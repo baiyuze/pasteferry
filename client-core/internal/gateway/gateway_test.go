@@ -5,6 +5,7 @@ import (
 	"crypto/ed25519"
 	"crypto/sha256"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net"
 	"net/http"
@@ -252,4 +253,81 @@ func TestDisablingCancelsTunnelHandshake(t *testing.T) {
 	case <-time.After(time.Second):
 		t.Fatal("disabling did not cancel handshake")
 	}
+}
+
+func TestRunFetchesOwnerUsageWithoutRelay(t *testing.T) {
+	var authorizes, usages atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		now := time.Now().Unix()
+		usage := Usage{Available: true, Limit: 100_000_000, Remaining: 100_000_000, ResetAt: now + 3600, UpdatedAt: now}
+		switch r.URL.Path {
+		case "/gateway/v1/challenge":
+			_ = json.NewEncoder(w).Encode(map[string]string{"nonce": "n"})
+		case "/gateway/v1/authorize":
+			var p Proof
+			_ = json.NewDecoder(r.Body).Decode(&p)
+			if p.Purpose != "usage" || p.MachineDigest != "" || p.PeerID != "" || p.SessionID != "" {
+				t.Errorf("owner query sent relay or machine fields: %+v", p)
+			}
+			n := authorizes.Add(1)
+			_ = json.NewEncoder(w).Encode(Access{Token: fmt.Sprint("owner-", n), ExpiresAt: now + 900, Usage: usage})
+		case "/gateway/v1/usage":
+			// The first poll simulates a restarted gateway that lost its tokens.
+			if usages.Add(1) == 1 {
+				w.WriteHeader(401)
+				_ = json.NewEncoder(w).Encode(map[string]string{"code": "unauthorized"})
+				return
+			}
+			_ = json.NewEncoder(w).Encode(usage)
+		default:
+			t.Errorf("unexpected request %s", r.URL.Path)
+			w.WriteHeader(404)
+		}
+	}))
+	defer server.Close()
+	got := make(chan Usage, 16)
+	c, err := NewClient(identity.FromSeed(make([]byte, 32)), server.URL, func(u Usage) { got <- u })
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go c.Run(ctx)
+	wait := func(what string) Usage {
+		t.Helper()
+		select {
+		case u := <-got:
+			return u
+		case <-time.After(3 * time.Second):
+			t.Fatalf("%s: no usage before the polling interval", what)
+			return Usage{}
+		}
+	}
+	// Enabled at start: the allowance is fetched at once, not after 15/60 s.
+	if u := wait("start"); u.Limit != 100_000_000 || u.Remaining != 100_000_000 || u.UpdatedAt == 0 {
+		t.Fatalf("start usage: %+v", u)
+	}
+	// A reconnect refresh with an unknown token re-authorizes instead of
+	// reporting the gateway as unavailable for the rest of the token's life.
+	c.RefreshUsage()
+	if u := wait("refresh"); !u.Available || u.Reason != "" {
+		t.Fatalf("refresh usage: %+v", u)
+	}
+	if authorizes.Load() != 2 || usages.Load() != 1 {
+		t.Fatalf("authorize=%d usage=%d", authorizes.Load(), usages.Load())
+	}
+	// Disabled mode makes no official request, even when asked to refresh.
+	c.SetEnabled(false)
+	before := authorizes.Load() + usages.Load()
+	c.RefreshUsage()
+	time.Sleep(200 * time.Millisecond)
+	if authorizes.Load()+usages.Load() != before {
+		t.Fatal("disabled gateway refreshed usage")
+	}
+	// Re-enabling clears old figures and fetches again.
+	c.SetEnabled(true)
+	if c.Usage().UpdatedAt != 0 {
+		t.Fatal("re-enabling kept usage from the disabled period")
+	}
+	wait("re-enable")
 }

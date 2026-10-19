@@ -29,7 +29,15 @@ type Client struct {
 	enabled     bool
 	root        context.Context
 	cancel      context.CancelFunc
+	kick        chan struct{}
 }
+
+// Without relay sessions the allowance only changes through policy, so it is
+// refreshed less often than while relaying.
+const (
+	relayUsageInterval = 15 * time.Second
+	idleUsageInterval  = 60 * time.Second
+)
 
 func (c *Client) ReportError(err error) {
 	u := c.Usage()
@@ -55,7 +63,7 @@ func NewClient(id *identity.Identity, base string, onUsage func(Usage)) (*Client
 		return nil, errors.New("gateway requires HTTPS")
 	}
 	root, cancel := context.WithCancel(context.Background())
-	return &Client{id: id, base: strings.TrimRight(base, "/"), http: &http.Client{Timeout: 15 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return errors.New("gateway redirects are not allowed") }}, access: map[string]Access{}, peers: map[string]string{}, conns: map[*packetConn]bool{}, onUsage: onUsage, enabled: true, root: root, cancel: cancel}, nil
+	return &Client{id: id, base: strings.TrimRight(base, "/"), http: &http.Client{Timeout: 15 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return errors.New("gateway redirects are not allowed") }}, access: map[string]Access{}, peers: map[string]string{}, conns: map[*packetConn]bool{}, onUsage: onUsage, enabled: true, root: root, cancel: cancel, kick: make(chan struct{}, 1)}, nil
 }
 
 func (c *Client) SetEnabled(enabled bool) {
@@ -67,8 +75,21 @@ func (c *Client) SetEnabled(enabled bool) {
 	if !c.enabled {
 		c.root, c.cancel = context.WithCancel(context.Background())
 		c.enabled = true
+		// Figures from an earlier enabled period may be from another day.
+		c.last = Usage{}
 	}
 	c.mu.Unlock()
+	c.RefreshUsage()
+}
+
+// RefreshUsage asks Run to query the owner allowance now instead of waiting
+// for the next interval. The query carries no machine digest and requests no
+// relay, so it is safe right after enabling or reconnecting.
+func (c *Client) RefreshUsage() {
+	select {
+	case c.kick <- struct{}{}:
+	default:
+	}
 }
 func (c *Client) request(ctx context.Context, method, path, token string, body, out any) error {
 	c.mu.Lock()
@@ -174,59 +195,77 @@ func (c *Client) Authorize(ctx context.Context, peer, session string) (Access, e
 	return a, nil
 }
 func (c *Client) Run(ctx context.Context) {
-	ticker := time.NewTicker(15 * time.Second)
+	ticker := time.NewTicker(relayUsageInterval)
 	defer ticker.Stop()
 	defer c.Close()
+	c.RefreshUsage()
+	var lastOwner time.Time
 	for {
+		force := false
 		select {
 		case <-ctx.Done():
 			return
+		case <-c.kick:
+			force = true
 		case <-ticker.C:
-			c.mu.Lock()
-			owner := c.usageAccess
-			sessions := make(map[string]Access, len(c.access))
-			peers := make(map[string]string, len(c.peers))
-			for k, v := range c.access {
-				sessions[k] = v
-				peers[k] = c.peers[k]
-			}
-			c.mu.Unlock()
-			if len(sessions) == 0 && owner.Token != "" {
-				var err error
-				if time.Now().Unix() >= owner.ExpiresAt-120 {
+		}
+		c.mu.Lock()
+		enabled := c.enabled
+		owner := c.usageAccess
+		sessions := make(map[string]Access, len(c.access))
+		peers := make(map[string]string, len(c.peers))
+		for k, v := range c.access {
+			sessions[k] = v
+			peers[k] = c.peers[k]
+		}
+		c.mu.Unlock()
+		if !enabled {
+			continue
+		}
+		if len(sessions) == 0 && (force || time.Since(lastOwner) >= idleUsageInterval) {
+			lastOwner = time.Now()
+			var err error
+			if owner.Token == "" || time.Now().Unix() >= owner.ExpiresAt-120 {
+				err = c.refreshUsage(ctx)
+			} else {
+				var u Usage
+				err = c.request(ctx, "GET", "usage", owner.Token, nil, &u)
+				var ge *Error
+				if errors.As(err, &ge) && ge.Code == "unauthorized" {
+					// The gateway keeps tokens in memory; after it restarts
+					// a still-unexpired token is unknown there.
 					err = c.refreshUsage(ctx)
-				} else {
-					var u Usage
-					err = c.request(ctx, "GET", "usage", owner.Token, nil, &u)
-					if err == nil {
-						c.update(u)
-					}
-				}
-				if err != nil {
-					c.ReportError(err)
-				}
-			}
-			for session, a := range sessions {
-				var err error
-				if time.Now().Unix() >= a.ExpiresAt-120 {
-					_, err = c.Authorize(ctx, peers[session], session)
-				} else {
-					var u Usage
-					err = c.request(ctx, "GET", "usage", a.Token, nil, &u)
-					if err == nil {
-						c.update(u)
-					}
-				}
-				if err != nil {
-					u := c.Usage()
-					u.Available = false
-					u.Reason = "service_unavailable"
-					var ge *Error
-					if errors.As(err, &ge) {
-						u.Reason = ge.Code
-					}
+				} else if err == nil {
 					c.update(u)
 				}
+			}
+			if err != nil {
+				c.ReportError(err)
+			}
+		}
+		if force {
+			continue
+		}
+		for session, a := range sessions {
+			var err error
+			if time.Now().Unix() >= a.ExpiresAt-120 {
+				_, err = c.Authorize(ctx, peers[session], session)
+			} else {
+				var u Usage
+				err = c.request(ctx, "GET", "usage", a.Token, nil, &u)
+				if err == nil {
+					c.update(u)
+				}
+			}
+			if err != nil {
+				u := c.Usage()
+				u.Available = false
+				u.Reason = "service_unavailable"
+				var ge *Error
+				if errors.As(err, &ge) {
+					u.Reason = ge.Code
+				}
+				c.update(u)
 			}
 		}
 	}

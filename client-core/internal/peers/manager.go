@@ -395,6 +395,8 @@ func (m *Manager) deviceInfo() (name, platform string, paired []string) {
 
 func (m *Manager) handleConnected() {
 	m.log.Info("信令已连接", "url", m.client.URL())
+	// 网络恢复后马上刷新官方额度；没开官方服务时网关客户端会忽略
+	m.gateway.RefreshUsage()
 	m.notifyAll()
 	m.notifyStatus()
 }
