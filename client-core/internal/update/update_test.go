@@ -331,16 +331,25 @@ func TestServiceNoticeRespectsSettings(t *testing.T) {
 	}
 }
 
-func TestReadResultOnce(t *testing.T) {
+func TestReadResultUntilStale(t *testing.T) {
 	root := t.TempDir()
 	os.MkdirAll(filepath.Join(root, "updates"), 0o700)
 	raw, _ := json.Marshal(Result{From: "2.3.0", To: "2.3.1", OK: true, At: time.Now().Unix()})
 	os.WriteFile(filepath.Join(root, "updates", "result.json"), raw, 0o600)
-	if r := ReadResult(root); r == nil || !r.OK || r.To != "2.3.1" {
-		t.Fatalf("result: %+v", r)
+	// 后台服务可能被重启几次，每次都要读得到
+	for i := 0; i < 2; i++ {
+		if r := ReadResult(root); r == nil || !r.OK || r.To != "2.3.1" {
+			t.Fatalf("read %d: %+v", i, r)
+		}
 	}
+	// 过时的结果不再提，文件也删掉
+	raw, _ = json.Marshal(Result{From: "2.3.0", To: "2.3.1", OK: true, At: time.Now().Add(-time.Hour).Unix()})
+	os.WriteFile(filepath.Join(root, "updates", "result.json"), raw, 0o600)
 	if ReadResult(root) != nil {
-		t.Fatal("result read twice")
+		t.Fatal("stale result shown")
+	}
+	if _, err := os.Stat(filepath.Join(root, "updates", "result.json")); !os.IsNotExist(err) {
+		t.Fatal("stale result kept")
 	}
 }
 

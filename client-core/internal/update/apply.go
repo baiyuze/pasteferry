@@ -143,16 +143,17 @@ func RunHelper(planPath string, detach bool) int {
 	return 0
 }
 
-// ReadResult 读出并删掉上一次安装的结果。没有就返回 nil。
+// ReadResult 读出上一次安装的结果，没有或已过时就返回 nil。
+// 读了不删：安装后后台服务可能被界面再重启一两次，每一次都要能告诉界面结果；过时的才删掉。
 func ReadResult(dataDir string) *Result {
 	path := filepath.Join(dataDir, "updates", "result.json")
 	raw, err := os.ReadFile(path)
 	if err != nil {
 		return nil
 	}
-	_ = os.Remove(path)
 	var r Result
-	if json.Unmarshal(raw, &r) != nil || r.To == "" {
+	if json.Unmarshal(raw, &r) != nil || r.To == "" || time.Since(time.Unix(r.At, 0)) > resultFresh {
+		_ = os.Remove(path)
 		return nil
 	}
 	return &r
@@ -179,7 +180,15 @@ func copyFile(src, dst string, mode os.FileMode) error {
 // swapDir 把 staged 换到 app 的位置，旧的改名为 old。失败时尽量还原。
 func swapDir(app, staged, old string) error {
 	_ = os.RemoveAll(old)
-	if err := os.Rename(app, old); err != nil {
+	// Windows 上刚结束的进程可能还占着文件一会儿，杀毒软件也可能正在扫描，多等几次
+	var err error
+	for deadline := time.Now().Add(15 * time.Second); ; {
+		if err = os.Rename(app, old); err == nil || time.Now().After(deadline) {
+			break
+		}
+		time.Sleep(500 * time.Millisecond)
+	}
+	if err != nil {
 		return fmt.Errorf("挪开旧版本: %w", err)
 	}
 	if err := os.Rename(staged, app); err != nil {
@@ -192,8 +201,10 @@ func swapDir(app, staged, old string) error {
 }
 
 // stopDaemons 结束计划里位于 App 里的后台服务与守护进程，并等它们退出。
+// Daemons 是 [后台服务, 它的父进程]：倒着结束，先结束守护进程，否则它会把刚结束的后台服务重新拉起来。
 func stopDaemons(p *Plan, log *slog.Logger) {
-	for _, pid := range p.Daemons {
+	for i := len(p.Daemons) - 1; i >= 0; i-- {
+		pid := p.Daemons[i]
 		if pid <= 0 || !processInDir(pid, p.App) {
 			continue
 		}

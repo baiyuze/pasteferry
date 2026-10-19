@@ -41,7 +41,6 @@ type Service struct {
 	lastAuto  time.Time
 	files     map[string]string // 版本 → 已下载并校验过的安装包
 	result    *Result
-	resultAt  time.Time
 }
 
 // NewService 读出上一次安装的结果（如果有）。
@@ -56,9 +55,7 @@ func NewService(current, root string, log *slog.Logger) (*Service, error) {
 		Checker: &Checker{HTTP: client, Sources: LoadSources(root), Keys: PublicKeys()},
 		files:   map[string]string{},
 	}
-	if r := ReadResult(root); r != nil {
-		s.result, s.resultAt = r, time.Now()
-	}
+	s.result = ReadResult(root)
 	return s, nil
 }
 
@@ -135,7 +132,7 @@ func (s *Service) Notice() string {
 func (s *Service) LastResult() *Result {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if s.result == nil || time.Since(s.resultAt) > resultFresh {
+	if s.result == nil || time.Since(time.Unix(s.result.At, 0)) > resultFresh {
 		return nil
 	}
 	return s.result
