@@ -83,6 +83,7 @@ func Start(p *Plan, work string) error {
 		return err
 	}
 	cmd := exec.Command(helper, "-apply-update", planPath)
+	cmd.Dir = work
 	if out, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("启动更新助手: %v %s", err, out)
 	}
@@ -92,6 +93,8 @@ func Start(p *Plan, work string) error {
 // RunHelper 是更新助手的入口（pasteferryd -apply-update / -apply-update-run）。
 // detach 为 true 时只负责启动脱离进程树的第二级，然后退出。
 func RunHelper(planPath string, detach bool) int {
+	// 工作目录不能留在要替换的文件夹里：Windows 上被当作工作目录的文件夹不能改名
+	_ = os.Chdir(filepath.Dir(planPath))
 	if detach {
 		self, err := os.Executable()
 		if err == nil {

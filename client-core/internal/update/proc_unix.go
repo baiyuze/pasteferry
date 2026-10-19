@@ -56,6 +56,8 @@ func processInDir(pid int, dir string) bool {
 
 func startDetached(path string, args ...string) error {
 	cmd := exec.Command(path, args...)
+	// 在程序自己的文件夹里运行，不把调用者的工作目录（可能是要替换的文件夹）带过去
+	cmd.Dir = filepath.Dir(path)
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
 	if err := cmd.Start(); err != nil {
 		return err
