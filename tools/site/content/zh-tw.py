@@ -873,14 +873,18 @@ C = {
             ],
         },
         "more_h2": "其他",
+        "mirror": {"lead": "在中國大陸下載很慢的話，可以改用 Gitee 鏡像：", "setup": "安裝程式", "portable": "可攜版",
+                   "apple": "Apple 晶片", "intel": "Intel 晶片", "universal": "通用版"},
         "more": [
             ("伺服器", "兩台電腦在同一個網路裡不需要伺服器。跨網路時的幾種方式見<a href=\"{server}\">快速入門</a>，"
                       "伺服器的安裝檔在各自的教學裡。"),
             ("驗證檔案", "所有檔案的 SHA-256 都在 <a href=\"{sums}\">SHA256SUMS</a> 裡。"),
             ("更新內容與舊版本", "這一版改了什麼請見<a href=\"{notes}\">版本說明</a>，舊版本在 <a href=\"{releases}\">GitHub Releases</a>。"),
+            ("中國大陸鏡像", "程式碼和最近兩版的安裝檔同步在 <a href=\"{gitee}\">Gitee</a>，與 GitHub 上的檔案相同，可以用 SHA256SUMS 驗證。"),
         ],
     },
 
+    "gitee_hint": "在中國大陸的伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：",
     "ld_description": "在 Mac、Windows 與 Linux 電腦之間同步剪貼簿與檔案的開源工具。複製文字、圖片、檔案或資料夾後，另一台電腦可直接貼上。"
                       "同一個網路裡不需要伺服器；裝置之間 WebRTC 直連、DTLS 端對端加密，跨網路打不通時，經使用者自行架設的伺服器以 TURN 中繼。",
     "ld_os": "macOS 13 以上（Intel 與 Apple 晶片）；Windows 10、Windows 11（x64）；Linux（x64、ARM64）",

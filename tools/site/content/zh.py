@@ -870,15 +870,19 @@ C = {
                 "需要 GTK 3。在 Ubuntu 24.04 的 GNOME（Wayland）上实测过。",
             ],
         },
+        "mirror": {"lead": "在中国大陆下载慢？用 Gitee 国内镜像：", "setup": "安装程序", "portable": "便携版",
+                   "apple": "Apple 芯片", "intel": "Intel 芯片", "universal": "通用版"},
         "more_h2": "其他",
         "more": [
             ("服务器", "两台电脑在同一个网络里不需要服务器。跨网络时的几种方式见<a href=\"{server}\">快速开始</a>，"
                       "服务器的安装包在各自的教程里。"),
             ("校验文件", "所有文件的 SHA-256 在 <a href=\"{sums}\">SHA256SUMS</a> 里。"),
             ("更新内容与旧版本", "这一版改了什么见<a href=\"{notes}\">发布说明</a>，旧版本在 <a href=\"{releases}\">GitHub Releases</a>。"),
+            ("国内镜像", "代码和最近两版的安装包同步在 <a href=\"{gitee}\">Gitee</a>，与 GitHub 上的文件相同，可以用 SHA256SUMS 核对。"),
         ],
     },
 
+    "gitee_hint": "国内服务器从 GitHub 下载慢的话，可以改从 Gitee 镜像下载：",
     "ld_description": "在 Mac、Windows 与 Linux 电脑之间同步剪贴板与文件的开源工具。复制文本、图片、文件或文件夹后，另一台电脑可直接粘贴。"
                       "同一网络里不需要服务器；设备间 WebRTC 直连、DTLS 端到端加密，跨网络打不通时经用户自建服务器的 TURN 中转。",
     "ld_os": "macOS 13 及以上（Intel 与 Apple 芯片）；Windows 10、Windows 11（x64）；Linux（x64、ARM64）",

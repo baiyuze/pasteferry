@@ -14,6 +14,8 @@
   ·
   <a href="https://pasteferry.cc/">项目主页</a>
   ·
+  <a href="https://gitee.com/baiyuze/pasteferry/releases">国内镜像（Gitee）</a>
+  ·
   <a href="README.md">English</a>
 </p>
 

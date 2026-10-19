@@ -28,6 +28,10 @@ BASE = "/"
 DL = REPO + "/releases/latest/download/"
 VERSION = "2.2.0"
 DATE = "2026-10-19"
+# Gitee 国内镜像，由 scripts/gitee-mirror.sh 每次发版同步代码与安装包。Gitee 没有 latest 跳转，
+# 直链带版本号，所以发版后要重新生成网站
+GITEE = "https://gitee.com/baiyuze/pasteferry"
+GITEE_DL = f"{GITEE}/releases/download/v{VERSION}/"
 
 # 语言代码 → (页面目录, html 的 lang, og:locale, 语言名)。顶栏的语言菜单按这个顺序列出。
 # 繁体的两份文案由 zh.py 转换后逐条校订，改了 zh.py 要一起改
@@ -836,6 +840,13 @@ def code_block(c: dict, code: str) -> str:
                 </div>"""
 
 
+def gitee_hint(c: dict, name: str) -> str:
+    """中文教程在下载命令下面给出同一个文件在 Gitee 镜像上的地址；其他语言没有这一行。"""
+    if "gitee_hint" not in c:
+        return ""
+    return f'\n                <p class="small">{c["gitee_hint"]}<a href="{GITEE_DL}{name}">{GITEE_DL}{name}</a></p>'
+
+
 def items(lst: list[str], indent: str = "                ") -> str:
     return "\n".join(f"{indent}<li>{x}</li>" for x in lst)
 
@@ -1040,7 +1051,7 @@ cd pasteferry-server-macos
                 <ol class="steps">
 {items(w["steps"])}
                 </ol>
-                <a class="button" href="{DL}pasteferry-server-windows-amd64.zip">{DOWN}{w["download"]}</a>
+                <a class="button" href="{DL}pasteferry-server-windows-amd64.zip">{DOWN}{w["download"]}</a>{gitee_hint(c, "pasteferry-server-windows-amd64.zip")}
                 <ul class="points">
 {items(w["notes"])}
                 </ul>
@@ -1064,7 +1075,7 @@ cd pasteferry-server-macos
               <div class="os-steps">
                 <ol class="steps">
                   <li>{m["steps"][0]}
-                {code_block(c, mac_dl)}</li>
+                {code_block(c, mac_dl)}{gitee_hint(c, "pasteferry-server-macos.tar.gz")}</li>
 {items(m["steps"][1:])}
                 </ol>
                 <ul class="points">
@@ -1084,7 +1095,7 @@ cd pasteferry-server-macos
               <div class="os-steps">
                 <ol class="steps">
                   <li>{l["steps"][0]}
-                {code_block(c, linux_dl)}</li>
+                {code_block(c, linux_dl)}{gitee_hint(c, "pasteferry-server-linux-amd64.tar.gz")}</li>
 {items(l["steps"][1:])}
                 </ol>
                 <ul class="points">
@@ -1274,7 +1285,7 @@ sudo ./install.sh {CLOUD_IP}"""
             <ol class="steps">
               <li>{cl["install_steps"][0]}</li>
               <li>{cl["install_steps"][1]}
-                {code_block(c, install)}</li>
+                {code_block(c, install)}{gitee_hint(c, "pasteferry-server-linux-amd64.tar.gz")}</li>
 {items(cl["install_steps"][2:], "              ")}
             </ol>
             <ul class="points">
@@ -1601,8 +1612,16 @@ def download_page(code: str) -> str:
     base = up + path
     links = {"start": base + START, "server": base + START + "#server", "releases": REPO + "/releases",
              "sums": DL + "SHA256SUMS", "universal": DL + "PasteFerry.dmg", "portable": DL + "PasteFerry-windows-x64.zip",
-             "notes": REPO + "/releases/latest", "lan": base + LAN}
+             "notes": REPO + "/releases/latest", "lan": base + LAN, "gitee": GITEE + "/releases"}
     w, m, lx = d["win"], d["mac"], d["linux"]
+    mirror = d.get("mirror")
+
+    def mirror_line(files: list[tuple[str, str]]) -> str:
+        """中文页面在按钮下面列出 Gitee 国内镜像上的同一批文件；其他语言没有这一行。"""
+        if not mirror:
+            return ""
+        anchors = " · ".join(f'<a href="{GITEE_DL}{name}">{label}</a>' for label, name in files)
+        return f'\n                <p class="small">{mirror["lead"]}{anchors}</p>'
 
     def button(name: str, label: str, quiet: bool = False) -> str:
         return f'<a class="button{" quiet" if quiet else ""}" href="{DL}{name}">{DOWN}{label}</a>'
@@ -1634,7 +1653,7 @@ def download_page(code: str) -> str:
               <div class="os-steps">
                 <div class="dl-row">
                   {button("PasteFerry-Setup.exe", w["setup"])}
-                </div>
+                </div>{mirror_line([(mirror["setup"], "PasteFerry-Setup.exe"), (mirror["portable"], "PasteFerry-windows-x64.zip")]) if mirror else ""}
                 <p class="small">{fill(w["portable"], links)}</p>
                 <ol class="steps">
 {items(w["steps"])}
@@ -1653,7 +1672,8 @@ def download_page(code: str) -> str:
                 <div class="dl-row" data-mac-chip>
                   {button("PasteFerry-mac-apple-silicon.dmg", m["apple"])}
                   {button("PasteFerry-mac-intel.dmg", m["intel"], True)}
-                </div>
+                </div>{mirror_line([(mirror["apple"], "PasteFerry-mac-apple-silicon.dmg"), (mirror["intel"], "PasteFerry-mac-intel.dmg"),
+                                    (mirror["universal"], "PasteFerry.dmg")]) if mirror else ""}
                 <p class="small">{fill(m["universal"], links)}</p>
                 <ol class="steps">
 {items(m["steps"])}
@@ -1683,7 +1703,10 @@ def download_page(code: str) -> str:
                   {button("PasteFerry-linux-amd64.tar.gz", lx["x64"], True)}
                   {button("PasteFerry-linux-arm64.tar.gz", lx["arm64"], True)}
                 </div>
-                {code_block(c, "tar xzf PasteFerry-linux-amd64.tar.gz" + chr(10) + "./PasteFerry/install.sh")}
+                {code_block(c, "tar xzf PasteFerry-linux-amd64.tar.gz" + chr(10) + "./PasteFerry/install.sh")}{
+                    mirror_line([(f".deb {lx['x64']}", "PasteFerry-linux-amd64.deb"), (f".deb {lx['arm64']}", "PasteFerry-linux-arm64.deb"),
+                                 (f"tar.gz {lx['x64']}", "PasteFerry-linux-amd64.tar.gz"),
+                                 (f"tar.gz {lx['arm64']}", "PasteFerry-linux-arm64.tar.gz")]) if mirror else ""}
               </div>
               <ul class="points">
 {items(lx["notes"])}

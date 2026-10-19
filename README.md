@@ -15,6 +15,8 @@
   <a href="https://pasteferry.cc/en/">Website</a>
   ·
   <a href="README.zh-CN.md">简体中文</a>
+  ·
+  <a href="https://gitee.com/baiyuze/pasteferry/releases">Gitee mirror</a>
 </p>
 
 <p align="center">
