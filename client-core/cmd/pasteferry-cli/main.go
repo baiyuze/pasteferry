@@ -483,6 +483,23 @@ func showStatus(ctx context.Context, c pb.DaemonServiceClient, ep rpc.Endpoint) 
 	fmt.Printf("在线对端    %d\n", st.GetPeersOnline())
 	fmt.Printf("剪贴板授权  %s\n", st.GetClipboardPermission())
 	fmt.Printf("缓存占用    %s\n", humanBytes(st.GetCacheBytesUsed()))
+	if u := st.GetOfficialUsage(); u != nil {
+		switch {
+		case u.GetUpdatedAtUnix() == 0 && u.GetReason() == "":
+			fmt.Println("官方额度    正在获取")
+		case u.GetUpdatedAtUnix() == 0:
+			fmt.Printf("官方额度    暂时获取不到（%s）\n", u.GetReason())
+		default:
+			// 网关按十进制 MB 计量，与界面显示一致
+			mb := func(n int64) string { return fmt.Sprintf("%.2f MB", float64(n)/1e6) }
+			line := fmt.Sprintf("剩余 %s / 每日 %s，已用 %s（上传 %s，下载 %s）", mb(u.GetRemainingBytes()), mb(u.GetLimitBytes()),
+				mb(u.GetUploadBytes()+u.GetDownloadBytes()), mb(u.GetUploadBytes()), mb(u.GetDownloadBytes()))
+			if u.GetReason() != "" {
+				line += "，" + u.GetReason()
+			}
+			fmt.Printf("官方额度    %s，更新于 %s\n", line, time.Unix(u.GetUpdatedAtUnix(), 0).Format("15:04:05"))
+		}
+	}
 	return nil
 }
 
