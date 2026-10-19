@@ -64,6 +64,7 @@
 <section><h2>最少必要資料</h2><p>網關保留去識別化裝置編號、首次與最近連線時間、每日中轉用量、必要額度綁定和累計彙總。每日裝置明細保留 90 天。這是官方服務裝置數，不是人數或全部安裝量。</p></section>
 <section><h2>內容與機器識別碼</h2><p>內容與真實裝置名稱透過裝置間加密通道傳送。不收集檔案名稱、路徑、用戶名稱、MAC、UA 或行為軌跡。原始系統識別碼不上傳；摘要只用於額度分組，並非不可偽造。</p></section>
 <section><h2>網絡資料與額度</h2><p>網絡端點暫時可見路由和網絡地址，官方統計庫及一般代理日誌不保存這些資料。每日 100 MB 中轉額度，含上下行，北京時間午夜重設；直連不計入。啟用後用戶端只憑裝置簽署查詢自己的額度，不申請中轉，也不讀取機器識別碼。關閉官方服務會停止其請求、輪詢及通道。</p></section>
+<section><h2>檢查更新</h2><p>2.3.0 起，App 啟動一分鐘後和之後每天檢查一次新版本：從 GitHub 和 Gitee 下載簽署過的更新清單，請求裏不帶裝置 ID、帳號或其他識別資料，這些服務只能看到一次普通的下載和網絡地址。可以在「設定 → 關於」關閉自動檢查。新版本只有在你確認後才會安裝，而且安裝檔必須與隔空貼發佈密鑰簽署的清單裏的校驗值一致。</p></section>
 <section><h2>網站與審計</h2><p>本站使用既有的 Cloudflare Web Analytics，瀏覽量不代表軟件用戶數。用戶端、信令及 TURN 持續開源，網關協定和欄位公開；私有正式環境的儲存行為仍需部署審計。</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
   <footer class="footer">
     <div class="wrap">

@@ -59,6 +59,16 @@ official relay only; it does not turn off LAN or direct synchronization.
 No anonymous-account system can guarantee a unique natural person without
 collecting additional identity information; PasteFerry does not attempt that.
 
+## Update checks
+
+Since 2.3.0 the app checks for a new version one minute after it starts and
+then once a day. It downloads the signed update list from GitHub and Gitee as a
+plain request with no device ID, account or other identifier, so these
+services only see an ordinary download from your network address. Automatic
+checks can be turned off in Settings → About; checking by hand still works.
+Updates are installed only after you confirm, and only if the package matches
+the checksum in a list signed with the PasteFerry release key.
+
 ## Website and audit
 
 The website has an existing Cloudflare Web Analytics beacon, separate from
