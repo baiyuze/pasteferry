@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "latest": "2.3.0",
+  "date": "2026-10-19",
+  "mirrors": [
+    {
+      "source": "gitee",
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.3.0/"
+    },
+    {
+      "source": "github",
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.3.0/"
+    }
+  ],
+  "assets": {
+    "mac-arm64": {
+      "name": "PasteFerry-mac-apple-silicon.dmg",
+      "size": 24642881,
+      "sha256": "23765774757e866c7cb4fcb60e2e779b0f71daf724f99a5a9b529a1eda9c0b60"
+    },
+    "mac-x64": {
+      "name": "PasteFerry-mac-intel.dmg",
+      "size": 26699489,
+      "sha256": "f873ff57894b39f0bd18b79027a00e7a73e59901f674c1a7af53db8772bc7d03"
+    },
+    "mac-universal": {
+      "name": "PasteFerry.dmg",
+      "size": 49729636,
+      "sha256": "9ae4071ffbbaa3272f3ecf1fe072cab548efee622e580f49a21762395b2d0a3e"
+    },
+    "windows-setup": {
+      "name": "PasteFerry-Setup.exe",
+      "size": 22679220,
+      "sha256": "dff1d6a24bd93de13f07cb333b5057351d97b05499050bbf49a01cf337fc3bac"
+    },
+    "windows-portable": {
+      "name": "PasteFerry-windows-x64.zip",
+      "size": 28456842,
+      "sha256": "11d1947dba86c785eff776601538fe41e6ce0ef86b1dc9413af203474523e419"
+    },
+    "linux-amd64-deb": {
+      "name": "PasteFerry-linux-amd64.deb",
+      "size": 21771296,
+      "sha256": "4ce5c7fb46cb3a0dd880b1add3888dcd589ac0e0a490f8302c3c4bc540263df1"
+    },
+    "linux-arm64-deb": {
+      "name": "PasteFerry-linux-arm64.deb",
+      "size": 20224800,
+      "sha256": "42362b176b3a9a0de85723c696f5de4f9c786b80f23127d8b8ffbbeca239ffad"
+    },
+    "linux-amd64-tar": {
+      "name": "PasteFerry-linux-amd64.tar.gz",
+      "size": 26327527,
+      "sha256": "05d422a19f8a79adcfda6339695aeb3f4fb0dcfdf86266d599fbcd479256ebe8"
+    },
+    "linux-arm64-tar": {
+      "name": "PasteFerry-linux-arm64.tar.gz",
+      "size": 24617746,
+      "sha256": "54a2c2c196c49b828b3be4e21b5b8054dad7e873b5d8f9cbfec97809f0b7c561"
+    }
+  },
+  "releases": [
+    {
+      "version": "2.3.0",
+      "date": "2026-10-19",
+      "notes": {
+        "en": {
+          "changes": [
+            "Check for updates in Settings → About. After you confirm, PasteFerry downloads, verifies and installs the new version and reopens by itself; your devices, history and settings stay.",
+            "Release notes appear in your interface language. If you are several versions behind, each version is listed.",
+            "A daily check shows a quiet hint in the sidebar when a new version is out. You can skip a version or turn automatic checks off; the check only reads the update list on GitHub and Gitee and sends nothing that identifies you.",
+            "Updates are signed: the app only installs a package whose checksum appears in an update list signed by the PasteFerry release key.",
+            "In mainland China, installers are also mirrored on Gitee, linked from the Chinese download pages; updates download from whichever of GitHub and Gitee answers first."
+          ],
+          "fixes": [
+            "On Linux, restarting the background service with the window open, as the app does after it is upgraded by hand, could leave the service stopped until PasteFerry was opened again. The service now stops within two seconds, so the restart goes through.",
+            "A device that closes Search nearby now disappears from the other devices' lists right away, instead of sometimes lingering for up to seven seconds."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "在「设置 → 关于」里检查更新。确认后，隔空贴会自动下载、校验并安装新版本，然后自己重新打开；配对、记录和设置都保留。",
+            "更新日志按界面语言显示；落后好几个版本时，每一版的变化都会列出来。",
+            "每天自动检查一次，有新版本时在侧边栏底部提示，不弹窗打扰。可以跳过某个版本，也可以关掉自动检查；检查只读取 GitHub 和 Gitee 上的更新清单，不发送任何能识别你的信息。",
+            "更新经过签名：只有出现在隔空贴发布密钥签过名的更新清单里、校验值也对得上的安装包才会被安装。",
+            "在中国大陆，安装包同时放在 Gitee 镜像上，中文下载页有链接；自动更新会从 GitHub 和 Gitee 中先响应的那个下载。"
+          ],
+          "fixes": [
+            "在 Linux 上，窗口开着时重新启动后台服务（手动升级后 App 会自动这样做），后台服务可能一直停着，直到下次打开隔空贴。现在后台服务两秒内就会退出，重启能顺利完成。",
+            "一台设备关掉「搜索附近设备」后，会立即从其他设备的列表里消失，不再偶尔多停留最长七秒。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "「設定 → このアプリについて」でアップデートを確認できます。確認すると PasteFerry が新しいバージョンをダウンロード・検証・インストールし、自動的に開き直します。ペアリング、履歴、設定はそのままです。",
+            "更新内容は表示言語で表示されます。複数のバージョンが空いている場合は、バージョンごとに表示します。",
+            "1 日 1 回自動で確認し、新しいバージョンがあるとサイドバーに控えめに表示します。特定のバージョンをスキップしたり、自動確認をオフにしたりできます。確認は GitHub と Gitee のアップデート一覧を読むだけで、あなたを識別できる情報は送信しません。",
+            "アップデートは署名されています。PasteFerry のリリース鍵で署名された一覧にあり、チェックサムも一致するパッケージだけをインストールします。",
+            "中国本土向けに、インストーラーを Gitee にもミラーしています（中国語のダウンロードページにリンクがあります）。アップデートは GitHub と Gitee のうち先に応答した方からダウンロードします。"
+          ],
+          "fixes": [
+            "Linux で、ウィンドウを開いたままバックグラウンドサービスを再起動すると（手動でアップグレードした後はアプリが自動で再起動します）、次に PasteFerry を開くまでサービスが止まったままになることがありました。サービスが 2 秒以内に終了するようになり、再起動が正しく完了します。",
+            "「近くを検索」を閉じたデバイスは、ほかのデバイスの一覧からすぐに消えるようになりました。以前は最大 7 秒残ることがありました。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "在「設定 → 關於」裡檢查更新。確認後，隔空貼會自動下載、驗證並安裝新版本，然後自己重新開啟；配對、記錄和設定都保留。",
+            "更新日誌依介面語言顯示；落後好幾個版本時，每一版的變化都會列出來。",
+            "每天自動檢查一次，有新版本時在側邊欄底部提示，不跳出視窗打擾。可以略過某個版本，也可以關閉自動檢查；檢查只讀取 GitHub 和 Gitee 上的更新清單，不傳送任何能識別你的資訊。",
+            "更新經過簽章：只有出現在隔空貼發布金鑰簽過章的更新清單裡、校驗值也對得上的安裝檔才會被安裝。",
+            "在中國大陸，安裝檔同時放在 Gitee 鏡像上，中文下載頁有連結；自動更新會從 GitHub 和 Gitee 中先回應的那個下載。"
+          ],
+          "fixes": [
+            "在 Linux 上，視窗開著時重新啟動背景服務（手動升級後 App 會自動這樣做），背景服務可能一直停著，直到下次開啟隔空貼。現在背景服務兩秒內就會結束，重新啟動能順利完成。",
+            "一台裝置關閉「搜尋附近裝置」後，會立即從其他裝置的列表中消失，不再偶爾多停留最長七秒。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "在「設定 → 關於」裏檢查更新。確認後，隔空貼會自動下載、校驗並安裝新版本，然後自己重新開啟；配對、記錄和設定都保留。",
+            "更新日誌按介面語言顯示；落後好幾個版本時，每個版本的變化都會列出來。",
+            "每天自動檢查一次，有新版本時在側邊欄底部提示，不彈出視窗打擾。可以略過某個版本，也可以關閉自動檢查；檢查只讀取 GitHub 和 Gitee 上的更新清單，不傳送任何能識別你的資料。",
+            "更新經過簽署：只有出現在隔空貼發佈密鑰簽署過的更新清單裏、校驗值也對得上的安裝檔才會被安裝。",
+            "在內地，安裝檔同時放在 Gitee 鏡像上，中文下載頁有連結；自動更新會從 GitHub 和 Gitee 中先回應的那個下載。"
+          ],
+          "fixes": [
+            "在 Linux 上，視窗開着時重新啟動背景服務（手動升級後 App 會自動這樣做），背景服務可能一直停着，直到下次開啟隔空貼。現在背景服務兩秒內就會結束，重新啟動能順利完成。",
+            "一部裝置關閉「搜尋附近裝置」後，會立即從其他裝置的列表中消失，不再偶爾多停留最長七秒。"
+          ]
+        }
+      }
+    }
+  ]
+}
