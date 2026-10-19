@@ -90,8 +90,9 @@ func relaunch(p *Plan, log *slog.Logger) error {
 		}
 	}
 	// open 启动的 App 不继承这里的环境变量：把 HOME 明确带过去，界面才会连回同一个数据目录。
-	// 平时两者本来就相同；只在系统的 open 不认 --env 时退回普通打开
-	err := exec.Command("open", "--env", "HOME="+home, p.App).Run()
+	// -n 让系统启动刚换上的这个 App，而不是去激活另一个同 Bundle ID、还开着的副本。
+	// 平时旧界面已经退出，两者效果相同；只在系统的 open 不认这些参数时退回普通打开
+	err := exec.Command("open", "-n", "--env", "HOME="+home, p.App).Run()
 	if err != nil {
 		err = exec.Command("open", p.App).Run()
 	}
