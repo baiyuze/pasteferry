@@ -133,6 +133,8 @@ type peerState struct {
 type seenInstance struct {
 	inst Instance
 	seen time.Time
+	// hidden 是 mDNS 报告对方关掉「搜索附近设备」窗口的时间，见 handleNearbyPing
+	hidden time.Time
 }
 
 type Transport struct {
@@ -919,7 +921,14 @@ func (t *Transport) found(inst Instance) {
 		return
 	}
 	prev, had := t.instances[inst.Name]
-	t.instances[inst.Name] = seenInstance{inst: inst, seen: now}
+	si := seenInstance{inst: inst, seen: now}
+	if _, shown := nearbyName(inst.Text); !shown {
+		si.hidden = prev.hidden
+		if _, was := nearbyName(prev.inst.Text); had && was {
+			si.hidden = now
+		}
+	}
+	t.instances[inst.Name] = si
 	// pion 每秒都会报一次同样的结果，只在有新信息时行动
 	fresh := !had || prev.inst.Addr != inst.Addr || prev.inst.Text["t"] != inst.Text["t"] ||
 		now.Sub(prev.seen) > 30*time.Second

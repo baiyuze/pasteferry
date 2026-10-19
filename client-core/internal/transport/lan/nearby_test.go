@@ -3,8 +3,11 @@ package lan
 import (
 	"context"
 	"errors"
+	"net/netip"
 	"testing"
 	"time"
+
+	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
 // waitNearby 等到 n 的「附近的设备」里正好有 want 台。
@@ -53,6 +56,31 @@ func TestNearbyOnlyWhileShown(t *testing.T) {
 	hideB()
 	hideB() // 多调一次不该出错
 	waitNearby(t, a, 0)
+}
+
+// 对方关窗口前刚发出的 ping 比 mDNS 的撤下消息晚到时，不能让它重新出现；过一会儿再收到 ping 才算它又打开了。
+func TestNearbyIgnoresPingRightAfterHide(t *testing.T) {
+	a := newNode(t, nil)
+	defer a.t.ShowNearby()()
+	addr := netip.MustParseAddrPort("127.0.0.1:9")
+	shown := Instance{Name: "other", Addr: addr, Text: map[string]string{"v": "1", "n": encodeNearbyName("other"), "o": "test"}}
+	a.t.found(shown)
+	waitNearby(t, a, 1)
+
+	a.t.found(Instance{Name: "other", Addr: addr, Text: map[string]string{"v": "1"}})
+	ping := &pb.LanNearbyPing{Instance: "other", Name: "other", Platform: "test"}
+	a.t.handleNearbyPing(ping, addr)
+	if got := a.t.Nearby(); len(got) != 0 {
+		t.Fatalf("刚撤下的设备不该因为晚到的 ping 重新出现: %+v", got)
+	}
+
+	a.t.mu.Lock()
+	si := a.t.instances["other"]
+	si.hidden = time.Now().Add(-nearbyHideGrace)
+	a.t.instances["other"] = si
+	a.t.mu.Unlock()
+	a.t.handleNearbyPing(ping, addr)
+	waitNearby(t, a, 1)
 }
 
 // 已配对的设备也显示，按令牌认出来是谁。

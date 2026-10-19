@@ -28,9 +28,11 @@ import (
 
 const (
 	// 这么久没收到对方的 ping、mDNS 也没有它的新消息，就从列表里拿掉。对方每 2 秒（tick）发一次
-	nearbyStale    = 7 * time.Second
-	maxNearbyName  = 60 // 设备名在广播里最多占的字节数（编码前）
-	maxNearbyAddrs = 4
+	nearbyStale = 7 * time.Second
+	// mDNS 报告对方关掉窗口后，这么久内不理它的 ping
+	nearbyHideGrace = time.Second
+	maxNearbyName   = 60 // 设备名在广播里最多占的字节数（编码前）
+	maxNearbyAddrs  = 4
 )
 
 // NearbyInstance 是附近一台打开了「搜索附近设备」窗口的设备。
@@ -159,6 +161,10 @@ func (t *Transport) handleNearbyPing(p *pb.LanNearbyPing, src netip.AddrPort) {
 		return
 	}
 	si, ok := t.instances[id]
+	if ok && now.Sub(si.hidden) < nearbyHideGrace {
+		// 对方关窗口之前刚发出的 ping，比 mDNS 的撤下消息晚到：不能让它重新出现在列表里
+		return
+	}
 	if !ok {
 		// mDNS 只在实例有变化时才报：本机可能早把它过期丢掉了，或者还没收到它的广播
 		si = seenInstance{inst: Instance{Name: id, Addr: src}}
