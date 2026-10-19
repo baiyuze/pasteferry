@@ -71,7 +71,7 @@ limited to 8 KiB; response bodies to the client are limited to 32 KiB.
 | Method / route | Request | Response |
 | --- | --- | --- |
 | GET `challenge` | No machine or device information | `nonce`, `expires_in:60` |
-| POST `authorize` | Proof fields above plus `signature`; purpose `relay` | `token`, `expires_at`, `usage` |
+| POST `authorize` | Proof fields above plus `signature`; purpose `relay` or `usage` | `token`, `expires_at`, `usage` |
 | GET `usage` | `Authorization: Bearer token` | Authoritative usage snapshot |
 | GET `tunnel` | WebSocket upgrade and same Authorization header | Packet connection |
 
@@ -83,13 +83,23 @@ back to persistent device identity on first enrollment. Tokens are random,
 memory-only, expire after 15 minutes, and bind device, peer, session and group.
 Both reciprocal grants must exist before opening a tunnel.
 
-After first relay enrollment, `authorize` also accepts purpose `usage` with
-empty peer, session and machine-digest fields and a fresh challenge signature.
-It can only issue a read-only usage token for an already-bound device. That
-token cannot open or renew a tunnel, and does not create a peer session.
-A denied relay grant may include `usage_token` and `expires_at` so the client
-can observe reset or administrator changes without retrying relay constantly.
-Disabling the official mode clears all tokens and cancels these requests.
+`authorize` also accepts purpose `usage` with empty peer, session and
+machine-digest fields and a fresh challenge signature. It issues a read-only
+owner usage token. For a bound device the snapshot is its group's usage. A
+device that has never requested relay has no group yet: it receives the
+untouched default allowance (`group` empty, nothing used) together with shared
+policy reasons such as `global_paused`. The query never binds a group, reads a
+machine identifier or records an access visit; a banned device gets
+`device_banned`. The token cannot open or renew a tunnel and does not create a
+peer session. A denied relay grant may include `usage_token` and `expires_at`
+so the client can observe reset or administrator changes without retrying
+relay constantly. Disabling the official mode clears all tokens and cancels
+these requests.
+
+Clients query owner usage when official mode is enabled, on start and after
+each signaling reconnect, then every 60 s while no relay session is active and
+every 15 s per active session. A token unknown to a restarted gateway is
+replaced by a fresh owner query.
 
 A signed `relay_denial_code` is limited to quota/policy denial and the
 `quota_available` retry hint. It cannot grant access: the gateway still checks
