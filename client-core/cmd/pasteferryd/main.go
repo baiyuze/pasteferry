@@ -476,7 +476,17 @@ func run(dataDir string) error {
 	if err != nil {
 		return err
 	}
-	defer grpcServer.GracefulStop()
+	// 界面开着时它的事件订阅一直不结束，GracefulStop 会等到界面断开为止：
+	// 被界面「重新启动」或更新时，旧进程就一直占着单实例锁，新的起不来。最多等两秒，然后断开所有连接
+	defer func() {
+		done := make(chan struct{})
+		go func() { grpcServer.GracefulStop(); close(done) }()
+		select {
+		case <-done:
+		case <-time.After(2 * time.Second):
+			grpcServer.Stop()
+		}
+	}()
 
 	// UI 靠这个文件发现 daemon
 	if err := rpc.WriteEndpoint(paths.Endpoint, rpc.Endpoint{
