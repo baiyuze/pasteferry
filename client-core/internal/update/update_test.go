@@ -18,6 +18,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -254,8 +255,13 @@ func TestStageFolderFromZipAndTar(t *testing.T) {
 	if err := stageFolder(p, untar, "pasteferry", "pasteferryd"); err != nil {
 		t.Fatal(err)
 	}
-	if st, err := os.Stat(filepath.Join(p.Staged, "pasteferryd")); err != nil || st.Mode().Perm()&0o100 == 0 {
-		t.Fatalf("executable bit lost: %v %v", st, err)
+	st, err := os.Stat(filepath.Join(p.Staged, "pasteferryd"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Windows 没有可执行位；tar.gz 只在 Linux 上用
+	if runtime.GOOS != "windows" && st.Mode().Perm()&0o100 == 0 {
+		t.Fatalf("executable bit lost: %v", st.Mode())
 	}
 	// 缺少必需的文件时不留下解压的东西
 	p = &Plan{App: app, To: "2.3.3", Package: tgz}

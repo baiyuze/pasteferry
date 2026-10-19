@@ -182,7 +182,11 @@ void main() {
     await tester.scrollUntilVisible(find.text('自动检查更新'), 200,
         scrollable: find.descendant(of: page, matching: find.byType(Scrollable)).first);
     final row = find.ancestor(of: find.text('自动检查更新'), matching: find.byType(SettingRow));
-    await tester.tap(find.descendant(of: row, matching: find.byType(SmallSwitch)));
+    final toggle = find.descendant(of: row, matching: find.byType(SmallSwitch));
+    // 各平台的设置页行数不同：文字进入视野时开关可能还在屏幕边缘外
+    await tester.ensureVisible(toggle);
+    await tester.pumpAndSettle();
+    await tester.tap(toggle);
     await tester.pumpAndSettle();
     expect(state.config!.updateCheckDisabled, isTrue);
     expect(state.autoCheckUpdates, isFalse);
