@@ -1,5 +1,40 @@
 # 更新记录 / Changelog
 
+## 2.2.0 — 2026-10-19
+
+See today's relay allowance as soon as official access is enabled, before any
+relay is used, and see how each device connects.
+
+### Changes
+
+- **Relay allowance at a glance**: the official service page shows the
+  remaining allowance, the daily limit and a bar that stays full until relay is
+  used, followed by used, upload, download, reset and update time. Figures are
+  fetched when official access is enabled and after restarts, refreshed every
+  60 seconds while idle and every 15 seconds while relaying.
+- **How devices connect**: the same page lists whether each paired device is
+  connected directly, through relay or offline. Direct connections do not use
+  the allowance.
+- **Connection state**: shown as a status dot beside the page title, in normal
+  colors unless something is actually wrong.
+- **Command line**: `pasteferry-cli status` prints the official allowance.
+- **Privacy**: the allowance check uses only the device signature. It does not
+  request relay or read a machine identifier.
+
+### Fixes
+
+- The official service page no longer shows "Relay not requested; allowance
+  not yet verified" in warning colors while every device connects directly.
+- After the official gateway restarts, the app requests a new allowance token
+  instead of reporting the allowance as unavailable for up to 15 minutes.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: upgrade to see the allowance before relay is
+  used. Mixing 2.1.0 and 2.2.0 devices is fine.
+- **Server**: no upgrade needed; the self-hosted server is unchanged.
+- The device-to-device protocol is unchanged.
+
 ## 2.1.0 — 2026-10-16
 
 Sync across networks without hosting a server. Enable optional official access,
