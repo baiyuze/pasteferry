@@ -288,8 +288,24 @@ func run() (resultErr error) {
 	}
 	connectedAfter := time.Since(started)
 	fmt.Fprintln(os.Stderr, "envcheck: connected", want.String(), "after", connectedAfter.Round(time.Millisecond))
-	if *mode == "direct" && (client.Usage().UpdatedAt != 0 || client.Usage().Reason != "") {
+	// The allowance is visible without relay; only relay authorization reads
+	// the machine digest, and a direct path must never request it.
+	if *mode == "direct" && (client.RelayRequested() || client.Usage().Reason != "") {
 		return errors.New("direct connection requested gateway authorization")
+	}
+	var atConnect gateway.Usage
+	if official {
+		for client.Usage().UpdatedAt == 0 {
+			select {
+			case <-time.After(100 * time.Millisecond):
+			case <-ctx.Done():
+				return errors.New("allowance was not fetched before transfer")
+			}
+		}
+		atConnect = client.Usage()
+		if *mode == "direct" && (atConnect.Group != "" || atConnect.Limit <= 0 || atConnect.Remaining != atConnect.Limit) {
+			return fmt.Errorf("fresh identity without relay should see the untouched default allowance: %+v", atConnect)
+		}
 	}
 	if *mode == "official-relay" && connectedAfter < 8*time.Second {
 		return errors.New("relay started before direct attempt window")
@@ -346,7 +362,23 @@ func run() (resultErr error) {
 	}
 	result := map[string]any{"platform": runtime.GOOS, "arch": runtime.GOARCH, "mode": *mode, "self": *selfLabel, "device_id": self.DeviceID, "peer_id": peer.DeviceID, "connection": want.String(), "connected_ms": connectedAfter.Milliseconds(), "transfer_ms": time.Since(transferStarted).Milliseconds(), "text_verified": true, "image_sha256": sum(fixture("image")), "file_sha256": sum(fixture("file")), "file_bytes": len(fixture("file"))}
 	if official {
-		result["gateway_authorized"] = client.Usage().UpdatedAt > 0
+		result["gateway_authorized"] = client.RelayRequested()
+		// Read the allowance again after the gateway has metered the transfer.
+		client.RefreshUsage()
+		time.Sleep(3 * time.Second)
+		after := client.Usage()
+		charged := after.Upload + after.Download - atConnect.Upload - atConnect.Download
+		result["usage_at_connect"] = atConnect
+		result["usage_after"] = after
+		result["relay_bytes_charged"] = charged
+		switch {
+		case *mode == "direct" && (charged != 0 || after.Group != "" || client.RelayRequested()):
+			return fmt.Errorf("direct transfer was charged or bound a quota group: %+v", after)
+		case *mode == "official-relay" && (after.Group == "" || charged < int64(len(fixture("file")))):
+			return fmt.Errorf("relay transfer was not charged to the machine group: charged %d, %+v", charged, after)
+		case *mode == "official-relay" && after.Remaining > atConnect.Remaining-charged+int64(len(fixture("file"))):
+			return fmt.Errorf("remaining allowance did not shrink with the charge: %d -> %d", atConnect.Remaining, after.Remaining)
+		}
 	}
 	encoded, _ := json.MarshalIndent(result, "", "  ")
 	if err = os.WriteFile(filepath.Join(*out, "result.json"), append(encoded, '\n'), 0600); err != nil {

@@ -316,6 +316,9 @@ func TestRunFetchesOwnerUsageWithoutRelay(t *testing.T) {
 	if authorizes.Load() != 2 || usages.Load() != 1 {
 		t.Fatalf("authorize=%d usage=%d", authorizes.Load(), usages.Load())
 	}
+	if c.RelayRequested() {
+		t.Fatal("owner allowance queries were counted as relay requests")
+	}
 	// Disabled mode makes no official request, even when asked to refresh.
 	c.SetEnabled(false)
 	before := authorizes.Load() + usages.Load()

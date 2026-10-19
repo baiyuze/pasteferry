@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/baiyuze/pasteferry/client-core/internal/identity"
@@ -30,6 +31,7 @@ type Client struct {
 	root        context.Context
 	cancel      context.CancelFunc
 	kick        chan struct{}
+	relayAsked  atomic.Bool
 }
 
 // Without relay sessions the allowance only changes through policy, so it is
@@ -149,7 +151,13 @@ func (c *Client) update(u Usage) {
 	}
 }
 func (c *Client) Usage() Usage { c.mu.Lock(); defer c.mu.Unlock(); return c.last }
+
+// RelayRequested reports whether relay authorization, the only request that
+// carries a machine digest, has been attempted since the client was created.
+func (c *Client) RelayRequested() bool { return c.relayAsked.Load() }
+
 func (c *Client) Authorize(ctx context.Context, peer, session string) (Access, error) {
+	c.relayAsked.Store(true)
 	var nonce struct {
 		Nonce string `json:"nonce"`
 	}
@@ -242,9 +250,6 @@ func (c *Client) Run(ctx context.Context) {
 			if err != nil {
 				c.ReportError(err)
 			}
-		}
-		if force {
-			continue
 		}
 		for session, a := range sessions {
 			var err error
