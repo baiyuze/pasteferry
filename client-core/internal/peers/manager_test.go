@@ -104,7 +104,12 @@ func lanOnly() config.Config {
 
 func waitFor(t *testing.T, what string, cond func() bool) {
 	t.Helper()
-	deadline := time.Now().Add(15 * time.Second)
+	waitForWithin(t, what, 15*time.Second, cond)
+}
+
+func waitForWithin(t *testing.T, what string, timeout time.Duration, cond func() bool) {
+	t.Helper()
+	deadline := time.Now().Add(timeout)
 	for !cond() {
 		if time.Now().After(deadline) {
 			t.Fatalf("等不到：%s", what)
@@ -265,7 +270,9 @@ func TestServerOnlyPairingStillWorks(t *testing.T) {
 	}
 
 	pairDevices(t, a, b, "")
-	waitFor(t, "P2P 连通", func() bool { return connected(a.m.P2P().State(b.id())) })
+	// 托管的 CI 机器上第一次 ICE 偶尔连不上（经网卡的 UDP 可能被拦），之后由每 10 秒一次的巡检
+	// 重新连接（第一次尝试最长 30 秒才放弃）。这里验证的是只靠服务器配对最终能连通，所以等足一轮重连
+	waitForWithin(t, "P2P 连通", 60*time.Second, func() bool { return connected(a.m.P2P().State(b.id())) })
 	sendAndExpect(t, a, b, "clip-4")
 
 	// 服务器上不存在的码：立即报错，而不是干等
