@@ -939,8 +939,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveAndConnect => 'Save and connect';
 
   @override
-  String get officialUnused =>
-      'Relay not requested; allowance not yet verified';
+  String get officialLoading => 'Checking the allowance…';
+
+  @override
+  String get officialFetchFailed =>
+      'Can\'t get the allowance right now. It will be retried automatically.';
 
   @override
   String get officialUnavailable =>
@@ -968,7 +971,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get officialAcknowledge => 'Got it';
 
   @override
-  String get officialToday => 'Today\'s relay usage';
+  String get officialToday => 'Today\'s relay allowance';
 
   @override
   String get officialUsed => 'Used';
@@ -990,6 +993,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get officialUpdated => 'Last updated';
+
+  @override
+  String get officialRoutes => 'How devices connect';
+
+  @override
+  String get officialRoutesFootnote =>
+      'Direct connections don\'t go through the official relay and don\'t use the allowance.';
 
   @override
   String get officialDeviceID => 'Device ID';

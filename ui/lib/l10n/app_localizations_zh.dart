@@ -852,7 +852,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get saveAndConnect => '保存并连接';
 
   @override
-  String get officialUnused => '尚未申请中转，余额待核验';
+  String get officialLoading => '正在获取额度…';
+
+  @override
+  String get officialFetchFailed => '暂时获取不到额度，会自动重试。';
 
   @override
   String get officialUnavailable => '用量暂不可用，已有数据可能过期';
@@ -876,7 +879,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get officialAcknowledge => '知道了';
 
   @override
-  String get officialToday => '今日中转用量';
+  String get officialToday => '今日中转额度';
 
   @override
   String get officialUsed => '已使用';
@@ -898,6 +901,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get officialUpdated => '最后更新';
+
+  @override
+  String get officialRoutes => '设备连接方式';
+
+  @override
+  String get officialRoutesFootnote => '直连时不经过官方中转，也不消耗额度。';
 
   @override
   String get officialDeviceID => '设备 ID';
@@ -1846,7 +1855,10 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get saveAndConnect => '儲存並連接';
 
   @override
-  String get officialUnused => '尚未申請中轉，餘額待確認';
+  String get officialLoading => '正在取得額度…';
+
+  @override
+  String get officialFetchFailed => '暫時無法取得額度，會自動重試。';
 
   @override
   String get officialUnavailable => '用量暫時無法取得，現有資料可能過期';
@@ -1870,7 +1882,7 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get officialAcknowledge => '知道了';
 
   @override
-  String get officialToday => '今日中轉用量';
+  String get officialToday => '今日中轉額度';
 
   @override
   String get officialUsed => '已使用';
@@ -1892,6 +1904,12 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get officialUpdated => '上次更新';
+
+  @override
+  String get officialRoutes => '裝置連線方式';
+
+  @override
+  String get officialRoutesFootnote => '直連時不經過官方中轉，也不消耗額度。';
 
   @override
   String get officialDeviceID => '裝置 ID';
@@ -2840,7 +2858,10 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get saveAndConnect => '儲存並連線';
 
   @override
-  String get officialUnused => '尚未申請中繼，餘額待確認';
+  String get officialLoading => '正在取得額度…';
+
+  @override
+  String get officialFetchFailed => '暫時無法取得額度，會自動重試。';
 
   @override
   String get officialUnavailable => '用量暫時無法取得，現有資料可能過期';
@@ -2864,7 +2885,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get officialAcknowledge => '知道了';
 
   @override
-  String get officialToday => '今日中繼用量';
+  String get officialToday => '今日中繼額度';
 
   @override
   String get officialUsed => '已使用';
@@ -2886,6 +2907,12 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get officialUpdated => '上次更新';
+
+  @override
+  String get officialRoutes => '裝置連線方式';
+
+  @override
+  String get officialRoutesFootnote => '直連時不經過官方中繼，也不消耗額度。';
 
   @override
   String get officialDeviceID => '裝置 ID';

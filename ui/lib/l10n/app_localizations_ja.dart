@@ -858,7 +858,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get saveAndConnect => '保存して接続';
 
   @override
-  String get officialUnused => '中継は未申請です。残量は未確認です';
+  String get officialLoading => '残量を確認しています…';
+
+  @override
+  String get officialFetchFailed => '残量を取得できません。自動的に再試行します。';
 
   @override
   String get officialUnavailable => '使用量を取得できません。表示データは古い可能性があります';
@@ -883,7 +886,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get officialAcknowledge => '確認しました';
 
   @override
-  String get officialToday => '本日の中継使用量';
+  String get officialToday => '本日の中継残量';
 
   @override
   String get officialUsed => '使用済み';
@@ -905,6 +908,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get officialUpdated => '最終更新';
+
+  @override
+  String get officialRoutes => 'デバイスの接続方法';
+
+  @override
+  String get officialRoutesFootnote => '直接接続は公式中継を経由せず、残量も消費しません。';
 
   @override
   String get officialDeviceID => '端末 ID';

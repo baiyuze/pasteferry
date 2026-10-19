@@ -1622,11 +1622,17 @@ abstract class AppLocalizations {
   /// **'Save and connect'**
   String get saveAndConnect;
 
-  /// No description provided for @officialUnused.
+  /// No description provided for @officialLoading.
   ///
   /// In en, this message translates to:
-  /// **'Relay not requested; allowance not yet verified'**
-  String get officialUnused;
+  /// **'Checking the allowance…'**
+  String get officialLoading;
+
+  /// No description provided for @officialFetchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t get the allowance right now. It will be retried automatically.'**
+  String get officialFetchFailed;
 
   /// No description provided for @officialUnavailable.
   ///
@@ -1673,7 +1679,7 @@ abstract class AppLocalizations {
   /// No description provided for @officialToday.
   ///
   /// In en, this message translates to:
-  /// **'Today\'s relay usage'**
+  /// **'Today\'s relay allowance'**
   String get officialToday;
 
   /// No description provided for @officialUsed.
@@ -1717,6 +1723,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last updated'**
   String get officialUpdated;
+
+  /// No description provided for @officialRoutes.
+  ///
+  /// In en, this message translates to:
+  /// **'How devices connect'**
+  String get officialRoutes;
+
+  /// No description provided for @officialRoutesFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct connections don\'t go through the official relay and don\'t use the allowance.'**
+  String get officialRoutesFootnote;
 
   /// No description provided for @officialDeviceID.
   ///
