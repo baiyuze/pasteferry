@@ -31,6 +31,7 @@ import (
 	syncengine "github.com/baiyuze/pasteferry/client-core/internal/sync"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/lan"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/p2p"
+	"github.com/baiyuze/pasteferry/client-core/internal/update"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
@@ -53,8 +54,16 @@ func main() {
 			"诊断用：在主线程直接读一次剪贴板并打印结果后退出")
 		supervise = flag.Bool("supervise", false,
 			"守护模式：拉起后台服务，异常退出时自动重启（Windows、Linux 开机自启用）")
+		applyUpdate    = flag.String("apply-update", "", "更新助手：按这个安装计划安装新版本（由后台服务调用）")
+		applyUpdateRun = flag.String("apply-update-run", "", "更新助手脱离进程树之后的第二级，不要直接调用")
 	)
 	flag.Parse()
+	if *applyUpdate != "" || *applyUpdateRun != "" {
+		if *applyUpdate != "" {
+			os.Exit(update.RunHelper(*applyUpdate, true))
+		}
+		os.Exit(update.RunHelper(*applyUpdateRun, false))
+	}
 	if *notificationAction != "" {
 		if err := activateNotification(*notificationAction); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -361,7 +370,8 @@ func run(dataDir string) error {
 		if c.LANDisabled != prev.LANDisabled {
 			peerMgr.SetLANEnabled(!c.LANDisabled)
 		}
-		if c.EffectiveSignalingURL() != prev.EffectiveSignalingURL() || c.ServiceMode != prev.ServiceMode || c.LANDisabled != prev.LANDisabled {
+		if c.EffectiveSignalingURL() != prev.EffectiveSignalingURL() || c.ServiceMode != prev.ServiceMode || c.LANDisabled != prev.LANDisabled ||
+			c.UpdateCheckDisabled != prev.UpdateCheckDisabled || c.UpdateSkipVersion != prev.UpdateSkipVersion {
 			select {
 			case statusDirty <- struct{}{}:
 			default:
@@ -375,7 +385,13 @@ func run(dataDir string) error {
 	if err != nil {
 		return err
 	}
-	srv := rpc.NewServer(rpc.Deps{
+	updater := newUpdater(paths.Root, loadCfg, func() {
+		select {
+		case statusDirty <- struct{}{}:
+		default:
+		}
+	})
+	deps := rpc.Deps{
 		Store:                    db,
 		Paths:                    paths,
 		Version:                  version,
@@ -434,7 +450,12 @@ func run(dataDir string) error {
 		NotificationStatus:   notifier.Status,
 		RequestNotifications: notifier.Request,
 		ActivateNotification: notifier.Activate,
-	}, hub, token)
+	}
+	wireUpdater(&deps, updater)
+	srv := rpc.NewServer(deps, hub, token)
+	if updater != nil {
+		go updater.Run(ctx)
+	}
 
 	// 信令连接与在线对端数的变化推给 UI。Subscribe 只在建立订阅时推一次状态，
 	// 没有这里的话，UI 会一直停留在它打开那一刻的连接状态。

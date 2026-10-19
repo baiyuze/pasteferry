@@ -231,6 +231,32 @@ class DaemonServiceClient extends $grpc.Client {
     return $createUnaryCall(_$setVerboseLog, request, options: options);
   }
 
+  /// 检查更新：从 GitHub 与 Gitee 同时取更新清单，验签后返回比当前新的各版更新日志。见 design/auto-update.md
+  $grpc.ResponseFuture<$0.UpdateInfo> checkForUpdate(
+    $0.CheckForUpdateRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$checkForUpdate, request, options: options);
+  }
+
+  /// 下载并校验最近一次检查到的新版本。取消调用即停止下载
+  $grpc.ResponseStream<$0.UpdateProgress> downloadUpdate(
+    $0.DownloadUpdateRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createStreamingCall(
+        _$downloadUpdate, $async.Stream.fromIterable([request]),
+        options: options);
+  }
+
+  /// 准备好新版本并启动更新助手。返回后界面应当立即退出：助手等它退出后替换文件，再重新打开
+  $grpc.ResponseFuture<$0.Empty> installUpdate(
+    $0.InstallUpdateRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$installUpdate, request, options: options);
+  }
+
   // method descriptors
 
   static final _$subscribe = $grpc.ClientMethod<$0.SubscribeRequest, $0.Event>(
@@ -350,6 +376,21 @@ class DaemonServiceClient extends $grpc.Client {
           '/pasteferry.v1.DaemonService/SetVerboseLog',
           ($0.SetVerboseLogRequest value) => value.writeToBuffer(),
           $0.Status.fromBuffer);
+  static final _$checkForUpdate =
+      $grpc.ClientMethod<$0.CheckForUpdateRequest, $0.UpdateInfo>(
+          '/pasteferry.v1.DaemonService/CheckForUpdate',
+          ($0.CheckForUpdateRequest value) => value.writeToBuffer(),
+          $0.UpdateInfo.fromBuffer);
+  static final _$downloadUpdate =
+      $grpc.ClientMethod<$0.DownloadUpdateRequest, $0.UpdateProgress>(
+          '/pasteferry.v1.DaemonService/DownloadUpdate',
+          ($0.DownloadUpdateRequest value) => value.writeToBuffer(),
+          $0.UpdateProgress.fromBuffer);
+  static final _$installUpdate =
+      $grpc.ClientMethod<$0.InstallUpdateRequest, $0.Empty>(
+          '/pasteferry.v1.DaemonService/InstallUpdate',
+          ($0.InstallUpdateRequest value) => value.writeToBuffer(),
+          $0.Empty.fromBuffer);
 }
 
 @$pb.GrpcServiceName('pasteferry.v1.DaemonService')
@@ -547,6 +588,30 @@ abstract class DaemonServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.SetVerboseLogRequest.fromBuffer(value),
         ($0.Status value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.CheckForUpdateRequest, $0.UpdateInfo>(
+        'CheckForUpdate',
+        checkForUpdate_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.CheckForUpdateRequest.fromBuffer(value),
+        ($0.UpdateInfo value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DownloadUpdateRequest, $0.UpdateProgress>(
+        'DownloadUpdate',
+        downloadUpdate_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) =>
+            $0.DownloadUpdateRequest.fromBuffer(value),
+        ($0.UpdateProgress value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.InstallUpdateRequest, $0.Empty>(
+        'InstallUpdate',
+        installUpdate_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.InstallUpdateRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
   }
 
   $async.Stream<$0.Event> subscribe_Pre($grpc.ServiceCall $call,
@@ -749,4 +814,28 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.Status> setVerboseLog(
       $grpc.ServiceCall call, $0.SetVerboseLogRequest request);
+
+  $async.Future<$0.UpdateInfo> checkForUpdate_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.CheckForUpdateRequest> $request) async {
+    return checkForUpdate($call, await $request);
+  }
+
+  $async.Future<$0.UpdateInfo> checkForUpdate(
+      $grpc.ServiceCall call, $0.CheckForUpdateRequest request);
+
+  $async.Stream<$0.UpdateProgress> downloadUpdate_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.DownloadUpdateRequest> $request) async* {
+    yield* downloadUpdate($call, await $request);
+  }
+
+  $async.Stream<$0.UpdateProgress> downloadUpdate(
+      $grpc.ServiceCall call, $0.DownloadUpdateRequest request);
+
+  $async.Future<$0.Empty> installUpdate_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.InstallUpdateRequest> $request) async {
+    return installUpdate($call, await $request);
+  }
+
+  $async.Future<$0.Empty> installUpdate(
+      $grpc.ServiceCall call, $0.InstallUpdateRequest request);
 }

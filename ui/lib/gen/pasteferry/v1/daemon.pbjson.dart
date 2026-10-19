@@ -741,6 +741,20 @@ const Config$json = {
       '5': 9,
       '10': 'officialNoticeAck'
     },
+    {
+      '1': 'update_check_disabled',
+      '3': 18,
+      '4': 1,
+      '5': 8,
+      '10': 'updateCheckDisabled'
+    },
+    {
+      '1': 'update_skip_version',
+      '3': 19,
+      '4': 1,
+      '5': 9,
+      '10': 'updateSkipVersion'
+    },
   ],
 };
 
@@ -758,7 +772,9 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'FuZ3VhZ2USIQoMbGFuX2Rpc2FibGVkGA4gASgIUgtsYW5EaXNhYmxlZBI9CgxzZXJ2aWNlX21v'
     'ZGUYDyABKA4yGi5wYXN0ZWZlcnJ5LnYxLlNlcnZpY2VNb2RlUgtzZXJ2aWNlTW9kZRIwChRjdX'
     'N0b21fc2lnbmFsaW5nX3VybBgQIAEoCVISY3VzdG9tU2lnbmFsaW5nVXJsEi4KE29mZmljaWFs'
-    'X25vdGljZV9hY2sYESABKAlSEW9mZmljaWFsTm90aWNlQWNr');
+    'X25vdGljZV9hY2sYESABKAlSEW9mZmljaWFsTm90aWNlQWNrEjIKFXVwZGF0ZV9jaGVja19kaX'
+    'NhYmxlZBgSIAEoCFITdXBkYXRlQ2hlY2tEaXNhYmxlZBIuChN1cGRhdGVfc2tpcF92ZXJzaW9u'
+    'GBMgASgJUhF1cGRhdGVTa2lwVmVyc2lvbg==');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {
@@ -934,6 +950,15 @@ const Status$json = {
       '6': '.pasteferry.v1.OfficialUsage',
       '10': 'officialUsage'
     },
+    {'1': 'update_available', '3': 13, '4': 1, '5': 9, '10': 'updateAvailable'},
+    {
+      '1': 'last_update',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.UpdateResult',
+      '10': 'lastUpdate'
+    },
   ],
 };
 
@@ -948,7 +973,131 @@ final $typed_data.Uint8List statusDescriptor = $convert.base64Decode(
     'ASgIUhBzZXJ2ZXJDb25maWd1cmVkEh8KC2xhbl9lbmFibGVkGAkgASgIUgpsYW5FbmFibGVkEh'
     '8KC2xhbl9ibG9ja2VkGAogASgIUgpsYW5CbG9ja2VkEjMKFnZlcmJvc2VfbG9nX3VudGlsX3Vu'
     'aXgYCyABKANSE3ZlcmJvc2VMb2dVbnRpbFVuaXgSQwoOb2ZmaWNpYWxfdXNhZ2UYDCABKAsyHC'
-    '5wYXN0ZWZlcnJ5LnYxLk9mZmljaWFsVXNhZ2VSDW9mZmljaWFsVXNhZ2U=');
+    '5wYXN0ZWZlcnJ5LnYxLk9mZmljaWFsVXNhZ2VSDW9mZmljaWFsVXNhZ2USKQoQdXBkYXRlX2F2'
+    'YWlsYWJsZRgNIAEoCVIPdXBkYXRlQXZhaWxhYmxlEjwKC2xhc3RfdXBkYXRlGA4gASgLMhsucG'
+    'FzdGVmZXJyeS52MS5VcGRhdGVSZXN1bHRSCmxhc3RVcGRhdGU=');
+
+@$core.Deprecated('Use checkForUpdateRequestDescriptor instead')
+const CheckForUpdateRequest$json = {
+  '1': 'CheckForUpdateRequest',
+  '2': [
+    {'1': 'language', '3': 1, '4': 1, '5': 9, '10': 'language'},
+  ],
+};
+
+/// Descriptor for `CheckForUpdateRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List checkForUpdateRequestDescriptor =
+    $convert.base64Decode(
+        'ChVDaGVja0ZvclVwZGF0ZVJlcXVlc3QSGgoIbGFuZ3VhZ2UYASABKAlSCGxhbmd1YWdl');
+
+@$core.Deprecated('Use updateReleaseDescriptor instead')
+const UpdateRelease$json = {
+  '1': 'UpdateRelease',
+  '2': [
+    {'1': 'version', '3': 1, '4': 1, '5': 9, '10': 'version'},
+    {'1': 'date', '3': 2, '4': 1, '5': 9, '10': 'date'},
+    {'1': 'changes', '3': 3, '4': 3, '5': 9, '10': 'changes'},
+    {'1': 'fixes', '3': 4, '4': 3, '5': 9, '10': 'fixes'},
+  ],
+};
+
+/// Descriptor for `UpdateRelease`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateReleaseDescriptor = $convert.base64Decode(
+    'Cg1VcGRhdGVSZWxlYXNlEhgKB3ZlcnNpb24YASABKAlSB3ZlcnNpb24SEgoEZGF0ZRgCIAEoCV'
+    'IEZGF0ZRIYCgdjaGFuZ2VzGAMgAygJUgdjaGFuZ2VzEhQKBWZpeGVzGAQgAygJUgVmaXhlcw==');
+
+@$core.Deprecated('Use updateInfoDescriptor instead')
+const UpdateInfo$json = {
+  '1': 'UpdateInfo',
+  '2': [
+    {'1': 'current_version', '3': 1, '4': 1, '5': 9, '10': 'currentVersion'},
+    {'1': 'latest_version', '3': 2, '4': 1, '5': 9, '10': 'latestVersion'},
+    {'1': 'available', '3': 3, '4': 1, '5': 8, '10': 'available'},
+    {
+      '1': 'releases',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.UpdateRelease',
+      '10': 'releases'
+    },
+    {'1': 'download_bytes', '3': 5, '4': 1, '5': 3, '10': 'downloadBytes'},
+    {'1': 'install_blocker', '3': 6, '4': 1, '5': 9, '10': 'installBlocker'},
+    {'1': 'source', '3': 7, '4': 1, '5': 9, '10': 'source'},
+    {'1': 'checked_at_unix', '3': 8, '4': 1, '5': 3, '10': 'checkedAtUnix'},
+    {'1': 'install_kind', '3': 9, '4': 1, '5': 9, '10': 'installKind'},
+  ],
+};
+
+/// Descriptor for `UpdateInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateInfoDescriptor = $convert.base64Decode(
+    'CgpVcGRhdGVJbmZvEicKD2N1cnJlbnRfdmVyc2lvbhgBIAEoCVIOY3VycmVudFZlcnNpb24SJQ'
+    'oObGF0ZXN0X3ZlcnNpb24YAiABKAlSDWxhdGVzdFZlcnNpb24SHAoJYXZhaWxhYmxlGAMgASgI'
+    'UglhdmFpbGFibGUSOAoIcmVsZWFzZXMYBCADKAsyHC5wYXN0ZWZlcnJ5LnYxLlVwZGF0ZVJlbG'
+    'Vhc2VSCHJlbGVhc2VzEiUKDmRvd25sb2FkX2J5dGVzGAUgASgDUg1kb3dubG9hZEJ5dGVzEicK'
+    'D2luc3RhbGxfYmxvY2tlchgGIAEoCVIOaW5zdGFsbEJsb2NrZXISFgoGc291cmNlGAcgASgJUg'
+    'Zzb3VyY2USJgoPY2hlY2tlZF9hdF91bml4GAggASgDUg1jaGVja2VkQXRVbml4EiEKDGluc3Rh'
+    'bGxfa2luZBgJIAEoCVILaW5zdGFsbEtpbmQ=');
+
+@$core.Deprecated('Use downloadUpdateRequestDescriptor instead')
+const DownloadUpdateRequest$json = {
+  '1': 'DownloadUpdateRequest',
+  '2': [
+    {'1': 'version', '3': 1, '4': 1, '5': 9, '10': 'version'},
+  ],
+};
+
+/// Descriptor for `DownloadUpdateRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List downloadUpdateRequestDescriptor =
+    $convert.base64Decode(
+        'ChVEb3dubG9hZFVwZGF0ZVJlcXVlc3QSGAoHdmVyc2lvbhgBIAEoCVIHdmVyc2lvbg==');
+
+@$core.Deprecated('Use updateProgressDescriptor instead')
+const UpdateProgress$json = {
+  '1': 'UpdateProgress',
+  '2': [
+    {'1': 'downloaded', '3': 1, '4': 1, '5': 3, '10': 'downloaded'},
+    {'1': 'total', '3': 2, '4': 1, '5': 3, '10': 'total'},
+    {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
+  ],
+};
+
+/// Descriptor for `UpdateProgress`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateProgressDescriptor = $convert.base64Decode(
+    'Cg5VcGRhdGVQcm9ncmVzcxIeCgpkb3dubG9hZGVkGAEgASgDUgpkb3dubG9hZGVkEhQKBXRvdG'
+    'FsGAIgASgDUgV0b3RhbBISCgRkb25lGAMgASgIUgRkb25l');
+
+@$core.Deprecated('Use installUpdateRequestDescriptor instead')
+const InstallUpdateRequest$json = {
+  '1': 'InstallUpdateRequest',
+  '2': [
+    {'1': 'version', '3': 1, '4': 1, '5': 9, '10': 'version'},
+    {'1': 'ui_pid', '3': 2, '4': 1, '5': 5, '10': 'uiPid'},
+  ],
+};
+
+/// Descriptor for `InstallUpdateRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List installUpdateRequestDescriptor = $convert.base64Decode(
+    'ChRJbnN0YWxsVXBkYXRlUmVxdWVzdBIYCgd2ZXJzaW9uGAEgASgJUgd2ZXJzaW9uEhUKBnVpX3'
+    'BpZBgCIAEoBVIFdWlQaWQ=');
+
+@$core.Deprecated('Use updateResultDescriptor instead')
+const UpdateResult$json = {
+  '1': 'UpdateResult',
+  '2': [
+    {'1': 'from_version', '3': 1, '4': 1, '5': 9, '10': 'fromVersion'},
+    {'1': 'to_version', '3': 2, '4': 1, '5': 9, '10': 'toVersion'},
+    {'1': 'ok', '3': 3, '4': 1, '5': 8, '10': 'ok'},
+    {'1': 'error', '3': 4, '4': 1, '5': 9, '10': 'error'},
+    {'1': 'at_unix', '3': 5, '4': 1, '5': 3, '10': 'atUnix'},
+  ],
+};
+
+/// Descriptor for `UpdateResult`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateResultDescriptor = $convert.base64Decode(
+    'CgxVcGRhdGVSZXN1bHQSIQoMZnJvbV92ZXJzaW9uGAEgASgJUgtmcm9tVmVyc2lvbhIdCgp0b1'
+    '92ZXJzaW9uGAIgASgJUgl0b1ZlcnNpb24SDgoCb2sYAyABKAhSAm9rEhQKBWVycm9yGAQgASgJ'
+    'UgVlcnJvchIXCgdhdF91bml4GAUgASgDUgZhdFVuaXg=');
 
 @$core.Deprecated('Use exportDiagnosticsRequestDescriptor instead')
 const ExportDiagnosticsRequest$json = {

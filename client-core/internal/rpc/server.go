@@ -77,6 +77,14 @@ type Deps struct {
 	NotificationStatus       func(context.Context) (*pb.NotificationStatus, error)
 	RequestNotifications     func(context.Context) (*pb.NotificationStatus, error)
 	ActivateNotification     func(context.Context, string, string) error
+
+	// 检查与安装更新，见 internal/update。UpdateNotice 是自动检查发现、要提示的新版本；
+	// LastUpdate 是刚完成的那次更新
+	CheckUpdate    func(ctx context.Context, language string) (*pb.UpdateInfo, error)
+	DownloadUpdate func(ctx context.Context, version string, progress func(done, total int64)) error
+	InstallUpdate  func(version string, uiPID int) error
+	UpdateNotice   func() string
+	LastUpdate     func() *pb.UpdateResult
 }
 
 func (s *Server) GetNotificationStatus(ctx context.Context, _ *pb.Empty) (*pb.NotificationStatus, error) {
@@ -344,6 +352,12 @@ func (s *Server) GetStatus(context.Context, *pb.Empty) (*pb.Status, error) {
 	if s.deps.OfficialUsage != nil {
 		st.OfficialUsage = s.deps.OfficialUsage()
 	}
+	if s.deps.UpdateNotice != nil {
+		st.UpdateAvailable = s.deps.UpdateNotice()
+	}
+	if s.deps.LastUpdate != nil {
+		st.LastUpdate = s.deps.LastUpdate()
+	}
 	if s.deps.Permission != nil {
 		st.ClipboardPermission = permissionToProto(s.deps.Permission())
 	}
@@ -577,6 +591,50 @@ func (s *Server) WatchNearby(_ *pb.Empty, stream grpc.ServerStreamingServer[pb.N
 		case <-tk.C:
 		}
 	}
+}
+
+func (s *Server) CheckForUpdate(ctx context.Context, req *pb.CheckForUpdateRequest) (*pb.UpdateInfo, error) {
+	if s.deps.CheckUpdate == nil {
+		return nil, status.Error(codes.Unimplemented, "当前版本不支持检查更新")
+	}
+	info, err := s.deps.CheckUpdate(ctx, req.GetLanguage())
+	if err != nil {
+		return nil, status.Error(codes.Unavailable, err.Error())
+	}
+	return info, nil
+}
+
+func (s *Server) DownloadUpdate(req *pb.DownloadUpdateRequest, stream grpc.ServerStreamingServer[pb.UpdateProgress]) error {
+	if s.deps.DownloadUpdate == nil {
+		return status.Error(codes.Unimplemented, "当前版本不支持自动更新")
+	}
+	// 进度最多每 200 毫秒发一次，不然大文件会发出成千上万条消息
+	var last time.Time
+	var sendErr error
+	err := s.deps.DownloadUpdate(stream.Context(), req.GetVersion(), func(done, total int64) {
+		if sendErr != nil || (time.Since(last) < 200*time.Millisecond && done < total) {
+			return
+		}
+		last = time.Now()
+		sendErr = stream.Send(&pb.UpdateProgress{Downloaded: done, Total: total})
+	})
+	if err != nil {
+		if stream.Context().Err() != nil {
+			return status.Error(codes.Canceled, "已取消下载")
+		}
+		return status.Error(codes.Unavailable, err.Error())
+	}
+	return stream.Send(&pb.UpdateProgress{Done: true})
+}
+
+func (s *Server) InstallUpdate(_ context.Context, req *pb.InstallUpdateRequest) (*pb.Empty, error) {
+	if s.deps.InstallUpdate == nil {
+		return nil, status.Error(codes.Unimplemented, "当前版本不支持自动更新")
+	}
+	if err := s.deps.InstallUpdate(req.GetVersion(), int(req.GetUiPid())); err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+	return &pb.Empty{}, nil
 }
 
 func (s *Server) PairNearby(ctx context.Context, req *pb.PairNearbyRequest) (*pb.RedeemPairingCodeResponse, error) {

@@ -2156,6 +2156,8 @@ class Config extends $pb.GeneratedMessage {
     ServiceMode? serviceMode,
     $core.String? customSignalingUrl,
     $core.String? officialNoticeAck,
+    $core.bool? updateCheckDisabled,
+    $core.String? updateSkipVersion,
   }) {
     final result = Config._();
     if (autoSyncThresholdBytes != null)
@@ -2178,6 +2180,9 @@ class Config extends $pb.GeneratedMessage {
     if (customSignalingUrl != null)
       result.customSignalingUrl = customSignalingUrl;
     if (officialNoticeAck != null) result.officialNoticeAck = officialNoticeAck;
+    if (updateCheckDisabled != null)
+      result.updateCheckDisabled = updateCheckDisabled;
+    if (updateSkipVersion != null) result.updateSkipVersion = updateSkipVersion;
     return result;
   }
 
@@ -2212,6 +2217,8 @@ class Config extends $pb.GeneratedMessage {
         enumValues: ServiceMode.values)
     ..aOS(16, _omitFieldNames ? '' : 'customSignalingUrl')
     ..aOS(17, _omitFieldNames ? '' : 'officialNoticeAck')
+    ..aOB(18, _omitFieldNames ? '' : 'updateCheckDisabled')
+    ..aOS(19, _omitFieldNames ? '' : 'updateSkipVersion')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2395,6 +2402,26 @@ class Config extends $pb.GeneratedMessage {
   $core.bool hasOfficialNoticeAck() => $_has(16);
   @$pb.TagNumber(17)
   void clearOfficialNoticeAck() => $_clearField(17);
+
+  /// 不自动检查更新。写成反向的：旧配置没有这一项时就是开启
+  @$pb.TagNumber(18)
+  $core.bool get updateCheckDisabled => $_getBF(17);
+  @$pb.TagNumber(18)
+  set updateCheckDisabled($core.bool value) => $_setBool(17, value);
+  @$pb.TagNumber(18)
+  $core.bool hasUpdateCheckDisabled() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearUpdateCheckDisabled() => $_clearField(18);
+
+  /// 用户选择跳过的版本，自动检查不再提示它；手动检查照常显示
+  @$pb.TagNumber(19)
+  $core.String get updateSkipVersion => $_getSZ(18);
+  @$pb.TagNumber(19)
+  set updateSkipVersion($core.String value) => $_setString(18, value);
+  @$pb.TagNumber(19)
+  $core.bool hasUpdateSkipVersion() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearUpdateSkipVersion() => $_clearField(19);
 }
 
 class OfficialUsage extends $pb.GeneratedMessage {
@@ -2993,6 +3020,8 @@ class Status extends $pb.GeneratedMessage {
     $core.bool? lanBlocked,
     $fixnum.Int64? verboseLogUntilUnix,
     OfficialUsage? officialUsage,
+    $core.String? updateAvailable,
+    UpdateResult? lastUpdate,
   }) {
     final result = Status._();
     if (deviceId != null) result.deviceId = deviceId;
@@ -3010,6 +3039,8 @@ class Status extends $pb.GeneratedMessage {
     if (verboseLogUntilUnix != null)
       result.verboseLogUntilUnix = verboseLogUntilUnix;
     if (officialUsage != null) result.officialUsage = officialUsage;
+    if (updateAvailable != null) result.updateAvailable = updateAvailable;
+    if (lastUpdate != null) result.lastUpdate = lastUpdate;
     return result;
   }
 
@@ -3040,6 +3071,9 @@ class Status extends $pb.GeneratedMessage {
     ..aInt64(11, _omitFieldNames ? '' : 'verboseLogUntilUnix')
     ..aOM<OfficialUsage>(12, _omitFieldNames ? '' : 'officialUsage',
         subBuilder: OfficialUsage.$_createMessage)
+    ..aOS(13, _omitFieldNames ? '' : 'updateAvailable')
+    ..aOM<UpdateResult>(14, _omitFieldNames ? '' : 'lastUpdate',
+        subBuilder: UpdateResult.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3174,6 +3208,639 @@ class Status extends $pb.GeneratedMessage {
   void clearOfficialUsage() => $_clearField(12);
   @$pb.TagNumber(12)
   OfficialUsage ensureOfficialUsage() => $_ensure(11);
+
+  /// 自动检查发现的新版本（没被跳过）；空表示没有要提示的
+  @$pb.TagNumber(13)
+  $core.String get updateAvailable => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set updateAvailable($core.String value) => $_setString(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasUpdateAvailable() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearUpdateAvailable() => $_clearField(13);
+
+  /// 刚完成的一次自动更新，界面据此提示「已更新到 X」；过一会儿就不再带
+  @$pb.TagNumber(14)
+  UpdateResult get lastUpdate => $_getN(13);
+  @$pb.TagNumber(14)
+  set lastUpdate(UpdateResult value) => $_setField(14, value);
+  @$pb.TagNumber(14)
+  $core.bool hasLastUpdate() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearLastUpdate() => $_clearField(14);
+  @$pb.TagNumber(14)
+  UpdateResult ensureLastUpdate() => $_ensure(13);
+}
+
+class CheckForUpdateRequest extends $pb.GeneratedMessage {
+  factory CheckForUpdateRequest({
+    $core.String? language,
+  }) {
+    final result = CheckForUpdateRequest._();
+    if (language != null) result.language = language;
+    return result;
+  }
+
+  CheckForUpdateRequest._();
+
+  factory CheckForUpdateRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CheckForUpdateRequest()..mergeFromBuffer(data, registry);
+  factory CheckForUpdateRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CheckForUpdateRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CheckForUpdateRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: CheckForUpdateRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'language')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CheckForUpdateRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CheckForUpdateRequest copyWith(
+          void Function(CheckForUpdateRequest) updates) =>
+      super.copyWith((message) => updates(message as CheckForUpdateRequest))
+          as CheckForUpdateRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use CheckForUpdateRequest() / CheckForUpdateRequest.new instead')
+  static CheckForUpdateRequest create() => CheckForUpdateRequest._();
+  static $pb.GeneratedMessage $_createMessage() => CheckForUpdateRequest._();
+  @$core.override
+  CheckForUpdateRequest createEmptyInstance() => CheckForUpdateRequest._();
+  @$core.pragma('dart2js:noInline')
+  static CheckForUpdateRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CheckForUpdateRequest>(
+          CheckForUpdateRequest.$_createMessage);
+  static CheckForUpdateRequest? _defaultInstance;
+
+  /// 界面语言，用来挑更新日志："en"、"zh-Hans"、"zh-Hant-TW"、"zh-Hant-HK"、"ja"
+  @$pb.TagNumber(1)
+  $core.String get language => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set language($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasLanguage() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearLanguage() => $_clearField(1);
+}
+
+class UpdateRelease extends $pb.GeneratedMessage {
+  factory UpdateRelease({
+    $core.String? version,
+    $core.String? date,
+    $core.Iterable<$core.String>? changes,
+    $core.Iterable<$core.String>? fixes,
+  }) {
+    final result = UpdateRelease._();
+    if (version != null) result.version = version;
+    if (date != null) result.date = date;
+    if (changes != null) result.changes.addAll(changes);
+    if (fixes != null) result.fixes.addAll(fixes);
+    return result;
+  }
+
+  UpdateRelease._();
+
+  factory UpdateRelease.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateRelease()..mergeFromBuffer(data, registry);
+  factory UpdateRelease.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateRelease()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateRelease',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: UpdateRelease.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'version')
+    ..aOS(2, _omitFieldNames ? '' : 'date')
+    ..pPS(3, _omitFieldNames ? '' : 'changes')
+    ..pPS(4, _omitFieldNames ? '' : 'fixes')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateRelease clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateRelease copyWith(void Function(UpdateRelease) updates) =>
+      super.copyWith((message) => updates(message as UpdateRelease))
+          as UpdateRelease;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use UpdateRelease() / UpdateRelease.new instead')
+  static UpdateRelease create() => UpdateRelease._();
+  static $pb.GeneratedMessage $_createMessage() => UpdateRelease._();
+  @$core.override
+  UpdateRelease createEmptyInstance() => UpdateRelease._();
+  @$core.pragma('dart2js:noInline')
+  static UpdateRelease getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateRelease>(
+          UpdateRelease.$_createMessage);
+  static UpdateRelease? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get version => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set version($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasVersion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearVersion() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get date => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set date($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasDate() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDate() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.String> get changes => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $pb.PbList<$core.String> get fixes => $_getList(3);
+}
+
+class UpdateInfo extends $pb.GeneratedMessage {
+  factory UpdateInfo({
+    $core.String? currentVersion,
+    $core.String? latestVersion,
+    $core.bool? available,
+    $core.Iterable<UpdateRelease>? releases,
+    $fixnum.Int64? downloadBytes,
+    $core.String? installBlocker,
+    $core.String? source,
+    $fixnum.Int64? checkedAtUnix,
+    $core.String? installKind,
+  }) {
+    final result = UpdateInfo._();
+    if (currentVersion != null) result.currentVersion = currentVersion;
+    if (latestVersion != null) result.latestVersion = latestVersion;
+    if (available != null) result.available = available;
+    if (releases != null) result.releases.addAll(releases);
+    if (downloadBytes != null) result.downloadBytes = downloadBytes;
+    if (installBlocker != null) result.installBlocker = installBlocker;
+    if (source != null) result.source = source;
+    if (checkedAtUnix != null) result.checkedAtUnix = checkedAtUnix;
+    if (installKind != null) result.installKind = installKind;
+    return result;
+  }
+
+  UpdateInfo._();
+
+  factory UpdateInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateInfo()..mergeFromBuffer(data, registry);
+  factory UpdateInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateInfo()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateInfo',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: UpdateInfo.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'currentVersion')
+    ..aOS(2, _omitFieldNames ? '' : 'latestVersion')
+    ..aOB(3, _omitFieldNames ? '' : 'available')
+    ..pPM<UpdateRelease>(4, _omitFieldNames ? '' : 'releases',
+        subBuilder: UpdateRelease.$_createMessage)
+    ..aInt64(5, _omitFieldNames ? '' : 'downloadBytes')
+    ..aOS(6, _omitFieldNames ? '' : 'installBlocker')
+    ..aOS(7, _omitFieldNames ? '' : 'source')
+    ..aInt64(8, _omitFieldNames ? '' : 'checkedAtUnix')
+    ..aOS(9, _omitFieldNames ? '' : 'installKind')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateInfo copyWith(void Function(UpdateInfo) updates) =>
+      super.copyWith((message) => updates(message as UpdateInfo)) as UpdateInfo;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use UpdateInfo() / UpdateInfo.new instead')
+  static UpdateInfo create() => UpdateInfo._();
+  static $pb.GeneratedMessage $_createMessage() => UpdateInfo._();
+  @$core.override
+  UpdateInfo createEmptyInstance() => UpdateInfo._();
+  @$core.pragma('dart2js:noInline')
+  static UpdateInfo getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateInfo>(UpdateInfo.$_createMessage);
+  static UpdateInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get currentVersion => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set currentVersion($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasCurrentVersion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCurrentVersion() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get latestVersion => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set latestVersion($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasLatestVersion() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLatestVersion() => $_clearField(2);
+
+  /// latest_version 比当前新
+  @$pb.TagNumber(3)
+  $core.bool get available => $_getBF(2);
+  @$pb.TagNumber(3)
+  set available($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasAvailable() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAvailable() => $_clearField(3);
+
+  /// 比当前新的各版更新日志，从新到旧，已按语言挑好
+  @$pb.TagNumber(4)
+  $pb.PbList<UpdateRelease> get releases => $_getList(3);
+
+  /// 这台电脑要下载的安装包大小
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get downloadBytes => $_getI64(4);
+  @$pb.TagNumber(5)
+  set downloadBytes($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasDownloadBytes() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDownloadBytes() => $_clearField(5);
+
+  /// 为空表示可以自动安装；否则是不能的原因：dev、must_move、read_only、unsupported
+  @$pb.TagNumber(6)
+  $core.String get installBlocker => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set installBlocker($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasInstallBlocker() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearInstallBlocker() => $_clearField(6);
+
+  /// 清单来自哪里：github 或 gitee
+  @$pb.TagNumber(7)
+  $core.String get source => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set source($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasSource() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearSource() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $fixnum.Int64 get checkedAtUnix => $_getI64(7);
+  @$pb.TagNumber(8)
+  set checkedAtUnix($fixnum.Int64 value) => $_setInt64(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCheckedAtUnix() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCheckedAtUnix() => $_clearField(8);
+
+  /// 本机的安装方式：mac-app、windows-setup、windows-portable、linux-deb、linux-tar。
+  /// linux-deb 安装时系统会要求输入密码，界面提前说明
+  @$pb.TagNumber(9)
+  $core.String get installKind => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set installKind($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasInstallKind() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearInstallKind() => $_clearField(9);
+}
+
+class DownloadUpdateRequest extends $pb.GeneratedMessage {
+  factory DownloadUpdateRequest({
+    $core.String? version,
+  }) {
+    final result = DownloadUpdateRequest._();
+    if (version != null) result.version = version;
+    return result;
+  }
+
+  DownloadUpdateRequest._();
+
+  factory DownloadUpdateRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      DownloadUpdateRequest()..mergeFromBuffer(data, registry);
+  factory DownloadUpdateRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      DownloadUpdateRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'DownloadUpdateRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: DownloadUpdateRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'version')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DownloadUpdateRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DownloadUpdateRequest copyWith(
+          void Function(DownloadUpdateRequest) updates) =>
+      super.copyWith((message) => updates(message as DownloadUpdateRequest))
+          as DownloadUpdateRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use DownloadUpdateRequest() / DownloadUpdateRequest.new instead')
+  static DownloadUpdateRequest create() => DownloadUpdateRequest._();
+  static $pb.GeneratedMessage $_createMessage() => DownloadUpdateRequest._();
+  @$core.override
+  DownloadUpdateRequest createEmptyInstance() => DownloadUpdateRequest._();
+  @$core.pragma('dart2js:noInline')
+  static DownloadUpdateRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DownloadUpdateRequest>(
+          DownloadUpdateRequest.$_createMessage);
+  static DownloadUpdateRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get version => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set version($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasVersion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearVersion() => $_clearField(1);
+}
+
+class UpdateProgress extends $pb.GeneratedMessage {
+  factory UpdateProgress({
+    $fixnum.Int64? downloaded,
+    $fixnum.Int64? total,
+    $core.bool? done,
+  }) {
+    final result = UpdateProgress._();
+    if (downloaded != null) result.downloaded = downloaded;
+    if (total != null) result.total = total;
+    if (done != null) result.done = done;
+    return result;
+  }
+
+  UpdateProgress._();
+
+  factory UpdateProgress.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateProgress()..mergeFromBuffer(data, registry);
+  factory UpdateProgress.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateProgress()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateProgress',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: UpdateProgress.$_createMessage)
+    ..aInt64(1, _omitFieldNames ? '' : 'downloaded')
+    ..aInt64(2, _omitFieldNames ? '' : 'total')
+    ..aOB(3, _omitFieldNames ? '' : 'done')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateProgress clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateProgress copyWith(void Function(UpdateProgress) updates) =>
+      super.copyWith((message) => updates(message as UpdateProgress))
+          as UpdateProgress;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use UpdateProgress() / UpdateProgress.new instead')
+  static UpdateProgress create() => UpdateProgress._();
+  static $pb.GeneratedMessage $_createMessage() => UpdateProgress._();
+  @$core.override
+  UpdateProgress createEmptyInstance() => UpdateProgress._();
+  @$core.pragma('dart2js:noInline')
+  static UpdateProgress getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateProgress>(
+          UpdateProgress.$_createMessage);
+  static UpdateProgress? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get downloaded => $_getI64(0);
+  @$pb.TagNumber(1)
+  set downloaded($fixnum.Int64 value) => $_setInt64(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasDownloaded() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDownloaded() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get total => $_getI64(1);
+  @$pb.TagNumber(2)
+  set total($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasTotal() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTotal() => $_clearField(2);
+
+  /// 下载完并通过校验
+  @$pb.TagNumber(3)
+  $core.bool get done => $_getBF(2);
+  @$pb.TagNumber(3)
+  set done($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasDone() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDone() => $_clearField(3);
+}
+
+class InstallUpdateRequest extends $pb.GeneratedMessage {
+  factory InstallUpdateRequest({
+    $core.String? version,
+    $core.int? uiPid,
+  }) {
+    final result = InstallUpdateRequest._();
+    if (version != null) result.version = version;
+    if (uiPid != null) result.uiPid = uiPid;
+    return result;
+  }
+
+  InstallUpdateRequest._();
+
+  factory InstallUpdateRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      InstallUpdateRequest()..mergeFromBuffer(data, registry);
+  factory InstallUpdateRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      InstallUpdateRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'InstallUpdateRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: InstallUpdateRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'version')
+    ..aI(2, _omitFieldNames ? '' : 'uiPid')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  InstallUpdateRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  InstallUpdateRequest copyWith(void Function(InstallUpdateRequest) updates) =>
+      super.copyWith((message) => updates(message as InstallUpdateRequest))
+          as InstallUpdateRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use InstallUpdateRequest() / InstallUpdateRequest.new instead')
+  static InstallUpdateRequest create() => InstallUpdateRequest._();
+  static $pb.GeneratedMessage $_createMessage() => InstallUpdateRequest._();
+  @$core.override
+  InstallUpdateRequest createEmptyInstance() => InstallUpdateRequest._();
+  @$core.pragma('dart2js:noInline')
+  static InstallUpdateRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<InstallUpdateRequest>(
+          InstallUpdateRequest.$_createMessage);
+  static InstallUpdateRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get version => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set version($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasVersion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearVersion() => $_clearField(1);
+
+  /// 界面的进程号：更新助手等它退出后再替换文件
+  @$pb.TagNumber(2)
+  $core.int get uiPid => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set uiPid($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasUiPid() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUiPid() => $_clearField(2);
+}
+
+class UpdateResult extends $pb.GeneratedMessage {
+  factory UpdateResult({
+    $core.String? fromVersion,
+    $core.String? toVersion,
+    $core.bool? ok,
+    $core.String? error,
+    $fixnum.Int64? atUnix,
+  }) {
+    final result = UpdateResult._();
+    if (fromVersion != null) result.fromVersion = fromVersion;
+    if (toVersion != null) result.toVersion = toVersion;
+    if (ok != null) result.ok = ok;
+    if (error != null) result.error = error;
+    if (atUnix != null) result.atUnix = atUnix;
+    return result;
+  }
+
+  UpdateResult._();
+
+  factory UpdateResult.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateResult()..mergeFromBuffer(data, registry);
+  factory UpdateResult.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateResult()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateResult',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: UpdateResult.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'fromVersion')
+    ..aOS(2, _omitFieldNames ? '' : 'toVersion')
+    ..aOB(3, _omitFieldNames ? '' : 'ok')
+    ..aOS(4, _omitFieldNames ? '' : 'error')
+    ..aInt64(5, _omitFieldNames ? '' : 'atUnix')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateResult clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateResult copyWith(void Function(UpdateResult) updates) =>
+      super.copyWith((message) => updates(message as UpdateResult))
+          as UpdateResult;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use UpdateResult() / UpdateResult.new instead')
+  static UpdateResult create() => UpdateResult._();
+  static $pb.GeneratedMessage $_createMessage() => UpdateResult._();
+  @$core.override
+  UpdateResult createEmptyInstance() => UpdateResult._();
+  @$core.pragma('dart2js:noInline')
+  static UpdateResult getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateResult>(
+          UpdateResult.$_createMessage);
+  static UpdateResult? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get fromVersion => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set fromVersion($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasFromVersion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFromVersion() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get toVersion => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set toVersion($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasToVersion() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearToVersion() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get ok => $_getBF(2);
+  @$pb.TagNumber(3)
+  set ok($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasOk() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearOk() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get error => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set error($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasError() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearError() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get atUnix => $_getI64(4);
+  @$pb.TagNumber(5)
+  set atUnix($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasAtUnix() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearAtUnix() => $_clearField(5);
 }
 
 class ExportDiagnosticsRequest extends $pb.GeneratedMessage {

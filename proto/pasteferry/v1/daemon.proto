@@ -60,6 +60,13 @@ service DaemonService {
   rpc ExportDiagnostics(ExportDiagnosticsRequest) returns (Diagnostics);
   // 临时打开详细日志（调试级别），到时间自动关回去；minutes 为 0 立即关闭
   rpc SetVerboseLog(SetVerboseLogRequest) returns (Status);
+
+  // 检查更新：从 GitHub 与 Gitee 同时取更新清单，验签后返回比当前新的各版更新日志。见 design/auto-update.md
+  rpc CheckForUpdate(CheckForUpdateRequest) returns (UpdateInfo);
+  // 下载并校验最近一次检查到的新版本。取消调用即停止下载
+  rpc DownloadUpdate(DownloadUpdateRequest) returns (stream UpdateProgress);
+  // 准备好新版本并启动更新助手。返回后界面应当立即退出：助手等它退出后替换文件，再重新打开
+  rpc InstallUpdate(InstallUpdateRequest) returns (Empty);
 }
 
 message Empty {}
@@ -325,6 +332,11 @@ message Config {
   ServiceMode service_mode = 15;
   string custom_signaling_url = 16;
   string official_notice_ack = 17;
+
+  // 不自动检查更新。写成反向的：旧配置没有这一项时就是开启
+  bool update_check_disabled = 18;
+  // 用户选择跳过的版本，自动检查不再提示它；手动检查照常显示
+  string update_skip_version = 19;
 }
 
 enum ServiceMode {
@@ -399,6 +411,66 @@ message Status {
   // 详细日志打开到什么时候；0 表示没打开
   int64 verbose_log_until_unix = 11;
   OfficialUsage official_usage = 12;
+  // 自动检查发现的新版本（没被跳过）；空表示没有要提示的
+  string update_available = 13;
+  // 刚完成的一次自动更新，界面据此提示「已更新到 X」；过一会儿就不再带
+  UpdateResult last_update = 14;
+}
+
+message CheckForUpdateRequest {
+  // 界面语言，用来挑更新日志："en"、"zh-Hans"、"zh-Hant-TW"、"zh-Hant-HK"、"ja"
+  string language = 1;
+}
+
+message UpdateRelease {
+  string version = 1;
+  string date = 2;
+  repeated string changes = 3;
+  repeated string fixes = 4;
+}
+
+message UpdateInfo {
+  string current_version = 1;
+  string latest_version = 2;
+  // latest_version 比当前新
+  bool available = 3;
+  // 比当前新的各版更新日志，从新到旧，已按语言挑好
+  repeated UpdateRelease releases = 4;
+  // 这台电脑要下载的安装包大小
+  int64 download_bytes = 5;
+  // 为空表示可以自动安装；否则是不能的原因：dev、must_move、read_only、unsupported
+  string install_blocker = 6;
+  // 清单来自哪里：github 或 gitee
+  string source = 7;
+  int64 checked_at_unix = 8;
+  // 本机的安装方式：mac-app、windows-setup、windows-portable、linux-deb、linux-tar。
+  // linux-deb 安装时系统会要求输入密码，界面提前说明
+  string install_kind = 9;
+}
+
+message DownloadUpdateRequest {
+  string version = 1;
+}
+
+message UpdateProgress {
+  int64 downloaded = 1;
+  int64 total = 2;
+  // 下载完并通过校验
+  bool done = 3;
+}
+
+message InstallUpdateRequest {
+  string version = 1;
+  // 界面的进程号：更新助手等它退出后再替换文件
+  int32 ui_pid = 2;
+}
+
+message UpdateResult {
+  string from_version = 1;
+  string to_version = 2;
+  bool ok = 3;
+  string error = 4;
+  int64 at_unix = 5;
 }
 
 message ExportDiagnosticsRequest {

@@ -49,6 +49,9 @@ const (
 	DaemonService_GetNetwork_FullMethodName                    = "/pasteferry.v1.DaemonService/GetNetwork"
 	DaemonService_ExportDiagnostics_FullMethodName             = "/pasteferry.v1.DaemonService/ExportDiagnostics"
 	DaemonService_SetVerboseLog_FullMethodName                 = "/pasteferry.v1.DaemonService/SetVerboseLog"
+	DaemonService_CheckForUpdate_FullMethodName                = "/pasteferry.v1.DaemonService/CheckForUpdate"
+	DaemonService_DownloadUpdate_FullMethodName                = "/pasteferry.v1.DaemonService/DownloadUpdate"
+	DaemonService_InstallUpdate_FullMethodName                 = "/pasteferry.v1.DaemonService/InstallUpdate"
 )
 
 // DaemonServiceClient is the client API for DaemonService service.
@@ -97,6 +100,12 @@ type DaemonServiceClient interface {
 	ExportDiagnostics(ctx context.Context, in *ExportDiagnosticsRequest, opts ...grpc.CallOption) (*Diagnostics, error)
 	// 临时打开详细日志（调试级别），到时间自动关回去；minutes 为 0 立即关闭
 	SetVerboseLog(ctx context.Context, in *SetVerboseLogRequest, opts ...grpc.CallOption) (*Status, error)
+	// 检查更新：从 GitHub 与 Gitee 同时取更新清单，验签后返回比当前新的各版更新日志。见 design/auto-update.md
+	CheckForUpdate(ctx context.Context, in *CheckForUpdateRequest, opts ...grpc.CallOption) (*UpdateInfo, error)
+	// 下载并校验最近一次检查到的新版本。取消调用即停止下载
+	DownloadUpdate(ctx context.Context, in *DownloadUpdateRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UpdateProgress], error)
+	// 准备好新版本并启动更新助手。返回后界面应当立即退出：助手等它退出后替换文件，再重新打开
+	InstallUpdate(ctx context.Context, in *InstallUpdateRequest, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type daemonServiceClient struct {
@@ -375,6 +384,45 @@ func (c *daemonServiceClient) SetVerboseLog(ctx context.Context, in *SetVerboseL
 	return out, nil
 }
 
+func (c *daemonServiceClient) CheckForUpdate(ctx context.Context, in *CheckForUpdateRequest, opts ...grpc.CallOption) (*UpdateInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateInfo)
+	err := c.cc.Invoke(ctx, DaemonService_CheckForUpdate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) DownloadUpdate(ctx context.Context, in *DownloadUpdateRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UpdateProgress], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &DaemonService_ServiceDesc.Streams[2], DaemonService_DownloadUpdate_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[DownloadUpdateRequest, UpdateProgress]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DaemonService_DownloadUpdateClient = grpc.ServerStreamingClient[UpdateProgress]
+
+func (c *daemonServiceClient) InstallUpdate(ctx context.Context, in *InstallUpdateRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_InstallUpdate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DaemonServiceServer is the server API for DaemonService service.
 // All implementations must embed UnimplementedDaemonServiceServer
 // for forward compatibility.
@@ -421,6 +469,12 @@ type DaemonServiceServer interface {
 	ExportDiagnostics(context.Context, *ExportDiagnosticsRequest) (*Diagnostics, error)
 	// 临时打开详细日志（调试级别），到时间自动关回去；minutes 为 0 立即关闭
 	SetVerboseLog(context.Context, *SetVerboseLogRequest) (*Status, error)
+	// 检查更新：从 GitHub 与 Gitee 同时取更新清单，验签后返回比当前新的各版更新日志。见 design/auto-update.md
+	CheckForUpdate(context.Context, *CheckForUpdateRequest) (*UpdateInfo, error)
+	// 下载并校验最近一次检查到的新版本。取消调用即停止下载
+	DownloadUpdate(*DownloadUpdateRequest, grpc.ServerStreamingServer[UpdateProgress]) error
+	// 准备好新版本并启动更新助手。返回后界面应当立即退出：助手等它退出后替换文件，再重新打开
+	InstallUpdate(context.Context, *InstallUpdateRequest) (*Empty, error)
 	mustEmbedUnimplementedDaemonServiceServer()
 }
 
@@ -505,6 +559,15 @@ func (UnimplementedDaemonServiceServer) ExportDiagnostics(context.Context, *Expo
 }
 func (UnimplementedDaemonServiceServer) SetVerboseLog(context.Context, *SetVerboseLogRequest) (*Status, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetVerboseLog not implemented")
+}
+func (UnimplementedDaemonServiceServer) CheckForUpdate(context.Context, *CheckForUpdateRequest) (*UpdateInfo, error) {
+	return nil, status.Error(codes.Unimplemented, "method CheckForUpdate not implemented")
+}
+func (UnimplementedDaemonServiceServer) DownloadUpdate(*DownloadUpdateRequest, grpc.ServerStreamingServer[UpdateProgress]) error {
+	return status.Error(codes.Unimplemented, "method DownloadUpdate not implemented")
+}
+func (UnimplementedDaemonServiceServer) InstallUpdate(context.Context, *InstallUpdateRequest) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method InstallUpdate not implemented")
 }
 func (UnimplementedDaemonServiceServer) mustEmbedUnimplementedDaemonServiceServer() {}
 func (UnimplementedDaemonServiceServer) testEmbeddedByValue()                       {}
@@ -963,6 +1026,53 @@ func _DaemonService_SetVerboseLog_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_CheckForUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckForUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).CheckForUpdate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_CheckForUpdate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).CheckForUpdate(ctx, req.(*CheckForUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_DownloadUpdate_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(DownloadUpdateRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(DaemonServiceServer).DownloadUpdate(m, &grpc.GenericServerStream[DownloadUpdateRequest, UpdateProgress]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DaemonService_DownloadUpdateServer = grpc.ServerStreamingServer[UpdateProgress]
+
+func _DaemonService_InstallUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstallUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).InstallUpdate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_InstallUpdate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).InstallUpdate(ctx, req.(*InstallUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DaemonService_ServiceDesc is the grpc.ServiceDesc for DaemonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1062,6 +1172,14 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "SetVerboseLog",
 			Handler:    _DaemonService_SetVerboseLog_Handler,
 		},
+		{
+			MethodName: "CheckForUpdate",
+			Handler:    _DaemonService_CheckForUpdate_Handler,
+		},
+		{
+			MethodName: "InstallUpdate",
+			Handler:    _DaemonService_InstallUpdate_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
@@ -1072,6 +1190,11 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "WatchNearby",
 			Handler:       _DaemonService_WatchNearby_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "DownloadUpdate",
+			Handler:       _DaemonService_DownloadUpdate_Handler,
 			ServerStreams: true,
 		},
 	},

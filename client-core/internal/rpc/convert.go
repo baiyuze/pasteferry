@@ -57,6 +57,8 @@ func configToProto(c config.Config) *pb.Config {
 		Language:               c.Language,
 		LanDisabled:            c.LANDisabled,
 		ServiceMode:            serviceModeToProto(c), CustomSignalingUrl: c.CustomSignalingURL, OfficialNoticeAck: c.OfficialNoticeAck,
+		UpdateCheckDisabled: c.UpdateCheckDisabled,
+		UpdateSkipVersion:   c.UpdateSkipVersion,
 	}
 }
 
@@ -121,6 +123,8 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	}
 	c.OfficialNoticeAck = in.GetOfficialNoticeAck()
 	c.LANDisabled = in.GetLanDisabled()
+	c.UpdateCheckDisabled = in.GetUpdateCheckDisabled()
+	c.UpdateSkipVersion = in.GetUpdateSkipVersion()
 	return c
 }
 

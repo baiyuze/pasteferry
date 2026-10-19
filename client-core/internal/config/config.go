@@ -53,6 +53,11 @@ type Config struct {
 	// LANDisabled 关掉局域网发现：不在局域网里广播和查找设备，也不接受局域网里的配对请求。
 	// 写成反向的，旧配置文件没有这一项时就是开启。
 	LANDisabled bool `json:"lan_disabled,omitempty"`
+
+	// UpdateCheckDisabled 不自动检查更新。写成反向的，旧配置文件没有这一项时就是开启。
+	UpdateCheckDisabled bool `json:"update_check_disabled,omitempty"`
+	// UpdateSkipVersion 是用户选择跳过的版本：自动检查不再提示它
+	UpdateSkipVersion string `json:"update_skip_version,omitempty"`
 }
 
 // CurrentVersion 是当前的配置格式版本。
