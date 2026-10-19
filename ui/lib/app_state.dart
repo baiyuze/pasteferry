@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show pid;
 
 import 'package:flutter/foundation.dart';
 import 'package:grpc/grpc.dart';
@@ -525,6 +526,38 @@ class AppState extends ChangeNotifier {
     if (!wasOfficial && officialEnabled) _officialNavigationSerial++;
     notifyListeners();
   }
+
+  // ─────────────────────────── 更新 ───────────────────────────
+
+  /// 自动检查发现、要在侧边栏提示的新版本；空字符串表示没有。
+  String get updateAvailable => _status?.updateAvailable ?? '';
+
+  /// 刚完成的那次自动更新，后台服务过一会儿就不再带。
+  UpdateResult? get lastUpdate =>
+      _status?.hasLastUpdate() == true ? _status!.lastUpdate : null;
+
+  bool get autoCheckUpdates => !(_config?.updateCheckDisabled ?? false);
+
+  /// [language] 是更新日志的语言，见 [settingFromLocale]。
+  Future<UpdateInfo> checkForUpdate(String language) =>
+      _client.checkForUpdate(CheckForUpdateRequest(language: language));
+
+  /// 下载并校验新版本。取消订阅即停止下载。
+  Stream<UpdateProgress> downloadUpdate(String version) =>
+      _client.downloadUpdate(DownloadUpdateRequest(version: version));
+
+  /// 让后台服务启动更新助手。返回后界面要立即退出，助手等它退出后替换文件并重新打开。
+  Future<void> installUpdate(String version) async {
+    await _client.installUpdate(
+      InstallUpdateRequest(version: version, uiPid: pid),
+    );
+  }
+
+  Future<void> skipUpdate(String version) =>
+      updateConfig(config!.deepCopy()..updateSkipVersion = version);
+
+  Future<void> setAutoCheckUpdates(bool on) =>
+      updateConfig(config!.deepCopy()..updateCheckDisabled = !on);
 
   // ─────────────────────────── 反馈问题 ───────────────────────────
 

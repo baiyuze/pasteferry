@@ -51,3 +51,22 @@ AppLocalizations appL10n = lookupAppLocalizations(resolveLocale(PlatformDispatch
 extension L10nContext on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
 }
+
+/// 界面语言 → Config.language 的写法，也是更新日志的语言代码。
+String settingFromLocale(Locale l) {
+  if (l.languageCode == 'zh') {
+    if (l.countryCode == 'HK' || l.countryCode == 'MO') return 'zh-Hant-HK';
+    if (l.scriptCode == 'Hant' || l.countryCode == 'TW') return 'zh-Hant-TW';
+    return 'zh-Hans';
+  }
+  return l.languageCode == 'ja' ? 'ja' : 'en';
+}
+
+/// 官网下载页，按界面语言。中文页面上有 Gitee 国内镜像。
+String downloadPageUrl(Locale l) => switch (settingFromLocale(l)) {
+      'zh-Hans' => 'https://pasteferry.cc/download/',
+      'zh-Hant-TW' => 'https://pasteferry.cc/zh-tw/download/',
+      'zh-Hant-HK' => 'https://pasteferry.cc/zh-hk/download/',
+      'ja' => 'https://pasteferry.cc/ja/download/',
+      _ => 'https://pasteferry.cc/en/download/',
+    };

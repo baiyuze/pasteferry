@@ -918,6 +918,111 @@ class AppLocalizationsZh extends AppLocalizations {
   String get officialAccounting => '上下行合计，包含加密传输开销；只统计官方中转，不统计直连内容或流量。';
 
   @override
+  String get updateCheck => '检查更新';
+
+  @override
+  String get updateCheckEllipsis => '检查更新…';
+
+  @override
+  String get updateAuto => '自动检查更新';
+
+  @override
+  String get updateAutoDesc => '每天一次，只读取 GitHub 和 Gitee 上的更新清单，不发送任何能识别你的信息。';
+
+  @override
+  String get updateChecking => '正在检查更新…';
+
+  @override
+  String updateUpToDate(String version) {
+    return '隔空贴 $version 已是最新版本。';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return '有新版本：隔空贴 $version';
+  }
+
+  @override
+  String updateCurrentSize(String current, String size) {
+    return '当前版本 $current，需要下载 $size。';
+  }
+
+  @override
+  String get updateNew => '新增';
+
+  @override
+  String get updateFixed => '修复';
+
+  @override
+  String get updateSkip => '跳过这个版本';
+
+  @override
+  String get updateLater => '以后再说';
+
+  @override
+  String get updateInstall => '下载并安装';
+
+  @override
+  String updateDownloading(String done, String total) {
+    return '正在下载 $done / $total';
+  }
+
+  @override
+  String get updateVerifying => '正在校验下载的文件…';
+
+  @override
+  String get updateInstalling => '正在安装，隔空贴会自动重新打开。';
+
+  @override
+  String get updateInstallingPassword =>
+      '正在安装。安装到 /opt 需要管理员权限，系统会请你输入密码，之后隔空贴会自动重新打开。';
+
+  @override
+  String get updateCheckFailed => '暂时连不上 GitHub 和 Gitee，请稍后再试。';
+
+  @override
+  String get updateDownloadFailed => '下载没有完成。可以重试，或者到下载页手动下载新版本。';
+
+  @override
+  String updateInstallFailed(String error) {
+    return '没能开始安装：$error';
+  }
+
+  @override
+  String get updateUnsupportedBuild => '这个版本不支持检查更新。';
+
+  @override
+  String get updateBlockedDev => '这是开发构建，不能自动更新。';
+
+  @override
+  String get updateBlockedMustMove =>
+      '隔空贴是直接从磁盘映像里打开的。把它拖到「应用程序」文件夹、从那里打开后，就能自动更新。';
+
+  @override
+  String get updateBlockedReadOnly => '隔空贴所在的文件夹不能写入，没法自动更新。请到下载页手动下载新版本。';
+
+  @override
+  String get updateBlockedUnsupported => '这台电脑没有可用的自动更新安装包，请到下载页手动下载新版本。';
+
+  @override
+  String get updateOpenDownload => '打开下载页';
+
+  @override
+  String updateSidebar(String version) {
+    return '新版本 $version 可用';
+  }
+
+  @override
+  String updatedTo(String version) {
+    return '已更新到 $version';
+  }
+
+  @override
+  String updateNotFinished(String version) {
+    return '更新没有完成，仍是 $version。';
+  }
+
+  @override
   String buildDetails(String uiVersion, String serviceVersion, String build) {
     return '界面 $uiVersion · 后台 $serviceVersion · 构建 $build';
   }
@@ -1921,6 +2026,111 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get officialAccounting => '上下行合計，包含加密傳輸開銷；只統計官方中轉，不統計直連內容或流量。';
 
   @override
+  String get updateCheck => '檢查更新';
+
+  @override
+  String get updateCheckEllipsis => '檢查更新…';
+
+  @override
+  String get updateAuto => '自動檢查更新';
+
+  @override
+  String get updateAutoDesc => '每天一次，只讀取 GitHub 和 Gitee 上的更新清單，不傳送任何能識別你的資料。';
+
+  @override
+  String get updateChecking => '正在檢查更新…';
+
+  @override
+  String updateUpToDate(String version) {
+    return '隔空貼 $version 已是最新版本。';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return '有新版本：隔空貼 $version';
+  }
+
+  @override
+  String updateCurrentSize(String current, String size) {
+    return '目前版本 $current，需要下載 $size。';
+  }
+
+  @override
+  String get updateNew => '新增';
+
+  @override
+  String get updateFixed => '修正';
+
+  @override
+  String get updateSkip => '略過這個版本';
+
+  @override
+  String get updateLater => '稍後再說';
+
+  @override
+  String get updateInstall => '下載並安裝';
+
+  @override
+  String updateDownloading(String done, String total) {
+    return '正在下載 $done / $total';
+  }
+
+  @override
+  String get updateVerifying => '正在校驗下載的檔案…';
+
+  @override
+  String get updateInstalling => '正在安裝，隔空貼會自動重新開啟。';
+
+  @override
+  String get updateInstallingPassword =>
+      '正在安裝。安裝到 /opt 需要管理員權限，系統會請你輸入密碼，之後隔空貼會自動重新開啟。';
+
+  @override
+  String get updateCheckFailed => '暫時連不上 GitHub 和 Gitee，請稍後再試。';
+
+  @override
+  String get updateDownloadFailed => '下載沒有完成。可以重試，或到下載頁手動下載新版本。';
+
+  @override
+  String updateInstallFailed(String error) {
+    return '未能開始安裝：$error';
+  }
+
+  @override
+  String get updateUnsupportedBuild => '這個版本不支援檢查更新。';
+
+  @override
+  String get updateBlockedDev => '這是開發版本，不能自動更新。';
+
+  @override
+  String get updateBlockedMustMove =>
+      '隔空貼是直接從磁碟映像檔裏開啟的。把它拖到「應用程式」資料夾、從那裏開啟後，就能自動更新。';
+
+  @override
+  String get updateBlockedReadOnly => '隔空貼所在的資料夾無法寫入，沒法自動更新。請到下載頁手動下載新版本。';
+
+  @override
+  String get updateBlockedUnsupported => '這部電腦沒有可用的自動更新安裝檔，請到下載頁手動下載新版本。';
+
+  @override
+  String get updateOpenDownload => '開啟下載頁';
+
+  @override
+  String updateSidebar(String version) {
+    return '新版本 $version 可用';
+  }
+
+  @override
+  String updatedTo(String version) {
+    return '已更新到 $version';
+  }
+
+  @override
+  String updateNotFinished(String version) {
+    return '更新沒有完成，仍是 $version。';
+  }
+
+  @override
   String buildDetails(String uiVersion, String serviceVersion, String build) {
     return '介面 $uiVersion · 背景服務 $serviceVersion · 版本識別 $build';
   }
@@ -2922,6 +3132,111 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get officialAccounting => '上下行合計，包含加密傳輸開銷；僅統計官方中繼，不統計直連內容或流量。';
+
+  @override
+  String get updateCheck => '檢查更新';
+
+  @override
+  String get updateCheckEllipsis => '檢查更新…';
+
+  @override
+  String get updateAuto => '自動檢查更新';
+
+  @override
+  String get updateAutoDesc => '每天一次，只讀取 GitHub 和 Gitee 上的更新清單，不傳送任何能識別你的資訊。';
+
+  @override
+  String get updateChecking => '正在檢查更新…';
+
+  @override
+  String updateUpToDate(String version) {
+    return '隔空貼 $version 已是最新版本。';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return '有新版本：隔空貼 $version';
+  }
+
+  @override
+  String updateCurrentSize(String current, String size) {
+    return '目前版本 $current，需要下載 $size。';
+  }
+
+  @override
+  String get updateNew => '新增';
+
+  @override
+  String get updateFixed => '修正';
+
+  @override
+  String get updateSkip => '略過這個版本';
+
+  @override
+  String get updateLater => '以後再說';
+
+  @override
+  String get updateInstall => '下載並安裝';
+
+  @override
+  String updateDownloading(String done, String total) {
+    return '正在下載 $done / $total';
+  }
+
+  @override
+  String get updateVerifying => '正在驗證下載的檔案…';
+
+  @override
+  String get updateInstalling => '正在安裝，隔空貼會自動重新開啟。';
+
+  @override
+  String get updateInstallingPassword =>
+      '正在安裝。安裝到 /opt 需要系統管理員權限，系統會請你輸入密碼，之後隔空貼會自動重新開啟。';
+
+  @override
+  String get updateCheckFailed => '暫時連不上 GitHub 和 Gitee，請稍後再試。';
+
+  @override
+  String get updateDownloadFailed => '下載沒有完成。可以重試，或到下載頁手動下載新版本。';
+
+  @override
+  String updateInstallFailed(String error) {
+    return '沒能開始安裝：$error';
+  }
+
+  @override
+  String get updateUnsupportedBuild => '這個版本不支援檢查更新。';
+
+  @override
+  String get updateBlockedDev => '這是開發版本，不能自動更新。';
+
+  @override
+  String get updateBlockedMustMove =>
+      '隔空貼是直接從磁碟映像檔裡開啟的。把它拖到「應用程式」資料夾、從那裡開啟後，就能自動更新。';
+
+  @override
+  String get updateBlockedReadOnly => '隔空貼所在的資料夾無法寫入，沒辦法自動更新。請到下載頁手動下載新版本。';
+
+  @override
+  String get updateBlockedUnsupported => '這台電腦沒有可用的自動更新安裝檔，請到下載頁手動下載新版本。';
+
+  @override
+  String get updateOpenDownload => '開啟下載頁';
+
+  @override
+  String updateSidebar(String version) {
+    return '新版本 $version 可用';
+  }
+
+  @override
+  String updatedTo(String version) {
+    return '已更新到 $version';
+  }
+
+  @override
+  String updateNotFinished(String version) {
+    return '更新沒有完成，仍是 $version。';
+  }
 
   @override
   String buildDetails(String uiVersion, String serviceVersion, String build) {

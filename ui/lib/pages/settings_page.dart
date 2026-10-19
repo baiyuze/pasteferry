@@ -11,6 +11,7 @@ import '../main.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/feedback_dialog.dart';
+import '../widgets/update_dialog.dart';
 import '../icons.dart';
 import '../platform.dart';
 
@@ -410,6 +411,24 @@ class _SettingsPageState extends State<SettingsPage> {
                           TextButton(
                             onPressed: () => showFeedbackDialog(context),
                             child: Text(l.feedback),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SettingRow(
+                      title: l.updateAuto,
+                      description: l.updateAutoDesc,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextButton(
+                            onPressed: () => showUpdateDialog(context),
+                            child: Text(l.updateCheckEllipsis),
+                          ),
+                          const SizedBox(width: Insets.sm),
+                          SmallSwitch(
+                            value: !cfg.updateCheckDisabled,
+                            onChanged: (v) => _update(state, cfg..updateCheckDisabled = !v),
                           ),
                         ],
                       ),

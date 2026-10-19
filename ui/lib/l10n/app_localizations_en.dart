@@ -1013,6 +1013,118 @@ class AppLocalizationsEn extends AppLocalizations {
       'Upload and download combined, including encryption overhead. Only official relay usage is measured; direct content and traffic are not recorded.';
 
   @override
+  String get updateCheck => 'Check for updates';
+
+  @override
+  String get updateCheckEllipsis => 'Check for updates…';
+
+  @override
+  String get updateAuto => 'Check for updates automatically';
+
+  @override
+  String get updateAutoDesc =>
+      'Once a day. Only reads the update list on GitHub and Gitee; nothing that identifies you is sent.';
+
+  @override
+  String get updateChecking => 'Checking for updates…';
+
+  @override
+  String updateUpToDate(String version) {
+    return 'PasteFerry $version is the latest version.';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'PasteFerry $version is available';
+  }
+
+  @override
+  String updateCurrentSize(String current, String size) {
+    return 'You have $current. Download size $size.';
+  }
+
+  @override
+  String get updateNew => 'New';
+
+  @override
+  String get updateFixed => 'Fixed';
+
+  @override
+  String get updateSkip => 'Skip this version';
+
+  @override
+  String get updateLater => 'Later';
+
+  @override
+  String get updateInstall => 'Download and install';
+
+  @override
+  String updateDownloading(String done, String total) {
+    return 'Downloading $done of $total';
+  }
+
+  @override
+  String get updateVerifying => 'Checking the download…';
+
+  @override
+  String get updateInstalling =>
+      'Installing. PasteFerry will reopen by itself.';
+
+  @override
+  String get updateInstallingPassword =>
+      'Installing. Your system will ask for your password, because /opt needs administrator rights; PasteFerry then reopens by itself.';
+
+  @override
+  String get updateCheckFailed =>
+      'Couldn\'t reach GitHub or Gitee. Try again later.';
+
+  @override
+  String get updateDownloadFailed =>
+      'The download didn\'t finish. Try again, or download the new version from the website.';
+
+  @override
+  String updateInstallFailed(String error) {
+    return 'Couldn\'t start the installation: $error';
+  }
+
+  @override
+  String get updateUnsupportedBuild => 'This build can\'t check for updates.';
+
+  @override
+  String get updateBlockedDev =>
+      'This is a development build, so it can\'t update itself.';
+
+  @override
+  String get updateBlockedMustMove =>
+      'PasteFerry is running from the disk image. Drag it to Applications and open it from there to update automatically.';
+
+  @override
+  String get updateBlockedReadOnly =>
+      'PasteFerry can\'t write to the folder it is installed in. Download the new version from the website instead.';
+
+  @override
+  String get updateBlockedUnsupported =>
+      'There is no automatic update for this computer. Download the new version from the website.';
+
+  @override
+  String get updateOpenDownload => 'Open download page';
+
+  @override
+  String updateSidebar(String version) {
+    return 'Version $version is available';
+  }
+
+  @override
+  String updatedTo(String version) {
+    return 'Updated to $version';
+  }
+
+  @override
+  String updateNotFinished(String version) {
+    return 'The update didn\'t finish. You\'re still on $version.';
+  }
+
+  @override
   String buildDetails(String uiVersion, String serviceVersion, String build) {
     return 'UI $uiVersion · Service $serviceVersion · Build $build';
   }

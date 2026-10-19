@@ -13,6 +13,7 @@ import 'pages/official_service_page.dart';
 import 'theme.dart';
 import 'widgets/common.dart';
 import 'widgets/pairing_dialog.dart';
+import 'widgets/update_dialog.dart';
 import 'icons.dart';
 
 void main() => runApp(const PasteFerryApp());
@@ -125,6 +126,7 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
   bool _pairingDialogOpen = false;
   bool _officialDialogOpen = false;
   int _seenOfficialNavigation = 0;
+  String? _shownUpdateResult;
   AppLifecycleState _lifecycle = AppLifecycleState.resumed;
 
   @override
@@ -232,6 +234,24 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
       });
     }
 
+    // 自动更新后重新打开时提示一次结果
+    final updated = state.lastUpdate;
+    if (updated != null) {
+      final key = '${updated.fromVersion}>${updated.toVersion}@${updated.atUnix}';
+      if (key != _shownUpdateResult) {
+        _shownUpdateResult = key;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          final l = context.l10n;
+          showToast(
+            context,
+            updated.ok ? l.updatedTo(updated.toVersion) : l.updateNotFinished(updated.fromVersion),
+            error: !updated.ok,
+          );
+        });
+      }
+    }
+
     // 后台服务没装或没在跑时，其他页面都无从谈起，先引导把它启用
     final service = state.serviceState;
     final needsService =
@@ -328,6 +348,7 @@ class _Sidebar extends StatelessWidget {
             onTap: () => onSelect(Section.settings),
           ),
           const Spacer(),
+          const _UpdateHint(),
           const _ConnectionFooter(),
         ],
       ),
@@ -400,6 +421,34 @@ class _NavItemState extends State<_NavItem> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 自动检查发现新版本时，侧边栏底部多一行，点开是更新窗口。不弹窗打扰。
+class _UpdateHint extends StatelessWidget {
+  const _UpdateHint();
+
+  @override
+  Widget build(BuildContext context) {
+    final version = AppScope.of(context).updateAvailable;
+    if (version.isEmpty) return const SizedBox.shrink();
+    final p = context.palette;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(Insets.sm, 0, Insets.sm, Insets.xs),
+      child: TextButton.icon(
+        style: TextButton.styleFrom(
+          alignment: Alignment.centerLeft,
+          foregroundColor: p.accent,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+        ),
+        onPressed: () => showUpdateDialog(context),
+        icon: Icon(AppIcons.arrowDownCircle, size: 16),
+        label: Text(
+          context.l10n.updateSidebar(version),
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );

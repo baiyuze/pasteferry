@@ -541,6 +541,97 @@
   "officialDeviceID": "Device ID",
   "officialWarning": "90% of the daily relay allowance has been used. Direct connections do not consume it.",
   "officialAccounting": "Upload and download combined, including encryption overhead. Only official relay usage is measured; direct content and traffic are not recorded.",
+  "updateCheck": "Check for updates",
+  "updateCheckEllipsis": "Check for updates…",
+  "updateAuto": "Check for updates automatically",
+  "updateAutoDesc": "Once a day. Only reads the update list on GitHub and Gitee; nothing that identifies you is sent.",
+  "updateChecking": "Checking for updates…",
+  "updateUpToDate": "PasteFerry {version} is the latest version.",
+  "@updateUpToDate": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateAvailableTitle": "PasteFerry {version} is available",
+  "@updateAvailableTitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateCurrentSize": "You have {current}. Download size {size}.",
+  "@updateCurrentSize": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "updateNew": "New",
+  "updateFixed": "Fixed",
+  "updateSkip": "Skip this version",
+  "updateLater": "Later",
+  "updateInstall": "Download and install",
+  "updateDownloading": "Downloading {done} of {total}",
+  "@updateDownloading": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "updateVerifying": "Checking the download…",
+  "updateInstalling": "Installing. PasteFerry will reopen by itself.",
+  "updateInstallingPassword": "Installing. Your system will ask for your password, because /opt needs administrator rights; PasteFerry then reopens by itself.",
+  "updateCheckFailed": "Couldn't reach GitHub or Gitee. Try again later.",
+  "updateDownloadFailed": "The download didn't finish. Try again, or download the new version from the website.",
+  "updateInstallFailed": "Couldn't start the installation: {error}",
+  "@updateInstallFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "updateUnsupportedBuild": "This build can't check for updates.",
+  "updateBlockedDev": "This is a development build, so it can't update itself.",
+  "updateBlockedMustMove": "PasteFerry is running from the disk image. Drag it to Applications and open it from there to update automatically.",
+  "updateBlockedReadOnly": "PasteFerry can't write to the folder it is installed in. Download the new version from the website instead.",
+  "updateBlockedUnsupported": "There is no automatic update for this computer. Download the new version from the website.",
+  "updateOpenDownload": "Open download page",
+  "updateSidebar": "Version {version} is available",
+  "@updateSidebar": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updatedTo": "Updated to {version}",
+  "@updatedTo": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateNotFinished": "The update didn't finish. You're still on {version}.",
+  "@updateNotFinished": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "buildDetails": "UI {uiVersion} · Service {serviceVersion} · Build {build}",
   "@buildDetails": {
     "placeholders": {

@@ -1754,6 +1754,180 @@ abstract class AppLocalizations {
   /// **'Upload and download combined, including encryption overhead. Only official relay usage is measured; direct content and traffic are not recorded.'**
   String get officialAccounting;
 
+  /// No description provided for @updateCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get updateCheck;
+
+  /// No description provided for @updateCheckEllipsis.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates…'**
+  String get updateCheckEllipsis;
+
+  /// No description provided for @updateAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates automatically'**
+  String get updateAuto;
+
+  /// No description provided for @updateAutoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Once a day. Only reads the update list on GitHub and Gitee; nothing that identifies you is sent.'**
+  String get updateAutoDesc;
+
+  /// No description provided for @updateChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking for updates…'**
+  String get updateChecking;
+
+  /// No description provided for @updateUpToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'PasteFerry {version} is the latest version.'**
+  String updateUpToDate(String version);
+
+  /// No description provided for @updateAvailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PasteFerry {version} is available'**
+  String updateAvailableTitle(String version);
+
+  /// No description provided for @updateCurrentSize.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {current}. Download size {size}.'**
+  String updateCurrentSize(String current, String size);
+
+  /// No description provided for @updateNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get updateNew;
+
+  /// No description provided for @updateFixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed'**
+  String get updateFixed;
+
+  /// No description provided for @updateSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip this version'**
+  String get updateSkip;
+
+  /// No description provided for @updateLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get updateLater;
+
+  /// No description provided for @updateInstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Download and install'**
+  String get updateInstall;
+
+  /// No description provided for @updateDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading {done} of {total}'**
+  String updateDownloading(String done, String total);
+
+  /// No description provided for @updateVerifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking the download…'**
+  String get updateVerifying;
+
+  /// No description provided for @updateInstalling.
+  ///
+  /// In en, this message translates to:
+  /// **'Installing. PasteFerry will reopen by itself.'**
+  String get updateInstalling;
+
+  /// No description provided for @updateInstallingPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Installing. Your system will ask for your password, because /opt needs administrator rights; PasteFerry then reopens by itself.'**
+  String get updateInstallingPassword;
+
+  /// No description provided for @updateCheckFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach GitHub or Gitee. Try again later.'**
+  String get updateCheckFailed;
+
+  /// No description provided for @updateDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The download didn\'t finish. Try again, or download the new version from the website.'**
+  String get updateDownloadFailed;
+
+  /// No description provided for @updateInstallFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start the installation: {error}'**
+  String updateInstallFailed(String error);
+
+  /// No description provided for @updateUnsupportedBuild.
+  ///
+  /// In en, this message translates to:
+  /// **'This build can\'t check for updates.'**
+  String get updateUnsupportedBuild;
+
+  /// No description provided for @updateBlockedDev.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a development build, so it can\'t update itself.'**
+  String get updateBlockedDev;
+
+  /// No description provided for @updateBlockedMustMove.
+  ///
+  /// In en, this message translates to:
+  /// **'PasteFerry is running from the disk image. Drag it to Applications and open it from there to update automatically.'**
+  String get updateBlockedMustMove;
+
+  /// No description provided for @updateBlockedReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'PasteFerry can\'t write to the folder it is installed in. Download the new version from the website instead.'**
+  String get updateBlockedReadOnly;
+
+  /// No description provided for @updateBlockedUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no automatic update for this computer. Download the new version from the website.'**
+  String get updateBlockedUnsupported;
+
+  /// No description provided for @updateOpenDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Open download page'**
+  String get updateOpenDownload;
+
+  /// No description provided for @updateSidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version} is available'**
+  String updateSidebar(String version);
+
+  /// No description provided for @updatedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated to {version}'**
+  String updatedTo(String version);
+
+  /// No description provided for @updateNotFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'The update didn\'t finish. You\'re still on {version}.'**
+  String updateNotFinished(String version);
+
   /// No description provided for @buildDetails.
   ///
   /// In en, this message translates to:

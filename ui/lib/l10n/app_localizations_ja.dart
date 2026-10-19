@@ -926,6 +926,116 @@ class AppLocalizationsJa extends AppLocalizations {
       '暗号化の通信量を含む送受信の合計です。公式中継のみ計測し、直接接続の内容や通信量は記録しません。';
 
   @override
+  String get updateCheck => 'アップデートを確認';
+
+  @override
+  String get updateCheckEllipsis => 'アップデートを確認…';
+
+  @override
+  String get updateAuto => 'アップデートを自動で確認';
+
+  @override
+  String get updateAutoDesc =>
+      '1 日 1 回、GitHub と Gitee のアップデート一覧を読むだけで、あなたを識別できる情報は送信しません。';
+
+  @override
+  String get updateChecking => 'アップデートを確認しています…';
+
+  @override
+  String updateUpToDate(String version) {
+    return 'PasteFerry $version は最新バージョンです。';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'PasteFerry $version があります';
+  }
+
+  @override
+  String updateCurrentSize(String current, String size) {
+    return '現在のバージョンは $current、ダウンロードは $size です。';
+  }
+
+  @override
+  String get updateNew => '新機能';
+
+  @override
+  String get updateFixed => '修正';
+
+  @override
+  String get updateSkip => 'このバージョンをスキップ';
+
+  @override
+  String get updateLater => '後で';
+
+  @override
+  String get updateInstall => 'ダウンロードしてインストール';
+
+  @override
+  String updateDownloading(String done, String total) {
+    return 'ダウンロード中 $done / $total';
+  }
+
+  @override
+  String get updateVerifying => 'ダウンロードしたファイルを検証しています…';
+
+  @override
+  String get updateInstalling => 'インストールしています。PasteFerry は自動的に再び開きます。';
+
+  @override
+  String get updateInstallingPassword =>
+      'インストールしています。/opt には管理者権限が必要なため、システムがパスワードを求めます。その後 PasteFerry は自動的に再び開きます。';
+
+  @override
+  String get updateCheckFailed =>
+      'GitHub と Gitee に接続できません。しばらくしてからもう一度お試しください。';
+
+  @override
+  String get updateDownloadFailed =>
+      'ダウンロードが完了しませんでした。もう一度試すか、ウェブサイトから新しいバージョンをダウンロードしてください。';
+
+  @override
+  String updateInstallFailed(String error) {
+    return 'インストールを開始できませんでした：$error';
+  }
+
+  @override
+  String get updateUnsupportedBuild => 'このビルドはアップデートを確認できません。';
+
+  @override
+  String get updateBlockedDev => '開発ビルドのため、自動アップデートできません。';
+
+  @override
+  String get updateBlockedMustMove =>
+      'PasteFerry をディスクイメージから直接開いています。「アプリケーション」フォルダにドラッグし、そこから開くと自動アップデートできます。';
+
+  @override
+  String get updateBlockedReadOnly =>
+      'PasteFerry のインストール先フォルダに書き込めないため、自動アップデートできません。ウェブサイトから新しいバージョンをダウンロードしてください。';
+
+  @override
+  String get updateBlockedUnsupported =>
+      'このコンピュータ用の自動アップデートはありません。ウェブサイトから新しいバージョンをダウンロードしてください。';
+
+  @override
+  String get updateOpenDownload => 'ダウンロードページを開く';
+
+  @override
+  String updateSidebar(String version) {
+    return 'バージョン $version があります';
+  }
+
+  @override
+  String updatedTo(String version) {
+    return '$version にアップデートしました';
+  }
+
+  @override
+  String updateNotFinished(String version) {
+    return 'アップデートが完了しませんでした。$version のままです。';
+  }
+
+  @override
   String buildDetails(String uiVersion, String serviceVersion, String build) {
     return 'UI $uiVersion · サービス $serviceVersion · ビルド $build';
   }
