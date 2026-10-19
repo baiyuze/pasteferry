@@ -1,5 +1,46 @@
 # 更新记录 / Changelog
 
+## 2.3.0 — 2026-10-19
+
+Update PasteFerry from inside the app: check for a new version, read what
+changed in your language, and install it after you confirm.
+
+### Changes
+
+- **Check for updates**: in Settings → About. After you confirm, PasteFerry
+  downloads, verifies and installs the new version and reopens by itself; your
+  devices, history and settings stay. This works for the macOS app, the
+  Windows installer and portable builds, and the Linux .deb and tar.gz builds.
+- **Release notes in your language**: English, Simplified Chinese, Traditional
+  Chinese (Taiwan and Hong Kong) and Japanese. If you are several versions
+  behind, each version is listed.
+- **Automatic checks**: a daily check shows a quiet hint in the sidebar when a
+  new version is out. You can skip a version or turn automatic checks off. The
+  check only reads the update list on GitHub and Gitee and sends nothing that
+  identifies you.
+- **Signed updates**: the app only installs a package whose checksum appears in
+  an update list signed by the PasteFerry release key.
+- **Gitee mirror**: in mainland China, installers are also mirrored on Gitee,
+  linked from the Chinese download pages. Updates download from whichever of
+  GitHub and Gitee answers first.
+
+### Fixes
+
+- On Linux, restarting the background service with the window open, as the app
+  does after it is upgraded by hand, could leave the service stopped until
+  PasteFerry was opened again. The service now stops within two seconds, so
+  the restart goes through.
+- A device that closes Search nearby now disappears from the other devices'
+  lists right away, instead of sometimes lingering for up to seven seconds.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: install 2.3.0 by hand once; later versions
+  can be installed from the app. Mixing 2.3.0 with 2.1.0 and 2.2.0 devices is
+  fine.
+- **Server**: no upgrade needed; the self-hosted server is unchanged.
+- The device-to-device protocol is unchanged.
+
 ## 2.2.0 — 2026-10-19
 
 See today's relay allowance as soon as official access is enabled, before any

@@ -13,7 +13,7 @@ MAX_RELEASES = 10
 RELEASES = [
     {
         "version": "2.3.0",
-        "date": "2026-10-20",
+        "date": "2026-10-19",
         "changes": [
             ("Check for updates in Settings → About. After you confirm, PasteFerry downloads, verifies and installs the new version and reopens by itself; your devices, history and settings stay.",
              "在「设置 → 关于」里检查更新。确认后，隔空贴会自动下载、校验并安装新版本，然后自己重新打开；配对、记录和设置都保留。",
@@ -41,6 +41,17 @@ RELEASES = [
              "在中國大陸，安裝檔同時放在 Gitee 鏡像上，中文下載頁有連結；自動更新會從 GitHub 和 Gitee 中先回應的那個下載。",
              "在內地，安裝檔同時放在 Gitee 鏡像上，中文下載頁有連結；自動更新會從 GitHub 和 Gitee 中先回應的那個下載。"),
         ],
-        "fixes": [],
+        "fixes": [
+            ("On Linux, restarting the background service with the window open, as the app does after it is upgraded by hand, could leave the service stopped until PasteFerry was opened again. The service now stops within two seconds, so the restart goes through.",
+             "在 Linux 上，窗口开着时重新启动后台服务（手动升级后 App 会自动这样做），后台服务可能一直停着，直到下次打开隔空贴。现在后台服务两秒内就会退出，重启能顺利完成。",
+             "Linux で、ウィンドウを開いたままバックグラウンドサービスを再起動すると（手動でアップグレードした後はアプリが自動で再起動します）、次に PasteFerry を開くまでサービスが止まったままになることがありました。サービスが 2 秒以内に終了するようになり、再起動が正しく完了します。",
+             "在 Linux 上，視窗開著時重新啟動背景服務（手動升級後 App 會自動這樣做），背景服務可能一直停著，直到下次開啟隔空貼。現在背景服務兩秒內就會結束，重新啟動能順利完成。",
+             "在 Linux 上，視窗開着時重新啟動背景服務（手動升級後 App 會自動這樣做），背景服務可能一直停着，直到下次開啟隔空貼。現在背景服務兩秒內就會結束，重新啟動能順利完成。"),
+            ("A device that closes Search nearby now disappears from the other devices' lists right away, instead of sometimes lingering for up to seven seconds.",
+             "一台设备关掉「搜索附近设备」后，会立即从其他设备的列表里消失，不再偶尔多停留最长七秒。",
+             "「近くを検索」を閉じたデバイスは、ほかのデバイスの一覧からすぐに消えるようになりました。以前は最大 7 秒残ることがありました。",
+             "一台裝置關閉「搜尋附近裝置」後，會立即從其他裝置的列表中消失，不再偶爾多停留最長七秒。",
+             "一部裝置關閉「搜尋附近裝置」後，會立即從其他裝置的列表中消失，不再偶爾多停留最長七秒。"),
+        ],
     },
 ]
