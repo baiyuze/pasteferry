@@ -63,7 +63,7 @@
 <main id="main" class="wrap" style="max-width:850px;padding-top:5rem;padding-bottom:5rem;line-height:1.9"><h1>プライバシーと必要なデータ</h1><section><h2>公式サービスは任意です</h2><p>新規インストールではLANのみを使用します。有効にした場合のみ公式シグナリングに接続し、必要な接続統計を記録します。独自サーバーは公式へ報告しません。まず直接接続を試し、失敗した場合のみ中継の認証と端末の残量識別を行います。</p></section>
 <section><h2>最小限の記録</h2><p>仮名化した端末番号、初回・最終接続時刻、日別中継使用量、必要な上限の紐付けと累計を保持します。端末の日別明細は90日間保持します。公式端末数は人数や全インストール数ではありません。</p></section>
 <section><h2>内容と識別子</h2><p>内容と実際の端末名は端末間の暗号化通信で送信します。ファイル名、パス、ユーザー名、MAC、UA、行動履歴を収集しません。元のシステム識別子は送信せず、専用ダイジェストを中継上限の分類にのみ使います。改変クライアントによる偽装は防ぎきれません。</p></section>
-<section><h2>ネットワークと残量</h2><p>通信先は一時的な経路・アドレスを認識しますが、公式統計と通常のプロキシログには保存しません。中継上限は送受信合計100 MB/日で、北京時間午前0時にリセットします。直接接続は消費しません。無効化すると公式の要求、照会とトンネルを停止します。</p></section>
+<section><h2>ネットワークと残量</h2><p>通信先は一時的な経路・アドレスを認識しますが、公式統計と通常のプロキシログには保存しません。中継上限は送受信合計100 MB/日で、北京時間午前0時にリセットします。直接接続は消費しません。有効にするとクライアントは端末の署名だけで自分の残量を照会します。中継の申請や端末識別子の読み取りは行いません。無効化すると公式の要求、照会とトンネルを停止します。</p></section>
 <section><h2>ウェブサイトと監査</h2><p>当サイトは既存のCloudflare Web Analyticsを使います。閲覧数はソフトの利用者数ではありません。クライアント、シグナリングとTURNはオープンソースを維持し、ゲートウェイの仕様と項目を公開します。非公開の本番環境の保持実態には配備監査が必要です。</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
   <footer class="footer">
     <div class="wrap">

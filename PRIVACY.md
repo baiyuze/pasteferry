@@ -15,6 +15,9 @@ Enabling the official service is a deliberate setting with an explanation.
 The client first uses signaling and STUN to try a direct connection. A failed
 direct attempt with an online compatible peer is required before requesting
 official relay access. No machine fingerprint is needed for direct service.
+After the service is enabled, the client also checks its own relay allowance
+with its device signature only; this neither requests relay nor reads a machine
+identifier, so devices that always connect directly still see their allowance.
 
 | Data | Purpose / retention |
 | --- | --- |
