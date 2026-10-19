@@ -353,6 +353,24 @@ func TestReadResultUntilStale(t *testing.T) {
 	}
 }
 
+// 安装失败、后台服务没被重启时，正在运行的服务也要能报告结果。
+func TestServiceSeesResultWrittenWhileRunning(t *testing.T) {
+	root := t.TempDir()
+	s, err := NewService("2.3.0", root, slog.New(slog.NewTextHandler(io.Discard, nil)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.LastResult() != nil {
+		t.Fatal("result before any update")
+	}
+	os.MkdirAll(filepath.Join(root, "updates"), 0o700)
+	raw, _ := json.Marshal(Result{From: "2.3.0", To: "2.3.1", Error: "denied", At: time.Now().Unix()})
+	os.WriteFile(filepath.Join(root, "updates", "result.json"), raw, 0o600)
+	if r := s.LastResult(); r == nil || r.OK || r.Error != "denied" {
+		t.Fatalf("result written while running: %+v", r)
+	}
+}
+
 func TestPublicKeyIsValid(t *testing.T) {
 	if len(PublicKeys()) == 0 {
 		t.Fatal("no valid public key compiled in")

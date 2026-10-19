@@ -41,6 +41,7 @@ type Service struct {
 	lastAuto  time.Time
 	files     map[string]string // 版本 → 已下载并校验过的安装包
 	result    *Result
+	resultMod time.Time
 }
 
 // NewService 读出上一次安装的结果（如果有）。
@@ -129,9 +130,13 @@ func (s *Service) Notice() string {
 }
 
 // LastResult 是刚完成的那次安装的结果，过了 resultFresh 就不再提。
+// 安装失败时后台服务可能根本没被重启（比如没有获得管理员授权），所以结果文件变了就重新读。
 func (s *Service) LastResult() *Result {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	if st, err := os.Stat(filepath.Join(s.Root, "updates", "result.json")); err == nil && !st.ModTime().Equal(s.resultMod) {
+		s.result, s.resultMod = ReadResult(s.Root), st.ModTime()
+	}
 	if s.result == nil || time.Since(time.Unix(s.result.At, 0)) > resultFresh {
 		return nil
 	}
