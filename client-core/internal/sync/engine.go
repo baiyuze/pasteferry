@@ -90,6 +90,8 @@ type Engine struct {
 
 	// 没送达对端、等连接恢复后补发的内容，见 backlog.go
 	backlog backlog
+	// 上一次本机复制，用来认出同一次复制引起的重复变化，见 repeat.go
+	recentCopy repeatGuard
 
 	// 每次传输上一次上报进度的时间，用于节流，见 emitProgress
 	progressMu   sync.Mutex
@@ -175,6 +177,10 @@ func (e *Engine) HandleClipboardChange(ctx context.Context, snap clipboard.Snaps
 	e.log.Debug("已读取剪贴板内容",
 		"kind", content.Kind, "文本长度", len(content.Text),
 		"HTML长度", len(content.HTML), "图片字节", len(content.Image), "文件", content.Files)
+	if e.recentCopy.seen(content, time.Now()) {
+		e.log.Debug("刚复制过同样的内容，跳过")
+		return
+	}
 
 	clip, err := e.recordOutgoing(content, cfg)
 	if errors.Is(err, errRemotePlaceholder) {

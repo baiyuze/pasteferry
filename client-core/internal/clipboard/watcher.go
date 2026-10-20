@@ -80,7 +80,36 @@ func (w *Watcher) Run(ctx context.Context) {
 		case <-ticker.C:
 			w.poll(ctx)
 		case <-notify:
+			settle(ctx, notify, settleDelay, settleMax)
 			w.poll(ctx)
+		}
+	}
+}
+
+// 系统通知剪贴板变化后，等通知停下来再读。有的程序一次复制会分几次写剪贴板
+// （PowerShell 的 Set-Clipboard、先放 OLE 数据对象再 OleFlushClipboard 的程序），
+// 几毫秒内连着来好几个通知；每个都读一次的话，一次复制会记成好几条。
+const (
+	settleDelay = 100 * time.Millisecond
+	settleMax   = 500 * time.Millisecond
+)
+
+// settle 等到 delay 内没有新通知为止，最多等 max：一直有通知也不能一直不读。
+func settle(ctx context.Context, notify <-chan struct{}, delay, max time.Duration) {
+	limit := time.NewTimer(max)
+	defer limit.Stop()
+	quiet := time.NewTimer(delay)
+	defer quiet.Stop()
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-limit.C:
+			return
+		case <-quiet.C:
+			return
+		case <-notify:
+			quiet.Reset(delay)
 		}
 	}
 }
