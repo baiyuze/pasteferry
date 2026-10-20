@@ -276,6 +276,7 @@ func (e *Engine) recordOutgoing(c clipboard.Content, cfg config.Config) (store.C
 		return clip, fmt.Errorf("不支持的剪贴板类型: %v", c.Kind)
 	}
 
+	clip.DetectLink() // 返回的记录随即推给界面
 	if err := e.store.PutClip(clip); err != nil {
 		return clip, err
 	}
@@ -407,6 +408,7 @@ func (e *Engine) handleOffer(ctx context.Context, from string, offer *pb.ClipOff
 		clip.TextPreview = describeItems(clip.Items)
 	}
 
+	clip.DetectLink() // 写入后随即推给界面
 	if err := e.store.PutClip(clip); err != nil {
 		e.log.Warn("保存对端记录失败", "err", err)
 		return

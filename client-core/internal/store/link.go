@@ -23,3 +23,9 @@ func IsLink(text string) bool {
 	scheme := strings.ToLower(u.Scheme)
 	return (scheme == "http" || scheme == "https") && u.Host != ""
 }
+
+// DetectLink 按内容算出 IsLink。PutClip 写入时也按这个算，但改的是它自己的副本：
+// 写入后马上推给界面的记录要先调用它，否则界面要等重新加载才知道这是链接。
+func (c *Clip) DetectLink() {
+	c.IsLink = c.Kind == KindText && IsLink(c.TextContent)
+}

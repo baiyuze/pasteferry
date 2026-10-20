@@ -313,6 +313,7 @@ func (s *Store) addColumnIfMissing(table, column, decl string) error {
 // ─────────────────────────── clips ───────────────────────────
 
 func (s *Store) PutClip(c Clip) error {
+	c.DetectLink()
 	tx, err := s.db.Begin()
 	if err != nil {
 		return err
@@ -345,7 +346,7 @@ ON CONFLICT(id) DO UPDATE SET
 		c.ID, c.Kind, c.Status, c.OriginDeviceID, c.OriginDeviceName, c.Outgoing,
 		c.TotalSize, c.TextPreview, c.TextContent, c.TextPlain, c.CachePath,
 		string(srcJSON), c.Error, c.CreatedAt.Unix(), c.ExpiresAt.Unix(),
-		c.Favorite, favoritedAt, c.SourceClipID, c.Kind == KindText && IsLink(c.TextContent))
+		c.Favorite, favoritedAt, c.SourceClipID, c.IsLink)
 	if err != nil {
 		return fmt.Errorf("写入 clip: %w", err)
 	}

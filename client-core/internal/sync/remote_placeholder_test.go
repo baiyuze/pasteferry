@@ -79,3 +79,27 @@ func TestRemotePlaceholderFlood(t *testing.T) {
 		}
 	}
 }
+
+// 推给界面的记录要带着「是链接」：本机复制的与对端发来的都一样，不能等界面重新加载
+func TestRecordsAreMarkedAsLinkWhenEmitted(t *testing.T) {
+	e := newBacklogEngine(t, &fakePeers{})
+	e.deviceName = func() string { return "test" }
+	var emitted []*pb.ClipRecord
+	e.onRecord = func(r *pb.ClipRecord) { emitted = append(emitted, r) }
+
+	c, err := e.recordOutgoing(clipboard.Content{Kind: clipboard.KindText, Text: "https://github.com/baiyuze/pasteferry"}, config.Default())
+	if err != nil || !c.IsLink {
+		t.Fatalf("outgoing link: IsLink=%v err=%v", c.IsLink, err)
+	}
+
+	cfg := config.Default()
+	cfg.AutoApplyToClipboard = false
+	e.loadConfig = func() config.Config { return cfg }
+	e.handleOffer(context.Background(), "office", &pb.ClipOffer{
+		ClipId: "remote-link", Kind: pb.ClipKind(store.KindText), TextContent: "https://pasteferry.cc/download/",
+		CreatedAtUnix: time.Now().Unix(),
+	})
+	if len(emitted) != 1 || !emitted[0].GetIsLink() {
+		t.Fatalf("received link emitted as %v", emitted)
+	}
+}
