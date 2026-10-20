@@ -3,6 +3,7 @@ package clipboard
 import (
 	"context"
 	"errors"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -64,6 +65,42 @@ func TestWatcherConditionalWriteAndErrors(t *testing.T) {
 	cb.peekErr = errors.New("metadata unavailable")
 	if ok, err := w.WriteIfUnchanged(ctx, Content{}, 8); err == nil || ok {
 		t.Fatalf("failed probe authorized a write: %v %v", ok, err)
+	}
+}
+
+// 本机写入正好插在一次轮询的探测与比对之间，也不能被当成用户的新复制
+func TestOwnWritesNeverReportedWhilePolling(t *testing.T) {
+	loop := NewMainLoop()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		for {
+			select {
+			case fn := <-loop.tasks:
+				fn()
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+	t.Cleanup(func() { cancel(); <-done })
+
+	cb := &testClipboard{revision: 1}
+	w := NewWatcher(WatcherOptions{Clipboard: cb, MainLoop: loop, Interval: time.Microsecond})
+	var reported atomic.Int32
+	w.SetOnChange(func(Snapshot) { reported.Add(1) })
+	go w.Run(ctx)
+	time.Sleep(20 * time.Millisecond) // 先让它记下基线
+	for range 3000 {
+		if err := w.Write(ctx, Content{Kind: KindText, Text: "x"}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	time.Sleep(20 * time.Millisecond)
+	if n := reported.Load(); n != 0 {
+		t.Fatalf("%d of our own writes were reported as new copies", n)
 	}
 }
 

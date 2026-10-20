@@ -119,7 +119,27 @@ func (w *Watcher) poll(ctx context.Context) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	snap, err := CallResult(ctx, w.loop, w.cb.Peek)
+	// 探测与比对要在同一个主线程任务里做：write 也在主线程上更新 lastChange、selfWrites。
+	// 分开做的话，本机写入正好插在探测与比对之间时，比对拿的是写入前的值，
+	// 会把自己写进去的内容当成用户的新复制，再记一条、再发一遍
+	type result struct {
+		snap        Snapshot
+		changed     bool
+		first, mine bool
+	}
+	r, err := CallResult(ctx, w.loop, func() (result, error) {
+		snap, err := w.cb.Peek()
+		if err != nil || snap.ChangeCount == w.lastChange {
+			return result{snap: snap}, err
+		}
+		r := result{snap: snap, changed: true, first: w.lastChange < 0}
+		w.lastChange = snap.ChangeCount
+		if _, mine := w.selfWrites[snap.ChangeCount]; mine {
+			delete(w.selfWrites, snap.ChangeCount)
+			r.mine = true
+		}
+		return r, nil
+	})
 	if err != nil {
 		w.log.Debug("探测剪贴板失败", "err", err)
 		return
@@ -135,25 +155,20 @@ func (w *Watcher) poll(ctx context.Context) {
 		}
 	}
 
-	if snap.ChangeCount == w.lastChange {
+	snap := r.snap
+	switch {
+	case !r.changed:
 		return
-	}
-	// 首轮只记录基线，不把启动前就存在的内容当作新复制广播出去
-	first := w.lastChange < 0
-	w.lastChange = snap.ChangeCount
-	if first {
+	case r.first:
+		// 首轮只记录基线，不把启动前就存在的内容当作新复制广播出去
 		w.log.Debug("剪贴板监听已就绪", "changeCount", snap.ChangeCount)
 		return
-	}
-
-	// 本机刚写进去的内容不该被当成用户的新复制再同步一轮
-	if _, mine := w.selfWrites[snap.ChangeCount]; mine {
-		delete(w.selfWrites, snap.ChangeCount)
+	case r.mine:
+		// 本机刚写进去的内容不该被当成用户的新复制再同步一轮
 		w.log.Debug("跳过本机写入触发的变化", "changeCount", snap.ChangeCount)
 		return
-	}
-	// 密码等敏感内容：不同步，也不进复制记录
-	if snap.Sensitive {
+	case snap.Sensitive:
+		// 密码等敏感内容：不同步，也不进复制记录
 		w.log.Debug("跳过标记为敏感的内容", "changeCount", snap.ChangeCount)
 		return
 	}
