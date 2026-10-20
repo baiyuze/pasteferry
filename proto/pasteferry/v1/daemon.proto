@@ -67,6 +67,21 @@ service DaemonService {
   rpc DownloadUpdate(DownloadUpdateRequest) returns (stream UpdateProgress);
   // 准备好新版本并启动更新助手。返回后界面应当立即退出：助手等它退出后替换文件，再重新打开
   rpc InstallUpdate(InstallUpdateRequest) returns (Empty);
+
+  // 收藏或取消收藏，见 design/quick-paste-and-favorites.md 第 3 节。
+  // 收藏时另存一份，返回新的收藏记录；取消时把收藏放回复制记录的最上面，返回放回去的那一条。
+  // 过程中照常推送 clip_added / clip_removed。已过期或已失败的图片、文件返回 FAILED_PRECONDITION
+  rpc SetFavorite(SetFavoriteRequest) returns (ClipRecord);
+  // 悬停提示框要显示的完整内容。ClipRecord 的 text_preview 最多 120 个字、换行被压平，不够用
+  rpc GetClipDetail(GetClipDetailRequest) returns (ClipDetail);
+
+  // 快捷粘贴窗口进程启动后一直保持这个调用：往上报自己的状态，往下收设置页发来的命令。
+  // 调用断开就当作快捷窗口没在运行
+  rpc QuickPasteSession(stream QuickPasteStatus) returns (stream QuickPasteCommand);
+  // 设置页读快捷窗口的状态；状态变化时另有 quick_paste_changed 事件
+  rpc GetQuickPasteStatus(Empty) returns (QuickPasteStatus);
+  // 设置页转给快捷窗口的命令。快捷窗口没在运行时返回 FAILED_PRECONDITION
+  rpc SendQuickPasteCommand(QuickPasteCommand) returns (Empty);
 }
 
 message Empty {}
@@ -117,6 +132,14 @@ message ClipRecord {
   // 能在界面里预览的图片数：剪贴板图片为 1，文件记录是其中图片文件的个数。
   // 由本机后台服务按文件名判断，HEIC、TIFF 这类格式只有能转换它的平台才算。
   int32 image_count = 13;
+
+  // 这一条是收藏，不是复制记录。收藏的 expires_at_unix 为 0，表示不会过期
+  bool favorite = 14;
+  // 复制记录里的这一条已经收藏过（星标亮着）
+  bool favorited = 15;
+  int64 favorited_at_unix = 16;
+  // 整条文字就是一个 http(s) 网址
+  bool is_link = 17;
 }
 
 // ─────────────────────────── 事件流 ───────────────────────────
@@ -176,6 +199,9 @@ message Event {
     ClipboardPermission permission_changed = 6;
     Status status_changed = 7;
     ClipboardWriteResult clipboard_written = 8;
+    // 设置保存后推送，快捷窗口据此重新注册快捷键
+    Config config_changed = 9;
+    QuickPasteStatus quick_paste_changed = 10;
   }
 }
 
@@ -210,11 +236,17 @@ message ClipboardWriteResult {
 message ListHistoryRequest {
   int32 limit = 1;
   int64 before_unix = 2;    // 分页游标
-  ClipKind kind_filter = 3; // UNSPECIFIED 表示不过滤
+  // UNSPECIFIED 表示不过滤。TEXT 是界面上的「文字」：纯文本与网页格式，不含链接
+  ClipKind kind_filter = 3;
 
   // 搜索词：非空时只返回文字内容或文件名包含它的记录（不分大小写），按时间倒序，
   // 忽略 before_unix。匹配处不在预览片段里的文字记录，text_preview 换成匹配处前后的一段。
   string query = 4;
+
+  // true 时只返回收藏，按收藏时间倒序，忽略 before_unix；false 时只返回复制记录
+  bool favorites = 5;
+  // 只返回链接（is_link）
+  bool links_only = 6;
 }
 
 message ListHistoryResponse {
@@ -235,6 +267,55 @@ message FetchRequest {
 
 message ApplyToClipboardRequest {
   string clip_id = 1;
+  // 只写纯文本，去掉网页格式（快捷窗口里按 ⇧回车）
+  bool plain_text = 2;
+}
+
+message SetFavoriteRequest {
+  // 收藏时传复制记录的 ID；取消收藏时传收藏的 ID 或原记录的 ID 都可以
+  string clip_id = 1;
+  bool favorite = 2;
+}
+
+message GetClipDetailRequest {
+  string clip_id = 1;
+}
+
+message ClipDetail {
+  // 文字的全文，网页格式给纯文本。最多前 4000 个字，保留换行
+  string text = 1;
+  // 全文的字数
+  int32 text_length = 2;
+  // 本机复制的文件在本机的完整路径
+  repeated string source_paths = 3;
+}
+
+// ─────────────────────────── 快捷粘贴窗口 ───────────────────────────
+
+message QuickPasteStatus {
+  // 快捷窗口进程在运行（QuickPasteSession 连着）
+  bool running = 1;
+  // 快捷键注册失败的原因：空表示成功；in_use（被其他程序占用）、invalid、unsupported，
+  // 或者平台给出的原文
+  string hotkey_error = 2;
+  // 实际生效的快捷键，与 Config.quick_paste_hotkey 同样的写法。Wayland 上是门户里用户设定的组合
+  string hotkey = 3;
+  // 选中后能自动粘贴
+  bool paste_available = 4;
+  // 不能自动粘贴的原因：not_trusted（Mac 未授予辅助功能）、wayland、copy_only（设置里选了只复制）
+  string paste_unavailable_reason = 5;
+  // 快捷键由谁触发：native（程序自己注册）、portal（Wayland 全局快捷键门户）、
+  // system_shortcut（Wayland 上要用户在系统设置里添加快捷键）
+  string hotkey_source = 6;
+  // 快捷窗口的版本。App 更新后还在跑旧版的，界面让它按新的程序重新启动
+  string version = 7;
+}
+
+message QuickPasteCommand {
+  // request_permission：Mac 上请求辅助功能权限；
+  // suspend_hotkey / resume_hotkey：设置页录制快捷键期间暂停全局快捷键；
+  // show：呼出快捷窗口
+  string command = 1;
 }
 
 // ─────────────────────────── 设备与配对 ───────────────────────────
@@ -337,6 +418,14 @@ message Config {
   bool update_check_disabled = 18;
   // 用户选择跳过的版本，自动检查不再提示它；手动检查照常显示
   string update_skip_version = 19;
+
+  // 关掉快捷粘贴窗口。写成反向的：旧配置没有这一项时就是开启
+  bool quick_paste_disabled = 20;
+  // 快捷键，如 "alt+v"、"ctrl+alt+v"，修饰键按 ctrl、alt、shift、meta 的顺序。
+  // 空字符串表示默认：Mac 上 ⌥V，其他平台 Alt+V
+  string quick_paste_hotkey = 21;
+  // 选中后只放进剪贴板，不模拟粘贴
+  bool quick_paste_copy_only = 22;
 }
 
 enum ServiceMode {

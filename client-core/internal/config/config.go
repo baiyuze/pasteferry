@@ -58,6 +58,14 @@ type Config struct {
 	UpdateCheckDisabled bool `json:"update_check_disabled,omitempty"`
 	// UpdateSkipVersion 是用户选择跳过的版本：自动检查不再提示它
 	UpdateSkipVersion string `json:"update_skip_version,omitempty"`
+
+	// QuickPasteDisabled 关掉快捷粘贴窗口。写成反向的，旧配置文件没有这一项时就是开启。
+	QuickPasteDisabled bool `json:"quick_paste_disabled,omitempty"`
+	// QuickPasteHotkey 是呼出快捷窗口的快捷键，写法见 NormalizeHotkey；
+	// 空字符串表示默认：Mac 上 ⌥V，其他平台 Alt+V
+	QuickPasteHotkey string `json:"quick_paste_hotkey,omitempty"`
+	// QuickPasteCopyOnly 选中后只放进剪贴板，不模拟粘贴
+	QuickPasteCopyOnly bool `json:"quick_paste_copy_only,omitempty"`
 }
 
 // CurrentVersion 是当前的配置格式版本。
@@ -146,15 +154,19 @@ func (c *Config) Validate() {
 	default:
 		c.Language = ""
 	}
+	// 写不对的快捷键当作默认的
+	c.QuickPasteHotkey = NormalizeHotkey(c.QuickPasteHotkey)
 }
 
 // ─────────────────────────── 目录布局 ───────────────────────────
 
 // Paths 是 daemon 用到的全部路径。集中在一处，便于测试时重定向。
 type Paths struct {
-	Root   string // 配置与数据库
-	Cache  string // 收到的文件内容
-	Config string
+	Root  string // 配置与数据库
+	Cache string // 收到的文件内容
+	// 收藏另存的图片与文件。不能放在 Cache 里面：GC 会把缓存目录里不认识的文件夹当成孤儿删掉
+	Favorites string
+	Config    string
 	DB     string
 	// daemon 启动后把 gRPC 端口和一次性 token 写在这里，供 UI 发现
 	Endpoint string
@@ -196,9 +208,10 @@ func DefaultPaths() (Paths, error) {
 
 func pathsUnder(root string) Paths {
 	return Paths{
-		Root:     root,
-		Cache:    filepath.Join(root, "cache"),
-		Config:   filepath.Join(root, "config.json"),
+		Root:      root,
+		Cache:     filepath.Join(root, "cache"),
+		Favorites: filepath.Join(root, "favorites"),
+		Config:    filepath.Join(root, "config.json"),
 		DB:       filepath.Join(root, "pasteferry.db"),
 		Endpoint: filepath.Join(root, "daemon.json"),
 	}
@@ -250,7 +263,7 @@ func legacyRoot(root string) string {
 }
 
 func (p Paths) EnsureDirs() error {
-	for _, d := range []string{p.Root, p.Cache} {
+	for _, d := range []string{p.Root, p.Cache, p.Favorites} {
 		if err := os.MkdirAll(d, 0o700); err != nil {
 			return fmt.Errorf("创建目录 %s: %w", d, err)
 		}

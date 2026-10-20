@@ -52,6 +52,11 @@ const (
 	DaemonService_CheckForUpdate_FullMethodName                = "/pasteferry.v1.DaemonService/CheckForUpdate"
 	DaemonService_DownloadUpdate_FullMethodName                = "/pasteferry.v1.DaemonService/DownloadUpdate"
 	DaemonService_InstallUpdate_FullMethodName                 = "/pasteferry.v1.DaemonService/InstallUpdate"
+	DaemonService_SetFavorite_FullMethodName                   = "/pasteferry.v1.DaemonService/SetFavorite"
+	DaemonService_GetClipDetail_FullMethodName                 = "/pasteferry.v1.DaemonService/GetClipDetail"
+	DaemonService_QuickPasteSession_FullMethodName             = "/pasteferry.v1.DaemonService/QuickPasteSession"
+	DaemonService_GetQuickPasteStatus_FullMethodName           = "/pasteferry.v1.DaemonService/GetQuickPasteStatus"
+	DaemonService_SendQuickPasteCommand_FullMethodName         = "/pasteferry.v1.DaemonService/SendQuickPasteCommand"
 )
 
 // DaemonServiceClient is the client API for DaemonService service.
@@ -106,6 +111,19 @@ type DaemonServiceClient interface {
 	DownloadUpdate(ctx context.Context, in *DownloadUpdateRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UpdateProgress], error)
 	// 准备好新版本并启动更新助手。返回后界面应当立即退出：助手等它退出后替换文件，再重新打开
 	InstallUpdate(ctx context.Context, in *InstallUpdateRequest, opts ...grpc.CallOption) (*Empty, error)
+	// 收藏或取消收藏，见 design/quick-paste-and-favorites.md 第 3 节。
+	// 收藏时另存一份，返回新的收藏记录；取消时把收藏放回复制记录的最上面，返回放回去的那一条。
+	// 过程中照常推送 clip_added / clip_removed。已过期或已失败的图片、文件返回 FAILED_PRECONDITION
+	SetFavorite(ctx context.Context, in *SetFavoriteRequest, opts ...grpc.CallOption) (*ClipRecord, error)
+	// 悬停提示框要显示的完整内容。ClipRecord 的 text_preview 最多 120 个字、换行被压平，不够用
+	GetClipDetail(ctx context.Context, in *GetClipDetailRequest, opts ...grpc.CallOption) (*ClipDetail, error)
+	// 快捷粘贴窗口进程启动后一直保持这个调用：往上报自己的状态，往下收设置页发来的命令。
+	// 调用断开就当作快捷窗口没在运行
+	QuickPasteSession(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[QuickPasteStatus, QuickPasteCommand], error)
+	// 设置页读快捷窗口的状态；状态变化时另有 quick_paste_changed 事件
+	GetQuickPasteStatus(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*QuickPasteStatus, error)
+	// 设置页转给快捷窗口的命令。快捷窗口没在运行时返回 FAILED_PRECONDITION
+	SendQuickPasteCommand(ctx context.Context, in *QuickPasteCommand, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type daemonServiceClient struct {
@@ -423,6 +441,59 @@ func (c *daemonServiceClient) InstallUpdate(ctx context.Context, in *InstallUpda
 	return out, nil
 }
 
+func (c *daemonServiceClient) SetFavorite(ctx context.Context, in *SetFavoriteRequest, opts ...grpc.CallOption) (*ClipRecord, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClipRecord)
+	err := c.cc.Invoke(ctx, DaemonService_SetFavorite_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) GetClipDetail(ctx context.Context, in *GetClipDetailRequest, opts ...grpc.CallOption) (*ClipDetail, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClipDetail)
+	err := c.cc.Invoke(ctx, DaemonService_GetClipDetail_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) QuickPasteSession(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[QuickPasteStatus, QuickPasteCommand], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &DaemonService_ServiceDesc.Streams[3], DaemonService_QuickPasteSession_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[QuickPasteStatus, QuickPasteCommand]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DaemonService_QuickPasteSessionClient = grpc.BidiStreamingClient[QuickPasteStatus, QuickPasteCommand]
+
+func (c *daemonServiceClient) GetQuickPasteStatus(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*QuickPasteStatus, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QuickPasteStatus)
+	err := c.cc.Invoke(ctx, DaemonService_GetQuickPasteStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) SendQuickPasteCommand(ctx context.Context, in *QuickPasteCommand, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_SendQuickPasteCommand_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DaemonServiceServer is the server API for DaemonService service.
 // All implementations must embed UnimplementedDaemonServiceServer
 // for forward compatibility.
@@ -475,6 +546,19 @@ type DaemonServiceServer interface {
 	DownloadUpdate(*DownloadUpdateRequest, grpc.ServerStreamingServer[UpdateProgress]) error
 	// 准备好新版本并启动更新助手。返回后界面应当立即退出：助手等它退出后替换文件，再重新打开
 	InstallUpdate(context.Context, *InstallUpdateRequest) (*Empty, error)
+	// 收藏或取消收藏，见 design/quick-paste-and-favorites.md 第 3 节。
+	// 收藏时另存一份，返回新的收藏记录；取消时把收藏放回复制记录的最上面，返回放回去的那一条。
+	// 过程中照常推送 clip_added / clip_removed。已过期或已失败的图片、文件返回 FAILED_PRECONDITION
+	SetFavorite(context.Context, *SetFavoriteRequest) (*ClipRecord, error)
+	// 悬停提示框要显示的完整内容。ClipRecord 的 text_preview 最多 120 个字、换行被压平，不够用
+	GetClipDetail(context.Context, *GetClipDetailRequest) (*ClipDetail, error)
+	// 快捷粘贴窗口进程启动后一直保持这个调用：往上报自己的状态，往下收设置页发来的命令。
+	// 调用断开就当作快捷窗口没在运行
+	QuickPasteSession(grpc.BidiStreamingServer[QuickPasteStatus, QuickPasteCommand]) error
+	// 设置页读快捷窗口的状态；状态变化时另有 quick_paste_changed 事件
+	GetQuickPasteStatus(context.Context, *Empty) (*QuickPasteStatus, error)
+	// 设置页转给快捷窗口的命令。快捷窗口没在运行时返回 FAILED_PRECONDITION
+	SendQuickPasteCommand(context.Context, *QuickPasteCommand) (*Empty, error)
 	mustEmbedUnimplementedDaemonServiceServer()
 }
 
@@ -568,6 +652,21 @@ func (UnimplementedDaemonServiceServer) DownloadUpdate(*DownloadUpdateRequest, g
 }
 func (UnimplementedDaemonServiceServer) InstallUpdate(context.Context, *InstallUpdateRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method InstallUpdate not implemented")
+}
+func (UnimplementedDaemonServiceServer) SetFavorite(context.Context, *SetFavoriteRequest) (*ClipRecord, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetFavorite not implemented")
+}
+func (UnimplementedDaemonServiceServer) GetClipDetail(context.Context, *GetClipDetailRequest) (*ClipDetail, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetClipDetail not implemented")
+}
+func (UnimplementedDaemonServiceServer) QuickPasteSession(grpc.BidiStreamingServer[QuickPasteStatus, QuickPasteCommand]) error {
+	return status.Error(codes.Unimplemented, "method QuickPasteSession not implemented")
+}
+func (UnimplementedDaemonServiceServer) GetQuickPasteStatus(context.Context, *Empty) (*QuickPasteStatus, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetQuickPasteStatus not implemented")
+}
+func (UnimplementedDaemonServiceServer) SendQuickPasteCommand(context.Context, *QuickPasteCommand) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method SendQuickPasteCommand not implemented")
 }
 func (UnimplementedDaemonServiceServer) mustEmbedUnimplementedDaemonServiceServer() {}
 func (UnimplementedDaemonServiceServer) testEmbeddedByValue()                       {}
@@ -1073,6 +1172,85 @@ func _DaemonService_InstallUpdate_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_SetFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetFavoriteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SetFavorite(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SetFavorite_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SetFavorite(ctx, req.(*SetFavoriteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_GetClipDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetClipDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).GetClipDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_GetClipDetail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).GetClipDetail(ctx, req.(*GetClipDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_QuickPasteSession_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(DaemonServiceServer).QuickPasteSession(&grpc.GenericServerStream[QuickPasteStatus, QuickPasteCommand]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DaemonService_QuickPasteSessionServer = grpc.BidiStreamingServer[QuickPasteStatus, QuickPasteCommand]
+
+func _DaemonService_GetQuickPasteStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).GetQuickPasteStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_GetQuickPasteStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).GetQuickPasteStatus(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_SendQuickPasteCommand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuickPasteCommand)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SendQuickPasteCommand(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SendQuickPasteCommand_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SendQuickPasteCommand(ctx, req.(*QuickPasteCommand))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DaemonService_ServiceDesc is the grpc.ServiceDesc for DaemonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1180,6 +1358,22 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "InstallUpdate",
 			Handler:    _DaemonService_InstallUpdate_Handler,
 		},
+		{
+			MethodName: "SetFavorite",
+			Handler:    _DaemonService_SetFavorite_Handler,
+		},
+		{
+			MethodName: "GetClipDetail",
+			Handler:    _DaemonService_GetClipDetail_Handler,
+		},
+		{
+			MethodName: "GetQuickPasteStatus",
+			Handler:    _DaemonService_GetQuickPasteStatus_Handler,
+		},
+		{
+			MethodName: "SendQuickPasteCommand",
+			Handler:    _DaemonService_SendQuickPasteCommand_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
@@ -1196,6 +1390,12 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "DownloadUpdate",
 			Handler:       _DaemonService_DownloadUpdate_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "QuickPasteSession",
+			Handler:       _DaemonService_QuickPasteSession_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "pasteferry/v1/daemon.proto",

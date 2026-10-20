@@ -62,6 +62,48 @@ type Clip struct {
 	Error            string
 	CreatedAt        time.Time
 	ExpiresAt        time.Time
+
+	// Favorite 表示这一行是收藏：另存的一份，不会过期，见 design/quick-paste-and-favorites.md 第 3 节。
+	// 收藏的 CachePath 相对于收藏目录（favorites/），不是缓存目录
+	Favorite    bool
+	FavoritedAt time.Time
+	// SourceClipID 是从复制记录里哪一条收藏来的
+	SourceClipID string
+	// Favorited 只在读出复制记录时有意义：已经有一条收藏来自它。由查询算出，不存库
+	Favorited bool
+	// IsLink 表示整条文字就是一个网址，写入时由 PutClip 算好
+	IsLink bool
+}
+
+// FavoriteExpiry 是收藏行的 expires_at。不用 0：降级到不认识收藏的旧版后台服务时，
+// 收藏会被当成普通记录，要让它们留在列表里，而不是马上被当成过期记录删掉。
+var FavoriteExpiry = time.Date(9999, 1, 1, 0, 0, 0, 0, time.UTC)
+
+// Filter 选出复制记录或收藏中的某一类。
+type Filter struct {
+	Favorites bool // true 查收藏，false 查复制记录
+	Kind      Kind // 只要这种类型；KindUnspecified 不限
+	// Text 是界面上的「文字」：纯文本与网页格式，不含链接。设置了它就忽略 Kind
+	Text bool
+	// LinksOnly 只要链接
+	LinksOnly bool
+}
+
+// where 返回这个筛选条件对应的 SQL 片段（以 AND 开头）与参数。
+func (f Filter) where() (string, []any) {
+	q := ` AND favorite = ?`
+	args := []any{f.Favorites}
+	switch {
+	case f.LinksOnly:
+		q += ` AND is_link = 1`
+	case f.Text:
+		q += ` AND kind IN (?, ?) AND is_link = 0`
+		args = append(args, KindText, KindHTML)
+	case f.Kind != KindUnspecified:
+		q += ` AND kind = ?`
+		args = append(args, f.Kind)
+	}
+	return q, args
 }
 
 type Device struct {
@@ -191,7 +233,57 @@ CREATE TABLE IF NOT EXISTS meta (
 		return fmt.Errorf("建表: %w", err)
 	}
 	// 建表语句对已有的库不生效，后加的列要单独补上
-	return s.addColumnIfMissing("clips", "text_plain", "TEXT NOT NULL DEFAULT ''")
+	for _, col := range []struct{ name, decl string }{
+		{"text_plain", "TEXT NOT NULL DEFAULT ''"},
+		{"favorite", "INTEGER NOT NULL DEFAULT 0"},
+		{"favorited_at", "INTEGER NOT NULL DEFAULT 0"},
+		{"source_clip_id", "TEXT NOT NULL DEFAULT ''"},
+		{"is_link", "INTEGER NOT NULL DEFAULT 0"},
+	} {
+		if err := s.addColumnIfMissing("clips", col.name, col.decl); err != nil {
+			return err
+		}
+	}
+	if _, err := s.db.Exec(`
+CREATE INDEX IF NOT EXISTS idx_clips_source   ON clips(source_clip_id) WHERE source_clip_id <> '';
+CREATE INDEX IF NOT EXISTS idx_clips_favorite ON clips(favorite, favorited_at DESC);`); err != nil {
+		return fmt.Errorf("建索引: %w", err)
+	}
+	return s.backfillLinks()
+}
+
+// backfillLinks 给加 is_link 列之前存进来的文字记录补算一次，记下已补算过，以后不再重复。
+func (s *Store) backfillLinks() error {
+	const key = "links_backfilled"
+	if _, err := s.GetMeta(key); err == nil {
+		return nil
+	}
+	rows, err := s.db.Query(`SELECT id, text_content FROM clips WHERE kind = ?`, KindText)
+	if err != nil {
+		return err
+	}
+	var links []string
+	for rows.Next() {
+		var id, text string
+		if err := rows.Scan(&id, &text); err != nil {
+			rows.Close()
+			return err
+		}
+		if IsLink(text) {
+			links = append(links, id)
+		}
+	}
+	err = rows.Err()
+	rows.Close() // 只有一个数据库连接，先放掉再写
+	if err != nil {
+		return err
+	}
+	for _, id := range links {
+		if _, err := s.db.Exec(`UPDATE clips SET is_link = 1 WHERE id = ?`, id); err != nil {
+			return err
+		}
+	}
+	return s.SetMeta(key, "1")
 }
 
 func (s *Store) addColumnIfMissing(table, column, decl string) error {
@@ -232,20 +324,28 @@ func (s *Store) PutClip(c Clip) error {
 		return err
 	}
 
+	var favoritedAt int64
+	if c.Favorite {
+		favoritedAt = c.FavoritedAt.Unix()
+	}
 	_, err = tx.Exec(`
 INSERT INTO clips (id, kind, status, origin_device_id, origin_device_name, outgoing,
                    total_size, text_preview, text_content, text_plain, cache_path,
-                   source_paths, error, created_at, expires_at)
-VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                   source_paths, error, created_at, expires_at,
+                   favorite, favorited_at, source_clip_id, is_link)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 ON CONFLICT(id) DO UPDATE SET
     status=excluded.status, total_size=excluded.total_size,
     text_preview=excluded.text_preview, text_content=excluded.text_content,
     text_plain=excluded.text_plain,
     cache_path=excluded.cache_path, source_paths=excluded.source_paths,
-    error=excluded.error, expires_at=excluded.expires_at`,
+    error=excluded.error, expires_at=excluded.expires_at,
+    favorite=excluded.favorite, favorited_at=excluded.favorited_at,
+    source_clip_id=excluded.source_clip_id, is_link=excluded.is_link`,
 		c.ID, c.Kind, c.Status, c.OriginDeviceID, c.OriginDeviceName, c.Outgoing,
 		c.TotalSize, c.TextPreview, c.TextContent, c.TextPlain, c.CachePath,
-		string(srcJSON), c.Error, c.CreatedAt.Unix(), c.ExpiresAt.Unix())
+		string(srcJSON), c.Error, c.CreatedAt.Unix(), c.ExpiresAt.Unix(),
+		c.Favorite, favoritedAt, c.SourceClipID, c.Kind == KindText && IsLink(c.TextContent))
 	if err != nil {
 		return fmt.Errorf("写入 clip: %w", err)
 	}
@@ -277,22 +377,27 @@ func (s *Store) GetClip(id string) (Clip, error) {
 	return rows[0], nil
 }
 
-// ListClips 按时间倒序分页。before 为零值表示从最新开始。
+// ListClips 按时间倒序分页列出复制记录（不含收藏）。before 为零值表示从最新开始。
 func (s *Store) ListClips(limit int, before time.Time, kind Kind) ([]Clip, error) {
+	return s.ListRecords(limit, before, Filter{Kind: kind})
+}
+
+// ListRecords 按筛选条件列出复制记录或收藏。复制记录按复制时间倒序、用 before 分页；
+// 收藏按收藏时间倒序，不分页（before 被忽略）。
+func (s *Store) ListRecords(limit int, before time.Time, f Filter) ([]Clip, error) {
 	if limit <= 0 || limit > 500 {
 		limit = 100
 	}
-	q := `SELECT ` + clipCols + ` FROM clips WHERE 1=1`
-	var args []any
-	if !before.IsZero() {
+	where, args := f.where()
+	q := `SELECT ` + clipCols + ` FROM clips WHERE 1=1` + where
+	order := ` ORDER BY created_at DESC`
+	if f.Favorites {
+		order = ` ORDER BY favorited_at DESC, created_at DESC`
+	} else if !before.IsZero() {
 		q += ` AND created_at < ?`
 		args = append(args, before.Unix())
 	}
-	if kind != KindUnspecified {
-		q += ` AND kind = ?`
-		args = append(args, kind)
-	}
-	q += ` ORDER BY created_at DESC LIMIT ?`
+	q += order + ` LIMIT ?`
 	args = append(args, limit)
 	return s.queryClips(q, args...)
 }
@@ -303,16 +408,28 @@ func (s *Store) ListClips(limit int, before time.Time, kind Kind) ([]Clip, error
 // 标签名也会命中。由调用方按纯文本再核对一遍（见 sync.Engine.SearchHistory）。
 // 剪贴板图片的文件名是生成的（image.png），界面上也不显示，不参与匹配。
 func (s *Store) SearchClips(query string, limit int) ([]Clip, error) {
+	return s.SearchRecords(query, limit, Filter{})
+}
+
+// SearchRecords 与 SearchClips 相同，只在筛选条件 f 选出的范围里找。
+func (s *Store) SearchRecords(query string, limit int, f Filter) ([]Clip, error) {
 	if limit <= 0 || limit > 500 {
 		limit = 100
 	}
 	like := "%" + strings.NewReplacer(`\`, `\\`, `%`, `\%`, `_`, `\_`).Replace(query) + "%"
+	where, fargs := f.where()
+	order := `created_at DESC`
+	if f.Favorites {
+		order = `favorited_at DESC, created_at DESC`
+	}
+	args := append([]any{KindText, like, KindHTML, like, like, KindImage, like}, fargs...)
+	args = append(args, limit)
 	return s.queryClips(`SELECT `+clipCols+` FROM clips
-WHERE (kind = ? AND text_content LIKE ? ESCAPE '\')
+WHERE ((kind = ? AND text_content LIKE ? ESCAPE '\')
    OR (kind = ? AND (text_plain LIKE ? ESCAPE '\' OR (text_plain = '' AND text_content LIKE ? ESCAPE '\')))
-   OR (kind <> ? AND EXISTS (SELECT 1 FROM clip_items i WHERE i.clip_id = clips.id AND i.name LIKE ? ESCAPE '\'))
-ORDER BY created_at DESC LIMIT ?`,
-		KindText, like, KindHTML, like, like, KindImage, like, limit)
+   OR (kind <> ? AND EXISTS (SELECT 1 FROM clip_items i WHERE i.clip_id = clips.id AND i.name LIKE ? ESCAPE '\')))`+
+		where+`
+ORDER BY `+order+` LIMIT ?`, args...)
 }
 
 // FileNames 返回复制过的文件、文件夹名，以及它们在源电脑上的完整路径（去重，最多 limit 个）。
@@ -337,9 +454,14 @@ LIMIT ?`, limit)
 	return out, rows.Err()
 }
 
+// clipCols 是读出一行 clips 的列。最后一列是算出来的：这条复制记录有没有收藏过，
+// 要求外层查询的表名就是 clips（不起别名）。
 const clipCols = `id, kind, status, origin_device_id, origin_device_name, outgoing,
                   total_size, text_preview, text_content, text_plain, cache_path,
-                  source_paths, error, created_at, expires_at`
+                  source_paths, error, created_at, expires_at,
+                  favorite, favorited_at, source_clip_id, is_link,
+                  (favorite = 0 AND EXISTS (SELECT 1 FROM clips f
+                      WHERE f.favorite = 1 AND f.source_clip_id = clips.id))`
 
 func (s *Store) queryClips(query string, args ...any) ([]Clip, error) {
 	rows, err := s.db.Query(query, args...)
@@ -352,14 +474,18 @@ func (s *Store) queryClips(query string, args ...any) ([]Clip, error) {
 	for rows.Next() {
 		var c Clip
 		var srcJSON string
-		var created, expires int64
+		var created, expires, favoritedAt int64
 		if err := rows.Scan(&c.ID, &c.Kind, &c.Status, &c.OriginDeviceID, &c.OriginDeviceName,
 			&c.Outgoing, &c.TotalSize, &c.TextPreview, &c.TextContent, &c.TextPlain,
-			&c.CachePath, &srcJSON, &c.Error, &created, &expires); err != nil {
+			&c.CachePath, &srcJSON, &c.Error, &created, &expires,
+			&c.Favorite, &favoritedAt, &c.SourceClipID, &c.IsLink, &c.Favorited); err != nil {
 			return nil, err
 		}
 		c.CreatedAt = time.Unix(created, 0)
 		c.ExpiresAt = time.Unix(expires, 0)
+		if c.Favorite {
+			c.FavoritedAt = time.Unix(favoritedAt, 0)
+		}
 		_ = json.Unmarshal([]byte(srcJSON), &c.SourcePaths)
 		out = append(out, c)
 	}
@@ -412,14 +538,26 @@ func (s *Store) SetClipboardError(id, message string) (bool, error) {
 
 // RecoverReceives runs once before the daemon accepts connections. There are
 // no live streams after a restart; show a retry action instead of a stale spinner.
+// 收藏正在另存时后台服务退出了，也一样改成失败，可以重试。
 func (s *Store) RecoverReceives() error {
+	if _, err := s.db.Exec(`UPDATE clips SET status=?, error=? WHERE status=? AND favorite=1`, StatusFailed, "保存已中断，请重试", StatusFetching); err != nil {
+		return err
+	}
 	_, err := s.db.Exec(`UPDATE clips SET status=?, error=? WHERE status=? AND outgoing=0`, StatusFailed, "接收已中断，请重试", StatusFetching)
 	return err
 }
 
+// CacheReferenced 判断缓存目录里的 rel 是否还有复制记录在用。收藏的路径在另一个目录里，不算。
 func (s *Store) CacheReferenced(rel string) (bool, error) {
 	var used bool
-	err := s.db.QueryRow(`SELECT EXISTS(SELECT 1 FROM clips WHERE cache_path=?)`, rel).Scan(&used)
+	err := s.db.QueryRow(`SELECT EXISTS(SELECT 1 FROM clips WHERE cache_path=? AND favorite=0)`, rel).Scan(&used)
+	return used, err
+}
+
+// FavoriteReferenced 判断收藏目录里的 rel 是否还有收藏在用。
+func (s *Store) FavoriteReferenced(rel string) (bool, error) {
+	var used bool
+	err := s.db.QueryRow(`SELECT EXISTS(SELECT 1 FROM clips WHERE cache_path=? AND favorite=1)`, rel).Scan(&used)
 	return used, err
 }
 
@@ -444,19 +582,73 @@ func (s *Store) DeleteClips(ids []string) error {
 	return tx.Commit()
 }
 
+// DeleteAllClips 清空复制记录。收藏不受影响。
 func (s *Store) DeleteAllClips() error {
-	_, err := s.db.Exec(`DELETE FROM clips`)
+	_, err := s.db.Exec(`DELETE FROM clips WHERE favorite=0`)
 	return err
 }
 
-// ExpiredClips 返回已过期的记录，交由 GC 先删缓存文件再删行。
+// ExpiredClips 返回已过期的复制记录，交由 GC 先删缓存文件再删行。收藏不会过期。
 func (s *Store) ExpiredClips(now time.Time) ([]Clip, error) {
-	return s.queryClips(`SELECT `+clipCols+` FROM clips WHERE expires_at <= ?`, now.Unix())
+	return s.queryClips(`SELECT `+clipCols+` FROM clips WHERE expires_at <= ? AND favorite=0`, now.Unix())
 }
 
-// CachePaths 返回所有仍被引用的缓存路径，供 GC 与磁盘对账、清理孤儿文件。
+// FavoriteOf 返回从复制记录 sourceID 收藏来的那一条收藏。
+func (s *Store) FavoriteOf(sourceID string) (Clip, error) {
+	return s.first(`SELECT `+clipCols+` FROM clips WHERE favorite=1 AND source_clip_id=?
+ORDER BY favorited_at DESC LIMIT 1`, sourceID)
+}
+
+// FavoriteWithText 返回文字内容完全相同的收藏：同样的文字不重复收藏。
+func (s *Store) FavoriteWithText(kind Kind, text string) (Clip, error) {
+	return s.first(`SELECT `+clipCols+` FROM clips WHERE favorite=1 AND kind=? AND text_content=?
+ORDER BY favorited_at DESC LIMIT 1`, kind, text)
+}
+
+// PendingFavorites 返回在等复制记录 sourceID 下载完、还没另存好的收藏。
+func (s *Store) PendingFavorites(sourceID string) ([]Clip, error) {
+	return s.queryClips(`SELECT `+clipCols+` FROM clips WHERE favorite=1 AND source_clip_id=? AND status<>?`,
+		sourceID, StatusReady)
+}
+
+func (s *Store) first(query string, args ...any) (Clip, error) {
+	rows, err := s.queryClips(query, args...)
+	if err != nil {
+		return Clip{}, err
+	}
+	if len(rows) == 0 {
+		return Clip{}, ErrNotFound
+	}
+	return rows[0], nil
+}
+
+// TouchFavorite 把一条收藏挪到收藏的最上面，并记下这次是从哪一条复制记录收藏的。
+func (s *Store) TouchFavorite(id, sourceID string, at time.Time) error {
+	_, err := s.db.Exec(`UPDATE clips SET favorited_at=?, source_clip_id=? WHERE id=? AND favorite=1`,
+		at.Unix(), sourceID, id)
+	return err
+}
+
+// Unfavorite 把一条收藏改回复制记录：时间改成 now，保留期到 expires，内容的位置改成缓存目录里的 cacheRel。
+func (s *Store) Unfavorite(id string, now, expires time.Time, cacheRel string) error {
+	_, err := s.db.Exec(`
+UPDATE clips SET favorite=0, favorited_at=0, source_clip_id='', created_at=?, expires_at=?, cache_path=?
+WHERE id=? AND favorite=1`, now.Unix(), expires.Unix(), cacheRel, id)
+	return err
+}
+
+// CachePaths 返回复制记录仍在引用的缓存路径，供 GC 与缓存目录对账、清理孤儿文件。
 func (s *Store) CachePaths() (map[string]struct{}, error) {
-	rows, err := s.db.Query(`SELECT cache_path FROM clips WHERE cache_path <> ''`)
+	return s.paths(false)
+}
+
+// FavoritePaths 返回收藏仍在引用的路径，供 GC 与收藏目录对账。
+func (s *Store) FavoritePaths() (map[string]struct{}, error) {
+	return s.paths(true)
+}
+
+func (s *Store) paths(favorite bool) (map[string]struct{}, error) {
+	rows, err := s.db.Query(`SELECT cache_path FROM clips WHERE cache_path <> '' AND favorite=?`, favorite)
 	if err != nil {
 		return nil, err
 	}

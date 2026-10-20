@@ -12,6 +12,9 @@ import (
 // launchdLabel 与界面登记的 LaunchAgent 相同，见 ui/lib/background_service.dart。
 const launchdLabel = "com.pasteferry.daemon"
 
+// pickerLabel 是快捷粘贴窗口的 LaunchAgent，由界面登记（见 ui/lib/quick_paste_service.dart）
+const pickerLabel = "com.pasteferry.picker"
+
 // prepare 挂载 DMG，把新 App 复制到旧 App 旁边（同一个磁盘，替换时只需改名），
 // 核对版本号、Bundle ID 与签名。
 func prepare(p *Plan, work string) error {
@@ -79,14 +82,17 @@ func apply(p *Plan, log *slog.Logger) error {
 	return nil
 }
 
-// relaunch 让 launchd 按新 App 里的程序重启后台服务（只在 LaunchAgent 指向这个 App 时），再打开界面。
+// relaunch 让 launchd 按新 App 里的程序重启后台服务与快捷粘贴窗口（只在 LaunchAgent 指向这个 App 时），
+// 再打开界面。快捷窗口不重启的话会一直跑着旧版本，它的程序文件已经随旧 App 删掉了
 func relaunch(p *Plan, log *slog.Logger) error {
 	home, _ := os.UserHomeDir()
-	plist := filepath.Join(home, "Library", "LaunchAgents", launchdLabel+".plist")
-	if raw, err := os.ReadFile(plist); err == nil && strings.Contains(string(raw), p.App+"/") {
-		target := fmt.Sprintf("gui/%d/%s", os.Getuid(), launchdLabel)
-		if out, err := exec.Command("launchctl", "kickstart", "-k", target).CombinedOutput(); err != nil {
-			log.Warn("重启后台服务失败", "err", err, "out", string(out))
+	for _, label := range []string{launchdLabel, pickerLabel} {
+		plist := filepath.Join(home, "Library", "LaunchAgents", label+".plist")
+		if raw, err := os.ReadFile(plist); err == nil && strings.Contains(string(raw), p.App+"/") {
+			target := fmt.Sprintf("gui/%d/%s", os.Getuid(), label)
+			if out, err := exec.Command("launchctl", "kickstart", "-k", target).CombinedOutput(); err != nil {
+				log.Warn("重启失败", "label", label, "err", err, "out", string(out))
+			}
 		}
 	}
 	// open 启动的 App 不继承这里的环境变量：把 HOME 明确带过去，界面才会连回同一个数据目录。

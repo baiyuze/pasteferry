@@ -257,6 +257,49 @@ class DaemonServiceClient extends $grpc.Client {
     return $createUnaryCall(_$installUpdate, request, options: options);
   }
 
+  /// 收藏或取消收藏，见 design/quick-paste-and-favorites.md 第 3 节。
+  /// 收藏时另存一份，返回新的收藏记录；取消时把收藏放回复制记录的最上面，返回放回去的那一条。
+  /// 过程中照常推送 clip_added / clip_removed。已过期或已失败的图片、文件返回 FAILED_PRECONDITION
+  $grpc.ResponseFuture<$0.ClipRecord> setFavorite(
+    $0.SetFavoriteRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setFavorite, request, options: options);
+  }
+
+  /// 悬停提示框要显示的完整内容。ClipRecord 的 text_preview 最多 120 个字、换行被压平，不够用
+  $grpc.ResponseFuture<$0.ClipDetail> getClipDetail(
+    $0.GetClipDetailRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getClipDetail, request, options: options);
+  }
+
+  /// 快捷粘贴窗口进程启动后一直保持这个调用：往上报自己的状态，往下收设置页发来的命令。
+  /// 调用断开就当作快捷窗口没在运行
+  $grpc.ResponseStream<$0.QuickPasteCommand> quickPasteSession(
+    $async.Stream<$0.QuickPasteStatus> request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createStreamingCall(_$quickPasteSession, request, options: options);
+  }
+
+  /// 设置页读快捷窗口的状态；状态变化时另有 quick_paste_changed 事件
+  $grpc.ResponseFuture<$0.QuickPasteStatus> getQuickPasteStatus(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getQuickPasteStatus, request, options: options);
+  }
+
+  /// 设置页转给快捷窗口的命令。快捷窗口没在运行时返回 FAILED_PRECONDITION
+  $grpc.ResponseFuture<$0.Empty> sendQuickPasteCommand(
+    $0.QuickPasteCommand request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$sendQuickPasteCommand, request, options: options);
+  }
+
   // method descriptors
 
   static final _$subscribe = $grpc.ClientMethod<$0.SubscribeRequest, $0.Event>(
@@ -390,6 +433,31 @@ class DaemonServiceClient extends $grpc.Client {
       $grpc.ClientMethod<$0.InstallUpdateRequest, $0.Empty>(
           '/pasteferry.v1.DaemonService/InstallUpdate',
           ($0.InstallUpdateRequest value) => value.writeToBuffer(),
+          $0.Empty.fromBuffer);
+  static final _$setFavorite =
+      $grpc.ClientMethod<$0.SetFavoriteRequest, $0.ClipRecord>(
+          '/pasteferry.v1.DaemonService/SetFavorite',
+          ($0.SetFavoriteRequest value) => value.writeToBuffer(),
+          $0.ClipRecord.fromBuffer);
+  static final _$getClipDetail =
+      $grpc.ClientMethod<$0.GetClipDetailRequest, $0.ClipDetail>(
+          '/pasteferry.v1.DaemonService/GetClipDetail',
+          ($0.GetClipDetailRequest value) => value.writeToBuffer(),
+          $0.ClipDetail.fromBuffer);
+  static final _$quickPasteSession =
+      $grpc.ClientMethod<$0.QuickPasteStatus, $0.QuickPasteCommand>(
+          '/pasteferry.v1.DaemonService/QuickPasteSession',
+          ($0.QuickPasteStatus value) => value.writeToBuffer(),
+          $0.QuickPasteCommand.fromBuffer);
+  static final _$getQuickPasteStatus =
+      $grpc.ClientMethod<$0.Empty, $0.QuickPasteStatus>(
+          '/pasteferry.v1.DaemonService/GetQuickPasteStatus',
+          ($0.Empty value) => value.writeToBuffer(),
+          $0.QuickPasteStatus.fromBuffer);
+  static final _$sendQuickPasteCommand =
+      $grpc.ClientMethod<$0.QuickPasteCommand, $0.Empty>(
+          '/pasteferry.v1.DaemonService/SendQuickPasteCommand',
+          ($0.QuickPasteCommand value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
 }
 
@@ -611,6 +679,43 @@ abstract class DaemonServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) =>
             $0.InstallUpdateRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SetFavoriteRequest, $0.ClipRecord>(
+        'SetFavorite',
+        setFavorite_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.SetFavoriteRequest.fromBuffer(value),
+        ($0.ClipRecord value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetClipDetailRequest, $0.ClipDetail>(
+        'GetClipDetail',
+        getClipDetail_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.GetClipDetailRequest.fromBuffer(value),
+        ($0.ClipDetail value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.QuickPasteStatus, $0.QuickPasteCommand>(
+        'QuickPasteSession',
+        quickPasteSession,
+        true,
+        true,
+        ($core.List<$core.int> value) => $0.QuickPasteStatus.fromBuffer(value),
+        ($0.QuickPasteCommand value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.QuickPasteStatus>(
+        'GetQuickPasteStatus',
+        getQuickPasteStatus_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.QuickPasteStatus value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.QuickPasteCommand, $0.Empty>(
+        'SendQuickPasteCommand',
+        sendQuickPasteCommand_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.QuickPasteCommand.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
   }
 
@@ -838,4 +943,39 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.Empty> installUpdate(
       $grpc.ServiceCall call, $0.InstallUpdateRequest request);
+
+  $async.Future<$0.ClipRecord> setFavorite_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SetFavoriteRequest> $request) async {
+    return setFavorite($call, await $request);
+  }
+
+  $async.Future<$0.ClipRecord> setFavorite(
+      $grpc.ServiceCall call, $0.SetFavoriteRequest request);
+
+  $async.Future<$0.ClipDetail> getClipDetail_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.GetClipDetailRequest> $request) async {
+    return getClipDetail($call, await $request);
+  }
+
+  $async.Future<$0.ClipDetail> getClipDetail(
+      $grpc.ServiceCall call, $0.GetClipDetailRequest request);
+
+  $async.Stream<$0.QuickPasteCommand> quickPasteSession(
+      $grpc.ServiceCall call, $async.Stream<$0.QuickPasteStatus> request);
+
+  $async.Future<$0.QuickPasteStatus> getQuickPasteStatus_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return getQuickPasteStatus($call, await $request);
+  }
+
+  $async.Future<$0.QuickPasteStatus> getQuickPasteStatus(
+      $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.Empty> sendQuickPasteCommand_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.QuickPasteCommand> $request) async {
+    return sendQuickPasteCommand($call, await $request);
+  }
+
+  $async.Future<$0.Empty> sendQuickPasteCommand(
+      $grpc.ServiceCall call, $0.QuickPasteCommand request);
 }

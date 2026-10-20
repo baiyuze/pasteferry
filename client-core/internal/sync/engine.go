@@ -59,6 +59,9 @@ type Engine struct {
 	store   *store.Store
 	cache   *cache.Cache
 	watcher *clipboard.Watcher
+	// favorites 是收藏另存的图片与文件，见 favorite.go。favMu 让收藏操作一个一个来，连点两下不会存两份
+	favorites *cache.Cache
+	favMu     sync.Mutex
 
 	deviceID   string
 	deviceName func() string
@@ -71,6 +74,7 @@ type Engine struct {
 
 	// 事件回传给界面
 	onRecord            func(*pb.ClipRecord)
+	onRemoved           func(clipID string)
 	onProgress          func(*pb.TransferProgress)
 	onReceive           func(ReceiveEvent)
 	onClipboardResult   func(*pb.ClipboardWriteResult)
@@ -96,6 +100,7 @@ type Options struct {
 	Logger     *slog.Logger
 	Store      *store.Store
 	Cache      *cache.Cache
+	Favorites  *cache.Cache
 	Watcher    *clipboard.Watcher
 	DeviceID   string
 	DeviceName func() string
@@ -105,6 +110,8 @@ type Options struct {
 	// PairedPeers 返回所有已配对设备，不论在线与否：连不上的记进待补发
 	PairedPeers         func() []string
 	OnRecord            func(*pb.ClipRecord)
+	// OnRemoved 在引擎自己删掉一条记录时调用（取消收藏时合并掉的原记录等）
+	OnRemoved           func(clipID string)
 	OnProgress          func(*pb.TransferProgress)
 	OnReceive           func(ReceiveEvent)
 	OnClipboardResult   func(*pb.ClipboardWriteResult)
@@ -120,6 +127,7 @@ func New(opts Options) *Engine {
 		log:                 log,
 		store:               opts.Store,
 		cache:               opts.Cache,
+		favorites:           opts.Favorites,
 		watcher:             opts.Watcher,
 		deviceID:            opts.DeviceID,
 		deviceName:          opts.DeviceName,
@@ -128,6 +136,7 @@ func New(opts Options) *Engine {
 		openStream:          opts.OpenStream,
 		pairedPeers:         opts.PairedPeers,
 		onRecord:            opts.OnRecord,
+		onRemoved:           opts.OnRemoved,
 		onProgress:          opts.OnProgress,
 		onReceive:           opts.OnReceive,
 		onClipboardResult:   opts.OnClipboardResult,
@@ -710,6 +719,7 @@ func (e *Engine) finishReceive(r *receiver, cacheRel string, tops []string) bool
 		return false
 	}
 	e.emitRecord(clip)
+	e.completePendingFavorites(clip)
 	result := &pb.ClipboardWriteResult{ClipId: clip.ID, Outcome: pb.ClipboardWriteOutcome_CLIPBOARD_WRITE_OUTCOME_PRESERVED}
 	if e.loadConfig().AutoApplyToClipboard && !quiet {
 		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
@@ -758,9 +768,17 @@ func (e *Engine) FetchForPreview(ctx context.Context, clipID string) error {
 
 // ApplyToClipboard 把某条已就绪的记录写入本机剪贴板。
 func (e *Engine) ApplyToClipboard(ctx context.Context, clipID string) error {
+	return e.ApplyToClipboardAs(ctx, clipID, false)
+}
+
+// ApplyToClipboardAs 与 ApplyToClipboard 相同；plain 时文字与网页格式只写纯文本。
+func (e *Engine) ApplyToClipboardAs(ctx context.Context, clipID string, plain bool) error {
 	clip, err := e.store.GetClip(clipID)
 	if err != nil {
 		return err
+	}
+	if plain && (clip.Kind == store.KindHTML || clip.Kind == store.KindText) {
+		clip.TextContent, clip.Kind = plainText(clip), store.KindText
 	}
 	result := e.writeClipboard(ctx, clip, nil)
 	e.clipboardResult(result)
@@ -857,7 +875,12 @@ func (e *Engine) ImagePreview(_ context.Context, clipID string, index int) (path
 
 // localPaths 返回这条记录在本机可用的实际路径。
 func (e *Engine) localPaths(clip store.Clip) ([]string, error) {
-	if clip.CachePath != "" && e.cache.Exists(clip.CachePath) {
+	if clip.Favorite {
+		// 收藏另存在收藏目录里；那里的东西被用户手动删掉了，才退回原来的位置
+		if clip.CachePath != "" && e.favorites != nil && e.favorites.Exists(clip.CachePath) {
+			return e.favorites.Entries(clip.CachePath)
+		}
+	} else if clip.CachePath != "" && e.cache.Exists(clip.CachePath) {
 		return e.cache.Entries(clip.CachePath)
 	}
 	if len(clip.SourcePaths) > 0 {
@@ -889,7 +912,7 @@ func recordProto(clip store.Clip) *pb.ClipRecord {
 			Name: it.Name, Size: it.Size, IsDir: it.IsDir, ContentType: it.ContentType,
 		})
 	}
-	return &pb.ClipRecord{
+	r := &pb.ClipRecord{
 		Id:               clip.ID,
 		Kind:             pb.ClipKind(clip.Kind),
 		Status:           pb.ClipStatus(clip.Status),
@@ -903,7 +926,15 @@ func recordProto(clip store.Clip) *pb.ClipRecord {
 		ExpiresAtUnix:    clip.ExpiresAt.Unix(),
 		Error:            clip.Error,
 		ImageCount:       imagepreview.ImageCount(clip),
+		Favorite:         clip.Favorite,
+		Favorited:        clip.Favorited,
+		IsLink:           clip.IsLink,
 	}
+	if clip.Favorite {
+		r.ExpiresAtUnix = 0 // 收藏不会过期
+		r.FavoritedAtUnix = clip.FavoritedAt.Unix()
+	}
+	return r
 }
 
 // progressInterval 是同一次传输两次进度上报之间的最小间隔。

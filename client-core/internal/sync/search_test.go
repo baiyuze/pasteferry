@@ -30,7 +30,7 @@ func TestSearchHistory(t *testing.T) {
 	}
 
 	find := func(query string) []store.Clip {
-		got, err := e.SearchHistory(query, 50)
+		got, err := e.SearchHistory(query, 50, store.Filter{})
 		if err != nil {
 			t.Fatal(err)
 		}

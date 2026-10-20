@@ -166,6 +166,10 @@ class ClipRecord extends $pb.GeneratedMessage {
     $fixnum.Int64? expiresAtUnix,
     $core.String? error,
     $core.int? imageCount,
+    $core.bool? favorite,
+    $core.bool? favorited,
+    $fixnum.Int64? favoritedAtUnix,
+    $core.bool? isLink,
   }) {
     final result = ClipRecord._();
     if (id != null) result.id = id;
@@ -181,6 +185,10 @@ class ClipRecord extends $pb.GeneratedMessage {
     if (expiresAtUnix != null) result.expiresAtUnix = expiresAtUnix;
     if (error != null) result.error = error;
     if (imageCount != null) result.imageCount = imageCount;
+    if (favorite != null) result.favorite = favorite;
+    if (favorited != null) result.favorited = favorited;
+    if (favoritedAtUnix != null) result.favoritedAtUnix = favoritedAtUnix;
+    if (isLink != null) result.isLink = isLink;
     return result;
   }
 
@@ -213,6 +221,10 @@ class ClipRecord extends $pb.GeneratedMessage {
     ..aInt64(11, _omitFieldNames ? '' : 'expiresAtUnix')
     ..aOS(12, _omitFieldNames ? '' : 'error')
     ..aI(13, _omitFieldNames ? '' : 'imageCount')
+    ..aOB(14, _omitFieldNames ? '' : 'favorite')
+    ..aOB(15, _omitFieldNames ? '' : 'favorited')
+    ..aInt64(16, _omitFieldNames ? '' : 'favoritedAtUnix')
+    ..aOB(17, _omitFieldNames ? '' : 'isLink')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -347,6 +359,45 @@ class ClipRecord extends $pb.GeneratedMessage {
   $core.bool hasImageCount() => $_has(12);
   @$pb.TagNumber(13)
   void clearImageCount() => $_clearField(13);
+
+  /// 这一条是收藏，不是复制记录。收藏的 expires_at_unix 为 0，表示不会过期
+  @$pb.TagNumber(14)
+  $core.bool get favorite => $_getBF(13);
+  @$pb.TagNumber(14)
+  set favorite($core.bool value) => $_setBool(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasFavorite() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearFavorite() => $_clearField(14);
+
+  /// 复制记录里的这一条已经收藏过（星标亮着）
+  @$pb.TagNumber(15)
+  $core.bool get favorited => $_getBF(14);
+  @$pb.TagNumber(15)
+  set favorited($core.bool value) => $_setBool(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasFavorited() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearFavorited() => $_clearField(15);
+
+  @$pb.TagNumber(16)
+  $fixnum.Int64 get favoritedAtUnix => $_getI64(15);
+  @$pb.TagNumber(16)
+  set favoritedAtUnix($fixnum.Int64 value) => $_setInt64(15, value);
+  @$pb.TagNumber(16)
+  $core.bool hasFavoritedAtUnix() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearFavoritedAtUnix() => $_clearField(16);
+
+  /// 整条文字就是一个 http(s) 网址
+  @$pb.TagNumber(17)
+  $core.bool get isLink => $_getBF(16);
+  @$pb.TagNumber(17)
+  set isLink($core.bool value) => $_setBool(16, value);
+  @$pb.TagNumber(17)
+  $core.bool hasIsLink() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearIsLink() => $_clearField(17);
 }
 
 class SubscribeRequest extends $pb.GeneratedMessage {
@@ -653,6 +704,8 @@ enum Event_Payload {
   permissionChanged,
   statusChanged,
   clipboardWritten,
+  configChanged,
+  quickPasteChanged,
   notSet
 }
 
@@ -666,6 +719,8 @@ class Event extends $pb.GeneratedMessage {
     ClipboardPermission? permissionChanged,
     Status? statusChanged,
     ClipboardWriteResult? clipboardWritten,
+    Config? configChanged,
+    QuickPasteStatus? quickPasteChanged,
   }) {
     final result = Event._();
     if (clipAdded != null) result.clipAdded = clipAdded;
@@ -676,6 +731,8 @@ class Event extends $pb.GeneratedMessage {
     if (permissionChanged != null) result.permissionChanged = permissionChanged;
     if (statusChanged != null) result.statusChanged = statusChanged;
     if (clipboardWritten != null) result.clipboardWritten = clipboardWritten;
+    if (configChanged != null) result.configChanged = configChanged;
+    if (quickPasteChanged != null) result.quickPasteChanged = quickPasteChanged;
     return result;
   }
 
@@ -697,13 +754,15 @@ class Event extends $pb.GeneratedMessage {
     6: Event_Payload.permissionChanged,
     7: Event_Payload.statusChanged,
     8: Event_Payload.clipboardWritten,
+    9: Event_Payload.configChanged,
+    10: Event_Payload.quickPasteChanged,
     0: Event_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Event',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: Event.$_createMessage)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     ..aOM<ClipRecord>(1, _omitFieldNames ? '' : 'clipAdded',
         subBuilder: ClipRecord.$_createMessage)
     ..aOM<ClipRecord>(2, _omitFieldNames ? '' : 'clipUpdated',
@@ -719,6 +778,10 @@ class Event extends $pb.GeneratedMessage {
         subBuilder: Status.$_createMessage)
     ..aOM<ClipboardWriteResult>(8, _omitFieldNames ? '' : 'clipboardWritten',
         subBuilder: ClipboardWriteResult.$_createMessage)
+    ..aOM<Config>(9, _omitFieldNames ? '' : 'configChanged',
+        subBuilder: Config.$_createMessage)
+    ..aOM<QuickPasteStatus>(10, _omitFieldNames ? '' : 'quickPasteChanged',
+        subBuilder: QuickPasteStatus.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -749,6 +812,8 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   @$pb.TagNumber(7)
   @$pb.TagNumber(8)
+  @$pb.TagNumber(9)
+  @$pb.TagNumber(10)
   Event_Payload whichPayload() => _Event_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(1)
   @$pb.TagNumber(2)
@@ -758,6 +823,8 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   @$pb.TagNumber(7)
   @$pb.TagNumber(8)
+  @$pb.TagNumber(9)
+  @$pb.TagNumber(10)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -843,6 +910,29 @@ class Event extends $pb.GeneratedMessage {
   void clearClipboardWritten() => $_clearField(8);
   @$pb.TagNumber(8)
   ClipboardWriteResult ensureClipboardWritten() => $_ensure(7);
+
+  /// 设置保存后推送，快捷窗口据此重新注册快捷键
+  @$pb.TagNumber(9)
+  Config get configChanged => $_getN(8);
+  @$pb.TagNumber(9)
+  set configChanged(Config value) => $_setField(9, value);
+  @$pb.TagNumber(9)
+  $core.bool hasConfigChanged() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearConfigChanged() => $_clearField(9);
+  @$pb.TagNumber(9)
+  Config ensureConfigChanged() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  QuickPasteStatus get quickPasteChanged => $_getN(9);
+  @$pb.TagNumber(10)
+  set quickPasteChanged(QuickPasteStatus value) => $_setField(10, value);
+  @$pb.TagNumber(10)
+  $core.bool hasQuickPasteChanged() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearQuickPasteChanged() => $_clearField(10);
+  @$pb.TagNumber(10)
+  QuickPasteStatus ensureQuickPasteChanged() => $_ensure(9);
 }
 
 class NotificationStatus extends $pb.GeneratedMessage {
@@ -1086,12 +1176,16 @@ class ListHistoryRequest extends $pb.GeneratedMessage {
     $fixnum.Int64? beforeUnix,
     ClipKind? kindFilter,
     $core.String? query,
+    $core.bool? favorites,
+    $core.bool? linksOnly,
   }) {
     final result = ListHistoryRequest._();
     if (limit != null) result.limit = limit;
     if (beforeUnix != null) result.beforeUnix = beforeUnix;
     if (kindFilter != null) result.kindFilter = kindFilter;
     if (query != null) result.query = query;
+    if (favorites != null) result.favorites = favorites;
+    if (linksOnly != null) result.linksOnly = linksOnly;
     return result;
   }
 
@@ -1113,6 +1207,8 @@ class ListHistoryRequest extends $pb.GeneratedMessage {
     ..aE<ClipKind>(3, _omitFieldNames ? '' : 'kindFilter',
         enumValues: ClipKind.values)
     ..aOS(4, _omitFieldNames ? '' : 'query')
+    ..aOB(5, _omitFieldNames ? '' : 'favorites')
+    ..aOB(6, _omitFieldNames ? '' : 'linksOnly')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1155,6 +1251,7 @@ class ListHistoryRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearBeforeUnix() => $_clearField(2);
 
+  /// UNSPECIFIED 表示不过滤。TEXT 是界面上的「文字」：纯文本与网页格式，不含链接
   @$pb.TagNumber(3)
   ClipKind get kindFilter => $_getN(2);
   @$pb.TagNumber(3)
@@ -1174,6 +1271,26 @@ class ListHistoryRequest extends $pb.GeneratedMessage {
   $core.bool hasQuery() => $_has(3);
   @$pb.TagNumber(4)
   void clearQuery() => $_clearField(4);
+
+  /// true 时只返回收藏，按收藏时间倒序，忽略 before_unix；false 时只返回复制记录
+  @$pb.TagNumber(5)
+  $core.bool get favorites => $_getBF(4);
+  @$pb.TagNumber(5)
+  set favorites($core.bool value) => $_setBool(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasFavorites() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearFavorites() => $_clearField(5);
+
+  /// 只返回链接（is_link）
+  @$pb.TagNumber(6)
+  $core.bool get linksOnly => $_getBF(5);
+  @$pb.TagNumber(6)
+  set linksOnly($core.bool value) => $_setBool(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasLinksOnly() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearLinksOnly() => $_clearField(6);
 }
 
 class ListHistoryResponse extends $pb.GeneratedMessage {
@@ -1378,9 +1495,11 @@ class FetchRequest extends $pb.GeneratedMessage {
 class ApplyToClipboardRequest extends $pb.GeneratedMessage {
   factory ApplyToClipboardRequest({
     $core.String? clipId,
+    $core.bool? plainText,
   }) {
     final result = ApplyToClipboardRequest._();
     if (clipId != null) result.clipId = clipId;
+    if (plainText != null) result.plainText = plainText;
     return result;
   }
 
@@ -1398,6 +1517,7 @@ class ApplyToClipboardRequest extends $pb.GeneratedMessage {
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: ApplyToClipboardRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'clipId')
+    ..aOB(2, _omitFieldNames ? '' : 'plainText')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1432,6 +1552,419 @@ class ApplyToClipboardRequest extends $pb.GeneratedMessage {
   $core.bool hasClipId() => $_has(0);
   @$pb.TagNumber(1)
   void clearClipId() => $_clearField(1);
+
+  /// 只写纯文本，去掉网页格式（快捷窗口里按 ⇧回车）
+  @$pb.TagNumber(2)
+  $core.bool get plainText => $_getBF(1);
+  @$pb.TagNumber(2)
+  set plainText($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasPlainText() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPlainText() => $_clearField(2);
+}
+
+class SetFavoriteRequest extends $pb.GeneratedMessage {
+  factory SetFavoriteRequest({
+    $core.String? clipId,
+    $core.bool? favorite,
+  }) {
+    final result = SetFavoriteRequest._();
+    if (clipId != null) result.clipId = clipId;
+    if (favorite != null) result.favorite = favorite;
+    return result;
+  }
+
+  SetFavoriteRequest._();
+
+  factory SetFavoriteRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetFavoriteRequest()..mergeFromBuffer(data, registry);
+  factory SetFavoriteRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetFavoriteRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SetFavoriteRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SetFavoriteRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'clipId')
+    ..aOB(2, _omitFieldNames ? '' : 'favorite')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetFavoriteRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetFavoriteRequest copyWith(void Function(SetFavoriteRequest) updates) =>
+      super.copyWith((message) => updates(message as SetFavoriteRequest))
+          as SetFavoriteRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SetFavoriteRequest() / SetFavoriteRequest.new instead')
+  static SetFavoriteRequest create() => SetFavoriteRequest._();
+  static $pb.GeneratedMessage $_createMessage() => SetFavoriteRequest._();
+  @$core.override
+  SetFavoriteRequest createEmptyInstance() => SetFavoriteRequest._();
+  @$core.pragma('dart2js:noInline')
+  static SetFavoriteRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SetFavoriteRequest>(
+          SetFavoriteRequest.$_createMessage);
+  static SetFavoriteRequest? _defaultInstance;
+
+  /// 收藏时传复制记录的 ID；取消收藏时传收藏的 ID 或原记录的 ID 都可以
+  @$pb.TagNumber(1)
+  $core.String get clipId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set clipId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasClipId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearClipId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get favorite => $_getBF(1);
+  @$pb.TagNumber(2)
+  set favorite($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasFavorite() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFavorite() => $_clearField(2);
+}
+
+class GetClipDetailRequest extends $pb.GeneratedMessage {
+  factory GetClipDetailRequest({
+    $core.String? clipId,
+  }) {
+    final result = GetClipDetailRequest._();
+    if (clipId != null) result.clipId = clipId;
+    return result;
+  }
+
+  GetClipDetailRequest._();
+
+  factory GetClipDetailRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetClipDetailRequest()..mergeFromBuffer(data, registry);
+  factory GetClipDetailRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetClipDetailRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetClipDetailRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: GetClipDetailRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'clipId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetClipDetailRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetClipDetailRequest copyWith(void Function(GetClipDetailRequest) updates) =>
+      super.copyWith((message) => updates(message as GetClipDetailRequest))
+          as GetClipDetailRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use GetClipDetailRequest() / GetClipDetailRequest.new instead')
+  static GetClipDetailRequest create() => GetClipDetailRequest._();
+  static $pb.GeneratedMessage $_createMessage() => GetClipDetailRequest._();
+  @$core.override
+  GetClipDetailRequest createEmptyInstance() => GetClipDetailRequest._();
+  @$core.pragma('dart2js:noInline')
+  static GetClipDetailRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetClipDetailRequest>(
+          GetClipDetailRequest.$_createMessage);
+  static GetClipDetailRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get clipId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set clipId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasClipId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearClipId() => $_clearField(1);
+}
+
+class ClipDetail extends $pb.GeneratedMessage {
+  factory ClipDetail({
+    $core.String? text,
+    $core.int? textLength,
+    $core.Iterable<$core.String>? sourcePaths,
+  }) {
+    final result = ClipDetail._();
+    if (text != null) result.text = text;
+    if (textLength != null) result.textLength = textLength;
+    if (sourcePaths != null) result.sourcePaths.addAll(sourcePaths);
+    return result;
+  }
+
+  ClipDetail._();
+
+  factory ClipDetail.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ClipDetail()..mergeFromBuffer(data, registry);
+  factory ClipDetail.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ClipDetail()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ClipDetail',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ClipDetail.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'text')
+    ..aI(2, _omitFieldNames ? '' : 'textLength')
+    ..pPS(3, _omitFieldNames ? '' : 'sourcePaths')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClipDetail clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ClipDetail copyWith(void Function(ClipDetail) updates) =>
+      super.copyWith((message) => updates(message as ClipDetail)) as ClipDetail;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ClipDetail() / ClipDetail.new instead')
+  static ClipDetail create() => ClipDetail._();
+  static $pb.GeneratedMessage $_createMessage() => ClipDetail._();
+  @$core.override
+  ClipDetail createEmptyInstance() => ClipDetail._();
+  @$core.pragma('dart2js:noInline')
+  static ClipDetail getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ClipDetail>(ClipDetail.$_createMessage);
+  static ClipDetail? _defaultInstance;
+
+  /// 文字的全文，网页格式给纯文本。最多前 4000 个字，保留换行
+  @$pb.TagNumber(1)
+  $core.String get text => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set text($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasText() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearText() => $_clearField(1);
+
+  /// 全文的字数
+  @$pb.TagNumber(2)
+  $core.int get textLength => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set textLength($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasTextLength() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTextLength() => $_clearField(2);
+
+  /// 本机复制的文件在本机的完整路径
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.String> get sourcePaths => $_getList(2);
+}
+
+class QuickPasteStatus extends $pb.GeneratedMessage {
+  factory QuickPasteStatus({
+    $core.bool? running,
+    $core.String? hotkeyError,
+    $core.String? hotkey,
+    $core.bool? pasteAvailable,
+    $core.String? pasteUnavailableReason,
+    $core.String? hotkeySource,
+    $core.String? version,
+  }) {
+    final result = QuickPasteStatus._();
+    if (running != null) result.running = running;
+    if (hotkeyError != null) result.hotkeyError = hotkeyError;
+    if (hotkey != null) result.hotkey = hotkey;
+    if (pasteAvailable != null) result.pasteAvailable = pasteAvailable;
+    if (pasteUnavailableReason != null)
+      result.pasteUnavailableReason = pasteUnavailableReason;
+    if (hotkeySource != null) result.hotkeySource = hotkeySource;
+    if (version != null) result.version = version;
+    return result;
+  }
+
+  QuickPasteStatus._();
+
+  factory QuickPasteStatus.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      QuickPasteStatus()..mergeFromBuffer(data, registry);
+  factory QuickPasteStatus.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      QuickPasteStatus()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'QuickPasteStatus',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: QuickPasteStatus.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'running')
+    ..aOS(2, _omitFieldNames ? '' : 'hotkeyError')
+    ..aOS(3, _omitFieldNames ? '' : 'hotkey')
+    ..aOB(4, _omitFieldNames ? '' : 'pasteAvailable')
+    ..aOS(5, _omitFieldNames ? '' : 'pasteUnavailableReason')
+    ..aOS(6, _omitFieldNames ? '' : 'hotkeySource')
+    ..aOS(7, _omitFieldNames ? '' : 'version')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickPasteStatus clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickPasteStatus copyWith(void Function(QuickPasteStatus) updates) =>
+      super.copyWith((message) => updates(message as QuickPasteStatus))
+          as QuickPasteStatus;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use QuickPasteStatus() / QuickPasteStatus.new instead')
+  static QuickPasteStatus create() => QuickPasteStatus._();
+  static $pb.GeneratedMessage $_createMessage() => QuickPasteStatus._();
+  @$core.override
+  QuickPasteStatus createEmptyInstance() => QuickPasteStatus._();
+  @$core.pragma('dart2js:noInline')
+  static QuickPasteStatus getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<QuickPasteStatus>(
+          QuickPasteStatus.$_createMessage);
+  static QuickPasteStatus? _defaultInstance;
+
+  /// 快捷窗口进程在运行（QuickPasteSession 连着）
+  @$pb.TagNumber(1)
+  $core.bool get running => $_getBF(0);
+  @$pb.TagNumber(1)
+  set running($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasRunning() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRunning() => $_clearField(1);
+
+  /// 快捷键注册失败的原因：空表示成功；in_use（被其他程序占用）、invalid、unsupported，
+  /// 或者平台给出的原文
+  @$pb.TagNumber(2)
+  $core.String get hotkeyError => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set hotkeyError($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasHotkeyError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearHotkeyError() => $_clearField(2);
+
+  /// 实际生效的快捷键，与 Config.quick_paste_hotkey 同样的写法。Wayland 上是门户里用户设定的组合
+  @$pb.TagNumber(3)
+  $core.String get hotkey => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set hotkey($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasHotkey() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearHotkey() => $_clearField(3);
+
+  /// 选中后能自动粘贴
+  @$pb.TagNumber(4)
+  $core.bool get pasteAvailable => $_getBF(3);
+  @$pb.TagNumber(4)
+  set pasteAvailable($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasPasteAvailable() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPasteAvailable() => $_clearField(4);
+
+  /// 不能自动粘贴的原因：not_trusted（Mac 未授予辅助功能）、wayland、copy_only（设置里选了只复制）
+  @$pb.TagNumber(5)
+  $core.String get pasteUnavailableReason => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set pasteUnavailableReason($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasPasteUnavailableReason() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPasteUnavailableReason() => $_clearField(5);
+
+  /// 快捷键由谁触发：native（程序自己注册）、portal（Wayland 全局快捷键门户）、
+  /// system_shortcut（Wayland 上要用户在系统设置里添加快捷键）
+  @$pb.TagNumber(6)
+  $core.String get hotkeySource => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set hotkeySource($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasHotkeySource() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearHotkeySource() => $_clearField(6);
+
+  /// 快捷窗口的版本。App 更新后还在跑旧版的，界面让它按新的程序重新启动
+  @$pb.TagNumber(7)
+  $core.String get version => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set version($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasVersion() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearVersion() => $_clearField(7);
+}
+
+class QuickPasteCommand extends $pb.GeneratedMessage {
+  factory QuickPasteCommand({
+    $core.String? command,
+  }) {
+    final result = QuickPasteCommand._();
+    if (command != null) result.command = command;
+    return result;
+  }
+
+  QuickPasteCommand._();
+
+  factory QuickPasteCommand.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      QuickPasteCommand()..mergeFromBuffer(data, registry);
+  factory QuickPasteCommand.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      QuickPasteCommand()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'QuickPasteCommand',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: QuickPasteCommand.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'command')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickPasteCommand clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  QuickPasteCommand copyWith(void Function(QuickPasteCommand) updates) =>
+      super.copyWith((message) => updates(message as QuickPasteCommand))
+          as QuickPasteCommand;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use QuickPasteCommand() / QuickPasteCommand.new instead')
+  static QuickPasteCommand create() => QuickPasteCommand._();
+  static $pb.GeneratedMessage $_createMessage() => QuickPasteCommand._();
+  @$core.override
+  QuickPasteCommand createEmptyInstance() => QuickPasteCommand._();
+  @$core.pragma('dart2js:noInline')
+  static QuickPasteCommand getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<QuickPasteCommand>(
+          QuickPasteCommand.$_createMessage);
+  static QuickPasteCommand? _defaultInstance;
+
+  /// request_permission：Mac 上请求辅助功能权限；
+  /// suspend_hotkey / resume_hotkey：设置页录制快捷键期间暂停全局快捷键；
+  /// show：呼出快捷窗口
+  @$pb.TagNumber(1)
+  $core.String get command => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set command($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasCommand() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCommand() => $_clearField(1);
 }
 
 class ListDevicesResponse extends $pb.GeneratedMessage {
@@ -2158,6 +2691,9 @@ class Config extends $pb.GeneratedMessage {
     $core.String? officialNoticeAck,
     $core.bool? updateCheckDisabled,
     $core.String? updateSkipVersion,
+    $core.bool? quickPasteDisabled,
+    $core.String? quickPasteHotkey,
+    $core.bool? quickPasteCopyOnly,
   }) {
     final result = Config._();
     if (autoSyncThresholdBytes != null)
@@ -2183,6 +2719,11 @@ class Config extends $pb.GeneratedMessage {
     if (updateCheckDisabled != null)
       result.updateCheckDisabled = updateCheckDisabled;
     if (updateSkipVersion != null) result.updateSkipVersion = updateSkipVersion;
+    if (quickPasteDisabled != null)
+      result.quickPasteDisabled = quickPasteDisabled;
+    if (quickPasteHotkey != null) result.quickPasteHotkey = quickPasteHotkey;
+    if (quickPasteCopyOnly != null)
+      result.quickPasteCopyOnly = quickPasteCopyOnly;
     return result;
   }
 
@@ -2219,6 +2760,9 @@ class Config extends $pb.GeneratedMessage {
     ..aOS(17, _omitFieldNames ? '' : 'officialNoticeAck')
     ..aOB(18, _omitFieldNames ? '' : 'updateCheckDisabled')
     ..aOS(19, _omitFieldNames ? '' : 'updateSkipVersion')
+    ..aOB(20, _omitFieldNames ? '' : 'quickPasteDisabled')
+    ..aOS(21, _omitFieldNames ? '' : 'quickPasteHotkey')
+    ..aOB(22, _omitFieldNames ? '' : 'quickPasteCopyOnly')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2422,6 +2966,37 @@ class Config extends $pb.GeneratedMessage {
   $core.bool hasUpdateSkipVersion() => $_has(18);
   @$pb.TagNumber(19)
   void clearUpdateSkipVersion() => $_clearField(19);
+
+  /// 关掉快捷粘贴窗口。写成反向的：旧配置没有这一项时就是开启
+  @$pb.TagNumber(20)
+  $core.bool get quickPasteDisabled => $_getBF(19);
+  @$pb.TagNumber(20)
+  set quickPasteDisabled($core.bool value) => $_setBool(19, value);
+  @$pb.TagNumber(20)
+  $core.bool hasQuickPasteDisabled() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearQuickPasteDisabled() => $_clearField(20);
+
+  /// 快捷键，如 "alt+v"、"ctrl+alt+v"，修饰键按 ctrl、alt、shift、meta 的顺序。
+  /// 空字符串表示默认：Mac 上 ⌥V，其他平台 Alt+V
+  @$pb.TagNumber(21)
+  $core.String get quickPasteHotkey => $_getSZ(20);
+  @$pb.TagNumber(21)
+  set quickPasteHotkey($core.String value) => $_setString(20, value);
+  @$pb.TagNumber(21)
+  $core.bool hasQuickPasteHotkey() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearQuickPasteHotkey() => $_clearField(21);
+
+  /// 选中后只放进剪贴板，不模拟粘贴
+  @$pb.TagNumber(22)
+  $core.bool get quickPasteCopyOnly => $_getBF(21);
+  @$pb.TagNumber(22)
+  set quickPasteCopyOnly($core.bool value) => $_setBool(21, value);
+  @$pb.TagNumber(22)
+  $core.bool hasQuickPasteCopyOnly() => $_has(21);
+  @$pb.TagNumber(22)
+  void clearQuickPasteCopyOnly() => $_clearField(22);
 }
 
 class OfficialUsage extends $pb.GeneratedMessage {

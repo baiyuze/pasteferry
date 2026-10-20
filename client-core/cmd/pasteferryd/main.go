@@ -201,6 +201,11 @@ func run(dataDir string) error {
 	if err := blobs.CleanTemp(); err != nil {
 		slog.Debug("清理临时文件失败", "err", err)
 	}
+	// 收藏另存的图片与文件，与缓存分开放：缓存会过期，收藏不会
+	favorites, err := cache.New(paths.Favorites)
+	if err != nil {
+		return err
+	}
 
 	// ── 配置的并发安全读写 ──
 	var cfgMu sync.RWMutex
@@ -296,6 +301,7 @@ func run(dataDir string) error {
 	engine = syncengine.New(syncengine.Options{
 		Store:      db,
 		Cache:      blobs,
+		Favorites:  favorites,
 		Watcher:    watcher,
 		DeviceID:   id.DeviceID,
 		DeviceName: func() string { return loadCfg().DeviceName },
@@ -328,6 +334,9 @@ func run(dataDir string) error {
 		OnRecord: func(r *pb.ClipRecord) {
 			hub.Publish(rpc.EventClipAdded(r))
 		},
+		OnRemoved: func(id string) {
+			hub.Publish(rpc.EventClipRemoved(id))
+		},
 		OnProgress: func(p *pb.TransferProgress) {
 			hub.Publish(rpc.EventProgress(p))
 		},
@@ -348,6 +357,7 @@ func run(dataDir string) error {
 	collector := gc.New(gc.Options{
 		Store:      db,
 		Cache:      blobs,
+		Favorites:  favorites,
 		LoadConfig: loadCfg,
 		OnRemoved: func(ids []string) {
 			for _, cid := range ids {
@@ -356,6 +366,9 @@ func run(dataDir string) error {
 		},
 	})
 	go collector.Run(ctx)
+
+	// 快捷粘贴窗口（Windows、Linux 上由这里拉起，Mac 上由 LaunchAgent），见 quickpaste.go
+	quickPaste := newQuickPasteRunner(ctx, dataDir == "", !cfg.QuickPasteDisabled)
 
 	// 改了服务器地址要立即重连，否则用户得重启 daemon 才生效
 	saveCfgAndApply := func(c config.Config) error {
@@ -377,6 +390,9 @@ func run(dataDir string) error {
 			default:
 			}
 		}
+		// 快捷窗口据此重新注册快捷键、换语言；关掉快捷粘贴时它自己退出
+		hub.Publish(rpc.EventConfigChanged(rpc.ConfigToProto(c)))
+		quickPaste.SetEnabled(!c.QuickPasteDisabled)
 		return nil
 	}
 
@@ -417,8 +433,10 @@ func run(dataDir string) error {
 		OpenLocalNetworkSettings: lan.RequestPermission,
 		Fetch:                    engine.Fetch,
 		FetchForPreview:          engine.FetchForPreview,
-		ApplyToClipboard:         engine.ApplyToClipboard,
+		ApplyToClipboard:         engine.ApplyToClipboardAs,
 		SearchHistory:            engine.SearchHistory,
+		SetFavorite:              engine.SetFavorite,
+		ClipDetail:               engine.ClipDetail,
 		ImagePreview:             engine.ImagePreview,
 		CacheBytesUsed:           blobs.Size,
 		OfficialUsage:            peerMgr.OfficialUsage,

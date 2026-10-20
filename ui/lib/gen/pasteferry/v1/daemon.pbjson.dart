@@ -195,6 +195,16 @@ const ClipRecord$json = {
     {'1': 'expires_at_unix', '3': 11, '4': 1, '5': 3, '10': 'expiresAtUnix'},
     {'1': 'error', '3': 12, '4': 1, '5': 9, '10': 'error'},
     {'1': 'image_count', '3': 13, '4': 1, '5': 5, '10': 'imageCount'},
+    {'1': 'favorite', '3': 14, '4': 1, '5': 8, '10': 'favorite'},
+    {'1': 'favorited', '3': 15, '4': 1, '5': 8, '10': 'favorited'},
+    {
+      '1': 'favorited_at_unix',
+      '3': 16,
+      '4': 1,
+      '5': 3,
+      '10': 'favoritedAtUnix'
+    },
+    {'1': 'is_link', '3': 17, '4': 1, '5': 8, '10': 'isLink'},
   ],
 };
 
@@ -208,7 +218,10 @@ final $typed_data.Uint8List clipRecordDescriptor = $convert.base64Decode(
     'RlbVIFaXRlbXMSHQoKdG90YWxfc2l6ZRgIIAEoA1IJdG90YWxTaXplEiEKDHRleHRfcHJldmll'
     'dxgJIAEoCVILdGV4dFByZXZpZXcSJgoPY3JlYXRlZF9hdF91bml4GAogASgDUg1jcmVhdGVkQX'
     'RVbml4EiYKD2V4cGlyZXNfYXRfdW5peBgLIAEoA1INZXhwaXJlc0F0VW5peBIUCgVlcnJvchgM'
-    'IAEoCVIFZXJyb3ISHwoLaW1hZ2VfY291bnQYDSABKAVSCmltYWdlQ291bnQ=');
+    'IAEoCVIFZXJyb3ISHwoLaW1hZ2VfY291bnQYDSABKAVSCmltYWdlQ291bnQSGgoIZmF2b3JpdG'
+    'UYDiABKAhSCGZhdm9yaXRlEhwKCWZhdm9yaXRlZBgPIAEoCFIJZmF2b3JpdGVkEioKEWZhdm9y'
+    'aXRlZF9hdF91bml4GBAgASgDUg9mYXZvcml0ZWRBdFVuaXgSFwoHaXNfbGluaxgRIAEoCFIGaX'
+    'NMaW5r');
 
 @$core.Deprecated('Use subscribeRequestDescriptor instead')
 const SubscribeRequest$json = {
@@ -344,6 +357,24 @@ const Event$json = {
       '9': 0,
       '10': 'clipboardWritten'
     },
+    {
+      '1': 'config_changed',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.Config',
+      '9': 0,
+      '10': 'configChanged'
+    },
+    {
+      '1': 'quick_paste_changed',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.QuickPasteStatus',
+      '9': 0,
+      '10': 'quickPasteChanged'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -361,7 +392,10 @@ final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
     'cnJ5LnYxLkNsaXBib2FyZFBlcm1pc3Npb25IAFIRcGVybWlzc2lvbkNoYW5nZWQSPgoOc3RhdH'
     'VzX2NoYW5nZWQYByABKAsyFS5wYXN0ZWZlcnJ5LnYxLlN0YXR1c0gAUg1zdGF0dXNDaGFuZ2Vk'
     'ElIKEWNsaXBib2FyZF93cml0dGVuGAggASgLMiMucGFzdGVmZXJyeS52MS5DbGlwYm9hcmRXcm'
-    'l0ZVJlc3VsdEgAUhBjbGlwYm9hcmRXcml0dGVuQgkKB3BheWxvYWQ=');
+    'l0ZVJlc3VsdEgAUhBjbGlwYm9hcmRXcml0dGVuEj4KDmNvbmZpZ19jaGFuZ2VkGAkgASgLMhUu'
+    'cGFzdGVmZXJyeS52MS5Db25maWdIAFINY29uZmlnQ2hhbmdlZBJRChNxdWlja19wYXN0ZV9jaG'
+    'FuZ2VkGAogASgLMh8ucGFzdGVmZXJyeS52MS5RdWlja1Bhc3RlU3RhdHVzSABSEXF1aWNrUGFz'
+    'dGVDaGFuZ2VkQgkKB3BheWxvYWQ=');
 
 @$core.Deprecated('Use notificationStatusDescriptor instead')
 const NotificationStatus$json = {
@@ -437,6 +471,8 @@ const ListHistoryRequest$json = {
       '10': 'kindFilter'
     },
     {'1': 'query', '3': 4, '4': 1, '5': 9, '10': 'query'},
+    {'1': 'favorites', '3': 5, '4': 1, '5': 8, '10': 'favorites'},
+    {'1': 'links_only', '3': 6, '4': 1, '5': 8, '10': 'linksOnly'},
   ],
 };
 
@@ -444,7 +480,8 @@ const ListHistoryRequest$json = {
 final $typed_data.Uint8List listHistoryRequestDescriptor = $convert.base64Decode(
     'ChJMaXN0SGlzdG9yeVJlcXVlc3QSFAoFbGltaXQYASABKAVSBWxpbWl0Eh8KC2JlZm9yZV91bm'
     'l4GAIgASgDUgpiZWZvcmVVbml4EjgKC2tpbmRfZmlsdGVyGAMgASgOMhcucGFzdGVmZXJyeS52'
-    'MS5DbGlwS2luZFIKa2luZEZpbHRlchIUCgVxdWVyeRgEIAEoCVIFcXVlcnk=');
+    'MS5DbGlwS2luZFIKa2luZEZpbHRlchIUCgVxdWVyeRgEIAEoCVIFcXVlcnkSHAoJZmF2b3JpdG'
+    'VzGAUgASgIUglmYXZvcml0ZXMSHQoKbGlua3Nfb25seRgGIAEoCFIJbGlua3NPbmx5');
 
 @$core.Deprecated('Use listHistoryResponseDescriptor instead')
 const ListHistoryResponse$json = {
@@ -506,13 +543,97 @@ const ApplyToClipboardRequest$json = {
   '1': 'ApplyToClipboardRequest',
   '2': [
     {'1': 'clip_id', '3': 1, '4': 1, '5': 9, '10': 'clipId'},
+    {'1': 'plain_text', '3': 2, '4': 1, '5': 8, '10': 'plainText'},
   ],
 };
 
 /// Descriptor for `ApplyToClipboardRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List applyToClipboardRequestDescriptor =
     $convert.base64Decode(
-        'ChdBcHBseVRvQ2xpcGJvYXJkUmVxdWVzdBIXCgdjbGlwX2lkGAEgASgJUgZjbGlwSWQ=');
+        'ChdBcHBseVRvQ2xpcGJvYXJkUmVxdWVzdBIXCgdjbGlwX2lkGAEgASgJUgZjbGlwSWQSHQoKcG'
+        'xhaW5fdGV4dBgCIAEoCFIJcGxhaW5UZXh0');
+
+@$core.Deprecated('Use setFavoriteRequestDescriptor instead')
+const SetFavoriteRequest$json = {
+  '1': 'SetFavoriteRequest',
+  '2': [
+    {'1': 'clip_id', '3': 1, '4': 1, '5': 9, '10': 'clipId'},
+    {'1': 'favorite', '3': 2, '4': 1, '5': 8, '10': 'favorite'},
+  ],
+};
+
+/// Descriptor for `SetFavoriteRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setFavoriteRequestDescriptor = $convert.base64Decode(
+    'ChJTZXRGYXZvcml0ZVJlcXVlc3QSFwoHY2xpcF9pZBgBIAEoCVIGY2xpcElkEhoKCGZhdm9yaX'
+    'RlGAIgASgIUghmYXZvcml0ZQ==');
+
+@$core.Deprecated('Use getClipDetailRequestDescriptor instead')
+const GetClipDetailRequest$json = {
+  '1': 'GetClipDetailRequest',
+  '2': [
+    {'1': 'clip_id', '3': 1, '4': 1, '5': 9, '10': 'clipId'},
+  ],
+};
+
+/// Descriptor for `GetClipDetailRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getClipDetailRequestDescriptor =
+    $convert.base64Decode(
+        'ChRHZXRDbGlwRGV0YWlsUmVxdWVzdBIXCgdjbGlwX2lkGAEgASgJUgZjbGlwSWQ=');
+
+@$core.Deprecated('Use clipDetailDescriptor instead')
+const ClipDetail$json = {
+  '1': 'ClipDetail',
+  '2': [
+    {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
+    {'1': 'text_length', '3': 2, '4': 1, '5': 5, '10': 'textLength'},
+    {'1': 'source_paths', '3': 3, '4': 3, '5': 9, '10': 'sourcePaths'},
+  ],
+};
+
+/// Descriptor for `ClipDetail`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List clipDetailDescriptor = $convert.base64Decode(
+    'CgpDbGlwRGV0YWlsEhIKBHRleHQYASABKAlSBHRleHQSHwoLdGV4dF9sZW5ndGgYAiABKAVSCn'
+    'RleHRMZW5ndGgSIQoMc291cmNlX3BhdGhzGAMgAygJUgtzb3VyY2VQYXRocw==');
+
+@$core.Deprecated('Use quickPasteStatusDescriptor instead')
+const QuickPasteStatus$json = {
+  '1': 'QuickPasteStatus',
+  '2': [
+    {'1': 'running', '3': 1, '4': 1, '5': 8, '10': 'running'},
+    {'1': 'hotkey_error', '3': 2, '4': 1, '5': 9, '10': 'hotkeyError'},
+    {'1': 'hotkey', '3': 3, '4': 1, '5': 9, '10': 'hotkey'},
+    {'1': 'paste_available', '3': 4, '4': 1, '5': 8, '10': 'pasteAvailable'},
+    {
+      '1': 'paste_unavailable_reason',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '10': 'pasteUnavailableReason'
+    },
+    {'1': 'hotkey_source', '3': 6, '4': 1, '5': 9, '10': 'hotkeySource'},
+    {'1': 'version', '3': 7, '4': 1, '5': 9, '10': 'version'},
+  ],
+};
+
+/// Descriptor for `QuickPasteStatus`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List quickPasteStatusDescriptor = $convert.base64Decode(
+    'ChBRdWlja1Bhc3RlU3RhdHVzEhgKB3J1bm5pbmcYASABKAhSB3J1bm5pbmcSIQoMaG90a2V5X2'
+    'Vycm9yGAIgASgJUgtob3RrZXlFcnJvchIWCgZob3RrZXkYAyABKAlSBmhvdGtleRInCg9wYXN0'
+    'ZV9hdmFpbGFibGUYBCABKAhSDnBhc3RlQXZhaWxhYmxlEjgKGHBhc3RlX3VuYXZhaWxhYmxlX3'
+    'JlYXNvbhgFIAEoCVIWcGFzdGVVbmF2YWlsYWJsZVJlYXNvbhIjCg1ob3RrZXlfc291cmNlGAYg'
+    'ASgJUgxob3RrZXlTb3VyY2USGAoHdmVyc2lvbhgHIAEoCVIHdmVyc2lvbg==');
+
+@$core.Deprecated('Use quickPasteCommandDescriptor instead')
+const QuickPasteCommand$json = {
+  '1': 'QuickPasteCommand',
+  '2': [
+    {'1': 'command', '3': 1, '4': 1, '5': 9, '10': 'command'},
+  ],
+};
+
+/// Descriptor for `QuickPasteCommand`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List quickPasteCommandDescriptor = $convert.base64Decode(
+    'ChFRdWlja1Bhc3RlQ29tbWFuZBIYCgdjb21tYW5kGAEgASgJUgdjb21tYW5k');
 
 @$core.Deprecated('Use listDevicesResponseDescriptor instead')
 const ListDevicesResponse$json = {
@@ -755,6 +876,27 @@ const Config$json = {
       '5': 9,
       '10': 'updateSkipVersion'
     },
+    {
+      '1': 'quick_paste_disabled',
+      '3': 20,
+      '4': 1,
+      '5': 8,
+      '10': 'quickPasteDisabled'
+    },
+    {
+      '1': 'quick_paste_hotkey',
+      '3': 21,
+      '4': 1,
+      '5': 9,
+      '10': 'quickPasteHotkey'
+    },
+    {
+      '1': 'quick_paste_copy_only',
+      '3': 22,
+      '4': 1,
+      '5': 8,
+      '10': 'quickPasteCopyOnly'
+    },
   ],
 };
 
@@ -774,7 +916,10 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'N0b21fc2lnbmFsaW5nX3VybBgQIAEoCVISY3VzdG9tU2lnbmFsaW5nVXJsEi4KE29mZmljaWFs'
     'X25vdGljZV9hY2sYESABKAlSEW9mZmljaWFsTm90aWNlQWNrEjIKFXVwZGF0ZV9jaGVja19kaX'
     'NhYmxlZBgSIAEoCFITdXBkYXRlQ2hlY2tEaXNhYmxlZBIuChN1cGRhdGVfc2tpcF92ZXJzaW9u'
-    'GBMgASgJUhF1cGRhdGVTa2lwVmVyc2lvbg==');
+    'GBMgASgJUhF1cGRhdGVTa2lwVmVyc2lvbhIwChRxdWlja19wYXN0ZV9kaXNhYmxlZBgUIAEoCF'
+    'IScXVpY2tQYXN0ZURpc2FibGVkEiwKEnF1aWNrX3Bhc3RlX2hvdGtleRgVIAEoCVIQcXVpY2tQ'
+    'YXN0ZUhvdGtleRIxChVxdWlja19wYXN0ZV9jb3B5X29ubHkYFiABKAhSEnF1aWNrUGFzdGVDb3'
+    'B5T25seQ==');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {

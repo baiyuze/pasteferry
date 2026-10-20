@@ -160,6 +160,7 @@ func (e *Engine) failReceive(id string, expected *receiveAttempt, failure error)
 			e.receiveEvent(clip, ReceiveFailed, nil)
 		}
 	}
+	e.failPendingFavorites(id, failure)
 }
 
 func (e *Engine) writeClipboard(ctx context.Context, clip store.Clip, revision *int64) *pb.ClipboardWriteResult {

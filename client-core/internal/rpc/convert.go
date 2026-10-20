@@ -23,7 +23,7 @@ func clipToProto(c store.Clip) *pb.ClipRecord {
 			ContentType: it.ContentType,
 		})
 	}
-	return &pb.ClipRecord{
+	r := &pb.ClipRecord{
 		Id:               c.ID,
 		Kind:             pb.ClipKind(c.Kind),
 		Status:           pb.ClipStatus(c.Status),
@@ -37,7 +37,29 @@ func clipToProto(c store.Clip) *pb.ClipRecord {
 		ExpiresAtUnix:    c.ExpiresAt.Unix(),
 		Error:            c.Error,
 		ImageCount:       imagepreview.ImageCount(c),
+		Favorite:         c.Favorite,
+		Favorited:        c.Favorited,
+		IsLink:           c.IsLink,
 	}
+	if c.Favorite {
+		r.ExpiresAtUnix = 0 // 收藏不会过期
+		r.FavoritedAtUnix = c.FavoritedAt.Unix()
+	}
+	return r
+}
+
+// filterFromProto 把界面的筛选条件换成 store 的。kind_filter 为 TEXT 是界面上的「文字」：
+// 纯文本与网页格式，不含链接。
+func filterFromProto(req *pb.ListHistoryRequest) store.Filter {
+	f := store.Filter{Favorites: req.GetFavorites(), LinksOnly: req.GetLinksOnly()}
+	switch k := req.GetKindFilter(); k {
+	case pb.ClipKind_CLIP_KIND_UNSPECIFIED:
+	case pb.ClipKind_CLIP_KIND_TEXT:
+		f.Text = true
+	default:
+		f.Kind = store.Kind(k)
+	}
+	return f
 }
 
 func configToProto(c config.Config) *pb.Config {
@@ -59,6 +81,9 @@ func configToProto(c config.Config) *pb.Config {
 		ServiceMode:            serviceModeToProto(c), CustomSignalingUrl: c.CustomSignalingURL, OfficialNoticeAck: c.OfficialNoticeAck,
 		UpdateCheckDisabled: c.UpdateCheckDisabled,
 		UpdateSkipVersion:   c.UpdateSkipVersion,
+		QuickPasteDisabled:  c.QuickPasteDisabled,
+		QuickPasteHotkey:    c.QuickPasteHotkey,
+		QuickPasteCopyOnly:  c.QuickPasteCopyOnly,
 	}
 }
 
@@ -125,6 +150,10 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	c.LANDisabled = in.GetLanDisabled()
 	c.UpdateCheckDisabled = in.GetUpdateCheckDisabled()
 	c.UpdateSkipVersion = in.GetUpdateSkipVersion()
+	c.QuickPasteDisabled = in.GetQuickPasteDisabled()
+	// 空字符串就是默认快捷键
+	c.QuickPasteHotkey = in.GetQuickPasteHotkey()
+	c.QuickPasteCopyOnly = in.GetQuickPasteCopyOnly()
 	return c
 }
 
@@ -163,3 +192,6 @@ func permissionToProto(p clipboard.Permission) pb.ClipboardPermission {
 
 // ClipToProto exposes the same record projection to desktop notifications.
 func ClipToProto(c store.Clip) *pb.ClipRecord { return clipToProto(c) }
+
+// ConfigToProto 用于设置保存后推送 config_changed。
+func ConfigToProto(c config.Config) *pb.Config { return configToProto(c) }

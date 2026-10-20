@@ -41,14 +41,18 @@ type Deps struct {
 	SaveConfig func(config.Config) error
 
 	// 以下在对应里程碑接上，未实现时为 nil，方法返回 Unimplemented
-	Fetch                  func(ctx context.Context, clipID string) error
-	FetchForPreview        func(ctx context.Context, clipID string) error
-	ApplyToClipboard       func(ctx context.Context, clipID string) error
+	Fetch           func(ctx context.Context, clipID string) error
+	FetchForPreview func(ctx context.Context, clipID string) error
+	// ApplyToClipboard 把记录放进剪贴板；plain 时文字只写纯文本
+	ApplyToClipboard       func(ctx context.Context, clipID string, plain bool) error
 	ImagePreview           func(ctx context.Context, clipID string, index int) (path, name string, count int, err error)
 	Permission             func() clipboard.Permission
 	OpenPermissionSettings func() error
-	// SearchHistory 按文字内容与文件名搜索复制记录，见 sync.Engine.SearchHistory
-	SearchHistory func(query string, limit int) ([]store.Clip, error)
+	// SearchHistory 按文字内容与文件名搜索复制记录或收藏，见 sync.Engine.SearchHistory
+	SearchHistory func(query string, limit int, f store.Filter) ([]store.Clip, error)
+	// SetFavorite 收藏或取消收藏，ClipDetail 是悬停提示框的完整内容，见 sync/favorite.go
+	SetFavorite func(ctx context.Context, clipID string, favorite bool) (store.Clip, error)
+	ClipDetail  func(clipID string) (*pb.ClipDetail, error)
 	// 诊断报告要读的日志文件（轮转出去的旧文件在前）与崩溃日志
 	LogFiles func() (logs []string, crash string)
 	// VerboseLog 临时打开详细日志，d 不大于 0 时关闭；VerboseUntil 是打开到什么时候
@@ -116,6 +120,8 @@ type Server struct {
 	deps  Deps
 	hub   *Hub
 	token string
+	// quickPaste 是快捷粘贴窗口的连接与状态，见 quickpaste.go
+	quickPaste quickPaste
 }
 
 func NewServer(deps Deps, hub *Hub, token string) *Server {
@@ -242,7 +248,7 @@ func (s *Server) ListHistory(_ context.Context,
 	if req.GetBeforeUnix() > 0 {
 		before = time.Unix(req.GetBeforeUnix(), 0)
 	}
-	clips, err := s.deps.Store.ListClips(int(req.GetLimit()), before, store.Kind(req.GetKindFilter()))
+	clips, err := s.deps.Store.ListRecords(int(req.GetLimit()), before, filterFromProto(req))
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "读取历史: %v", err)
 	}
@@ -257,21 +263,24 @@ func (s *Server) searchHistory(query string, req *pb.ListHistoryRequest) (*pb.Li
 	if s.deps.SearchHistory == nil {
 		return nil, status.Error(codes.Unimplemented, "搜索未接入")
 	}
-	clips, err := s.deps.SearchHistory(query, int(req.GetLimit()))
+	clips, err := s.deps.SearchHistory(query, int(req.GetLimit()), filterFromProto(req))
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "搜索历史: %v", err)
 	}
 	out := make([]*pb.ClipRecord, 0, len(clips))
 	for _, c := range clips {
-		if k := req.GetKindFilter(); k != pb.ClipKind_CLIP_KIND_UNSPECIFIED && pb.ClipKind(c.Kind) != k {
-			continue
-		}
 		out = append(out, clipToProto(c))
 	}
 	return &pb.ListHistoryResponse{Records: out, Searched: true}, nil
 }
 
+// DeleteHistory 只删复制记录。收藏里没有删除，要先取消收藏（放回复制记录）再删。
 func (s *Server) DeleteHistory(_ context.Context, req *pb.DeleteHistoryRequest) (*pb.Empty, error) {
+	for _, id := range req.GetIds() {
+		if c, err := s.deps.Store.GetClip(id); err == nil && c.Favorite {
+			return nil, status.Error(codes.InvalidArgument, "收藏不能直接删除，请先取消收藏")
+		}
+	}
 	var err error
 	if req.GetAll() {
 		err = s.deps.Store.DeleteAllClips()
@@ -306,10 +315,38 @@ func (s *Server) ApplyToClipboard(ctx context.Context,
 	if s.deps.ApplyToClipboard == nil {
 		return nil, status.Error(codes.Unimplemented, "剪贴板写入尚未接入（M3）")
 	}
-	if err := s.deps.ApplyToClipboard(ctx, req.GetClipId()); err != nil {
+	if err := s.deps.ApplyToClipboard(ctx, req.GetClipId(), req.GetPlainText()); err != nil {
 		return nil, status.Errorf(codes.Internal, "写入剪贴板失败: %v", err)
 	}
 	return &pb.Empty{}, nil
+}
+
+func (s *Server) SetFavorite(ctx context.Context, req *pb.SetFavoriteRequest) (*pb.ClipRecord, error) {
+	if s.deps.SetFavorite == nil {
+		return nil, status.Error(codes.Unimplemented, "当前版本不支持收藏")
+	}
+	clip, err := s.deps.SetFavorite(ctx, req.GetClipId(), req.GetFavorite())
+	if errors.Is(err, store.ErrNotFound) {
+		return nil, status.Error(codes.NotFound, "找不到这条记录")
+	}
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+	return clipToProto(clip), nil
+}
+
+func (s *Server) GetClipDetail(_ context.Context, req *pb.GetClipDetailRequest) (*pb.ClipDetail, error) {
+	if s.deps.ClipDetail == nil {
+		return nil, status.Error(codes.Unimplemented, "当前版本不支持查看完整内容")
+	}
+	d, err := s.deps.ClipDetail(req.GetClipId())
+	if errors.Is(err, store.ErrNotFound) {
+		return nil, status.Error(codes.NotFound, "找不到这条记录")
+	}
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return d, nil
 }
 
 func (s *Server) GetImagePreview(ctx context.Context,

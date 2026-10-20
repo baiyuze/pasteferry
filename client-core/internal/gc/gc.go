@@ -25,6 +25,7 @@ type Collector struct {
 	log        *slog.Logger
 	store      *store.Store
 	cache      *cache.Cache
+	favorites  *cache.Cache
 	loadConfig func() config.Config
 	onRemoved  func(ids []string)
 	// 便于测试注入假时钟
@@ -32,9 +33,11 @@ type Collector struct {
 }
 
 type Options struct {
-	Logger     *slog.Logger
-	Store      *store.Store
-	Cache      *cache.Cache
+	Logger *slog.Logger
+	Store  *store.Store
+	Cache  *cache.Cache
+	// Favorites 是收藏另存的目录。收藏不会过期，这里只清掉崩溃留下、没有收藏引用的副本
+	Favorites  *cache.Cache
 	LoadConfig func() config.Config
 	OnRemoved  func(ids []string)
 }
@@ -48,6 +51,7 @@ func New(opts Options) *Collector {
 		log:        log,
 		store:      opts.Store,
 		cache:      opts.Cache,
+		favorites:  opts.Favorites,
 		loadConfig: opts.LoadConfig,
 		onRemoved:  opts.OnRemoved,
 		now:        time.Now,
@@ -126,20 +130,10 @@ func (c *Collector) Collect() Result {
 	}
 
 	// ── 第三步：与磁盘对账，清掉无人引用的孤儿目录 ──
-	referenced, err := c.store.CachePaths()
-	if err != nil {
-		c.log.Warn("读取缓存引用失败", "err", err)
-	} else {
-		orphans, err := c.cache.Orphans(referenced)
-		if err != nil {
-			c.log.Warn("扫描孤儿缓存失败", "err", err)
-		} else {
-			for _, o := range orphans {
-				if removed, err := c.cache.RemoveOrphan(o, c.store.CacheReferenced); err == nil && removed {
-					res.OrphansRemoved++
-				}
-			}
-		}
+	res.OrphansRemoved += c.removeOrphans(c.cache, c.store.CachePaths, c.store.CacheReferenced)
+	// 收藏目录也一样：另存到一半崩溃、或者取消收藏挪走到一半，都可能留下没人认领的副本
+	if c.favorites != nil {
+		res.OrphansRemoved += c.removeOrphans(c.favorites, c.store.FavoritePaths, c.store.FavoriteReferenced)
 	}
 
 	if res.RecordsRemoved+res.CachesRemoved+res.OrphansRemoved > 0 {
@@ -149,6 +143,28 @@ func (c *Collector) Collect() Result {
 			"孤儿目录", res.OrphansRemoved)
 	}
 	return res
+}
+
+// removeOrphans 删掉目录 dir 里不再有记录引用的子目录，返回删了几个。
+func (c *Collector) removeOrphans(dir *cache.Cache, paths func() (map[string]struct{}, error),
+	referenced func(string) (bool, error)) int {
+	refs, err := paths()
+	if err != nil {
+		c.log.Warn("读取缓存引用失败", "dir", dir.Root(), "err", err)
+		return 0
+	}
+	orphans, err := dir.Orphans(refs)
+	if err != nil {
+		c.log.Warn("扫描孤儿缓存失败", "dir", dir.Root(), "err", err)
+		return 0
+	}
+	var n int
+	for _, o := range orphans {
+		if removed, err := dir.RemoveOrphan(o, referenced); err == nil && removed {
+			n++
+		}
+	}
+	return n
 }
 
 // expireStaleCaches 释放超过 cacheTTL 的缓存文件，但保留记录本身。

@@ -13,12 +13,14 @@ import (
 // 数据库只能粗筛（见 store.SearchClips），这里按用户看得到的文字再核对一遍：
 // HTML 记录看纯文本，不看标签。匹配处不在预览片段里的文字记录，预览换成匹配处前后的一段，
 // 列表里一眼能看出为什么搜到了它。
-func (e *Engine) SearchHistory(query string, limit int) ([]store.Clip, error) {
+//
+// f 选定在复制记录还是收藏里搜、只搜哪一类，见 store.Filter。
+func (e *Engine) SearchHistory(query string, limit int, f store.Filter) ([]store.Clip, error) {
 	q := []rune(strings.Map(unicode.ToLower, strings.TrimSpace(query)))
 	if len(q) == 0 {
 		return nil, nil
 	}
-	candidates, err := e.store.SearchClips(string(q), limit)
+	candidates, err := e.store.SearchRecords(string(q), limit, f)
 	if err != nil {
 		return nil, err
 	}
