@@ -298,7 +298,7 @@ void main() {
       (_) {},
     );
     await tester.pump();
-    expect(tester.testTextInput.log.map((c) => c.method), contains('TextInput.show'));
+    expect(tester.testTextInput.log.map((c) => c.method), containsAllInOrder(['TextInput.hide', 'TextInput.show']));
   });
 
   testWidgets('每次呼出都从「全部」、第一条、空搜索开始', (tester) async {

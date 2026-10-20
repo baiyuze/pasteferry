@@ -37,7 +37,9 @@ class PickerHost {
         case 'onHotkeyChanged':
           onHotkeyChanged?.call('${(call.arguments as Map?)?['hotkey'] ?? ''}');
         case 'onFocusIn':
-          // 和搜索框连着输入法时 TextInputConnection.show 发的是同一条：引擎据此调用 gtk_im_context_focus_in
+          // 引擎收到 TextInput.hide、TextInput.show 时调用 gtk_im_context_focus_out、focus_in。
+          // 先 hide：IBus 的输入上下文自认为还有焦点时（窗口收起时没人告诉它失去了焦点），focus_in 什么都不做
+          await SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
           await SystemChannels.textInput.invokeMethod<void>('TextInput.show');
       }
       return null;
