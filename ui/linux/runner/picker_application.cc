@@ -477,16 +477,6 @@ static void toggle_from_portal(PickerApplication* self, const gchar* token) {
   toggle(self, GDK_CURRENT_TIME);
 }
 
-// 窗口拿到焦点时告诉 Dart，由它重新连一次输入法（TextInput.hide 再 TextInput.show，见 picker_host.dart）。
-// Flutter 只在这两条消息上调用 gtk_im_context_focus_out、focus_in，不管窗口焦点；搜索框的焦点在窗口隐藏时
-// 就有了、之后不再变，X11 上 IBus 就一直不知道该把按键交给这个窗口，打不出中文。
-// Wayland 上由合成器通知输入法，本来就没问题
-static gboolean on_focus_in(GtkWidget*, GdkEvent*, gpointer data) {
-  auto* self = PICKER_APPLICATION(data);
-  if (gtk_widget_get_visible(GTK_WIDGET(self->window))) invoke(self, "onFocusIn");
-  return FALSE;
-}
-
 static gboolean on_focus_out(GtkWidget*, GdkEvent*, gpointer data) {
   // 点了窗口外面、切到别的程序：收起，什么都不粘贴
   hide(PICKER_APPLICATION(data), TRUE);
@@ -663,7 +653,6 @@ static void create_window(PickerApplication* self) {
   gtk_window_set_type_hint(window, GDK_WINDOW_TYPE_HINT_DIALOG);
   gtk_window_set_default_size(window, kWidth, kHeight);
   gtk_window_set_position(window, GTK_WIN_POS_CENTER);
-  g_signal_connect(window, "focus-in-event", G_CALLBACK(on_focus_in), self);
   g_signal_connect(window, "focus-out-event", G_CALLBACK(on_focus_out), self);
   g_signal_connect(window, "delete-event", G_CALLBACK(on_delete), self);
 

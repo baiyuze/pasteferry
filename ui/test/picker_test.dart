@@ -288,19 +288,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 200));
   });
 
-  testWidgets('窗口拿到焦点（Linux 外壳发 onFocusIn）时重新打开输入法', (tester) async {
-    final s = await open(tester);
-    s.host.listen();
-    tester.testTextInput.log.clear();
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
-      _channel.name,
-      _channel.codec.encodeMethodCall(const MethodCall('onFocusIn')),
-      (_) {},
-    );
-    await tester.pump();
-    expect(tester.testTextInput.log.map((c) => c.method), containsAllInOrder(['TextInput.hide', 'TextInput.show']));
-  });
-
   testWidgets('每次呼出都从「全部」、第一条、空搜索开始', (tester) async {
     final s = await open(tester);
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
