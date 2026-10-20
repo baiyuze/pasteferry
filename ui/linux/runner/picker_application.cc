@@ -734,7 +734,10 @@ static void picker_application_dispose(GObject* object) {
     gdk_window_remove_filter(nullptr, key_filter, self);
   }
 #endif
-  GDBusConnection* bus = g_application_get_dbus_connection(G_APPLICATION(self));
+  // 只转发 --toggle 的那个进程退出时已经注销，不能再取连接（会报 GLib-GIO-CRITICAL）
+  GDBusConnection* bus = g_application_get_is_registered(G_APPLICATION(self))
+                             ? g_application_get_dbus_connection(G_APPLICATION(self))
+                             : nullptr;
   if (bus != nullptr) {
     if (self->portal_activated_sub != 0) g_dbus_connection_signal_unsubscribe(bus, self->portal_activated_sub);
     if (self->portal_changed_sub != 0) g_dbus_connection_signal_unsubscribe(bus, self->portal_changed_sub);
