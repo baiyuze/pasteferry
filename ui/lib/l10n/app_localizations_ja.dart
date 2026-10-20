@@ -485,6 +485,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get pickerGrantHint => 'アクセシビリティを許可すると直接ペーストできます';
 
   @override
+  String pickerElevated(String key) {
+    return 'このウィンドウは管理者として実行中です。選んだあと $key で貼り付けてください';
+  }
+
+  @override
   String get pickerDownloading => 'ダウンロード中。完了するとペーストします';
 
   @override

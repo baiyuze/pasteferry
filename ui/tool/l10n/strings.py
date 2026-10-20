@@ -169,6 +169,7 @@ S = [
     ("pickerUnfavoriteHint", "Remove (back to History)", "取消收藏（放回复制记录）", "お気に入りから外す（履歴に戻す）", "取消收藏（放回複製記錄）", "取消收藏（放回複製記錄）"),
     ("pickerPasteManually", "Picked items are copied — press {key} to paste", "选中后按 {key} 粘贴", "選ぶとコピーされます。{key} で貼り付けてください", "選取後按 {key} 貼上", "選取後按 {key} 貼上"),
     ("pickerGrantHint", "Allow Accessibility to paste directly", "授予「辅助功能」权限后可直接粘贴", "アクセシビリティを許可すると直接ペーストできます", "授予「輔助使用」權限後可直接貼上", "授予「輔助使用」權限後可直接貼上"),
+    ("pickerElevated", "This window runs as administrator — press {key} to paste after picking", "这个窗口以管理员身份运行，选中后按 {key} 粘贴", "このウィンドウは管理者として実行中です。選んだあと {key} で貼り付けてください", "這個視窗以系統管理員身分執行，選取後按 {key} 貼上", "這個視窗以管理員身分執行，選取後按 {key} 貼上"),
     ("pickerDownloading", "Downloading — pastes when done", "正在下载，下完自动粘贴", "ダウンロード中。完了するとペーストします", "正在下載，下載完自動貼上", "正在下載，下載完自動貼上"),
 
     # ── 图片预览 ──

@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 /// Dart → 原生：
 ///   setHotkey {hotkey, enabled} → {ok, error, source, hotkey}
 ///   setSuspended {suspended}       设置页录制快捷键期间暂停
-///   pasteStatus → {available, reason}
+///   pasteStatus → {available, reason, targetElevated}   targetElevated 只有 Windows 给
 ///   requestPermission              Mac：请求辅助功能权限
 ///   show / hide                    hide 会把焦点还给原来的窗口
 ///   commit {paste} → {pasted, reason}   隐藏窗口、还原焦点，paste 时再模拟粘贴键
@@ -54,7 +54,11 @@ class PickerHost {
 
   Future<PasteStatus> pasteStatus() async {
     final r = await _invoke('pasteStatus');
-    return PasteStatus(available: r?['available'] == true, reason: '${r?['reason'] ?? 'unsupported'}');
+    return PasteStatus(
+      available: r?['available'] == true,
+      reason: '${r?['reason'] ?? 'unsupported'}',
+      targetElevated: r?['targetElevated'] == true,
+    );
   }
 
   Future<void> requestPermission() => _invoke('requestPermission');
@@ -92,11 +96,14 @@ class HotkeyResult {
 }
 
 class PasteStatus {
-  const PasteStatus({required this.available, required this.reason});
+  const PasteStatus({required this.available, required this.reason, this.targetElevated = false});
   final bool available;
 
   /// not_trusted（Mac 没授予辅助功能）、wayland
   final String reason;
+
+  /// 呼出前的窗口以管理员身份运行（Windows）：系统不许普通程序给它发按键，这一次只能放进剪贴板
+  final bool targetElevated;
 }
 
 class CommitResult {

@@ -372,6 +372,8 @@ class _PickerViewState extends State<PickerView> {
       content = Text(s.error!, style: style?.copyWith(color: p.danger), maxLines: 1, overflow: TextOverflow.ellipsis);
     } else if (s.pendingId != null) {
       content = Text(l.pickerDownloading, style: style);
+    } else if (s.canPaste && s.targetElevated) {
+      content = Text(l.pickerElevated(pasteKey), style: style, maxLines: 1, overflow: TextOverflow.ellipsis);
     } else if (!s.canPaste) {
       final notTrusted = s.pasteBlockedReason == 'not_trusted';
       content = Row(

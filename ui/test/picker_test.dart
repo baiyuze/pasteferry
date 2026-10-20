@@ -232,6 +232,16 @@ void main() {
     expect(commits().single.arguments, {'paste': false});
   });
 
+  testWidgets('目标窗口以管理员身份运行（Windows）：底栏先说明要自己按粘贴键，设置页照样报能粘贴', (tester) async {
+    final s = await open(tester, paste: const PasteStatus(available: true, reason: '', targetElevated: true));
+    expect(find.text('这个窗口以管理员身份运行，选中后按 ${_mac ? '⌘V' : 'Ctrl+V'} 粘贴'), findsOneWidget);
+    expect(s.canPaste, isTrue);
+    expect(s.pasteBlockedReason, '');
+    await tester.sendKeyEvent(LogicalKeyboardKey.digit1);
+    await tester.pump();
+    expect(s.applied.single.$1, 'a');
+  });
+
   testWidgets('没授予辅助功能：底栏提示并给出授权按钮', (tester) async {
     await open(tester, paste: const PasteStatus(available: false, reason: 'not_trusted'));
     expect(find.textContaining('授予「辅助功能」权限后可直接粘贴'), findsOneWidget);

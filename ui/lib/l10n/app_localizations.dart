@@ -914,6 +914,12 @@ abstract class AppLocalizations {
   /// **'Allow Accessibility to paste directly'**
   String get pickerGrantHint;
 
+  /// No description provided for @pickerElevated.
+  ///
+  /// In en, this message translates to:
+  /// **'This window runs as administrator — press {key} to paste after picking'**
+  String pickerElevated(String key);
+
   /// No description provided for @pickerDownloading.
   ///
   /// In en, this message translates to:

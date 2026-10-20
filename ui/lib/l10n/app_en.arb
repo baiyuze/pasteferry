@@ -393,6 +393,14 @@
     }
   },
   "pickerGrantHint": "Allow Accessibility to paste directly",
+  "pickerElevated": "This window runs as administrator — press {key} to paste after picking",
+  "@pickerElevated": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
   "pickerDownloading": "Downloading — pastes when done",
   "imagePreviewTitle": "Image preview",
   "closePreview": "Close preview",

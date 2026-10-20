@@ -134,6 +134,7 @@
   "pickerUnfavoriteHint": "お気に入りから外す（履歴に戻す）",
   "pickerPasteManually": "選ぶとコピーされます。{key} で貼り付けてください",
   "pickerGrantHint": "アクセシビリティを許可すると直接ペーストできます",
+  "pickerElevated": "このウィンドウは管理者として実行中です。選んだあと {key} で貼り付けてください",
   "pickerDownloading": "ダウンロード中。完了するとペーストします",
   "imagePreviewTitle": "画像プレビュー",
   "closePreview": "プレビューを閉じる",

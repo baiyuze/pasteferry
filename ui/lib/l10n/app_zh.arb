@@ -134,6 +134,7 @@
   "pickerUnfavoriteHint": "取消收藏（放回复制记录）",
   "pickerPasteManually": "选中后按 {key} 粘贴",
   "pickerGrantHint": "授予「辅助功能」权限后可直接粘贴",
+  "pickerElevated": "这个窗口以管理员身份运行，选中后按 {key} 粘贴",
   "pickerDownloading": "正在下载，下完自动粘贴",
   "imagePreviewTitle": "图片预览",
   "closePreview": "关闭预览",

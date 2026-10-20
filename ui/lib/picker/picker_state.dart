@@ -93,6 +93,9 @@ class PickerState extends ChangeNotifier implements RecordDetails {
   /// copy_only、not_trusted、wayland，能粘贴时为空
   String get pasteBlockedReason => copyOnly ? 'copy_only' : (_paste.available ? '' : _paste.reason);
 
+  /// 这一次的目标窗口以管理员身份运行，选中后只放进剪贴板。不报给设置页：换个窗口就又能粘贴了
+  bool get targetElevated => _paste.targetElevated;
+
   /// 当前页签、搜索词下的列表。
   List<ClipRecord> get visible {
     final f = _tab.filter;

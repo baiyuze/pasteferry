@@ -134,6 +134,7 @@
   "pickerUnfavoriteHint": "取消收藏（放回複製記錄）",
   "pickerPasteManually": "選取後按 {key} 貼上",
   "pickerGrantHint": "授予「輔助使用」權限後可直接貼上",
+  "pickerElevated": "這個視窗以系統管理員身分執行，選取後按 {key} 貼上",
   "pickerDownloading": "正在下載，下載完自動貼上",
   "imagePreviewTitle": "圖片預覽",
   "closePreview": "關閉預覽",

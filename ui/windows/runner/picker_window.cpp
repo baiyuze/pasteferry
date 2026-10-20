@@ -286,7 +286,12 @@ void PickerWindow::HandleMethodCall(const flutter::MethodCall<EncodableValue>& c
     ApplyHotkey();
     result->Success();
   } else if (m == "pasteStatus") {
-    result->Success(EncodableValue(EncodableMap{{Str("available"), EncodableValue(true)}, {Str("reason"), Str("")}}));
+    // targetElevated：呼出前的窗口以管理员身份运行，这一次没法模拟粘贴（见 Commit）。
+    // 只是这一次，不算「不能自动粘贴」，底栏据此提示用户自己按 Ctrl+V
+    const bool elevated = previous_ && ::IsWindow(previous_) && IsElevatedWindow(previous_) && !SelfElevated();
+    result->Success(EncodableValue(EncodableMap{{Str("available"), EncodableValue(true)},
+                                                {Str("reason"), Str("")},
+                                                {Str("targetElevated"), EncodableValue(elevated)}}));
   } else if (m == "requestPermission") {
     result->Success();  // Windows 不需要授权
   } else if (m == "show") {

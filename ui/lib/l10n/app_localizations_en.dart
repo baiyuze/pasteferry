@@ -578,6 +578,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pickerGrantHint => 'Allow Accessibility to paste directly';
 
   @override
+  String pickerElevated(String key) {
+    return 'This window runs as administrator — press $key to paste after picking';
+  }
+
+  @override
   String get pickerDownloading => 'Downloading — pastes when done';
 
   @override

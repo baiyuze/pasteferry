@@ -482,6 +482,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pickerGrantHint => '授予「辅助功能」权限后可直接粘贴';
 
   @override
+  String pickerElevated(String key) {
+    return '这个窗口以管理员身份运行，选中后按 $key 粘贴';
+  }
+
+  @override
   String get pickerDownloading => '正在下载，下完自动粘贴';
 
   @override
@@ -1792,6 +1797,11 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get pickerGrantHint => '授予「輔助使用」權限後可直接貼上';
 
   @override
+  String pickerElevated(String key) {
+    return '這個視窗以管理員身分執行，選取後按 $key 貼上';
+  }
+
+  @override
   String get pickerDownloading => '正在下載，下載完自動貼上';
 
   @override
@@ -3100,6 +3110,11 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get pickerGrantHint => '授予「輔助使用」權限後可直接貼上';
+
+  @override
+  String pickerElevated(String key) {
+    return '這個視窗以系統管理員身分執行，選取後按 $key 貼上';
+  }
 
   @override
   String get pickerDownloading => '正在下載，下載完自動貼上';
