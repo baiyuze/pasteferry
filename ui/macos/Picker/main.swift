@@ -279,7 +279,11 @@ final class PickerController: NSObject, NSWindowDelegate {
         place()
         channel.invokeMethod("onShow", arguments: nil)
         panel.makeKeyAndOrderFront(nil)
-        panel.makeFirstResponder(flutter.view)
+        // 搜索框有焦点时，第一响应者是 Flutter 放进视图里的文本输入视图，输入法接在它上面。
+        // 再次呼出时搜索框的焦点没变，Flutter 不会重新设置；这时换成 FlutterView 就打不出中文了
+        if !((panel.firstResponder as? NSView)?.isDescendant(of: flutter.view) ?? false) {
+            panel.makeFirstResponder(flutter.view)
+        }
         panel.invalidateShadow()
         NSLog("呼出快捷窗口，原来在前台的是 %@，窗口 key=%d", previousApp?.localizedName ?? "-", panel.isKeyWindow ? 1 : 0)
     }
