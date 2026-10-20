@@ -17,6 +17,7 @@ import 'package:flutter/services.dart';
 ///   onShow                         窗口刚显示出来
 ///   onHide                         窗口被收起（点了窗口外面、切到别的程序）
 ///   onHotkeyChanged {hotkey}       Wayland 上用户在系统设置里改了快捷键
+///   onFocusIn                      Linux：窗口拿到了焦点，重新打开输入法（见 linux/runner/picker_application.cc）
 class PickerHost {
   PickerHost([MethodChannel? channel]) : _ch = channel ?? const MethodChannel('pasteferry/picker');
 
@@ -35,6 +36,9 @@ class PickerHost {
           onHide?.call();
         case 'onHotkeyChanged':
           onHotkeyChanged?.call('${(call.arguments as Map?)?['hotkey'] ?? ''}');
+        case 'onFocusIn':
+          // 和搜索框连着输入法时 TextInputConnection.show 发的是同一条：引擎据此调用 gtk_im_context_focus_in
+          await SystemChannels.textInput.invokeMethod<void>('TextInput.show');
       }
       return null;
     });
