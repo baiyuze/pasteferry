@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +11,10 @@ import 'package:pasteferry_ui/picker/picker_state.dart';
 import 'package:pasteferry_ui/picker/picker_view.dart';
 
 const _channel = MethodChannel('pasteferry/picker');
+
+// 快捷窗口的按键跟着平台走：Mac 上是 ⌘，Windows 与 Linux 上是 Ctrl（序号是 Alt+数字）
+final _mac = Platform.isMacOS;
+final _cmdKey = _mac ? LogicalKeyboardKey.metaLeft : LogicalKeyboardKey.controlLeft;
 
 /// 不连后台服务：放进剪贴板、下载、收藏都记下来。
 class _TestPicker extends PickerState {
@@ -128,7 +134,7 @@ void main() {
     expect(s.applied, isEmpty);
     await tester.enterText(find.byType(TextField), 'docker');
     await tester.pump();
-    expect(find.text('⌘1'), findsOneWidget);
+    expect(find.text(_mac ? '⌘1' : 'Alt+1'), findsOneWidget);
     expect(find.textContaining('docker compose'), findsOneWidget);
     expect(find.textContaining('会议'), findsNothing);
     // 停顿后在当前页签里搜全部历史
@@ -154,9 +160,9 @@ void main() {
     await tester.pump();
     expect(s.applied.last, ('a', true));
 
-    await tester.sendKeyDownEvent(LogicalKeyboardKey.metaLeft);
+    await tester.sendKeyDownEvent(_cmdKey);
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-    await tester.sendKeyUpEvent(LogicalKeyboardKey.metaLeft);
+    await tester.sendKeyUpEvent(_cmdKey);
     await tester.pump();
     expect(commits().last.arguments, {'paste': false});
   });
@@ -180,9 +186,9 @@ void main() {
     expect(find.textContaining('收货地址'), findsOneWidget);
     expect(find.textContaining('取消收藏（放回复制记录）'), findsOneWidget);
 
-    await tester.sendKeyDownEvent(LogicalKeyboardKey.metaLeft);
+    await tester.sendKeyDownEvent(_cmdKey);
     await tester.sendKeyEvent(LogicalKeyboardKey.keyD);
-    await tester.sendKeyUpEvent(LogicalKeyboardKey.metaLeft);
+    await tester.sendKeyUpEvent(_cmdKey);
     await tester.pump();
     expect(s.favorited, [('f1', false)]);
   });
@@ -202,7 +208,7 @@ void main() {
 
   testWidgets('设置里选了只复制：选中后不模拟粘贴，底栏写明要按 ⌘V', (tester) async {
     final s = await open(tester, config: Config(language: 'zh-Hans', quickPasteCopyOnly: true));
-    expect(find.text('选中后按 ⌘V 粘贴'), findsOneWidget);
+    expect(find.text('选中后按 ${_mac ? '⌘V' : 'Ctrl+V'} 粘贴'), findsOneWidget);
     await tester.sendKeyEvent(LogicalKeyboardKey.digit1);
     await tester.pump();
     expect(s.applied.single.$1, 'a');

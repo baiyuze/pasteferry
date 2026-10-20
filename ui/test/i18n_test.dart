@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -187,7 +189,10 @@ void main() {
         await tester.tap(find.text(l.navSettings).first);
         await tester.pump();
         await tester.dragUntilVisible(find.text(l.language), find.byType(ListView), const Offset(0, -100));
-        await tester.dragUntilVisible(find.text(l.quickPasteAccessibility), find.byType(ListView), const Offset(0, -100));
+        // 辅助功能授权只有 Mac 上有
+        if (Platform.isMacOS) {
+          await tester.dragUntilVisible(find.text(l.quickPasteAccessibility), find.byType(ListView), const Offset(0, -100));
+        }
         await tester.dragUntilVisible(find.text(l.favoritesUsage), find.byType(ListView), const Offset(0, -100));
         await tester.dragUntilVisible(find.text(l.about), find.byType(ListView), const Offset(0, -200));
       });
