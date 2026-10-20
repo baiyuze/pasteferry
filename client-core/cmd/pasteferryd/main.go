@@ -540,7 +540,24 @@ func run(dataDir string) error {
 	loop.Run(ctx)
 
 	slog.Info("正在退出")
+	exitWatchdog(shutdownTimeout, os.Exit)
 	return nil
+}
+
+// shutdownTimeout 是收到退出信号后收尾的最长时间，见 exitWatchdog。
+const shutdownTimeout = 10 * time.Second
+
+// exitWatchdog 在收尾超时时强制结束进程。收尾（停 gRPC、关引擎、关数据库……）某一步卡住时，
+// 进程不能一直占着单实例锁：界面重启或更新后台服务时，新进程会因「已有后台服务在运行」而退出，
+// 旧的一直跑到重启。超时先把所有协程的堆栈写进日志，诊断报告里能看到卡在哪里。
+// 退出码用 0：本来就是要退出，守护进程见到 0 不会再拉起。
+func exitWatchdog(timeout time.Duration, exit func(int)) *time.Timer {
+	return time.AfterFunc(timeout, func() {
+		buf := make([]byte, 1<<20)
+		n := runtime.Stack(buf, true)
+		slog.Error("退出超时，强制结束", "timeout", timeout, "stacks", string(buf[:n]))
+		exit(0)
+	})
 }
 
 func resolvePaths(dataDir string) (config.Paths, error) {

@@ -90,12 +90,21 @@ class LinuxBackgroundService implements BackgroundService {
     return enabled;
   }
 
-  /// 守护进程与后台服务一起结束：只结束后台服务的话，守护进程会把它重新拉起来
+  /// 守护进程与后台服务一起结束：只结束后台服务的话，守护进程会把它重新拉起来。
+  /// 5 秒还没退出就强制结束：旧进程占着单实例锁，新启动的会以为已有实例在运行而退出。
   Future<void> _stop([String image = _image]) async {
     await Process.run('pkill', [..._ownedBy, '-x', image]);
-    for (var i = 0; i < 20 && await _running(image); i++) {
+    if (await _waitGone(image, 20)) return;
+    await Process.run('pkill', ['-KILL', ..._ownedBy, '-x', image]);
+    await _waitGone(image, 8);
+  }
+
+  Future<bool> _waitGone(String image, int checks) async {
+    for (var i = 0; i < checks; i++) {
+      if (!await _running(image)) return true;
       await Future<void>.delayed(const Duration(milliseconds: 250));
     }
+    return !await _running(image);
   }
 
   Future<bool> _running([String image = _image]) async {
