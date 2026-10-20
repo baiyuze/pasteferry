@@ -132,7 +132,7 @@ jobs:
       - name: 安装构建依赖
         run: |
           sudo apt-get update -q
-          sudo apt-get install -y -q clang cmake ninja-build pkg-config libgtk-3-dev xvfb xclip dbus-x11
+          sudo apt-get install -y -q clang cmake ninja-build pkg-config libgtk-3-dev libx11-dev libxtst-dev xvfb xclip dbus-x11
       # flutter-action 不提供 Linux ARM64 的 Flutter，两种架构都直接取 stable 分支
       - name: 安装 Flutter
         run: |

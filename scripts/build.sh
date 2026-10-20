@@ -109,11 +109,57 @@ mkdir -p "$UI/Contents/Helpers"
 cp -R "$APP" "$UI/Contents/Helpers/"
 cp "$DIST/pasteferry-cli" "$UI/Contents/Helpers/pasteferry-cli"
 
+# 快捷粘贴窗口：单独的辅助程序，由界面登记成第二个 LaunchAgent（见 ui/lib/quick_paste_service.dart）。
+# 只有一个很小的 Swift 可执行文件，Flutter 引擎与 Dart 代码用主 App 的 Contents/Frameworks/
+# （rpath 指过去），所以不进 Xcode 工程，在这里用 swiftc 编译。见 ui/macos/Picker/main.swift
+echo "▶ 构建快捷粘贴窗口"
+PICKER="$UI/Contents/Helpers/PasteFerryPicker.app"
+FLUTTER_ROOT=$(dirname "$(dirname "$(readlink -f "$(command -v flutter)")")")
+FLUTTER_FW="$FLUTTER_ROOT/bin/cache/artifacts/engine/darwin-x64-release/FlutterMacOS.xcframework/macos-arm64_x86_64"
+mkdir -p "$PICKER/Contents/MacOS" "$PICKER/Contents/Resources"
+PICKER_TMP=$(mktemp -d)
+for arch in x86_64 arm64; do
+    swiftc -O -target "$arch-apple-macos$MACOS_MIN" -F "$FLUTTER_FW" -framework FlutterMacOS \
+        -Xlinker -rpath -Xlinker @executable_path/../../../../Frameworks \
+        ui/macos/Picker/main.swift -o "$PICKER_TMP/$arch"
+done
+lipo -create -output "$PICKER/Contents/MacOS/PasteFerryPicker" "$PICKER_TMP/x86_64" "$PICKER_TMP/arm64"
+rm -rf "$PICKER_TMP"
+cat > "$PICKER/Contents/Info.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>         <string>PasteFerryPicker</string>
+    <key>CFBundleIdentifier</key>         <string>com.pasteferry.picker</string>
+    <key>CFBundleName</key>               <string>PasteFerry</string>
+    <key>CFBundleDisplayName</key>        <string>PasteFerry</string>
+    <key>CFBundleDevelopmentRegion</key>  <string>en</string>
+    <key>CFBundleIconFile</key>           <string>AppIcon</string>
+    <key>CFBundlePackageType</key>        <string>APPL</string>
+    <key>CFBundleShortVersionString</key> <string>$VERSION</string>
+    <key>CFBundleVersion</key>            <string>$VERSION</string>
+    <key>LSMinimumSystemVersion</key>     <string>$MACOS_MIN</string>
+    <key>LSUIElement</key>                <true/>
+    <key>NSHighResolutionCapable</key>    <true/>
+</dict>
+</plist>
+PLIST
+cp assets/brand/AppIcon.icns "$PICKER/Contents/Resources/AppIcon.icns"
+# 「辅助功能」授权列表里显示的名字，按系统语言：中文系统上叫隔空贴
+for loc in zh-Hans zh-Hant zh-HK; do
+    mkdir -p "$PICKER/Contents/Resources/$loc.lproj"
+    name=$([[ $loc == zh-Hans ]] && echo 隔空贴 || echo 隔空貼)
+    printf '"CFBundleDisplayName" = "%s";\n"CFBundleName" = "%s";\n' "$name" "$name" \
+        > "$PICKER/Contents/Resources/$loc.lproj/InfoPlist.strings"
+done
+
 # 签名由内向外：先签内置的组件，最后签外层 App。
 # Flutter 增量构建在 Dart 代码变化后会重新生成 App.framework 却不重签，
 # 留下失效签名，Apple Silicon 上会直接拒绝运行，这里一并重签。
 codesign --force --sign - "$UI/Contents/Helpers/pasteferry-cli"
 codesign --force --sign - "$UI/Contents/Helpers/PasteFerryDaemon.app"
+codesign --force --sign - "$UI/Contents/Helpers/PasteFerryPicker.app"
 codesign --force --sign - "$UI/Contents/Frameworks/App.framework"
 codesign --force --sign - --preserve-metadata=entitlements,requirements,flags "$UI"
 codesign --verify --deep --strict "$UI" "$APP"

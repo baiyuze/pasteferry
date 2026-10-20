@@ -11,7 +11,7 @@
 # 所以 CI 在两种架构的机器上各跑一次。
 #
 # 需要 Go、Flutter，以及 Flutter 的 Linux 构建依赖：
-#   sudo apt install clang cmake ninja-build pkg-config libgtk-3-dev
+#   sudo apt install clang cmake ninja-build pkg-config libgtk-3-dev libx11-dev libxtst-dev
 # 文件名不带版本号，网站上的 releases/latest/download/<文件名> 链接才不会随发版失效。
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -65,14 +65,15 @@ done
 ln -s /opt/PasteFerry/pasteferry "$DEB/usr/bin/pasteferry"
 ln -s /opt/PasteFerry/pasteferry-cli "$DEB/usr/bin/pasteferry-cli"
 
-# libgtk-3-0：Ubuntu 24.04 起改名为 libgtk-3-0t64，新包也提供旧名字，写旧名字两边都能装
+# libgtk-3-0：Ubuntu 24.04 起改名为 libgtk-3-0t64，新包也提供旧名字，写旧名字两边都能装。
+# libxtst6：快捷粘贴窗口在 X11 上模拟粘贴键
 cat > "$DEB/DEBIAN/control" <<EOF
 Package: pasteferry
 Version: $VERSION
 Architecture: $ARCH
 Maintainer: baiyuze <27543832+baiyuze@users.noreply.github.com>
 Installed-Size: $(du -sk "$DEB" | cut -f1)
-Depends: libgtk-3-0 (>= 3.22)
+Depends: libgtk-3-0 (>= 3.22), libxtst6
 Recommends: fonts-noto-cjk
 Conflicts: copysync
 Replaces: copysync
@@ -87,12 +88,14 @@ EOF
 # 2.0.0 之前的包叫 copysync：上面的 Conflicts/Replaces 让 apt 装这个包时自动卸掉旧的，
 # 旧的后台服务与开机自启项由界面第一次启动时清理（ui/lib/background_service_linux.dart 的 removeLegacy）
 #
-# 卸载时结束正在运行的后台服务：程序文件已经没了。升级时不结束，界面打开时会按新版本重启它
+# 卸载时结束正在运行的后台服务与快捷粘贴窗口（pasteferry --picker）：程序文件已经没了。
+# 升级时不结束，界面打开时会按新版本重启后台服务，快捷窗口随之由新的后台服务拉起
 cat > "$DEB/DEBIAN/prerm" <<'EOF'
 #!/bin/sh
 set -e
 if [ "$1" = remove ]; then
     pkill -x pasteferryd || true
+    pkill -f '^/opt/PasteFerry/pasteferry --picker' || true
 fi
 EOF
 chmod 755 "$DEB/DEBIAN/prerm"

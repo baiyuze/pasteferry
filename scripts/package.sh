@@ -82,6 +82,7 @@ thin_app() { # <通用 App> <输出 App> <arm64 | x86_64>
     done < <(find "$dst" -type f -print0)
     codesign --force --sign - "$dst/Contents/Helpers/pasteferry-cli"
     codesign --force --sign - "$dst/Contents/Helpers/PasteFerryDaemon.app"
+    codesign --force --sign - "$dst/Contents/Helpers/PasteFerryPicker.app"
     codesign --force --sign - "$dst/Contents/Frameworks/App.framework"
     codesign --force --sign - "$dst/Contents/Frameworks/FlutterMacOS.framework"
     codesign --force --sign - --preserve-metadata=entitlements,requirements,flags "$dst"

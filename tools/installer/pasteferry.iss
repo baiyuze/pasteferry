@@ -90,6 +90,7 @@ begin
 end;
 
 // 后台服务（含守护进程）没有可见窗口，重启管理器关不掉它，安装前直接结束。
+// /T 连同它拉起的快捷粘贴窗口（PasteFerry.exe --picker）一起结束。
 // 2.0.0 之前叫 CopySync：旧的界面与后台服务也结束掉，旧的开机自启项换成新的，
 // 数据目录由新的后台服务第一次启动时挪过来
 function PrepareToInstall(var NeedsRestart: Boolean): String;
