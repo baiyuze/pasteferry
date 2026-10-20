@@ -6,10 +6,50 @@
 #include <algorithm>
 
 #include "flutter_window.h"
+#include "picker_window.h"
 #include "utils.h"
+
+namespace {
+
+// PasteFerry.exe --picker：快捷粘贴窗口，由后台服务拉起，平时隐藏，按快捷键时出现。
+// 与主界面是同一个程序、同一份 Dart 代码（Dart 看到 --picker 就运行快捷窗口），
+// 但单实例互斥量与窗口类各用各的，互不影响。见 picker_window.h
+int RunPicker(const std::vector<std::string>& args) {
+  HANDLE single_instance = ::CreateMutexW(nullptr, TRUE, L"Local\\PasteFerry.Picker");
+  if (::GetLastError() == ERROR_ALREADY_EXISTS) {
+    return EXIT_SUCCESS;
+  }
+  ::CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+  flutter::DartProject project(L"data");
+  project.set_dart_entrypoint_arguments(args);
+  int code = EXIT_FAILURE;
+  {
+    PickerWindow window(project);
+    if (window.Create()) {
+      ::MSG msg;
+      while (::GetMessage(&msg, nullptr, 0, 0)) {
+        ::TranslateMessage(&msg);
+        ::DispatchMessage(&msg);
+      }
+      code = EXIT_SUCCESS;
+    }
+  }
+  ::CoUninitialize();
+  ::CloseHandle(single_instance);
+  return code;
+}
+
+}  // namespace
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
+  {
+    std::vector<std::string> args = GetCommandLineArguments();
+    if (std::find(args.begin(), args.end(), "--picker") != args.end()) {
+      return RunPicker(args);
+    }
+  }
+
   // 只开一个窗口：再次打开时把已有的窗口提到前面，与 Mac 上点 Dock 图标一致
   HANDLE single_instance = ::CreateMutexW(nullptr, TRUE, L"Local\\PasteFerry.UI");
   if (::GetLastError() == ERROR_ALREADY_EXISTS) {
