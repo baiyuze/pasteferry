@@ -21,6 +21,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get navSettings => '设置';
 
   @override
+  String get navFavorites => '收藏';
+
+  @override
   String get linkConnecting => '正在连接…';
 
   @override
@@ -186,6 +189,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get filterFile => '文件';
 
   @override
+  String get filterLink => '链接';
+
+  @override
   String get historyClearTooltip => '清空记录';
 
   @override
@@ -281,6 +287,202 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get searchEmptyBody => '搜索的是复制过的文字和文件名。';
+
+  @override
+  String get favoriteAction => '收藏';
+
+  @override
+  String get unfavoriteAction => '取消收藏';
+
+  @override
+  String get favoritedToast => '已收藏';
+
+  @override
+  String get unfavoritedToast => '已放回复制记录';
+
+  @override
+  String get undo => '撤销';
+
+  @override
+  String get favoriteSaving => '正在保存…';
+
+  @override
+  String favoritedAt(String date) {
+    return '收藏于 $date';
+  }
+
+  @override
+  String favoritesSubtitle(int count, String size) {
+    return '$count 条 · 不会被自动清理 · 最多占用 $size';
+  }
+
+  @override
+  String get favoritesEmptyTitle => '还没有收藏';
+
+  @override
+  String get favoritesEmptyBody => '在复制记录里点星标，就会在这里另存一份。收藏不会被自动清理。';
+
+  @override
+  String get favoritesSearchHint => '搜索收藏';
+
+  @override
+  String favoriteLargeTitle(String size) {
+    return '另存一份 $size 的内容？';
+  }
+
+  @override
+  String favoriteLargeBody(String size, String device) {
+    return '收藏会另存一份，原文件之后改动或删除都不影响收藏。这会占用$device上 $size 的空间。';
+  }
+
+  @override
+  String get saveCopy => '另存';
+
+  @override
+  String clearKeepsFavorites(int count) {
+    return '已收藏的 $count 条会保留。';
+  }
+
+  @override
+  String get favoritesUsage => '收藏占用';
+
+  @override
+  String get favoritesUsageDesc => '收藏不受上面两项的限制，不会被自动清理';
+
+  @override
+  String upToSize(String size) {
+    return '最多 $size';
+  }
+
+  @override
+  String detailChars(int count) {
+    return '$count 字';
+  }
+
+  @override
+  String detailTruncated(int count) {
+    return '…… 共 $count 字';
+  }
+
+  @override
+  String detailMoreFiles(int count) {
+    return '还有 $count 个';
+  }
+
+  @override
+  String get detailReceiveFirst => '选中后先下载';
+
+  @override
+  String detailTotalSize(String size) {
+    return '共 $size';
+  }
+
+  @override
+  String get quickPaste => '快捷粘贴';
+
+  @override
+  String get quickPasteWindow => '快捷粘贴窗口';
+
+  @override
+  String get quickPasteWindowDesc => '在任何程序里按快捷键呼出复制记录，选中即粘贴';
+
+  @override
+  String get quickPasteShortcut => '快捷键';
+
+  @override
+  String get quickPasteRecord => '点击录制';
+
+  @override
+  String get quickPasteRecording => '请按下新的快捷键…';
+
+  @override
+  String get quickPasteUseDefault => '恢复默认';
+
+  @override
+  String get quickPasteNeedsModifier => '要带上 ⌃、⌥、⇧ 或 ⌘，或者用功能键';
+
+  @override
+  String get quickPasteNeedsModifierPc => '要带上 Ctrl、Alt、Shift 或 Win 键，或者用功能键';
+
+  @override
+  String get quickPasteAfterPick => '选中后';
+
+  @override
+  String get quickPastePasteIt => '直接粘贴';
+
+  @override
+  String get quickPasteCopyIt => '只放进剪贴板';
+
+  @override
+  String get quickPasteAccessibility => '辅助功能权限';
+
+  @override
+  String get quickPasteAccessibilityDesc => '直接粘贴需要它；没有授权时只放进剪贴板，再由你按 ⌘V';
+
+  @override
+  String get quickPasteAllowed => '已授权';
+
+  @override
+  String get quickPasteAllow => '去授权';
+
+  @override
+  String get quickPasteNotRunning => '快捷粘贴窗口没有运行';
+
+  @override
+  String quickPasteInUse(String key) {
+    return '$key 已被其他程序占用，换一个组合';
+  }
+
+  @override
+  String quickPasteHotkeyFailed(String key, String detail) {
+    return '设置 $key 失败：$detail';
+  }
+
+  @override
+  String get quickPastePortalKey => '在系统的快捷键设置里修改';
+
+  @override
+  String get quickPasteWaylandDesc =>
+      'Wayland 下快捷键要加在桌面的键盘设置里；选中后放进剪贴板，再按 Ctrl+V 粘贴';
+
+  @override
+  String get quickPasteAddShortcut => '添加系统快捷键';
+
+  @override
+  String quickPasteShortcutAdded(String key) {
+    return '已添加，按 $key 试试';
+  }
+
+  @override
+  String quickPasteShortcutManual(String command) {
+    return '在桌面的键盘设置里添加一个自定义快捷键，命令填：$command';
+  }
+
+  @override
+  String get pickerSearch => '搜索';
+
+  @override
+  String get pickerPaste => '粘贴';
+
+  @override
+  String get pickerPlainText => '纯文本';
+
+  @override
+  String get pickerCopyOnly => '只复制';
+
+  @override
+  String get pickerUnfavoriteHint => '取消收藏（放回复制记录）';
+
+  @override
+  String pickerPasteManually(String key) {
+    return '选中后按 $key 粘贴';
+  }
+
+  @override
+  String get pickerGrantHint => '授予「辅助功能」权限后可直接粘贴';
+
+  @override
+  String get pickerDownloading => '正在下载，下完自动粘贴';
 
   @override
   String get imagePreviewTitle => '图片预览';
@@ -1129,6 +1331,9 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get navSettings => '設定';
 
   @override
+  String get navFavorites => '收藏';
+
+  @override
   String get linkConnecting => '正在連線…';
 
   @override
@@ -1294,6 +1499,9 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get filterFile => '檔案';
 
   @override
+  String get filterLink => '連結';
+
+  @override
   String get historyClearTooltip => '清除記錄';
 
   @override
@@ -1389,6 +1597,202 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get searchEmptyBody => '搜尋範圍是複製過的文字和檔案名稱。';
+
+  @override
+  String get favoriteAction => '收藏';
+
+  @override
+  String get unfavoriteAction => '取消收藏';
+
+  @override
+  String get favoritedToast => '已收藏';
+
+  @override
+  String get unfavoritedToast => '已放回複製記錄';
+
+  @override
+  String get undo => '復原';
+
+  @override
+  String get favoriteSaving => '正在儲存…';
+
+  @override
+  String favoritedAt(String date) {
+    return '收藏於 $date';
+  }
+
+  @override
+  String favoritesSubtitle(int count, String size) {
+    return '$count 條 · 不會被自動清理 · 最多佔用 $size';
+  }
+
+  @override
+  String get favoritesEmptyTitle => '仍未有收藏';
+
+  @override
+  String get favoritesEmptyBody => '在複製記錄裏按星號，就會在這裏另存一份。收藏不會被自動清理。';
+
+  @override
+  String get favoritesSearchHint => '搜尋收藏';
+
+  @override
+  String favoriteLargeTitle(String size) {
+    return '另存一份 $size 的內容？';
+  }
+
+  @override
+  String favoriteLargeBody(String size, String device) {
+    return '收藏會另存一份，原檔案之後改動或刪除都不影響收藏。這會佔用$device上 $size 的空間。';
+  }
+
+  @override
+  String get saveCopy => '另存';
+
+  @override
+  String clearKeepsFavorites(int count) {
+    return '已收藏的 $count 條會保留。';
+  }
+
+  @override
+  String get favoritesUsage => '收藏佔用';
+
+  @override
+  String get favoritesUsageDesc => '收藏不受上面兩項的限制，不會被自動清理';
+
+  @override
+  String upToSize(String size) {
+    return '最多 $size';
+  }
+
+  @override
+  String detailChars(int count) {
+    return '$count 字';
+  }
+
+  @override
+  String detailTruncated(int count) {
+    return '…… 共 $count 字';
+  }
+
+  @override
+  String detailMoreFiles(int count) {
+    return '還有 $count 個';
+  }
+
+  @override
+  String get detailReceiveFirst => '選取後先下載';
+
+  @override
+  String detailTotalSize(String size) {
+    return '共 $size';
+  }
+
+  @override
+  String get quickPaste => '快速貼上';
+
+  @override
+  String get quickPasteWindow => '快速貼上視窗';
+
+  @override
+  String get quickPasteWindowDesc => '在任何程式裏按快速鍵叫出複製記錄，選取即貼上';
+
+  @override
+  String get quickPasteShortcut => '快速鍵';
+
+  @override
+  String get quickPasteRecord => '按一下錄製';
+
+  @override
+  String get quickPasteRecording => '請按下新的快速鍵…';
+
+  @override
+  String get quickPasteUseDefault => '恢復預設';
+
+  @override
+  String get quickPasteNeedsModifier => '要加上 ⌃、⌥、⇧ 或 ⌘，或者用功能鍵';
+
+  @override
+  String get quickPasteNeedsModifierPc => '要加上 Ctrl、Alt、Shift 或 Win 鍵，或者用功能鍵';
+
+  @override
+  String get quickPasteAfterPick => '選取後';
+
+  @override
+  String get quickPastePasteIt => '直接貼上';
+
+  @override
+  String get quickPasteCopyIt => '只放入剪貼簿';
+
+  @override
+  String get quickPasteAccessibility => '輔助使用權限';
+
+  @override
+  String get quickPasteAccessibilityDesc => '直接貼上需要它；沒有授權時只放入剪貼簿，再由你按 ⌘V';
+
+  @override
+  String get quickPasteAllowed => '已授權';
+
+  @override
+  String get quickPasteAllow => '去授權';
+
+  @override
+  String get quickPasteNotRunning => '快速貼上視窗未有執行';
+
+  @override
+  String quickPasteInUse(String key) {
+    return '$key 已被其他程式佔用，請換一個組合';
+  }
+
+  @override
+  String quickPasteHotkeyFailed(String key, String detail) {
+    return '無法設定 $key：$detail';
+  }
+
+  @override
+  String get quickPastePortalKey => '在系統的快速鍵設定裏修改';
+
+  @override
+  String get quickPasteWaylandDesc =>
+      'Wayland 下快速鍵要加在桌面的鍵盤設定裏；選取後放入剪貼簿，再按 Ctrl+V 貼上';
+
+  @override
+  String get quickPasteAddShortcut => '新增系統快速鍵';
+
+  @override
+  String quickPasteShortcutAdded(String key) {
+    return '已新增，按 $key 試試';
+  }
+
+  @override
+  String quickPasteShortcutManual(String command) {
+    return '在桌面的鍵盤設定裏新增一個自訂快速鍵，指令填：$command';
+  }
+
+  @override
+  String get pickerSearch => '搜尋';
+
+  @override
+  String get pickerPaste => '貼上';
+
+  @override
+  String get pickerPlainText => '純文字';
+
+  @override
+  String get pickerCopyOnly => '只複製';
+
+  @override
+  String get pickerUnfavoriteHint => '取消收藏（放回複製記錄）';
+
+  @override
+  String pickerPasteManually(String key) {
+    return '選取後按 $key 貼上';
+  }
+
+  @override
+  String get pickerGrantHint => '授予「輔助使用」權限後可直接貼上';
+
+  @override
+  String get pickerDownloading => '正在下載，下載完自動貼上';
 
   @override
   String get imagePreviewTitle => '圖片預覽';
@@ -2237,6 +2641,9 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get navSettings => '設定';
 
   @override
+  String get navFavorites => '收藏';
+
+  @override
   String get linkConnecting => '正在連線…';
 
   @override
@@ -2402,6 +2809,9 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get filterFile => '檔案';
 
   @override
+  String get filterLink => '連結';
+
+  @override
   String get historyClearTooltip => '清空記錄';
 
   @override
@@ -2497,6 +2907,202 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get searchEmptyBody => '搜尋範圍是複製過的文字和檔名。';
+
+  @override
+  String get favoriteAction => '收藏';
+
+  @override
+  String get unfavoriteAction => '取消收藏';
+
+  @override
+  String get favoritedToast => '已收藏';
+
+  @override
+  String get unfavoritedToast => '已放回複製記錄';
+
+  @override
+  String get undo => '復原';
+
+  @override
+  String get favoriteSaving => '正在儲存…';
+
+  @override
+  String favoritedAt(String date) {
+    return '收藏於 $date';
+  }
+
+  @override
+  String favoritesSubtitle(int count, String size) {
+    return '$count 筆 · 不會被自動清除 · 最多佔用 $size';
+  }
+
+  @override
+  String get favoritesEmptyTitle => '還沒有收藏';
+
+  @override
+  String get favoritesEmptyBody => '在複製記錄裡點星號，就會在這裡另存一份。收藏不會被自動清除。';
+
+  @override
+  String get favoritesSearchHint => '搜尋收藏';
+
+  @override
+  String favoriteLargeTitle(String size) {
+    return '要另存一份 $size 的內容嗎？';
+  }
+
+  @override
+  String favoriteLargeBody(String size, String device) {
+    return '收藏會另存一份，原檔案之後改動或刪除都不影響收藏。這會佔用$device上 $size 的空間。';
+  }
+
+  @override
+  String get saveCopy => '另存';
+
+  @override
+  String clearKeepsFavorites(int count) {
+    return '已收藏的 $count 筆會保留。';
+  }
+
+  @override
+  String get favoritesUsage => '收藏佔用';
+
+  @override
+  String get favoritesUsageDesc => '收藏不受上面兩項的限制，不會被自動清除';
+
+  @override
+  String upToSize(String size) {
+    return '最多 $size';
+  }
+
+  @override
+  String detailChars(int count) {
+    return '$count 字';
+  }
+
+  @override
+  String detailTruncated(int count) {
+    return '…… 共 $count 字';
+  }
+
+  @override
+  String detailMoreFiles(int count) {
+    return '還有 $count 個';
+  }
+
+  @override
+  String get detailReceiveFirst => '選取後先下載';
+
+  @override
+  String detailTotalSize(String size) {
+    return '共 $size';
+  }
+
+  @override
+  String get quickPaste => '快速貼上';
+
+  @override
+  String get quickPasteWindow => '快速貼上視窗';
+
+  @override
+  String get quickPasteWindowDesc => '在任何程式裡按快速鍵叫出複製記錄，選取即貼上';
+
+  @override
+  String get quickPasteShortcut => '快速鍵';
+
+  @override
+  String get quickPasteRecord => '按一下錄製';
+
+  @override
+  String get quickPasteRecording => '請按下新的快速鍵…';
+
+  @override
+  String get quickPasteUseDefault => '恢復預設';
+
+  @override
+  String get quickPasteNeedsModifier => '要加上 ⌃、⌥、⇧ 或 ⌘，或者用功能鍵';
+
+  @override
+  String get quickPasteNeedsModifierPc => '要加上 Ctrl、Alt、Shift 或 Win 鍵，或者用功能鍵';
+
+  @override
+  String get quickPasteAfterPick => '選取後';
+
+  @override
+  String get quickPastePasteIt => '直接貼上';
+
+  @override
+  String get quickPasteCopyIt => '只放進剪貼簿';
+
+  @override
+  String get quickPasteAccessibility => '輔助使用權限';
+
+  @override
+  String get quickPasteAccessibilityDesc => '直接貼上需要它；沒有授權時只放進剪貼簿，再由你按 ⌘V';
+
+  @override
+  String get quickPasteAllowed => '已授權';
+
+  @override
+  String get quickPasteAllow => '去授權';
+
+  @override
+  String get quickPasteNotRunning => '快速貼上視窗沒有在執行';
+
+  @override
+  String quickPasteInUse(String key) {
+    return '$key 已被其他程式佔用，請換一個組合';
+  }
+
+  @override
+  String quickPasteHotkeyFailed(String key, String detail) {
+    return '設定 $key 失敗：$detail';
+  }
+
+  @override
+  String get quickPastePortalKey => '在系統的快速鍵設定裡修改';
+
+  @override
+  String get quickPasteWaylandDesc =>
+      'Wayland 下快速鍵要加在桌面的鍵盤設定裡；選取後放進剪貼簿，再按 Ctrl+V 貼上';
+
+  @override
+  String get quickPasteAddShortcut => '新增系統快速鍵';
+
+  @override
+  String quickPasteShortcutAdded(String key) {
+    return '已新增，按 $key 試試';
+  }
+
+  @override
+  String quickPasteShortcutManual(String command) {
+    return '在桌面的鍵盤設定裡新增一個自訂快速鍵，指令填：$command';
+  }
+
+  @override
+  String get pickerSearch => '搜尋';
+
+  @override
+  String get pickerPaste => '貼上';
+
+  @override
+  String get pickerPlainText => '純文字';
+
+  @override
+  String get pickerCopyOnly => '只複製';
+
+  @override
+  String get pickerUnfavoriteHint => '取消收藏（放回複製記錄）';
+
+  @override
+  String pickerPasteManually(String key) {
+    return '選取後按 $key 貼上';
+  }
+
+  @override
+  String get pickerGrantHint => '授予「輔助使用」權限後可直接貼上';
+
+  @override
+  String get pickerDownloading => '正在下載，下載完自動貼上';
 
   @override
   String get imagePreviewTitle => '圖片預覽';

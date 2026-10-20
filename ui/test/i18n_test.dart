@@ -61,6 +61,33 @@ AppState _demo(String language, {LinkState link = LinkState.online, ServiceState
             items: [ClipItem(name: 'report.key'), ClipItem(name: 'notes.txt')],
           ),
         ],
+        favorites: [
+          ClipRecord(
+            id: 'fav',
+            kind: ClipKind.CLIP_KIND_TEXT,
+            favorite: true,
+            textPreview: 'https://pasteferry.cc/download/',
+            isLink: true,
+            outgoing: true,
+            totalSize: Int64(31),
+          ),
+          ClipRecord(
+            id: 'saving',
+            kind: ClipKind.CLIP_KIND_FILE,
+            favorite: true,
+            status: ClipStatus.CLIP_STATUS_FAILED,
+            error: '源设备当前不可达',
+            originDeviceName: 'MacBook Air',
+            items: [ClipItem(name: 'report.key')],
+          ),
+        ],
+        // 快捷键被占用、还没授予辅助功能：设置页上要显示的东西最多的情况
+        quickPaste: QuickPasteStatus(
+          running: true,
+          hotkey: 'alt+v',
+          hotkeyError: 'in_use',
+          pasteUnavailableReason: 'not_trusted',
+        ),
       );
 
 void main() {
@@ -151,12 +178,17 @@ void main() {
 
       testWidgets('三个页面', (tester) async {
         final l = await open(tester, _demo(language));
+        await tester.tap(find.text(l.navFavorites).first);
+        await tester.pump();
+        expect(find.text('https://pasteferry.cc/download/'), findsOneWidget);
         await tester.tap(find.text(l.navDevices).first);
         await tester.pump();
         expect(find.text(l.pairedDevices), findsOneWidget);
         await tester.tap(find.text(l.navSettings).first);
         await tester.pump();
         await tester.dragUntilVisible(find.text(l.language), find.byType(ListView), const Offset(0, -100));
+        await tester.dragUntilVisible(find.text(l.quickPasteAccessibility), find.byType(ListView), const Offset(0, -100));
+        await tester.dragUntilVisible(find.text(l.favoritesUsage), find.byType(ListView), const Offset(0, -100));
         await tester.dragUntilVisible(find.text(l.about), find.byType(ListView), const Offset(0, -200));
       });
 

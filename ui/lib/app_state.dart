@@ -7,8 +7,10 @@ import 'package:grpc/grpc.dart';
 import 'background_service.dart';
 import 'daemon_client.dart';
 import 'i18n.dart';
+import 'quick_paste_service.dart';
 import 'gen/pasteferry/v1/daemon.pb.dart';
 import 'gen/pasteferry/v1/daemon.pbgrpc.dart' show DaemonServiceClient;
+import 'widgets/record_hover.dart' show RecordDetails;
 
 /// daemon 连接的生命周期状态。
 enum LinkState { connecting, online, offline }
@@ -30,11 +32,15 @@ enum PairingFailure {
 ///
 /// 所有与 daemon 的交互都经过这里：页面只读状态、调方法，不直接碰 gRPC。
 /// 这样断线重连、事件合并这些琐事集中在一处，页面代码保持干净。
-class AppState extends ChangeNotifier {
-  AppState({BackgroundService? service})
-    : service = service ?? BackgroundService();
+class AppState extends ChangeNotifier implements RecordDetails {
+  AppState({BackgroundService? service, QuickPasteService? quickPasteService})
+    : service = service ?? BackgroundService(),
+      quickPasteService = quickPasteService ?? QuickPasteService();
 
   final BackgroundService service;
+
+  /// Mac 上快捷粘贴窗口的 LaunchAgent，见 quick_paste_service.dart
+  final QuickPasteService quickPasteService;
 
   DaemonConnection? _conn;
   StreamSubscription<Event>? _events;
@@ -48,6 +54,15 @@ class AppState extends ChangeNotifier {
   List<Device> _peers = const [];
   final List<ClipRecord> _records = [];
 
+  /// 收藏，按收藏时间倒序。和复制记录是两份，见 design/quick-paste-and-favorites.md 第 3 节
+  final List<ClipRecord> _favorites = [];
+
+  /// 悬停提示框要显示的完整内容，按记录 ID 缓存：内容不会变
+  final Map<String, ClipDetail> _details = {};
+
+  /// 快捷粘贴窗口的状态，由后台服务转来；没连上时为 null
+  QuickPasteStatus? _quickPaste;
+
   /// 正在传输的记录的进度（0–1），只在界面上展示，传完即移除。
   final Map<String, double> _progress = {};
   final Map<String, ClipboardWriteResult> _clipboardResults = {};
@@ -55,12 +70,18 @@ class AppState extends ChangeNotifier {
   NotificationStatus? get notificationStatus => _notificationStatus;
   ClipboardWriteResult? clipboardResultOf(String id) => _clipboardResults[id];
 
-  /// 复制记录的搜索：搜索词，以及后台服务返回的结果（还没出结果时为 null）。
-  /// 界面只加载最新的 200 条，更早的记录只有后台服务能搜到，所以不在界面里筛选。
-  String _query = '';
-  List<ClipRecord>? _searchResults;
-  Timer? _searchTimer;
-  int _searchSeq = 0; // 只采用最后一次搜索的结果，先发出的请求可能后返回
+  /// 复制记录与收藏各自的搜索。界面只加载最新的 200 条复制记录，更早的只有后台服务能搜到，
+  /// 所以不在界面里筛选。
+  late final _historySearch = _RecordSearch(
+    notify: notifyListeners,
+    request: (q) => requestSearch(q),
+    local: () => _records,
+  );
+  late final _favoriteSearch = _RecordSearch(
+    notify: notifyListeners,
+    request: (q) => requestFavoriteSearch(q),
+    local: () => _favorites,
+  );
 
   /// 待用户核对指纹的配对请求。非空时界面弹出确认。
   Device? _pendingPairing;
@@ -77,14 +98,24 @@ class AppState extends ChangeNotifier {
   Device? get self => _self;
   List<Device> get peers => List.unmodifiable(_peers);
   List<ClipRecord> get records => List.unmodifiable(_records);
+  List<ClipRecord> get favorites => List.unmodifiable(_favorites);
+
+  /// 全部收藏的大小之和。硬链接、写时复制保存的副本实际占用更少，界面上写「最多」
+  int get favoritesBytes => _favorites.fold(0, (n, r) => n + r.totalSize.toInt());
+
+  QuickPasteStatus? get quickPaste => _quickPaste;
 
   /// 正在搜索复制记录（搜索词不是空白）。
-  bool get searching => _query.trim().isNotEmpty;
-  String get searchQuery => _query.trim();
+  bool get searching => _historySearch.active;
+  String get searchQuery => _historySearch.query.trim();
 
   /// 搜到的记录，按时间倒序；没在搜索、或这次搜索还没出结果时为 null。
-  List<ClipRecord>? get searchResults =>
-      _searchResults == null ? null : List.unmodifiable(_searchResults!);
+  List<ClipRecord>? get searchResults => _historySearch.resultsView;
+
+  /// 收藏页的搜索，与复制记录的分开。
+  bool get searchingFavorites => _favoriteSearch.active;
+  String get favoriteQuery => _favoriteSearch.query.trim();
+  List<ClipRecord>? get favoriteResults => _favoriteSearch.resultsView;
 
   /// 传输进度；总量未知或尚未开始时为 null。
   double? progressOf(String clipId) => _progress[clipId];
@@ -162,7 +193,8 @@ class AppState extends ChangeNotifier {
   @override
   void dispose() {
     _retry?.cancel();
-    _searchTimer?.cancel();
+    _historySearch.dispose();
+    _favoriteSearch.dispose();
     _events?.cancel();
     _conn?.close();
     super.dispose();
@@ -184,6 +216,7 @@ class AppState extends ChangeNotifier {
         conn.client.listHistory(ListHistoryRequest(limit: 200)),
         conn.client.getConfig(Empty()),
         conn.client.getStatus(Empty()),
+        conn.client.listHistory(ListHistoryRequest(limit: 500, favorites: true)),
       ]);
 
       _records
@@ -191,6 +224,11 @@ class AppState extends ChangeNotifier {
         ..addAll((results[0] as ListHistoryResponse).records);
       _config = results[1] as Config;
       _status = results[2] as Status;
+      // 旧版后台服务不认识 favorites，会把复制记录原样返回：只收下真的收藏
+      _favorites
+        ..clear()
+        ..addAll((results[3] as ListHistoryResponse).records.where((r) => r.favorite));
+      await _loadQuickPasteStatus();
 
       await _loadDevices();
       await refreshNotificationStatus();
@@ -207,7 +245,8 @@ class AppState extends ChangeNotifier {
       _serviceState = null;
       _setLink(LinkState.online, null);
       _ensureServiceCurrent();
-      if (searching) _scheduleSearch(Duration.zero);
+      _historySearch.schedule(Duration.zero);
+      _favoriteSearch.schedule(Duration.zero);
     } on DaemonNotRunning {
       await _refreshServiceState();
       _scheduleRetry(appL10n.linkServiceNotRunning);
@@ -262,6 +301,28 @@ class AppState extends ChangeNotifier {
     } catch (_) {
       // 核对失败不影响使用：旧进程仍在正常工作
     }
+    await _syncQuickPaste();
+  }
+
+  /// Mac 上按设置登记或撤下快捷粘贴窗口的 LaunchAgent；App 更新后还在跑旧版的，按新的程序重新拉起。
+  /// Windows、Linux 上快捷窗口由后台服务照看，这里什么都不做。
+  Future<void> _syncQuickPaste() async {
+    final qp = quickPasteService;
+    if (!qp.available) return;
+    try {
+      // 快捷窗口跟着后台服务走：后台服务没登记成登录项（开发时手动跑的、测试用的）就不登记它
+      if (await service.state() != ServiceState.running) return;
+      if (_config?.quickPasteDisabled ?? false) {
+        await qp.uninstall();
+      } else if (!await qp.installed()) {
+        await qp.install();
+      } else {
+        final v = _quickPaste?.version ?? '';
+        if (appVersion != 'dev' && v.isNotEmpty && v != appVersion) await qp.restart();
+      }
+    } catch (_) {
+      // 登记失败不影响主界面，设置页会显示快捷窗口没在运行
+    }
   }
 
   /// 截图与界面测试用：直接填入数据，不连接后台服务。
@@ -272,9 +333,11 @@ class AppState extends ChangeNotifier {
     required Device self,
     List<Device> peers = const [],
     List<ClipRecord> records = const [],
+    List<ClipRecord> favorites = const [],
     Device? pendingPairing,
     LinkState link = LinkState.online,
     ServiceState? serviceState,
+    QuickPasteStatus? quickPaste,
   }) {
     _status = status;
     _config = config;
@@ -283,6 +346,10 @@ class AppState extends ChangeNotifier {
     _records
       ..clear()
       ..addAll(records);
+    _favorites
+      ..clear()
+      ..addAll(favorites);
+    _quickPaste = quickPaste;
     _pendingPairing = pendingPairing;
     _serviceState = serviceState;
     _link = link;
@@ -296,6 +363,7 @@ class AppState extends ChangeNotifier {
     await service.install();
     await _refreshServiceState();
     await connect();
+    await _syncQuickPaste();
   }
 
   Future<void> restartService() async {
@@ -303,9 +371,10 @@ class AppState extends ChangeNotifier {
     await connect();
   }
 
-  /// 停用后台服务：关闭同步并取消开机自启。
+  /// 停用后台服务：关闭同步并取消开机自启。快捷窗口离了后台服务没法用，一起撤下，重新启用时再登记。
   Future<void> disableService() async {
     _retry?.cancel();
+    if (quickPasteService.available) await quickPasteService.uninstall();
     await service.uninstall();
     await _refreshServiceState();
     _scheduleRetry(appL10n.linkServiceDisabled);
@@ -349,18 +418,32 @@ class AppState extends ChangeNotifier {
       case Event_Payload.clipAdded:
         _upsert(ev.clipAdded);
         // 新记录该不该出现在搜索结果里，只有后台服务知道
-        if (!_patchSearch(ev.clipAdded)) {
-          _scheduleSearch(const Duration(milliseconds: 300));
+        final search = ev.clipAdded.favorite ? _favoriteSearch : _historySearch;
+        if (!search.patch(ev.clipAdded)) {
+          search.schedule(const Duration(milliseconds: 300));
         }
+        // 取消收藏后同一条记录换到了复制记录里
+        (ev.clipAdded.favorite ? _historySearch : _favoriteSearch).remove(ev.clipAdded.id);
 
       case Event_Payload.clipUpdated:
         _upsert(ev.clipUpdated);
-        _patchSearch(ev.clipUpdated);
+        _historySearch.patch(ev.clipUpdated);
+        _favoriteSearch.patch(ev.clipUpdated);
 
       case Event_Payload.clipRemoved:
         _records.removeWhere((r) => r.id == ev.clipRemoved);
+        _favorites.removeWhere((r) => r.id == ev.clipRemoved);
         _clipboardResults.remove(ev.clipRemoved);
-        _searchResults?.removeWhere((r) => r.id == ev.clipRemoved);
+        _details.remove(ev.clipRemoved);
+        _historySearch.remove(ev.clipRemoved);
+        _favoriteSearch.remove(ev.clipRemoved);
+
+      case Event_Payload.configChanged:
+        // 别处（快捷窗口、另一个界面窗口）改了设置
+        _config = ev.configChanged;
+
+      case Event_Payload.quickPasteChanged:
+        _quickPaste = ev.quickPasteChanged;
 
       case Event_Payload.clipboardWritten:
         _clipboardResults[ev.clipboardWritten.clipId] = ev.clipboardWritten;
@@ -382,11 +465,27 @@ class AppState extends ChangeNotifier {
 
   void _upsert(ClipRecord r) {
     if (r.status == ClipStatus.CLIP_STATUS_FETCHING) _clipboardResults.remove(r.id);
+    if (r.favorite) {
+      _records.removeWhere((x) => x.id == r.id);
+      final i = _favorites.indexWhere((x) => x.id == r.id);
+      if (i >= 0) {
+        _favorites[i] = r;
+      } else {
+        _favorites.add(r);
+      }
+      // 再收藏一次同样的内容会把它挪到最上面
+      _favorites.sort((a, b) => b.favoritedAtUnix.compareTo(a.favoritedAtUnix));
+      return;
+    }
+    // 取消收藏：同一条记录从收藏挪回复制记录
+    _favorites.removeWhere((x) => x.id == r.id);
     final i = _records.indexWhere((x) => x.id == r.id);
     if (i >= 0) {
       _records[i] = r;
     } else {
-      _records.insert(0, r);
+      // 按复制时间插到该在的位置：新复制的、刚取消收藏的都在最上面
+      final at = _records.indexWhere((x) => x.createdAtUnix < r.createdAtUnix);
+      _records.insert(at < 0 ? _records.length : at, r);
       if (_records.length > 500) _records.removeLast();
     }
     // 传完（或失败）了就不再显示进度
@@ -402,7 +501,7 @@ class AppState extends ChangeNotifier {
     if (r.status == ClipStatus.CLIP_STATUS_REMOTE_ONLY) {
       // 用户点了「拉取到本机」，开始传了
       _records[i] = r.deepCopy()..status = ClipStatus.CLIP_STATUS_FETCHING;
-      _patchSearch(_records[i]);
+      _historySearch.patch(_records[i]);
     } else if (r.status != ClipStatus.CLIP_STATUS_FETCHING) {
       return; // 已经传完的记录，迟到的进度事件不能把它拉回「接收中」
     }
@@ -522,9 +621,11 @@ class AppState extends ChangeNotifier {
 
   Future<void> updateConfig(Config next) async {
     final wasOfficial = officialEnabled;
+    final quickPasteWasDisabled = _config?.quickPasteDisabled;
     _config = await _client.updateConfig(next);
     if (!wasOfficial && officialEnabled) _officialNavigationSerial++;
     notifyListeners();
+    if (_config!.quickPasteDisabled != quickPasteWasDisabled) await _syncQuickPaste();
   }
 
   // ─────────────────────────── 更新 ───────────────────────────
@@ -580,69 +681,80 @@ class AppState extends ChangeNotifier {
       DeleteHistoryRequest(ids: ids ?? const [], all: all),
     );
     if (all) {
+      // 清空只清复制记录，收藏不受影响
       _records.clear();
-      _searchResults?.clear();
+      _historySearch.clear();
     } else if (ids != null) {
       _records.removeWhere((r) => ids.contains(r.id));
-      _searchResults?.removeWhere((r) => ids.contains(r.id));
+      ids.forEach(_historySearch.remove);
     }
     notifyListeners();
   }
 
-  // ─────────────────────────── 搜索复制记录 ───────────────────────────
+  // ─────────────────────────── 收藏 ───────────────────────────
+
+  /// 收藏（另存一份）或取消收藏（放回复制记录的最上面）。返回收藏后的收藏，或取消后放回的那一条。
+  /// 取消收藏时 [clipId] 是收藏或它的原记录都可以。
+  Future<ClipRecord> setFavorite(String clipId, bool favorite) async {
+    final r = await _client.setFavorite(
+      SetFavoriteRequest(clipId: clipId, favorite: favorite),
+      // 整份复制大文件时后台服务先返回「正在保存」，不会等太久
+      options: CallOptions(timeout: const Duration(seconds: 30)),
+    );
+    _upsert(r);
+    (r.favorite ? _historySearch : _favoriteSearch).remove(r.id);
+    notifyListeners();
+    return r;
+  }
+
+  /// 悬停提示框要显示的完整内容。
+  @override
+  Future<ClipDetail> clipDetail(String clipId) async {
+    final cached = _details[clipId];
+    if (cached != null) return cached;
+    final d = await requestClipDetail(clipId);
+    _details[clipId] = d;
+    return d;
+  }
+
+  @protected
+  Future<ClipDetail> requestClipDetail(String clipId) =>
+      _client.getClipDetail(GetClipDetailRequest(clipId: clipId));
+
+  // ─────────────────────────── 快捷粘贴窗口 ───────────────────────────
+
+  Future<void> _loadQuickPasteStatus() async {
+    final conn = _conn;
+    if (conn == null) return;
+    try {
+      _quickPaste = await conn.client.getQuickPasteStatus(Empty());
+    } on GrpcError {
+      _quickPaste = null; // 旧版后台服务没有快捷窗口
+    }
+  }
+
+  /// 转给快捷窗口的命令：request_permission、suspend_hotkey、resume_hotkey、show。
+  Future<void> sendQuickPasteCommand(String command) =>
+      _client.sendQuickPasteCommand(QuickPasteCommand(command: command));
+
+  // ─────────────────────────── 搜索 ───────────────────────────
 
   /// 输入搜索词。停顿一下再向后台服务查询，不必每敲一个字就查一次；空白表示不搜索。
   /// [notify] 为 false 用于页面销毁时清掉搜索：那时界面树已锁定，不能再通知重建。
-  void search(String query, {bool notify = true}) {
-    _query = query;
-    _searchTimer?.cancel();
-    if (!searching) {
-      _searchSeq++;
-      _searchResults = null;
-      if (notify) notifyListeners();
-      return;
-    }
-    _scheduleSearch(const Duration(milliseconds: 200));
-  }
+  void search(String query, {bool notify = true}) => _historySearch.set(query, notify: notify);
 
-  void _scheduleSearch(Duration delay) {
-    if (!searching) return;
-    _searchTimer?.cancel();
-    _searchTimer = Timer(delay, _runSearch);
-  }
-
-  Future<void> _runSearch() async {
-    final query = searchQuery;
-    final seq = ++_searchSeq;
-    List<ClipRecord> found;
-    try {
-      final r = await requestSearch(query);
-      // 旧版后台服务不认识搜索词，会原样返回全部记录：退回到只在已加载的记录里找
-      found = r.searched
-          ? List.of(r.records)
-          : _records.where((x) => matchesSearch(x, query)).toList();
-    } catch (_) {
-      found = _records.where((x) => matchesSearch(x, query)).toList();
-    }
-    if (seq != _searchSeq || query != searchQuery) return;
-    _searchResults = found;
-    notifyListeners();
-  }
+  /// 收藏页的搜索，用法与 [search] 相同。
+  void searchFavorites(String query, {bool notify = true}) => _favoriteSearch.set(query, notify: notify);
 
   /// 向后台服务搜索复制记录。界面测试与截图里由子类给出演示结果。
   @protected
   Future<ListHistoryResponse> requestSearch(String query) =>
       _client.listHistory(ListHistoryRequest(limit: 200, query: query));
 
-  /// 搜索结果里的同一条记录跟着更新状态（拉取进度、失败等），预览保留搜索给的那一段。
-  /// 返回这条记录在不在结果里。
-  bool _patchSearch(ClipRecord r) {
-    final results = _searchResults;
-    final i = results?.indexWhere((x) => x.id == r.id) ?? -1;
-    if (i < 0) return false;
-    results![i] = r.deepCopy()..textPreview = results[i].textPreview;
-    return true;
-  }
+  /// 向后台服务搜索收藏。
+  @protected
+  Future<ListHistoryResponse> requestFavoriteSearch(String query) =>
+      _client.listHistory(ListHistoryRequest(limit: 200, query: query, favorites: true));
 
   Future<void> refreshNotificationStatus() async {
     final conn = _conn;
@@ -674,6 +786,7 @@ class AppState extends ChangeNotifier {
 
   /// 一条记录里第 [index] 张图片：本机路径、文件名，以及能预览的图片总数。
   /// HEIC 这类格式由后台服务先转换，大图可能要一两秒，超时放宽一些。
+  @override
   Future<GetImagePreviewResponse> imagePreview(
     String clipId, {
     int index = 0,
@@ -712,6 +825,75 @@ class AppState extends ChangeNotifier {
       _ => PairingFailure.other,
     };
   }
+}
+
+/// 一组记录（复制记录或收藏）的搜索：搜索词、后台服务返回的结果，以及「只采用最后一次」的计数。
+class _RecordSearch {
+  _RecordSearch({required this.notify, required this.request, required this.local});
+
+  final VoidCallback notify;
+  final Future<ListHistoryResponse> Function(String query) request;
+
+  /// 已加载的记录：后台服务不支持搜索时在这里面找
+  final List<ClipRecord> Function() local;
+
+  String query = '';
+  List<ClipRecord>? _results;
+  Timer? _timer;
+  int _seq = 0; // 只采用最后一次搜索的结果，先发出的请求可能后返回
+
+  bool get active => query.trim().isNotEmpty;
+  List<ClipRecord>? get resultsView => _results == null ? null : List.unmodifiable(_results!);
+
+  void set(String q, {bool notify = true}) {
+    query = q;
+    _timer?.cancel();
+    if (!active) {
+      _seq++;
+      _results = null;
+      if (notify) this.notify();
+      return;
+    }
+    schedule(const Duration(milliseconds: 200));
+  }
+
+  void schedule(Duration delay) {
+    if (!active) return;
+    _timer?.cancel();
+    _timer = Timer(delay, _run);
+  }
+
+  Future<void> _run() async {
+    final q = query.trim();
+    final seq = ++_seq;
+    List<ClipRecord> found;
+    try {
+      final r = await request(q);
+      // 旧版后台服务不认识搜索词，会原样返回全部记录：退回到只在已加载的记录里找
+      found = r.searched ? List.of(r.records) : local().where((x) => matchesSearch(x, q)).toList();
+    } catch (_) {
+      found = local().where((x) => matchesSearch(x, q)).toList();
+    }
+    if (seq != _seq || q != query.trim()) return;
+    _results = found;
+    notify();
+  }
+
+  /// 结果里的同一条记录跟着更新状态（拉取进度、星标等），预览保留搜索给的那一段。
+  /// 返回这条记录在不在结果里。
+  bool patch(ClipRecord r) {
+    final results = _results;
+    final i = results?.indexWhere((x) => x.id == r.id) ?? -1;
+    if (i < 0) return false;
+    results![i] = r.deepCopy()..textPreview = results[i].textPreview;
+    return true;
+  }
+
+  void remove(String id) => _results?.removeWhere((r) => r.id == id);
+
+  void clear() => _results?.clear();
+
+  void dispose() => _timer?.cancel();
 }
 
 /// 在界面已有的信息里判断一条记录是否匹配搜索词：预览片段或文件名包含它，不分大小写。

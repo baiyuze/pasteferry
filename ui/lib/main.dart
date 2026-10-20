@@ -6,17 +6,26 @@ import 'app_state.dart';
 import 'background_service.dart';
 import 'i18n.dart';
 import 'pages/devices_page.dart';
+import 'pages/favorites_page.dart';
 import 'pages/history_page.dart';
 import 'pages/service_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/official_service_page.dart';
+import 'picker/picker_main.dart';
 import 'theme.dart';
 import 'widgets/common.dart';
 import 'widgets/pairing_dialog.dart';
 import 'widgets/update_dialog.dart';
 import 'icons.dart';
 
-void main() => runApp(const PasteFerryApp());
+/// 带 --picker 启动的是快捷粘贴窗口进程，见 picker/picker_main.dart。
+void main(List<String> args) {
+  if (args.contains('--picker')) {
+    runPicker();
+    return;
+  }
+  runApp(const PasteFerryApp());
+}
 
 class PasteFerryApp extends StatefulWidget {
   const PasteFerryApp({super.key, this.state});
@@ -110,7 +119,7 @@ class AppScope extends InheritedNotifier<AppState> {
       context.getInheritedWidgetOfExactType<AppScope>()!.notifier!;
 }
 
-enum Section { history, devices, official, settings }
+enum Section { history, favorites, devices, official, settings }
 
 class Shell extends StatefulWidget {
   const Shell({super.key, this.initialSection = Section.history});
@@ -271,6 +280,7 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
                 ? const ServicePage()
                 : switch (_section) {
                     Section.history => const HistoryPage(),
+                    Section.favorites => const FavoritesPage(),
                     Section.devices => const DevicesPage(),
                     Section.official => const OfficialServicePage(),
                     Section.settings => const SettingsPage(),
@@ -327,6 +337,13 @@ class _Sidebar extends StatelessWidget {
             selected: current == Section.history,
             trailing: state.records.isEmpty ? null : '${state.records.length}',
             onTap: () => onSelect(Section.history),
+          ),
+          _NavItem(
+            icon: AppIcons.star,
+            label: l.navFavorites,
+            selected: current == Section.favorites,
+            trailing: state.favorites.isEmpty ? null : '${state.favorites.length}',
+            onTap: () => onSelect(Section.favorites),
           ),
           _NavItem(
             icon: AppIcons.deviceLaptop,

@@ -108,11 +108,14 @@ class GroupSection extends StatelessWidget {
 
 /// 设置项行：左侧标题与说明，右侧控件。
 class SettingRow extends StatelessWidget {
-  const SettingRow({super.key, required this.title, required this.child, this.description});
+  const SettingRow({super.key, required this.title, required this.child, this.description, this.descriptionColor});
 
   final String title;
   final String? description;
   final Widget child;
+
+  /// 说明文字的颜色，出错时用红色；不给时用默认的次要文字色
+  final Color? descriptionColor;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +133,7 @@ class SettingRow extends StatelessWidget {
                   Text(title, style: context.text.labelLarge),
                   if (description != null) ...[
                     const SizedBox(height: 2),
-                    Text(description!, style: context.text.bodySmall),
+                    Text(description!, style: context.text.bodySmall?.copyWith(color: descriptionColor)),
                   ],
                 ],
               ),
@@ -438,11 +441,14 @@ class AppMark extends StatelessWidget {
 
 /// 可点击的图标按钮，悬停时出现浅色底。
 class IconAction extends StatefulWidget {
-  const IconAction({super.key, required this.icon, required this.tooltip, this.onTap});
+  const IconAction({super.key, required this.icon, required this.tooltip, this.onTap, this.color});
 
   final IconData icon;
   final String tooltip;
   final VoidCallback? onTap;
+
+  /// 图标的颜色；不给时用次要文字色，悬停时变深。亮着的星标用强调色
+  final Color? color;
 
   @override
   State<IconAction> createState() => _IconActionState();
@@ -469,7 +475,7 @@ class _IconActionState extends State<IconAction> {
               color: _hovered ? p.hover : Colors.transparent,
               borderRadius: BorderRadius.circular(Radii.sm),
             ),
-            child: Icon(widget.icon, size: 16, color: _hovered ? p.text : p.textDim),
+            child: Icon(widget.icon, size: 16, color: widget.color ?? (_hovered ? p.text : p.textDim)),
           ),
         ),
       ),
@@ -507,7 +513,9 @@ String relativeTime(DateTime t, {DateTime? now}) {
   return l.monthDay(t.month, t.day);
 }
 
-void showToast(BuildContext context, String message, {bool error = false}) {
+/// 底部的提示条。给了 [actionLabel] 时右边多一个按钮，比如取消收藏后的「撤销」。
+void showToast(BuildContext context, String message,
+    {bool error = false, String? actionLabel, VoidCallback? onAction}) {
   final p = context.palette;
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
@@ -523,7 +531,10 @@ void showToast(BuildContext context, String message, {bool error = false}) {
           Expanded(child: Text(message)),
         ],
       ),
-      duration: const Duration(seconds: 3),
+      action: actionLabel == null || onAction == null
+          ? null
+          : SnackBarAction(label: actionLabel, onPressed: onAction),
+      duration: Duration(seconds: actionLabel == null ? 3 : 5),
       width: 360,
     ));
 }

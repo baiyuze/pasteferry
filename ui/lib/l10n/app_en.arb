@@ -4,6 +4,7 @@
   "navHistory": "History",
   "navDevices": "Devices",
   "navSettings": "Settings",
+  "navFavorites": "Favorites",
   "linkConnecting": "Connecting…",
   "linkServiceNotRunning": "Service not running",
   "linkLanMode": "Looking for devices on this network",
@@ -160,6 +161,7 @@
   "filterText": "Text",
   "filterImage": "Images",
   "filterFile": "Files",
+  "filterLink": "Links",
   "historyClearTooltip": "Clear history",
   "historyEmptyTitle": "Nothing here yet",
   "historyEmptyFilteredTitle": "Nothing of this kind",
@@ -223,6 +225,175 @@
     }
   },
   "searchEmptyBody": "Search looks through copied text and the names of copied files.",
+  "favoriteAction": "Add to favorites",
+  "unfavoriteAction": "Remove from favorites",
+  "favoritedToast": "Added to Favorites",
+  "unfavoritedToast": "Moved back to History",
+  "undo": "Undo",
+  "favoriteSaving": "Saving…",
+  "favoritedAt": "Saved {date}",
+  "@favoritedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "favoritesSubtitle": "{count, plural, =1{1 item} other{{count} items}} · never cleaned up · up to {size}",
+  "@favoritesSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "favoritesEmptyTitle": "No favorites yet",
+  "favoritesEmptyBody": "Star an item in History to keep a copy here. Favorites are never cleaned up automatically.",
+  "favoritesSearchHint": "Search favorites",
+  "favoriteLargeTitle": "Save a copy of {size}?",
+  "@favoriteLargeTitle": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "favoriteLargeBody": "A favorite keeps its own copy, so changing or deleting the original files won't affect it. This uses {size} on {device}.",
+  "@favoriteLargeBody": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "device": {
+        "type": "String"
+      }
+    }
+  },
+  "saveCopy": "Save copy",
+  "clearKeepsFavorites": "{count, plural, =1{Your 1 favorite stays.} other{Your {count} favorites stay.}}",
+  "@clearKeepsFavorites": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoritesUsage": "Favorites",
+  "favoritesUsageDesc": "Favorites are never cleaned up, whatever the settings above",
+  "upToSize": "Up to {size}",
+  "@upToSize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "detailChars": "{count, plural, =1{1 character} other{{count} characters}}",
+  "@detailChars": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "detailTruncated": "… {count} characters in total",
+  "@detailTruncated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "detailMoreFiles": "{count, plural, =1{1 more} other{{count} more}}",
+  "@detailMoreFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "detailReceiveFirst": "Pick it to download it first",
+  "detailTotalSize": "{size} in total",
+  "@detailTotalSize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "quickPaste": "Quick paste",
+  "quickPasteWindow": "Quick paste window",
+  "quickPasteWindowDesc": "Press the shortcut in any app to bring up your history; pick an item and it's pasted",
+  "quickPasteShortcut": "Shortcut",
+  "quickPasteRecord": "Click to change",
+  "quickPasteRecording": "Press the new shortcut…",
+  "quickPasteUseDefault": "Use default",
+  "quickPasteNeedsModifier": "Include ⌃, ⌥, ⇧ or ⌘, or use a function key",
+  "quickPasteNeedsModifierPc": "Include Ctrl, Alt, Shift or the Windows key, or use a function key",
+  "quickPasteAfterPick": "After you pick an item",
+  "quickPastePasteIt": "Paste it",
+  "quickPasteCopyIt": "Just copy it",
+  "quickPasteAccessibility": "Accessibility",
+  "quickPasteAccessibilityDesc": "Needed to paste for you. Without it, items are copied and you press ⌘V.",
+  "quickPasteAllowed": "Allowed",
+  "quickPasteAllow": "Allow…",
+  "quickPasteNotRunning": "The quick paste window isn't running",
+  "quickPasteInUse": "{key} is used by another app. Pick another shortcut.",
+  "@quickPasteInUse": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "quickPasteHotkeyFailed": "Couldn't set {key}: {detail}",
+  "@quickPasteHotkeyFailed": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "quickPastePortalKey": "Set in the system shortcut settings",
+  "quickPasteWaylandDesc": "On Wayland, add the shortcut in your desktop's keyboard settings. Picked items are copied; press Ctrl+V to paste.",
+  "quickPasteAddShortcut": "Add system shortcut",
+  "quickPasteShortcutAdded": "Added. Press {key} to try it.",
+  "@quickPasteShortcutAdded": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "quickPasteShortcutManual": "Add a custom shortcut in your desktop's keyboard settings that runs: {command}",
+  "@quickPasteShortcutManual": {
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    }
+  },
+  "pickerSearch": "Search",
+  "pickerPaste": "Paste",
+  "pickerPlainText": "Plain text",
+  "pickerCopyOnly": "Copy only",
+  "pickerUnfavoriteHint": "Remove (back to History)",
+  "pickerPasteManually": "Picked items are copied — press {key} to paste",
+  "@pickerPasteManually": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "pickerGrantHint": "Allow Accessibility to paste directly",
+  "pickerDownloading": "Downloading — pastes when done",
   "imagePreviewTitle": "Image preview",
   "closePreview": "Close preview",
   "previousImage": "Previous image",

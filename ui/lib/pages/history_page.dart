@@ -7,13 +7,16 @@ import '../app_state.dart';
 import '../gen/pasteferry/v1/daemon.pb.dart';
 import '../i18n.dart';
 import '../main.dart';
+import '../records.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/favorite_actions.dart';
 import '../widgets/image_preview_dialog.dart';
+import '../widgets/record_hover.dart';
 import '../icons.dart';
 import '../platform.dart';
 
-enum _Filter { all, text, image, file }
+export '../records.dart' show kindIcon, recordTitle, highlightMatches;
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -23,7 +26,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  _Filter _filter = _Filter.all;
+  RecordFilter _filter = RecordFilter.all;
   final _search = TextEditingController();
   final _searchFocus = FocusNode();
   AppState? _state;
@@ -43,14 +46,7 @@ class _HistoryPageState extends State<HistoryPage> {
     super.dispose();
   }
 
-  bool _matches(ClipRecord r) => switch (_filter) {
-        _Filter.all => true,
-        // 富文本也是文字，用户不关心它在剪贴板里是不是 HTML
-        _Filter.text =>
-          r.kind == ClipKind.CLIP_KIND_TEXT || r.kind == ClipKind.CLIP_KIND_HTML,
-        _Filter.image => r.kind == ClipKind.CLIP_KIND_IMAGE,
-        _Filter.file => r.kind == ClipKind.CLIP_KIND_FILE,
-      };
+  bool _matches(ClipRecord r) => _filter.matches(r);
 
   @override
   Widget build(BuildContext context) {
@@ -101,14 +97,9 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                 ),
                 const SizedBox(width: Insets.md),
-                Segmented<_Filter>(
+                Segmented<RecordFilter>(
                   value: _filter,
-                  segments: [
-                    (_Filter.all, l.filterAll),
-                    (_Filter.text, l.filterText),
-                    (_Filter.image, l.filterImage),
-                    (_Filter.file, l.filterFile),
-                  ],
+                  segments: [for (final f in RecordFilter.values) (f, f.label(l))],
                   onChanged: (f) => setState(() => _filter = f),
                 ),
               ],
@@ -130,11 +121,11 @@ class _HistoryPageState extends State<HistoryPage> {
                 )
               : records.isEmpty
               ? EmptyState(
-                  icon: _filter == _Filter.all
+                  icon: _filter == RecordFilter.all
                       ? AppIcons.docOnClipboard
                       : AppIcons.filter,
-                  title: _filter == _Filter.all ? l.historyEmptyTitle : l.historyEmptyFilteredTitle,
-                  description: _filter == _Filter.all
+                  title: _filter == RecordFilter.all ? l.historyEmptyTitle : l.historyEmptyFilteredTitle,
+                  description: _filter == RecordFilter.all
                       ? l.historyEmptyBody
                       : null,
                 )
@@ -186,7 +177,11 @@ class _HistoryPageState extends State<HistoryPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l.clearConfirmTitle),
-        content: Text(l.clearConfirmBody(Wording.thisDeviceInText)),
+        content: Text([
+          l.clearConfirmBody(Wording.thisDeviceInText),
+          // 清空不影响收藏，说一声免得用户以为收藏也没了
+          if (state.favorites.isNotEmpty) l.clearKeepsFavorites(state.favorites.length),
+        ].join('\n\n')),
         actions: [
           OutlinedButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l.cancel)),
           FilledButton(
@@ -250,8 +245,12 @@ class _RecordRowState extends State<_RecordRow> {
   bool _hovered = false;
   bool _busy = false;
 
+  // 鼠标停一会儿弹出完整内容，见 widgets/record_hover.dart
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) =>
+      RecordHover(record: widget.record, details: AppScope.read(context), child: _content(context));
+
+  Widget _content(BuildContext context) {
     final r = widget.record;
     final p = context.palette;
     // 剪贴板里的图片、以及复制的图片文件，点一下这一行就能预览，不另放按钮
@@ -307,11 +306,7 @@ class _RecordRowState extends State<_RecordRow> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      [
-                        r.outgoing ? context.l10n.thisDeviceShort : context.l10n.fromDevice(r.originDeviceName),
-                        if (r.totalSize > 0) humanBytes(r.totalSize.toInt()),
-                        relativeTime(DateTime.fromMillisecondsSinceEpoch(r.createdAtUnix.toInt() * 1000)),
-                      ].join(' · '),
+                      recordMeta(r),
                       style: context.text.bodySmall,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -338,6 +333,23 @@ class _RecordRowState extends State<_RecordRow> {
     );
   }
 
+  /// 星标：已收藏的一直亮着，没收藏的悬停时才出现。
+  Widget _star(BuildContext context, ClipRecord r) {
+    final l = context.l10n;
+    return Visibility(
+      visible: _hovered || r.favorited,
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      child: IconAction(
+        icon: r.favorited ? AppIcons.starFill : AppIcons.star,
+        color: r.favorited ? context.palette.accent : null,
+        tooltip: r.favorited ? l.unfavoriteAction : l.favoriteAction,
+        onTap: () => toggleFavorite(context, AppScope.read(context), r),
+      ),
+    );
+  }
+
   Widget _trailing(BuildContext context, ClipRecord r) {
     final p = context.palette;
     final l = context.l10n;
@@ -350,10 +362,17 @@ class _RecordRowState extends State<_RecordRow> {
     }
     switch (r.status) {
       case ClipStatus.CLIP_STATUS_REMOTE_ONLY:
-        // 超过自动同步阈值的大文件：只有元数据，需要时再拉
-        return OutlinedButton(
-          onPressed: () => _run(() => AppScope.read(context).fetch(r.id), l.fetchStarted),
-          child: Text(l.fetch),
+        // 超过自动同步阈值的大文件：只有元数据，需要时再拉。收藏它也会先下载
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _star(context, r),
+            const SizedBox(width: Insets.xs),
+            OutlinedButton(
+              onPressed: () => _run(() => AppScope.read(context).fetch(r.id), l.fetchStarted),
+              child: Text(l.fetch),
+            ),
+          ],
         );
       case ClipStatus.CLIP_STATUS_FETCHING:
         // 知道总量时显示真实进度，否则显示不确定进度
@@ -388,6 +407,7 @@ class _RecordRowState extends State<_RecordRow> {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            _star(context, r),
             hoverOnly(TextButton(
               onPressed: () =>
                   _run(() => AppScope.read(context).applyToClipboard(r.id), l.putOnClipboardDone),
@@ -416,48 +436,3 @@ class _RecordRowState extends State<_RecordRow> {
   }
 }
 
-/// 按内容类型区分的图标：只靠形状区分，不靠颜色。
-IconData kindIcon(ClipRecord r) => switch (r.kind) {
-      ClipKind.CLIP_KIND_TEXT => AppIcons.textAlignLeft,
-      ClipKind.CLIP_KIND_HTML => AppIcons.docRichtext,
-      ClipKind.CLIP_KIND_IMAGE => AppIcons.photo,
-      // 单张图片文件也用图片图标，一眼看出点开能预览
-      ClipKind.CLIP_KIND_FILE when r.items.length == 1 && r.imageCount == 1 => AppIcons.photo,
-      ClipKind.CLIP_KIND_FILE when r.items.length > 1 => AppIcons.docOnDoc,
-      ClipKind.CLIP_KIND_FILE when r.items.isNotEmpty && r.items.first.isDir =>
-        AppIcons.folder,
-      ClipKind.CLIP_KIND_FILE => AppIcons.doc,
-      _ => AppIcons.questionCircle,
-    };
-
-/// 记录在列表里的标题。搜索时传入 [query]：一次复制了多个文件、搜到的又不是第一个时，
-/// 标题改用搜到的那个文件名打头，看得出为什么搜到了它。
-String recordTitle(ClipRecord r, {String? query}) {
-  // 图片和文件的标题按当前界面语言拼：后台服务存下的摘要是写入时的中文，不会跟着换语言
-  if (r.kind == ClipKind.CLIP_KIND_IMAGE) return appL10n.imageRecord;
-  if (r.kind != ClipKind.CLIP_KIND_FILE && r.textPreview.isNotEmpty) {
-    return r.textPreview.replaceAll('\n', ' ').trim();
-  }
-  if (r.items.isEmpty) return appL10n.emptyRecord;
-  if (r.items.length == 1) return r.items.first.name;
-  final q = query?.toLowerCase();
-  final lead = q == null ? null : r.items.where((i) => i.name.toLowerCase().contains(q)).firstOrNull;
-  return appL10n.itemsSummary((lead ?? r.items.first).name, r.items.length - 1, r.items.length);
-}
-
-/// 把 [text] 里所有不分大小写匹配 [query] 的片段套上 [mark] 样式。
-/// 转小写后长度变了的少数字符（如土耳其语的 İ）对不上位置，这时不标。
-List<TextSpan> highlightMatches(String text, String? query, TextStyle mark) {
-  final lower = text.toLowerCase();
-  final q = query?.toLowerCase() ?? '';
-  if (q.isEmpty || lower.length != text.length) return [TextSpan(text: text)];
-  final spans = <TextSpan>[];
-  var start = 0;
-  for (var i = lower.indexOf(q); i >= 0; i = lower.indexOf(q, start)) {
-    if (i > start) spans.add(TextSpan(text: text.substring(start, i)));
-    spans.add(TextSpan(text: text.substring(i, i + q.length), style: mark));
-    start = i + q.length;
-  }
-  if (start < text.length) spans.add(TextSpan(text: text.substring(start)));
-  return spans;
-}

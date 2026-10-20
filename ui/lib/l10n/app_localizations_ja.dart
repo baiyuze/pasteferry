@@ -21,6 +21,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get navSettings => '設定';
 
   @override
+  String get navFavorites => 'お気に入り';
+
+  @override
   String get linkConnecting => '接続中…';
 
   @override
@@ -186,6 +189,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get filterFile => 'ファイル';
 
   @override
+  String get filterLink => 'リンク';
+
+  @override
   String get historyClearTooltip => '履歴を消去';
 
   @override
@@ -281,6 +287,205 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get searchEmptyBody => 'コピーしたテキストとファイル名から検索します。';
+
+  @override
+  String get favoriteAction => 'お気に入りに追加';
+
+  @override
+  String get unfavoriteAction => 'お気に入りから外す';
+
+  @override
+  String get favoritedToast => 'お気に入りに追加しました';
+
+  @override
+  String get unfavoritedToast => '履歴に戻しました';
+
+  @override
+  String get undo => '元に戻す';
+
+  @override
+  String get favoriteSaving => '保存中…';
+
+  @override
+  String favoritedAt(String date) {
+    return '$date に保存';
+  }
+
+  @override
+  String favoritesSubtitle(int count, String size) {
+    return '$count 件・自動では削除されません・最大 $size';
+  }
+
+  @override
+  String get favoritesEmptyTitle => 'お気に入りはまだありません';
+
+  @override
+  String get favoritesEmptyBody =>
+      '履歴で星をクリックすると、ここにコピーが保存されます。お気に入りは自動では削除されません。';
+
+  @override
+  String get favoritesSearchHint => 'お気に入りを検索';
+
+  @override
+  String favoriteLargeTitle(String size) {
+    return '$size のコピーを保存しますか？';
+  }
+
+  @override
+  String favoriteLargeBody(String size, String device) {
+    return 'お気に入りは独自のコピーを保存するため、元のファイルを変更・削除しても影響を受けません。$deviceの $size を使用します。';
+  }
+
+  @override
+  String get saveCopy => '保存';
+
+  @override
+  String clearKeepsFavorites(int count) {
+    return 'お気に入りの $count 件は残ります。';
+  }
+
+  @override
+  String get favoritesUsage => 'お気に入りの使用量';
+
+  @override
+  String get favoritesUsageDesc => 'お気に入りは上の設定にかかわらず自動では削除されません';
+
+  @override
+  String upToSize(String size) {
+    return '最大 $size';
+  }
+
+  @override
+  String detailChars(int count) {
+    return '$count 文字';
+  }
+
+  @override
+  String detailTruncated(int count) {
+    return '…（全 $count 文字）';
+  }
+
+  @override
+  String detailMoreFiles(int count) {
+    return 'ほか $count 件';
+  }
+
+  @override
+  String get detailReceiveFirst => '選ぶと先にダウンロードします';
+
+  @override
+  String detailTotalSize(String size) {
+    return '合計 $size';
+  }
+
+  @override
+  String get quickPaste => 'クイックペースト';
+
+  @override
+  String get quickPasteWindow => 'クイックペーストウィンドウ';
+
+  @override
+  String get quickPasteWindowDesc => 'どのアプリでもショートカットで履歴を表示し、選ぶとペーストします';
+
+  @override
+  String get quickPasteShortcut => 'ショートカット';
+
+  @override
+  String get quickPasteRecord => 'クリックして変更';
+
+  @override
+  String get quickPasteRecording => '新しいショートカットを押してください…';
+
+  @override
+  String get quickPasteUseDefault => 'デフォルトに戻す';
+
+  @override
+  String get quickPasteNeedsModifier => '⌃、⌥、⇧、⌘ のいずれかを含めるか、ファンクションキーを使ってください';
+
+  @override
+  String get quickPasteNeedsModifierPc =>
+      'Ctrl、Alt、Shift、Windows キーのいずれかを含めるか、ファンクションキーを使ってください';
+
+  @override
+  String get quickPasteAfterPick => '選んだ後';
+
+  @override
+  String get quickPastePasteIt => 'ペーストする';
+
+  @override
+  String get quickPasteCopyIt => 'コピーのみ';
+
+  @override
+  String get quickPasteAccessibility => 'アクセシビリティ';
+
+  @override
+  String get quickPasteAccessibilityDesc =>
+      'ペーストするのに必要です。許可しない場合はコピーだけされ、⌘V で貼り付けます。';
+
+  @override
+  String get quickPasteAllowed => '許可済み';
+
+  @override
+  String get quickPasteAllow => '許可する…';
+
+  @override
+  String get quickPasteNotRunning => 'クイックペーストウィンドウが起動していません';
+
+  @override
+  String quickPasteInUse(String key) {
+    return '$key は別のアプリが使用しています。別のショートカットを選んでください。';
+  }
+
+  @override
+  String quickPasteHotkeyFailed(String key, String detail) {
+    return '$key を設定できませんでした：$detail';
+  }
+
+  @override
+  String get quickPastePortalKey => 'システムのショートカット設定で変更します';
+
+  @override
+  String get quickPasteWaylandDesc =>
+      'Wayland ではデスクトップのキーボード設定でショートカットを追加します。選ぶとコピーされるので、Ctrl+V で貼り付けてください。';
+
+  @override
+  String get quickPasteAddShortcut => 'システムのショートカットを追加';
+
+  @override
+  String quickPasteShortcutAdded(String key) {
+    return '追加しました。$key を押して試してください。';
+  }
+
+  @override
+  String quickPasteShortcutManual(String command) {
+    return 'デスクトップのキーボード設定で、次のコマンドを実行するカスタムショートカットを追加してください：$command';
+  }
+
+  @override
+  String get pickerSearch => '検索';
+
+  @override
+  String get pickerPaste => 'ペースト';
+
+  @override
+  String get pickerPlainText => 'プレーンテキスト';
+
+  @override
+  String get pickerCopyOnly => 'コピーのみ';
+
+  @override
+  String get pickerUnfavoriteHint => 'お気に入りから外す（履歴に戻す）';
+
+  @override
+  String pickerPasteManually(String key) {
+    return '選ぶとコピーされます。$key で貼り付けてください';
+  }
+
+  @override
+  String get pickerGrantHint => 'アクセシビリティを許可すると直接ペーストできます';
+
+  @override
+  String get pickerDownloading => 'ダウンロード中。完了するとペーストします';
 
   @override
   String get imagePreviewTitle => '画像プレビュー';

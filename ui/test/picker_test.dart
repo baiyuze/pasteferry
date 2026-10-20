@@ -1,0 +1,260 @@
+import 'package:fixnum/fixnum.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:pasteferry_ui/gen/pasteferry/v1/daemon.pb.dart';
+import 'package:pasteferry_ui/picker/picker_host.dart';
+import 'package:pasteferry_ui/picker/picker_state.dart';
+import 'package:pasteferry_ui/picker/picker_view.dart';
+
+const _channel = MethodChannel('pasteferry/picker');
+
+/// 不连后台服务：放进剪贴板、下载、收藏都记下来。
+class _TestPicker extends PickerState {
+  _TestPicker() : super(host: PickerHost(_channel));
+
+  final applied = <(String, bool)>[];
+  final fetched = <String>[];
+  final favorited = <(String, bool)>[];
+  final searches = <(String, PickerTab)>[];
+
+  @override
+  Future<void> requestApply(String id, bool plain) async => applied.add((id, plain));
+
+  @override
+  Future<void> requestFetch(String id) async => fetched.add(id);
+
+  @override
+  Future<void> requestFavorite(String id, bool favorite) async => favorited.add((id, favorite));
+
+  @override
+  Future<ListHistoryResponse> requestSearch(String query, PickerTab tab) async {
+    searches.add((query, tab));
+    return ListHistoryResponse(searched: false);
+  }
+
+  @override
+  Future<ClipDetail> clipDetail(String clipId) async => ClipDetail(text: 'detail', textLength: 6);
+
+  @override
+  Future<GetImagePreviewResponse> imagePreview(String clipId, {int index = 0}) async => GetImagePreviewResponse();
+}
+
+final _now = Int64(DateTime.now().millisecondsSinceEpoch ~/ 1000);
+
+ClipRecord _text(String id, String text, {int ago = 0, bool link = false}) => ClipRecord(
+      id: id,
+      kind: ClipKind.CLIP_KIND_TEXT,
+      status: ClipStatus.CLIP_STATUS_READY,
+      textPreview: text,
+      isLink: link,
+      outgoing: true,
+      createdAtUnix: _now - ago,
+    );
+
+final _records = [
+  _text('a', '会议改到周四下午 3 点', ago: 1),
+  _text('b', 'https://github.com/baiyuze/pasteferry', ago: 60, link: true),
+  _text('c', 'docker compose up -d --build', ago: 3600),
+  ClipRecord(
+    id: 'big',
+    kind: ClipKind.CLIP_KIND_FILE,
+    status: ClipStatus.CLIP_STATUS_REMOTE_ONLY,
+    originDeviceName: 'MacBook Air',
+    items: [ClipItem(name: 'PasteFerry.dmg', size: Int64(812 << 20))],
+    totalSize: Int64(812 << 20),
+    createdAtUnix: _now - 7200,
+  ),
+];
+
+final _favorite = _text('f1', '收货地址：上海市徐汇区', ago: 86400)
+  ..favorite = true
+  ..favoritedAtUnix = _now;
+
+void main() {
+  late List<MethodCall> calls;
+
+  setUp(() {
+    calls = [];
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(_channel, (c) async {
+      calls.add(c);
+      return switch (c.method) {
+        'commit' => {'pasted': true, 'reason': ''},
+        'pasteStatus' => {'available': true, 'reason': ''},
+        _ => null,
+      };
+    });
+  });
+
+  Future<_TestPicker> open(WidgetTester tester, {Config? config, PasteStatus? paste}) async {
+    final view = tester.view;
+    view.physicalSize = const Size(560, 460);
+    view.devicePixelRatio = 1;
+    addTearDown(view.reset);
+    final s = _TestPicker()
+      ..debugSeed(
+        config: config ?? Config(language: 'zh-Hans'),
+        records: _records,
+        favorites: [_favorite],
+        paste: paste ?? const PasteStatus(available: true, reason: ''),
+      );
+    await tester.pumpWidget(PickerApp(state: s));
+    await tester.pump();
+    return s;
+  }
+
+  List<MethodCall> commits() => calls.where((c) => c.method == 'commit').toList();
+
+  testWidgets('前 9 条标序号，按数字直接粘贴那一条', (tester) async {
+    final s = await open(tester);
+    expect(find.text('1'), findsOneWidget);
+    expect(find.text('4'), findsOneWidget);
+    // 「收藏」既是页签，也是底栏 ⌘D 的说明
+    for (final t in ['全部', '文本', '链接', '图片', '文件', '收藏']) {
+      expect(find.text(t), findsWidgets, reason: t);
+    }
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.digit2);
+    await tester.pump();
+    expect(s.applied, [('b', false)]);
+    expect(commits().single.arguments, {'paste': true});
+  });
+
+  testWidgets('搜索时数字是打字，序号变成 ⌘1……', (tester) async {
+    final s = await open(tester);
+    await tester.enterText(find.byType(TextField), 'docker 2');
+    await tester.pump();
+    expect(s.applied, isEmpty);
+    await tester.enterText(find.byType(TextField), 'docker');
+    await tester.pump();
+    expect(find.text('⌘1'), findsOneWidget);
+    expect(find.textContaining('docker compose'), findsOneWidget);
+    expect(find.textContaining('会议'), findsNothing);
+    // 停顿后在当前页签里搜全部历史
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(s.searches.last, ('docker', PickerTab.all));
+  });
+
+  testWidgets('上下键移动选择，回车粘贴，⇧回车纯文本，⌘回车只复制', (tester) async {
+    final s = await open(tester);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+    await tester.pump();
+    expect(s.selected, 2);
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pump();
+    expect(s.applied.last, ('c', false));
+    expect(commits().last.arguments, {'paste': true});
+
+    // 选中后会回到第一条
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.pump();
+    expect(s.applied.last, ('a', true));
+
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.metaLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.metaLeft);
+    await tester.pump();
+    expect(commits().last.arguments, {'paste': false});
+  });
+
+  testWidgets('Tab 切换页签，「链接」只有网址，「收藏」里 ⌘D 是取消收藏', (tester) async {
+    final s = await open(tester);
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pump();
+    expect(s.tab, PickerTab.link);
+    expect(find.textContaining('github.com'), findsOneWidget);
+    expect(find.textContaining('会议'), findsNothing);
+
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.pump();
+    expect(s.tab, PickerTab.favorites);
+    expect(find.textContaining('收货地址'), findsOneWidget);
+    expect(find.textContaining('取消收藏（放回复制记录）'), findsOneWidget);
+
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.metaLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.keyD);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.metaLeft);
+    await tester.pump();
+    expect(s.favorited, [('f1', false)]);
+  });
+
+  testWidgets('Esc 先清空搜索，再按一次收起窗口', (tester) async {
+    final s = await open(tester);
+    await tester.enterText(find.byType(TextField), 'docker');
+    await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.pump();
+    expect(s.query, '');
+    expect(calls.where((c) => c.method == 'hide'), isEmpty);
+    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.pump();
+    expect(calls.where((c) => c.method == 'hide'), hasLength(1));
+  });
+
+  testWidgets('设置里选了只复制：选中后不模拟粘贴，底栏写明要按 ⌘V', (tester) async {
+    final s = await open(tester, config: Config(language: 'zh-Hans', quickPasteCopyOnly: true));
+    expect(find.text('选中后按 ⌘V 粘贴'), findsOneWidget);
+    await tester.sendKeyEvent(LogicalKeyboardKey.digit1);
+    await tester.pump();
+    expect(s.applied.single.$1, 'a');
+    expect(commits().single.arguments, {'paste': false});
+  });
+
+  testWidgets('没授予辅助功能：底栏提示并给出授权按钮', (tester) async {
+    await open(tester, paste: const PasteStatus(available: false, reason: 'not_trusted'));
+    expect(find.textContaining('授予「辅助功能」权限后可直接粘贴'), findsOneWidget);
+    await tester.tap(find.text('去授权'));
+    await tester.pump();
+    expect(calls.map((c) => c.method), contains('requestPermission'));
+  });
+
+  testWidgets('没下载的大文件：先下载，下完放进剪贴板再粘贴', (tester) async {
+    final s = await open(tester);
+    await tester.sendKeyEvent(LogicalKeyboardKey.digit4);
+    await tester.pump();
+    expect(s.fetched, ['big']);
+    expect(s.applied, isEmpty);
+    expect(find.text('正在下载，下完自动粘贴'), findsOneWidget);
+
+    s.debugEvent(Event(clipUpdated: _records[3].deepCopy()..status = ClipStatus.CLIP_STATUS_READY));
+    await tester.pump();
+    expect(s.applied, [('big', false)]);
+    expect(commits().single.arguments, {'paste': true});
+  });
+
+  testWidgets('正在用输入法打字时，数字和回车交给输入法', (tester) async {
+    final s = await open(tester);
+    final field = tester.widget<TextField>(find.byType(TextField));
+    field.controller!.value = const TextEditingValue(
+      text: 'hui',
+      selection: TextSelection.collapsed(offset: 3),
+      composing: TextRange(start: 0, end: 3),
+    );
+    await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.digit1);
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pump();
+    expect(s.applied, isEmpty);
+  });
+
+  testWidgets('每次呼出都从「全部」、第一条、空搜索开始', (tester) async {
+    final s = await open(tester);
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.enterText(find.byType(TextField), 'abc');
+    await tester.pump();
+    s.debugShow();
+    await tester.pump();
+    expect(s.tab, PickerTab.all);
+    expect(s.query, '');
+    expect(tester.widget<TextField>(find.byType(TextField)).controller!.text, '');
+  });
+}

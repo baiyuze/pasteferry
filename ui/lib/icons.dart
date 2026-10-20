@@ -52,4 +52,10 @@ abstract final class AppIcons {
   static IconData get chevronRight => _pick(CupertinoIcons.chevron_right, FluentIcons.chevron_right_24_regular);
   static IconData get chevronUpDown =>
       _pick(CupertinoIcons.chevron_up_chevron_down, FluentIcons.chevron_up_down_24_regular);
+  static IconData get link => _pick(CupertinoIcons.link, FluentIcons.link_24_regular);
+  static IconData get star => _pick(CupertinoIcons.star, FluentIcons.star_24_regular);
+  static IconData get starFill => _pick(CupertinoIcons.star_fill, FluentIcons.star_24_filled);
+  static IconData get keyboard => _pick(CupertinoIcons.keyboard, FluentIcons.keyboard_24_regular);
+  // 回车键：快捷窗口底栏的按键提示里用。字符 ↩ 在 Mac 上会被画成彩色 emoji，所以用图标
+  static IconData get returnKey => _pick(CupertinoIcons.return_icon, FluentIcons.arrow_enter_left_20_regular);
 }

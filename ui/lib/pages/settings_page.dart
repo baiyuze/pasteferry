@@ -14,6 +14,7 @@ import '../widgets/feedback_dialog.dart';
 import '../widgets/update_dialog.dart';
 import '../icons.dart';
 import '../platform.dart';
+import 'quick_paste_settings.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -235,6 +236,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 ),
               ),
+              QuickPasteSection(config: cfg, onUpdate: (next) => _update(state, next)),
               GroupSection(
                 title: l.sync,
                 child: GroupBox(
@@ -358,6 +360,15 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: context.text.bodyMedium?.copyWith(
                           color: p.textDim,
                         ),
+                      ),
+                    ),
+                    // 硬链接、写时复制保存的副本实际占用更少，所以写「最多」
+                    SettingRow(
+                      title: l.favoritesUsage,
+                      description: l.favoritesUsageDesc,
+                      child: Text(
+                        l.upToSize(humanBytes(state.favoritesBytes)),
+                        style: context.text.bodyMedium?.copyWith(color: p.textDim),
                       ),
                     ),
                   ],

@@ -134,6 +134,12 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get navSettings;
 
+  /// No description provided for @navFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get navFavorites;
+
   /// No description provided for @linkConnecting.
   ///
   /// In en, this message translates to:
@@ -404,6 +410,12 @@ abstract class AppLocalizations {
   /// **'Files'**
   String get filterFile;
 
+  /// No description provided for @filterLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Links'**
+  String get filterLink;
+
   /// No description provided for @historyClearTooltip.
   ///
   /// In en, this message translates to:
@@ -577,6 +589,336 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search looks through copied text and the names of copied files.'**
   String get searchEmptyBody;
+
+  /// No description provided for @favoriteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favorites'**
+  String get favoriteAction;
+
+  /// No description provided for @unfavoriteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favorites'**
+  String get unfavoriteAction;
+
+  /// No description provided for @favoritedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to Favorites'**
+  String get favoritedToast;
+
+  /// No description provided for @unfavoritedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Moved back to History'**
+  String get unfavoritedToast;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @favoriteSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving…'**
+  String get favoriteSaving;
+
+  /// No description provided for @favoritedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {date}'**
+  String favoritedAt(String date);
+
+  /// No description provided for @favoritesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item} other{{count} items}} · never cleaned up · up to {size}'**
+  String favoritesSubtitle(int count, String size);
+
+  /// No description provided for @favoritesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites yet'**
+  String get favoritesEmptyTitle;
+
+  /// No description provided for @favoritesEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Star an item in History to keep a copy here. Favorites are never cleaned up automatically.'**
+  String get favoritesEmptyBody;
+
+  /// No description provided for @favoritesSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search favorites'**
+  String get favoritesSearchHint;
+
+  /// No description provided for @favoriteLargeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save a copy of {size}?'**
+  String favoriteLargeTitle(String size);
+
+  /// No description provided for @favoriteLargeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A favorite keeps its own copy, so changing or deleting the original files won\'t affect it. This uses {size} on {device}.'**
+  String favoriteLargeBody(String size, String device);
+
+  /// No description provided for @saveCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Save copy'**
+  String get saveCopy;
+
+  /// No description provided for @clearKeepsFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Your 1 favorite stays.} other{Your {count} favorites stay.}}'**
+  String clearKeepsFavorites(int count);
+
+  /// No description provided for @favoritesUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favoritesUsage;
+
+  /// No description provided for @favoritesUsageDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites are never cleaned up, whatever the settings above'**
+  String get favoritesUsageDesc;
+
+  /// No description provided for @upToSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to {size}'**
+  String upToSize(String size);
+
+  /// No description provided for @detailChars.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 character} other{{count} characters}}'**
+  String detailChars(int count);
+
+  /// No description provided for @detailTruncated.
+  ///
+  /// In en, this message translates to:
+  /// **'… {count} characters in total'**
+  String detailTruncated(int count);
+
+  /// No description provided for @detailMoreFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more} other{{count} more}}'**
+  String detailMoreFiles(int count);
+
+  /// No description provided for @detailReceiveFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick it to download it first'**
+  String get detailReceiveFirst;
+
+  /// No description provided for @detailTotalSize.
+  ///
+  /// In en, this message translates to:
+  /// **'{size} in total'**
+  String detailTotalSize(String size);
+
+  /// No description provided for @quickPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick paste'**
+  String get quickPaste;
+
+  /// No description provided for @quickPasteWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick paste window'**
+  String get quickPasteWindow;
+
+  /// No description provided for @quickPasteWindowDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Press the shortcut in any app to bring up your history; pick an item and it\'s pasted'**
+  String get quickPasteWindowDesc;
+
+  /// No description provided for @quickPasteShortcut.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcut'**
+  String get quickPasteShortcut;
+
+  /// No description provided for @quickPasteRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Click to change'**
+  String get quickPasteRecord;
+
+  /// No description provided for @quickPasteRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Press the new shortcut…'**
+  String get quickPasteRecording;
+
+  /// No description provided for @quickPasteUseDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Use default'**
+  String get quickPasteUseDefault;
+
+  /// No description provided for @quickPasteNeedsModifier.
+  ///
+  /// In en, this message translates to:
+  /// **'Include ⌃, ⌥, ⇧ or ⌘, or use a function key'**
+  String get quickPasteNeedsModifier;
+
+  /// No description provided for @quickPasteNeedsModifierPc.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Ctrl, Alt, Shift or the Windows key, or use a function key'**
+  String get quickPasteNeedsModifierPc;
+
+  /// No description provided for @quickPasteAfterPick.
+  ///
+  /// In en, this message translates to:
+  /// **'After you pick an item'**
+  String get quickPasteAfterPick;
+
+  /// No description provided for @quickPastePasteIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste it'**
+  String get quickPastePasteIt;
+
+  /// No description provided for @quickPasteCopyIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Just copy it'**
+  String get quickPasteCopyIt;
+
+  /// No description provided for @quickPasteAccessibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get quickPasteAccessibility;
+
+  /// No description provided for @quickPasteAccessibilityDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Needed to paste for you. Without it, items are copied and you press ⌘V.'**
+  String get quickPasteAccessibilityDesc;
+
+  /// No description provided for @quickPasteAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed'**
+  String get quickPasteAllowed;
+
+  /// No description provided for @quickPasteAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow…'**
+  String get quickPasteAllow;
+
+  /// No description provided for @quickPasteNotRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'The quick paste window isn\'t running'**
+  String get quickPasteNotRunning;
+
+  /// No description provided for @quickPasteInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'{key} is used by another app. Pick another shortcut.'**
+  String quickPasteInUse(String key);
+
+  /// No description provided for @quickPasteHotkeyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t set {key}: {detail}'**
+  String quickPasteHotkeyFailed(String key, String detail);
+
+  /// No description provided for @quickPastePortalKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Set in the system shortcut settings'**
+  String get quickPastePortalKey;
+
+  /// No description provided for @quickPasteWaylandDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'On Wayland, add the shortcut in your desktop\'s keyboard settings. Picked items are copied; press Ctrl+V to paste.'**
+  String get quickPasteWaylandDesc;
+
+  /// No description provided for @quickPasteAddShortcut.
+  ///
+  /// In en, this message translates to:
+  /// **'Add system shortcut'**
+  String get quickPasteAddShortcut;
+
+  /// No description provided for @quickPasteShortcutAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added. Press {key} to try it.'**
+  String quickPasteShortcutAdded(String key);
+
+  /// No description provided for @quickPasteShortcutManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a custom shortcut in your desktop\'s keyboard settings that runs: {command}'**
+  String quickPasteShortcutManual(String command);
+
+  /// No description provided for @pickerSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get pickerSearch;
+
+  /// No description provided for @pickerPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste'**
+  String get pickerPaste;
+
+  /// No description provided for @pickerPlainText.
+  ///
+  /// In en, this message translates to:
+  /// **'Plain text'**
+  String get pickerPlainText;
+
+  /// No description provided for @pickerCopyOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy only'**
+  String get pickerCopyOnly;
+
+  /// No description provided for @pickerUnfavoriteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove (back to History)'**
+  String get pickerUnfavoriteHint;
+
+  /// No description provided for @pickerPasteManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Picked items are copied — press {key} to paste'**
+  String pickerPasteManually(String key);
+
+  /// No description provided for @pickerGrantHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Accessibility to paste directly'**
+  String get pickerGrantHint;
+
+  /// No description provided for @pickerDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading — pastes when done'**
+  String get pickerDownloading;
 
   /// No description provided for @imagePreviewTitle.
   ///

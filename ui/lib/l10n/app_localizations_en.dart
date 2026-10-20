@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navSettings => 'Settings';
 
   @override
+  String get navFavorites => 'Favorites';
+
+  @override
   String get linkConnecting => 'Connecting…';
 
   @override
@@ -238,6 +241,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filterFile => 'Files';
 
   @override
+  String get filterLink => 'Links';
+
+  @override
   String get historyClearTooltip => 'Clear history';
 
   @override
@@ -347,6 +353,232 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get searchEmptyBody =>
       'Search looks through copied text and the names of copied files.';
+
+  @override
+  String get favoriteAction => 'Add to favorites';
+
+  @override
+  String get unfavoriteAction => 'Remove from favorites';
+
+  @override
+  String get favoritedToast => 'Added to Favorites';
+
+  @override
+  String get unfavoritedToast => 'Moved back to History';
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String get favoriteSaving => 'Saving…';
+
+  @override
+  String favoritedAt(String date) {
+    return 'Saved $date';
+  }
+
+  @override
+  String favoritesSubtitle(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+    );
+    return '$_temp0 · never cleaned up · up to $size';
+  }
+
+  @override
+  String get favoritesEmptyTitle => 'No favorites yet';
+
+  @override
+  String get favoritesEmptyBody =>
+      'Star an item in History to keep a copy here. Favorites are never cleaned up automatically.';
+
+  @override
+  String get favoritesSearchHint => 'Search favorites';
+
+  @override
+  String favoriteLargeTitle(String size) {
+    return 'Save a copy of $size?';
+  }
+
+  @override
+  String favoriteLargeBody(String size, String device) {
+    return 'A favorite keeps its own copy, so changing or deleting the original files won\'t affect it. This uses $size on $device.';
+  }
+
+  @override
+  String get saveCopy => 'Save copy';
+
+  @override
+  String clearKeepsFavorites(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Your $count favorites stay.',
+      one: 'Your 1 favorite stays.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get favoritesUsage => 'Favorites';
+
+  @override
+  String get favoritesUsageDesc =>
+      'Favorites are never cleaned up, whatever the settings above';
+
+  @override
+  String upToSize(String size) {
+    return 'Up to $size';
+  }
+
+  @override
+  String detailChars(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count characters',
+      one: '1 character',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String detailTruncated(int count) {
+    return '… $count characters in total';
+  }
+
+  @override
+  String detailMoreFiles(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more',
+      one: '1 more',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get detailReceiveFirst => 'Pick it to download it first';
+
+  @override
+  String detailTotalSize(String size) {
+    return '$size in total';
+  }
+
+  @override
+  String get quickPaste => 'Quick paste';
+
+  @override
+  String get quickPasteWindow => 'Quick paste window';
+
+  @override
+  String get quickPasteWindowDesc =>
+      'Press the shortcut in any app to bring up your history; pick an item and it\'s pasted';
+
+  @override
+  String get quickPasteShortcut => 'Shortcut';
+
+  @override
+  String get quickPasteRecord => 'Click to change';
+
+  @override
+  String get quickPasteRecording => 'Press the new shortcut…';
+
+  @override
+  String get quickPasteUseDefault => 'Use default';
+
+  @override
+  String get quickPasteNeedsModifier =>
+      'Include ⌃, ⌥, ⇧ or ⌘, or use a function key';
+
+  @override
+  String get quickPasteNeedsModifierPc =>
+      'Include Ctrl, Alt, Shift or the Windows key, or use a function key';
+
+  @override
+  String get quickPasteAfterPick => 'After you pick an item';
+
+  @override
+  String get quickPastePasteIt => 'Paste it';
+
+  @override
+  String get quickPasteCopyIt => 'Just copy it';
+
+  @override
+  String get quickPasteAccessibility => 'Accessibility';
+
+  @override
+  String get quickPasteAccessibilityDesc =>
+      'Needed to paste for you. Without it, items are copied and you press ⌘V.';
+
+  @override
+  String get quickPasteAllowed => 'Allowed';
+
+  @override
+  String get quickPasteAllow => 'Allow…';
+
+  @override
+  String get quickPasteNotRunning => 'The quick paste window isn\'t running';
+
+  @override
+  String quickPasteInUse(String key) {
+    return '$key is used by another app. Pick another shortcut.';
+  }
+
+  @override
+  String quickPasteHotkeyFailed(String key, String detail) {
+    return 'Couldn\'t set $key: $detail';
+  }
+
+  @override
+  String get quickPastePortalKey => 'Set in the system shortcut settings';
+
+  @override
+  String get quickPasteWaylandDesc =>
+      'On Wayland, add the shortcut in your desktop\'s keyboard settings. Picked items are copied; press Ctrl+V to paste.';
+
+  @override
+  String get quickPasteAddShortcut => 'Add system shortcut';
+
+  @override
+  String quickPasteShortcutAdded(String key) {
+    return 'Added. Press $key to try it.';
+  }
+
+  @override
+  String quickPasteShortcutManual(String command) {
+    return 'Add a custom shortcut in your desktop\'s keyboard settings that runs: $command';
+  }
+
+  @override
+  String get pickerSearch => 'Search';
+
+  @override
+  String get pickerPaste => 'Paste';
+
+  @override
+  String get pickerPlainText => 'Plain text';
+
+  @override
+  String get pickerCopyOnly => 'Copy only';
+
+  @override
+  String get pickerUnfavoriteHint => 'Remove (back to History)';
+
+  @override
+  String pickerPasteManually(String key) {
+    return 'Picked items are copied — press $key to paste';
+  }
+
+  @override
+  String get pickerGrantHint => 'Allow Accessibility to paste directly';
+
+  @override
+  String get pickerDownloading => 'Downloading — pastes when done';
 
   @override
   String get imagePreviewTitle => 'Image preview';
