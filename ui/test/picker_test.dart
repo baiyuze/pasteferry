@@ -127,6 +127,14 @@ void main() {
     expect(commits().single.arguments, {'paste': true});
   });
 
+  testWidgets('模拟输入没有扫描码、认不出物理按键时，按逻辑按键认数字', (tester) async {
+    final s = await open(tester);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.digit3, physicalKey: PhysicalKeyboardKey.keyQ);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.digit3, physicalKey: PhysicalKeyboardKey.keyQ);
+    await tester.pump();
+    expect(s.applied, [('c', false)]);
+  });
+
   testWidgets('输入法收下数字键、只交来文字时（Windows 中文输入法），也按数字选那一行', (tester) async {
     final s = await open(tester);
     final field = tester.widget<TextField>(find.byType(TextField));

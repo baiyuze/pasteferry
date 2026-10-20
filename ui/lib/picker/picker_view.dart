@@ -196,12 +196,19 @@ class _PickerViewState extends State<PickerView> {
     return KeyEventResult.ignored;
   }
 
+  /// 先按物理位置认（法语 AZERTY 等布局要按 Shift 才出数字），认不出再按逻辑按键：
+  /// 远程桌面、按键脚本这类模拟输入在 Windows 上可能不带扫描码，Flutter 就认不出物理按键。
   static int? _digit(KeyEvent e) {
     final u = e.physicalKey.usbHidUsage;
     final one = PhysicalKeyboardKey.digit1.usbHidUsage;
     if (u >= one && u <= PhysicalKeyboardKey.digit9.usbHidUsage) return 1 + u - one;
     final pad = PhysicalKeyboardKey.numpad1.usbHidUsage;
     if (u >= pad && u <= PhysicalKeyboardKey.numpad9.usbHidUsage) return 1 + u - pad;
+    final l = e.logicalKey.keyId;
+    final lone = LogicalKeyboardKey.digit1.keyId;
+    if (l >= lone && l <= LogicalKeyboardKey.digit9.keyId) return 1 + l - lone;
+    final lpad = LogicalKeyboardKey.numpad1.keyId;
+    if (l >= lpad && l <= LogicalKeyboardKey.numpad9.keyId) return 1 + l - lpad;
     return null;
   }
 
