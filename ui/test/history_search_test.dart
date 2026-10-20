@@ -121,6 +121,26 @@ void main() {
     expect(field.controller!.text, isEmpty);
   });
 
+  testWidgets('用输入法打拼音时不拿拼音去搜，上屏后才搜', (tester) async {
+    final state = _seed((q) => ListHistoryResponse(records: [_note], searched: true));
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    final controller = tester.widget<TextField>(find.byType(TextField)).controller!;
+
+    controller.value = const TextEditingValue(
+      text: 'wu',
+      selection: TextSelection.collapsed(offset: 2),
+      composing: TextRange(start: 0, end: 2),
+    );
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(state.queries, isEmpty);
+    expect(state.searching, isFalse);
+
+    // 有的输入法直接把拼音当英文上屏：文字没变，只是组字结束了
+    controller.value = const TextEditingValue(text: 'wu', selection: TextSelection.collapsed(offset: 2));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(state.queries, ['wu']);
+  });
+
   test('标出所有匹配处，不分大小写', () {
     const mark = TextStyle(backgroundColor: Color(0xFF000000));
     final spans = highlightMatches('Copy, copy, COPY', 'copy', mark);

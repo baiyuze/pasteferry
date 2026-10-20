@@ -223,10 +223,18 @@ class Segmented<T> extends StatelessWidget {
   }
 }
 
+/// 输入框里已经确定的文字：输入法正在组字时，组字的部分（比如拼音 hui）不算，选字上屏后才算。
+String committedText(TextEditingValue value) {
+  final composing = value.composing;
+  if (!composing.isValid || composing.isCollapsed) return value.text;
+  return composing.textBefore(value.text) + composing.textAfter(value.text);
+}
+
 /// 搜索框，对应 macOS 的 NSSearchField：浅灰底、左边放大镜，输入后右边出现清除按钮。
 /// 按 Esc 时有字就清空，没字就交出焦点。不给 [width] 时占满父级给的宽度。
 /// 高度定为 28，与旁边的 [Segmented] 一样高；不跟着字体变，否则换个系统字体就高低不齐。
-class SearchField extends StatelessWidget {
+/// [onChanged] 收到的是 [committedText]：用输入法打拼音时不拿拼音去搜。
+class SearchField extends StatefulWidget {
   const SearchField({
     super.key,
     required this.controller,
@@ -244,26 +252,59 @@ class SearchField extends StatelessWidget {
   final FocusNode? focusNode;
   final double? width;
 
-  void _clear() {
-    controller.clear();
-    onChanged('');
+  @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  late String _reported = committedText(widget.controller.value);
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_report);
+  }
+
+  @override
+  void didUpdateWidget(SearchField old) {
+    super.didUpdateWidget(old);
+    if (old.controller != widget.controller) {
+      old.controller.removeListener(_report);
+      widget.controller.addListener(_report);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_report);
+    super.dispose();
+  }
+
+  /// 组字结束时文字可能没变（输入法直接上屏英文），所以监听整个输入框，而不是 TextField.onChanged
+  void _report() {
+    final text = committedText(widget.controller.value);
+    if (text == _reported) return;
+    _reported = text;
+    widget.onChanged(text);
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = widget.controller;
+    final focusNode = widget.focusNode;
     final p = context.palette;
     final round = OutlineInputBorder(
       borderRadius: BorderRadius.circular(Radii.sm),
       borderSide: BorderSide.none,
     );
     return SizedBox(
-      width: width,
+      width: widget.width,
       height: 28,
       child: CallbackShortcuts(
         bindings: {
           const SingleActivator(LogicalKeyboardKey.escape): () {
             if (controller.text.isNotEmpty) {
-              _clear();
+              controller.clear();
             } else {
               focusNode?.unfocus();
             }
@@ -274,13 +315,12 @@ class SearchField extends StatelessWidget {
           builder: (context, _) => TextField(
             controller: controller,
             focusNode: focusNode,
-            onChanged: onChanged,
             style: context.text.bodyMedium,
             expands: true,
             maxLines: null,
             textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
-              hintText: hint,
+              hintText: widget.hint,
               fillColor: p.fill,
               contentPadding: EdgeInsets.zero,
               border: round,
@@ -291,8 +331,8 @@ class SearchField extends StatelessWidget {
               suffixIcon: controller.text.isEmpty
                   ? null
                   : IconButton(
-                      onPressed: _clear,
-                      tooltip: clearTooltip,
+                      onPressed: controller.clear,
+                      tooltip: widget.clearTooltip,
                       icon: Icon(AppIcons.clearField, size: 14, color: p.textFaint),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 28, minHeight: 0),

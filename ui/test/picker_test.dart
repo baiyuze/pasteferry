@@ -250,6 +250,15 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
     await tester.pump();
     expect(s.applied, isEmpty);
+    // 拼音不拿去搜，列表不变；选字上屏后才搜
+    expect(s.query, '');
+    expect(find.textContaining('docker compose'), findsOneWidget);
+    field.controller!.value = const TextEditingValue(text: '会', selection: TextSelection.collapsed(offset: 1));
+    await tester.pump();
+    expect(s.query, '会');
+    expect(find.textContaining('会议'), findsOneWidget);
+    expect(find.textContaining('docker compose'), findsNothing);
+    await tester.pump(const Duration(milliseconds: 200));
   });
 
   testWidgets('每次呼出都从「全部」、第一条、空搜索开始', (tester) async {

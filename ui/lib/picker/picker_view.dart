@@ -8,7 +8,7 @@ import '../i18n.dart';
 import '../icons.dart';
 import '../records.dart';
 import '../theme.dart';
-import '../widgets/common.dart' show humanBytes, relativeTime;
+import '../widgets/common.dart' show committedText, humanBytes, relativeTime;
 import '../widgets/record_hover.dart';
 import 'picker_state.dart';
 
@@ -77,6 +77,7 @@ class _PickerViewState extends State<PickerView> {
     super.initState();
     s.shown.addListener(_onShown);
     s.addListener(_followSelection);
+    _search.addListener(_onSearch);
   }
 
   @override
@@ -87,6 +88,12 @@ class _PickerViewState extends State<PickerView> {
     _focus.dispose();
     _scroll.dispose();
     super.dispose();
+  }
+
+  /// 用输入法打拼音时不拿拼音去搜，选字上屏后再搜（见 [committedText]）
+  void _onSearch() {
+    final q = committedText(_search.value);
+    if (q != s.query) s.setQuery(q);
   }
 
   void _onShown() {
@@ -107,7 +114,7 @@ class _PickerViewState extends State<PickerView> {
     }
   }
 
-  bool get _composing => _search.value.composing.isValid;
+  bool get _composing => committedText(_search.value) != _search.text;
 
   /// 修饰键：Mac 上是 ⌘，其他平台是 Ctrl（序号用 Alt）
   bool get _cmd => _mac ? HardwareKeyboard.instance.isMetaPressed : HardwareKeyboard.instance.isControlPressed;
@@ -124,7 +131,6 @@ class _PickerViewState extends State<PickerView> {
     if (k == LogicalKeyboardKey.escape) {
       if (_search.text.isNotEmpty) {
         _search.clear();
-        s.setQuery('');
       } else {
         s.close();
       }
@@ -227,7 +233,6 @@ class _PickerViewState extends State<PickerView> {
               controller: _search,
               focusNode: _focus,
               autofocus: true,
-              onChanged: s.setQuery,
               style: context.text.titleMedium?.copyWith(fontWeight: FontWeight.w400),
               decoration: InputDecoration(
                 hintText: l.pickerSearch,
