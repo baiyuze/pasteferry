@@ -127,6 +127,15 @@ void main() {
     expect(commits().single.arguments, {'paste': true});
   });
 
+  testWidgets('输入法收下数字键、只交来文字时（Windows 中文输入法），也按数字选那一行', (tester) async {
+    final s = await open(tester);
+    final field = tester.widget<TextField>(find.byType(TextField));
+    field.controller!.value = const TextEditingValue(text: '２', selection: TextSelection.collapsed(offset: 1));
+    await tester.pump();
+    expect(s.applied, [('b', false)]);
+    expect(field.controller!.text, '');
+  });
+
   testWidgets('搜索时数字是打字，序号变成 ⌘1……', (tester) async {
     final s = await open(tester);
     await tester.enterText(find.byType(TextField), 'docker 2');

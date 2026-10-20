@@ -1,3 +1,4 @@
+import 'dart:ffi' show DynamicLibrary, DynamicLibraryExtension, Int16, Int32;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -93,7 +94,24 @@ class _PickerViewState extends State<PickerView> {
   /// 用输入法打拼音时不拿拼音去搜，选字上屏后再搜（见 [committedText]）
   void _onSearch() {
     final q = committedText(_search.value);
+    // 搜索框原本是空的、只多了一个 1–9：和按数字键一样选那一行。
+    // Windows 上中文输入法开着时，数字键先被输入法收下，Flutter 收不到按键（见 _onKey），只收到输入法交来的字
+    final digit = s.query.isEmpty && !_composing ? _typedDigit(q) : null;
+    if (digit != null) {
+      _search.clear();
+      s.chooseIndex(digit - 1);
+      return;
+    }
     if (q != s.query) s.setQuery(q);
+  }
+
+  /// 单独一个 1–9，半角或全角
+  static int? _typedDigit(String text) {
+    if (text.length != 1) return null;
+    final c = text.codeUnitAt(0);
+    if (c >= 0x31 && c <= 0x39) return c - 0x30;
+    if (c >= 0xFF11 && c <= 0xFF19) return c - 0xFF10;
+    return null;
   }
 
   void _onShown() {
@@ -117,7 +135,10 @@ class _PickerViewState extends State<PickerView> {
   bool get _composing => committedText(_search.value) != _search.text;
 
   /// 修饰键：Mac 上是 ⌘，其他平台是 Ctrl（序号用 Alt）
-  bool get _cmd => _mac ? HardwareKeyboard.instance.isMetaPressed : HardwareKeyboard.instance.isControlPressed;
+  bool get _cmd => _mac ? HardwareKeyboard.instance.isMetaPressed : _ctrl;
+  bool get _ctrl => HardwareKeyboard.instance.isControlPressed || _WindowsKeys.pressed(_WindowsKeys.control);
+  bool get _shift => HardwareKeyboard.instance.isShiftPressed || _WindowsKeys.pressed(_WindowsKeys.shift);
+  bool get _alt => HardwareKeyboard.instance.isAltPressed || _WindowsKeys.pressed(_WindowsKeys.menu);
 
   KeyEventResult _onKey(FocusNode _, KeyEvent e) {
     if (e is! KeyDownEvent && e is! KeyRepeatEvent) return KeyEventResult.ignored;
@@ -145,12 +166,12 @@ class _PickerViewState extends State<PickerView> {
       return KeyEventResult.handled;
     }
     if (k == LogicalKeyboardKey.tab) {
-      s.cycleTab(kb.isShiftPressed ? -1 : 1);
+      s.cycleTab(_shift ? -1 : 1);
       return KeyEventResult.handled;
     }
     if (k == LogicalKeyboardKey.enter || k == LogicalKeyboardKey.numpadEnter) {
       if (e is KeyRepeatEvent || current == null) return KeyEventResult.handled;
-      s.choose(current, plain: kb.isShiftPressed, copyOnly: _cmd);
+      s.choose(current, plain: _shift, copyOnly: _cmd);
       return KeyEventResult.handled;
     }
     if (_cmd && k == LogicalKeyboardKey.keyD && current != null) {
@@ -158,7 +179,7 @@ class _PickerViewState extends State<PickerView> {
       return KeyEventResult.handled;
     }
     final delete = (_mac && kb.isMetaPressed && k == LogicalKeyboardKey.backspace) ||
-        (!_mac && kb.isShiftPressed && k == LogicalKeyboardKey.delete);
+        (!_mac && _shift && k == LogicalKeyboardKey.delete);
     if (delete && current != null && s.tab != PickerTab.favorites) {
       s.delete(current);
       return KeyEventResult.handled;
@@ -166,8 +187,8 @@ class _PickerViewState extends State<PickerView> {
     // 序号：搜索框为空时直接按数字；任何时候按住 ⌘（Mac）或 Alt（Windows、Linux）
     final digit = _digit(e);
     if (digit != null && e is KeyDownEvent) {
-      final withModifier = _mac ? kb.isMetaPressed : kb.isAltPressed;
-      if (withModifier || (_search.text.isEmpty && !kb.isControlPressed && !kb.isMetaPressed && !kb.isAltPressed)) {
+      final withModifier = _mac ? kb.isMetaPressed : _alt;
+      if (withModifier || (_search.text.isEmpty && !_ctrl && !kb.isMetaPressed && !_alt)) {
         s.chooseIndex(digit - 1);
         return KeyEventResult.handled;
       }
@@ -578,4 +599,16 @@ class _PickerRow extends StatelessWidget {
         await state.delete(r);
     }
   }
+}
+
+/// Windows 上中文输入法（如微软拼音）会先收下 Shift、Ctrl 这些键（VK_PROCESSKEY），Flutter 引擎把这样的按键当作
+/// 已处理、不交给 Dart，也就一直以为它们没按着：Ctrl+回车会变成回车。所以在 Windows 上再问一次系统。
+abstract final class _WindowsKeys {
+  static const shift = 0x10, control = 0x11, menu = 0x12;
+
+  static final int Function(int)? _getAsyncKeyState = Platform.isWindows
+      ? DynamicLibrary.open('user32.dll').lookupFunction<Int16 Function(Int32), int Function(int)>('GetAsyncKeyState')
+      : null;
+
+  static bool pressed(int vk) => ((_getAsyncKeyState?.call(vk) ?? 0) & 0x8000) != 0;
 }
