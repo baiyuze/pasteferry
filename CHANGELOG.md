@@ -1,5 +1,55 @@
 # 更新记录 / Changelog
 
+## 2.4.0 — 2026-10-21
+
+Quick paste: press ⌥V or Alt+V in any app to pick from your history and
+paste it right where you are typing. Plus favorites, a Links filter and
+hover cards.
+
+### Changes
+
+- **Quick paste**: press ⌥V on a Mac or Alt+V on Windows and Linux in any app
+  to bring up your history. Type to search, then press a number or Return to
+  paste the item where you were typing; Shift+Return pastes plain text and
+  ⌘Return or Ctrl+Enter only copies. You can change or turn off the shortcut
+  in Settings.
+- **Pasting for you**: on a Mac this needs the Accessibility permission;
+  without it the item is copied and you press ⌘V. On Linux with Wayland,
+  picked items are copied and you press Ctrl+V.
+- **Favorites**: star an item to keep a copy of it. Favorites never expire,
+  stay when you clear your history and appear in quick paste too. They stay
+  on the computer where you saved them.
+- **Links filter and hover cards**: History has a Links filter, and resting
+  the pointer on an item shows its full text, a larger image or every file
+  name.
+- **Mac signing**: the Mac app is now signed with a fixed PasteFerry
+  certificate, so permissions you grant, such as Accessibility, are kept when
+  the app updates.
+
+### Fixes
+
+- Apps that write the clipboard twice for one copy no longer leave two
+  identical records.
+- Content PasteFerry put on the clipboard itself, such as an item received
+  from another device, could occasionally be recorded again as a new copy,
+  and in rare cases the background service crashed while doing so.
+- A background service that hangs while quitting is now stopped after 10
+  seconds, so it can no longer keep the new one from starting after an
+  update or restart.
+- While you type with an input method, History search waits until you pick
+  the characters instead of searching the romanization.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended on every computer; quick paste
+  and favorites work on each computer on its own. On a Mac, this version
+  changes the app's signature once: if macOS asks again for a permission
+  (such as Local Network), allow it. To let quick paste paste for you, turn
+  on PasteFerry in System Settings → Privacy & Security → Accessibility.
+  Later updates keep these permissions.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged.
+
 ## 2.3.0 — 2026-10-19
 
 Update PasteFerry from inside the app: check for a new version, read what
