@@ -117,6 +117,39 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('收藏页里点收藏的图片能预览，不提示已被删除', (tester) async {
+    // 收藏是另存的一条（ID 与原记录不同），复制记录里没有它
+    final state = PreviewState(File('test/fixtures/image-preview.png').absolute.path, records: []);
+    addTearDown(state.dispose);
+    state.debugSeed(
+      status: Status(signalingConnected: true),
+      config: Config(),
+      self: Device(id: 'self'),
+      favorites: [
+        ClipRecord(
+          id: 'fav-image',
+          kind: ClipKind.CLIP_KIND_IMAGE,
+          status: ClipStatus.CLIP_STATUS_READY,
+          originDeviceName: '测试电脑',
+          imageCount: 1,
+          favorite: true,
+        ),
+      ],
+    );
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    await tester.pump();
+    await tester.tap(find.text('收藏').first); // 侧边栏
+    await tester.pumpAndSettle();
+    await tester.tap(find.textContaining('来自 测试电脑'));
+    await tester.pump(const Duration(milliseconds: 250));
+
+    expect(find.byType(ImagePreviewDialog), findsOneWidget);
+    expect(find.text('这条图片记录已被删除'), findsNothing);
+    final image = await decodedImage(tester);
+    expect(image.image!.width, 16);
+    expect(state.previewCalls, 1);
+  });
+
   testWidgets('复制的几张图片文件点开后可以左右翻看', (tester) async {
     final state = PreviewState(
       File('test/fixtures/image-preview.png').absolute.path,

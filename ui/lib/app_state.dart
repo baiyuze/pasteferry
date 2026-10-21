@@ -100,6 +100,12 @@ class AppState extends ChangeNotifier implements RecordDetails {
   List<ClipRecord> get records => List.unmodifiable(_records);
   List<ClipRecord> get favorites => List.unmodifiable(_favorites);
 
+  /// 按 ID 找一条记录：复制记录、收藏，以及只在搜索结果里出现的较早记录都算。
+  ClipRecord? recordById(String id) =>
+      _records.where((r) => r.id == id).firstOrNull ??
+      _favorites.where((r) => r.id == id).firstOrNull ??
+      _historySearch.resultsView?.where((r) => r.id == id).firstOrNull;
+
   /// 全部收藏的大小之和。硬链接、写时复制保存的副本实际占用更少，界面上写「最多」
   int get favoritesBytes => _favorites.fold(0, (n, r) => n + r.totalSize.toInt());
 

@@ -71,7 +71,13 @@ class _ImagePreviewDialogState extends State<ImagePreviewDialog> {
       _preview = null;
     });
     try {
-      await AppScope.read(context).fetchImagePreview(widget.clipId);
+      final state = AppScope.read(context);
+      if (state.recordById(widget.clipId)?.favorite ?? false) {
+        // 收藏另存失败了：再收藏一次就是重新另存
+        await state.setFavorite(widget.clipId, true);
+      } else {
+        await state.fetchImagePreview(widget.clipId);
+      }
     } catch (e) {
       if (mounted) setState(() => _downloadError = AppState.describeError(e));
     } finally {
@@ -82,9 +88,8 @@ class _ImagePreviewDialogState extends State<ImagePreviewDialog> {
   @override
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
-    final record = state.records
-        .where((r) => r.id == widget.clipId)
-        .firstOrNull;
+    // 收藏是另一条记录（ID 不同），不在复制记录里：两边都要找
+    final record = state.recordById(widget.clipId);
     // 预览框按应用窗口的比例定大小：窗口小，预览也小，不会一打开就把整个窗口盖满
     final window = MediaQuery.sizeOf(context);
     final l = context.l10n;
