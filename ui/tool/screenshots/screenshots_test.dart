@@ -14,6 +14,9 @@ import 'package:pasteferry_ui/background_service.dart';
 import 'package:pasteferry_ui/gen/pasteferry/v1/daemon.pb.dart';
 import 'package:pasteferry_ui/i18n.dart';
 import 'package:pasteferry_ui/main.dart';
+import 'package:pasteferry_ui/picker/picker_host.dart';
+import 'package:pasteferry_ui/picker/picker_state.dart';
+import 'package:pasteferry_ui/picker/picker_view.dart';
 import 'package:pasteferry_ui/theme.dart';
 import 'package:pasteferry_ui/widgets/nearby_dialog.dart';
 import 'package:pasteferry_ui/widgets/pairing_dialog.dart';
@@ -47,6 +50,10 @@ class _DemoState extends AppState {
   @override
   Future<ListHistoryResponse> requestSearch(String query) async =>
       ListHistoryResponse(records: records.where((r) => matchesSearch(r, query)), searched: true);
+
+  // 悬停提示框里的全文
+  @override
+  Future<ClipDetail> clipDetail(String clipId) async => ClipDetail(text: _meetingNotes, textLength: _meetingNotes.length);
 
   // 不关闭的流：后台服务那边的订阅一直开着，结束就表示后台服务断开了
   @override
@@ -112,6 +119,57 @@ ClipRecord _clip(
 const _mb = 1024 * 1024;
 final _quarterly = _t('季度汇报-终版.key', 'Q3 review - final.key', '四半期報告_最終版.key',
     tw: '季度報告-定稿.key', hk: '季度報告-最終版.key');
+final _meeting = _t('会议结论：周二灰度 10%，观察两天没问题周四全量；回滚预案见文档第 3 节',
+    'Decision: ship to 10% on Tuesday, everyone on Thursday if two days look clean. Rollback plan in section 3',
+    '決定事項：火曜に 10% へ先行公開、2 日問題なければ木曜に全体公開。切り戻し手順は資料の第 3 節',
+    tw: '會議結論：週二先開放 10%，觀察兩天沒問題就在週四全面上線；回滾方案見文件第 3 節',
+    hk: '會議結論：星期二先開放 10%，觀察兩日沒問題便於星期四全面推出；回滾方案見文件第 3 節');
+// 悬停提示框里显示的全文：比列表里那一行长，换了行
+final _meetingNotes = _meeting + _t(
+    '\n\n负责人：前端 小林，后端 老周，测试 阿杰\n发布窗口：周二 10:00–11:00\n监控：错误率超过 0.5% 立即回滚',
+    '\n\nOwners: web Lin, backend Zhou, QA Jay\nRelease window: Tuesday 10:00–11:00\nMonitoring: roll back at once if errors exceed 0.5%',
+    '\n\n担当：フロント 林、バックエンド 周、テスト 杰\n公開時間：火曜 10:00–11:00\n監視：エラー率 0.5% 超えで即切り戻し',
+    tw: '\n\n負責人：前端 小林，後端 老周，測試 阿杰\n發布時段：週二 10:00–11:00\n監控：錯誤率超過 0.5% 立即回滾',
+    hk: '\n\n負責人：前端 小林，後端 老周，測試 阿杰\n發佈時段：星期二 10:00–11:00\n監察：錯誤率超過 0.5% 立即回滾');
+
+ClipRecord _favorite(ClipRecord r, Duration ago) => r
+  ..favorite = true
+  ..favoritedAtUnix = _ago(ago);
+
+/// 收藏页的演示数据：常用的文字、链接、文件。收藏页按收藏时间从新到旧排
+List<ClipRecord> _favorites() => <ClipRecord>[
+      _favorite(
+          _clip('f1', ClipKind.CLIP_KIND_TEXT,
+              preview: _t('发票抬头：上海隔空科技有限公司　税号 91310104MA1K000000',
+                  'Billing: Ferry Labs Ltd · VAT GB 123 4567 89',
+                  '請求先：株式会社フェリーラボ　登録番号 T1234567890123',
+                  tw: '發票抬頭：隔空科技股份有限公司　統一編號 12345678',
+                  hk: '發票抬頭：隔空科技有限公司　商業登記號碼 12345678'),
+              outgoing: true, size: 72, ago: const Duration(days: 12)),
+          const Duration(days: 12)),
+      _favorite(
+          _clip('f2', ClipKind.CLIP_KIND_TEXT,
+              preview: _t('收到，我看一下，今天下班前给你答复。', 'Got it — I’ll take a look and get back to you today.',
+                  '承知しました。確認して本日中にお返事します。',
+                  tw: '收到，我看一下，今天下班前給你答覆。', hk: '收到，我睇一睇，今日放工前覆你。'),
+              outgoing: true, size: 54, ago: const Duration(days: 6)),
+          const Duration(days: 6)),
+      _favorite(
+          _clip('f3', ClipKind.CLIP_KIND_TEXT,
+              preview: 'https://pasteferry.cc/download/', outgoing: true, size: 31, ago: const Duration(days: 4))
+            ..isLink = true,
+          const Duration(days: 4)),
+      _favorite(
+          _clip('f4', ClipKind.CLIP_KIND_FILE,
+              size: (1.2 * _mb).round(), ago: const Duration(days: 9),
+              items: [ClipItem(name: _t('营业执照.pdf', 'certificate-of-incorporation.pdf', '登記簿謄本.pdf',
+                  tw: '公司登記證明.pdf', hk: '商業登記證.pdf'), size: Int64((1.2 * _mb).round()))]),
+          const Duration(days: 3)),
+      _favorite(
+          _clip('f5', ClipKind.CLIP_KIND_TEXT,
+              preview: 'ssh deploy@203.0.113.10 -p 2222', outgoing: true, size: 32, ago: const Duration(days: 20)),
+          const Duration(days: 2)),
+    ].reversed.toList();
 
 AppState _demo({LinkState link = LinkState.online,
     ServiceState? service, Device? pending, bool empty = false,
@@ -122,7 +180,7 @@ AppState _demo({LinkState link = LinkState.online,
     serviceState: service,
     pendingPairing: pending,
     status: Status(
-      version: '2.3.0',
+      version: '2.4.0',
       deviceName: 'MacBook Pro',
       signalingConnected: link == LinkState.online && server.isNotEmpty,
       serverConfigured: server.isNotEmpty,
@@ -163,6 +221,7 @@ AppState _demo({LinkState link = LinkState.online,
       ),
       Device(id: 'imac', name: 'iMac', platform: 'darwin', publicKeyFingerprint: 'T2VA-LP7Q-8ZRN'),
     ],
+    favorites: empty ? const [] : _favorites(),
     records: empty ? const [] : [
       _clip('1', ClipKind.CLIP_KIND_TEXT,
           preview: 'git push origin release/1.0 && gh release create v1.0.0',
@@ -178,12 +237,7 @@ AppState _demo({LinkState link = LinkState.online,
           from: 'Mac mini', status: ClipStatus.CLIP_STATUS_REMOTE_ONLY,
           items: [ClipItem(name: _t('发布演示录屏.mov', 'launch-demo.mov', '発表デモ.mov', tw: '發表會示範錄影.mov', hk: '發佈會示範錄影.mov'), size: Int64((1.3 * 1024 * _mb).round()))]),
       _clip('5', ClipKind.CLIP_KIND_HTML,
-          preview: _t('会议结论：周二灰度 10%，观察两天没问题周四全量；回滚预案见文档第 3 节',
-              'Decision: ship to 10% on Tuesday, everyone on Thursday if two days look clean. Rollback plan in section 3',
-              '決定事項：火曜に 10% へ先行公開、2 日問題なければ木曜に全体公開。切り戻し手順は資料の第 3 節',
-              tw: '會議結論：週二先開放 10%，觀察兩天沒問題就在週四全面上線；回滾方案見文件第 3 節',
-              hk: '會議結論：星期二先開放 10%，觀察兩日沒問題便於星期四全面推出；回滾方案見文件第 3 節'),
-          from: 'Mac mini', size: 2310, ago: const Duration(minutes: 26)),
+          preview: _meeting, from: 'Mac mini', size: 2310, ago: const Duration(minutes: 26)),
       _clip('6', ClipKind.CLIP_KIND_FILE,
           outgoing: true, size: 126 * _mb, ago: const Duration(minutes: 41),
           items: [ClipItem(name: 'design-assets', size: Int64(126 * _mb), isDir: true)]),
@@ -193,7 +247,8 @@ AppState _demo({LinkState link = LinkState.online,
           items: [ClipItem(name: _t('合同扫描件.pdf', 'signed-contract.pdf', '契約書_署名済み.pdf', tw: '合約掃描檔.pdf', hk: '合約掃描本.pdf'), size: Int64((18.6 * _mb).round()))]),
       _clip('8', ClipKind.CLIP_KIND_TEXT,
           preview: 'https://github.com/baiyuze/pasteferry/releases', outgoing: true, size: 44,
-          ago: const Duration(hours: 3)),
+          ago: const Duration(hours: 3))
+        ..isLink = true,
       _clip('9', ClipKind.CLIP_KIND_FILE,
           size: (4.1 * _mb).round(), ago: const Duration(hours: 5),
           items: [
@@ -309,6 +364,35 @@ void main() {
   testWidgets('history-dark', (tester) async {
     await _shoot(tester, 'history-dark',
         state: _demo(), brightness: Brightness.dark, settle: false);
+  });
+
+  // 网站「功能」页：鼠标停在一条长文字上，弹出提示框显示全文
+  testWidgets('hover-dark', (tester) async {
+    await _shoot(tester, 'hover-dark', state: _demo(), brightness: Brightness.dark, settle: false,
+        arrange: () async {
+      final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      await mouse.addPointer(location: Offset.zero);
+      addTearDown(mouse.removePointer);
+      await mouse.moveTo(tester.getCenter(find.text(_meeting)));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+      await tester.pump();
+      await tester.pump();
+    });
+  });
+
+  testWidgets('favorites-dark', (tester) async {
+    await _shoot(tester, 'favorites-dark', state: _demo(), section: Section.favorites,
+        brightness: Brightness.dark);
+  });
+
+  // 快捷粘贴窗口：单独渲染，透明背景，自带圆角与阴影
+  testWidgets('card-picker-dark', (tester) async {
+    await _shootPicker(tester, 'card-picker-dark');
+  });
+
+  testWidgets('card-picker-search-dark', (tester) async {
+    await _shootPicker(tester, 'card-picker-search-dark', query: 'docker');
   });
 
   testWidgets('devices', (tester) async {
@@ -494,4 +578,129 @@ void main() {
     final state = _demo(link: LinkState.offline, service: ServiceState.notInstalled, empty: true);
     await _shoot(tester, 'welcome', state: state);
   });
+}
+
+// ─────────────────────────── 快捷粘贴窗口 ───────────────────────────
+
+const _pickerChannel = MethodChannel('pasteferry/picker');
+
+/// 快捷窗口的演示数据，照 design/quick-paste-and-favorites.md 第 2.6 节的示意。不连后台服务。
+class _DemoPicker extends PickerState {
+  _DemoPicker() : super(host: PickerHost(_pickerChannel));
+
+  @override
+  Future<ListHistoryResponse> requestSearch(String query, PickerTab tab) async => ListHistoryResponse(searched: false);
+
+  @override
+  Future<ClipDetail> clipDetail(String clipId) async => ClipDetail();
+
+  @override
+  Future<GetImagePreviewResponse> imagePreview(String clipId, {int index = 0}) async => GetImagePreviewResponse();
+}
+
+ClipRecord _pick(String id, String text, Duration ago, {bool link = false, bool favorited = false}) =>
+    _clip(id, ClipKind.CLIP_KIND_TEXT, preview: text, outgoing: true, size: text.length, ago: ago)
+      ..isLink = link
+      ..favorited = favorited;
+
+List<ClipRecord> _pickerRecords() => [
+      _pick('p1', _t('会议改到周四下午 3 点，地点不变', 'Meeting moved to Thursday 3 pm, same room',
+          '打ち合わせは木曜 15 時に変更、場所は同じ',
+          tw: '會議改到週四下午 3 點，地點不變', hk: '會議改到星期四下午 3 點，地點不變'), const Duration(seconds: 8)),
+      _pick('p2', 'https://github.com/baiyuze/pasteferry', const Duration(minutes: 2), link: true),
+      _clip('p3', ClipKind.CLIP_KIND_IMAGE,
+          preview: _t('截图 14.32.png', 'Screenshot 14.32.png', 'スクリーンショット 14.32.png',
+              tw: '截圖 14.32.png', hk: '截圖 14.32.png'),
+          from: _t('Windows 台式机', 'Windows PC', 'Windows デスクトップ', tw: 'Windows 桌機', hk: 'Windows 桌面電腦'),
+          size: 412 * 1024, ago: const Duration(minutes: 5),
+          items: [ClipItem(name: _t('截图 14.32.png', 'Screenshot 14.32.png', 'スクリーンショット 14.32.png',
+              tw: '截圖 14.32.png', hk: '截圖 14.32.png'), size: Int64(412 * 1024))])
+        ..favorited = true,
+      _clip('p4', ClipKind.CLIP_KIND_FILE, outgoing: true, size: (6.4 * _mb).round(), ago: const Duration(minutes: 52),
+          items: [
+            ClipItem(name: _t('合同扫描件.pdf', 'signed-contract.pdf', '契約書_署名済み.pdf', tw: '合約掃描檔.pdf', hk: '合約掃描本.pdf'),
+                size: Int64((2.2 * _mb).round())),
+            ClipItem(name: _t('报价单.xlsx', 'quote.xlsx', '見積書.xlsx', tw: '報價單.xlsx', hk: '報價單.xlsx'), size: Int64(96 * 1024)),
+            ClipItem(name: _t('附件.zip', 'attachments.zip', '添付.zip', tw: '附件.zip', hk: '附件.zip'), size: Int64((4.1 * _mb).round())),
+          ]),
+      _pick('p5', 'docker compose up -d --build', const Duration(hours: 1, minutes: 5)),
+      _clip('p6', ClipKind.CLIP_KIND_FILE, status: ClipStatus.CLIP_STATUS_REMOTE_ONLY,
+          size: 812 * _mb, ago: const Duration(hours: 20),
+          items: [ClipItem(name: 'PasteFerry.dmg', size: Int64(812 * _mb))]),
+      _pick('p7', _t('收货地址：上海市徐汇区漕溪北路 88 号 5 楼', 'Ship to: 221B Baker Street, London NW1 6XE',
+          'お届け先：東京都渋谷区神南 1-2-3 5F',
+          tw: '收件地址：台北市信義區松仁路 88 號 5 樓', hk: '送貨地址：九龍尖沙咀廣東道 88 號 5 樓'),
+          const Duration(hours: 22), favorited: true),
+      _pick('p8', "SELECT id, status FROM orders WHERE created_at > now() - interval '1 day'", const Duration(hours: 23)),
+      _pick('p9', 'pnpm install', const Duration(hours: 26)),
+      _pick('p10', 'git push origin main', const Duration(hours: 27)),
+      _pick('p11', 'docker logs -f gateway', const Duration(days: 2)),
+      _pick('p12', _t('把 docker 镜像源换成国内的', 'switch the docker registry mirror', 'docker のミラーを切り替える',
+          tw: '把 docker 映像來源換成本地的', hk: '把 docker 鏡像源換成本地的'), const Duration(days: 2, hours: 3)),
+    ];
+
+Future<void> _shootPicker(WidgetTester tester, String name, {String query = ''}) async {
+  // 窗口 560×460，四周留出阴影的位置
+  const pad = 40.0;
+  tester.view.physicalSize = const Size((560 + pad * 2) * 2, (460 + pad * 2) * 2);
+  tester.view.devicePixelRatio = 2;
+  tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
+  addTearDown(tester.view.reset);
+  addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(_pickerChannel, (c) async {
+    return switch (c.method) {
+      'pasteStatus' => {'available': true, 'reason': ''},
+      _ => null,
+    };
+  });
+  debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+  debugDisableShadows = false;
+  try {
+    final s = _DemoPicker()
+      ..debugSeed(
+        config: Config(language: _lang == 'zh' ? 'zh-Hans' : _locale.toLanguageTag()),
+        records: _pickerRecords(),
+        favorites: _favorites(),
+      );
+    final theme = buildTheme(Brightness.dark, fontFamily: 'SF', fontFamilyFallback: _cjk).copyWith(
+      scaffoldBackgroundColor: Colors.transparent,
+      canvasColor: Colors.transparent,
+    );
+    await tester.pumpWidget(RepaintBoundary(
+      key: _boundary,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        color: Colors.transparent,
+        theme: theme,
+        locale: _locale,
+        supportedLocales: supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        home: Center(
+          child: Container(
+            width: 560,
+            height: 460,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Radii.lg),
+              boxShadow: const [
+                BoxShadow(color: Color(0x73000000), blurRadius: 36, offset: Offset(0, 14)),
+                BoxShadow(color: Color(0x40000000), blurRadius: 3),
+              ],
+            ),
+            child: PickerView(state: s),
+          ),
+        ),
+      ),
+    ));
+    await tester.pump();
+    if (query.isNotEmpty) {
+      await tester.enterText(find.byType(TextField), query);
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    await tester.pumpAndSettle();
+    await _capture(tester, name);
+  } finally {
+    debugDefaultTargetPlatformOverride = null;
+    debugDisableShadows = true;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(_pickerChannel, null);
+  }
 }
