@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fixnum/fixnum.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -93,7 +94,7 @@ void main() {
     });
   });
 
-  Future<_TestPicker> open(WidgetTester tester, {Config? config, PasteStatus? paste}) async {
+  Future<_TestPicker> open(WidgetTester tester, {Config? config, PasteStatus? paste, List<ClipRecord>? records}) async {
     final view = tester.view;
     view.physicalSize = const Size(560, 460);
     view.devicePixelRatio = 1;
@@ -101,7 +102,7 @@ void main() {
     final s = _TestPicker()
       ..debugSeed(
         config: config ?? Config(language: 'zh-Hans'),
-        records: _records,
+        records: records ?? _records,
         favorites: [_favorite],
         paste: paste ?? const PasteStatus(available: true, reason: ''),
       );
@@ -248,6 +249,54 @@ void main() {
     await tester.tap(find.text('去授权'));
     await tester.pump();
     expect(calls.map((c) => c.method), contains('requestPermission'));
+  });
+
+  group('滚动', () {
+    final many = [for (var i = 0; i < 40; i++) _text('m$i', '第 $i 条', ago: i * 60)];
+
+    ScrollPosition position(WidgetTester tester) =>
+        tester.state<ScrollableState>(find.descendant(of: find.byType(ListView), matching: find.byType(Scrollable))).position;
+    double offset(WidgetTester tester) => position(tester).pixels;
+
+    testWidgets('用滚轮滚下去以后，缩略图、传输进度这类更新不会把列表拉回选中的那一行', (tester) async {
+      final s = await open(tester, records: many);
+      final pointer = TestPointer(1, PointerDeviceKind.mouse);
+      // 鼠标停在列表上，选中的是鼠标下面那一行；滚轮往下滚时鼠标不动，选中的那一行滚出了视野
+      await tester.sendEventToBinding(pointer.hover(tester.getCenter(find.byType(ListView))));
+      await tester.pump();
+      final selected = s.selected;
+      await tester.sendEventToBinding(pointer.scroll(const Offset(0, 600)));
+      await tester.pump();
+      final scrolled = offset(tester);
+      expect(scrolled, greaterThan(0));
+      expect(s.selected, selected);
+
+      // 后台服务发来的更新：传输进度、记录变化。滚动位置要留在原处
+      s.debugEvent(Event(progress: TransferProgress(clipId: 'm30', transferred: Int64(1), total: Int64(2))));
+      await tester.pump();
+      s.debugEvent(Event(clipUpdated: many[25].deepCopy()..textPreview = '第 25 条（改过）'));
+      await tester.pump();
+      expect(offset(tester), scrolled);
+    });
+
+    testWidgets('用键盘上下移动时，选中的那一行仍然留在视野里', (tester) async {
+      final s = await open(tester, records: many);
+      for (var i = 0; i < 20; i++) {
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      }
+      await tester.pump();
+      expect(s.selected, 20);
+      final view = position(tester).viewportDimension;
+      final top = 20 * PickerView.rowHeight;
+      expect(offset(tester), lessThanOrEqualTo(top));
+      expect(offset(tester) + view, greaterThanOrEqualTo(top + PickerView.rowHeight));
+
+      // 换搜索词，列表回到最上面
+      await tester.enterText(find.byType(TextField), '第');
+      await tester.pump();
+      expect(offset(tester), 0);
+      await tester.pump(const Duration(milliseconds: 200)); // 等搜索的计时器走完
+    });
   });
 
   testWidgets('没下载的大文件：先下载，下完放进剪贴板再粘贴', (tester) async {

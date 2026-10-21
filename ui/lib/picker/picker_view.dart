@@ -120,15 +120,27 @@ class _PickerViewState extends State<PickerView> {
     _focus.requestFocus();
   }
 
-  /// 用键盘上下移动时，选中的那一行要留在视野里。
+  /// 上次让它留在视野里的选中行，连同当时的页签与搜索词
+  (int, PickerTab, String)? _followed;
+
+  /// 用键盘上下移动、换了页签或搜索词时，选中的那一行要留在视野里。
+  ///
+  /// 只在选中的那一行变了的时候跟：缩略图加载完、传输进度、新记录这类更新也会通知，
+  /// 那时用户可能正用滚轮、触控板往下翻，选中的那一行早已滚出视野，不能把列表拉回去。
+  /// 鼠标移到哪一行就选中哪一行，那一行本来就在视野里，也不用跟。
   void _followSelection() {
-    if (!_scroll.hasClients) return;
+    final key = (s.selected, s.tab, s.query);
+    if (key == _followed) return;
+    _followed = key;
+    if (!_scroll.hasClients || s.selectedByPointer) return;
+    // 列表上下各有 Insets.xs 的留白：第一行对齐到顶，最后一行连同下面的留白一起露出来
     final top = s.selected * PickerView.rowHeight;
+    final bottom = top + PickerView.rowHeight + Insets.xs * 2;
     final view = _scroll.position.viewportDimension;
     if (top < _scroll.offset) {
       _scroll.jumpTo(top);
-    } else if (top + PickerView.rowHeight > _scroll.offset + view) {
-      _scroll.jumpTo(top + PickerView.rowHeight - view);
+    } else if (bottom > _scroll.offset + view) {
+      _scroll.jumpTo(bottom - view);
     }
   }
 

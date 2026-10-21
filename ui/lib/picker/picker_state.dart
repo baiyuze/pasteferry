@@ -65,6 +65,7 @@ class PickerState extends ChangeNotifier implements RecordDetails {
   PickerTab _tab = PickerTab.all;
   String _query = '';
   int _selected = 0;
+  bool _byPointer = false;
   List<ClipRecord>? _results;
   Timer? _searchTimer;
   int _searchSeq = 0;
@@ -80,6 +81,9 @@ class PickerState extends ChangeNotifier implements RecordDetails {
   PickerTab get tab => _tab;
   String get query => _query;
   int get selected => _selected;
+
+  /// 选中的那一行是鼠标移上去选的：它本来就在视野里，列表不用跟着滚
+  bool get selectedByPointer => _byPointer;
   String? get error => _error;
   String? get pendingId => _pendingId;
   double? progressOf(String id) => _progress[id];
@@ -324,6 +328,7 @@ class PickerState extends ChangeNotifier implements RecordDetails {
     _tab = PickerTab.all;
     _query = '';
     _selected = 0;
+    _byPointer = false;
     _results = null;
     _searchTimer?.cancel();
     _searchSeq++;
@@ -343,6 +348,7 @@ class PickerState extends ChangeNotifier implements RecordDetails {
     if (t == _tab) return;
     _tab = t;
     _selected = 0;
+    _byPointer = false;
     _results = null;
     _scheduleSearch(Duration.zero);
     notifyListeners();
@@ -356,15 +362,18 @@ class PickerState extends ChangeNotifier implements RecordDetails {
   void setQuery(String q) {
     _query = q;
     _selected = 0;
+    _byPointer = false;
     _results = null;
     _error = null;
     _scheduleSearch(const Duration(milliseconds: 150));
     notifyListeners();
   }
 
+  /// 鼠标移到这一行上
   void select(int i) {
     if (i == _selected || i < 0 || i >= visible.length) return;
     _selected = i;
+    _byPointer = true;
     notifyListeners();
   }
 
@@ -372,6 +381,7 @@ class PickerState extends ChangeNotifier implements RecordDetails {
     final n = visible.length;
     if (n == 0) return;
     _selected = (_selected + delta).clamp(0, n - 1);
+    _byPointer = false;
     notifyListeners();
   }
 
@@ -467,6 +477,7 @@ class PickerState extends ChangeNotifier implements RecordDetails {
     final list = visible;
     if (i < 0 || i >= list.length) return;
     _selected = i;
+    _byPointer = false;
     await choose(list[i], plain: plain, copyOnly: copyOnly);
   }
 
