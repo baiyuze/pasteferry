@@ -448,16 +448,18 @@
 - **权限**：需要「隐私与安全性 → 辅助功能」。
   - 用 `AXIsProcessTrusted()` 检查。没有授权时，快捷窗口底部显示提示，设置页有「去授权」按钮。
   - 授权列表里显示的是 PasteFerryPicker.app，把它 Info.plist 里的显示名设为「隔空贴」。
-- **签名**：改用自签名证书（已定）。
-  - 现在发版用的是临时签名（`codesign --sign -`）。对临时签名的程序，系统按程序的哈希记录辅助功能授权，所以每次更新后授权就失效：列表里看起来还开着，实际不起作用，用户得删掉再重新添加。
-  - 改用自签名的代码签名证书后，系统按「包名 + 这张证书」记录授权，更新后仍然有效（**待验证**，第 12 节第 4 条）。
-  - 证书在这台 Mac 上生成，名称 `PasteFerry Code Signing`，有效期 20 年，私钥放在登录钥匙串里。
-    - 和更新签名私钥一样只在这台 Mac 上，也要同样备份。证书丢了只能换新的，所有用户都得重新授权一次。
-  - 整个 App 包都换成这张证书签名：PasteFerry.app、PasteFerryDaemon.app、PasteFerryPicker.app、pasteferry-cli。
-    - `scripts/build.sh` 和 `scripts/package.sh` 找得到这张证书就用它；找不到时（开发机、Codex）退回临时签名。
-  - Gatekeeper 不认自签名证书，所以首次打开的体验和现在的临时签名一样，不会更好，也不会更差。
+- **签名**：2.4.0 起用自签名证书，和快捷粘贴同一版（原计划先单独发一个 2.3.x，后来合在一起：用户反正要为新功能授权一次）。
+  - 2.3.0 及以前用临时签名（`codesign --sign -`）。对临时签名的程序，系统按程序的哈希记录辅助功能授权，所以每次更新后授权就失效：列表里看起来还开着，实际不起作用，用户得删掉再重新添加。
+  - 用自签名的代码签名证书后，签名要求变成 `identifier "com.pasteferry.picker" and certificate root = H"0d0da1d5…"`：系统按「包名 + 这张证书」记录授权，更新后仍然有效。
+  - 证书 2026-10-21 在发版的 Mac 上生成：`PasteFerry Code Signing`，RSA 3072，有效期到 2046 年，SHA-1 `0D0DA1D5F1EEF4E7EDC2281416AFAF2A4470DA97`。
+    - 放在单独的钥匙串 `~/Library/Keychains/pasteferry-signing.keychain-db`，钥匙串密码存在登录钥匙串（服务名 `pasteferry-signing-keychain`）。私钥的访问列表放行了 codesign，构建时不会弹窗。
+    - 这张证书没被系统信任，codesign 按名字找不到它，要用 SHA-1 指定，而且钥匙串要在搜索列表里（`scripts/sign.sh` 会加上）。
+    - **永远不换**：换了，所有 Mac 用户的辅助功能授权都会失效。和更新签名私钥一样只在这台 Mac 上，要离线备份钥匙串文件和它的密码；丢了只能从备份恢复。
+  - 整个 App 包都用这张证书签名：PasteFerry.app、PasteFerryDaemon.app、PasteFerryPicker.app、pasteferry-cli。
+    - `scripts/sign.sh` 固定了证书的 SHA-1，对不上就报错。`build.sh` 找不到证书时（开发机、Codex）退回临时签名；`package.sh` 打发布包时必须有它，并逐个核对签名要求。
+  - Gatekeeper 不认自签名证书，所以首次打开的体验和临时签名一样，不会更好，也不会更差。自动更新只做 `codesign --verify`，自签名能通过。
   - 换签名的那一版，后台服务已有的系统授权（本地网络等）可能要重新给一次（**待验证**）。之后的更新不会再丢授权。
-  - 发版规范（`.claude/rules/commits-and-releases.md`）第 6 步的核对加一条：用 `codesign -dv` 确认签名者是这张证书。
+  - 发版规范（`.claude/rules/commits-and-releases.md`）加了「Mac 签名证书」一节，第 6 步核对签名要求里的证书。
 - **输入法**：搜索框要能用中文输入法。
   - 已验证（2026-10-20，macOS 15.7.3，搜狗拼音）：非激活面板里拼音能在搜索框里组字，候选框出现在搜索框下方，选字后上屏，不需要激活隔空贴。
   - 前提是不能抢走第一响应者。搜索框有焦点时，第一响应者是 Flutter 放进视图里的文本输入视图，输入法就接在它上面。再次呼出时搜索框的焦点没变，Flutter 不会重新设置。外壳如果这时把第一响应者换成 FlutterView，英文还能打，中文的拼音和候选框就跑到原来的 App 那边去了。

@@ -26,8 +26,14 @@ cd "$(dirname "$0")/.."
 export VERSION=${VERSION:-2.3.0}
 OUT=release
 
+# 发布包一定要用 PasteFerry Code Signing 证书签名，没有就停下（见 scripts/sign.sh）
+export REQUIRE_SIGNING=1
 ./scripts/build.sh
 echo
+
+# 拆出单一芯片的版本后重新签名，和 build.sh 用同一个签名身份
+# shellcheck source=sign.sh
+source scripts/sign.sh
 
 rm -rf "$OUT" && mkdir -p "$OUT"
 STAGE=$(mktemp -d)
@@ -80,13 +86,14 @@ thin_app() { # <通用 App> <输出 App> <arm64 | x86_64>
             mv "$f.thin" "$f"
         fi
     done < <(find "$dst" -type f -print0)
-    codesign --force --sign - "$dst/Contents/Helpers/pasteferry-cli"
-    codesign --force --sign - "$dst/Contents/Helpers/PasteFerryDaemon.app"
-    codesign --force --sign - "$dst/Contents/Helpers/PasteFerryPicker.app"
-    codesign --force --sign - "$dst/Contents/Frameworks/App.framework"
-    codesign --force --sign - "$dst/Contents/Frameworks/FlutterMacOS.framework"
-    codesign --force --sign - --preserve-metadata=entitlements,requirements,flags "$dst"
+    sign "$dst/Contents/Helpers/pasteferry-cli"
+    sign "$dst/Contents/Helpers/PasteFerryDaemon.app"
+    sign "$dst/Contents/Helpers/PasteFerryPicker.app"
+    sign "$dst/Contents/Frameworks/App.framework"
+    sign "$dst/Contents/Frameworks/FlutterMacOS.framework"
+    sign --preserve-metadata=entitlements,flags "$dst"
     codesign --verify --deep --strict "$dst"
+    check_signed "$dst"
 }
 
 # 安装窗口的背景三个 DMG 共用
@@ -123,6 +130,7 @@ make_dmg() { # <App> <输出文件名>
 }
 
 echo "▶ 打包 DMG"
+check_signed dist/PasteFerry.app
 thin_app dist/PasteFerry.app "$STAGE/arm64/PasteFerry.app" arm64
 thin_app dist/PasteFerry.app "$STAGE/x86_64/PasteFerry.app" x86_64
 make_dmg "$STAGE/arm64/PasteFerry.app" PasteFerry-mac-apple-silicon.dmg

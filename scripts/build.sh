@@ -13,6 +13,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# shellcheck source=sign.sh
+source scripts/sign.sh
+
 DIST=dist
 VERSION=${VERSION:-2.3.0}
 APP_BUILD=${APP_BUILD:-$(git rev-parse --short=8 HEAD)}
@@ -92,8 +95,7 @@ localize zh-Hans "PasteFerry 在局域网里查找你的其他电脑，直接与
 localize zh-Hant "PasteFerry 會在區域網路中尋找你的其他電腦，直接與它們同步剪貼簿。"
 localize zh-HK "PasteFerry 會在區域網絡中尋找你的其他電腦，直接與它們同步剪貼簿。"
 localize ja "PasteFerry はこのネットワーク上のほかのコンピューターを見つけ、クリップボードを直接同期します。"
-# ad-hoc 签名即可让 TCC 记住授权决定；正式分发应换成 Developer ID
-codesign --force --sign - "$APP"
+sign "$APP"
 echo "  ✓ $APP"
 
 echo "▶ 构建图形界面"
@@ -157,11 +159,12 @@ done
 # 签名由内向外：先签内置的组件，最后签外层 App。
 # Flutter 增量构建在 Dart 代码变化后会重新生成 App.framework 却不重签，
 # 留下失效签名，Apple Silicon 上会直接拒绝运行，这里一并重签。
-codesign --force --sign - "$UI/Contents/Helpers/pasteferry-cli"
-codesign --force --sign - "$UI/Contents/Helpers/PasteFerryDaemon.app"
-codesign --force --sign - "$UI/Contents/Helpers/PasteFerryPicker.app"
-codesign --force --sign - "$UI/Contents/Frameworks/App.framework"
-codesign --force --sign - --preserve-metadata=entitlements,requirements,flags "$UI"
+# 外层 App 保留 Xcode 写进去的权限声明（entitlements）与标志；签名要求不保留，按新的签名身份生成
+sign "$UI/Contents/Helpers/pasteferry-cli"
+sign "$UI/Contents/Helpers/PasteFerryDaemon.app"
+sign "$UI/Contents/Helpers/PasteFerryPicker.app"
+sign "$UI/Contents/Frameworks/App.framework"
+sign --preserve-metadata=entitlements,flags "$UI"
 codesign --verify --deep --strict "$UI" "$APP"
 echo "  ✓ $UI"
 
