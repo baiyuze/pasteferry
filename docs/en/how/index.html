@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How PasteFerry works: direct connections, multi-uplink probing and failure handling</title>
+  <meta name="description" content="What happens after you copy, how two computers find each other and connect directly, and what happens when they can’t.">
+  <link rel="canonical" href="https://pasteferry.cc/en/how/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/how/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/how/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/how/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/how/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/how/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="How PasteFerry works: direct connections, multi-uplink probing and failure handling">
+  <meta property="og:description" content="What happens after you copy, how two computers find each other and connect directly, and what happens when they can’t.">
+  <meta property="og:url" content="https://pasteferry.cc/en/how/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../en/" aria-label="PasteFerry home"><img src="../../assets/icon.svg" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Page">
+        <a href="../../en/features/">Features</a>
+        <a class="mid" href="../../en/start/">Quick start</a>
+        <a class="wide" href="../../en/start/#server">Ways to connect</a>
+        <a href="../../en/download/">Download</a>
+        <details class="menu">
+          <summary aria-label="More pages" class="current"><span>More</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../en/start/">Quick start</a></li>
+            <li class="narrow"><a href="../../en/start/#server">Ways to connect</a></li>
+            <li><a href="./" aria-current="page">How it works</a></li>
+            <li><a href="../../en/security/">Security</a></li>
+            <li><a href="../../en/faq/">FAQ</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Changelog</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Language：English"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>English</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/how/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a></li>
+            <li><a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../en/">PasteFerry</a></p>
+        <h1 class="display">How it works</h1>
+        <p class="lede">What happens after you copy, how two computers find each other and connect directly, and what happens when they can’t.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="flow-title">
+      <div class="wrap">
+        <h2 id="flow-title">What happens when you copy</h2>
+        <p class="intro">Text, images, files and whole folders all take the same path.</p>
+        <ol class="flow">
+          <li><h3>Notice</h3><p>On Mac, the background service checks the clipboard's change count at short intervals; reading the count and types needs no permission and never shows a prompt. On Windows, the system tells it the moment you copy.</p></li>
+          <li><h3>Send</h3><p>Text travels inside the message. Images and files under 50 MB are streamed right away. Larger files are announced as a record and sent when you ask for them.</p></li>
+          <li><h3>Paste</h3><p>The other computer stores the content locally, then puts it on the clipboard. What you paste with ⌘V or Ctrl+V is a real local file.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="diagram" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title">How PasteFerry connects</h2>
+        <p class="intro">On the same network, devices find each other without a server. Across networks, official access or your own server exchanges connection information. Direct NAT traversal comes first; encrypted relay is used after direct failure. The diagram shows this general signaling and relay structure.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
+            <title id="diagram-title">How PasteFerry connects</title>
+            <desc id="diagram-desc">Computer A and computer B (Mac or Windows) connect directly over WebRTC. Both connect to your server for signaling. If the direct connection fails, data is relayed through the server's TURN service.</desc>
+            <rect class="d-box" x="360" y="24" width="240" height="96" rx="14"/>
+            <text class="d-title" x="480" y="64" text-anchor="middle">Signaling and relay service</text>
+            <text class="d-sub" x="480" y="92" text-anchor="middle">Signaling, STUN, TURN relay</text>
+            <path class="d-sig" d="M140 210V58H360"/>
+            <path class="d-sig" d="M820 210V58H600"/>
+            <path class="d-relay" d="M196 210V100H360"/>
+            <path class="d-relay" d="M764 210V100H600"/>
+            <text class="d-note" x="210" y="50">Signaling: connection details</text>
+            <text class="d-note" x="210" y="128">Relay: only if direct fails</text>
+            <rect class="d-box" x="40" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="160" y="262" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="160" y="290" text-anchor="middle">You copy here</text>
+            <rect class="d-box" x="680" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="800" y="262" text-anchor="middle">Mac or Windows</text>
+            <text class="d-sub" x="800" y="290" text-anchor="middle">You paste here</text>
+            <path class="d-direct" d="M280 270H680"/>
+            <text class="d-label" x="480" y="256" text-anchor="middle">Direct WebRTC, DTLS encrypted</text>
+            <text class="d-note" x="480" y="298" text-anchor="middle">Data moves only between your computers</text>
+            <g class="d-legend" transform="translate(40 372)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">Data (direct)</text>
+              <path class="d-relay" d="M210 0H238"/><text x="248" y="5">Data (relay, fallback)</text>
+              <path class="d-sig" d="M470 0H498"/><text x="508" y="5">Signaling</text>
+            </g>
+          </svg>
+          <ul class="points diagram-text">
+            <li><strong>Direct WebRTC, DTLS encrypted</strong> Data moves only between your computers</li>
+            <li><strong>Signaling and relay service</strong> Signaling, STUN, TURN relay</li>
+            <li>Relay: only if direct fails</li>
+          </ul>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="multi-uplink" aria-labelledby="multi-title">
+      <div class="wrap">
+        <h2 id="multi-title">Direct on office networks too</h2>
+        <p class="intro">Office networks with two ISPs, or carriers with a pool of NAT addresses, have several uplinks and pick one per destination. A single probe only reveals one of them, so connections end up on the relay. PasteFerry probes every uplink and tells the peer about all of them.</p>
+        <div class="cols">
+          <div>
+            <h3>What it does</h3>
+            <ul class="points">
+              <li><strong>One shared port.</strong> All connections send and receive on one local UDP port, so the addresses learned from different servers line up.</li>
+              <li><strong>Every uplink probed.</strong> Seven IP-diverse servers are queried from that port at once, yielding one address per uplink. Addresses poisoned by DNS are dropped first.</li>
+              <li><strong>All of them sent to the peer.</strong> The peer tries each address; the one matching the real uplink gets through.</li>
+              <li><strong>Uplinks remembered.</strong> If a round misses an uplink that keeps ports unchanged, its address is filled in as uplink IP plus local port.</li>
+              <li><strong>A rule for who sends first.</strong> Some routers lock a port when the other side's packet arrives first. One side announces its addresses first; the other sends to them before announcing its own. Retries alternate the order.</li>
+              <li><strong>Retry direct while idle.</strong>If direct traversal fails and relay is available, sync can use relay. When the connection is idle, the client can retry direct access and release the relay after success.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Checked against real network topologies</h3>
+            <p class="small">The NAT lab builds these topologies with Linux network namespaces and iptables and runs PasteFerry's actual connection code through each. It runs on every commit.</p>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th scope="col">Scenario</th><th scope="col">Result</th></tr></thead>
+                <tbody>
+                <tr><td>Single uplink ↔ home router</td><td>Direct</td></tr>
+                <tr><td>Two uplinks, previous version (control)</td><td>Relay</td></tr>
+                <tr><td>Two uplinks ↔ home router</td><td>Direct</td></tr>
+                <tr><td>Four uplinks ↔ home router</td><td>Direct</td></tr>
+                <tr><td>Two uplinks, second not probed, no history</td><td>Relay</td></tr>
+                <tr><td>Two uplinks, second not probed, with history</td><td>Direct</td></tr>
+                <tr><td>Two uplinks ↔ two uplinks</td><td>Direct</td></tr>
+                <tr><td>Two uplinks ↔ NAT that randomizes ports</td><td>Relay</td></tr>
+                <tr><td>Blocked at first, network recovers later</td><td>Relay, then direct</td></tr>
+                <tr><td>Office router locks a port for unsolicited packets</td><td>Direct</td></tr>
+                <tr><td>Home router locks a port for unsolicited packets</td><td>Relay, then direct after one retry</td></tr>
+                <tr><td>No server, same subnet, found over mDNS</td><td>Direct</td></tr>
+                <tr><td>No server, two subnets, one side remembers the address</td><td>Direct</td></tr>
+                <tr><td>No server, both block inbound, both remember</td><td>Direct</td></tr>
+                <tr><td>No server, both block inbound, only one remembers</td><td>No connection (known limit)</td></tr>
+                <tr><td>No server, subnets isolated from each other</td><td>No connection</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="small">Measured: a Mac on a 4-uplink office network and one at home could only relay before, capped at 0.6 MB/s by the server's bandwidth. Now they connect directly, about 3 seconds after reaching the server.</p>
+            <p class="small">Measurements, design trade-offs and lessons learned are in the <a href="../../design/nat-traversal.html">design document</a> (in Chinese).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="fallbacks" aria-labelledby="fallback-title">
+      <div class="wrap">
+        <h2 id="fallback-title">When things go wrong</h2>
+        <p class="intro">Every network is different. Each of these cases was considered, and each has a test.</p>
+        <dl class="fallbacks">
+          <div><dt>Can't find the other computer on the network</dt><dd>Different subnets, guest networks and Wi‑Fi with client isolation block local discovery. Enter the address shown under the other computer's code when pairing; it's remembered afterwards, and if both computers change addresses you enter it once more in the device list.</dd></div>
+          <div><dt>The system blocks the local network</dt><dd>From macOS 15, the background service needs your permission to reach devices on the local network; Windows asks about the firewall on first run. If either isn't allowed, the app says so and links straight to the fix.</dd></div>
+          <div><dt>No direct path between the computers</dt><dd>Official access requests relay only after direct failure and within its current allowance. A custom server uses its own TURN relay instead. Content remains end-to-end encrypted in either case.</dd></div>
+          <div><dt>Public STUN servers unreachable</dt><dd>Public STUN is unreliable in some regions, including mainland China. Your server runs its own STUN, and clients prefer it.</dd></div>
+          <div><dt>Switching back to direct</dt><dd>If direct traversal fails and relay is available, sync can use relay. When the connection is idle, the client can retry direct access and release the relay after success.</dd></div>
+          <div><dt>The other computer sleeps, drops off or restarts</dt><dd>A connection that dies silently is noticed, closed and reconnected. Anything you copy meanwhile is kept and added to the other computer's history once it's back, without overwriting what's on its clipboard now.</dd></div>
+          <div><dt>Server connection drops</dt><dd>Reconnects automatically: the delay starts at 1 second and doubles up to 30, with jitter so devices don't all reconnect at once. Devices on the same network keep syncing.</dd></div>
+          <div><dt>File too large</dt><dd>Above the limit only a record is synced, pulled when you need it. If the source file is gone by then, you get a clear message instead of a vague failure.</dd></div>
+          <div><dt>Pasting into plain-text fields</dt><dd>Rich text copied from the web is written as both HTML and plain text, so no markup leaks into what you paste.</dd></div>
+          <div><dt>A file name Windows doesn't allow</dt><dd>Colons, question marks and a few other characters that are fine on a Mac arrive as the matching full-width characters, so the name still reads the same. Two names that differ only in case never overwrite each other.</dd></div>
+          <div><dt>Copying a password</dt><dd>On Windows, password managers mark what they copy as "don't record". PasteFerry skips it: not synced, not kept in the history.</dd></div>
+          <div><dt>Clipboard access not granted yet</dt><dd>Content isn't read, which would block on a prompt a background process can't show. The app asks you to grant access and links straight to the setting.</dd></div>
+          <div><dt>Background service crashes</dt><dd>launchd on Mac, and PasteFerry's own supervisor on Windows, restart it, throttled to once every 10 seconds.</dd></div>
+          <div><dt>App updated or moved</dt><dd>On launch the app re-points its login item and restarts the service on the new version.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="specs" aria-labelledby="specs-title">
+      <div class="wrap">
+        <h2 id="specs-title">Specifications</h2>
+        <div class="table-scroll">
+          <table class="specs">
+            <tbody>
+            <tr><th scope="row">Version</th><td>2.3.0, released <time datetime="2026-10-19">October 19, 2026</time></td></tr>
+            <tr><th scope="row">Mac app</th><td>macOS 13 Ventura or later; separate downloads for Apple silicon and Intel, about 25 MB each, no Rosetta; a universal version for both is about 47 MB</td></tr>
+            <tr><th scope="row">Windows app</th><td>Windows 10 and Windows 11, x64; installs per user, no administrator rights; about 23 MB download</td></tr>
+            <tr><th scope="row">Linux app</th><td>x64 and ARM64; .deb (Debian, Ubuntu and similar) or tar.gz (other distributions), about 22 MB; needs an X11 desktop, or a Wayland desktop with XWayland (GNOME, KDE and others include it by default); GTK 3</td></tr>
+            <tr><th scope="row">Server</th><td>Deployment is needed only for self-hosting; official access needs no server of your own. Self-hosting supports Linux x86_64/ARM64, macOS and Windows 10/11 x64.</td></tr>
+            <tr><th scope="row">Languages</th><td>English, Simplified Chinese, Traditional Chinese (Taiwan and Hong Kong) and Japanese; follows the system by default, switchable in Settings</td></tr>
+            <tr><th scope="row">Content</th><td>Plain text, rich text, images and screenshots, files, folders; each type can be turned off</td></tr>
+            <tr><th scope="row">Transport</th><td>WebRTC data channels, direct first with TURN relay fallback; on the same network, mDNS discovery and connection details over UDP 8788; every uplink probed on multi-uplink networks; files streamed as tar + zstd</td></tr>
+            <tr><th scope="row">Encryption and identity</th><td>End-to-end DTLS; Ed25519 device keys; every signaling message signed</td></tr>
+            <tr><th scope="row">Pairing</th><td>6-character code valid for 5 minutes, using an alphabet without look-alikes such as 0/O and 1/I; fingerprints compared by you</td></tr>
+            <tr><th scope="row">Auto-sync limit</th><td>50 MB by default, adjustable from 1 MB to 1 GB</td></tr>
+            <tr><th scope="row">History</th><td>3 days by default, adjustable from 1 hour to 30 days; expired items removed automatically</td></tr>
+            <tr><th scope="row">Measured speed</th><td>A 20 MB file transfers in about 330 ms over a direct LAN connection, checksums matching</td></tr>
+            <tr><th scope="row">Built with</th><td>Go for the background service and server (pure Go calling Win32 on Windows and speaking the X11 protocol on Linux), Flutter for the app (one codebase for all three systems), Protocol Buffers for messages</td></tr>
+            <tr><th scope="row">License</th><td><a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">GNU AGPL-3.0</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry is open source under the GNU AGPL-3.0.</p>
+      <nav aria-label="Footer">
+        <a href="https://github.com/baiyuze/pasteferry/releases">All releases</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Design notes (Chinese)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">License</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Report an issue</a>
+        <a href="../../en/privacy/">Privacy and essential data</a>
+      </nav>
+      <nav aria-label="Language">
+        <a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/how/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a>
+        <a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

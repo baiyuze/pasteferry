@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>よくある質問 — PasteFerry</title>
+  <meta name="description" content="インストール、接続、同期、料金について。答えが見つからなければお知らせください。">
+  <link rel="canonical" href="https://pasteferry.cc/ja/faq/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/faq/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/faq/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/faq/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/faq/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/faq/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="よくある質問 — PasteFerry">
+  <meta property="og:description" content="インストール、接続、同期、料金について。答えが見つからなければお知らせください。">
+  <meta property="og:url" content="https://pasteferry.cc/ja/faq/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "UU Remote の使用中に .uuremote_ ファイルが増え続けるのはなぜですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "UU Remote は一時的なプレースホルダーファイルをシステムのクリップボードに書き込みます。旧版の PasteFerry はそれを通常のファイルとして記録・転送していました。1.3.2 では確認済みの命名パターンを送受信時に除外し、起動時にプレースホルダーだけの履歴を削除します。通常の空ファイル、隠しファイル、大容量ファイルは対象外です。50 MB は自動転送のしきい値であり、UU の UDP P2P 設定とは関係ありません。両端を更新してください。他のクリップボード同期ツールによる通常コンテンツの重複は起こり得ます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "macOS のユニバーサルクリップボードとの違いは？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Mac・Windows・Linux でテキスト、画像、ファイル、フォルダを同期。同じアカウントは不要。公式サービスをオンにすれば、サーバーを構築せずに別ネットワーク間でも使えます。直接接続を優先し、常にエンドツーエンド暗号化。 2 台の Mac が同じ Apple ID でいつも並んでいて、主にテキストをコピーするだけなら、標準機能で十分です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "サーバーにコピーした内容は見えますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "コピー内容は復号できません。直接通信は端末間で行い、中継はエンドツーエンド暗号化されたパケットを転送します。公式サービスは必要な端末・使用量統計を保持します。公開ソースだけで非公開の本番保存動作まで証明できるわけではありません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "出口が複数ある会社のネットワークでも直接つながりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "つながります。こうしたネットワークは宛先ごとに出口を選びます。PasteFerry はひとつのポートから複数のサーバーに問い合わせて出口ごとのアドレスを集め、すべて相手に送り、相手がひとつずつ試します。テストでは、出口が 4 つある会社の Mac と家庭の回線が直接つながりました。相手がポートをランダムに割り当てる NAT の場合は中継になります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "サーバーは自分で用意する必要がありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "不要です。別ネットワークなら両方で公式サービスを有効にします。クラウド契約やアドレス入力は不要。初期状態はオフで、現在の中継上限は 100 MB/日、直接通信は消費しません。LAN、独自サーバー、Tailscale も使えます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "自宅にグローバル IP がありません。自宅と会社のあいだで同期できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "不要です。別ネットワークなら両方で公式サービスを有効にします。クラウド契約やアドレス入力は不要。初期状態はオフで、現在の中継上限は 100 MB/日、直接通信は消費しません。LAN、独自サーバー、Tailscale も使えます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "同じネットワークなのに、もう一台が見つからないのはなぜ？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "まず本当に同じサブネットか確認してください。会社の有線と Wi‑Fi、ゲストネットワーク、クライアント分離が有効な Wi‑Fi では、デバイス同士が見えないことがよくあります。その場合は、コードを入力する側で「別のサブネットにありますか？」をクリックし、相手のコードの下に表示されたアドレスを入力します。 Windows では初回起動時にファイアウォールに聞かれたら許可してください。キャンセルした場合は「設定 → ローカルネットワーク」で「許可」をクリックします。Mac では「システム設定 → プライバシーとセキュリティ → ローカルネットワーク」で PasteFerry Daemon をオンにします。詳しくは同じネットワークでの手順を。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Windows や Linux に対応していますか？iPhone は？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Windows 10 と Windows 11（x64）に対応し、Mac と相互に使えます。Windows で貼り付けたファイルは本物のファイルなので、エクスプローラーや Office にそのまま貼り付けられます。 x64 と ARM64 の Linux デスクトップにも対応しています。X11、または XWayland 付きの Wayland デスクトップ（GNOME、KDE などは標準で搭載）で動きます。コピーしたファイルはファイルマネージャーにそのまま貼り付けられます。 iPhone と iPad には対応していません。iOS ではアプリがバックグラウンドでクリップボードを監視できないため、コピーしてすぐ同期することができないからです。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "初めて開くときにシステムに止められるのはなぜ？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PasteFerry はまだ Apple の公証を受けておらず、Windows 版もコード署名していません。どちらも毎年費用のかかる証明書が必要です。 Mac では「システム設定 → プライバシーとセキュリティ」でページ下部の「このまま開く」をクリック、Windows では「Windows によって PC が保護されました」で「詳細情報」から「実行」を押してください。どちらも一度だけで済みます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "大きなファイルはどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "初期設定では 50 MB までのものはコピーした時点でもう一台に送られ、そのまま貼り付けられます。それより大きいファイルは記録だけを同期し、必要なときに履歴から「このデバイスに取り込む」で転送します。上限は「設定」で変えられます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "無料ですか？会社で使えますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "無料です。PasteFerry は GNU AGPL-3.0 のオープンソースで、個人も会社も無料で使い、改変できます。配布する場合や、改変したものをネットワーク越しに提供する場合は、同じライセンスでソースコードを公開する必要があります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "公式中継は無制限ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "現在の標準中継上限は端末の上限グループごとに送受信合計 100 MB/日で、北京時間午前 0 時にリセットします。再インストールで新たな残量が得られる保証はありません。使用量画面に実際の上限、残量、更新時刻を表示します。上限に達しても直接接続は利用できます。上限と提供状況は変更される場合があるため、アプリでご確認ください。"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">本文へ移動</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ja/" aria-label="PasteFerry ホーム"><img src="../../assets/icon.svg" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="ページ内の移動">
+        <a href="../../ja/features/">機能</a>
+        <a class="mid" href="../../ja/start/">はじめかた</a>
+        <a class="wide" href="../../ja/start/#server">接続方法</a>
+        <a href="../../ja/download/">ダウンロード</a>
+        <details class="menu">
+          <summary aria-label="その他のページ" class="current"><span>その他</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../ja/start/">はじめかた</a></li>
+            <li class="narrow"><a href="../../ja/start/#server">接続方法</a></li>
+            <li><a href="../../ja/how/">しくみ</a></li>
+            <li><a href="../../ja/security/">セキュリティ</a></li>
+            <li><a href="./" aria-current="page">よくある質問</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="言語：日本語"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>日本語</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../faq/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/faq/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/faq/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/faq/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/faq/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../ja/">PasteFerry</a></p>
+        <h1 class="display">よくある質問</h1>
+        <p class="lede">インストール、接続、同期、料金について。答えが見つからなければお知らせください。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="faq">
+          <details>
+            <summary>UU Remote の使用中に .uuremote_ ファイルが増え続けるのはなぜですか？</summary>
+            <div class="answer"><p>UU Remote は一時的なプレースホルダーファイルをシステムのクリップボードに書き込みます。旧版の PasteFerry はそれを通常のファイルとして記録・転送していました。1.3.2 では確認済みの命名パターンを送受信時に除外し、起動時にプレースホルダーだけの履歴を削除します。通常の空ファイル、隠しファイル、大容量ファイルは対象外です。50 MB は自動転送のしきい値であり、UU の UDP P2P 設定とは関係ありません。両端を更新してください。他のクリップボード同期ツールによる通常コンテンツの重複は起こり得ます。</p></div>
+          </details>
+          <details>
+            <summary>macOS のユニバーサルクリップボードとの違いは？</summary>
+            <div class="answer"><p>Mac・Windows・Linux でテキスト、画像、ファイル、フォルダを同期。同じアカウントは不要。公式サービスをオンにすれば、サーバーを構築せずに別ネットワーク間でも使えます。直接接続を優先し、常にエンドツーエンド暗号化。</p><p>2 台の Mac が同じ Apple ID でいつも並んでいて、主にテキストをコピーするだけなら、標準機能で十分です。</p></div>
+          </details>
+          <details>
+            <summary>サーバーにコピーした内容は見えますか？</summary>
+            <div class="answer"><p>コピー内容は復号できません。直接通信は端末間で行い、中継はエンドツーエンド暗号化されたパケットを転送します。公式サービスは必要な端末・使用量統計を保持します。公開ソースだけで非公開の本番保存動作まで証明できるわけではありません。</p></div>
+          </details>
+          <details>
+            <summary>出口が複数ある会社のネットワークでも直接つながりますか？</summary>
+            <div class="answer"><p>つながります。こうしたネットワークは宛先ごとに出口を選びます。PasteFerry はひとつのポートから複数のサーバーに問い合わせて出口ごとのアドレスを集め、すべて相手に送り、相手がひとつずつ試します。テストでは、出口が 4 つある会社の Mac と家庭の回線が直接つながりました。相手がポートをランダムに割り当てる NAT の場合は中継になります。</p></div>
+          </details>
+          <details>
+            <summary>サーバーは自分で用意する必要がありますか？</summary>
+            <div class="answer"><p>不要です。別ネットワークなら両方で<a href="../../ja/official/">公式サービス</a>を有効にします。クラウド契約やアドレス入力は不要。初期状態はオフで、現在の中継上限は 100 MB/日、直接通信は消費しません。LAN、<a href="../../ja/cloud/">独自サーバー</a>、<a href="../../ja/tailscale/">Tailscale</a> も使えます。</p></div>
+          </details>
+          <details>
+            <summary>自宅にグローバル IP がありません。自宅と会社のあいだで同期できますか？</summary>
+            <div class="answer"><p>不要です。別ネットワークなら両方で<a href="../../ja/official/">公式サービス</a>を有効にします。クラウド契約やアドレス入力は不要。初期状態はオフで、現在の中継上限は 100 MB/日、直接通信は消費しません。LAN、<a href="../../ja/cloud/">独自サーバー</a>、<a href="../../ja/tailscale/">Tailscale</a> も使えます。</p></div>
+          </details>
+          <details>
+            <summary>同じネットワークなのに、もう一台が見つからないのはなぜ？</summary>
+            <div class="answer"><p>まず本当に同じサブネットか確認してください。会社の有線と Wi‑Fi、ゲストネットワーク、クライアント分離が有効な Wi‑Fi では、デバイス同士が見えないことがよくあります。その場合は、コードを入力する側で「別のサブネットにありますか？」をクリックし、相手のコードの下に表示されたアドレスを入力します。</p><p>Windows では初回起動時にファイアウォールに聞かれたら許可してください。キャンセルした場合は「設定 → ローカルネットワーク」で「許可」をクリックします。Mac では「システム設定 → プライバシーとセキュリティ → ローカルネットワーク」で PasteFerry Daemon をオンにします。詳しくは<a href="../../ja/lan/#faq">同じネットワークでの手順</a>を。</p></div>
+          </details>
+          <details>
+            <summary>Windows や Linux に対応していますか？iPhone は？</summary>
+            <div class="answer"><p>Windows 10 と Windows 11（x64）に対応し、Mac と相互に使えます。Windows で貼り付けたファイルは本物のファイルなので、エクスプローラーや Office にそのまま貼り付けられます。</p><p>x64 と ARM64 の Linux デスクトップにも対応しています。X11、または XWayland 付きの Wayland デスクトップ（GNOME、KDE などは標準で搭載）で動きます。コピーしたファイルはファイルマネージャーにそのまま貼り付けられます。</p><p>iPhone と iPad には対応していません。iOS ではアプリがバックグラウンドでクリップボードを監視できないため、コピーしてすぐ同期することができないからです。</p></div>
+          </details>
+          <details>
+            <summary>初めて開くときにシステムに止められるのはなぜ？</summary>
+            <div class="answer"><p>PasteFerry はまだ Apple の公証を受けておらず、Windows 版もコード署名していません。どちらも毎年費用のかかる証明書が必要です。</p><p>Mac では「システム設定 → プライバシーとセキュリティ」でページ下部の「このまま開く」をクリック、Windows では「Windows によって PC が保護されました」で「詳細情報」から「実行」を押してください。どちらも一度だけで済みます。</p></div>
+          </details>
+          <details>
+            <summary>大きなファイルはどうなりますか？</summary>
+            <div class="answer"><p>初期設定では 50 MB までのものはコピーした時点でもう一台に送られ、そのまま貼り付けられます。それより大きいファイルは記録だけを同期し、必要なときに履歴から「このデバイスに取り込む」で転送します。上限は「設定」で変えられます。</p></div>
+          </details>
+          <details>
+            <summary>無料ですか？会社で使えますか？</summary>
+            <div class="answer"><p>無料です。PasteFerry は GNU AGPL-3.0 のオープンソースで、個人も会社も無料で使い、改変できます。配布する場合や、改変したものをネットワーク越しに提供する場合は、同じライセンスでソースコードを公開する必要があります。</p></div>
+          </details>
+          <details>
+            <summary>公式中継は無制限ですか？</summary>
+            <div class="answer"><p>現在の標準中継上限は端末の上限グループごとに送受信合計 100 MB/日で、北京時間午前 0 時にリセットします。再インストールで新たな残量が得られる保証はありません。使用量画面に実際の上限、残量、更新時刻を表示します。上限に達しても直接接続は利用できます。上限と提供状況は変更される場合があるため、アプリでご確認ください。</p></div>
+          </details>
+        </div>
+        <p class="more"><a href="https://github.com/baiyuze/pasteferry/issues">問題を報告 →</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry は GNU AGPL-3.0 のオープンソースです。</p>
+      <nav aria-label="フッターのリンク">
+        <a href="https://github.com/baiyuze/pasteferry/releases">すべてのリリース</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技術資料（中国語）</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">ライセンス</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">問題を報告</a>
+        <a href="../../ja/privacy/">プライバシーと必要なデータ</a>
+      </nav>
+      <nav aria-label="言語">
+        <a href="../../faq/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/faq/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/faq/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/faq/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/faq/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

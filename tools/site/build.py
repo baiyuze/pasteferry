@@ -18,6 +18,7 @@ from pathlib import Path
 from content.tour import localized as tour_copy
 from content.privacy import COPY as PRIVACY_COPY
 from content.official import COPY as OFFICIAL_COPY
+from content.features import localized as features_copy
 
 ROOT = Path(__file__).resolve().parents[2]
 DOCS = ROOT / "docs"
@@ -67,7 +68,12 @@ DOWNLOAD = "download/"
 TOUR = "tour/"
 PRIVACY = "privacy/"
 OFFICIAL = "official/"
-SUBPAGES = [START, OFFICIAL, LAN, CLOUD, GUIDE, TAILSCALE, DOWNLOAD, TOUR, PRIVACY]
+# 功能页，以及从首页挪出去、放在顶栏「更多」里的三页：用户上手不必先看的内容
+FEATURES = "features/"
+HOW = "how/"
+SECURITY = "security/"
+FAQ = "faq/"
+SUBPAGES = [FEATURES, START, OFFICIAL, LAN, CLOUD, GUIDE, TAILSCALE, DOWNLOAD, TOUR, PRIVACY, HOW, SECURITY, FAQ]
 DEPLOY_PAGES = [LAN, CLOUD, GUIDE, TAILSCALE]
 
 # 放到网站上的技术方案：文件名 → 网页名。其他 design/*.md 链接到 GitHub
@@ -92,6 +98,46 @@ GLOBE = ('<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-widt
          'M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg>')
 CHEVRON = ('<svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" '
            'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg>')
+
+# 按键在 Mac 与 Windows、Linux 上的两种写法。文案里写占位符，页面里两种都放，
+# 由 <head> 里的 PLATFORM 按访问者的系统显示其中一种；没有脚本时显示 Mac 的。
+# PLATFORM 同时给 html 加 js：滚动到才淡入的块只在有脚本时先藏起来
+KEYS = {
+    "key": ("⌥V", "Alt+V"),
+    "enter": ("↩", "Enter"),
+    "plain": ("⇧↩", "Shift+Enter"),
+    "copyonly": ("⌘↩", "Ctrl+Enter"),
+    "fav": ("⌘D", "Ctrl+D"),
+    "paste": ("⌘V", "Ctrl+V"),
+    "copy": ("⌘C", "Ctrl+C"),
+}
+PLATFORM = ('  <script>document.documentElement.classList.add("js");'
+            'if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) '
+            'document.documentElement.classList.add("pc");</script>\n')
+
+
+def keys(text: str) -> str:
+    """把文案里的 {key}、{enter} 这类按键占位换成两种写法。"""
+    for k, (mac, pc) in KEYS.items():
+        text = text.replace("{" + k + "}", f'<span class="k-mac">{mac}</span><span class="k-pc">{pc}</span>')
+    return text
+
+
+def mac_keys(text: str) -> str:
+    """给 alt、title 这类只能是纯文本的地方：按键一律写 Mac 的。"""
+    for k, (mac, _) in KEYS.items():
+        text = text.replace("{" + k + "}", mac)
+    return text
+
+
+def app_strings(code: str) -> dict:
+    """App 界面的文案（ui/tool/l10n/strings.py），功能页的界面演示直接用它，和 App 里一字不差。"""
+    path = ROOT / "ui" / "tool" / "l10n" / "strings.py"
+    spec = importlib.util.spec_from_file_location("app_strings", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    col = {"en": 1, "zh": 2, "ja": 3, "zh-tw": 4, "zh-hk": 5}[code]
+    return {row[0]: row[col] for row in module.S}
 
 # 同一份页面也由 GitHub Pages 发布；在那里先跳到官网，再加载样式和其他脚本。
 GITHUB_PAGES_REDIRECT = """  <script>
@@ -211,34 +257,56 @@ def cta(c: dict, base: str, start: str = "", tour_label: str = "") -> str:
         <p class="note">{c["dl_note"]}</p>{link}"""
 
 
+# 顶栏里标出当前所在的栏目（不是当前页面本身）
+IN_SECTION = ' aria-current="true"'
+
+
 def header(c: dict, code: str, up: str, sub: str = "") -> str:
-    """顶栏。sub 是当前的教程页面（START、GUIDE 等），首页为空。窄屏只留不带 wide 的几项，手机上再收起带 mid 的。
+    """顶栏：功能、快速开始、连接方式、下载，其余放进「更多」菜单。sub 是当前页面（START、GUIDE 等），首页为空。
+    窄屏收起带 wide 的，手机上再收起带 mid 的；收起的几项在「更多」菜单里显示（带 narrow 的菜单项）。
     「连接方式」指向快速开始里三种方式的选择，在各篇教程里显示为当前所在的栏目。"""
+    f = features_copy(code)
     path = LANGS[code][0]
     if sub:
         home = up + (path or "./")
-        base = up + path  # 语言根目录，教程页面互相链接用
+        base = up + path  # 语言根目录，页面之间互相链接用
     else:
         home, base = "", ""
-    if sub == START:
-        start = '<a href="./" aria-current="page">'
-        deploy = '<a class="mid" href="#server">'
-    else:
-        start = f'<a href="{base}{START}">'
-        current = ' aria-current="true"' if sub in DEPLOY_PAGES else ""
-        deploy = f'<a class="mid" href="{base}{START}#server"{current}>'
-    download = '<a href="./" aria-current="page">' if sub == DOWNLOAD else f'<a href="{base}{DOWNLOAD}">'
+
+    def link(page: str, label: str, cls: str = "", current: bool = False) -> str:
+        cls = f' class="{cls}"' if cls else ""
+        if sub == page:
+            return f'<a{cls} href="./" aria-current="page">{label}</a>'
+        return f'<a{cls} href="{base}{page}"{IN_SECTION if current else ""}>{label}</a>'
+
+    server = f'{base}{START}#server' if sub != START else "#server"
+    deploy = f'<a class="wide" href="{server}"{IN_SECTION if sub in DEPLOY_PAGES else ""}>{c["nav_server"]}</a>'
+    more = [
+        f'<li class="narrow">{link(START, c["nav_start"])}</li>',
+        f'<li class="narrow"><a href="{server}">{c["nav_server"]}</a></li>',
+        f'<li>{link(HOW, c["nav_how"])}</li>',
+        f'<li>{link(SECURITY, f["nav_security"])}</li>',
+        f'<li>{link(FAQ, c["nav_faq"])}</li>',
+        '<li class="sep" role="separator"></li>',
+        f'<li><a href="{REPO}/blob/main/CHANGELOG.md">{f["nav_changelog"]}</a></li>',
+        f'<li><a href="{REPO}">GitHub</a></li>',
+    ]
+    in_more = sub in (HOW, SECURITY, FAQ)
 
     return f"""  <header class="bar">
     <div class="wrap">
       <a class="brand" href="{home or "./"}" aria-label="{c["home_label"]}"><img src="{up}assets/icon.svg" alt="" width="26" height="26">{c["brand"]}</a>
       <nav aria-label="{c["nav_label"]}">
-        {start}{c["nav_start"]}</a>
-        <a class="wide" href="{home}#how">{c["nav_how"]}</a>
-        <a class="wide" href="{home}#faq">{c["nav_faq"]}</a>
-        {deploy}{c["nav_server"]}</a>
-        {download}{c["nav_download"]}</a>
-        <a class="wide" href="{REPO}">GitHub</a>
+        {link(FEATURES, f["nav_features"])}
+        {link(START, c["nav_start"], "mid")}
+        {deploy}
+        {link(DOWNLOAD, c["nav_download"])}
+        <details class="menu">
+          <summary aria-label="{f["nav_more_label"]}"{' class="current"' if in_more else ""}><span>{f["nav_more"]}</span>{CHEVRON}</summary>
+          <ul>
+            {(chr(10) + "            ").join(more)}
+          </ul>
+        </details>
         {lang_menu(c, code, up, sub)}
       </nav>
     </div>
@@ -361,69 +429,33 @@ def jsonld(c: dict, code: str, path: str, shots: str) -> str:
                 "featureList": c["ld_features"],
                 "author": {"@type": "Person", "name": "baiyuze", "url": "https://github.com/baiyuze"},
             },
-            {
-                "@type": "FAQPage",
-                "mainEntity": [
-                    {"@type": "Question", "name": q,
-                     "acceptedAnswer": {"@type": "Answer", "text": " ".join(text_of(p) for p in answer)}}
-                    for q, answer in c["faq"]
-                ],
-            },
         ],
     }
     body = json.dumps(data, ensure_ascii=False, indent=2)
     return "\n".join("  " + line for line in body.split("\n"))
 
 
-def home(code: str) -> str:
-    c = load(code)
-    _, tour_ui, _ = tour_copy(code, c)
-    path, hl, locale, _ = LANGS[code]
-    up = "../" * path.count("/")
-    a = up + "assets/"
-    shots = shots_dir(code)
+def head_meta(c: dict, code: str, path: str, title: str, description: str, og_title: str, og_description: str,
+              a: str) -> str:
+    """首页与功能页共用的 <head> 内容：标题、描述、各语言的地址、分享卡片与图标。"""
+    _, hl, locale, _ = LANGS[code]
+    sub = path[len(LANGS[code][0]):]
     alternates = "\n".join(
-        f'  <link rel="alternate" hreflang="{h}" href="{SITE}{p}">' for p, h, _, _ in LANGS.values())
+        f'  <link rel="alternate" hreflang="{h}" href="{SITE}{p}{sub}">' for p, h, _, _ in LANGS.values())
+    if not sub:
+        alternates += f'\n  <link rel="alternate" hreflang="x-default" href="{SITE}">'
     others = [l for k, (_, _, l, _) in LANGS.items() if k != code]
-
-    ours = ' class="ours"'
-    compare_head = "".join(
-        f'<th scope="col"{ours if i == 0 else ""}>{h}</th>' for i, h in enumerate(c["compare_cols"]))
-    compare_rows = "\n".join(
-        f'              <tr><th scope="row">{label}</th>' + "".join(
-            f'<td class="{cls}{" ours" if i == 0 else ""}">{val}</td>' for i, (cls, val) in enumerate(cells)) + "</tr>"
-        for label, cells in c["compare_rows"])
-    flow = "\n".join(f"          <li><h3>{h}</h3><p>{p}</p></li>" for h, p in c["flow"])
-    uplink = "\n".join(f"              <li><strong>{s}</strong>{t}</li>" for s, t in c["uplink_points"])
-    lab = "\n".join(f"                <tr><td>{s}</td><td>{r}</td></tr>" for s, r in c["lab_rows"])
-    security = "\n".join(f"            <li><strong>{s}</strong>{t}</li>" for s, t in c["security_points"])
-    fallbacks = "\n".join(f"          <div><dt>{t}</dt><dd>{d}</dd></div>" for t, d in c["fallbacks"])
-    mac_steps = "\n".join(f"              <li>{s}</li>" for s in c["mac_steps"])
-    win_steps = "\n".join(f"              <li>{s}</li>" for s in c["win_steps"])
-    linux_steps = "\n".join(f"              <li>{s}</li>" for s in c["linux_steps"])
-    opts = "\n".join(
-        f'              <li><a href="{page}">{c["plans"][key]["name"]}</a><span>{c["plans"][key]["fit"]}</span></li>'
-        for key, page, _ in PLANS)
-    specs = "\n".join(f'            <tr><th scope="row">{k}</th><td>{v}</td></tr>' for k, v in c["specs"])
-    links = {"official": OFFICIAL, "lan": LAN, "cloud": CLOUD, "server": GUIDE, "ts": TAILSCALE, "start": START}
-    faq = faq_list(c["faq"], links)
-    d = c["diagram"]
-
-    return f"""<!doctype html>
-<html lang="{hl}">
-<head>
-  <meta charset="utf-8">
+    return f"""  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{c["title"]}</title>
-  <meta name="description" content="{esc(c["description"])}">
+  <title>{title}</title>
+  <meta name="description" content="{esc(description)}">
   <link rel="canonical" href="{SITE}{path}">
 {alternates}
-  <link rel="alternate" hreflang="x-default" href="{SITE}">
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{c["brand"]}">
-  <meta property="og:title" content="{esc(c["og_title"])}">
-  <meta property="og:description" content="{esc(c["og_description"])}">
+  <meta property="og:title" content="{esc(og_title)}">
+  <meta property="og:description" content="{esc(og_description)}">
   <meta property="og:url" content="{SITE}{path}">
   <meta property="og:image" content="{SITE}assets/{c["og_image"]}">
   <meta property="og:image:width" content="1200">
@@ -434,7 +466,68 @@ def home(code: str) -> str:
   <link rel="icon" href="{a}favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="{a}apple-touch-icon.png">
   <link rel="stylesheet" href="{a}site.css">
-{REDIRECT if code == "zh" else ""}  <script type="application/ld+json">
+{PLATFORM}"""
+
+
+# 首页「功能」六格与功能页用的线条图标，24×24，描边随文字颜色
+ICONS = {
+    "keys": '<rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/>',
+    "star": '<path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>',
+    "folder": '<path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/>',
+    "clock": '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    "globe": '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/>',
+    "lock": '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+}
+
+
+def icon(name: str) -> str:
+    return (f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[name]}</svg>')
+
+
+# 旧版首页上的锚点挪到了别的页面：从外面带着这些锚点进来的，跳到新位置
+MOVED_ANCHORS = """  <script>
+    (function () {
+      var moved = MOVED;
+      var to = moved[location.hash.slice(1)];
+      if (to) location.replace(to);
+    })();
+  </script>
+"""
+
+
+def home(code: str) -> str:
+    c = load(code)
+    f = features_copy(code)
+    _, tour_ui, _ = tour_copy(code, c)
+    path, hl, _, _ = LANGS[code]
+    up = "../" * path.count("/")
+    a = up + "assets/"
+    shots = shots_dir(code)
+
+    ours = ' class="ours"'
+    compare_head = "".join(
+        f'<th scope="col"{ours if i == 0 else ""}>{h}</th>' for i, h in enumerate(c["compare_cols"]))
+    compare_rows = "\n".join(
+        f'              <tr><th scope="row">{label}</th>' + "".join(
+            f'<td class="{cls}{" ours" if i == 0 else ""}">{val}</td>' for i, (cls, val) in enumerate(cells)) + "</tr>"
+        for label, cells in c["compare_rows"])
+    links = {"official": OFFICIAL, "lan": LAN, "cloud": CLOUD, "server": GUIDE, "ts": TAILSCALE, "start": START}
+    tiles = "\n".join(
+        f"""          <li class="tile">
+            {icon(name)}
+            <h3>{title}{f' <span class="new">{f["new_tag"]}</span>' if new else ""}</h3>
+            <p>{keys(text)}</p>
+          </li>""" for name, title, text, new in f["grid"])
+    moved = MOVED_ANCHORS.replace("MOVED", json.dumps({
+        "how": HOW, "multi-uplink": HOW + "#multi-uplink", "install": DOWNLOAD,
+        "faq": FAQ, "security": SECURITY, "specs": HOW + "#specs",
+    }))
+
+    return f"""<!doctype html>
+<html lang="{hl}">
+<head>
+{head_meta(c, code, path, c["title"], c["description"], c["og_title"], c["og_description"], a)}{REDIRECT if code == "zh" else ""}{moved}  <script type="application/ld+json">
 {jsonld(c, code, path, shots)}
   </script>
 </head>
@@ -446,7 +539,7 @@ def home(code: str) -> str:
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="{OFFICIAL}">{esc(c["official"]["badge"])}</a>
+        <a class="release-note" href="{FEATURES}#quick-paste">{keys(f["badge"])}</a>
         <h1 class="display">{c["h1"]}</h1>
         <p class="lede">{c["lede"]}</p>{cta(c, "", START, tour_ui["watch"])}
         <div class="stage" data-play role="img" aria-label="{esc(c["stage_label"])}">
@@ -476,36 +569,32 @@ def home(code: str) -> str:
       </div>
     </section>
 
-    <section class="section" id="deploy" aria-labelledby="deploy-title">
+    <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <h2 id="deploy-title">{c["paths_h2"]}</h2>
-        <p class="intro">{c["paths_intro"]}</p>
-        {paths(c, "")}
-        <p class="note">{fill(c["paths_after"], links)}</p>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="history-title">
-      <div class="wrap">
-        <h2 id="history-title">{c["history_h2"]}</h2>
-        <p class="intro">{c["history_intro"]}</p>
-        <figure class="shot">
-          <img src="{up}{shots}history-dark.png" width="2112" height="1472" alt="{esc(c["history_alt"])}">
+        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
+        <h2 id="qp-title">{keys(f["home_qp_h2"])}</h2>
+        <p class="intro">{keys(f["home_qp_intro"])}</p>
+        <figure class="spot" data-reveal>
+          <div class="spot-keys" aria-hidden="true">
+            <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
+          </div>
+          <img src="{up}{shots}card-picker-dark.png" width="1280" height="1080" loading="lazy" alt="{esc(f["home_qp_alt"])}">
         </figure>
+        <p class="more"><a href="{FEATURES}#quick-paste">{f["home_qp_link"]}</a></p>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="flow-title">
+    <section class="section" id="features" aria-labelledby="grid-title">
       <div class="wrap">
-        <h2 id="flow-title">{c["flow_h2"]}</h2>
-        <p class="intro">{c["flow_intro"]}</p>
-        <ol class="flow">
-{flow}
-        </ol>
+        <h2 id="grid-title">{f["grid_h2"]}</h2>
+        <ul class="tiles">
+{tiles}
+        </ul>
+        <p class="more"><a href="{FEATURES}">{f["grid_more"]}</a></p>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="why-title">
+    <section class="section" id="why" aria-labelledby="why-title">
       <div class="wrap">
         <h2 id="why-title">{c["why_h2"]}</h2>
         <p class="intro">{c["why_intro"]}</p>
@@ -521,9 +610,377 @@ def home(code: str) -> str:
       </div>
     </section>
 
-    <section class="section" id="how" aria-labelledby="how-title">
+    <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
-        <h2 id="how-title">{c["how_h2"]}</h2>
+        <h2 id="deploy-title">{c["paths_h2"]}</h2>
+        <p class="intro">{c["paths_intro"]}</p>
+        {paths(c, "")}
+        <p class="note">{fill(c["paths_after"], links)}</p>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">{c["closing"]}</h2>{cta(c, "", START)}
+        <a class="source" href="{REPO}">{c["source"]}</a>
+      </div>
+    </section>
+  </main>
+
+{footer(c, code, up)}
+
+  <dialog class="tour-dialog" aria-label="{esc(tour_ui["title"])}">
+    <form method="dialog"><button class="tour-close" aria-label="{esc(tour_ui["close"])}">×</button></form>
+    <iframe title="{esc(tour_ui["title"])}" data-src="{TOUR}?embed" allow="fullscreen" allowfullscreen></iframe>
+  </dialog>
+  <script src="{a}site.js" defer></script>
+{ANALYTICS}</body>
+</html>
+"""
+
+
+# ─────────────────────────── 功能页 ───────────────────────────
+
+# 快捷窗口与复制记录里每种记录的小图标，照 App 里的 Cupertino 图标画，16×16
+ROW_ICONS = {
+    "text": '<path d="M3 4.5h10M3 8h10M3 11.5h6.5"/>',
+    "link": '<path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/>'
+            '<path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/>',
+    "image": '<rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/>'
+             '<path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/>',
+    "files": '<path d="M5.5 4.5V3.2c0-.5.4-.9.9-.9h3.8l2.6 2.6v6.4c0 .5-.4.9-.9.9h-1.4"/>'
+             '<path d="M3.5 5.6c0-.5.4-.9.9-.9h3.6l2.5 2.5v5.9c0 .5-.4.9-.9.9H4.4a.9.9 0 0 1-.9-.9z"/>',
+    "file": '<path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/>',
+    "search": '<circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/>',
+}
+STAR = ('<svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" '
+        'd="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>')
+
+
+ON = ' class="on"'
+
+
+def row_icon(name: str) -> str:
+    return (f'<svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" '
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ROW_ICONS[name]}</svg>')
+
+
+def kbd(mac: str, pc: str) -> str:
+    """底栏与按键提示里的键帽：Mac 与 Windows、Linux 各一种。"""
+    if mac == pc:
+        return f"<kbd>{mac}</kbd>"
+    return f'<kbd class="k-mac">{mac}</kbd><kbd class="k-pc">{pc}</kbd>'
+
+
+def qp_demo(f: dict, app: dict) -> str:
+    """快捷粘贴的演示：写邮件时按 ⌥V，搜到发票抬头，回车粘贴进正文。
+    没有脚本时停在搜到结果的样子；features.js 按滚动的进度一步步演示。"""
+    rows = []
+    hit = 0
+    for i, (kind, text, meta, starred, match) in enumerate(f["qp_rows"]):
+        if match:
+            hit += 1
+        num = f'<span class="n n-all">{i + 1}</span>' if i < 9 else '<span class="n n-all"></span>'
+        search_num = (f'<span class="n n-hit"><span class="k-mac">⌘{hit}</span><span class="k-pc">Alt+{hit}</span></span>'
+                      if match else "")
+        rows.append(
+            f'<li class="qp-row{" hit" if match else ""}{" first" if match and hit == 1 else ""}{" top" if i == 0 else ""}">'
+            f'{num}{search_num}{row_icon(kind)}<span class="t">{esc(text)}</span>'
+            f'<span class="m">{STAR if starred else ""}{esc(meta)}</span></li>')
+    tabs = "".join(
+        f'<span{ON if i == 0 else ""}>{esc(app[k])}</span>'
+        for i, k in enumerate(("filterAll", "filterText", "filterLink", "filterImage", "filterFile", "navFavorites")))
+    footer = (f'<span>{kbd("↩", "Enter")}{esc(app["pickerPaste"])}</span>'
+              f'<span>{kbd("⇧↩", "Shift+Enter")}{esc(app["pickerPlainText"])}</span>'
+              f'<span>{kbd("⌘↩", "Ctrl+Enter")}{esc(app["pickerCopyOnly"])}</span>'
+              f'<span>{kbd("⌘D", "Ctrl+D")}{esc(app["favoriteAction"])}</span>'
+              f'<span>{kbd("esc", "Esc")}{esc(app["close"])}</span>')
+    typing = json.dumps(f["qp_typing"], ensure_ascii=False)
+    query, _ = f["qp_typing"][-1]
+    pasted = next(text for _, text, _, _, match in f["qp_rows"] if match)
+    body = "".join(f"<p>{esc(line)}</p>" for line in f["mail_body"][:-1])
+    last = f["mail_body"][-1]
+    return f"""<div class="qp-stage" role="img" aria-label="{esc(f["qp_label"])}" data-typing="{esc(typing)}">
+            <div class="mail">
+              <div class="mail-bar"><i></i><i></i><i></i><span>{esc(f["mail_window"])}</span></div>
+              <div class="mail-field"><span>{esc(f["mail_to_label"])}</span><b>{esc(f["mail_to"])}</b></div>
+              <div class="mail-field"><span>{esc(f["mail_subject_label"])}</span><b>{esc(f["mail_subject"])}</b></div>
+              <div class="mail-body">{body}<p>{esc(last)}</p><p class="mail-line"><span class="pasted">{esc(pasted)}</span><i class="caret"></i></p></div>
+            </div>
+            <div class="press press-open" aria-hidden="true"><span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span></div>
+            <div class="press press-enter" aria-hidden="true">{kbd("↩", "Enter")}</div>
+            <div class="picker">
+              <div class="qp-search">{row_icon("search")}<span class="field"><span class="q">{esc(query)}</span><i class="caret"></i><span class="ph">{esc(app["pickerSearch"])}</span></span></div>
+              <div class="qp-tabs">{tabs}</div>
+              <ol class="qp-rows">{"".join(rows)}</ol>
+              <div class="qp-foot">{footer}</div>
+            </div>
+          </div>"""
+
+
+def filter_demo(f: dict, app: dict) -> str:
+    """细节一格：复制记录按类型筛选，features.js 轮流点各个页签。"""
+    kinds = [("all", "filterAll"), ("text", "filterText"), ("link", "filterLink"), ("image", "filterImage"),
+             ("file", "filterFile"), ("fav", "navFavorites")]
+    tabs = "".join(f'<span data-tab="{k}"{ON if k == "all" else ""}>{esc(app[key])}</span>' for k, key in kinds)
+    rows = "".join(
+        f'<li data-kind="{kind}"{" data-fav" if fav else ""}>{row_icon(kind)}<span class="t">{esc(text)}</span>'
+        f'{STAR if fav else ""}</li>' for kind, text, fav in f["filter_rows"])
+    return f'<div class="mini" aria-hidden="true"><div class="seg">{tabs}</div><ul class="mini-rows">{rows}</ul></div>'
+
+
+def features_page(code: str) -> str:
+    c = load(code)
+    f = features_copy(code)
+    app = app_strings(code)
+    path, hl, _, _ = LANGS[code]
+    sub = FEATURES
+    up = "../" * (path + sub).count("/")
+    a = up + "assets/"
+    base = up + path
+    shots = up + shots_dir(code)
+    _, tour_ui, _ = tour_copy(code, c)
+
+    def facts(items: list) -> str:
+        return "\n".join(f'          <li><h3>{keys(t)}</h3><p>{keys(d)}</p></li>' for t, d in items)
+
+    steps = "\n".join(
+        f'            <li data-step="{i}"><span class="num">{i + 1}</span><h3>{keys(t)}</h3><p>{keys(d)}</p></li>'
+        for i, (t, d) in enumerate(f["qp_steps"]))
+    numbers = "\n".join(
+        f'          <div><dt><b>{esc(n)}</b>{f" <span>{esc(u)}</span>" if u else ""}</dt><dd>{esc(d)}</dd></div>'
+        for n, u, d in f["numbers"])
+    hits = "".join(f"<li>{row_icon('file' if i == 0 else 'text')}<span>{esc(h)}</span></li>"
+                   for i, h in enumerate(f["search_hits"]))
+    new = f'<span class="new">{f["new_tag"]}</span>'
+    n = f["net_label"]
+
+    return f"""<!doctype html>
+<html lang="{hl}">
+<head>
+{head_meta(c, code, path + sub, f["title"], f["description"], f["title"], f["description"], a)}  <link rel="stylesheet" href="{a}features.css">
+</head>
+<body class="features">
+  <a class="skip" href="#main">{c["skip"]}</a>
+
+{header(c, code, up, sub)}
+
+  <main id="main">
+    <section class="f-hero">
+      <div class="wrap">
+        <p class="eyebrow">{f["eyebrow"]}</p>
+        <h1 class="display">{f["h1"]}</h1>
+        <p class="lede">{f["lede"]}</p>
+        <div class="cta">
+          <a class="button" href="{base}{DOWNLOAD}">{DOWN}{c["dl_button"]}</a>
+          <a class="button quiet" href="{base}{TOUR}"><span aria-hidden="true">▶</span> {esc(tour_ui["watch"])}</a>
+        </div>
+      </div>
+      <figure class="f-hero-shot" data-zoom>
+        <img src="{shots}history-dark.png" width="2112" height="1472" alt="{esc(f["hero_alt"])}">
+      </figure>
+    </section>
+
+    <section class="f-section" id="sync" aria-labelledby="sync-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="sync-title">{f["sync_h2"]}</h2>
+        <p class="f-intro">{keys(f["sync_intro"])}</p>
+        <div class="trio" data-reveal aria-hidden="true">
+          <div class="dev"><div class="scr"><span class="doc">{LINES}</span></div><b>MacBook</b>{kbd("⌘C", "⌘C")}</div>
+          <div class="dev"><div class="scr"><span class="doc">{LINES}</span></div><b>Windows</b>{kbd("Ctrl+V", "Ctrl+V")}</div>
+          <div class="dev"><div class="scr"><span class="doc">{LINES}</span></div><b>Linux</b>{kbd("Ctrl+V", "Ctrl+V")}</div>
+        </div>
+        <ul class="facts">
+{facts(f["sync_facts"])}
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
+        <h2 class="f-h2" id="qp-title">{keys(f["qp_h2"])}</h2>
+        <p class="f-intro">{keys(f["qp_intro"])}</p>
+      </div>
+      <div class="qp-track" data-scene>
+        <div class="qp-sticky">
+          {qp_demo(f, app)}
+          <ol class="qp-steps">
+{steps}
+          </ol>
+        </div>
+      </div>
+      <div class="wrap">
+        <p class="f-note">{f["qp_note"]}</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="favorites" aria-labelledby="fav-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
+        <h2 class="f-h2" id="fav-title">{f["fav_h2"]}</h2>
+        <p class="f-intro">{f["fav_intro"]}</p>
+        <figure class="f-shot" data-reveal>
+          <img src="{shots}favorites-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(f["fav_alt"])}">
+        </figure>
+        <ul class="facts">
+{facts(f["fav_points"])}
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section" id="details" aria-labelledby="details-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="details-title">{f["details_h2"]}</h2>
+        <div class="bento">
+          <article class="cell wide" data-reveal data-filter>
+            <h3>{f["filter_title"]} {new}</h3>
+            <p>{f["filter_text"]}</p>
+            {filter_demo(f, app)}
+          </article>
+          <article class="cell wide hover-cell" data-reveal>
+            <h3>{f["hover_title"]} {new}</h3>
+            <p>{f["hover_text"]}</p>
+            <div class="crop"><img src="{shots}hover-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(f["hover_alt"])}"></div>
+          </article>
+          <article class="cell" data-reveal data-search>
+            <h3>{f["search_title"]}</h3>
+            <p>{f["search_text"]}</p>
+            <div class="mini" aria-hidden="true">
+              <div class="mini-search">{row_icon("search")}<span class="q" data-q="{esc(f["search_query"])}">{esc(f["search_query"])}</span><i class="caret"></i></div>
+              <ul class="mini-rows hits">{hits}</ul>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>{f["big_title"]}</h3>
+            <p>{f["big_text"]}</p>
+            <div class="mini big" aria-hidden="true">
+              {row_icon("file")}<div><b>{esc(f["big_file"])}</b><span>{esc(f["big_meta"])}</span><i class="bar"><i></i></i></div>
+              <span class="receive">{esc(f["big_button"])}</span>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>{f["folder_title"]}</h3>
+            <p>{f["folder_text"]}</p>
+            <ul class="mini tree" aria-hidden="true">
+              <li>{icon("folder")}design-assets</li>
+              <li>{row_icon("image")}logo.svg</li>
+              <li>{row_icon("image")}banner@2x.png</li>
+              <li>{icon("folder")}fonts</li>
+            </ul>
+          </article>
+          <article class="cell full" data-reveal>
+            <div>
+              <h3>{f["names_title"]}</h3>
+              <p>{f["names_text"]}</p>
+            </div>
+            <div class="mini names" aria-hidden="true">
+              <div><span>Mac</span><code>{esc(f["names_from"])}</code></div>
+              <div><span>Windows</span><code>{esc(f["names_to"])}</code></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="f-section" id="network" aria-labelledby="net-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="net-title">{f["net_h2"]}</h2>
+        <p class="f-intro">{f["net_intro"]}</p>
+        <figure class="net" data-reveal>
+          <svg viewBox="0 0 800 330" role="img" aria-label="{esc(n)}">
+            <rect class="n-svc" x="300" y="14" width="200" height="56" rx="14"/>
+            <text class="n-title" x="400" y="49" text-anchor="middle">{esc(f["net_service"])}</text>
+            <rect class="n-net" x="20" y="130" width="300" height="180" rx="22"/>
+            <rect class="n-net" x="480" y="130" width="300" height="180" rx="22"/>
+            <text class="n-label" x="44" y="164">{esc(f["net_home"])}</text>
+            <text class="n-label" x="756" y="164" text-anchor="end">{esc(f["net_office"])}</text>
+            <path class="n-sig" d="M170 200V42H300"/>
+            <path class="n-sig" d="M630 200V42H500"/>
+            <rect class="n-dev" x="120" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M105 278h130"/>
+            <rect class="n-dev" x="580" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M565 278h130"/>
+            <path class="n-direct" d="M235 236H565"/>
+            <text class="n-note" x="400" y="222" text-anchor="middle">{esc(f["net_direct"])}</text>
+          </svg>
+        </figure>
+        <ul class="facts">
+{facts(f["net_points"])}
+        </ul>
+        <p class="more"><a href="{base}{START}#server">{f["net_links"]}</a><a href="{base}{HOW}">{f["net_how"]}</a></p>
+      </div>
+    </section>
+
+    <section class="f-section" id="numbers" aria-labelledby="numbers-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="numbers-title">{f["numbers_h2"]}</h2>
+        <dl class="numbers" data-reveal>
+{numbers}
+        </dl>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">{f["closing"]}</h2>{cta(c, base, base + START)}
+      </div>
+    </section>
+  </main>
+
+{footer(c, code, up, sub)}
+
+  <script src="{a}site.js" defer></script>
+  <script src="{a}features.js" defer></script>
+{ANALYTICS}</body>
+</html>
+"""
+
+
+# ─────────────────────────── 从首页挪出去的三页 ───────────────────────────
+
+
+def sub_hero(c: dict, code: str, sub: str, h1: str, lede: str) -> str:
+    """工作原理、安全、常见问题三页的开头：面包屑、大标题、一句说明。"""
+    path = LANGS[code][0]
+    up = "../" * (path + sub).count("/")
+    home = up + (path or "./")
+    return f"""
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="{home}">{c["brand"]}</a></p>
+        <h1 class="display">{h1}</h1>
+        <p class="lede">{lede}</p>
+      </div>
+    </section>
+"""
+
+
+def how_page(code: str) -> str:
+    """工作原理：按下复制之后、连接方式的示意图、多出口网络与打洞实验、出问题时、技术规格。"""
+    c = load(code)
+    f = features_copy(code)
+    path = LANGS[code][0]
+    up = "../" * (path + HOW).count("/")
+    flow = "\n".join(f"          <li><h3>{h}</h3><p>{p}</p></li>" for h, p in c["flow"])
+    uplink = "\n".join(f"              <li><strong>{s}</strong>{t}</li>" for s, t in c["uplink_points"])
+    lab = "\n".join(f"                <tr><td>{s}</td><td>{r}</td></tr>" for s, r in c["lab_rows"])
+    fallbacks = "\n".join(f"          <div><dt>{t}</dt><dd>{d}</dd></div>" for t, d in c["fallbacks"])
+    specs = "\n".join(f'            <tr><th scope="row">{k}</th><td>{v}</td></tr>' for k, v in c["specs"])
+    d = c["diagram"]
+    return page_top(c, code, HOW, f["how_title"], f["how_lede"]) + sub_hero(c, code, HOW, c["how_h2"], f["how_lede"]) + f"""
+    <section class="section" aria-labelledby="flow-title">
+      <div class="wrap">
+        <h2 id="flow-title">{c["flow_h2"]}</h2>
+        <p class="intro">{c["flow_intro"]}</p>
+        <ol class="flow">
+{flow}
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="diagram" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title">{c["diagram"]["title"]}</h2>
         <p class="intro">{c["how_intro"]}</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
@@ -591,21 +1048,7 @@ def home(code: str) -> str:
       </div>
     </section>
 
-    <section class="section" aria-labelledby="security-title">
-      <div class="wrap">
-        <h2 id="security-title">{c["security_h2"]}</h2>
-        <div class="cols">
-          <ul class="points">
-{security}
-          </ul>
-          <figure class="figure-card">
-            <img src="{up}{shots}card-verify-dark.png" width="1120" height="800" loading="lazy" alt="{esc(c["verify_alt"])}">
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="fallback-title">
+    <section class="section" id="fallbacks" aria-labelledby="fallback-title">
       <div class="wrap">
         <h2 id="fallback-title">{c["fallback_h2"]}</h2>
         <p class="intro">{c["fallback_intro"]}</p>
@@ -615,46 +1058,7 @@ def home(code: str) -> str:
       </div>
     </section>
 
-    <section class="section" id="install" aria-labelledby="install-title">
-      <div class="wrap">
-        <h2 id="install-title">{c["install_h2"]}</h2>
-        <p class="intro">{fill(c["install_intro"], links)}</p>
-        <div class="install">
-          <div>
-            <h3>{LAPTOP}Mac</h3>
-            <ol>
-{mac_steps}
-            </ol>
-            <a class="button" href="{DOWNLOAD}#macos">{DOWN}{c["dl_mac"]}</a>
-          </div>
-          <div>
-            <h3>{DESKTOP}Windows</h3>
-            <ol>
-{win_steps}
-            </ol>
-            <a class="button" href="{DOWNLOAD}#windows">{DOWN}{c["dl_win"]}</a>
-          </div>
-          <div>
-            <h3>{DESKTOP}Linux</h3>
-            <ol>
-{linux_steps}
-            </ol>
-            <a class="button" href="{DOWNLOAD}#linux">{DOWN}{c["dl_linux"]}</a>
-          </div>
-        </div>
-        <div class="install-more">
-          <h3>{SERVER}{c["server_h3"]}</h3>
-          <p class="small">{c["server_intro"]}</p>
-          <ul class="opts">
-{opts}
-          </ul>
-          <a class="button quiet" href="{START}#server">{c["server_compare"]}</a>
-        </div>
-        <p class="pairing">{c["pairing"]}</p>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="specs-title">
+    <section class="section" id="specs" aria-labelledby="specs-title">
       <div class="wrap">
         <h2 id="specs-title">{c["specs_h2"]}</h2>
         <div class="table-scroll">
@@ -666,34 +1070,65 @@ def home(code: str) -> str:
         </div>
       </div>
     </section>
+  </main>
+""" + page_bottom(c, code, HOW)
 
-    <section class="section" id="faq" aria-labelledby="faq-title">
+
+def security_page(code: str) -> str:
+    c = load(code)
+    f = features_copy(code)
+    path = LANGS[code][0]
+    up = "../" * (path + SECURITY).count("/")
+    security = "\n".join(f"            <li><strong>{s}</strong>{t}</li>" for s, t in c["security_points"])
+    return page_top(c, code, SECURITY, f["security_title"], f["security_lede"]) + sub_hero(
+        c, code, SECURITY, c["security_h2"], f["security_lede"]) + f"""
+    <section class="section">
       <div class="wrap">
-        <h2 id="faq-title">{c["faq_h2"]}</h2>
-        <div class="faq">
-{faq}
+        <div class="cols">
+          <ul class="points">
+{security}
+          </ul>
+          <figure class="figure-card">
+            <img src="{up}{shots_dir(code)}card-verify-dark.png" width="1120" height="800" alt="{esc(c["verify_alt"])}">
+          </figure>
         </div>
-      </div>
-    </section>
-
-    <section class="closing" aria-labelledby="closing-title">
-      <div class="wrap">
-        <h2 class="display" id="closing-title">{c["closing"]}</h2>{cta(c, "", START)}
-        <a class="source" href="{REPO}">{c["source"]}</a>
+        <p class="more"><a href="{up}{path}{PRIVACY}">{f["privacy_link"]}</a></p>
       </div>
     </section>
   </main>
+""" + page_bottom(c, code, SECURITY)
 
-{footer(c, code, up)}
 
-  <dialog class="tour-dialog" aria-label="{esc(tour_ui["title"])}">
-    <form method="dialog"><button class="tour-close" aria-label="{esc(tour_ui["close"])}">×</button></form>
-    <iframe title="{esc(tour_ui["title"])}" data-src="{TOUR}?embed" allow="fullscreen" allowfullscreen></iframe>
-  </dialog>
-  <script src="{a}site.js" defer></script>
-{ANALYTICS}</body>
-</html>
-"""
+def faq_page(code: str) -> str:
+    c = load(code)
+    f = features_copy(code)
+    path = LANGS[code][0]
+    up = "../" * (path + FAQ).count("/")
+    base = up + path
+    links = {"official": base + OFFICIAL, "lan": base + LAN, "cloud": base + CLOUD, "server": base + GUIDE,
+             "ts": base + TAILSCALE, "start": base + START}
+    faq_ld = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": q,
+             "acceptedAnswer": {"@type": "Answer", "text": " ".join(text_of(p) for p in answer)}}
+            for q, answer in c["faq"]
+        ],
+    }, ensure_ascii=False, indent=2)
+    top = page_top(c, code, FAQ, f["faq_title"], f["faq_lede"]).replace(
+        "</head>", '  <script type="application/ld+json">\n' + faq_ld + "\n  </script>\n</head>", 1)
+    return top + sub_hero(c, code, FAQ, c["faq_h2"], f["faq_lede"]) + f"""
+    <section class="section">
+      <div class="wrap">
+        <div class="faq">
+{faq_list(c["faq"], links)}
+        </div>
+        <p class="more"><a href="{REPO}/issues">{f["faq_more"]}</a></p>
+      </div>
+    </section>
+  </main>
+""" + page_bottom(c, code, FAQ)
 
 
 # ─────────────────────────── 在局域网里部署服务器 ───────────────────────────
@@ -917,7 +1352,7 @@ def page_top(c: dict, code: str, sub: str, title: str, description: str) -> str:
   <link rel="icon" href="{a}favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="{a}apple-touch-icon.png">
   <link rel="stylesheet" href="{a}site.css">
-</head>
+{PLATFORM}</head>
 <body>
   <a class="skip" href="#main">{c["skip"]}</a>
 
@@ -2277,6 +2712,10 @@ def main() -> None:
         write(DOCS / path / DOWNLOAD / "index.html", download_page(code))
         write(DOCS / path / PRIVACY / "index.html", privacy_page(code))
         write(DOCS / path / OFFICIAL / "index.html", official_page(code))
+        write(DOCS / path / FEATURES / "index.html", features_page(code))
+        write(DOCS / path / HOW / "index.html", how_page(code))
+        write(DOCS / path / SECURITY / "index.html", security_page(code))
+        write(DOCS / path / FAQ / "index.html", faq_page(code))
     for md_name, page in DESIGN_DOCS.items():
         write(DOCS / "design" / f"{page}.html", design_page(md_name, page))
     write(DOCS / "404.html", not_found())

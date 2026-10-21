@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Security and privacy: end-to-end encryption and pairing verification — PasteFerry</title>
+  <meta name="description" content="Each device is identified by a key, you verify fingerprints when pairing, every message is signed, and only your devices can decrypt what you copy.">
+  <link rel="canonical" href="https://pasteferry.cc/en/security/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/security/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/security/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/security/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/security/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/security/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Security and privacy: end-to-end encryption and pairing verification — PasteFerry">
+  <meta property="og:description" content="Each device is identified by a key, you verify fingerprints when pairing, every message is signed, and only your devices can decrypt what you copy.">
+  <meta property="og:url" content="https://pasteferry.cc/en/security/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../en/" aria-label="PasteFerry home"><img src="../../assets/icon.svg" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Page">
+        <a href="../../en/features/">Features</a>
+        <a class="mid" href="../../en/start/">Quick start</a>
+        <a class="wide" href="../../en/start/#server">Ways to connect</a>
+        <a href="../../en/download/">Download</a>
+        <details class="menu">
+          <summary aria-label="More pages" class="current"><span>More</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../en/start/">Quick start</a></li>
+            <li class="narrow"><a href="../../en/start/#server">Ways to connect</a></li>
+            <li><a href="../../en/how/">How it works</a></li>
+            <li><a href="./" aria-current="page">Security</a></li>
+            <li><a href="../../en/faq/">FAQ</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Changelog</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Language：English"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>English</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../security/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/security/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/security/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/security/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a></li>
+            <li><a href="../../ja/security/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../en/">PasteFerry</a></p>
+        <h1 class="display">Your server can't see what you copy</h1>
+        <p class="lede">Each device is identified by a key, you verify fingerprints when pairing, every message is signed, and only your devices can decrypt what you copy.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="cols">
+          <ul class="points">
+            <li><strong>No accounts, no stored content.</strong> A device's identity is an Ed25519 key, and its ID is derived from the public key, so the server verifies identity without a user table.</li>
+            <li><strong>You compare fingerprints when pairing.</strong> Both screens show the same two lines: the fingerprint of each device's key. The server could swap keys in transit, but then the two screens would no longer match. That check is what stops a man in the middle.</li>
+            <li><strong>Every message after that is signed,</strong> so the server can't impersonate your device. The direct channel's certificate is checked again after the handshake; a mismatch drops the connection.</li>
+            <li><strong>The relay only forwards ciphertext.</strong> TURN carries encrypted packets, and relay credentials are issued per device and expire after 12 hours.</li>
+            <li><strong>Same on the local network.</strong> What a device broadcasts on the LAN is an anonymous token that changes daily, not its name; the name is added only while Search nearby is open. Pairing still means comparing fingerprints, and every message is still signed.</li>
+          </ul>
+          <figure class="figure-card">
+            <img src="../../assets/screenshots/en/card-verify-dark.png" width="1120" height="800" alt="The fingerprint check during pairing shows R8NF-2WTC-QL5J and asks you to confirm it matches the other computer exactly">
+          </figure>
+        </div>
+        <p class="more"><a href="../../en/privacy/">Privacy policy →</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry is open source under the GNU AGPL-3.0.</p>
+      <nav aria-label="Footer">
+        <a href="https://github.com/baiyuze/pasteferry/releases">All releases</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Design notes (Chinese)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">License</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Report an issue</a>
+        <a href="../../en/privacy/">Privacy and essential data</a>
+      </nav>
+      <nav aria-label="Language">
+        <a href="../../security/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/security/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/security/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/security/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a>
+        <a href="../../ja/security/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

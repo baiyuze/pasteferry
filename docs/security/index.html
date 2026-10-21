@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>安全与隐私：端到端加密与配对核对 — 隔空贴</title>
+  <meta name="description" content="设备身份是一把密钥，配对时由你核对指纹，之后的每条消息都带签名，内容只有你的设备能解密。">
+  <link rel="canonical" href="https://pasteferry.cc/security/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/security/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/security/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/security/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/security/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/security/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="隔空贴">
+  <meta property="og:title" content="安全与隐私：端到端加密与配对核对 — 隔空贴">
+  <meta property="og:description" content="设备身份是一把密钥，配对时由你核对指纹，之后的每条消息都带签名，内容只有你的设备能解密。">
+  <meta property="og:url" content="https://pasteferry.cc/security/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href=".././" aria-label="隔空贴首页"><img src="../assets/icon.svg" alt="" width="26" height="26">隔空贴</a>
+      <nav aria-label="页面导航">
+        <a href="../features/">功能</a>
+        <a class="mid" href="../start/">快速开始</a>
+        <a class="wide" href="../start/#server">连接方式</a>
+        <a href="../download/">下载</a>
+        <details class="menu">
+          <summary aria-label="更多页面" class="current"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../start/">快速开始</a></li>
+            <li class="narrow"><a href="../start/#server">连接方式</a></li>
+            <li><a href="../how/">工作原理</a></li>
+            <li><a href="./" aria-current="page">安全与隐私</a></li>
+            <li><a href="../faq/">常见问题</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新记录</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="语言：简体中文"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>简体中文</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../security/" hreflang="zh-CN" lang="zh-CN" data-lang="zh" aria-current="page">简体中文</a></li>
+            <li><a href="../zh-tw/security/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../zh-hk/security/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../en/security/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../ja/security/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href=".././">隔空贴</a></p>
+        <h1 class="display">服务器看不到你复制了什么</h1>
+        <p class="lede">设备身份是一把密钥，配对时由你核对指纹，之后的每条消息都带签名，内容只有你的设备能解密。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="cols">
+          <ul class="points">
+            <li><strong>服务器不存账号，也不存内容。</strong>设备身份是一把 Ed25519 密钥，设备 ID 由公钥算出，服务器不需要用户表就能验证身份。</li>
+            <li><strong>配对时由你核对安全指纹。</strong>两块屏幕会显示同样的两行：双方各自公钥的指纹。服务器有能力替换转发中的公钥，但替换之后两块屏幕就对不上了，这一步就是防中间人的闸门。</li>
+            <li><strong>之后的每条消息都带签名，</strong>服务器无法冒充你的设备。直连通道的证书在握手后还会再核对一次，不一致立即断开。</li>
+            <li><strong>中转也只是转发密文。</strong>TURN 转发的是加密后的数据包，中转凭证按设备单独签发，12 小时后过期。</li>
+            <li><strong>局域网里也一样。</strong>设备在局域网里广播的只是一个每天都变的匿名标识，看不出是谁的电脑，只有打开「搜索附近设备」时才带上设备名；配对同样要核对指纹，之后的消息同样带签名。</li>
+          </ul>
+          <figure class="figure-card">
+            <img src="../assets/screenshots/card-verify-dark.png" width="1120" height="800" alt="配对时的「核对安全指纹」对话框，显示 R8NF-2WTC-QL5J，要求与另一台电脑上显示的完全一致">
+          </figure>
+        </div>
+        <p class="more"><a href="../privacy/">隐私说明 →</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>隔空贴以 GNU AGPL-3.0 开源。</p>
+      <nav aria-label="页脚链接">
+        <a href="https://github.com/baiyuze/pasteferry/releases">所有版本</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新记录</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技术方案</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">许可说明</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">反馈问题</a>
+        <a href="../privacy/">隐私与必要数据</a>
+      </nav>
+      <nav aria-label="语言">
+        <a href="../security/" hreflang="zh-CN" lang="zh-CN" data-lang="zh" aria-current="page">简体中文</a>
+        <a href="../zh-tw/security/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../zh-hk/security/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../en/security/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../ja/security/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../assets/site.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

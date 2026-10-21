@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>運作原理：直連、多出口探測與出問題時的處理 — 隔空貼</title>
+  <meta name="description" content="按下複製之後發生了什麼，兩台電腦怎樣找到彼此、怎樣直連，打不通時怎麼辦。">
+  <link rel="canonical" href="https://pasteferry.cc/zh-tw/how/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/how/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/how/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/how/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/how/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/how/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="隔空貼">
+  <meta property="og:title" content="運作原理：直連、多出口探測與出問題時的處理 — 隔空貼">
+  <meta property="og:description" content="按下複製之後發生了什麼，兩台電腦怎樣找到彼此、怎樣直連，打不通時怎麼辦。">
+  <meta property="og:url" content="https://pasteferry.cc/zh-tw/how/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-zh-hant.png">
+  <meta property="og:locale" content="zh_TW">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要內容</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../zh-tw/" aria-label="隔空貼首頁"><img src="../../assets/icon.svg" alt="" width="26" height="26">隔空貼</a>
+      <nav aria-label="頁面導覽">
+        <a href="../../zh-tw/features/">功能</a>
+        <a class="mid" href="../../zh-tw/start/">快速入門</a>
+        <a class="wide" href="../../zh-tw/start/#server">連線方式</a>
+        <a href="../../zh-tw/download/">下載</a>
+        <details class="menu">
+          <summary aria-label="更多頁面" class="current"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../zh-tw/start/">快速入門</a></li>
+            <li class="narrow"><a href="../../zh-tw/start/#server">連線方式</a></li>
+            <li><a href="./" aria-current="page">運作原理</a></li>
+            <li><a href="../../zh-tw/security/">安全與隱私</a></li>
+            <li><a href="../../zh-tw/faq/">常見問題</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新記錄</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="語言：繁體中文（台灣）"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>繁體中文（台灣）</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw" aria-current="page">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../zh-tw/">隔空貼</a></p>
+        <h1 class="display">運作原理</h1>
+        <p class="lede">按下複製之後發生了什麼，兩台電腦怎樣找到彼此、怎樣直連，打不通時怎麼辦。</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="flow-title">
+      <div class="wrap">
+        <h2 id="flow-title">按下複製之後</h2>
+        <p class="intro">文字、圖片、檔案、整個資料夾，都走同一條路。</p>
+        <ol class="flow">
+          <li><h3>偵測</h3><p>在 Mac 上，背景服務每隔一小段時間查看一次剪貼簿的變更計數，只看計數和類型，不需要授權，也不會跳出系統提示；在 Windows 上，複製的那一刻系統就會通知它。</p></li>
+          <li><h3>傳輸</h3><p>文字隨訊息一起送出；50 MB 以內的圖片和檔案打包成串流立即推送；更大的檔案只送出一筆記錄，等你需要時再傳。</p></li>
+          <li><h3>貼上</h3><p>另一台電腦先把內容存到本機，再寫入剪貼簿。按下 ⌘V 或 Ctrl+V 貼上的，就是本機上真正的檔案。</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="diagram" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title">隔空貼的連線方式</h2>
+        <p class="intro">同一網路裡，裝置不需伺服器就能找到彼此；跨網路時，官方服務或自建伺服器協助交換連線資訊。優先打洞直連，失敗後才使用加密中繼。下圖展示通用的信令與中繼結構。</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
+            <title id="diagram-title">隔空貼的連線方式</title>
+            <desc id="diagram-desc">電腦 A 與電腦 B（Mac 或 Windows）之間是 WebRTC 直連；兩台電腦都透過信令連線到信令與中繼服務；直連失敗時，資料經伺服器的 TURN 中繼。</desc>
+            <rect class="d-box" x="360" y="24" width="240" height="96" rx="14"/>
+            <text class="d-title" x="480" y="64" text-anchor="middle">信令與中繼服務</text>
+            <text class="d-sub" x="480" y="92" text-anchor="middle">信令、STUN、TURN 中繼</text>
+            <path class="d-sig" d="M140 210V58H360"/>
+            <path class="d-sig" d="M820 210V58H600"/>
+            <path class="d-relay" d="M196 210V100H360"/>
+            <path class="d-relay" d="M764 210V100H600"/>
+            <text class="d-note" x="210" y="50">信令：交換連線資訊</text>
+            <text class="d-note" x="210" y="128">中繼：只在直連打不通時</text>
+            <rect class="d-box" x="40" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="160" y="262" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="160" y="290" text-anchor="middle">在這裡複製</text>
+            <rect class="d-box" x="680" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="800" y="262" text-anchor="middle">Mac 或 Windows</text>
+            <text class="d-sub" x="800" y="290" text-anchor="middle">在這裡貼上</text>
+            <path class="d-direct" d="M280 270H680"/>
+            <text class="d-label" x="480" y="256" text-anchor="middle">WebRTC 直連，DTLS 加密</text>
+            <text class="d-note" x="480" y="298" text-anchor="middle">資料只在兩台電腦之間傳輸</text>
+            <g class="d-legend" transform="translate(40 372)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">資料（直連）</text>
+              <path class="d-relay" d="M210 0H238"/><text x="248" y="5">資料（中繼，備用）</text>
+              <path class="d-sig" d="M470 0H498"/><text x="508" y="5">信令</text>
+            </g>
+          </svg>
+          <ul class="points diagram-text">
+            <li><strong>WebRTC 直連，DTLS 加密</strong> 資料只在兩台電腦之間傳輸</li>
+            <li><strong>信令與中繼服務</strong> 信令、STUN、TURN 中繼</li>
+            <li>中繼：只在直連打不通時</li>
+          </ul>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="multi-uplink" aria-labelledby="multi-title">
+      <div class="wrap">
+        <h2 id="multi-title">公司網路也能直連</h2>
+        <p class="intro">公司雙線路、電信業者位址池這類網路有多個出口，會依目的位址決定走哪一個。只偵測一次，只會知道其中一個出口，結果只能經伺服器中繼。隔空貼會偵測每個出口，把位址全部告訴對方。</p>
+        <div class="cols">
+          <div>
+            <h3>做了什麼</h3>
+            <ul class="points">
+              <li><strong>共用一個連接埠。</strong>所有連線都從同一個本機 UDP 連接埠收發，向不同伺服器查到的位址才對得上。</li>
+              <li><strong>偵測每個出口。</strong>在這個連接埠上同時詢問 7 台 IP 分散的伺服器，網路有幾個出口就拿到幾個位址；遭 DNS 汙染的位址會先過濾掉。</li>
+              <li><strong>全部告訴對方。</strong>對方逐一嘗試，與實際出口相符的那一個就能打通。</li>
+              <li><strong>記住見過的出口。</strong>某次漏掉的出口，如果它不會改變連接埠，就用「出口 IP + 本機連接埠」推算補上。</li>
+              <li><strong>講好誰先送封包。</strong>有些路由器收到對方先到的封包，會把連接埠佔住。一方先公布出口位址，另一方先往那邊送封包，再公布自己的；重試時兩種順序輪流使用。</li>
+              <li><strong>閒置時重試直連。</strong>直連失敗且中繼可用時，先透過中繼保持同步。連線閒置時可重試打洞，成功後切回直連並釋放中繼。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>用真實的網路拓撲驗證</h3>
+            <p class="small">NAT 打洞實驗室用 Linux 網路命名空間與 iptables 搭出這些拓撲，用隔空貼真正的連線程式碼各跑一遍，每次提交程式碼都會自動執行。</p>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th scope="col">情境</th><th scope="col">結果</th></tr></thead>
+                <tbody>
+                <tr><td>單一出口 ↔ 家用路由器</td><td>直連</td></tr>
+                <tr><td>兩個出口，舊版本（對照）</td><td>中繼</td></tr>
+                <tr><td>兩個出口 ↔ 家用路由器</td><td>直連</td></tr>
+                <tr><td>四個出口 ↔ 家用路由器</td><td>直連</td></tr>
+                <tr><td>兩個出口，第二條線路沒偵測到，沒有歷史記錄</td><td>中繼</td></tr>
+                <tr><td>兩個出口，第二條線路沒偵測到，有歷史記錄</td><td>直連</td></tr>
+                <tr><td>兩個出口 ↔ 兩個出口</td><td>直連</td></tr>
+                <tr><td>兩個出口 ↔ 連接埠隨機分配的 NAT</td><td>中繼</td></tr>
+                <tr><td>一開始打不通，之後網路恢復</td><td>先中繼，隨後直連</td></tr>
+                <tr><td>公司路由器會為外來的封包佔住連接埠</td><td>直連</td></tr>
+                <tr><td>家用路由器會為外來的封包佔住連接埠</td><td>先中繼，重試一次後直連</td></tr>
+                <tr><td>沒有伺服器，同一個網段，靠 mDNS 探索</td><td>直連</td></tr>
+                <tr><td>沒有伺服器，兩個網段，一邊記得對方位址</td><td>直連</td></tr>
+                <tr><td>沒有伺服器，兩台都擋外來連線，都記得位址</td><td>直連</td></tr>
+                <tr><td>沒有伺服器，兩台都擋外來連線，只有一邊記得</td><td>連不上（已知限制）</td></tr>
+                <tr><td>沒有伺服器，兩個網段之間被隔離</td><td>連不上</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="small">實測：一台在 4 個出口的公司網路裡的 Mac 與家裡的 Mac，改良前只能中繼，速度被伺服器頻寬限制在 0.6 MB/s；改良後可以直連，連上伺服器後約 3 秒就建立連線。</p>
+            <p class="small">量測過程、設計取捨與踩過的坑，請見<a href="../../design/nat-traversal.html">技術說明</a>。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="fallbacks" aria-labelledby="fallback-title">
+      <div class="wrap">
+        <h2 id="fallback-title">出問題的時候會怎樣</h2>
+        <p class="intro">每個人的網路環境都不一樣。下面這些情況都考慮過，也都有對應的測試。</p>
+        <dl class="fallbacks">
+          <div><dt>在同一個網路裡找不到對方</dt><dd>不同網段、訪客網路、開了 AP 隔離的 Wi‑Fi，都會擋住區域網路探索。配對時輸入對方配對碼下方顯示的位址就行；之後位址會被記住，兩邊都換了位址時，在裝置清單裡幫它重新輸入一次。</dd></div>
+          <div><dt>系統擋住區域網路連線</dt><dd>從 macOS 15 起，背景服務要連線區域網路裡的裝置，需要你允許；Windows 第一次執行時，防火牆會跳出詢問。沒有允許時，App 會提示，並提供直達設定的按鈕。</dd></div>
+          <div><dt>兩台電腦打不通直連</dt><dd>官方模式在直連失敗後，依目前額度申請中繼；自建模式使用自己的 TURN 中繼。兩種方式的內容均保持端到端加密。</dd></div>
+          <div><dt>連不上公共 STUN 伺服器</dt><dd>在中國大陸連公共 STUN 時通時斷。伺服器內建 STUN，用戶端會優先使用它。</dd></div>
+          <div><dt>從中繼切回直連</dt><dd>直連失敗且中繼可用時，先透過中繼保持同步。連線閒置時可重試打洞，成功後切回直連並釋放中繼。</dd></div>
+          <div><dt>對方睡眠、斷線或重新開機</dt><dd>連線悄悄斷了也能察覺，會立即關閉並重新連線。這段期間複製的內容會先記下來，連上後補送到對方的複製記錄裡，但不會覆蓋對方當下剪貼簿裡的內容。</dd></div>
+          <div><dt>伺服器斷線</dt><dd>自動重新連線，間隔從 1 秒開始加倍、最長 30 秒，並加上隨機抖動，避免一大群裝置同時重連。同一個網路裡的裝置不受影響，照常同步。</dd></div>
+          <div><dt>檔案太大</dt><dd>超過上限的只同步一筆記錄，需要時再拉取。拉取時如果原始檔案已經被刪除，會明確告訴你，而不是莫名其妙地失敗。</dd></div>
+          <div><dt>貼到只接受純文字的地方</dt><dd>從網頁複製的帶格式文字，會同時寫入 HTML 和純文字兩份，貼到哪裡都不會冒出標籤。</dd></div>
+          <div><dt>檔名在 Windows 上不合法</dt><dd>Mac 上可以用的冒號、問號等字元，收到時會換成對應的全形字元，檔名照樣看得懂；只差在大小寫的兩個檔案也不會互相覆蓋。</dd></div>
+          <div><dt>複製的是密碼</dt><dd>在 Windows 上，密碼管理工具複製的內容會帶一個「不要記錄」的標記，隔空貼看到就跳過：不同步，也不會進入複製記錄。</dd></div>
+          <div><dt>還沒授權讀取剪貼簿</dt><dd>不去讀取內容，否則背景程序會卡在一個看不見的系統對話框上。App 裡會提示你去授權，並提供直達設定的按鈕。</dd></div>
+          <div><dt>背景服務當掉</dt><dd>Mac 上由系統的 launchd、Windows 上由隔空貼內建的守護程式自動重新啟動，每次至少間隔 10 秒，不會無限重啟。</dd></div>
+          <div><dt>更新了 App，或把它搬到別的位置</dt><dd>打開 App 時會自動修正登入項目，並把背景服務重新啟動到新版本。</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="specs" aria-labelledby="specs-title">
+      <div class="wrap">
+        <h2 id="specs-title">技術規格</h2>
+        <div class="table-scroll">
+          <table class="specs">
+            <tbody>
+            <tr><th scope="row">版本</th><td>2.3.0，<time datetime="2026-10-19">2026 年 10 月 19 日</time>發布</td></tr>
+            <tr><th scope="row">Mac 用戶端</th><td>macOS 13 Ventura 以上；Apple 晶片與 Intel 晶片各有一個安裝檔，約 25 MB，不需要 Rosetta；也有兩種晶片通用的版本，約 47 MB</td></tr>
+            <tr><th scope="row">Windows 用戶端</th><td>Windows 10 與 Windows 11，x64；只為目前使用者安裝，不需要系統管理員權限；安裝檔約 23 MB</td></tr>
+            <tr><th scope="row">Linux 用戶端</th><td>x64 與 ARM64；.deb（Debian、Ubuntu 等）或 tar.gz（其他發行版），約 22 MB；需要 X11 桌面，或附有 XWayland 的 Wayland 桌面（GNOME、KDE 等預設都有）；GTK 3</td></tr>
+            <tr><th scope="row">伺服器</th><td>僅自建時需要部署；使用官方服務不需自備伺服器。自建支援 Linux x86_64/ARM64、macOS 與 Windows 10/11 x64。</td></tr>
+            <tr><th scope="row">介面語言</th><td>簡體中文、繁體中文（台灣、香港）、English、日本語，預設跟隨系統，可在設定裡切換</td></tr>
+            <tr><th scope="row">同步的內容</th><td>純文字、帶格式的文字、圖片與螢幕截圖、檔案、資料夾，可依類型個別關閉</td></tr>
+            <tr><th scope="row">傳輸</th><td>WebRTC 資料通道，優先直連，打不通時經 TURN 中繼；同一個網路裡透過 mDNS 探索、UDP 8788 交換連線資訊；多出口網路逐一偵測每個出口；檔案以 tar + zstd 串流打包</td></tr>
+            <tr><th scope="row">加密與身分</th><td>DTLS 端對端加密；裝置身分為 Ed25519 金鑰；信令訊息逐則簽章</td></tr>
+            <tr><th scope="row">配對</th><td>6 碼配對碼，5 分鐘內有效，字元集去掉了 0/O、1/I 等容易混淆的字元；配對時人工核對安全指紋</td></tr>
+            <tr><th scope="row">自動同步上限</th><td>預設 50 MB，可在 1 MB 到 1 GB 之間調整</td></tr>
+            <tr><th scope="row">記錄保留</th><td>預設 3 天，可在 1 小時到 30 天之間調整，到期自動清除</td></tr>
+            <tr><th scope="row">實測速度</th><td>區域網路直連傳輸 20 MB 檔案約 330 毫秒，檢查碼一致</td></tr>
+            <tr><th scope="row">技術堆疊</th><td>背景服務與伺服器用 Go（Windows 上以純 Go 呼叫 Win32，Linux 上以純 Go 走 X11 協定），介面用 Flutter（三個系統共用一套程式碼），訊息定義用 Protocol Buffers</td></tr>
+            <tr><th scope="row">授權</th><td><a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">GNU AGPL-3.0</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>隔空貼以 GNU AGPL-3.0 授權開源。</p>
+      <nav aria-label="頁尾連結">
+        <a href="https://github.com/baiyuze/pasteferry/releases">所有版本</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新記錄</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技術說明</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">授權說明</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">回報問題</a>
+        <a href="../../zh-tw/privacy/">隱私與必要資料</a>
+      </nav>
+      <nav aria-label="語言">
+        <a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw" aria-current="page">繁體中文（台灣）</a>
+        <a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

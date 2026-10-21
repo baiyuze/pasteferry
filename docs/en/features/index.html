@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Features: quick paste, favorites, history across devices — PasteFerry</title>
+  <meta name="description" content="PasteFerry syncs the clipboard between Mac, Windows and Linux: copy text, images, files or folders and paste them on the other computer. Press ⌥V or Alt+V for quick paste, keep favorites, and search or filter your history.">
+  <link rel="canonical" href="https://pasteferry.cc/en/features/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/features/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/features/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/features/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/features/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/features/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Features: quick paste, favorites, history across devices — PasteFerry">
+  <meta property="og:description" content="PasteFerry syncs the clipboard between Mac, Windows and Linux: copy text, images, files or folders and paste them on the other computer. Press ⌥V or Alt+V for quick paste, keep favorites, and search or filter your history.">
+  <meta property="og:url" content="https://pasteferry.cc/en/features/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="zh_HK">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <link rel="stylesheet" href="../../assets/features.css">
+</head>
+<body class="features">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../en/" aria-label="PasteFerry home"><img src="../../assets/icon.svg" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Page">
+        <a href="./" aria-current="page">Features</a>
+        <a class="mid" href="../../en/start/">Quick start</a>
+        <a class="wide" href="../../en/start/#server">Ways to connect</a>
+        <a href="../../en/download/">Download</a>
+        <details class="menu">
+          <summary aria-label="More pages"><span>More</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../en/start/">Quick start</a></li>
+            <li class="narrow"><a href="../../en/start/#server">Ways to connect</a></li>
+            <li><a href="../../en/how/">How it works</a></li>
+            <li><a href="../../en/security/">Security</a></li>
+            <li><a href="../../en/faq/">FAQ</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Changelog</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Language：English"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>English</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/features/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a></li>
+            <li><a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="f-hero">
+      <div class="wrap">
+        <p class="eyebrow">PasteFerry features</p>
+        <h1 class="display">Copy and paste,<br>the way it should be.</h1>
+        <p class="lede">A clipboard shared by your Mac, Windows and Linux computers, with everything you copied a keystroke away.</p>
+        <div class="cta">
+          <a class="button" href="../../en/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download PasteFerry</a>
+          <a class="button quiet" href="../../en/tour/"><span aria-hidden="true">▶</span> Watch the full tour</a>
+        </div>
+      </div>
+      <figure class="f-hero-shot" data-zoom>
+        <img src="../../assets/screenshots/en/history-dark.png" width="2112" height="1472" alt="PasteFerry’s history: a sidebar with History, Favorites, Devices and Settings, and a list of text, images, files and links from different computers">
+      </figure>
+    </section>
+
+    <section class="f-section" id="sync" aria-labelledby="sync-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="sync-title">Copy here.<br>Paste there.</h2>
+        <p class="f-intro">Press <span class="k-mac">⌘C</span><span class="k-pc">Ctrl+C</span> and it’s on your other computers. Press <span class="k-mac">⌘V</span><span class="k-pc">Ctrl+V</span> there. No shared account needed — mix Mac, Windows and Linux however you like.</p>
+        <div class="trio" data-reveal aria-hidden="true">
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>MacBook</b><kbd>⌘C</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Windows</b><kbd>Ctrl+V</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Linux</b><kbd>Ctrl+V</kbd></div>
+        </div>
+        <ul class="facts">
+          <li><h3>Text, images, files, folders</h3><p>Formatted text pastes cleanly into plain-text fields, too.</p></li>
+          <li><h3>Up to 50 MB is sent as you copy</h3><p>Larger items sync as a record first; fetch them when you need them. The limit is adjustable.</p></li>
+          <li><h3>Nothing lost while offline</h3><p>What you copy meanwhile lands in the other computer’s history once it’s back.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">New in 2.4</span></p>
+        <h2 class="f-h2" id="qp-title">Press <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>.<br>Your history, right where you’re typing.</h2>
+        <p class="f-intro">No switching apps, no digging through chats. Press the shortcut in any app, pick an item, and it’s pasted right where your cursor was.</p>
+      </div>
+      <div class="qp-track" data-scene>
+        <div class="qp-sticky">
+          <div class="qp-stage" role="img" aria-label="Demo: while writing an email, press ⌥V; the quick paste window opens, typing “billing” finds the billing details, and Return pastes them into the email" data-typing="[[&quot;b&quot;, false], [&quot;bi&quot;, false], [&quot;bil&quot;, false], [&quot;bill&quot;, false], [&quot;billing&quot;, false]]">
+            <div class="mail">
+              <div class="mail-bar"><i></i><i></i><i></i><span>New Message</span></div>
+              <div class="mail-field"><span>To:</span><b>Sarah Chen</b></div>
+              <div class="mail-field"><span>Subject:</span><b>Billing details</b></div>
+              <div class="mail-body"><p>Hi Sarah,</p><p>Here are our billing details:</p><p class="mail-line"><span class="pasted">Billing: Ferry Labs Ltd · VAT GB 123 4567 89</span><i class="caret"></i></p></div>
+            </div>
+            <div class="press press-open" aria-hidden="true"><span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span></div>
+            <div class="press press-enter" aria-hidden="true"><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd></div>
+            <div class="picker">
+              <div class="qp-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="field"><span class="q">billing</span><i class="caret"></i><span class="ph">Search</span></span></div>
+              <div class="qp-tabs"><span class="on">All</span><span>Text</span><span>Links</span><span>Images</span><span>Files</span><span>Favorites</span></div>
+              <ol class="qp-rows"><li class="qp-row top"><span class="n n-all">1</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Meeting moved to Thursday 3 pm, same room</span><span class="m">Just now</span></li><li class="qp-row"><span class="n n-all">2</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span><span class="m">2 minutes ago</span></li><li class="qp-row"><span class="n n-all">3</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">Image</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>Windows PC · 5 minutes ago</span></li><li class="qp-row"><span class="n n-all">4</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 4.5V3.2c0-.5.4-.9.9-.9h3.8l2.6 2.6v6.4c0 .5-.4.9-.9.9h-1.4"/><path d="M3.5 5.6c0-.5.4-.9.9-.9h3.6l2.5 2.5v5.9c0 .5-.4.9-.9.9H4.4a.9.9 0 0 1-.9-.9z"/></svg><span class="t">signed-contract.pdf and 2 more</span><span class="m">52 minutes ago</span></li><li class="qp-row hit first"><span class="n n-all">5</span><span class="n n-hit"><span class="k-mac">⌘1</span><span class="k-pc">Alt+1</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Billing: Ferry Labs Ltd · VAT GB 123 4567 89</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>1 hour ago</span></li><li class="qp-row"><span class="n n-all">6</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">docker compose up -d --build</span><span class="m">1 hour ago</span></li><li class="qp-row hit"><span class="n n-all">7</span><span class="n n-hit"><span class="k-mac">⌘2</span><span class="k-pc">Alt+2</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Send the billing PDF to accounts, quote the order number</span><span class="m">Yesterday</span></li><li class="qp-row"><span class="n n-all">8</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">pnpm install</span><span class="m">Yesterday</span></li></ol>
+              <div class="qp-foot"><span><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd>Paste</span><span><kbd class="k-mac">⇧↩</kbd><kbd class="k-pc">Shift+Enter</kbd>Plain text</span><span><kbd class="k-mac">⌘↩</kbd><kbd class="k-pc">Ctrl+Enter</kbd>Copy only</span><span><kbd class="k-mac">⌘D</kbd><kbd class="k-pc">Ctrl+D</kbd>Add to favorites</span><span><kbd class="k-mac">esc</kbd><kbd class="k-pc">Esc</kbd>Close</span></div>
+            </div>
+          </div>
+          <ol class="qp-steps">
+            <li data-step="0"><span class="num">1</span><h3>Press <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span></h3><p>In any app. The window opens in the middle of the screen and hands focus back when you’re done.</p></li>
+            <li data-step="1"><span class="num">2</span><h3>Type a few letters</h3><p>Search text and file names. Without a search, press 1–9 to pick one of the first nine.</p></li>
+            <li data-step="2"><span class="num">3</span><h3>Press <span class="k-mac">↩</span><span class="k-pc">Enter</span>. Done.</h3><p>It’s pasted where your cursor was. <span class="k-mac">⇧↩</span><span class="k-pc">Shift+Enter</span> pastes plain text; <span class="k-mac">⌘↩</span><span class="k-pc">Ctrl+Enter</span> copies without pasting.</p></li>
+          </ol>
+        </div>
+      </div>
+      <div class="wrap">
+        <p class="f-note">You can change or turn off the shortcut in Settings. On a Mac, pasting for you needs the Accessibility permission; without it the item is copied and you press ⌘V. On Linux with Wayland, picked items are copied and you press Ctrl+V.</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="favorites" aria-labelledby="fav-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">New in 2.4</span></p>
+        <h2 class="f-h2" id="fav-title">Keep what you reuse.</h2>
+        <p class="f-intro">Billing details, addresses, stock replies: star an item to keep a copy. Favorites never expire and survive clearing your history.</p>
+        <figure class="f-shot" data-reveal>
+          <img src="../../assets/screenshots/en/favorites-dark.png" width="2112" height="1472" loading="lazy" alt="The Favorites page: five saved items including billing details, a stock reply, a download link and a PDF, each with a blue star">
+        </figure>
+        <ul class="facts">
+          <li><h3>Never cleaned up</h3><p>History expires on schedule; favorites stay.</p></li>
+          <li><h3>A copy of its own</h3><p>Changing or deleting the original file doesn’t touch the favorite.</p></li>
+          <li><h3>In quick paste too</h3><p>Switch to the Favorites tab, or press <span class="k-mac">⌘D</span><span class="k-pc">Ctrl+D</span> to favorite the selected item.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section" id="details" aria-labelledby="details-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="details-title">The details,<br>taken care of.</h2>
+        <div class="bento">
+          <article class="cell wide" data-reveal data-filter>
+            <h3>Links get their own tab <span class="new">New</span></h3>
+            <p>Filter your history by type — text, links, images, files or favorites — in one click.</p>
+            <div class="mini" aria-hidden="true"><div class="seg"><span data-tab="all" class="on">All</span><span data-tab="text">Text</span><span data-tab="link">Links</span><span data-tab="image">Images</span><span data-tab="file">Files</span><span data-tab="fav">Favorites</span></div><ul class="mini-rows"><li data-kind="text"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Meeting moved to Thursday 3 pm</span></li><li data-kind="link"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span></li><li data-kind="image"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">Image · 2.4 MB</span></li><li data-kind="file"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span class="t">Q3 review - final.key</span></li><li data-kind="link" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://pasteferry.cc/download/</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li><li data-kind="text" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Billing: Ferry Labs Ltd</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li></ul></div>
+          </article>
+          <article class="cell wide hover-cell" data-reveal>
+            <h3>Hover to see it all <span class="new">New</span></h3>
+            <p>Rest the pointer on an item for half a second to see the full text, a larger image or every file name.</p>
+            <div class="crop"><img src="../../assets/screenshots/en/hover-dark.png" width="2112" height="1472" loading="lazy" alt="The pointer rests on meeting notes and a card shows the full text: owners, release window and monitoring"></div>
+          </article>
+          <article class="cell" data-reveal data-search>
+            <h3>Search what you copied</h3>
+            <p>Search by text or file name and put it back on the clipboard in one click. History is kept for 3 days by default, up to 30.</p>
+            <div class="mini" aria-hidden="true">
+              <div class="mini-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="q" data-q="contract">contract</span><i class="caret"></i></div>
+              <ul class="mini-rows hits"><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span>signed-contract.pdf</span></li><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span>Contract clause 3: switch to quarterly payments</span></li></ul>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>Big files, when you need them</h3>
+            <p>Anything over 50 MB syncs as a record first and only transfers when you click Receive.</p>
+            <div class="mini big" aria-hidden="true">
+              <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><div><b>launch-demo.mov</b><span>From Mac mini · 1.3 GB</span><i class="bar"><i></i></i></div>
+              <span class="receive">Receive</span>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>Whole folders, too</h3>
+            <p>Copy a folder and paste the same folder, structure intact, on the other computer.</p>
+            <ul class="mini tree" aria-hidden="true">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>design-assets</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>logo.svg</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>banner@2x.png</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>fonts</li>
+            </ul>
+          </article>
+          <article class="cell full" data-reveal>
+            <div>
+              <h3>Names that work everywhere</h3>
+              <p>Characters that are fine on a Mac but not allowed on Windows become full-width look-alikes, so names stay readable.</p>
+            </div>
+            <div class="mini names" aria-hidden="true">
+              <div><span>Mac</span><code>Notes 10:30?.md</code></div>
+              <div><span>Windows</span><code>Notes 10：30？.md</code></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="f-section" id="network" aria-labelledby="net-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="net-title">Home and office,<br>connected directly.</h2>
+        <p class="f-intro">On the same network, install and pair. Across networks, turn on the official service — no server of your own. Computers connect directly whenever possible and fall back to an encrypted relay.</p>
+        <figure class="net" data-reveal>
+          <svg viewBox="0 0 800 330" role="img" aria-label="Diagram: two computers on a home and an office network find each other through the official service, then connect directly">
+            <rect class="n-svc" x="300" y="14" width="200" height="56" rx="14"/>
+            <text class="n-title" x="400" y="49" text-anchor="middle">Official service</text>
+            <rect class="n-net" x="20" y="130" width="300" height="180" rx="22"/>
+            <rect class="n-net" x="480" y="130" width="300" height="180" rx="22"/>
+            <text class="n-label" x="44" y="164">Home</text>
+            <text class="n-label" x="756" y="164" text-anchor="end">Office</text>
+            <path class="n-sig" d="M170 200V42H300"/>
+            <path class="n-sig" d="M630 200V42H500"/>
+            <rect class="n-dev" x="120" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M105 278h130"/>
+            <rect class="n-dev" x="580" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M565 278h130"/>
+            <path class="n-direct" d="M235 236H565"/>
+            <text class="n-note" x="400" y="222" text-anchor="middle">Direct · end-to-end encrypted</text>
+          </svg>
+        </figure>
+        <ul class="facts">
+          <li><h3>Same network</h3><p>No server. Enter a pairing code and you’re done.</p></li>
+          <li><h3>Across networks</h3><p>The official service, your own server, or Tailscale.</p></li>
+          <li><h3>End-to-end encrypted</h3><p>Verify fingerprints when pairing; the server never sees your content.</p></li>
+        </ul>
+        <p class="more"><a href="../../en/start/#server">Choose how to connect →</a><a href="../../en/how/">How it works →</a></p>
+      </div>
+    </section>
+
+    <section class="f-section" id="numbers" aria-labelledby="numbers-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="numbers-title">By the numbers.</h2>
+        <dl class="numbers" data-reveal>
+          <div><dt><b>3</b> <span>systems</span></dt><dd>macOS, Windows, Linux</dd></div>
+          <div><dt><b>50 MB</b></dt><dd>sent as you copy</dd></div>
+          <div><dt><b>≈330 ms</b></dt><dd>for a 20 MB file over a LAN</dd></div>
+          <div><dt><b>0</b> <span>accounts</span></dt><dd>no sign-up, just pair</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">Try it now.</h2>
+        <div class="cta">
+          <a class="button" href="../../en/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download PasteFerry</a>
+        </div>
+        <p class="note">Version 2.3.0, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64).</p>
+        <a class="start-link" href="../../en/start/">New here? Set it up in three steps →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry is open source under the GNU AGPL-3.0.</p>
+      <nav aria-label="Footer">
+        <a href="https://github.com/baiyuze/pasteferry/releases">All releases</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Design notes (Chinese)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">License</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Report an issue</a>
+        <a href="../../en/privacy/">Privacy and essential data</a>
+      </nav>
+      <nav aria-label="Language">
+        <a href="../../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/features/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a>
+        <a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js" defer></script>
+  <script src="../../assets/features.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

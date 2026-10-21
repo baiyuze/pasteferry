@@ -1,4 +1,5 @@
-// 首屏动画、代码块的「复制」按钮、分页（部署教程按系统分页、快速开始按部署方式分页）、语言菜单、记住选过的语言。
+// 首屏动画、代码块的「复制」按钮、分页（部署教程按系统分页、快速开始按部署方式分页）、语言菜单与「更多」菜单、
+// 滚动到才淡入的块、记住选过的语言。
 // 没有脚本时页面照样完整：动画停在复制完成的样子，分页的内容依次排开。
 (function () {
   // Load the localized tour only when requested. The href remains a normal
@@ -166,18 +167,37 @@
     } catch (e) {}
   }
 
-  // 语言菜单：点菜单外面或按 Esc 收起
-  var langs = document.querySelector("details.lang");
-  if (langs) {
+  // 语言菜单与「更多」菜单：点菜单外面或按 Esc 收起，打开一个时收起另一个
+  var menus = document.querySelectorAll("details.lang, details.menu");
+  menus.forEach(function (menu) {
     document.addEventListener("click", function (e) {
-      if (langs.open && !langs.contains(e.target)) langs.open = false;
+      if (menu.open && !menu.contains(e.target)) menu.open = false;
     });
-    langs.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && langs.open) {
-        langs.open = false;
-        langs.querySelector("summary").focus();
+    menu.addEventListener("toggle", function () {
+      if (!menu.open) return;
+      menus.forEach(function (other) { if (other !== menu) other.open = false; });
+    });
+    menu.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.open) {
+        menu.open = false;
+        menu.querySelector("summary").focus();
       }
     });
+  });
+
+  // 带 data-reveal 的块滚动到时淡入。没有 IntersectionObserver 的浏览器直接显示
+  var reveals = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window) {
+    var shown = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("in");
+        shown.unobserve(entry.target);
+      });
+    }, { threshold: 0.18, rootMargin: "0px 0px -8% 0px" });
+    reveals.forEach(function (el) { shown.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add("in"); });
   }
 
   // 选过语言，以后打开首页就直接是这种语言，不再按浏览器语言跳转

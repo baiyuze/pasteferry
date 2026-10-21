@@ -40,6 +40,14 @@
   <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
   <link rel="stylesheet" href="../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <script>
+    (function () {
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs"};
+      var to = moved[location.hash.slice(1)];
+      if (to) location.replace(to);
+    })();
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -84,107 +92,6 @@
           "name": "baiyuze",
           "url": "https://github.com/baiyuze"
         }
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "開啟 UU 遠程時，為甚麼不斷出現 .uuremote_ 檔案？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "UU 遠程會在系統剪貼簿裏寫入臨時佔位檔案，舊版隔空貼把它們當成普通檔案反覆記錄和轉發。1.3.2 會在傳送和接收時過濾已確認的佔位命名，並在啟動時清理純佔位記錄。正常的空檔案、隱藏檔案和大檔案不受此規則影響。50 MB 只決定是否自動傳輸，與 UU 的 UDP P2P 設定無關。建議兩端都升級；其他軟件如果也同步剪貼簿，仍可能產生普通內容的重複記錄。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "和 macOS 內建的「通用剪貼簿」有甚麼分別？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Mac、Windows、Linux 互通，文字、圖片、檔案、整個資料夾都可以，不要求同一帳戶。現在啟用官方服務就能跨網絡同步，無需自行架設伺服器。優先直連，始終端到端加密。 如果你的兩部 Mac 用同一個 Apple ID、總是放在一起、主要複製文字，系統內建的功能已經足夠。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "伺服器會看到我複製的內容嗎？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "伺服器無法解密複製內容：直連時內容不經過中轉伺服器；中轉時轉發端到端加密封包。官方服務保留必要裝置與用量統計，詳見私隱說明。原始碼可供審計，不代表能證明私有正式環境的儲存行為。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "公司網絡（雙線、多出口）能直連嗎？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "能。這類網絡按目標地址選擇出口，隔空貼會在同一個端口上向多部伺服器探測，取得每個出口的地址後一併發給對方，由對方逐個嘗試。實測公司 4 個出口與家用寬頻之間可以直連。對方是端口隨機分配的 NAT 時仍會經中轉。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "一定要自己準備伺服器嗎？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "不需要。不同網絡時，在兩部電腦上啟用官方服務即可，不用購買雲端主機或填寫地址。預設關閉，目前提供每日 100 MB 中轉額度，直連不消耗此額度。區域網絡、自建伺服器與 Tailscale 繼續可用。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "家裏沒有公網 IP，能在家和公司之間同步嗎？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "不需要。不同網絡時，在兩部電腦上啟用官方服務即可，不用購買雲端主機或填寫地址。預設關閉，目前提供每日 100 MB 中轉額度，直連不消耗此額度。區域網絡、自建伺服器與 Tailscale 繼續可用。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "在同一個網絡裏，為甚麼找不到另一部電腦？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "先看兩部是否真的在同一個網段：公司裏的有線和無線網絡、訪客網絡、開啟了「AP 隔離」的 Wi‑Fi 往往互不相通，區域網絡發現無法穿過。這時在輸入配對碼的那部電腦按「不在同一網段？」，填上另一部電腦配對碼下面顯示的地址。 在 Windows 上，第一次執行時防火牆會詢問，要選擇允許；如果按過取消，可在「設定 → 區域網絡」裏按「允許」。在 Mac 上，要在「系統設定 → 私隱與保安 → 本地網絡」裏開啟 PasteFerry Daemon。詳情見同一網絡教學。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "支援 Windows 和 Linux 嗎？iPhone 呢？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "支援 Windows 10 與 Windows 11（x64），與 Mac 互通。複製的檔案在 Windows 上貼上後就是真實檔案，可以直接貼進檔案總管、微信、Office。 也支援 x64 與 ARM64 的 Linux 桌面：X11，或帶 XWayland 的 Wayland 桌面（GNOME、KDE 等預設都已包含）。複製的檔案可以直接貼進檔案管理員。 暫不支援 iPhone 和 iPad：iOS 不允許 App 在背景監測剪貼簿，做不到複製後即時同步。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "為甚麼第一次開啟時系統會阻擋一下？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "隔空貼仍未經 Apple 公證，Windows 版也仍未有程式碼簽署，兩者都需要每年付費的證書。 在 Mac 上，到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」；在 Windows 上，在「Windows 已保護您的電腦」提示裏按「其他資訊」，再按「仍要執行」。兩者都只需要做一次。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "大檔案怎樣處理？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "預設 50 MB 以內的內容在你複製時就會推送到另一部電腦，那邊可以直接貼上；更大的檔案只同步一條記錄，需要時在複製記錄裏按「拉取到本機」再傳送。上限可以在設定裏調整。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "免費嗎？公司可以用嗎？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "免費。隔空貼以 GNU AGPL-3.0 開源，個人和公司都可以免費使用和修改。分發它，或透過網絡提供修改過的版本時，需要以同樣的授權公開原始碼。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "官方中轉不限量嗎？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "目前預設每機器額度組每日 100 MB 中轉流量，上傳與下載合計，北京時間午夜重設。重新安裝不保證獲得新額度。用量頁顯示實際額度、剩餘量與更新時間；額度用完仍可直連。額度與服務可用性可能調整，以用戶端顯示為準。"
-            }
-          }
-        ]
       }
     ]
   }
@@ -197,12 +104,23 @@
     <div class="wrap">
       <a class="brand" href="./" aria-label="隔空貼首頁"><img src="../assets/icon.svg" alt="" width="26" height="26">隔空貼</a>
       <nav aria-label="頁面導覽">
-        <a href="start/">快速開始</a>
-        <a class="wide" href="#how">運作原理</a>
-        <a class="wide" href="#faq">常見問題</a>
-        <a class="mid" href="start/#server">連線方式</a>
+        <a href="features/">功能</a>
+        <a class="mid" href="start/">快速開始</a>
+        <a class="wide" href="start/#server">連線方式</a>
         <a href="download/">下載</a>
-        <a class="wide" href="https://github.com/baiyuze/pasteferry">GitHub</a>
+        <details class="menu">
+          <summary aria-label="更多頁面"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="start/">快速開始</a></li>
+            <li class="narrow"><a href="start/#server">連線方式</a></li>
+            <li><a href="how/">運作原理</a></li>
+            <li><a href="security/">安全與私隱</a></li>
+            <li><a href="faq/">常見問題</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新記錄</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
         <details class="lang">
           <summary aria-label="語言：繁體中文（香港）"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>繁體中文（香港）</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
@@ -220,7 +138,7 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="official/">2.1 新增：跨網絡同步，無需自建伺服器 →</a>
+        <a class="release-note" href="features/#quick-paste">2.4 新功能：按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> 快速貼上 →</a>
         <h1 class="display">在這部電腦複製，<br>到那部電腦貼上。</h1>
         <p class="lede">Mac、Windows、Linux 互通，文字、圖片、檔案、整個資料夾都可以，不要求同一帳戶。現在啟用官方服務就能跨網絡同步，無需自行架設伺服器。優先直連，始終端到端加密。</p>
         <div class="cta">
@@ -253,6 +171,82 @@
           <span class="sheet-fly" aria-hidden="true"><span class="lines"><i></i><i></i><i></i></span></span>
         </div>
         <button class="replay" type="button">再示範一次</button>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.4 新功能</span></p>
+        <h2 id="qp-title">按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>，<br>最近複製的都在手邊。</h2>
+        <p class="intro">在任何程式裏按一下，複製記錄就出現在螢幕中間。按數字或 Enter，選取的內容直接貼上；常用的內容收藏起來，隨時取用。</p>
+        <figure class="spot" data-reveal>
+          <div class="spot-keys" aria-hidden="true">
+            <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
+          </div>
+          <img src="../assets/screenshots/zh-hk/card-picker-dark.png" width="1280" height="1080" loading="lazy" alt="快速貼上視窗：頂部是搜尋框和全部、文字、連結、圖片、檔案、收藏六個分頁，下面是帶序號的複製記錄，底列是按鍵說明">
+        </figure>
+        <p class="more"><a href="features/#quick-paste">了解快速貼上 →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="grid-title">
+      <div class="wrap">
+        <h2 id="grid-title">不只是同步剪貼簿。</h2>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
+            <h3>快速貼上 <span class="new">新</span></h3>
+            <p>按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> 叫出複製記錄，選取就貼上。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
+            <h3>收藏 <span class="new">新</span></h3>
+            <p>常用的內容另存一份，不會過期。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
+            <h3>檔案與資料夾</h3>
+            <p>50 MB 以內複製時就已傳好，更大的需要時再取。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+            <h3>複製記錄</h3>
+            <p>所有裝置複製過的都在這裏，能搜尋，能按類型篩選。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
+            <h3>跨網絡</h3>
+            <p>開啟官方服務，家裏和公司之間也能同步。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            <h3>端對端加密</h3>
+            <p>優先直連，伺服器看不到你複製了甚麼。</p>
+          </li>
+        </ul>
+        <p class="more"><a href="features/">查看全部功能 →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="why" aria-labelledby="why-title">
+      <div class="wrap">
+        <h2 id="why-title">為甚麼不用現有的方法</h2>
+        <p class="intro">「通用剪貼簿」要用同一個 Apple ID，而且裝置要夠近；AirDrop 每次都要按接受；傳給自己要手動下載，檔案還留在別人的伺服器上。一部 Mac 加一部 Windows 電腦時，系統內建的方法一個都用不上。</p>
+        <div class="block table-scroll">
+          <table class="compare">
+            <caption class="skip">隔空貼與其他方式的比較</caption>
+            <thead><tr><td></td><th scope="col" class="ours">隔空貼</th><th scope="col">通用剪貼簿</th><th scope="col">AirDrop</th><th scope="col">通訊軟件</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">不同 Apple ID 之間</th><td class="yes ours">可以</td><td class="no">不行</td><td class="partial">要對方接受</td><td class="yes">可以</td></tr>
+              <tr><th scope="row">Mac 與 Windows 之間</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
+              <tr><th scope="row">不在同一個網絡（家裏和公司）</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
+              <tr><th scope="row">複製後直接貼上，不用按接受</th><td class="yes ours">可以</td><td class="yes">可以</td><td class="no">不行</td><td class="no">不行</td></tr>
+              <tr><th scope="row">檔案與整個資料夾</th><td class="yes ours">可以</td><td class="partial">不穩定</td><td class="yes">可以</td><td class="partial">要先壓縮</td></tr>
+              <tr><th scope="row">找回之前複製過的內容</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="partial">翻查聊天記錄</td></tr>
+              <tr><th scope="row">只有自己的裝置可解密內容</th><td class="yes ours">可以</td><td class="yes">可以</td><td class="yes">可以</td><td class="some">視軟件而定</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -291,313 +285,6 @@
           </a>
         </div>
         <p class="note">第一次用？跟著<a href="start/#server">快速開始</a>。官方服務可選，目前預設每日 100 MB 中轉額度，直連不扣此額度。</p>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="history-title">
-      <div class="wrap">
-        <h2 id="history-title">所有裝置上複製過的內容，都在這裏</h2>
-        <p class="intro">複製記錄保留最近 3 天的內容，隨時可以放回剪貼簿，圖片按一下就能預覽。50 MB 以內的檔案在你複製的時候已經傳送好了，更大的檔案需要時按一下再拉取。想找以前複製過的，用文字內容或檔案名稱搜尋一下就找到。</p>
-        <figure class="shot">
-          <img src="../assets/screenshots/zh-hk/history-dark.png" width="2112" height="1472" alt="隔空貼的複製記錄：來自 MacBook Air 和 Mac mini 的檔案、圖片、文字，大檔案顯示「接收」按鈕">
-        </figure>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="flow-title">
-      <div class="wrap">
-        <h2 id="flow-title">按下複製之後</h2>
-        <p class="intro">文字、圖片、檔案、整個資料夾，都走同一條路。</p>
-        <ol class="flow">
-          <li><h3>偵測</h3><p>在 Mac 上，背景服務每隔一小段時間查看一次剪貼簿的變更計數，只看計數和類型，不需要授權，也不會彈出系統提示；在 Windows 上，複製的一刻系統就會通知它。</p></li>
-          <li><h3>傳輸</h3><p>文字隨訊息一起發出；50 MB 以內的圖片和檔案打包成串流即時推送；更大的檔案只發送一條記錄，等你需要時再傳。</p></li>
-          <li><h3>貼上</h3><p>另一部電腦先把內容存到本機，再寫入剪貼簿。按下 ⌘V 或 Ctrl+V 貼上的，就是本機上的真實檔案。</p></li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="why-title">
-      <div class="wrap">
-        <h2 id="why-title">為甚麼不用現有的方法</h2>
-        <p class="intro">「通用剪貼簿」要用同一個 Apple ID，而且裝置要夠近；AirDrop 每次都要按接受；傳給自己要手動下載，檔案還留在別人的伺服器上。一部 Mac 加一部 Windows 電腦時，系統內建的方法一個都用不上。</p>
-        <div class="block table-scroll">
-          <table class="compare">
-            <caption class="skip">隔空貼與其他方式的比較</caption>
-            <thead><tr><td></td><th scope="col" class="ours">隔空貼</th><th scope="col">通用剪貼簿</th><th scope="col">AirDrop</th><th scope="col">通訊軟件</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">不同 Apple ID 之間</th><td class="yes ours">可以</td><td class="no">不行</td><td class="partial">要對方接受</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">Mac 與 Windows 之間</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">不在同一個網絡（家裏和公司）</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">複製後直接貼上，不用按接受</th><td class="yes ours">可以</td><td class="yes">可以</td><td class="no">不行</td><td class="no">不行</td></tr>
-              <tr><th scope="row">檔案與整個資料夾</th><td class="yes ours">可以</td><td class="partial">不穩定</td><td class="yes">可以</td><td class="partial">要先壓縮</td></tr>
-              <tr><th scope="row">找回之前複製過的內容</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="partial">翻查聊天記錄</td></tr>
-              <tr><th scope="row">只有自己的裝置可解密內容</th><td class="yes ours">可以</td><td class="yes">可以</td><td class="yes">可以</td><td class="some">視軟件而定</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="how" aria-labelledby="how-title">
-      <div class="wrap">
-        <h2 id="how-title">運作原理</h2>
-        <p class="intro">同一網絡裏，裝置無需伺服器就能找到彼此；跨網絡時，官方服務或自建伺服器協助交換連線資料。優先打洞直連，失敗後才使用加密中轉。下圖展示通用的信令與中轉結構。</p>
-        <figure class="diagram">
-          <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
-            <title id="diagram-title">隔空貼的連線方式</title>
-            <desc id="diagram-desc">電腦 A 與電腦 B（Mac 或 Windows）之間是 WebRTC 直連；兩部電腦都透過信令連接到信令與中轉服務；直連失敗時，資料經伺服器的 TURN 中轉。</desc>
-            <rect class="d-box" x="360" y="24" width="240" height="96" rx="14"/>
-            <text class="d-title" x="480" y="64" text-anchor="middle">信令與中轉服務</text>
-            <text class="d-sub" x="480" y="92" text-anchor="middle">信令、STUN、TURN 中轉</text>
-            <path class="d-sig" d="M140 210V58H360"/>
-            <path class="d-sig" d="M820 210V58H600"/>
-            <path class="d-relay" d="M196 210V100H360"/>
-            <path class="d-relay" d="M764 210V100H600"/>
-            <text class="d-note" x="210" y="50">信令：交換連線資訊</text>
-            <text class="d-note" x="210" y="128">中轉：僅在打不通直連時</text>
-            <rect class="d-box" x="40" y="210" width="240" height="120" rx="14"/>
-            <text class="d-title" x="160" y="262" text-anchor="middle">Mac</text>
-            <text class="d-sub" x="160" y="290" text-anchor="middle">在這裏複製</text>
-            <rect class="d-box" x="680" y="210" width="240" height="120" rx="14"/>
-            <text class="d-title" x="800" y="262" text-anchor="middle">Mac 或 Windows</text>
-            <text class="d-sub" x="800" y="290" text-anchor="middle">在這裏貼上</text>
-            <path class="d-direct" d="M280 270H680"/>
-            <text class="d-label" x="480" y="256" text-anchor="middle">WebRTC 直連，DTLS 加密</text>
-            <text class="d-note" x="480" y="298" text-anchor="middle">資料只在兩部電腦之間傳輸</text>
-            <g class="d-legend" transform="translate(40 372)">
-              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">資料（直連）</text>
-              <path class="d-relay" d="M210 0H238"/><text x="248" y="5">資料（中轉，後備）</text>
-              <path class="d-sig" d="M470 0H498"/><text x="508" y="5">信令</text>
-            </g>
-          </svg>
-          <ul class="points diagram-text">
-            <li><strong>WebRTC 直連，DTLS 加密</strong> 資料只在兩部電腦之間傳輸</li>
-            <li><strong>信令與中轉服務</strong> 信令、STUN、TURN 中轉</li>
-            <li>中轉：僅在打不通直連時</li>
-          </ul>
-        </figure>
-      </div>
-    </section>
-
-    <section class="section" id="multi-uplink" aria-labelledby="multi-title">
-      <div class="wrap">
-        <h2 id="multi-title">公司網絡也能直連</h2>
-        <p class="intro">公司雙線、電訊商地址池這類網絡有多個出口，會按目標地址選擇走哪一個。只探測一次只會知道其中一個出口，結果只能經伺服器中轉。隔空貼會探測每個出口，把所有地址都告訴對方。</p>
-        <div class="cols">
-          <div>
-            <h3>做了甚麼</h3>
-            <ul class="points">
-              <li><strong>共用一個端口。</strong>所有連線都從同一個本機 UDP 端口收發，向不同伺服器查到的地址才能對得上。</li>
-              <li><strong>探測每個出口。</strong>在這個端口上同時詢問 7 部 IP 分散的伺服器，網絡有幾個出口就取得幾個地址；受 DNS 污染的地址會先過濾掉。</li>
-              <li><strong>全部告訴對方。</strong>對方逐個嘗試，與實際出口吻合的那一個就能打通。</li>
-              <li><strong>記住見過的出口。</strong>某次漏掉的出口如果沒有改變端口，就用「出口 IP + 本機端口」推算補上。</li>
-              <li><strong>定好誰先發封包。</strong>有些路由器收到對方先到的封包，會佔用該端口。一方先公佈出口地址，另一方先向那邊發封包，再公佈自己的；重試時兩種次序輪流使用。</li>
-              <li><strong>閒置時重試直連。</strong>直連失敗且中轉可用時，先透過中轉保持同步。連線閒置時可重試打洞，成功後切回直連並釋放中轉。</li>
-            </ul>
-          </div>
-          <div>
-            <h3>用真實的網絡拓撲驗證</h3>
-            <p class="small">NAT 打洞實驗室用 Linux 網絡命名空間與 iptables 搭建這些拓撲，用隔空貼真實的連線程式碼逐一執行，每次提交程式碼都會自動執行。</p>
-            <div class="table-scroll">
-              <table>
-                <thead><tr><th scope="col">場景</th><th scope="col">結果</th></tr></thead>
-                <tbody>
-                <tr><td>單出口 ↔ 家用路由器</td><td>直連</td></tr>
-                <tr><td>兩個出口，舊版本（對照）</td><td>中轉</td></tr>
-                <tr><td>兩個出口 ↔ 家用路由器</td><td>直連</td></tr>
-                <tr><td>四個出口 ↔ 家用路由器</td><td>直連</td></tr>
-                <tr><td>兩個出口，第二個未探測到，沒有歷史</td><td>中轉</td></tr>
-                <tr><td>兩個出口，第二個未探測到，有歷史</td><td>直連</td></tr>
-                <tr><td>兩個出口 ↔ 兩個出口</td><td>直連</td></tr>
-                <tr><td>兩個出口 ↔ 端口隨機分配的 NAT</td><td>中轉</td></tr>
-                <tr><td>一開始打不通，之後網絡恢復</td><td>先中轉，隨後直連</td></tr>
-                <tr><td>公司路由器會為外來封包佔用端口</td><td>直連</td></tr>
-                <tr><td>家用路由器會為外來封包佔用端口</td><td>先中轉，重試一次後直連</td></tr>
-                <tr><td>沒有伺服器，同一網段，靠 mDNS 發現</td><td>直連</td></tr>
-                <tr><td>沒有伺服器，兩個網段，一方記得對方地址</td><td>直連</td></tr>
-                <tr><td>沒有伺服器，兩部都阻擋入站連線，都記得地址</td><td>直連</td></tr>
-                <tr><td>沒有伺服器，兩部都阻擋入站連線，只有一方記得</td><td>連不上（已知限制）</td></tr>
-                <tr><td>沒有伺服器，兩個網段之間被隔離</td><td>連不上</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p class="small">實測：一部位於有 4 個出口的公司網絡的 Mac 與家裏的 Mac，改動前只能中轉，速度受伺服器頻寬限制在 0.6 MB/s；改動後直連，連上伺服器後約 3 秒建立。</p>
-            <p class="small">測量過程、設計取捨與遇過的問題，見<a href="../design/nat-traversal.html">技術方案</a>。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="security-title">
-      <div class="wrap">
-        <h2 id="security-title">伺服器看不到你複製了甚麼</h2>
-        <div class="cols">
-          <ul class="points">
-            <li><strong>伺服器不儲存帳戶，也不儲存內容。</strong>裝置身份是一把 Ed25519 密鑰，裝置 ID 由公鑰計算得出，伺服器不需要用戶資料表就能驗證身份。</li>
-            <li><strong>配對時由你核對安全指紋。</strong>兩部電腦的螢幕會顯示同樣的兩行：雙方各自公鑰的指紋。伺服器有能力替換轉發中的公鑰，但替換之後兩邊螢幕就對不上，這一步就是防範中間人攻擊的關卡。</li>
-            <li><strong>之後的每條訊息都帶簽名，</strong>伺服器無法冒充你的裝置。直連通道的證書在握手後還會再核對一次，不一致就立即中斷。</li>
-            <li><strong>中轉也只是轉發密文。</strong>TURN 轉發的是加密後的封包，中轉憑證按裝置個別簽發，12 小時後失效。</li>
-            <li><strong>區域網絡裏也一樣。</strong>裝置在區域網絡裏廣播的只是一個每天都會改變的匿名標識，看不出是誰的電腦，只有開啟「搜尋附近裝置」時才會帶上裝置名稱；配對同樣要核對指紋，之後的訊息同樣帶簽名。</li>
-          </ul>
-          <figure class="figure-card">
-            <img src="../assets/screenshots/zh-hk/card-verify-dark.png" width="1120" height="800" loading="lazy" alt="配對時的「核對安全指紋」對話框，顯示 R8NF-2WTC-QL5J，要求與另一部電腦上顯示的完全一致">
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="fallback-title">
-      <div class="wrap">
-        <h2 id="fallback-title">出問題時會怎樣</h2>
-        <p class="intro">每個人的網絡環境都不同。以下這些情況都考慮過，也都有對應的測試。</p>
-        <dl class="fallbacks">
-          <div><dt>在同一網絡裏找不到對方</dt><dd>不同網段、訪客網絡、開啟了 AP 隔離的 Wi‑Fi 會阻礙區域網絡發現。配對時輸入對方配對碼下面顯示的地址就可以；之後地址會被記住，兩邊都換了地址時，在裝置列表裏為它重新輸入一次。</dd></div>
-          <div><dt>系統阻擋區域網絡</dt><dd>由 macOS 15 起，背景服務連接區域網絡裏的裝置需要你允許；Windows 第一次執行時會詢問防火牆設定。未允許時 App 會提示，並提供直達設定的按鈕。</dd></div>
-          <div><dt>兩部電腦打不通直連</dt><dd>官方模式在直連失敗後，按目前額度申請中轉；自建模式使用自己的 TURN 中轉。兩種方式的內容均保持端到端加密。</dd></div>
-          <div><dt>公共 STUN 伺服器連不上</dt><dd>在內地連公共 STUN 時通時斷。伺服器自帶 STUN，用戶端會優先使用它。</dd></div>
-          <div><dt>從中轉切回直連</dt><dd>直連失敗且中轉可用時，先透過中轉保持同步。連線閒置時可重試打洞，成功後切回直連並釋放中轉。</dd></div>
-          <div><dt>對方進入睡眠、斷網或重新啟動</dt><dd>連線悄悄斷了也能察覺，會立即關閉並重新連線。這期間複製的內容會記下來，連上後補發到對方的複製記錄裏，但不會覆蓋對方此刻剪貼簿裏的內容。</dd></div>
-          <div><dt>伺服器斷線</dt><dd>自動重新連線，間隔由 1 秒開始倍增、最長 30 秒，並加入隨機抖動，避免大量裝置同時重新連線。同一網絡裏的裝置不受影響，照常同步。</dd></div>
-          <div><dt>檔案太大</dt><dd>超過上限的只同步一條記錄，需要時再拉取。拉取時如果來源檔案已被刪除，會清楚告訴你，而不是莫名其妙地失敗。</dd></div>
-          <div><dt>貼到只接受純文字的地方</dt><dd>從網頁複製的帶格式文字會同時寫入 HTML 和純文字兩份，貼到哪裏都不會冒出標籤。</dd></div>
-          <div><dt>檔案名稱在 Windows 上不合法</dt><dd>Mac 上可以用的冒號、問號等字元，收到時會換成對應的全形字元，名稱照樣看得懂；只差大小寫的兩個檔案也不會互相覆蓋。</dd></div>
-          <div><dt>複製的是密碼</dt><dd>在 Windows 上，密碼管理工具複製的內容會帶有「不要記錄」的標記，隔空貼看到就會略過：不同步，也不加入複製記錄。</dd></div>
-          <div><dt>仍未授權讀取剪貼簿</dt><dd>不會去讀取內容，否則背景程序會卡在一個看不見的系統彈出視窗上。App 裏會提示你授權，並提供直達設定的按鈕。</dd></div>
-          <div><dt>背景服務崩潰</dt><dd>Mac 上由系統的 launchd、Windows 上由隔空貼自帶的守護程序自動重新啟動，有 10 秒節流，不會無止境地重新啟動。</dd></div>
-          <div><dt>更新了 App，或者移動了它的位置</dt><dd>開啟 App 時會自動修正登入項目，並把背景服務重新啟動到新版本。</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <section class="section" id="install" aria-labelledby="install-title">
-      <div class="wrap">
-        <h2 id="install-title">安裝</h2>
-        <p class="intro">每部電腦安裝一個 App。在同一個網絡裏安裝好就能配對；跨網絡時，再選一種方式讓兩部電腦找到彼此。第一次安裝可以跟着<a href="start/">快速開始</a>做。</p>
-        <div class="install">
-          <div>
-            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>Mac</h3>
-            <ol>
-              <li>下載 DMG，開啟後把隔空貼拖進「應用程式」。<span class="aside">Apple 晶片與 Intel 處理器的 Mac 各有一個版本，下載頁會告訴你怎樣分辨自己的 Mac 屬於哪種。</span></li>
-              <li>從「應用程式」裏開啟。<span class="aside">第一次會提示「無法驗證開發者」：隔空貼仍未經 Apple 公證。到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」，只需要做一次。</span></li>
-              <li>按「啟用背景同步」。系統詢問是否允許讀取剪貼簿、能否尋找本地網絡上的裝置時，都選擇允許。</li>
-              <li>跨網絡時，在每部電腦的「設定」中開啟「使用官方服務」，無需填寫伺服器地址；也可以繼續自建。</li>
-            </ol>
-            <a class="button" href="download/#macos"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載 Mac 版</a>
-          </div>
-          <div>
-            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Windows</h3>
-            <ol>
-              <li>執行 PasteFerry-Setup.exe。它會安裝在目前用戶的目錄下，不需要管理員權限。<span class="aside">隔空貼仍未有程式碼簽署，Windows 會提示「Windows 已保護您的電腦」：按「其他資訊」，再按「仍要執行」。不想執行安裝程式的話，可以下載<a href="https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-windows-x64.zip">免安裝版</a>。</span></li>
-              <li>開啟隔空貼，按「啟用背景同步」。關閉視窗後，它會在右下角的系統匣裏繼續執行。防火牆詢問時選擇允許。</li>
-              <li>跨網絡時，在每部電腦的「設定」中開啟「使用官方服務」，無需填寫伺服器地址；也可以繼續自建。</li>
-            </ol>
-            <a class="button" href="download/#windows"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載 Windows 版</a>
-          </div>
-          <div>
-            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Linux</h3>
-            <ol>
-              <li>Ubuntu、Debian 等發行版下載 .deb，執行 <code>sudo apt install ./PasteFerry-linux-amd64.deb</code>；其他發行版下載 tar.gz，解壓後執行 <code>./PasteFerry/install.sh</code>。</li>
-              <li>從應用程式選單開啟隔空貼，按「啟用背景同步」。之後它會在登入時自動啟動。</li>
-              <li>跨網絡時，在每部電腦的「設定」中開啟「使用官方服務」，無需填寫伺服器地址；也可以繼續自建。</li>
-            </ol>
-            <a class="button" href="download/#linux"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載 Linux 版</a>
-          </div>
-        </div>
-        <div class="install-more">
-          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg>連線方式</h3>
-          <p class="small">同一網絡裏裝好就能配對；不同網絡裏，啟用官方服務即可，無需自建。也保留自建伺服器與 Tailscale，按需要選擇。</p>
-          <ul class="opts">
-              <li><a href="official/">官方服務</a><span>跨網絡，無需自建</span></li>
-              <li><a href="lan/">同一網絡</a><span>甚麼都不用部署</span></li>
-              <li><a href="cloud/">自建公網伺服器</a><span>自行管理容量與部署</span></li>
-              <li><a href="tailscale/">Tailscale</a><span>跨網絡，不用伺服器</span></li>
-          </ul>
-          <a class="button quiet" href="start/#server">比較連線方式</a>
-        </div>
-        <p class="pairing">一部產生配對碼，另一部輸入；核對兩邊的安全指紋後確認。原有配對關係可以繼續使用。 官方服務無需填寫對方 IP；只在區域網絡跨網段或 Tailscale 配對時填寫對方地址。</p>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="specs-title">
-      <div class="wrap">
-        <h2 id="specs-title">技術規格</h2>
-        <div class="table-scroll">
-          <table class="specs">
-            <tbody>
-            <tr><th scope="row">版本</th><td>2.3.0，<time datetime="2026-10-19">2026 年 10 月 19 日</time>發佈</td></tr>
-            <tr><th scope="row">Mac 用戶端</th><td>macOS 13 Ventura 或以上；Apple 晶片與 Intel 處理器的 Mac 各有一個安裝檔，約 25 MB，不需要 Rosetta；另有兩種 Mac 通用的版本，約 47 MB</td></tr>
-            <tr><th scope="row">Windows 用戶端</th><td>Windows 10 與 Windows 11，x64；為目前用戶安裝，不需要管理員權限；安裝檔約 23 MB</td></tr>
-            <tr><th scope="row">Linux 用戶端</th><td>x64 與 ARM64；.deb（Debian、Ubuntu 等）或 tar.gz（其他發行版），約 22 MB；需要 X11 桌面，或帶 XWayland 的 Wayland 桌面（GNOME、KDE 等預設都已包含）；GTK 3</td></tr>
-            <tr><th scope="row">伺服器</th><td>只在自建時需要部署；使用官方服務無需自備伺服器。自建支援 Linux x86_64/ARM64、macOS 與 Windows 10/11 x64。</td></tr>
-            <tr><th scope="row">介面語言</th><td>簡體中文、繁體中文（台灣、香港）、English、日本語，預設跟隨系統，可在設定裏切換</td></tr>
-            <tr><th scope="row">同步的內容</th><td>純文字、帶格式的文字、圖片與截圖、檔案、資料夾，可以按類型關閉</td></tr>
-            <tr><th scope="row">傳輸</th><td>WebRTC 數據通道，直連優先，打不通時經 TURN 中轉；同一網絡裏經 mDNS 發現、UDP 8788 交換連線資訊；多出口網絡會逐一探測每個出口；檔案以 tar + zstd 串流方式打包</td></tr>
-            <tr><th scope="row">加密與身份</th><td>DTLS 端對端加密；裝置身份為 Ed25519 密鑰；信令訊息逐條簽名</td></tr>
-            <tr><th scope="row">配對</th><td>6 位配對碼，5 分鐘內有效，字元集剔除了 0/O、1/I 等容易混淆的字元；配對時人手核對安全指紋</td></tr>
-            <tr><th scope="row">自動同步上限</th><td>預設 50 MB，可在 1 MB 到 1 GB 之間調整</td></tr>
-            <tr><th scope="row">記錄保留</th><td>預設 3 天，可在 1 小時到 30 天之間調整，到期自動清理</td></tr>
-            <tr><th scope="row">實測速度</th><td>區域網絡直連傳輸 20 MB 檔案約 330 毫秒，校驗和一致</td></tr>
-            <tr><th scope="row">技術架構</th><td>背景服務與伺服器用 Go（Windows 上以純 Go 呼叫 Win32，Linux 上以純 Go 使用 X11 協定），介面用 Flutter（三個系統共用一套程式碼），訊息定義用 Protocol Buffers</td></tr>
-            <tr><th scope="row">授權</th><td><a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">GNU AGPL-3.0</a></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="faq" aria-labelledby="faq-title">
-      <div class="wrap">
-        <h2 id="faq-title">常見問題</h2>
-        <div class="faq">
-          <details>
-            <summary>開啟 UU 遠程時，為甚麼不斷出現 .uuremote_ 檔案？</summary>
-            <div class="answer"><p>UU 遠程會在系統剪貼簿裏寫入臨時佔位檔案，舊版隔空貼把它們當成普通檔案反覆記錄和轉發。1.3.2 會在傳送和接收時過濾已確認的佔位命名，並在啟動時清理純佔位記錄。正常的空檔案、隱藏檔案和大檔案不受此規則影響。50 MB 只決定是否自動傳輸，與 UU 的 UDP P2P 設定無關。建議兩端都升級；其他軟件如果也同步剪貼簿，仍可能產生普通內容的重複記錄。</p></div>
-          </details>
-          <details>
-            <summary>和 macOS 內建的「通用剪貼簿」有甚麼分別？</summary>
-            <div class="answer"><p>Mac、Windows、Linux 互通，文字、圖片、檔案、整個資料夾都可以，不要求同一帳戶。現在啟用官方服務就能跨網絡同步，無需自行架設伺服器。優先直連，始終端到端加密。</p><p>如果你的兩部 Mac 用同一個 Apple ID、總是放在一起、主要複製文字，系統內建的功能已經足夠。</p></div>
-          </details>
-          <details>
-            <summary>伺服器會看到我複製的內容嗎？</summary>
-            <div class="answer"><p>伺服器無法解密複製內容：直連時內容不經過中轉伺服器；中轉時轉發端到端加密封包。官方服務保留必要裝置與用量統計，詳見私隱說明。原始碼可供審計，不代表能證明私有正式環境的儲存行為。</p></div>
-          </details>
-          <details>
-            <summary>公司網絡（雙線、多出口）能直連嗎？</summary>
-            <div class="answer"><p>能。這類網絡按目標地址選擇出口，隔空貼會在同一個端口上向多部伺服器探測，取得每個出口的地址後一併發給對方，由對方逐個嘗試。實測公司 4 個出口與家用寬頻之間可以直連。對方是端口隨機分配的 NAT 時仍會經中轉。</p></div>
-          </details>
-          <details>
-            <summary>一定要自己準備伺服器嗎？</summary>
-            <div class="answer"><p>不需要。不同網絡時，在兩部電腦上啟用<a href="official/">官方服務</a>即可，不用購買雲端主機或填寫地址。預設關閉，目前提供每日 100 MB 中轉額度，直連不消耗此額度。區域網絡、<a href="cloud/">自建伺服器</a>與 <a href="tailscale/">Tailscale</a> 繼續可用。</p></div>
-          </details>
-          <details>
-            <summary>家裏沒有公網 IP，能在家和公司之間同步嗎？</summary>
-            <div class="answer"><p>不需要。不同網絡時，在兩部電腦上啟用<a href="official/">官方服務</a>即可，不用購買雲端主機或填寫地址。預設關閉，目前提供每日 100 MB 中轉額度，直連不消耗此額度。區域網絡、<a href="cloud/">自建伺服器</a>與 <a href="tailscale/">Tailscale</a> 繼續可用。</p></div>
-          </details>
-          <details>
-            <summary>在同一個網絡裏，為甚麼找不到另一部電腦？</summary>
-            <div class="answer"><p>先看兩部是否真的在同一個網段：公司裏的有線和無線網絡、訪客網絡、開啟了「AP 隔離」的 Wi‑Fi 往往互不相通，區域網絡發現無法穿過。這時在輸入配對碼的那部電腦按「不在同一網段？」，填上另一部電腦配對碼下面顯示的地址。</p><p>在 Windows 上，第一次執行時防火牆會詢問，要選擇允許；如果按過取消，可在「設定 → 區域網絡」裏按「允許」。在 Mac 上，要在「系統設定 → 私隱與保安 → 本地網絡」裏開啟 PasteFerry Daemon。詳情見<a href="lan/#faq">同一網絡教學</a>。</p></div>
-          </details>
-          <details>
-            <summary>支援 Windows 和 Linux 嗎？iPhone 呢？</summary>
-            <div class="answer"><p>支援 Windows 10 與 Windows 11（x64），與 Mac 互通。複製的檔案在 Windows 上貼上後就是真實檔案，可以直接貼進檔案總管、微信、Office。</p><p>也支援 x64 與 ARM64 的 Linux 桌面：X11，或帶 XWayland 的 Wayland 桌面（GNOME、KDE 等預設都已包含）。複製的檔案可以直接貼進檔案管理員。</p><p>暫不支援 iPhone 和 iPad：iOS 不允許 App 在背景監測剪貼簿，做不到複製後即時同步。</p></div>
-          </details>
-          <details>
-            <summary>為甚麼第一次開啟時系統會阻擋一下？</summary>
-            <div class="answer"><p>隔空貼仍未經 Apple 公證，Windows 版也仍未有程式碼簽署，兩者都需要每年付費的證書。</p><p>在 Mac 上，到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」；在 Windows 上，在「Windows 已保護您的電腦」提示裏按「其他資訊」，再按「仍要執行」。兩者都只需要做一次。</p></div>
-          </details>
-          <details>
-            <summary>大檔案怎樣處理？</summary>
-            <div class="answer"><p>預設 50 MB 以內的內容在你複製時就會推送到另一部電腦，那邊可以直接貼上；更大的檔案只同步一條記錄，需要時在複製記錄裏按「拉取到本機」再傳送。上限可以在設定裏調整。</p></div>
-          </details>
-          <details>
-            <summary>免費嗎？公司可以用嗎？</summary>
-            <div class="answer"><p>免費。隔空貼以 GNU AGPL-3.0 開源，個人和公司都可以免費使用和修改。分發它，或透過網絡提供修改過的版本時，需要以同樣的授權公開原始碼。</p></div>
-          </details>
-          <details>
-            <summary>官方中轉不限量嗎？</summary>
-            <div class="answer"><p>目前預設每機器額度組每日 100 MB 中轉流量，上傳與下載合計，北京時間午夜重設。重新安裝不保證獲得新額度。用量頁顯示實際額度、剩餘量與更新時間；額度用完仍可直連。額度與服務可用性可能調整，以用戶端顯示為準。</p></div>
-          </details>
-        </div>
       </div>
     </section>
 

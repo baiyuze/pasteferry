@@ -40,6 +40,14 @@
   <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
   <link rel="stylesheet" href="../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <script>
+    (function () {
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs"};
+      var to = moved[location.hash.slice(1)];
+      if (to) location.replace(to);
+    })();
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -84,107 +92,6 @@
           "name": "baiyuze",
           "url": "https://github.com/baiyuze"
         }
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "UU Remote の使用中に .uuremote_ ファイルが増え続けるのはなぜですか？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "UU Remote は一時的なプレースホルダーファイルをシステムのクリップボードに書き込みます。旧版の PasteFerry はそれを通常のファイルとして記録・転送していました。1.3.2 では確認済みの命名パターンを送受信時に除外し、起動時にプレースホルダーだけの履歴を削除します。通常の空ファイル、隠しファイル、大容量ファイルは対象外です。50 MB は自動転送のしきい値であり、UU の UDP P2P 設定とは関係ありません。両端を更新してください。他のクリップボード同期ツールによる通常コンテンツの重複は起こり得ます。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "macOS のユニバーサルクリップボードとの違いは？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Mac・Windows・Linux でテキスト、画像、ファイル、フォルダを同期。同じアカウントは不要。公式サービスをオンにすれば、サーバーを構築せずに別ネットワーク間でも使えます。直接接続を優先し、常にエンドツーエンド暗号化。 2 台の Mac が同じ Apple ID でいつも並んでいて、主にテキストをコピーするだけなら、標準機能で十分です。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "サーバーにコピーした内容は見えますか？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "コピー内容は復号できません。直接通信は端末間で行い、中継はエンドツーエンド暗号化されたパケットを転送します。公式サービスは必要な端末・使用量統計を保持します。公開ソースだけで非公開の本番保存動作まで証明できるわけではありません。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "出口が複数ある会社のネットワークでも直接つながりますか？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "つながります。こうしたネットワークは宛先ごとに出口を選びます。PasteFerry はひとつのポートから複数のサーバーに問い合わせて出口ごとのアドレスを集め、すべて相手に送り、相手がひとつずつ試します。テストでは、出口が 4 つある会社の Mac と家庭の回線が直接つながりました。相手がポートをランダムに割り当てる NAT の場合は中継になります。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "サーバーは自分で用意する必要がありますか？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "不要です。別ネットワークなら両方で公式サービスを有効にします。クラウド契約やアドレス入力は不要。初期状態はオフで、現在の中継上限は 100 MB/日、直接通信は消費しません。LAN、独自サーバー、Tailscale も使えます。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "自宅にグローバル IP がありません。自宅と会社のあいだで同期できますか？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "不要です。別ネットワークなら両方で公式サービスを有効にします。クラウド契約やアドレス入力は不要。初期状態はオフで、現在の中継上限は 100 MB/日、直接通信は消費しません。LAN、独自サーバー、Tailscale も使えます。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "同じネットワークなのに、もう一台が見つからないのはなぜ？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "まず本当に同じサブネットか確認してください。会社の有線と Wi‑Fi、ゲストネットワーク、クライアント分離が有効な Wi‑Fi では、デバイス同士が見えないことがよくあります。その場合は、コードを入力する側で「別のサブネットにありますか？」をクリックし、相手のコードの下に表示されたアドレスを入力します。 Windows では初回起動時にファイアウォールに聞かれたら許可してください。キャンセルした場合は「設定 → ローカルネットワーク」で「許可」をクリックします。Mac では「システム設定 → プライバシーとセキュリティ → ローカルネットワーク」で PasteFerry Daemon をオンにします。詳しくは同じネットワークでの手順を。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Windows や Linux に対応していますか？iPhone は？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Windows 10 と Windows 11（x64）に対応し、Mac と相互に使えます。Windows で貼り付けたファイルは本物のファイルなので、エクスプローラーや Office にそのまま貼り付けられます。 x64 と ARM64 の Linux デスクトップにも対応しています。X11、または XWayland 付きの Wayland デスクトップ（GNOME、KDE などは標準で搭載）で動きます。コピーしたファイルはファイルマネージャーにそのまま貼り付けられます。 iPhone と iPad には対応していません。iOS ではアプリがバックグラウンドでクリップボードを監視できないため、コピーしてすぐ同期することができないからです。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "初めて開くときにシステムに止められるのはなぜ？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "PasteFerry はまだ Apple の公証を受けておらず、Windows 版もコード署名していません。どちらも毎年費用のかかる証明書が必要です。 Mac では「システム設定 → プライバシーとセキュリティ」でページ下部の「このまま開く」をクリック、Windows では「Windows によって PC が保護されました」で「詳細情報」から「実行」を押してください。どちらも一度だけで済みます。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "大きなファイルはどうなりますか？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "初期設定では 50 MB までのものはコピーした時点でもう一台に送られ、そのまま貼り付けられます。それより大きいファイルは記録だけを同期し、必要なときに履歴から「このデバイスに取り込む」で転送します。上限は「設定」で変えられます。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "無料ですか？会社で使えますか？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "無料です。PasteFerry は GNU AGPL-3.0 のオープンソースで、個人も会社も無料で使い、改変できます。配布する場合や、改変したものをネットワーク越しに提供する場合は、同じライセンスでソースコードを公開する必要があります。"
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "公式中継は無制限ですか？",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "現在の標準中継上限は端末の上限グループごとに送受信合計 100 MB/日で、北京時間午前 0 時にリセットします。再インストールで新たな残量が得られる保証はありません。使用量画面に実際の上限、残量、更新時刻を表示します。上限に達しても直接接続は利用できます。上限と提供状況は変更される場合があるため、アプリでご確認ください。"
-            }
-          }
-        ]
       }
     ]
   }
@@ -197,12 +104,23 @@
     <div class="wrap">
       <a class="brand" href="./" aria-label="PasteFerry ホーム"><img src="../assets/icon.svg" alt="" width="26" height="26">PasteFerry</a>
       <nav aria-label="ページ内の移動">
-        <a href="start/">はじめかた</a>
-        <a class="wide" href="#how">しくみ</a>
-        <a class="wide" href="#faq">よくある質問</a>
-        <a class="mid" href="start/#server">接続方法</a>
+        <a href="features/">機能</a>
+        <a class="mid" href="start/">はじめかた</a>
+        <a class="wide" href="start/#server">接続方法</a>
         <a href="download/">ダウンロード</a>
-        <a class="wide" href="https://github.com/baiyuze/pasteferry">GitHub</a>
+        <details class="menu">
+          <summary aria-label="その他のページ"><span>その他</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="start/">はじめかた</a></li>
+            <li class="narrow"><a href="start/#server">接続方法</a></li>
+            <li><a href="how/">しくみ</a></li>
+            <li><a href="security/">セキュリティ</a></li>
+            <li><a href="faq/">よくある質問</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
         <details class="lang">
           <summary aria-label="言語：日本語"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>日本語</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
@@ -220,7 +138,7 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="official/">2.1 新機能：サーバー不要で別ネットワーク間を同期 →</a>
+        <a class="release-note" href="features/#quick-paste">2.4 の新機能：<span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> でクイックペースト →</a>
         <h1 class="display">こっちでコピーして、<br>あっちで貼り付け。</h1>
         <p class="lede">Mac・Windows・Linux でテキスト、画像、ファイル、フォルダを同期。同じアカウントは不要。公式サービスをオンにすれば、サーバーを構築せずに別ネットワーク間でも使えます。直接接続を優先し、常にエンドツーエンド暗号化。</p>
         <div class="cta">
@@ -253,6 +171,82 @@
           <span class="sheet-fly" aria-hidden="true"><span class="lines"><i></i><i></i><i></i></span></span>
         </div>
         <button class="replay" type="button">もう一度再生</button>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.4 の新機能</span></p>
+        <h2 id="qp-title"><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> を押せば、<br>コピーした内容がすぐそこに。</h2>
+        <p class="intro">どのアプリでも押すだけで、画面の中央に履歴が出ます。数字かリターンを押せば、選んだ内容がそのままペーストされます。よく使うものはお気に入りに。</p>
+        <figure class="spot" data-reveal>
+          <div class="spot-keys" aria-hidden="true">
+            <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
+          </div>
+          <img src="../assets/screenshots/ja/card-picker-dark.png" width="1280" height="1080" loading="lazy" alt="クイックペーストウィンドウ：上に検索欄と「すべて・テキスト・リンク・画像・ファイル・お気に入り」のタブ、番号付きの履歴、下にキーの説明">
+        </figure>
+        <p class="more"><a href="features/#quick-paste">クイックペーストについて →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="grid-title">
+      <div class="wrap">
+        <h2 id="grid-title">クリップボードの同期だけじゃない。</h2>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
+            <h3>クイックペースト <span class="new">新機能</span></h3>
+            <p><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> で履歴を呼び出し、選ぶだけでペースト。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
+            <h3>お気に入り <span class="new">新機能</span></h3>
+            <p>よく使う内容を別に保存。期限切れになりません。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
+            <h3>ファイルとフォルダ</h3>
+            <p>50 MB まではコピーした時点で転送済み。大きいものは必要なときに。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+            <h3>履歴</h3>
+            <p>すべてのデバイスでコピーした内容をここに。検索も種類別の表示も。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
+            <h3>ネットワークをまたいで</h3>
+            <p>公式サービスをオンにすれば、自宅と職場の間でも同期。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            <h3>エンドツーエンド暗号化</h3>
+            <p>まず直接接続。サーバーはコピーした内容を見られません。</p>
+          </li>
+        </ul>
+        <p class="more"><a href="features/">すべての機能を見る →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="why" aria-labelledby="why-title">
+      <div class="wrap">
+        <h2 id="why-title">いまある方法では足りない理由</h2>
+        <p class="intro">ユニバーサルクリップボードは同じ Apple ID で、近くにいる必要があります。AirDrop は毎回受け取り操作が要ります。自分宛てにメッセージで送ると手動でダウンロードすることになり、ファイルは他社のサーバーに残ります。Mac と Windows の組み合わせでは、標準の方法はどれも使えません。</p>
+        <div class="block table-scroll">
+          <table class="compare">
+            <caption class="skip">PasteFerry とほかの方法の比較</caption>
+            <thead><tr><td></td><th scope="col" class="ours">PasteFerry</th><th scope="col">ユニバーサル<br>クリップボード</th><th scope="col">AirDrop</th><th scope="col">チャットアプリ</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">別々の Apple ID のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="partial">受け取り操作が必要</td><td class="yes">できる</td></tr>
+              <tr><th scope="row">Mac と Windows のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
+              <tr><th scope="row">別のネットワーク（自宅と会社）</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
+              <tr><th scope="row">コピーしてすぐ貼り付け、受け取り操作なし</th><td class="yes ours">できる</td><td class="yes">できる</td><td class="no">できない</td><td class="no">できない</td></tr>
+              <tr><th scope="row">ファイルとフォルダまるごと</th><td class="yes ours">できる</td><td class="partial">不安定</td><td class="yes">できる</td><td class="partial">先に圧縮</td></tr>
+              <tr><th scope="row">前にコピーしたものを探す</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="partial">履歴をさかのぼる</td></tr>
+              <tr><th scope="row">内容を復号できるのは自分の端末のみ</th><td class="yes ours">可能</td><td class="yes">可能</td><td class="yes">可能</td><td class="some">アプリによる</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -291,313 +285,6 @@
           </a>
         </div>
         <p class="note">初めての方は<a href="start/#server">クイックスタート</a>へ。公式サービスは任意です。現在の標準中継上限は 100 MB/日で、直接通信では消費しません。</p>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="history-title">
-      <div class="wrap">
-        <h2 id="history-title">どのデバイスでコピーしたものも、ここに</h2>
-        <p class="intro">履歴には直近 3 日分が残り、いつでもクリップボードに戻せます。画像はクリックでプレビュー。50 MB までのファイルはコピーした時点で届いていて、それより大きいものは必要なときにワンクリックで取り込めます。前にコピーしたものは、テキストやファイル名で検索できます。</p>
-        <figure class="shot">
-          <img src="../assets/screenshots/ja/history-dark.png" width="2112" height="1472" alt="PasteFerry の履歴画面：MacBook Air と Mac mini から届いたファイル、画像、テキスト。大きなファイルには「このデバイスに取り込む」ボタン">
-        </figure>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="flow-title">
-      <div class="wrap">
-        <h2 id="flow-title">コピーしたあと、何が起きるか</h2>
-        <p class="intro">テキストも画像も、ファイルもフォルダも、同じ道を通ります。</p>
-        <ol class="flow">
-          <li><h3>気づく</h3><p>Mac ではバックグラウンドサービスが短い間隔でクリップボードの変更カウントを確認します。カウントと種類を見るだけなので許可は不要で、確認ダイアログも出ません。Windows ではコピーした瞬間にシステムが知らせます。</p></li>
-          <li><h3>送る</h3><p>テキストはメッセージと一緒に送ります。50 MB までの画像とファイルはその場でストリームとして送り、それより大きいファイルは記録だけを送って、必要になったときに転送します。</p></li>
-          <li><h3>貼り付ける</h3><p>受け取った側はまず内容をローカルに保存してから、クリップボードに入れます。⌘V や Ctrl+V で貼り付けられるのは、手元にある本物のファイルです。</p></li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="why-title">
-      <div class="wrap">
-        <h2 id="why-title">いまある方法では足りない理由</h2>
-        <p class="intro">ユニバーサルクリップボードは同じ Apple ID で、近くにいる必要があります。AirDrop は毎回受け取り操作が要ります。自分宛てにメッセージで送ると手動でダウンロードすることになり、ファイルは他社のサーバーに残ります。Mac と Windows の組み合わせでは、標準の方法はどれも使えません。</p>
-        <div class="block table-scroll">
-          <table class="compare">
-            <caption class="skip">PasteFerry とほかの方法の比較</caption>
-            <thead><tr><td></td><th scope="col" class="ours">PasteFerry</th><th scope="col">ユニバーサル<br>クリップボード</th><th scope="col">AirDrop</th><th scope="col">チャットアプリ</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">別々の Apple ID のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="partial">受け取り操作が必要</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">Mac と Windows のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">別のネットワーク（自宅と会社）</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">コピーしてすぐ貼り付け、受け取り操作なし</th><td class="yes ours">できる</td><td class="yes">できる</td><td class="no">できない</td><td class="no">できない</td></tr>
-              <tr><th scope="row">ファイルとフォルダまるごと</th><td class="yes ours">できる</td><td class="partial">不安定</td><td class="yes">できる</td><td class="partial">先に圧縮</td></tr>
-              <tr><th scope="row">前にコピーしたものを探す</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="partial">履歴をさかのぼる</td></tr>
-              <tr><th scope="row">内容を復号できるのは自分の端末のみ</th><td class="yes ours">可能</td><td class="yes">可能</td><td class="yes">可能</td><td class="some">アプリによる</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="how" aria-labelledby="how-title">
-      <div class="wrap">
-        <h2 id="how-title">しくみ</h2>
-        <p class="intro">同じネットワークではサーバーなしで端末を検出します。別ネットワークでは公式サービスまたは独自サーバーが接続情報を交換。直接接続を優先し、失敗時に暗号化中継を使います。図は共通のシグナリングと中継構成です。</p>
-        <figure class="diagram">
-          <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
-            <title id="diagram-title">PasteFerry の接続のしかた</title>
-            <desc id="diagram-desc">コンピューター A と B（Mac または Windows）は WebRTC で直接つながります。どちらもシグナリングのためにシグナリング・中継サービスへ接続し、直接接続に失敗したときはサーバーの TURN でデータを中継します。</desc>
-            <rect class="d-box" x="360" y="24" width="240" height="96" rx="14"/>
-            <text class="d-title" x="480" y="64" text-anchor="middle">シグナリング・中継サービス</text>
-            <text class="d-sub" x="480" y="92" text-anchor="middle">シグナリング、STUN、TURN 中継</text>
-            <path class="d-sig" d="M140 210V58H360"/>
-            <path class="d-sig" d="M820 210V58H600"/>
-            <path class="d-relay" d="M196 210V100H360"/>
-            <path class="d-relay" d="M764 210V100H600"/>
-            <text class="d-note" x="210" y="50">シグナリング：接続情報の交換</text>
-            <text class="d-note" x="210" y="128">中継：直接つながらないときだけ</text>
-            <rect class="d-box" x="40" y="210" width="240" height="120" rx="14"/>
-            <text class="d-title" x="160" y="262" text-anchor="middle">Mac</text>
-            <text class="d-sub" x="160" y="290" text-anchor="middle">ここでコピー</text>
-            <rect class="d-box" x="680" y="210" width="240" height="120" rx="14"/>
-            <text class="d-title" x="800" y="262" text-anchor="middle">Mac または Windows</text>
-            <text class="d-sub" x="800" y="290" text-anchor="middle">ここで貼り付け</text>
-            <path class="d-direct" d="M280 270H680"/>
-            <text class="d-label" x="480" y="256" text-anchor="middle">WebRTC 直接接続、DTLS 暗号化</text>
-            <text class="d-note" x="480" y="298" text-anchor="middle">データは 2 台のあいだだけを流れる</text>
-            <g class="d-legend" transform="translate(40 372)">
-              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">データ（直接）</text>
-              <path class="d-relay" d="M210 0H238"/><text x="248" y="5">データ（中継、予備）</text>
-              <path class="d-sig" d="M470 0H498"/><text x="508" y="5">シグナリング</text>
-            </g>
-          </svg>
-          <ul class="points diagram-text">
-            <li><strong>WebRTC 直接接続、DTLS 暗号化</strong> データは 2 台のあいだだけを流れる</li>
-            <li><strong>シグナリング・中継サービス</strong> シグナリング、STUN、TURN 中継</li>
-            <li>中継：直接つながらないときだけ</li>
-          </ul>
-        </figure>
-      </div>
-    </section>
-
-    <section class="section" id="multi-uplink" aria-labelledby="multi-title">
-      <div class="wrap">
-        <h2 id="multi-title">会社のネットワークでも直接つながる</h2>
-        <p class="intro">2 つの回線を持つ会社や、キャリアの NAT アドレスプールのようなネットワークには出口が複数あり、宛先ごとに出口が変わります。一度調べただけでは出口のひとつしか分からず、中継頼みになります。PasteFerry はすべての出口を調べ、そのアドレスをすべて相手に伝えます。</p>
-        <div class="cols">
-          <div>
-            <h3>やっていること</h3>
-            <ul class="points">
-              <li><strong>ポートはひとつ。</strong>すべての接続をひとつのローカル UDP ポートで送受信するので、別々のサーバーから得たアドレスがかみ合います。</li>
-              <li><strong>出口をすべて調べる。</strong>そのポートから IP の散らばった 7 台のサーバーに同時に問い合わせ、出口の数だけアドレスを得ます。DNS 汚染されたアドレスは先に除外します。</li>
-              <li><strong>すべて相手に伝える。</strong>相手はひとつずつ試し、実際の出口と合うものがつながります。</li>
-              <li><strong>見た出口を覚えておく。</strong>ポートを書き換えない出口を取りこぼしたときは、「出口の IP ＋ローカルポート」で補います。</li>
-              <li><strong>どちらが先に送るかを決める。</strong>相手のパケットが先に届くとポートをふさいでしまうルーターがあります。片方が先にアドレスを公開し、もう片方はそこへ送ってから自分のアドレスを公開します。再試行では順番を入れ替えます。</li>
-              <li><strong>待機中に直接接続を再試行。</strong>直接接続に失敗して中継が利用可能なら、中継で同期を続けます。待機中に直接接続を再試行し、成功したら中継を解放します。</li>
-            </ul>
-          </div>
-          <div>
-            <h3>実際のネットワーク構成で検証</h3>
-            <p class="small">NAT 穴あけ実験室では、Linux のネットワーク名前空間と iptables でこれらの構成を組み、PasteFerry の本物の接続コードをそれぞれで動かします。コミットのたびに自動で実行されます。</p>
-            <div class="table-scroll">
-              <table>
-                <thead><tr><th scope="col">構成</th><th scope="col">結果</th></tr></thead>
-                <tbody>
-                <tr><td>出口ひとつ ↔ 家庭用ルーター</td><td>直接</td></tr>
-                <tr><td>出口ふたつ、旧バージョン（対照）</td><td>中継</td></tr>
-                <tr><td>出口ふたつ ↔ 家庭用ルーター</td><td>直接</td></tr>
-                <tr><td>出口よっつ ↔ 家庭用ルーター</td><td>直接</td></tr>
-                <tr><td>出口ふたつ、2 本目を取りこぼし、履歴なし</td><td>中継</td></tr>
-                <tr><td>出口ふたつ、2 本目を取りこぼし、履歴あり</td><td>直接</td></tr>
-                <tr><td>出口ふたつ ↔ 出口ふたつ</td><td>直接</td></tr>
-                <tr><td>出口ふたつ ↔ ポートをランダムに割り当てる NAT</td><td>中継</td></tr>
-                <tr><td>最初はつながらず、あとでネットワークが回復</td><td>中継のあと直接</td></tr>
-                <tr><td>会社のルーターが外からのパケットでポートをふさぐ</td><td>直接</td></tr>
-                <tr><td>家庭用ルーターが外からのパケットでポートをふさぐ</td><td>中継のあと、1 回の再試行で直接</td></tr>
-                <tr><td>サーバーなし、同じサブネット、mDNS で発見</td><td>直接</td></tr>
-                <tr><td>サーバーなし、別のサブネット、片方が相手のアドレスを覚えている</td><td>直接</td></tr>
-                <tr><td>サーバーなし、両方が受信をブロック、両方がアドレスを覚えている</td><td>直接</td></tr>
-                <tr><td>サーバーなし、両方が受信をブロック、片方だけが覚えている</td><td>つながらない（既知の制限）</td></tr>
-                <tr><td>サーバーなし、サブネット同士が遮断されている</td><td>つながらない</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p class="small">実測：出口が 4 つある会社の Mac と自宅の Mac は、以前は中継しかできず、サーバーの帯域で 0.6 MB/s に抑えられていました。いまは直接つながり、サーバーに接続してから約 3 秒で確立します。</p>
-            <p class="small">測定の過程、設計の判断、ハマった点は<a href="../design/nat-traversal.html">技術資料</a>（中国語）にまとめています。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="security-title">
-      <div class="wrap">
-        <h2 id="security-title">サーバーにはコピーした内容が見えない</h2>
-        <div class="cols">
-          <ul class="points">
-            <li><strong>サーバーはアカウントも内容も保存しない。</strong>デバイスの身元は Ed25519 の鍵で、デバイス ID は公開鍵から計算されます。サーバーはユーザー表なしで身元を確かめられます。</li>
-            <li><strong>ペアリングでは指紋をあなたが照合する。</strong>両方の画面に同じ 2 行、つまりお互いの公開鍵の指紋が表示されます。サーバーは転送中の公開鍵をすり替えられますが、すり替えれば 2 つの画面が一致しなくなります。この照合が中間者攻撃を防ぐ関門です。</li>
-            <li><strong>その後のメッセージはすべて署名付き。</strong>サーバーがあなたのデバイスになりすますことはできません。直接接続の証明書もハンドシェイク後にもう一度照合し、食い違えばすぐ切断します。</li>
-            <li><strong>中継も暗号文を転送するだけ。</strong>TURN が運ぶのは暗号化済みのパケットです。中継用の認証情報はデバイスごとに発行され、12 時間で失効します。</li>
-            <li><strong>ローカルネットワークでも同じ。</strong>デバイスが LAN に流すのは毎日変わる匿名の識別子だけで、誰のコンピューターかはわかりません。デバイス名を流すのは「近くを検索」を開いている間だけです。ペアリングでは同じく指紋を照合し、その後のメッセージも署名付きです。</li>
-          </ul>
-          <figure class="figure-card">
-            <img src="../assets/screenshots/ja/card-verify-dark.png" width="1120" height="800" loading="lazy" alt="ペアリング時の「セキュリティ指紋を確認」ダイアログ。R8NF-2WTC-QL5J が表示され、もう一台の表示と完全に一致するか確かめるよう求めている">
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="fallback-title">
-      <div class="wrap">
-        <h2 id="fallback-title">うまくいかないときに起きること</h2>
-        <p class="intro">ネットワークの事情は人それぞれです。ここに挙げたケースはどれも想定済みで、テストがあります。</p>
-        <dl class="fallbacks">
-          <div><dt>同じネットワークなのに相手が見つからない</dt><dd>サブネットが違う、ゲストネットワーク、クライアント分離（AP アイソレーション）が有効な Wi‑Fi では、LAN 内の検出が届きません。ペアリング時に相手のコードの下に表示されたアドレスを入力してください。アドレスはその後も記憶され、両方のアドレスが変わったときはデバイス一覧からもう一度入力します。</dd></div>
-          <div><dt>システムがローカルネットワークを止めている</dt><dd>macOS 15 以降、バックグラウンドサービスが LAN 上のデバイスに接続するにはあなたの許可が要ります。Windows は初回起動時にファイアウォールについて聞いてきます。許可されていないときはアプリが知らせ、設定へ直接飛べるボタンを出します。</dd></div>
-          <div><dt>2 台が直接つながらない</dt><dd>公式モードでは直接接続に失敗した後、残量の範囲内で中継を申請します。独自サーバーではその TURN 中継を使います。どちらも内容はエンドツーエンド暗号化されます。</dd></div>
-          <div><dt>公開 STUN サーバーにつながらない</dt><dd>中国本土などでは公開 STUN が不安定です。サーバーは STUN を内蔵していて、クライアントはそちらを優先します。</dd></div>
-          <div><dt>直接接続へ切り替える</dt><dd>直接接続に失敗して中継が利用可能なら、中継で同期を続けます。待機中に直接接続を再試行し、成功したら中継を解放します。</dd></div>
-          <div><dt>相手がスリープ、切断、再起動した</dt><dd>黙って切れた接続にも気づき、すぐに閉じて再接続します。そのあいだにコピーしたものは記録しておき、つながったら相手の履歴に追加します。相手のいまのクリップボードは上書きしません。</dd></div>
-          <div><dt>サーバーとの接続が切れた</dt><dd>自動で再接続します。間隔は 1 秒から倍々で最大 30 秒、ランダムな揺らぎ付きで、たくさんのデバイスが一斉に再接続しないようにしています。同じネットワークのデバイスは影響を受けず、そのまま同期します。</dd></div>
-          <div><dt>ファイルが大きすぎる</dt><dd>上限を超えるものは記録だけを同期し、必要なときに取り込みます。そのとき元のファイルが消えていれば、あいまいな失敗ではなく、はっきりそう伝えます。</dd></div>
-          <div><dt>プレーンテキストしか受け付けない場所に貼り付ける</dt><dd>Web からコピーした書式付きテキストは HTML とプレーンテキストの両方で書き込むので、どこに貼り付けてもタグが混ざりません。</dd></div>
-          <div><dt>Windows では使えないファイル名</dt><dd>Mac では使えるコロンや疑問符などは、対応する全角文字に置き換えて受け取るので、名前はそのまま読めます。大文字と小文字だけが違う 2 つのファイルが上書きし合うこともありません。</dd></div>
-          <div><dt>パスワードをコピーした</dt><dd>Windows ではパスワードマネージャーがコピーした内容に「記録しない」印が付きます。PasteFerry はそれを見て飛ばします。同期も履歴への保存もしません。</dd></div>
-          <div><dt>クリップボードの読み取りをまだ許可していない</dt><dd>内容は読みに行きません。読みに行くと、バックグラウンドプロセスが見えないダイアログで止まってしまうからです。アプリが許可を促し、設定へ直接飛べるボタンを出します。</dd></div>
-          <div><dt>バックグラウンドサービスが落ちた</dt><dd>Mac ではシステムの launchd が、Windows では PasteFerry 自身の監視プロセスが再起動します。10 秒に 1 回までに抑え、暴走はしません。</dd></div>
-          <div><dt>アプリを更新した、または移動した</dt><dd>アプリを開いたときにログイン項目を正しい場所に向け直し、バックグラウンドサービスを新しいバージョンで再起動します。</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <section class="section" id="install" aria-labelledby="install-title">
-      <div class="wrap">
-        <h2 id="install-title">インストール</h2>
-        <p class="intro">それぞれのコンピューターにアプリを入れます。同じネットワークならそのままペアリングでき、ネットワークをまたぐときは 2 台がお互いを見つける方法をひとつ選びます。はじめての方は<a href="start/">はじめかた</a>をどうぞ。</p>
-        <div class="install">
-          <div>
-            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>Mac</h3>
-            <ol>
-              <li>DMG をダウンロードして開き、PasteFerry を「アプリケーション」にドラッグします。<span class="aside">Apple シリコン版と Intel 版があります。自分の Mac がどちらかの確かめ方は、ダウンロードページにあります。</span></li>
-              <li>「アプリケーション」から開きます。<span class="aside">初回は「開発元を検証できません」と表示されます。PasteFerry はまだ Apple の公証を受けていないためです。「システム設定 → プライバシーとセキュリティ」を開き、ページ下部の「このまま開く」をクリックします。必要なのは一度だけです。</span></li>
-              <li>「バックグラウンド同期を有効にする」をクリックします。クリップボードの読み取りと、ローカルネットワーク上のデバイスを探すことについて聞かれたら、どちらも許可します。</li>
-              <li>別ネットワークで使う場合は各パソコンの「設定 → 公式サービスを使う」をオンにします。アドレス入力は不要。独自サーバーも利用できます。</li>
-            </ol>
-            <a class="button" href="download/#macos"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Mac 版をダウンロード</a>
-          </div>
-          <div>
-            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Windows</h3>
-            <ol>
-              <li>PasteFerry-Setup.exe を実行します。現在のユーザーのフォルダにインストールされ、管理者権限は要りません。<span class="aside">PasteFerry はまだコード署名されていないため、「Windows によって PC が保護されました」と表示されます。「詳細情報」を押してから「実行」を押してください。インストーラーを使いたくない場合は<a href="https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-windows-x64.zip">ポータブル版</a>もあります。</span></li>
-              <li>PasteFerry を開き、「バックグラウンド同期を有効にする」をクリックします。ファイアウォールに聞かれたら許可します。ウィンドウを閉じても、画面右下の通知領域で動き続けます。</li>
-              <li>別ネットワークで使う場合は各パソコンの「設定 → 公式サービスを使う」をオンにします。アドレス入力は不要。独自サーバーも利用できます。</li>
-            </ol>
-            <a class="button" href="download/#windows"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Windows 版をダウンロード</a>
-          </div>
-          <div>
-            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Linux</h3>
-            <ol>
-              <li>Ubuntu や Debian などでは .deb をダウンロードし、<code>sudo apt install ./PasteFerry-linux-amd64.deb</code> を実行します。ほかのディストリビューションでは tar.gz をダウンロードして展開し、<code>./PasteFerry/install.sh</code> を実行します。</li>
-              <li>アプリケーションメニューから PasteFerry を開き、「バックグラウンド同期を有効にする」をクリックします。以後はログイン時に自動で起動します。</li>
-              <li>別ネットワークで使う場合は各パソコンの「設定 → 公式サービスを使う」をオンにします。アドレス入力は不要。独自サーバーも利用できます。</li>
-            </ol>
-            <a class="button" href="download/#linux"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Linux 版をダウンロード</a>
-          </div>
-        </div>
-        <div class="install-more">
-          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg>接続方法</h3>
-          <p class="small">同じネットワークならインストールしてペアリング。別ネットワークなら公式サービスをオンにするだけで、サーバーの準備は不要です。独自サーバーと Tailscale も選べます。</p>
-          <ul class="opts">
-              <li><a href="official/">公式サービス</a><span>別ネットワーク間、構築不要</span></li>
-              <li><a href="lan/">同じネットワーク</a><span>準備は何も要らない</span></li>
-              <li><a href="cloud/">独自の公開サーバー</a><span>容量と運用を自分で管理</span></li>
-              <li><a href="tailscale/">Tailscale</a><span>ネットワークをまたぐ、サーバーなし</span></li>
-          </ul>
-          <a class="button quiet" href="start/#server">接続方法を比較</a>
-        </div>
-        <p class="pairing">一方でコードを表示し、もう一方で入力。両画面の指紋を照合して確認します。既存のペアリングはそのまま使えます。 公式サービスでは相手の IP は不要です。LAN の別サブネットや Tailscale の場合のみ相手のアドレスを入力します。</p>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="specs-title">
-      <div class="wrap">
-        <h2 id="specs-title">仕様</h2>
-        <div class="table-scroll">
-          <table class="specs">
-            <tbody>
-            <tr><th scope="row">バージョン</th><td>2.3.0（<time datetime="2026-10-19">2026 年 10 月 19 日</time>公開）</td></tr>
-            <tr><th scope="row">Mac アプリ</th><td>macOS 13 Ventura 以降。Apple シリコン版と Intel 版に分かれ、ダウンロードはそれぞれ約 25 MB で Rosetta 不要。両方で動くユニバーサル版は約 47 MB</td></tr>
-            <tr><th scope="row">Windows アプリ</th><td>Windows 10 と Windows 11、x64。ユーザーごとのインストールで管理者権限不要。ダウンロードは約 23 MB</td></tr>
-            <tr><th scope="row">Linux アプリ</th><td>x64 と ARM64。.deb（Debian、Ubuntu など）または tar.gz（ほかのディストリビューション）、約 22 MB。X11 のデスクトップ、または XWayland 付きの Wayland デスクトップ（GNOME、KDE などは標準で搭載）が必要。GTK 3</td></tr>
-            <tr><th scope="row">サーバー</th><td>構築が必要なのは独自運用の場合のみ。公式サービスなら自分のサーバーは不要です。独自運用は Linux x86_64/ARM64、macOS、Windows 10/11 x64 に対応。</td></tr>
-            <tr><th scope="row">表示言語</th><td>日本語、英語、簡体字中国語、繁体字中国語（台湾・香港）。初期設定はシステムに合わせ、「設定」で切り替え可能</td></tr>
-            <tr><th scope="row">同期する内容</th><td>プレーンテキスト、書式付きテキスト、画像とスクリーンショット、ファイル、フォルダ。種類ごとにオフにできる</td></tr>
-            <tr><th scope="row">転送</th><td>WebRTC データチャネル。直接接続を優先し、つながらなければ TURN で中継。同じネットワークでは mDNS で発見し、UDP 8788 で接続情報を交換。複数の出口があるネットワークでは出口ごとに調査。ファイルは tar + zstd でストリーム転送</td></tr>
-            <tr><th scope="row">暗号化と身元</th><td>DTLS によるエンドツーエンド暗号化。デバイスの身元は Ed25519 の鍵。シグナリングのメッセージはすべて署名付き</td></tr>
-            <tr><th scope="row">ペアリング</th><td>5 分間有効な 6 桁のコード。0/O や 1/I のような紛らわしい文字は使わない。指紋は人が照合</td></tr>
-            <tr><th scope="row">自動同期の上限</th><td>初期値 50 MB、1 MB〜1 GB で調整可能</td></tr>
-            <tr><th scope="row">履歴の保存期間</th><td>初期値 3 日、1 時間〜30 日で調整可能。期限が来たら自動で削除</td></tr>
-            <tr><th scope="row">実測の速度</th><td>LAN の直接接続で 20 MB のファイルを約 330 ミリ秒で転送、チェックサム一致</td></tr>
-            <tr><th scope="row">技術スタック</th><td>バックグラウンドサービスとサーバーは Go（Windows では Go から Win32 を直接呼び出し、Linux では Go で X11 プロトコルを直接扱う）、アプリは Flutter（3 つの OS で同じコード）、メッセージ定義は Protocol Buffers</td></tr>
-            <tr><th scope="row">ライセンス</th><td><a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">GNU AGPL-3.0</a></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="faq" aria-labelledby="faq-title">
-      <div class="wrap">
-        <h2 id="faq-title">よくある質問</h2>
-        <div class="faq">
-          <details>
-            <summary>UU Remote の使用中に .uuremote_ ファイルが増え続けるのはなぜですか？</summary>
-            <div class="answer"><p>UU Remote は一時的なプレースホルダーファイルをシステムのクリップボードに書き込みます。旧版の PasteFerry はそれを通常のファイルとして記録・転送していました。1.3.2 では確認済みの命名パターンを送受信時に除外し、起動時にプレースホルダーだけの履歴を削除します。通常の空ファイル、隠しファイル、大容量ファイルは対象外です。50 MB は自動転送のしきい値であり、UU の UDP P2P 設定とは関係ありません。両端を更新してください。他のクリップボード同期ツールによる通常コンテンツの重複は起こり得ます。</p></div>
-          </details>
-          <details>
-            <summary>macOS のユニバーサルクリップボードとの違いは？</summary>
-            <div class="answer"><p>Mac・Windows・Linux でテキスト、画像、ファイル、フォルダを同期。同じアカウントは不要。公式サービスをオンにすれば、サーバーを構築せずに別ネットワーク間でも使えます。直接接続を優先し、常にエンドツーエンド暗号化。</p><p>2 台の Mac が同じ Apple ID でいつも並んでいて、主にテキストをコピーするだけなら、標準機能で十分です。</p></div>
-          </details>
-          <details>
-            <summary>サーバーにコピーした内容は見えますか？</summary>
-            <div class="answer"><p>コピー内容は復号できません。直接通信は端末間で行い、中継はエンドツーエンド暗号化されたパケットを転送します。公式サービスは必要な端末・使用量統計を保持します。公開ソースだけで非公開の本番保存動作まで証明できるわけではありません。</p></div>
-          </details>
-          <details>
-            <summary>出口が複数ある会社のネットワークでも直接つながりますか？</summary>
-            <div class="answer"><p>つながります。こうしたネットワークは宛先ごとに出口を選びます。PasteFerry はひとつのポートから複数のサーバーに問い合わせて出口ごとのアドレスを集め、すべて相手に送り、相手がひとつずつ試します。テストでは、出口が 4 つある会社の Mac と家庭の回線が直接つながりました。相手がポートをランダムに割り当てる NAT の場合は中継になります。</p></div>
-          </details>
-          <details>
-            <summary>サーバーは自分で用意する必要がありますか？</summary>
-            <div class="answer"><p>不要です。別ネットワークなら両方で<a href="official/">公式サービス</a>を有効にします。クラウド契約やアドレス入力は不要。初期状態はオフで、現在の中継上限は 100 MB/日、直接通信は消費しません。LAN、<a href="cloud/">独自サーバー</a>、<a href="tailscale/">Tailscale</a> も使えます。</p></div>
-          </details>
-          <details>
-            <summary>自宅にグローバル IP がありません。自宅と会社のあいだで同期できますか？</summary>
-            <div class="answer"><p>不要です。別ネットワークなら両方で<a href="official/">公式サービス</a>を有効にします。クラウド契約やアドレス入力は不要。初期状態はオフで、現在の中継上限は 100 MB/日、直接通信は消費しません。LAN、<a href="cloud/">独自サーバー</a>、<a href="tailscale/">Tailscale</a> も使えます。</p></div>
-          </details>
-          <details>
-            <summary>同じネットワークなのに、もう一台が見つからないのはなぜ？</summary>
-            <div class="answer"><p>まず本当に同じサブネットか確認してください。会社の有線と Wi‑Fi、ゲストネットワーク、クライアント分離が有効な Wi‑Fi では、デバイス同士が見えないことがよくあります。その場合は、コードを入力する側で「別のサブネットにありますか？」をクリックし、相手のコードの下に表示されたアドレスを入力します。</p><p>Windows では初回起動時にファイアウォールに聞かれたら許可してください。キャンセルした場合は「設定 → ローカルネットワーク」で「許可」をクリックします。Mac では「システム設定 → プライバシーとセキュリティ → ローカルネットワーク」で PasteFerry Daemon をオンにします。詳しくは<a href="lan/#faq">同じネットワークでの手順</a>を。</p></div>
-          </details>
-          <details>
-            <summary>Windows や Linux に対応していますか？iPhone は？</summary>
-            <div class="answer"><p>Windows 10 と Windows 11（x64）に対応し、Mac と相互に使えます。Windows で貼り付けたファイルは本物のファイルなので、エクスプローラーや Office にそのまま貼り付けられます。</p><p>x64 と ARM64 の Linux デスクトップにも対応しています。X11、または XWayland 付きの Wayland デスクトップ（GNOME、KDE などは標準で搭載）で動きます。コピーしたファイルはファイルマネージャーにそのまま貼り付けられます。</p><p>iPhone と iPad には対応していません。iOS ではアプリがバックグラウンドでクリップボードを監視できないため、コピーしてすぐ同期することができないからです。</p></div>
-          </details>
-          <details>
-            <summary>初めて開くときにシステムに止められるのはなぜ？</summary>
-            <div class="answer"><p>PasteFerry はまだ Apple の公証を受けておらず、Windows 版もコード署名していません。どちらも毎年費用のかかる証明書が必要です。</p><p>Mac では「システム設定 → プライバシーとセキュリティ」でページ下部の「このまま開く」をクリック、Windows では「Windows によって PC が保護されました」で「詳細情報」から「実行」を押してください。どちらも一度だけで済みます。</p></div>
-          </details>
-          <details>
-            <summary>大きなファイルはどうなりますか？</summary>
-            <div class="answer"><p>初期設定では 50 MB までのものはコピーした時点でもう一台に送られ、そのまま貼り付けられます。それより大きいファイルは記録だけを同期し、必要なときに履歴から「このデバイスに取り込む」で転送します。上限は「設定」で変えられます。</p></div>
-          </details>
-          <details>
-            <summary>無料ですか？会社で使えますか？</summary>
-            <div class="answer"><p>無料です。PasteFerry は GNU AGPL-3.0 のオープンソースで、個人も会社も無料で使い、改変できます。配布する場合や、改変したものをネットワーク越しに提供する場合は、同じライセンスでソースコードを公開する必要があります。</p></div>
-          </details>
-          <details>
-            <summary>公式中継は無制限ですか？</summary>
-            <div class="answer"><p>現在の標準中継上限は端末の上限グループごとに送受信合計 100 MB/日で、北京時間午前 0 時にリセットします。再インストールで新たな残量が得られる保証はありません。使用量画面に実際の上限、残量、更新時刻を表示します。上限に達しても直接接続は利用できます。上限と提供状況は変更される場合があるため、アプリでご確認ください。</p></div>
-          </details>
-        </div>
       </div>
     </section>
 

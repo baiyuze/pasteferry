@@ -104,13 +104,6 @@ C = {
         },
     },
 
-    "history_h2": "Everything you copied, on every computer",
-    "history_intro": "History keeps the last 3 days, ready to go back on the clipboard; click an image to preview it. "
-                     "Files under 50 MB have already arrived by the time you switch computers, and larger ones are a click away. "
-                     "To find something you copied earlier, search by its text or file name.",
-    "history_alt": "PasteFerry history: files, images and text from a MacBook Air and a Mac mini; a large file shows a button "
-                   "to pull it to this device",
-
     "flow_h2": "What happens when you copy",
     "flow_intro": "Text, images, files and whole folders all take the same path.",
     "flow": [
@@ -213,33 +206,7 @@ C = {
     "install_h2": "Install",
     "install_intro": "Install the app on each computer. On the same network you can pair right away; across networks, pick a way "
                      "for them to find each other. First time? Follow the <a href=\"{start}\">quick start</a>.",
-    "mac_steps": [
-        "Download the DMG, open it and drag PasteFerry into Applications.<span class=\"aside\">There's one for Apple silicon "
-        "and one for Intel; the download page shows how to tell which your Mac has.</span>",
-        "Open it from Applications.<span class=\"aside\">The first time, macOS says it can't verify the developer: PasteFerry "
-        "isn't notarized by Apple yet. Go to System Settings → Privacy &amp; Security and click Open Anyway near the bottom. "
-        "You only do this once.</span>",
-        "Click Turn on background sync. When macOS asks whether PasteFerry may read the clipboard or find devices on your local "
-        "network, allow both.",
-        'For different networks, enable Settings → Use official service on each computer. No server address is needed. Custom hosting remains optional.',
-    ],
-    "win_steps": [
-        "Run PasteFerry-Setup.exe. It installs for the current user, no administrator rights needed."
-        "<span class=\"aside\">PasteFerry isn't code-signed yet, so Windows says \"Windows protected your PC\": click More info, "
-        f"then Run anyway. To skip the installer, get the <a href=\"{REPO}/releases/latest/download/PasteFerry-windows-x64.zip\">portable zip</a>.</span>",
-        "Open PasteFerry and click Turn on background sync. Allow it if Windows Firewall asks. After you close the window it "
-        "keeps running in the notification area.",
-        'For different networks, enable Settings → Use official service on each computer. No server address is needed. Custom hosting remains optional.',
-    ],
-    "linux_steps": [
-        "On Ubuntu, Debian and similar, download the .deb and run <code>sudo apt install ./PasteFerry-linux-amd64.deb</code>; "
-        "on other distributions, download the tar.gz, extract it and run <code>./PasteFerry/install.sh</code>.",
-        "Open PasteFerry from the app menu and click Turn on background sync. From then on it starts when you log in.",
-        'For different networks, enable Settings → Use official service on each computer. No server address is needed. Custom hosting remains optional.',
-    ],
-    "server_h3": "Ways to connect",
     "server_intro": 'Same network? Install and pair. Different networks? Enable official access without hosting a server. Custom servers and Tailscale remain available when you prefer to manage the connection yourself.',
-    "server_compare": 'Compare connection options',
     "copy": "Copy",
     "copied": "Copied",
     "pairing": 'Show a pairing code on one computer, enter it on the other, and compare both fingerprint lines before confirming. Existing pairings are kept. Official access needs no peer IP. Enter an address only for LAN subnets or Tailscale.',

@@ -218,6 +218,14 @@ caption.skip {
   }
 }
 
+/* 英文、日文的导航字多（Download、ダウンロード），手机上品牌只留图标 */
+@media (max-width: 30rem) {
+  :lang(en) .brand,
+  :lang(ja) .brand {
+    font-size: 0;
+  }
+}
+
 /* 语言菜单：平时只显示当前语言，点开是一列语言，样子照 macOS 的弹出菜单 */
 .lang {
   position: relative;
@@ -2574,3 +2582,279 @@ td {
 }
 .release-note:hover { background: var(--surface-2); }
 .official-copy { max-width: 56rem; }
+
+/* ── 顶栏的「更多」菜单：工作原理、安全、常见问题、更新记录与 GitHub。样子和语言菜单一样 ── */
+
+.menu {
+  position: relative;
+}
+
+.menu summary {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: -0.3rem -0.45rem;
+  padding: 0.3rem 0.45rem;
+  border-radius: 6px;
+  color: var(--dim);
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.menu summary:hover,
+.menu[open] summary,
+.menu summary.current {
+  color: var(--ink);
+}
+
+.menu summary .chev {
+  width: 0.7rem;
+  height: 0.7rem;
+  transition: transform 0.15s var(--ease);
+}
+
+.menu[open] summary .chev {
+  transform: rotate(180deg);
+}
+
+.menu ul {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: -0.45rem;
+  z-index: 20;
+  min-width: 11rem;
+  margin: 0;
+  padding: 0.3rem;
+  list-style: none;
+  background: var(--surface-2);
+  border: 1px solid var(--rule-strong);
+  border-radius: 10px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+}
+
+.bar nav .menu ul a {
+  display: block;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+.bar nav .menu ul a:hover,
+.bar nav .menu ul a:focus-visible {
+  background: var(--blue);
+  color: #fff;
+  outline: none;
+}
+
+.bar nav .menu ul a[aria-current="page"] {
+  color: var(--blue-hi);
+}
+
+.bar nav .menu ul a[aria-current="page"]:hover {
+  color: #fff;
+}
+
+.menu .sep {
+  height: 1px;
+  margin: 0.3rem 0.5rem;
+  background: var(--rule-strong);
+}
+
+/* 顶栏里收起的几项在菜单里出现 */
+.menu .narrow {
+  display: none;
+}
+
+@media (max-width: 46rem) {
+  .menu .narrow:nth-child(2) {
+    display: block;
+  }
+}
+
+@media (max-width: 30rem) {
+  .menu .narrow {
+    display: block;
+  }
+}
+
+/* ── 按键：Mac 上显示 ⌥V，Windows、Linux 上显示 Alt+V（<head> 里的脚本给 html 加 pc） ── */
+
+.k-pc,
+.pc .k-mac {
+  display: none;
+}
+
+.pc .k-pc {
+  display: inline;
+}
+
+kbd {
+  font-family: var(--sans);
+}
+
+/* ── 首页：快捷粘贴 ── */
+
+.kicker {
+  margin: 0 0 1rem;
+  text-align: center;
+  color: var(--dim);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* 「新」标：蓝字，细边框，不用色块 */
+.new {
+  display: inline-block;
+  padding: 0.05em 0.55em;
+  border: 1px solid rgba(110, 169, 241, 0.45);
+  border-radius: 999px;
+  color: var(--blue-hi);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: 0;
+  vertical-align: 0.2em;
+}
+
+.spot {
+  position: relative;
+  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
+  max-width: 44rem;
+}
+
+.spot img {
+  width: 100%;
+}
+
+/* 截图上方的两颗键帽：⌥ V */
+.spot-keys {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: -0.5rem;
+}
+
+.spot-keys .k-mac,
+.spot-keys .k-pc {
+  gap: 0.5rem;
+}
+
+.spot-keys > span {
+  display: flex;
+}
+
+.pc .spot-keys .k-mac,
+.spot-keys .k-pc {
+  display: none;
+}
+
+.pc .spot-keys .k-pc {
+  display: flex;
+}
+
+.spot-keys kbd {
+  display: grid;
+  place-items: center;
+  min-width: 3.4rem;
+  height: 3.4rem;
+  padding: 0 0.9rem;
+  border-radius: 12px;
+  background: linear-gradient(#2e2e33, #232327);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 0 #111, 0 6px 16px rgba(0, 0, 0, 0.45);
+  border: 1px solid #3a3a40;
+  color: var(--ink);
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+
+.more {
+  margin: 2rem 0 0;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+.more a + a {
+  margin-left: 1.75rem;
+}
+
+/* ── 首页：功能六格 ── */
+
+/* 六格：手机一列，平板两列，宽屏三列，总是排满 */
+.tiles {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
+  padding: 0;
+  max-width: 64rem;
+  list-style: none;
+}
+
+@media (min-width: 34rem) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 56rem) {
+  .tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.tile {
+  padding: 1.6rem 1.5rem 1.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.tile svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--ink-2);
+}
+
+.tile h3 {
+  margin-top: 1rem;
+  font-size: 1.12rem;
+}
+
+.tile h3 .new {
+  margin-left: 0.3rem;
+  vertical-align: 0.1em;
+}
+
+.tile p {
+  margin: 0.4rem 0 0;
+  color: var(--dim);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* 带 data-reveal 的块滚动到时淡入（features.js 加 in）；没有脚本时一直显示 */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+
+.js [data-reveal].in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

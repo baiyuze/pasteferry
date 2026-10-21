@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>功能：快捷粘贴、收藏、跨设备复制记录 — 隔空贴</title>
+  <meta name="description" content="隔空贴在 Mac、Windows 与 Linux 之间同步剪贴板：复制文字、图片、文件、文件夹，到另一台直接粘贴。按 ⌥V 或 Alt+V 呼出快捷粘贴，常用内容可以收藏，复制记录能搜索、按类型筛选。">
+  <link rel="canonical" href="https://pasteferry.cc/features/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/features/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/features/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/features/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/features/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/features/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="隔空贴">
+  <meta property="og:title" content="功能：快捷粘贴、收藏、跨设备复制记录 — 隔空贴">
+  <meta property="og:description" content="隔空贴在 Mac、Windows 与 Linux 之间同步剪贴板：复制文字、图片、文件、文件夹，到另一台直接粘贴。按 ⌥V 或 Alt+V 呼出快捷粘贴，常用内容可以收藏，复制记录能搜索、按类型筛选。">
+  <meta property="og:url" content="https://pasteferry.cc/features/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="zh_HK">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <link rel="stylesheet" href="../assets/features.css">
+</head>
+<body class="features">
+  <a class="skip" href="#main">跳到正文</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href=".././" aria-label="隔空贴首页"><img src="../assets/icon.svg" alt="" width="26" height="26">隔空贴</a>
+      <nav aria-label="页面导航">
+        <a href="./" aria-current="page">功能</a>
+        <a class="mid" href="../start/">快速开始</a>
+        <a class="wide" href="../start/#server">连接方式</a>
+        <a href="../download/">下载</a>
+        <details class="menu">
+          <summary aria-label="更多页面"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../start/">快速开始</a></li>
+            <li class="narrow"><a href="../start/#server">连接方式</a></li>
+            <li><a href="../how/">工作原理</a></li>
+            <li><a href="../security/">安全与隐私</a></li>
+            <li><a href="../faq/">常见问题</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新记录</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="语言：简体中文"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>简体中文</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh" aria-current="page">简体中文</a></li>
+            <li><a href="../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../en/features/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="f-hero">
+      <div class="wrap">
+        <p class="eyebrow">隔空贴的功能</p>
+        <h1 class="display">复制粘贴，<br>本该这么顺手。</h1>
+        <p class="lede">Mac、Windows、Linux 之间同步剪贴板，复制过的随叫随到。</p>
+        <div class="cta">
+          <a class="button" href="../download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
+          <a class="button quiet" href="../tour/"><span aria-hidden="true">▶</span> 看完整演示</a>
+        </div>
+      </div>
+      <figure class="f-hero-shot" data-zoom>
+        <img src="../assets/screenshots/history-dark.png" width="2112" height="1472" alt="隔空贴的复制记录：侧边栏有复制记录、收藏、设备、设置，列表里是来自不同电脑的文字、图片、文件和链接">
+      </figure>
+    </section>
+
+    <section class="f-section" id="sync" aria-labelledby="sync-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="sync-title">在这台复制，<br>到那台粘贴。</h2>
+        <p class="f-intro">按下 <span class="k-mac">⌘C</span><span class="k-pc">Ctrl+C</span>，内容就同步到你的其他电脑，到那边按 <span class="k-mac">⌘V</span><span class="k-pc">Ctrl+V</span> 粘贴。不用同一个账号，Mac、Windows、Linux 随便搭配。</p>
+        <div class="trio" data-reveal aria-hidden="true">
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>MacBook</b><kbd>⌘C</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Windows</b><kbd>Ctrl+V</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Linux</b><kbd>Ctrl+V</kbd></div>
+        </div>
+        <ul class="facts">
+          <li><h3>文字、图片、文件、文件夹</h3><p>带格式的文字粘贴到只认纯文本的地方，也不会冒出标签。</p></li>
+          <li><h3>50 MB 以内，复制时就传好</h3><p>更大的先同步一条记录，需要时点一下再取。上限可以调。</p></li>
+          <li><h3>对方离线也不丢</h3><p>这期间复制的，连上后补进对方的复制记录。</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.4 新功能</span></p>
+        <h2 class="f-h2" id="qp-title">按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>，<br>最近复制的都在手边。</h2>
+        <p class="f-intro">不用切到隔空贴，也不用翻聊天记录。在任何 App 里按一下快捷键，选一条，它就粘贴到你刚才的光标处。</p>
+      </div>
+      <div class="qp-track" data-scene>
+        <div class="qp-sticky">
+          <div class="qp-stage" role="img" aria-label="演示：在写邮件时按 ⌥V，弹出快捷粘贴窗口；输入「发票」搜到发票抬头，按回车，它被粘贴进邮件正文" data-typing="[[&quot;f&quot;, true], [&quot;fa&quot;, true], [&quot;fa&#x27;p&quot;, true], [&quot;fa&#x27;piao&quot;, true], [&quot;发票&quot;, false]]">
+            <div class="mail">
+              <div class="mail-bar"><i></i><i></i><i></i><span>新邮件</span></div>
+              <div class="mail-field"><span>收件人：</span><b>王经理</b></div>
+              <div class="mail-field"><span>主题：</span><b>开票信息</b></div>
+              <div class="mail-body"><p>王经理您好，</p><p>我们的开票信息如下：</p><p class="mail-line"><span class="pasted">发票抬头：上海隔空科技有限公司　税号 91310104MA1K000000</span><i class="caret"></i></p></div>
+            </div>
+            <div class="press press-open" aria-hidden="true"><span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span></div>
+            <div class="press press-enter" aria-hidden="true"><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd></div>
+            <div class="picker">
+              <div class="qp-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="field"><span class="q">发票</span><i class="caret"></i><span class="ph">搜索</span></span></div>
+              <div class="qp-tabs"><span class="on">全部</span><span>文本</span><span>链接</span><span>图片</span><span>文件</span><span>收藏</span></div>
+              <ol class="qp-rows"><li class="qp-row top"><span class="n n-all">1</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">会议改到周四下午 3 点，地点不变</span><span class="m">刚刚</span></li><li class="qp-row"><span class="n n-all">2</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span><span class="m">2 分钟前</span></li><li class="qp-row"><span class="n n-all">3</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">图片</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>Windows 台式机 · 5 分钟前</span></li><li class="qp-row"><span class="n n-all">4</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 4.5V3.2c0-.5.4-.9.9-.9h3.8l2.6 2.6v6.4c0 .5-.4.9-.9.9h-1.4"/><path d="M3.5 5.6c0-.5.4-.9.9-.9h3.6l2.5 2.5v5.9c0 .5-.4.9-.9.9H4.4a.9.9 0 0 1-.9-.9z"/></svg><span class="t">合同扫描件.pdf 等 3 项</span><span class="m">52 分钟前</span></li><li class="qp-row hit first"><span class="n n-all">5</span><span class="n n-hit"><span class="k-mac">⌘1</span><span class="k-pc">Alt+1</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">发票抬头：上海隔空科技有限公司　税号 91310104MA1K000000</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>1 小时前</span></li><li class="qp-row"><span class="n n-all">6</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">docker compose up -d --build</span><span class="m">1 小时前</span></li><li class="qp-row hit"><span class="n n-all">7</span><span class="n n-hit"><span class="k-mac">⌘2</span><span class="k-pc">Alt+2</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">发票寄到财务部，备注订单号</span><span class="m">1 天前</span></li><li class="qp-row"><span class="n n-all">8</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">pnpm install</span><span class="m">1 天前</span></li></ol>
+              <div class="qp-foot"><span><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd>粘贴</span><span><kbd class="k-mac">⇧↩</kbd><kbd class="k-pc">Shift+Enter</kbd>纯文本</span><span><kbd class="k-mac">⌘↩</kbd><kbd class="k-pc">Ctrl+Enter</kbd>只复制</span><span><kbd class="k-mac">⌘D</kbd><kbd class="k-pc">Ctrl+D</kbd>收藏</span><span><kbd class="k-mac">esc</kbd><kbd class="k-pc">Esc</kbd>关闭</span></div>
+            </div>
+          </div>
+          <ol class="qp-steps">
+            <li data-step="0"><span class="num">1</span><h3>按下 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span></h3><p>在任何 App 里都行。窗口出现在屏幕中间，选完自动回到原来的 App。</p></li>
+            <li data-step="1"><span class="num">2</span><h3>打几个字</h3><p>文字和文件名都能搜。不搜的时候，前 9 条按数字直接选。</p></li>
+            <li data-step="2"><span class="num">3</span><h3>按 <span class="k-mac">↩</span><span class="k-pc">Enter</span>，就贴好了</h3><p>内容直接粘贴到刚才的光标处。<span class="k-mac">⇧↩</span><span class="k-pc">Shift+Enter</span> 粘贴纯文本，<span class="k-mac">⌘↩</span><span class="k-pc">Ctrl+Enter</span> 只复制不粘贴。</p></li>
+          </ol>
+        </div>
+      </div>
+      <div class="wrap">
+        <p class="f-note">快捷键可以在设置里更换或关闭。Mac 上直接粘贴需要授予「辅助功能」权限，没授权时选中的内容放进剪贴板，再由你按 ⌘V；Linux 的 Wayland 桌面上也是选中后按 Ctrl+V。</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="favorites" aria-labelledby="fav-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.4 新功能</span></p>
+        <h2 class="f-h2" id="fav-title">常用的，<br>收藏起来。</h2>
+        <p class="f-intro">发票抬头、地址、常用回复，点一下星标就另存一份。收藏不会过期，清空复制记录也还在。</p>
+        <figure class="f-shot" data-reveal>
+          <img src="../assets/screenshots/favorites-dark.png" width="2112" height="1472" loading="lazy" alt="收藏页：发票抬头、常用回复、下载链接、营业执照.pdf 等五条收藏，每条右边是蓝色的星标">
+        </figure>
+        <ul class="facts">
+          <li><h3>不会被清理</h3><p>复制记录到期自动清理，收藏一直留着。</p></li>
+          <li><h3>另存一份</h3><p>原文件之后改动或删除，都不影响收藏里的那份。</p></li>
+          <li><h3>快捷窗口里也有</h3><p>切到「收藏」页签，或者按 <span class="k-mac">⌘D</span><span class="k-pc">Ctrl+D</span> 收藏选中的那一条。</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section" id="details" aria-labelledby="details-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="details-title">细节里，<br>也替你想好了。</h2>
+        <div class="bento">
+          <article class="cell wide" data-reveal data-filter>
+            <h3>链接单独一栏 <span class="new">新</span></h3>
+            <p>复制记录按类型筛选：文本、链接、图片、文件、收藏，一点就分开。</p>
+            <div class="mini" aria-hidden="true"><div class="seg"><span data-tab="all" class="on">全部</span><span data-tab="text">文本</span><span data-tab="link">链接</span><span data-tab="image">图片</span><span data-tab="file">文件</span><span data-tab="fav">收藏</span></div><ul class="mini-rows"><li data-kind="text"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">会议改到周四下午 3 点</span></li><li data-kind="link"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span></li><li data-kind="image"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">图片 · 2.4 MB</span></li><li data-kind="file"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span class="t">季度汇报-终版.key</span></li><li data-kind="link" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://pasteferry.cc/download/</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li><li data-kind="text" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">发票抬头：上海隔空科技有限公司</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li></ul></div>
+          </article>
+          <article class="cell wide hover-cell" data-reveal>
+            <h3>停一下，就看到全文 <span class="new">新</span></h3>
+            <p>鼠标在一条上停半秒，弹出完整的文字、放大的图片或全部文件名，不用点开。</p>
+            <div class="crop"><img src="../assets/screenshots/hover-dark.png" width="2112" height="1472" loading="lazy" alt="鼠标停在一条会议记录上，弹出的提示框显示它的全文：负责人、发布窗口和监控要求"></div>
+          </article>
+          <article class="cell" data-reveal data-search>
+            <h3>三天里复制的，搜得到</h3>
+            <p>按文字内容或文件名搜索，点一下就放回剪贴板。记录默认保留 3 天，最长可以留 30 天。</p>
+            <div class="mini" aria-hidden="true">
+              <div class="mini-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="q" data-q="合同">合同</span><i class="caret"></i></div>
+              <ul class="mini-rows hits"><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span>合同扫描件.pdf</span></li><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span>合同第 3 条改成按季度付款</span></li></ul>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>大文件，用时再取</h3>
+            <p>超过 50 MB 的先只同步一条记录，点「接收」才开始传，不占你的带宽。</p>
+            <div class="mini big" aria-hidden="true">
+              <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><div><b>发布演示录屏.mov</b><span>来自 Mac mini · 1.3 GB</span><i class="bar"><i></i></i></div>
+              <span class="receive">接收</span>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>整个文件夹也行</h3>
+            <p>复制一个文件夹，到另一台粘贴出来的就是同样的文件夹，结构不变。</p>
+            <ul class="mini tree" aria-hidden="true">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>design-assets</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>logo.svg</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>banner@2x.png</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>fonts</li>
+            </ul>
+          </article>
+          <article class="cell full" data-reveal>
+            <div>
+              <h3>文件名不打架</h3>
+              <p>Mac 上能用、Windows 上不合法的字符，收到时换成全角字符，名字照样看得懂。</p>
+            </div>
+            <div class="mini names" aria-hidden="true">
+              <div><span>Mac</span><code>会议纪要 10:30?.md</code></div>
+              <div><span>Windows</span><code>会议纪要 10：30？.md</code></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="f-section" id="network" aria-labelledby="net-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="net-title">家里和公司，<br>也能直连。</h2>
+        <p class="f-intro">同一网络里装好就能配对。不在一个网络时，开启官方服务就行，不用自己搭服务器。两台电脑优先打洞直连，打不通才加密中转。</p>
+        <figure class="net" data-reveal>
+          <svg viewBox="0 0 800 330" role="img" aria-label="示意：家里和公司两个网络里的两台电脑经官方服务找到彼此，然后直接相连">
+            <rect class="n-svc" x="300" y="14" width="200" height="56" rx="14"/>
+            <text class="n-title" x="400" y="49" text-anchor="middle">官方服务</text>
+            <rect class="n-net" x="20" y="130" width="300" height="180" rx="22"/>
+            <rect class="n-net" x="480" y="130" width="300" height="180" rx="22"/>
+            <text class="n-label" x="44" y="164">家里</text>
+            <text class="n-label" x="756" y="164" text-anchor="end">公司</text>
+            <path class="n-sig" d="M170 200V42H300"/>
+            <path class="n-sig" d="M630 200V42H500"/>
+            <rect class="n-dev" x="120" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M105 278h130"/>
+            <rect class="n-dev" x="580" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M565 278h130"/>
+            <path class="n-direct" d="M235 236H565"/>
+            <text class="n-note" x="400" y="222" text-anchor="middle">直连 · 端到端加密</text>
+          </svg>
+        </figure>
+        <ul class="facts">
+          <li><h3>同一网络</h3><p>不需要服务器，输入配对码就行。</p></li>
+          <li><h3>跨网络</h3><p>官方服务、自建服务器或 Tailscale，任选一种。</p></li>
+          <li><h3>端到端加密</h3><p>配对时核对安全指纹，服务器看不到内容。</p></li>
+        </ul>
+        <p class="more"><a href="../start/#server">选择连接方式 →</a><a href="../how/">工作原理 →</a></p>
+      </div>
+    </section>
+
+    <section class="f-section" id="numbers" aria-labelledby="numbers-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="numbers-title">几个数字。</h2>
+        <dl class="numbers" data-reveal>
+          <div><dt><b>3</b> <span>个系统</span></dt><dd>macOS、Windows、Linux</dd></div>
+          <div><dt><b>50 MB</b> <span>以内</span></dt><dd>复制的同时就传好</dd></div>
+          <div><dt><b>≈330 ms</b></dt><dd>局域网直连传 20 MB 文件</dd></div>
+          <div><dt><b>0</b> <span>个账号</span></dt><dd>不用注册，配对即用</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">现在就试试。</h2>
+        <div class="cta">
+          <a class="button" href="../download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
+        </div>
+        <p class="note">版本 2.3.0，免费开源。macOS 13 及以上；Windows 10、11；Linux（x64 与 ARM64）。</p>
+        <a class="start-link" href="../start/">第一次用？看快速开始，三步配好 →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>隔空贴以 GNU AGPL-3.0 开源。</p>
+      <nav aria-label="页脚链接">
+        <a href="https://github.com/baiyuze/pasteferry/releases">所有版本</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新记录</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技术方案</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">许可说明</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">反馈问题</a>
+        <a href="../privacy/">隐私与必要数据</a>
+      </nav>
+      <nav aria-label="语言">
+        <a href="../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh" aria-current="page">简体中文</a>
+        <a href="../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../en/features/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../assets/site.js" defer></script>
+  <script src="../assets/features.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

@@ -33,6 +33,7 @@
   <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
   <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
 </head>
 <body>
   <a class="skip" href="#main">本文へ移動</a>
@@ -41,12 +42,23 @@
     <div class="wrap">
       <a class="brand" href="../../ja/" aria-label="PasteFerry ホーム"><img src="../../assets/icon.svg" alt="" width="26" height="26">PasteFerry</a>
       <nav aria-label="ページ内の移動">
-        <a href="../../ja/start/">はじめかた</a>
-        <a class="wide" href="../../ja/#how">しくみ</a>
-        <a class="wide" href="../../ja/#faq">よくある質問</a>
-        <a class="mid" href="../../ja/start/#server">接続方法</a>
+        <a href="../../ja/features/">機能</a>
+        <a class="mid" href="../../ja/start/">はじめかた</a>
+        <a class="wide" href="../../ja/start/#server">接続方法</a>
         <a href="../../ja/download/">ダウンロード</a>
-        <a class="wide" href="https://github.com/baiyuze/pasteferry">GitHub</a>
+        <details class="menu">
+          <summary aria-label="その他のページ"><span>その他</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../ja/start/">はじめかた</a></li>
+            <li class="narrow"><a href="../../ja/start/#server">接続方法</a></li>
+            <li><a href="../../ja/how/">しくみ</a></li>
+            <li><a href="../../ja/security/">セキュリティ</a></li>
+            <li><a href="../../ja/faq/">よくある質問</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
         <details class="lang">
           <summary aria-label="言語：日本語"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>日本語</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>

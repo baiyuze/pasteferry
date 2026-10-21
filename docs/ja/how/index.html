@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PasteFerry のしくみ：直接接続、複数回線の探索、障害時の動作</title>
+  <meta name="description" content="コピーした後に何が起きるのか。2 台のパソコンがどう互いを見つけて直接つながり、つながらないときはどうなるのか。">
+  <link rel="canonical" href="https://pasteferry.cc/ja/how/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/how/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/how/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/how/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/how/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/how/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="PasteFerry のしくみ：直接接続、複数回線の探索、障害時の動作">
+  <meta property="og:description" content="コピーした後に何が起きるのか。2 台のパソコンがどう互いを見つけて直接つながり、つながらないときはどうなるのか。">
+  <meta property="og:url" content="https://pasteferry.cc/ja/how/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">本文へ移動</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ja/" aria-label="PasteFerry ホーム"><img src="../../assets/icon.svg" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="ページ内の移動">
+        <a href="../../ja/features/">機能</a>
+        <a class="mid" href="../../ja/start/">はじめかた</a>
+        <a class="wide" href="../../ja/start/#server">接続方法</a>
+        <a href="../../ja/download/">ダウンロード</a>
+        <details class="menu">
+          <summary aria-label="その他のページ" class="current"><span>その他</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../ja/start/">はじめかた</a></li>
+            <li class="narrow"><a href="../../ja/start/#server">接続方法</a></li>
+            <li><a href="./" aria-current="page">しくみ</a></li>
+            <li><a href="../../ja/security/">セキュリティ</a></li>
+            <li><a href="../../ja/faq/">よくある質問</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="言語：日本語"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>日本語</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../ja/">PasteFerry</a></p>
+        <h1 class="display">しくみ</h1>
+        <p class="lede">コピーした後に何が起きるのか。2 台のパソコンがどう互いを見つけて直接つながり、つながらないときはどうなるのか。</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="flow-title">
+      <div class="wrap">
+        <h2 id="flow-title">コピーしたあと、何が起きるか</h2>
+        <p class="intro">テキストも画像も、ファイルもフォルダも、同じ道を通ります。</p>
+        <ol class="flow">
+          <li><h3>気づく</h3><p>Mac ではバックグラウンドサービスが短い間隔でクリップボードの変更カウントを確認します。カウントと種類を見るだけなので許可は不要で、確認ダイアログも出ません。Windows ではコピーした瞬間にシステムが知らせます。</p></li>
+          <li><h3>送る</h3><p>テキストはメッセージと一緒に送ります。50 MB までの画像とファイルはその場でストリームとして送り、それより大きいファイルは記録だけを送って、必要になったときに転送します。</p></li>
+          <li><h3>貼り付ける</h3><p>受け取った側はまず内容をローカルに保存してから、クリップボードに入れます。⌘V や Ctrl+V で貼り付けられるのは、手元にある本物のファイルです。</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="diagram" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title">PasteFerry の接続のしかた</h2>
+        <p class="intro">同じネットワークではサーバーなしで端末を検出します。別ネットワークでは公式サービスまたは独自サーバーが接続情報を交換。直接接続を優先し、失敗時に暗号化中継を使います。図は共通のシグナリングと中継構成です。</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
+            <title id="diagram-title">PasteFerry の接続のしかた</title>
+            <desc id="diagram-desc">コンピューター A と B（Mac または Windows）は WebRTC で直接つながります。どちらもシグナリングのためにシグナリング・中継サービスへ接続し、直接接続に失敗したときはサーバーの TURN でデータを中継します。</desc>
+            <rect class="d-box" x="360" y="24" width="240" height="96" rx="14"/>
+            <text class="d-title" x="480" y="64" text-anchor="middle">シグナリング・中継サービス</text>
+            <text class="d-sub" x="480" y="92" text-anchor="middle">シグナリング、STUN、TURN 中継</text>
+            <path class="d-sig" d="M140 210V58H360"/>
+            <path class="d-sig" d="M820 210V58H600"/>
+            <path class="d-relay" d="M196 210V100H360"/>
+            <path class="d-relay" d="M764 210V100H600"/>
+            <text class="d-note" x="210" y="50">シグナリング：接続情報の交換</text>
+            <text class="d-note" x="210" y="128">中継：直接つながらないときだけ</text>
+            <rect class="d-box" x="40" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="160" y="262" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="160" y="290" text-anchor="middle">ここでコピー</text>
+            <rect class="d-box" x="680" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="800" y="262" text-anchor="middle">Mac または Windows</text>
+            <text class="d-sub" x="800" y="290" text-anchor="middle">ここで貼り付け</text>
+            <path class="d-direct" d="M280 270H680"/>
+            <text class="d-label" x="480" y="256" text-anchor="middle">WebRTC 直接接続、DTLS 暗号化</text>
+            <text class="d-note" x="480" y="298" text-anchor="middle">データは 2 台のあいだだけを流れる</text>
+            <g class="d-legend" transform="translate(40 372)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">データ（直接）</text>
+              <path class="d-relay" d="M210 0H238"/><text x="248" y="5">データ（中継、予備）</text>
+              <path class="d-sig" d="M470 0H498"/><text x="508" y="5">シグナリング</text>
+            </g>
+          </svg>
+          <ul class="points diagram-text">
+            <li><strong>WebRTC 直接接続、DTLS 暗号化</strong> データは 2 台のあいだだけを流れる</li>
+            <li><strong>シグナリング・中継サービス</strong> シグナリング、STUN、TURN 中継</li>
+            <li>中継：直接つながらないときだけ</li>
+          </ul>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="multi-uplink" aria-labelledby="multi-title">
+      <div class="wrap">
+        <h2 id="multi-title">会社のネットワークでも直接つながる</h2>
+        <p class="intro">2 つの回線を持つ会社や、キャリアの NAT アドレスプールのようなネットワークには出口が複数あり、宛先ごとに出口が変わります。一度調べただけでは出口のひとつしか分からず、中継頼みになります。PasteFerry はすべての出口を調べ、そのアドレスをすべて相手に伝えます。</p>
+        <div class="cols">
+          <div>
+            <h3>やっていること</h3>
+            <ul class="points">
+              <li><strong>ポートはひとつ。</strong>すべての接続をひとつのローカル UDP ポートで送受信するので、別々のサーバーから得たアドレスがかみ合います。</li>
+              <li><strong>出口をすべて調べる。</strong>そのポートから IP の散らばった 7 台のサーバーに同時に問い合わせ、出口の数だけアドレスを得ます。DNS 汚染されたアドレスは先に除外します。</li>
+              <li><strong>すべて相手に伝える。</strong>相手はひとつずつ試し、実際の出口と合うものがつながります。</li>
+              <li><strong>見た出口を覚えておく。</strong>ポートを書き換えない出口を取りこぼしたときは、「出口の IP ＋ローカルポート」で補います。</li>
+              <li><strong>どちらが先に送るかを決める。</strong>相手のパケットが先に届くとポートをふさいでしまうルーターがあります。片方が先にアドレスを公開し、もう片方はそこへ送ってから自分のアドレスを公開します。再試行では順番を入れ替えます。</li>
+              <li><strong>待機中に直接接続を再試行。</strong>直接接続に失敗して中継が利用可能なら、中継で同期を続けます。待機中に直接接続を再試行し、成功したら中継を解放します。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>実際のネットワーク構成で検証</h3>
+            <p class="small">NAT 穴あけ実験室では、Linux のネットワーク名前空間と iptables でこれらの構成を組み、PasteFerry の本物の接続コードをそれぞれで動かします。コミットのたびに自動で実行されます。</p>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th scope="col">構成</th><th scope="col">結果</th></tr></thead>
+                <tbody>
+                <tr><td>出口ひとつ ↔ 家庭用ルーター</td><td>直接</td></tr>
+                <tr><td>出口ふたつ、旧バージョン（対照）</td><td>中継</td></tr>
+                <tr><td>出口ふたつ ↔ 家庭用ルーター</td><td>直接</td></tr>
+                <tr><td>出口よっつ ↔ 家庭用ルーター</td><td>直接</td></tr>
+                <tr><td>出口ふたつ、2 本目を取りこぼし、履歴なし</td><td>中継</td></tr>
+                <tr><td>出口ふたつ、2 本目を取りこぼし、履歴あり</td><td>直接</td></tr>
+                <tr><td>出口ふたつ ↔ 出口ふたつ</td><td>直接</td></tr>
+                <tr><td>出口ふたつ ↔ ポートをランダムに割り当てる NAT</td><td>中継</td></tr>
+                <tr><td>最初はつながらず、あとでネットワークが回復</td><td>中継のあと直接</td></tr>
+                <tr><td>会社のルーターが外からのパケットでポートをふさぐ</td><td>直接</td></tr>
+                <tr><td>家庭用ルーターが外からのパケットでポートをふさぐ</td><td>中継のあと、1 回の再試行で直接</td></tr>
+                <tr><td>サーバーなし、同じサブネット、mDNS で発見</td><td>直接</td></tr>
+                <tr><td>サーバーなし、別のサブネット、片方が相手のアドレスを覚えている</td><td>直接</td></tr>
+                <tr><td>サーバーなし、両方が受信をブロック、両方がアドレスを覚えている</td><td>直接</td></tr>
+                <tr><td>サーバーなし、両方が受信をブロック、片方だけが覚えている</td><td>つながらない（既知の制限）</td></tr>
+                <tr><td>サーバーなし、サブネット同士が遮断されている</td><td>つながらない</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="small">実測：出口が 4 つある会社の Mac と自宅の Mac は、以前は中継しかできず、サーバーの帯域で 0.6 MB/s に抑えられていました。いまは直接つながり、サーバーに接続してから約 3 秒で確立します。</p>
+            <p class="small">測定の過程、設計の判断、ハマった点は<a href="../../design/nat-traversal.html">技術資料</a>（中国語）にまとめています。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="fallbacks" aria-labelledby="fallback-title">
+      <div class="wrap">
+        <h2 id="fallback-title">うまくいかないときに起きること</h2>
+        <p class="intro">ネットワークの事情は人それぞれです。ここに挙げたケースはどれも想定済みで、テストがあります。</p>
+        <dl class="fallbacks">
+          <div><dt>同じネットワークなのに相手が見つからない</dt><dd>サブネットが違う、ゲストネットワーク、クライアント分離（AP アイソレーション）が有効な Wi‑Fi では、LAN 内の検出が届きません。ペアリング時に相手のコードの下に表示されたアドレスを入力してください。アドレスはその後も記憶され、両方のアドレスが変わったときはデバイス一覧からもう一度入力します。</dd></div>
+          <div><dt>システムがローカルネットワークを止めている</dt><dd>macOS 15 以降、バックグラウンドサービスが LAN 上のデバイスに接続するにはあなたの許可が要ります。Windows は初回起動時にファイアウォールについて聞いてきます。許可されていないときはアプリが知らせ、設定へ直接飛べるボタンを出します。</dd></div>
+          <div><dt>2 台が直接つながらない</dt><dd>公式モードでは直接接続に失敗した後、残量の範囲内で中継を申請します。独自サーバーではその TURN 中継を使います。どちらも内容はエンドツーエンド暗号化されます。</dd></div>
+          <div><dt>公開 STUN サーバーにつながらない</dt><dd>中国本土などでは公開 STUN が不安定です。サーバーは STUN を内蔵していて、クライアントはそちらを優先します。</dd></div>
+          <div><dt>直接接続へ切り替える</dt><dd>直接接続に失敗して中継が利用可能なら、中継で同期を続けます。待機中に直接接続を再試行し、成功したら中継を解放します。</dd></div>
+          <div><dt>相手がスリープ、切断、再起動した</dt><dd>黙って切れた接続にも気づき、すぐに閉じて再接続します。そのあいだにコピーしたものは記録しておき、つながったら相手の履歴に追加します。相手のいまのクリップボードは上書きしません。</dd></div>
+          <div><dt>サーバーとの接続が切れた</dt><dd>自動で再接続します。間隔は 1 秒から倍々で最大 30 秒、ランダムな揺らぎ付きで、たくさんのデバイスが一斉に再接続しないようにしています。同じネットワークのデバイスは影響を受けず、そのまま同期します。</dd></div>
+          <div><dt>ファイルが大きすぎる</dt><dd>上限を超えるものは記録だけを同期し、必要なときに取り込みます。そのとき元のファイルが消えていれば、あいまいな失敗ではなく、はっきりそう伝えます。</dd></div>
+          <div><dt>プレーンテキストしか受け付けない場所に貼り付ける</dt><dd>Web からコピーした書式付きテキストは HTML とプレーンテキストの両方で書き込むので、どこに貼り付けてもタグが混ざりません。</dd></div>
+          <div><dt>Windows では使えないファイル名</dt><dd>Mac では使えるコロンや疑問符などは、対応する全角文字に置き換えて受け取るので、名前はそのまま読めます。大文字と小文字だけが違う 2 つのファイルが上書きし合うこともありません。</dd></div>
+          <div><dt>パスワードをコピーした</dt><dd>Windows ではパスワードマネージャーがコピーした内容に「記録しない」印が付きます。PasteFerry はそれを見て飛ばします。同期も履歴への保存もしません。</dd></div>
+          <div><dt>クリップボードの読み取りをまだ許可していない</dt><dd>内容は読みに行きません。読みに行くと、バックグラウンドプロセスが見えないダイアログで止まってしまうからです。アプリが許可を促し、設定へ直接飛べるボタンを出します。</dd></div>
+          <div><dt>バックグラウンドサービスが落ちた</dt><dd>Mac ではシステムの launchd が、Windows では PasteFerry 自身の監視プロセスが再起動します。10 秒に 1 回までに抑え、暴走はしません。</dd></div>
+          <div><dt>アプリを更新した、または移動した</dt><dd>アプリを開いたときにログイン項目を正しい場所に向け直し、バックグラウンドサービスを新しいバージョンで再起動します。</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="specs" aria-labelledby="specs-title">
+      <div class="wrap">
+        <h2 id="specs-title">仕様</h2>
+        <div class="table-scroll">
+          <table class="specs">
+            <tbody>
+            <tr><th scope="row">バージョン</th><td>2.3.0（<time datetime="2026-10-19">2026 年 10 月 19 日</time>公開）</td></tr>
+            <tr><th scope="row">Mac アプリ</th><td>macOS 13 Ventura 以降。Apple シリコン版と Intel 版に分かれ、ダウンロードはそれぞれ約 25 MB で Rosetta 不要。両方で動くユニバーサル版は約 47 MB</td></tr>
+            <tr><th scope="row">Windows アプリ</th><td>Windows 10 と Windows 11、x64。ユーザーごとのインストールで管理者権限不要。ダウンロードは約 23 MB</td></tr>
+            <tr><th scope="row">Linux アプリ</th><td>x64 と ARM64。.deb（Debian、Ubuntu など）または tar.gz（ほかのディストリビューション）、約 22 MB。X11 のデスクトップ、または XWayland 付きの Wayland デスクトップ（GNOME、KDE などは標準で搭載）が必要。GTK 3</td></tr>
+            <tr><th scope="row">サーバー</th><td>構築が必要なのは独自運用の場合のみ。公式サービスなら自分のサーバーは不要です。独自運用は Linux x86_64/ARM64、macOS、Windows 10/11 x64 に対応。</td></tr>
+            <tr><th scope="row">表示言語</th><td>日本語、英語、簡体字中国語、繁体字中国語（台湾・香港）。初期設定はシステムに合わせ、「設定」で切り替え可能</td></tr>
+            <tr><th scope="row">同期する内容</th><td>プレーンテキスト、書式付きテキスト、画像とスクリーンショット、ファイル、フォルダ。種類ごとにオフにできる</td></tr>
+            <tr><th scope="row">転送</th><td>WebRTC データチャネル。直接接続を優先し、つながらなければ TURN で中継。同じネットワークでは mDNS で発見し、UDP 8788 で接続情報を交換。複数の出口があるネットワークでは出口ごとに調査。ファイルは tar + zstd でストリーム転送</td></tr>
+            <tr><th scope="row">暗号化と身元</th><td>DTLS によるエンドツーエンド暗号化。デバイスの身元は Ed25519 の鍵。シグナリングのメッセージはすべて署名付き</td></tr>
+            <tr><th scope="row">ペアリング</th><td>5 分間有効な 6 桁のコード。0/O や 1/I のような紛らわしい文字は使わない。指紋は人が照合</td></tr>
+            <tr><th scope="row">自動同期の上限</th><td>初期値 50 MB、1 MB〜1 GB で調整可能</td></tr>
+            <tr><th scope="row">履歴の保存期間</th><td>初期値 3 日、1 時間〜30 日で調整可能。期限が来たら自動で削除</td></tr>
+            <tr><th scope="row">実測の速度</th><td>LAN の直接接続で 20 MB のファイルを約 330 ミリ秒で転送、チェックサム一致</td></tr>
+            <tr><th scope="row">技術スタック</th><td>バックグラウンドサービスとサーバーは Go（Windows では Go から Win32 を直接呼び出し、Linux では Go で X11 プロトコルを直接扱う）、アプリは Flutter（3 つの OS で同じコード）、メッセージ定義は Protocol Buffers</td></tr>
+            <tr><th scope="row">ライセンス</th><td><a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">GNU AGPL-3.0</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry は GNU AGPL-3.0 のオープンソースです。</p>
+      <nav aria-label="フッターのリンク">
+        <a href="https://github.com/baiyuze/pasteferry/releases">すべてのリリース</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技術資料（中国語）</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">ライセンス</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">問題を報告</a>
+        <a href="../../ja/privacy/">プライバシーと必要なデータ</a>
+      </nav>
+      <nav aria-label="言語">
+        <a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

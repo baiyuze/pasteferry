@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>功能：快速貼上、收藏、跨裝置複製記錄 — 隔空貼</title>
+  <meta name="description" content="隔空貼在 Mac、Windows 與 Linux 之間同步剪貼簿：複製文字、圖片、檔案、資料夾，到另一部電腦直接貼上。按 ⌥V 或 Alt+V 叫出快速貼上，常用內容可以收藏，複製記錄能搜尋、按類型篩選。">
+  <link rel="canonical" href="https://pasteferry.cc/zh-hk/features/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/features/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/features/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/features/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/features/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/features/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="隔空貼">
+  <meta property="og:title" content="功能：快速貼上、收藏、跨裝置複製記錄 — 隔空貼">
+  <meta property="og:description" content="隔空貼在 Mac、Windows 與 Linux 之間同步剪貼簿：複製文字、圖片、檔案、資料夾，到另一部電腦直接貼上。按 ⌥V 或 Alt+V 叫出快速貼上，常用內容可以收藏，複製記錄能搜尋、按類型篩選。">
+  <meta property="og:url" content="https://pasteferry.cc/zh-hk/features/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-zh-hant.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="zh_HK">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <link rel="stylesheet" href="../../assets/features.css">
+</head>
+<body class="features">
+  <a class="skip" href="#main">跳至主要內容</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../zh-hk/" aria-label="隔空貼首頁"><img src="../../assets/icon.svg" alt="" width="26" height="26">隔空貼</a>
+      <nav aria-label="頁面導覽">
+        <a href="./" aria-current="page">功能</a>
+        <a class="mid" href="../../zh-hk/start/">快速開始</a>
+        <a class="wide" href="../../zh-hk/start/#server">連線方式</a>
+        <a href="../../zh-hk/download/">下載</a>
+        <details class="menu">
+          <summary aria-label="更多頁面"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../zh-hk/start/">快速開始</a></li>
+            <li class="narrow"><a href="../../zh-hk/start/#server">連線方式</a></li>
+            <li><a href="../../zh-hk/how/">運作原理</a></li>
+            <li><a href="../../zh-hk/security/">安全與私隱</a></li>
+            <li><a href="../../zh-hk/faq/">常見問題</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新記錄</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="語言：繁體中文（香港）"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>繁體中文（香港）</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk" aria-current="page">繁體中文（香港）</a></li>
+            <li><a href="../../en/features/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="f-hero">
+      <div class="wrap">
+        <p class="eyebrow">隔空貼的功能</p>
+        <h1 class="display">複製貼上，<br>本應這麼順手。</h1>
+        <p class="lede">Mac、Windows、Linux 之間同步剪貼簿，複製過的隨叫隨到。</p>
+        <div class="cta">
+          <a class="button" href="../../zh-hk/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
+          <a class="button quiet" href="../../zh-hk/tour/"><span aria-hidden="true">▶</span> 觀看完整示範</a>
+        </div>
+      </div>
+      <figure class="f-hero-shot" data-zoom>
+        <img src="../../assets/screenshots/zh-hk/history-dark.png" width="2112" height="1472" alt="隔空貼的複製記錄：側邊欄有複製記錄、收藏、裝置、設定，列表裏是來自不同電腦的文字、圖片、檔案和連結">
+      </figure>
+    </section>
+
+    <section class="f-section" id="sync" aria-labelledby="sync-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="sync-title">在這部電腦複製，<br>到那部電腦貼上。</h2>
+        <p class="f-intro">按下 <span class="k-mac">⌘C</span><span class="k-pc">Ctrl+C</span>，內容就同步到你的其他電腦，到那邊按 <span class="k-mac">⌘V</span><span class="k-pc">Ctrl+V</span> 貼上。不用同一個帳戶，Mac、Windows、Linux 隨意配搭。</p>
+        <div class="trio" data-reveal aria-hidden="true">
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>MacBook</b><kbd>⌘C</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Windows</b><kbd>Ctrl+V</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Linux</b><kbd>Ctrl+V</kbd></div>
+        </div>
+        <ul class="facts">
+          <li><h3>文字、圖片、檔案、資料夾</h3><p>帶格式的文字貼到只認純文字的地方，也不會冒出標籤。</p></li>
+          <li><h3>50 MB 以內，複製時就傳好</h3><p>更大的先同步一條記錄，需要時按一下再取。上限可以調。</p></li>
+          <li><h3>對方離線也不會漏</h3><p>這段期間複製的，連上後補進對方的複製記錄。</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.4 新功能</span></p>
+        <h2 class="f-h2" id="qp-title">按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>，<br>最近複製的都在手邊。</h2>
+        <p class="f-intro">不用切換到隔空貼，也不用翻聊天記錄。在任何程式裏按一下快速鍵，選一條，它就貼到你剛才的游標處。</p>
+      </div>
+      <div class="qp-track" data-scene>
+        <div class="qp-sticky">
+          <div class="qp-stage" role="img" aria-label="示範：寫電郵時按 ⌥V，彈出快速貼上視窗；輸入「發票」搜到發票抬頭，按 Enter，它被貼進電郵內文" data-typing="[[&quot;發&quot;, false], [&quot;發票&quot;, false]]">
+            <div class="mail">
+              <div class="mail-bar"><i></i><i></i><i></i><span>新電郵</span></div>
+              <div class="mail-field"><span>收件人：</span><b>王經理</b></div>
+              <div class="mail-field"><span>主旨：</span><b>發票資料</b></div>
+              <div class="mail-body"><p>王經理你好，</p><p>我們的發票資料如下：</p><p class="mail-line"><span class="pasted">發票抬頭：隔空科技有限公司　商業登記號碼 12345678</span><i class="caret"></i></p></div>
+            </div>
+            <div class="press press-open" aria-hidden="true"><span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span></div>
+            <div class="press press-enter" aria-hidden="true"><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd></div>
+            <div class="picker">
+              <div class="qp-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="field"><span class="q">發票</span><i class="caret"></i><span class="ph">搜尋</span></span></div>
+              <div class="qp-tabs"><span class="on">全部</span><span>文字</span><span>連結</span><span>圖片</span><span>檔案</span><span>收藏</span></div>
+              <ol class="qp-rows"><li class="qp-row top"><span class="n n-all">1</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">會議改到星期四下午 3 點，地點不變</span><span class="m">剛剛</span></li><li class="qp-row"><span class="n n-all">2</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span><span class="m">2 分鐘前</span></li><li class="qp-row"><span class="n n-all">3</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">圖片</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>Windows 桌面電腦 · 5 分鐘前</span></li><li class="qp-row"><span class="n n-all">4</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 4.5V3.2c0-.5.4-.9.9-.9h3.8l2.6 2.6v6.4c0 .5-.4.9-.9.9h-1.4"/><path d="M3.5 5.6c0-.5.4-.9.9-.9h3.6l2.5 2.5v5.9c0 .5-.4.9-.9.9H4.4a.9.9 0 0 1-.9-.9z"/></svg><span class="t">合約掃描本.pdf 等 3 項</span><span class="m">52 分鐘前</span></li><li class="qp-row hit first"><span class="n n-all">5</span><span class="n n-hit"><span class="k-mac">⌘1</span><span class="k-pc">Alt+1</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">發票抬頭：隔空科技有限公司　商業登記號碼 12345678</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>1 小時前</span></li><li class="qp-row"><span class="n n-all">6</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">docker compose up -d --build</span><span class="m">1 小時前</span></li><li class="qp-row hit"><span class="n n-all">7</span><span class="n n-hit"><span class="k-mac">⌘2</span><span class="k-pc">Alt+2</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">發票寄到財務部，註明訂單編號</span><span class="m">1 天前</span></li><li class="qp-row"><span class="n n-all">8</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">pnpm install</span><span class="m">1 天前</span></li></ol>
+              <div class="qp-foot"><span><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd>貼上</span><span><kbd class="k-mac">⇧↩</kbd><kbd class="k-pc">Shift+Enter</kbd>純文字</span><span><kbd class="k-mac">⌘↩</kbd><kbd class="k-pc">Ctrl+Enter</kbd>只複製</span><span><kbd class="k-mac">⌘D</kbd><kbd class="k-pc">Ctrl+D</kbd>收藏</span><span><kbd class="k-mac">esc</kbd><kbd class="k-pc">Esc</kbd>關閉</span></div>
+            </div>
+          </div>
+          <ol class="qp-steps">
+            <li data-step="0"><span class="num">1</span><h3>按下 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span></h3><p>在任何程式裏都可以。視窗出現在螢幕中間，選完自動回到原來的程式。</p></li>
+            <li data-step="1"><span class="num">2</span><h3>打幾個字</h3><p>文字和檔案名稱都能搜。不搜的時候，頭 9 條按數字直接選。</p></li>
+            <li data-step="2"><span class="num">3</span><h3>按 <span class="k-mac">↩</span><span class="k-pc">Enter</span>，就貼好了</h3><p>內容直接貼到剛才的游標處。<span class="k-mac">⇧↩</span><span class="k-pc">Shift+Enter</span> 貼上純文字，<span class="k-mac">⌘↩</span><span class="k-pc">Ctrl+Enter</span> 只複製不貼上。</p></li>
+          </ol>
+        </div>
+      </div>
+      <div class="wrap">
+        <p class="f-note">快速鍵可以在設定裏更換或關閉。Mac 上直接貼上需要授予「輔助使用」權限，未授權時選取的內容放入剪貼簿，再由你按 ⌘V；Linux 的 Wayland 桌面上也是選取後按 Ctrl+V。</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="favorites" aria-labelledby="fav-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.4 新功能</span></p>
+        <h2 class="f-h2" id="fav-title">常用的，<br>收藏起來。</h2>
+        <p class="f-intro">發票抬頭、地址、常用回覆，按一下星號就另存一份。收藏不會過期，清空複製記錄也還在。</p>
+        <figure class="f-shot" data-reveal>
+          <img src="../../assets/screenshots/zh-hk/favorites-dark.png" width="2112" height="1472" loading="lazy" alt="收藏頁：發票抬頭、常用回覆、下載連結、商業登記證.pdf 等五條收藏，每條右邊是藍色的星號">
+        </figure>
+        <ul class="facts">
+          <li><h3>不會被清理</h3><p>複製記錄到期自動清理，收藏一直留着。</p></li>
+          <li><h3>另存一份</h3><p>原檔案之後改動或刪除，都不影響收藏裏的那份。</p></li>
+          <li><h3>快速貼上視窗裏也有</h3><p>切到「收藏」分頁，或者按 <span class="k-mac">⌘D</span><span class="k-pc">Ctrl+D</span> 收藏選取的那一條。</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section" id="details" aria-labelledby="details-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="details-title">細節裏，<br>也替你想好了。</h2>
+        <div class="bento">
+          <article class="cell wide" data-reveal data-filter>
+            <h3>連結單獨一欄 <span class="new">新</span></h3>
+            <p>複製記錄按類型篩選：文字、連結、圖片、檔案、收藏，一按就分開。</p>
+            <div class="mini" aria-hidden="true"><div class="seg"><span data-tab="all" class="on">全部</span><span data-tab="text">文字</span><span data-tab="link">連結</span><span data-tab="image">圖片</span><span data-tab="file">檔案</span><span data-tab="fav">收藏</span></div><ul class="mini-rows"><li data-kind="text"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">會議改到星期四下午 3 點</span></li><li data-kind="link"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span></li><li data-kind="image"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">圖片 · 2.4 MB</span></li><li data-kind="file"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span class="t">季度報告-最終版.key</span></li><li data-kind="link" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://pasteferry.cc/download/</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li><li data-kind="text" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">發票抬頭：隔空科技有限公司</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li></ul></div>
+          </article>
+          <article class="cell wide hover-cell" data-reveal>
+            <h3>停一停，就看到全文 <span class="new">新</span></h3>
+            <p>滑鼠在一條上停半秒，彈出完整的文字、放大的圖片或全部檔案名稱，不用打開。</p>
+            <div class="crop"><img src="../../assets/screenshots/zh-hk/hover-dark.png" width="2112" height="1472" loading="lazy" alt="滑鼠停在一條會議記錄上，彈出的提示框顯示它的全文：負責人、發佈時段和監察要求"></div>
+          </article>
+          <article class="cell" data-reveal data-search>
+            <h3>三日內複製的，搜得到</h3>
+            <p>按文字內容或檔案名稱搜尋，按一下就放回剪貼簿。記錄預設保留 3 日，最長可以留 30 日。</p>
+            <div class="mini" aria-hidden="true">
+              <div class="mini-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="q" data-q="合約">合約</span><i class="caret"></i></div>
+              <ul class="mini-rows hits"><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span>合約掃描本.pdf</span></li><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span>合約第 3 條改為按季付款</span></li></ul>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>大檔案，用時再取</h3>
+            <p>超過 50 MB 的先只同步一條記錄，按「接收」才開始傳，不佔你的頻寬。</p>
+            <div class="mini big" aria-hidden="true">
+              <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><div><b>發佈會示範錄影.mov</b><span>來自 Mac mini · 1.3 GB</span><i class="bar"><i></i></i></div>
+              <span class="receive">接收</span>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>整個資料夾也可以</h3>
+            <p>複製一個資料夾，到另一部電腦貼上的就是同樣的資料夾，結構不變。</p>
+            <ul class="mini tree" aria-hidden="true">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>design-assets</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>logo.svg</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>banner@2x.png</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>fonts</li>
+            </ul>
+          </article>
+          <article class="cell full" data-reveal>
+            <div>
+              <h3>檔案名稱不衝突</h3>
+              <p>Mac 上能用、Windows 上不合法的字元，收到時換成全形字元，檔案名稱照樣看得懂。</p>
+            </div>
+            <div class="mini names" aria-hidden="true">
+              <div><span>Mac</span><code>會議記錄 10:30?.md</code></div>
+              <div><span>Windows</span><code>會議記錄 10：30？.md</code></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="f-section" id="network" aria-labelledby="net-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="net-title">家裏和公司，<br>也能直連。</h2>
+        <p class="f-intro">同一網絡裏裝好就能配對。不在同一網絡時，開啟官方服務就可以，不用自己架設伺服器。兩部電腦優先打洞直連，打不通才加密中轉。</p>
+        <figure class="net" data-reveal>
+          <svg viewBox="0 0 800 330" role="img" aria-label="示意：家裏和公司兩個網絡裏的兩部電腦經官方服務找到彼此，然後直接相連">
+            <rect class="n-svc" x="300" y="14" width="200" height="56" rx="14"/>
+            <text class="n-title" x="400" y="49" text-anchor="middle">官方服務</text>
+            <rect class="n-net" x="20" y="130" width="300" height="180" rx="22"/>
+            <rect class="n-net" x="480" y="130" width="300" height="180" rx="22"/>
+            <text class="n-label" x="44" y="164">家裏</text>
+            <text class="n-label" x="756" y="164" text-anchor="end">公司</text>
+            <path class="n-sig" d="M170 200V42H300"/>
+            <path class="n-sig" d="M630 200V42H500"/>
+            <rect class="n-dev" x="120" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M105 278h130"/>
+            <rect class="n-dev" x="580" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M565 278h130"/>
+            <path class="n-direct" d="M235 236H565"/>
+            <text class="n-note" x="400" y="222" text-anchor="middle">直連 · 端對端加密</text>
+          </svg>
+        </figure>
+        <ul class="facts">
+          <li><h3>同一網絡</h3><p>不需要伺服器，輸入配對碼就可以。</p></li>
+          <li><h3>跨網絡</h3><p>官方服務、自建伺服器或 Tailscale，任選一種。</p></li>
+          <li><h3>端對端加密</h3><p>配對時核對安全指紋，伺服器看不到內容。</p></li>
+        </ul>
+        <p class="more"><a href="../../zh-hk/start/#server">選擇連接方式 →</a><a href="../../zh-hk/how/">運作原理 →</a></p>
+      </div>
+    </section>
+
+    <section class="f-section" id="numbers" aria-labelledby="numbers-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="numbers-title">幾個數字。</h2>
+        <dl class="numbers" data-reveal>
+          <div><dt><b>3</b> <span>個系統</span></dt><dd>macOS、Windows、Linux</dd></div>
+          <div><dt><b>50 MB</b> <span>以內</span></dt><dd>複製的同時就傳好</dd></div>
+          <div><dt><b>≈330 ms</b></dt><dd>區域網絡直連傳 20 MB 檔案</dd></div>
+          <div><dt><b>0</b> <span>個帳戶</span></dt><dd>不用登記，配對即用</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">現在就試試。</h2>
+        <div class="cta">
+          <a class="button" href="../../zh-hk/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
+        </div>
+        <p class="note">版本 2.3.0，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）。</p>
+        <a class="start-link" href="../../zh-hk/start/">第一次使用？看看快速開始，三步設定好 →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>隔空貼以 GNU AGPL-3.0 開源。</p>
+      <nav aria-label="頁尾連結">
+        <a href="https://github.com/baiyuze/pasteferry/releases">所有版本</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新記錄</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技術方案</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">授權說明</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">回報問題</a>
+        <a href="../../zh-hk/privacy/">私隱與必要資料</a>
+      </nav>
+      <nav aria-label="語言">
+        <a href="../../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk" aria-current="page">繁體中文（香港）</a>
+        <a href="../../en/features/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js" defer></script>
+  <script src="../../assets/features.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

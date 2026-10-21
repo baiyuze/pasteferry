@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>セキュリティとプライバシー：エンドツーエンド暗号化とペアリングの照合 — PasteFerry</title>
+  <meta name="description" content="デバイスは鍵で識別され、ペアリング時にあなたが指紋を照合します。以降のメッセージはすべて署名付きで、内容を復号できるのはあなたのデバイスだけです。">
+  <link rel="canonical" href="https://pasteferry.cc/ja/security/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/security/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/security/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/security/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/security/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/security/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="セキュリティとプライバシー：エンドツーエンド暗号化とペアリングの照合 — PasteFerry">
+  <meta property="og:description" content="デバイスは鍵で識別され、ペアリング時にあなたが指紋を照合します。以降のメッセージはすべて署名付きで、内容を復号できるのはあなたのデバイスだけです。">
+  <meta property="og:url" content="https://pasteferry.cc/ja/security/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">本文へ移動</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ja/" aria-label="PasteFerry ホーム"><img src="../../assets/icon.svg" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="ページ内の移動">
+        <a href="../../ja/features/">機能</a>
+        <a class="mid" href="../../ja/start/">はじめかた</a>
+        <a class="wide" href="../../ja/start/#server">接続方法</a>
+        <a href="../../ja/download/">ダウンロード</a>
+        <details class="menu">
+          <summary aria-label="その他のページ" class="current"><span>その他</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../ja/start/">はじめかた</a></li>
+            <li class="narrow"><a href="../../ja/start/#server">接続方法</a></li>
+            <li><a href="../../ja/how/">しくみ</a></li>
+            <li><a href="./" aria-current="page">セキュリティ</a></li>
+            <li><a href="../../ja/faq/">よくある質問</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="言語：日本語"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>日本語</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../security/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/security/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/security/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/security/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/security/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../ja/">PasteFerry</a></p>
+        <h1 class="display">サーバーにはコピーした内容が見えない</h1>
+        <p class="lede">デバイスは鍵で識別され、ペアリング時にあなたが指紋を照合します。以降のメッセージはすべて署名付きで、内容を復号できるのはあなたのデバイスだけです。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="cols">
+          <ul class="points">
+            <li><strong>サーバーはアカウントも内容も保存しない。</strong>デバイスの身元は Ed25519 の鍵で、デバイス ID は公開鍵から計算されます。サーバーはユーザー表なしで身元を確かめられます。</li>
+            <li><strong>ペアリングでは指紋をあなたが照合する。</strong>両方の画面に同じ 2 行、つまりお互いの公開鍵の指紋が表示されます。サーバーは転送中の公開鍵をすり替えられますが、すり替えれば 2 つの画面が一致しなくなります。この照合が中間者攻撃を防ぐ関門です。</li>
+            <li><strong>その後のメッセージはすべて署名付き。</strong>サーバーがあなたのデバイスになりすますことはできません。直接接続の証明書もハンドシェイク後にもう一度照合し、食い違えばすぐ切断します。</li>
+            <li><strong>中継も暗号文を転送するだけ。</strong>TURN が運ぶのは暗号化済みのパケットです。中継用の認証情報はデバイスごとに発行され、12 時間で失効します。</li>
+            <li><strong>ローカルネットワークでも同じ。</strong>デバイスが LAN に流すのは毎日変わる匿名の識別子だけで、誰のコンピューターかはわかりません。デバイス名を流すのは「近くを検索」を開いている間だけです。ペアリングでは同じく指紋を照合し、その後のメッセージも署名付きです。</li>
+          </ul>
+          <figure class="figure-card">
+            <img src="../../assets/screenshots/ja/card-verify-dark.png" width="1120" height="800" alt="ペアリング時の「セキュリティ指紋を確認」ダイアログ。R8NF-2WTC-QL5J が表示され、もう一台の表示と完全に一致するか確かめるよう求めている">
+          </figure>
+        </div>
+        <p class="more"><a href="../../ja/privacy/">プライバシーポリシー →</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry は GNU AGPL-3.0 のオープンソースです。</p>
+      <nav aria-label="フッターのリンク">
+        <a href="https://github.com/baiyuze/pasteferry/releases">すべてのリリース</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技術資料（中国語）</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">ライセンス</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">問題を報告</a>
+        <a href="../../ja/privacy/">プライバシーと必要なデータ</a>
+      </nav>
+      <nav aria-label="言語">
+        <a href="../../security/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/security/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/security/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/security/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/security/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

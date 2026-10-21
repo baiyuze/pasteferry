@@ -33,6 +33,7 @@
   <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
   <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
 </head>
 <body>
   <a class="skip" href="#main">跳到主要內容</a>
@@ -41,12 +42,23 @@
     <div class="wrap">
       <a class="brand" href="../../zh-tw/" aria-label="隔空貼首頁"><img src="../../assets/icon.svg" alt="" width="26" height="26">隔空貼</a>
       <nav aria-label="頁面導覽">
-        <a href="../../zh-tw/start/">快速入門</a>
-        <a class="wide" href="../../zh-tw/#how">運作原理</a>
-        <a class="wide" href="../../zh-tw/#faq">常見問題</a>
-        <a class="mid" href="../../zh-tw/start/#server">連線方式</a>
+        <a href="../../zh-tw/features/">功能</a>
+        <a class="mid" href="../../zh-tw/start/">快速入門</a>
+        <a class="wide" href="../../zh-tw/start/#server">連線方式</a>
         <a href="../../zh-tw/download/">下載</a>
-        <a class="wide" href="https://github.com/baiyuze/pasteferry">GitHub</a>
+        <details class="menu">
+          <summary aria-label="更多頁面"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../zh-tw/start/">快速入門</a></li>
+            <li class="narrow"><a href="../../zh-tw/start/#server">連線方式</a></li>
+            <li><a href="../../zh-tw/how/">運作原理</a></li>
+            <li><a href="../../zh-tw/security/">安全與隱私</a></li>
+            <li><a href="../../zh-tw/faq/">常見問題</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新記錄</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
         <details class="lang">
           <summary aria-label="語言：繁體中文（台灣）"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>繁體中文（台灣）</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>

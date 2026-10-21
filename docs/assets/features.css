@@ -1,0 +1,1326 @@
+/* 功能页（features/）。在 site.css 之后加载，只给这一页用。
+ *
+ * 照苹果产品页的路数：一屏一件事，大标题，留白多，画面随滚动出现或推进。
+ * 颜色仍是石墨底加系统蓝，不加渐变色块和发光。快捷粘贴的演示用 HTML 画，
+ * 尺寸以演示框宽度为准（--u 是 1000 份之一），手机与宽屏上比例一致。
+ * 没有脚本或要求减少动画时，每块都停在最能说明问题的那一帧。
+ */
+
+/* ── 开头 ── */
+
+.f-hero {
+  padding: clamp(4rem, 10vw, 7.5rem) 0 0;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 1.25rem;
+  color: var(--dim);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 600;
+}
+
+.f-hero .display {
+  font-size: clamp(2.8rem, 9vw, 6.6rem);
+}
+
+.f-hero-shot {
+  width: min(94vw, 72rem);
+  margin: clamp(3rem, 8vw, 5.5rem) auto 0;
+  transform: scale(var(--z, 1));
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+.f-hero-shot img {
+  width: 100%;
+}
+
+/* ── 每一节 ── */
+
+.f-section {
+  padding-top: clamp(7rem, 17vw, 13rem);
+}
+
+.f-h2 {
+  margin: 0 auto;
+  max-width: 13em;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 7.4vw, 5.2rem);
+  line-height: 1.07;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+:lang(zh) .f-h2,
+:lang(ja) .f-h2 {
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+:lang(ja) .f-h2 {
+  font-size: clamp(2.1rem, 6.4vw, 4.4rem);
+  word-break: auto-phrase;
+}
+
+.f-intro {
+  margin: 1.6rem auto 0;
+  max-width: 40rem;
+  text-align: center;
+  color: var(--dim);
+  font-size: clamp(1.08rem, 2.1vw, 1.32rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.f-h2 .k-mac,
+.f-h2 .k-pc,
+.f-intro .k-mac,
+.f-intro .k-pc {
+  white-space: nowrap;
+}
+
+.kicker .new {
+  font-size: 0.85rem;
+}
+
+.f-note {
+  margin: 2.5rem auto 0;
+  max-width: 44rem;
+  text-align: center;
+  color: var(--dim);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.f-shot {
+  max-width: 68rem;
+  margin: clamp(3rem, 7vw, 5rem) auto 0;
+}
+
+.f-shot img {
+  width: 100%;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 2rem clamp(1.5rem, 4vw, 3rem);
+  max-width: 64rem;
+  margin: clamp(3rem, 7vw, 4.5rem) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.facts h3 {
+  font-size: 1.15rem;
+}
+
+.facts p {
+  margin: 0.45rem 0 0;
+  color: var(--dim);
+  line-height: 1.7;
+}
+
+.facts .k-mac,
+.facts .k-pc {
+  font-family: var(--sans);
+}
+
+/* ── 跨设备：Mac 上 ⌘C，两条弧线把纸送到 Windows 与 Linux ── */
+
+.trio {
+  --g: clamp(1.25rem, 5vw, 4rem);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--g);
+  max-width: 56rem;
+  margin: clamp(5rem, 12vw, 8.5rem) auto 0;
+}
+
+.dev {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  text-align: center;
+}
+
+.dev .scr {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--rule-strong);
+  border-radius: clamp(8px, 1.4vw, 14px);
+  background: linear-gradient(#202024, #18181b);
+}
+
+.dev b {
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
+  font-weight: 600;
+}
+
+.dev kbd {
+  padding: 0.15em 0.6em;
+  border: 1px solid var(--rule-strong);
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: clamp(0.72rem, 1.5vw, 0.85rem);
+}
+
+/* 纸：和首页演示里的一样，三行字的造型同 App 图标 */
+.trio .doc {
+  position: relative;
+  width: 24%;
+  aspect-ratio: 0.78;
+  border-radius: 10%;
+  background: #f5f5f4;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  font-size: clamp(0.45rem, 1vw, 0.75rem);
+}
+
+.trio .doc .lines {
+  color: #4a4a4f;
+}
+
+/* 收到之前，Windows 与 Linux 的屏幕上是空的（没有脚本时一直显示） */
+.js .trio .dev + .dev .doc {
+  opacity: 0;
+}
+
+/* 弧线由 features.js 按屏幕位置画在 .trio 上（svg.arcs） */
+.trio .arcs {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.trio .arcs path {
+  fill: none;
+  stroke: var(--blue-hi);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: var(--len) var(--len);
+  stroke-dashoffset: var(--len);
+  opacity: 0.9;
+}
+
+.trio.in .dev:first-child .doc {
+  animation: copy-pulse 5s var(--ease) infinite;
+}
+
+.trio.in .dev:first-child kbd,
+.trio.in .dev + .dev kbd {
+  animation: key-hit 5s ease infinite;
+}
+
+.trio.in .dev:nth-child(2) kbd {
+  animation-delay: 1.25s;
+}
+
+.trio.in .dev:nth-child(3) kbd {
+  animation-delay: 1.45s;
+}
+
+.trio.in .arcs path {
+  animation: arc-draw 5s var(--ease) infinite;
+}
+
+.trio.in .arcs path + path {
+  animation-delay: 0.2s;
+}
+
+.trio.in .dev:nth-child(2) .doc {
+  animation: doc-land 5s var(--ease) infinite;
+}
+
+.trio.in .dev:nth-child(3) .doc {
+  animation: doc-land 5s var(--ease) 0.2s infinite;
+}
+
+@keyframes copy-pulse {
+  0%, 4% { transform: scale(1); }
+  9% { transform: scale(0.9); }
+  16%, 100% { transform: scale(1); }
+}
+
+@keyframes key-hit {
+  0%, 3% { background: var(--surface-2); color: var(--ink-2); border-color: var(--rule-strong); }
+  6%, 14% { background: var(--blue); color: #fff; border-color: var(--blue); }
+  22%, 100% { background: var(--surface-2); color: var(--ink-2); border-color: var(--rule-strong); }
+}
+
+@keyframes arc-draw {
+  0%, 10% { stroke-dashoffset: var(--len); opacity: 0.9; }
+  26% { stroke-dashoffset: 0; opacity: 0.9; }
+  80% { stroke-dashoffset: 0; opacity: 0.9; }
+  92%, 100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes doc-land {
+  0%, 24% { opacity: 0; transform: translateY(-30%) scale(0.7); }
+  32% { opacity: 1; transform: translateY(4%) scale(1.04); }
+  38%, 82% { opacity: 1; transform: none; }
+  94%, 100% { opacity: 0; transform: none; }
+}
+
+/* ── 快捷粘贴：滚动推进的演示 ── */
+
+.qp-track {
+  position: relative;
+  height: 360vh;
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+.qp-sticky {
+  position: sticky;
+  top: 3.5rem;
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: center;
+  justify-items: center;
+  gap: 1.75rem;
+  height: calc(100vh - 3.5rem);
+  height: calc(100svh - 3.5rem);
+  padding: 1rem var(--gutter) 1.5rem;
+  overflow: hidden;
+}
+
+@media (min-width: 62rem) {
+  .qp-sticky {
+    grid-template-columns: minmax(0, 1fr) 19rem;
+    grid-template-rows: auto;
+    align-items: center;
+    gap: clamp(2.5rem, 4vw, 4rem);
+    max-width: 84rem;
+    margin: 0 auto;
+  }
+}
+
+.qp-stage {
+  --u: calc(100cqw / 1000);
+  position: relative;
+  width: min(100%, calc((100svh - 3.5rem - 15rem) * 1.5625), 58rem);
+  aspect-ratio: 1000 / 640;
+  container-type: inline-size;
+  font-family: var(--sans);
+  line-height: 1.4;
+  text-align: left;
+}
+
+@media (min-width: 62rem) {
+  .qp-stage {
+    width: min(100%, calc((100svh - 3.5rem - 4rem) * 1.5625));
+    justify-self: end;
+  }
+}
+
+/* 手机上放大一半，两边裁掉邮件窗口的边，快捷窗口的字才看得清；邮件的正文跟着往里挪 */
+@media (max-width: 40rem) {
+  .qp-sticky {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .qp-stage {
+    width: 150%;
+  }
+
+  .qp-stage .mail-field {
+    margin-inline: calc(190 * var(--u));
+  }
+
+  .qp-stage .mail-body {
+    padding-inline: calc(190 * var(--u));
+  }
+}
+
+/* 邮件窗口：铺满演示框 */
+.mail {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--rule-strong);
+  border-radius: calc(14 * var(--u));
+  background: #1c1c1e;
+  box-shadow: 0 calc(30 * var(--u)) calc(80 * var(--u)) rgba(0, 0, 0, 0.45);
+}
+
+.mail-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: calc(8 * var(--u));
+  height: calc(52 * var(--u));
+  padding: 0 calc(20 * var(--u));
+  border-bottom: 1px solid #2c2c2e;
+  background: #232325;
+}
+
+.mail-bar i {
+  width: calc(12 * var(--u));
+  height: calc(12 * var(--u));
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.mail-bar i:nth-child(2) {
+  background: #febc2e;
+}
+
+.mail-bar i:nth-child(3) {
+  background: #28c840;
+}
+
+.mail-bar span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #98989d;
+  font-size: calc(15 * var(--u));
+  font-weight: 600;
+}
+
+.mail-field {
+  display: flex;
+  gap: calc(10 * var(--u));
+  align-items: center;
+  height: calc(48 * var(--u));
+  margin: 0 calc(28 * var(--u));
+  border-bottom: 1px solid #2c2c2e;
+  font-size: calc(16 * var(--u));
+}
+
+.mail-field span {
+  color: #98989d;
+}
+
+.mail-field b {
+  font-weight: 500;
+  color: #f5f5f7;
+}
+
+.mail-body {
+  padding: calc(26 * var(--u)) calc(28 * var(--u));
+  color: #f5f5f7;
+  font-size: calc(19 * var(--u));
+  line-height: 1.75;
+}
+
+.mail-body p {
+  margin: 0;
+}
+
+.mail-line {
+  min-height: 1.75em;
+}
+
+.caret {
+  display: inline-block;
+  width: max(1px, calc(2 * var(--u)));
+  height: 1.15em;
+  margin-left: calc(1 * var(--u));
+  vertical-align: -0.2em;
+  background: var(--blue-hi);
+  animation: blink 1.06s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* 粘贴进去的那一行：先闪一下蓝底 */
+.pasted {
+  border-radius: calc(4 * var(--u));
+}
+
+.qp-stage.live:not(.done) .pasted {
+  display: none;
+}
+
+.qp-stage.live.done .pasted {
+  animation: paste-flash 1.6s var(--ease);
+}
+
+.qp-stage:not(.live) .mail-line .caret,
+.qp-stage.live:not(.done) .mail-line .caret {
+  margin-left: 0;
+}
+
+@keyframes paste-flash {
+  0% { background: rgba(61, 139, 234, 0.55); }
+  100% { background: transparent; }
+}
+
+/* 快捷窗口：560×460，在演示框中间偏上 */
+.picker {
+  position: absolute;
+  left: calc(220 * var(--u));
+  top: calc(66 * var(--u));
+  display: flex;
+  flex-direction: column;
+  width: calc(560 * var(--u));
+  height: calc(460 * var(--u));
+  overflow: hidden;
+  border: 1px solid #3a3a3c;
+  border-radius: calc(14 * var(--u));
+  background: #2a2a2c;
+  color: #f5f5f7;
+  box-shadow: 0 calc(24 * var(--u)) calc(70 * var(--u)) rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.35s var(--ease), transform 0.45s var(--ease);
+}
+
+.qp-stage.live:not(.open) .picker,
+.qp-stage.live.done .picker {
+  opacity: 0;
+  transform: scale(0.96);
+  pointer-events: none;
+}
+
+.qp-search {
+  display: flex;
+  align-items: center;
+  gap: calc(8 * var(--u));
+  height: calc(44 * var(--u));
+  padding: 0 calc(12 * var(--u));
+  font-size: calc(16 * var(--u));
+}
+
+.qp-search .ico {
+  width: calc(16 * var(--u));
+  height: calc(16 * var(--u));
+  color: #636366;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.field .ph {
+  color: #636366;
+}
+
+.qp-stage:not(.empty) .field .ph,
+.qp-stage.empty .field .q {
+  display: none;
+}
+
+.qp-stage.composing .field .q {
+  text-decoration: underline;
+  text-decoration-color: #98989d;
+  text-underline-offset: 0.2em;
+}
+
+.field .caret {
+  height: 1.2em;
+  margin: 0 calc(2 * var(--u)) 0 calc(1 * var(--u));
+  background: var(--blue);
+}
+
+.qp-stage.empty .field .caret {
+  order: -1;
+}
+
+.qp-tabs {
+  display: flex;
+  height: calc(30 * var(--u));
+  padding: 0 calc(8 * var(--u));
+  border-bottom: 1px solid #333335;
+  font-size: calc(13 * var(--u));
+}
+
+.qp-tabs span {
+  display: grid;
+  place-items: center;
+  margin: calc(3 * var(--u)) calc(2 * var(--u)) calc(5 * var(--u));
+  padding: 0 calc(10 * var(--u));
+  border-radius: calc(6 * var(--u));
+  color: #98989d;
+}
+
+.qp-tabs .on {
+  background: #323234;
+  color: #f5f5f7;
+  font-weight: 600;
+}
+
+.qp-rows {
+  flex: 1;
+  margin: 0;
+  padding: calc(4 * var(--u)) 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.qp-row {
+  display: flex;
+  align-items: center;
+  height: calc(36 * var(--u));
+  margin: 0 calc(4 * var(--u));
+  padding: 0 calc(8 * var(--u));
+  overflow: hidden;
+  border-radius: calc(6 * var(--u));
+  font-size: calc(14.5 * var(--u));
+  transition: height 0.4s var(--ease), opacity 0.25s ease, background-color 0.2s ease;
+}
+
+.qp-row .n {
+  flex: none;
+  width: calc(28 * var(--u));
+  color: #636366;
+  font-size: calc(12.5 * var(--u));
+  font-variant-numeric: tabular-nums;
+}
+
+.qp-row .n .k-mac,
+.qp-row .n .k-pc {
+  white-space: nowrap;
+}
+
+.pc .qp-row .n {
+  width: calc(44 * var(--u));
+}
+
+.qp-row .ico {
+  flex: none;
+  width: calc(16 * var(--u));
+  height: calc(16 * var(--u));
+  margin: 0 calc(11 * var(--u)) 0 calc(3 * var(--u));
+  color: #98989d;
+}
+
+.qp-row .t {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.qp-row .m {
+  display: flex;
+  align-items: center;
+  gap: calc(6 * var(--u));
+  margin-left: calc(12 * var(--u));
+  color: #636366;
+  font-size: calc(12.5 * var(--u));
+  white-space: nowrap;
+}
+
+.qp-row .star {
+  width: calc(14 * var(--u));
+  height: calc(14 * var(--u));
+  color: #3b8beb;
+}
+
+/* 没有搜索时，每行前面是序号 1–9；搜索时只留下搜到的几行，序号换成 ⌘1、⌘2 */
+.qp-stage:not(.live) .qp-row:not(.hit),
+.qp-stage.filtered .qp-row:not(.hit) {
+  height: 0;
+  opacity: 0;
+}
+
+.qp-stage:not(.live) .n-all,
+.qp-stage.filtered .n-all,
+.qp-stage.live:not(.filtered) .n-hit {
+  display: none;
+}
+
+.qp-stage:not(.live) .qp-row.first,
+.qp-stage.filtered .qp-row.first,
+.qp-stage.live:not(.filtered) .qp-row.top {
+  background: #3b8beb;
+  color: #fff;
+}
+
+.qp-stage:not(.live) .qp-row.first :is(.n, .ico, .m, .star),
+.qp-stage.filtered .qp-row.first :is(.n, .ico, .m, .star),
+.qp-stage.live:not(.filtered) .qp-row.top :is(.n, .ico, .m, .star) {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.qp-foot {
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--u));
+  height: calc(34 * var(--u));
+  padding: 0 calc(12 * var(--u));
+  border-top: 1px solid #333335;
+  color: #98989d;
+  font-size: calc(12.5 * var(--u));
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.qp-foot > span {
+  display: flex;
+  align-items: center;
+  gap: calc(5 * var(--u));
+}
+
+.qp-foot kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: calc(20 * var(--u));
+  height: calc(19 * var(--u));
+  padding: 0 calc(5 * var(--u));
+  border-radius: calc(4 * var(--u));
+  background: #3a3a3c;
+  color: #c7c7cc;
+  font-size: calc(11.5 * var(--u));
+}
+
+.qp-foot kbd.k-pc,
+.pc .qp-foot kbd.k-mac {
+  display: none;
+}
+
+.pc .qp-foot kbd.k-pc {
+  display: inline-grid;
+}
+
+/* 按键提示：大号键帽，按下时压一下 */
+.press {
+  position: absolute;
+  left: 50%;
+  bottom: calc(20 * var(--u));
+  z-index: 2;
+  display: flex;
+  gap: calc(12 * var(--u));
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.press > span {
+  display: flex;
+  gap: calc(12 * var(--u));
+}
+
+.press .k-pc,
+.pc .press .k-mac {
+  display: none;
+}
+
+.pc .press .k-pc {
+  display: flex;
+}
+
+.press kbd {
+  display: grid;
+  place-items: center;
+  min-width: calc(78 * var(--u));
+  height: calc(78 * var(--u));
+  padding: 0 calc(20 * var(--u));
+  border: 1px solid #45454b;
+  border-radius: calc(16 * var(--u));
+  background: linear-gradient(#323237, #26262a);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 calc(3 * var(--u)) 0 #111, 0 calc(14 * var(--u)) calc(30 * var(--u)) rgba(0, 0, 0, 0.55);
+  color: #f5f5f7;
+  font-size: calc(30 * var(--u));
+  font-weight: 500;
+}
+
+.press .k-pc kbd,
+.press-enter kbd.k-pc {
+  font-size: calc(24 * var(--u));
+}
+
+.press-enter kbd.k-pc,
+.pc .press-enter kbd.k-mac {
+  display: none;
+}
+
+.pc .press-enter kbd.k-pc {
+  display: grid;
+}
+
+.qp-stage.keys .press-open,
+.qp-stage.enter .press-enter {
+  opacity: 1;
+}
+
+.qp-stage.keys .press-open kbd,
+.qp-stage.enter .press-enter kbd {
+  animation: press 0.5s var(--ease);
+}
+
+@keyframes press {
+  0% { transform: translateY(calc(-14 * var(--u))); opacity: 0; }
+  45% { transform: translateY(calc(3 * var(--u))); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 #111; }
+  100% { transform: none; opacity: 1; }
+}
+
+/* 右边（手机上是下面）的三步，当前这一步亮 */
+.qp-steps {
+  width: min(100%, 36rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.qp-steps li {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  column-gap: 0.9rem;
+  padding: 0.9rem 0;
+  transition: opacity 0.35s ease;
+}
+
+.qp-steps li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.qp-steps .num {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1.5px solid var(--rule-strong);
+  border-radius: 50%;
+  color: var(--dim);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+}
+
+.qp-steps h3 {
+  font-size: 1.12rem;
+  line-height: 2rem;
+}
+
+.qp-steps p {
+  margin: 0.2rem 0 0;
+  color: var(--dim);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.qp-steps.live li:not(.on) {
+  opacity: 0.35;
+}
+
+.qp-steps.live li.on .num {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+/* 手机上只放得下当前这一步 */
+@media (max-width: 61.99rem) {
+  .qp-steps.live li:not(.on) {
+    display: none;
+  }
+
+  .qp-steps.live li + li {
+    border-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qp-track {
+    height: auto;
+  }
+
+  .qp-sticky {
+    position: relative;
+    top: 0;
+    height: auto;
+  }
+}
+
+/* ── 细节：六格 ── */
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 72rem;
+  margin: clamp(3rem, 7vw, 5rem) auto 0;
+}
+
+.cell {
+  grid-column: span 6;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(1.5rem, 3vw, 2.1rem);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 24px;
+  background: var(--surface);
+}
+
+@media (min-width: 40rem) {
+  .cell {
+    grid-column: span 3;
+  }
+}
+
+@media (min-width: 60rem) {
+  .cell {
+    grid-column: span 2;
+  }
+
+  .cell.wide {
+    grid-column: span 3;
+  }
+}
+
+.cell h3 {
+  font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.cell h3 .new {
+  margin-left: 0.35rem;
+  vertical-align: 0.15em;
+}
+
+/* 最后一格占满一行：宽屏上说明在左，演示在右 */
+@media (min-width: 60rem) {
+  .cell.full {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    column-gap: 3rem;
+  }
+
+  .cell.full .mini {
+    padding-top: 0;
+  }
+}
+
+.cell > p,
+.cell.full p {
+  margin: 0.55rem 0 0;
+  color: var(--dim);
+  font-size: 0.97rem;
+  line-height: 1.65;
+}
+
+.mini {
+  margin: auto 0 0;
+  padding-top: 1.75rem;
+  font-size: 0.92rem;
+}
+
+.mini .ico,
+.mini svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: var(--dim);
+}
+
+.mini-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mini-rows li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  height: 2.5rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
+  transition: height 0.45s var(--ease), opacity 0.3s ease, border-color 0.3s ease;
+}
+
+.mini-rows li:last-child {
+  border-bottom: 0;
+}
+
+.mini-rows .t {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mini-rows .star {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #3b8beb;
+}
+
+.mini-rows li.out {
+  height: 0;
+  opacity: 0;
+  border-color: transparent;
+}
+
+/* 类型筛选：分段控件，照 App 里的样子。页签紧跟说明，列表留足 6 行的高度，筛选时页签不跳 */
+[data-filter] .mini {
+  margin-top: 0;
+}
+
+[data-filter] .mini-rows {
+  min-height: 15rem;
+}
+
+.seg {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 0.6rem;
+  padding: 3px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: #1f1f22;
+  font-size: 0.8rem;
+}
+
+.seg span {
+  flex: 1;
+  padding: 0.3rem 0.2rem;
+  border-radius: 7px;
+  color: var(--dim);
+  text-align: center;
+  white-space: nowrap;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.seg .on {
+  background: #3a3a40;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* 悬停提示框：截图里只露出提示框那一块 */
+.hover-cell .crop {
+  position: relative;
+  margin-top: 1.75rem;
+  aspect-ratio: 1040 / 490;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+}
+
+.hover-cell .crop img {
+  position: absolute;
+  left: -55.8%;
+  top: -95.9%;
+  width: 203%;
+  max-width: none;
+}
+
+/* 搜索 */
+.mini-search {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  height: 2.4rem;
+  margin-bottom: 0.4rem;
+  padding: 0 0.8rem;
+  border-radius: 9px;
+  background: #1f1f22;
+}
+
+.mini-search .caret {
+  height: 1.1em;
+  margin-left: 1px;
+  background: var(--blue);
+}
+
+.hits li {
+  height: 2.3rem;
+}
+
+.hits li span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 大文件：一行记录，点「接收」后进度条走完 */
+.big {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.big > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.big b {
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.big span {
+  color: var(--dim);
+  font-size: 0.82rem;
+}
+
+.big .bar {
+  display: block;
+  height: 3px;
+  margin-top: 0.45rem;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #333338;
+}
+
+.big .bar i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--blue);
+}
+
+.big .receive {
+  flex: none;
+  padding: 0.3rem 0.85rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 8px;
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.big.in-view .bar i,
+.in .big .bar i {
+  animation: fetch 5s var(--ease) infinite;
+}
+
+.in .big .receive {
+  animation: receive-press 5s ease infinite;
+}
+
+@keyframes fetch {
+  0%, 14% { width: 0; }
+  70%, 90% { width: 100%; }
+  100% { width: 100%; opacity: 0; }
+}
+
+@keyframes receive-press {
+  0%, 6% { background: transparent; }
+  9%, 13% { background: var(--blue); border-color: var(--blue); color: #fff; }
+  18%, 100% { background: transparent; }
+}
+
+/* 文件夹：一棵小树 */
+.tree {
+  list-style: none;
+}
+
+.tree li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  height: 2.1rem;
+}
+
+.tree li + li {
+  padding-left: 1.6rem;
+}
+
+.tree li svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.tree li:first-child {
+  font-weight: 500;
+}
+
+.in .tree li + li,
+.tree.in li + li {
+  animation: tree-in 0.6s var(--ease) both;
+}
+
+.in .tree li:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.in .tree li:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+@keyframes tree-in {
+  from { opacity: 0; transform: translateX(-0.6rem); }
+}
+
+/* 文件名：Mac 上的名字 → Windows 上收到的 */
+.names {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.names div {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.names span {
+  flex: none;
+  width: 4.6rem;
+  color: var(--dim);
+  font-size: 0.82rem;
+}
+
+.names code {
+  padding: 0.35rem 0.6rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.names div + div code {
+  background: var(--blue-wash);
+  color: var(--blue-hi);
+}
+
+/* ── 跨网络的示意图 ── */
+
+.net {
+  max-width: 50rem;
+  margin: clamp(3rem, 7vw, 5rem) auto 0;
+}
+
+.net svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.n-svc,
+.n-net,
+.n-dev {
+  fill: none;
+  stroke: var(--rule-strong);
+  stroke-width: 1.5;
+}
+
+.n-svc {
+  fill: var(--surface);
+}
+
+.n-net {
+  stroke-dasharray: 5 6;
+}
+
+.n-dev {
+  fill: var(--surface-2);
+  stroke: #4a4a52;
+}
+
+.n-title {
+  fill: var(--ink);
+  font: 600 19px var(--sans);
+}
+
+.n-label {
+  fill: var(--dim);
+  font: 500 17px var(--sans);
+}
+
+.n-note {
+  fill: var(--blue-hi);
+  font: 500 15px var(--sans);
+}
+
+.n-sig {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1.3;
+  stroke-dasharray: 3 5;
+}
+
+.n-direct {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 2 12;
+}
+
+.net.in .n-direct {
+  animation: flow 1.2s linear infinite;
+}
+
+.net.in .n-sig {
+  animation: flow 2.4s linear infinite reverse;
+}
+
+@keyframes flow {
+  to { stroke-dashoffset: -28; }
+}
+
+/* ── 几个数字 ── */
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 3rem) 1.5rem;
+  max-width: 64rem;
+  margin: clamp(3rem, 7vw, 5rem) auto 0;
+  text-align: center;
+}
+
+@media (min-width: 52rem) {
+  .numbers {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.numbers dt b {
+  font-family: var(--display);
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.numbers dt span {
+  color: var(--ink-2);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.numbers dd {
+  margin: 0.5rem 0 0;
+  color: var(--dim);
+  font-size: 0.95rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .trio .dev + .dev .doc {
+    opacity: 1;
+  }
+
+  .trio.in *,
+  .in .big *,
+  .in .tree li,
+  .net.in path {
+    animation: none !important;
+  }
+}

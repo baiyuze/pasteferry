@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>機能：クイックペースト、お気に入り、デバイスをまたぐ履歴 — PasteFerry</title>
+  <meta name="description" content="PasteFerry は Mac、Windows、Linux の間でクリップボードを同期します。テキスト、画像、ファイル、フォルダをコピーして、別のパソコンでそのままペースト。⌥V か Alt+V でクイックペースト、お気に入り、履歴の検索と種類別の表示も。">
+  <link rel="canonical" href="https://pasteferry.cc/ja/features/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/features/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/features/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/features/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/features/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/features/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="機能：クイックペースト、お気に入り、デバイスをまたぐ履歴 — PasteFerry">
+  <meta property="og:description" content="PasteFerry は Mac、Windows、Linux の間でクリップボードを同期します。テキスト、画像、ファイル、フォルダをコピーして、別のパソコンでそのままペースト。⌥V か Alt+V でクイックペースト、お気に入り、履歴の検索と種類別の表示も。">
+  <meta property="og:url" content="https://pasteferry.cc/ja/features/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="zh_HK">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <link rel="stylesheet" href="../../assets/features.css">
+</head>
+<body class="features">
+  <a class="skip" href="#main">本文へ移動</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ja/" aria-label="PasteFerry ホーム"><img src="../../assets/icon.svg" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="ページ内の移動">
+        <a href="./" aria-current="page">機能</a>
+        <a class="mid" href="../../ja/start/">はじめかた</a>
+        <a class="wide" href="../../ja/start/#server">接続方法</a>
+        <a href="../../ja/download/">ダウンロード</a>
+        <details class="menu">
+          <summary aria-label="その他のページ"><span>その他</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../ja/start/">はじめかた</a></li>
+            <li class="narrow"><a href="../../ja/start/#server">接続方法</a></li>
+            <li><a href="../../ja/how/">しくみ</a></li>
+            <li><a href="../../ja/security/">セキュリティ</a></li>
+            <li><a href="../../ja/faq/">よくある質問</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a></li>
+            <li><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="言語：日本語"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>日本語</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/features/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="f-hero">
+      <div class="wrap">
+        <p class="eyebrow">PasteFerry の機能</p>
+        <h1 class="display">コピペは、<br>こうあるべき。</h1>
+        <p class="lede">Mac、Windows、Linux の間でクリップボードを同期。コピーしたものは、いつでも呼び出せます。</p>
+        <div class="cta">
+          <a class="button" href="../../ja/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry をダウンロード</a>
+          <a class="button quiet" href="../../ja/tour/"><span aria-hidden="true">▶</span> 紹介ムービーを見る</a>
+        </div>
+      </div>
+      <figure class="f-hero-shot" data-zoom>
+        <img src="../../assets/screenshots/ja/history-dark.png" width="2112" height="1472" alt="PasteFerry の履歴：サイドバーに履歴・お気に入り・デバイス・設定、一覧には各パソコンからのテキスト、画像、ファイル、リンク">
+      </figure>
+    </section>
+
+    <section class="f-section" id="sync" aria-labelledby="sync-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="sync-title">こっちでコピー、<br>あっちでペースト。</h2>
+        <p class="f-intro"><span class="k-mac">⌘C</span><span class="k-pc">Ctrl+C</span> を押すと、ほかのパソコンに同期されます。向こうで <span class="k-mac">⌘V</span><span class="k-pc">Ctrl+V</span> を押すだけ。同じアカウントは不要で、Mac、Windows、Linux を自由に組み合わせられます。</p>
+        <div class="trio" data-reveal aria-hidden="true">
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>MacBook</b><kbd>⌘C</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Windows</b><kbd>Ctrl+V</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Linux</b><kbd>Ctrl+V</kbd></div>
+        </div>
+        <ul class="facts">
+          <li><h3>テキスト、画像、ファイル、フォルダ</h3><p>書式付きテキストをプレーンテキストの欄に貼っても、タグは出ません。</p></li>
+          <li><h3>50 MB までは、コピーした時点で転送済み</h3><p>大きいものはまず記録だけ同期し、必要なときに取得。上限は変更できます。</p></li>
+          <li><h3>相手がオフラインでも失われない</h3><p>その間にコピーしたものは、つながった後に相手の履歴へ届きます。</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.4 の新機能</span></p>
+        <h2 class="f-h2" id="qp-title"><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> で、<br>履歴をその場に。</h2>
+        <p class="f-intro">アプリを切り替える必要も、チャットをさかのぼる必要もありません。どのアプリでもショートカットを押して選ぶだけで、カーソルの位置にペーストされます。</p>
+      </div>
+      <div class="qp-track" data-scene>
+        <div class="qp-sticky">
+          <div class="qp-stage" role="img" aria-label="デモ：メールを書いている途中で ⌥V を押すとクイックペーストが開き、「請求」で検索した請求先をリターンでメール本文にペースト" data-typing="[[&quot;せ&quot;, true], [&quot;せい&quot;, true], [&quot;せいきゅ&quot;, true], [&quot;せいきゅう&quot;, true], [&quot;請求&quot;, false]]">
+            <div class="mail">
+              <div class="mail-bar"><i></i><i></i><i></i><span>新規メッセージ</span></div>
+              <div class="mail-field"><span>宛先：</span><b>佐藤様</b></div>
+              <div class="mail-field"><span>件名：</span><b>請求先について</b></div>
+              <div class="mail-body"><p>佐藤様</p><p>請求先は以下のとおりです。</p><p class="mail-line"><span class="pasted">請求先：株式会社フェリーラボ　登録番号 T1234567890123</span><i class="caret"></i></p></div>
+            </div>
+            <div class="press press-open" aria-hidden="true"><span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span></div>
+            <div class="press press-enter" aria-hidden="true"><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd></div>
+            <div class="picker">
+              <div class="qp-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="field"><span class="q">請求</span><i class="caret"></i><span class="ph">検索</span></span></div>
+              <div class="qp-tabs"><span class="on">すべて</span><span>テキスト</span><span>リンク</span><span>画像</span><span>ファイル</span><span>お気に入り</span></div>
+              <ol class="qp-rows"><li class="qp-row top"><span class="n n-all">1</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">打ち合わせは木曜 15 時に変更、場所は同じ</span><span class="m">たった今</span></li><li class="qp-row"><span class="n n-all">2</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span><span class="m">2 分前</span></li><li class="qp-row"><span class="n n-all">3</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">画像</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>Windows デスクトップ · 5 分前</span></li><li class="qp-row"><span class="n n-all">4</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 4.5V3.2c0-.5.4-.9.9-.9h3.8l2.6 2.6v6.4c0 .5-.4.9-.9.9h-1.4"/><path d="M3.5 5.6c0-.5.4-.9.9-.9h3.6l2.5 2.5v5.9c0 .5-.4.9-.9.9H4.4a.9.9 0 0 1-.9-.9z"/></svg><span class="t">契約書_署名済み.pdf ほか 2 件</span><span class="m">52 分前</span></li><li class="qp-row hit first"><span class="n n-all">5</span><span class="n n-hit"><span class="k-mac">⌘1</span><span class="k-pc">Alt+1</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">請求先：株式会社フェリーラボ　登録番号 T1234567890123</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>1 時間前</span></li><li class="qp-row"><span class="n n-all">6</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">docker compose up -d --build</span><span class="m">1 時間前</span></li><li class="qp-row hit"><span class="n n-all">7</span><span class="n n-hit"><span class="k-mac">⌘2</span><span class="k-pc">Alt+2</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">請求書は経理部宛て、注文番号を記載</span><span class="m">1 日前</span></li><li class="qp-row"><span class="n n-all">8</span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">pnpm install</span><span class="m">1 日前</span></li></ol>
+              <div class="qp-foot"><span><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd>ペースト</span><span><kbd class="k-mac">⇧↩</kbd><kbd class="k-pc">Shift+Enter</kbd>プレーンテキスト</span><span><kbd class="k-mac">⌘↩</kbd><kbd class="k-pc">Ctrl+Enter</kbd>コピーのみ</span><span><kbd class="k-mac">⌘D</kbd><kbd class="k-pc">Ctrl+D</kbd>お気に入りに追加</span><span><kbd class="k-mac">esc</kbd><kbd class="k-pc">Esc</kbd>閉じる</span></div>
+            </div>
+          </div>
+          <ol class="qp-steps">
+            <li data-step="0"><span class="num">1</span><h3><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> を押す</h3><p>どのアプリでも。画面の中央に開き、選び終わると元のアプリに戻ります。</p></li>
+            <li data-step="1"><span class="num">2</span><h3>数文字を入力</h3><p>テキストもファイル名も検索できます。検索しないときは、最初の 9 件を数字で選べます。</p></li>
+            <li data-step="2"><span class="num">3</span><h3><span class="k-mac">↩</span><span class="k-pc">Enter</span> を押せば完了</h3><p>カーソルの位置にペーストされます。<span class="k-mac">⇧↩</span><span class="k-pc">Shift+Enter</span> でプレーンテキスト、<span class="k-mac">⌘↩</span><span class="k-pc">Ctrl+Enter</span> はコピーだけ。</p></li>
+          </ol>
+        </div>
+      </div>
+      <div class="wrap">
+        <p class="f-note">ショートカットは設定で変更・オフにできます。Mac で直接ペーストするにはアクセシビリティの許可が必要で、許可しない場合はコピーされるので ⌘V で貼り付けます。Linux の Wayland でも、選んだ後に Ctrl+V で貼り付けます。</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="favorites" aria-labelledby="fav-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.4 の新機能</span></p>
+        <h2 class="f-h2" id="fav-title">よく使うものは、<br>お気に入りに。</h2>
+        <p class="f-intro">請求先、住所、定型の返信。星をクリックすれば別に保存されます。お気に入りは期限切れにならず、履歴を消しても残ります。</p>
+        <figure class="f-shot" data-reveal>
+          <img src="../../assets/screenshots/ja/favorites-dark.png" width="2112" height="1472" loading="lazy" alt="お気に入りページ：請求先、定型の返信、ダウンロードリンク、PDF など 5 件。それぞれ右に青い星">
+        </figure>
+        <ul class="facts">
+          <li><h3>自動では削除されない</h3><p>履歴は期限が来ると消えますが、お気に入りは残ります。</p></li>
+          <li><h3>別のコピーとして保存</h3><p>元のファイルを変更・削除しても、お気に入りは影響を受けません。</p></li>
+          <li><h3>クイックペーストでも</h3><p>「お気に入り」タブに切り替えるか、<span class="k-mac">⌘D</span><span class="k-pc">Ctrl+D</span> で選んだ項目をお気に入りに。</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section" id="details" aria-labelledby="details-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="details-title">細かいところまで、<br>考えてあります。</h2>
+        <div class="bento">
+          <article class="cell wide" data-reveal data-filter>
+            <h3>リンクは専用のタブに <span class="new">新機能</span></h3>
+            <p>履歴を種類で絞り込み：テキスト、リンク、画像、ファイル、お気に入り。クリックひとつで。</p>
+            <div class="mini" aria-hidden="true"><div class="seg"><span data-tab="all" class="on">すべて</span><span data-tab="text">テキスト</span><span data-tab="link">リンク</span><span data-tab="image">画像</span><span data-tab="file">ファイル</span><span data-tab="fav">お気に入り</span></div><ul class="mini-rows"><li data-kind="text"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">打ち合わせは木曜 15 時に変更</span></li><li data-kind="link"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span></li><li data-kind="image"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">画像 · 2.4 MB</span></li><li data-kind="file"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span class="t">四半期報告_最終版.key</span></li><li data-kind="link" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://pasteferry.cc/download/</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li><li data-kind="text" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">請求先：株式会社フェリーラボ</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li></ul></div>
+          </article>
+          <article class="cell wide hover-cell" data-reveal>
+            <h3>ポインタを置くだけで全文 <span class="new">新機能</span></h3>
+            <p>項目にポインタを 0.5 秒置くと、全文、大きな画像、すべてのファイル名が表示されます。</p>
+            <div class="crop"><img src="../../assets/screenshots/ja/hover-dark.png" width="2112" height="1472" loading="lazy" alt="会議メモにポインタを置くと、全文（担当、公開時間、監視）がカードに表示される"></div>
+          </article>
+          <article class="cell" data-reveal data-search>
+            <h3>コピーしたものを検索</h3>
+            <p>テキストやファイル名で検索し、クリックでクリップボードに戻せます。履歴は既定で 3 日、最長 30 日保存。</p>
+            <div class="mini" aria-hidden="true">
+              <div class="mini-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="q" data-q="契約">契約</span><i class="caret"></i></div>
+              <ul class="mini-rows hits"><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span>契約書_署名済み.pdf</span></li><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span>契約第 3 条を四半期払いに変更</span></li></ul>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>大きなファイルは必要なときに</h3>
+            <p>50 MB を超えるものはまず記録だけを同期し、「受信」をクリックしたときに転送します。</p>
+            <div class="mini big" aria-hidden="true">
+              <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><div><b>発表デモ.mov</b><span>Mac mini から · 1.3 GB</span><i class="bar"><i></i></i></div>
+              <span class="receive">受信</span>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>フォルダごとでも</h3>
+            <p>フォルダをコピーすれば、向こうには同じ構成のフォルダがそのままペーストされます。</p>
+            <ul class="mini tree" aria-hidden="true">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>design-assets</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>logo.svg</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>banner@2x.png</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>fonts</li>
+            </ul>
+          </article>
+          <article class="cell full" data-reveal>
+            <div>
+              <h3>ファイル名も安心</h3>
+              <p>Mac では使えて Windows では使えない文字は全角に置き換えるので、名前はそのまま読めます。</p>
+            </div>
+            <div class="mini names" aria-hidden="true">
+              <div><span>Mac</span><code>議事録 10:30?.md</code></div>
+              <div><span>Windows</span><code>議事録 10：30？.md</code></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="f-section" id="network" aria-labelledby="net-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="net-title">自宅と職場も、<br>直接つながる。</h2>
+        <p class="f-intro">同じネットワークなら、入れてペアリングするだけ。別のネットワークでも公式サービスをオンにすれば、自前のサーバーは不要です。可能な限り直接つながり、だめなときだけ暗号化して中継します。</p>
+        <figure class="net" data-reveal>
+          <svg viewBox="0 0 800 330" role="img" aria-label="図：自宅と職場のネットワークにある 2 台のパソコンが公式サービスを介して互いを見つけ、直接つながる">
+            <rect class="n-svc" x="300" y="14" width="200" height="56" rx="14"/>
+            <text class="n-title" x="400" y="49" text-anchor="middle">公式サービス</text>
+            <rect class="n-net" x="20" y="130" width="300" height="180" rx="22"/>
+            <rect class="n-net" x="480" y="130" width="300" height="180" rx="22"/>
+            <text class="n-label" x="44" y="164">自宅</text>
+            <text class="n-label" x="756" y="164" text-anchor="end">職場</text>
+            <path class="n-sig" d="M170 200V42H300"/>
+            <path class="n-sig" d="M630 200V42H500"/>
+            <rect class="n-dev" x="120" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M105 278h130"/>
+            <rect class="n-dev" x="580" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M565 278h130"/>
+            <path class="n-direct" d="M235 236H565"/>
+            <text class="n-note" x="400" y="222" text-anchor="middle">直接接続 · エンドツーエンド暗号化</text>
+          </svg>
+        </figure>
+        <ul class="facts">
+          <li><h3>同じネットワーク</h3><p>サーバー不要。ペアリングコードを入れるだけ。</p></li>
+          <li><h3>別のネットワーク</h3><p>公式サービス、自前のサーバー、Tailscale から選べます。</p></li>
+          <li><h3>エンドツーエンド暗号化</h3><p>ペアリング時に指紋を照合。サーバーは内容を見られません。</p></li>
+        </ul>
+        <p class="more"><a href="../../ja/start/#server">接続方法を選ぶ →</a><a href="../../ja/how/">しくみ →</a></p>
+      </div>
+    </section>
+
+    <section class="f-section" id="numbers" aria-labelledby="numbers-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="numbers-title">数字で見る。</h2>
+        <dl class="numbers" data-reveal>
+          <div><dt><b>3</b> <span>つの OS</span></dt><dd>macOS、Windows、Linux</dd></div>
+          <div><dt><b>50 MB</b> <span>まで</span></dt><dd>コピーと同時に転送</dd></div>
+          <div><dt><b>≈330 ms</b></dt><dd>LAN で 20 MB のファイルを転送</dd></div>
+          <div><dt><b>0</b> <span>アカウント</span></dt><dd>登録不要、ペアリングだけ</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">さっそく試す。</h2>
+        <div class="cta">
+          <a class="button" href="../../ja/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry をダウンロード</a>
+        </div>
+        <p class="note">バージョン 2.3.0、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。</p>
+        <a class="start-link" href="../../ja/start/">はじめての方は、3 ステップのはじめかたへ →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry は GNU AGPL-3.0 のオープンソースです。</p>
+      <nav aria-label="フッターのリンク">
+        <a href="https://github.com/baiyuze/pasteferry/releases">すべてのリリース</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技術資料（中国語）</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">ライセンス</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">問題を報告</a>
+        <a href="../../ja/privacy/">プライバシーと必要なデータ</a>
+      </nav>
+      <nav aria-label="言語">
+        <a href="../../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/features/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js" defer></script>
+  <script src="../../assets/features.js" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>
