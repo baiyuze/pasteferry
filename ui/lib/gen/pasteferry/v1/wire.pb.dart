@@ -105,7 +105,15 @@ class Signed extends $pb.GeneratedMessage {
   void clearFromDeviceId() => $_clearField(3);
 }
 
-enum SignalMessage_Payload { offer, answer, candidate, ping, lanHello, notSet }
+enum SignalMessage_Payload {
+  offer,
+  answer,
+  candidate,
+  ping,
+  lanHello,
+  retryDirect,
+  notSet
+}
 
 class SignalMessage extends $pb.GeneratedMessage {
   factory SignalMessage({
@@ -121,6 +129,7 @@ class SignalMessage extends $pb.GeneratedMessage {
     IceCandidate? candidate,
     Ping? ping,
     LanHello? lanHello,
+    RetryDirect? retryDirect,
   }) {
     final result = SignalMessage._();
     if (timestampUnix != null) result.timestampUnix = timestampUnix;
@@ -136,6 +145,7 @@ class SignalMessage extends $pb.GeneratedMessage {
     if (candidate != null) result.candidate = candidate;
     if (ping != null) result.ping = ping;
     if (lanHello != null) result.lanHello = lanHello;
+    if (retryDirect != null) result.retryDirect = retryDirect;
     return result;
   }
 
@@ -155,13 +165,14 @@ class SignalMessage extends $pb.GeneratedMessage {
     12: SignalMessage_Payload.candidate,
     13: SignalMessage_Payload.ping,
     14: SignalMessage_Payload.lanHello,
+    15: SignalMessage_Payload.retryDirect,
     0: SignalMessage_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SignalMessage',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: SignalMessage.$_createMessage)
-    ..oo(0, [10, 11, 12, 13, 14])
+    ..oo(0, [10, 11, 12, 13, 14, 15])
     ..aInt64(1, _omitFieldNames ? '' : 'timestampUnix')
     ..a<$core.List<$core.int>>(
         2, _omitFieldNames ? '' : 'nonce', $pb.PbFieldType.OY)
@@ -180,6 +191,8 @@ class SignalMessage extends $pb.GeneratedMessage {
         subBuilder: Ping.$_createMessage)
     ..aOM<LanHello>(14, _omitFieldNames ? '' : 'lanHello',
         subBuilder: LanHello.$_createMessage)
+    ..aOM<RetryDirect>(15, _omitFieldNames ? '' : 'retryDirect',
+        subBuilder: RetryDirect.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -209,6 +222,7 @@ class SignalMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(12)
   @$pb.TagNumber(13)
   @$pb.TagNumber(14)
+  @$pb.TagNumber(15)
   SignalMessage_Payload whichPayload() =>
       _SignalMessage_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(10)
@@ -216,6 +230,7 @@ class SignalMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(12)
   @$pb.TagNumber(13)
   @$pb.TagNumber(14)
+  @$pb.TagNumber(15)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   /// 防重放：接收方拒绝时间戳过旧或 nonce 重复的消息
@@ -339,6 +354,60 @@ class SignalMessage extends $pb.GeneratedMessage {
   void clearLanHello() => $_clearField(14);
   @$pb.TagNumber(14)
   LanHello ensureLanHello() => $_ensure(11);
+
+  @$pb.TagNumber(15)
+  RetryDirect get retryDirect => $_getN(12);
+  @$pb.TagNumber(15)
+  set retryDirect(RetryDirect value) => $_setField(15, value);
+  @$pb.TagNumber(15)
+  $core.bool hasRetryDirect() => $_has(12);
+  @$pb.TagNumber(15)
+  void clearRetryDirect() => $_clearField(15);
+  @$pb.TagNumber(15)
+  RetryDirect ensureRetryDirect() => $_ensure(12);
+}
+
+/// 用户在应答方点了「重新连接」：只有发起方能做 ICE 重启，请它马上再试一次直连。
+/// 旧版本不认识它，照旧按自己的间隔重试
+class RetryDirect extends $pb.GeneratedMessage {
+  factory RetryDirect() => RetryDirect._();
+
+  RetryDirect._();
+
+  factory RetryDirect.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RetryDirect()..mergeFromBuffer(data, registry);
+  factory RetryDirect.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RetryDirect()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RetryDirect',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: RetryDirect.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RetryDirect clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RetryDirect copyWith(void Function(RetryDirect) updates) =>
+      super.copyWith((message) => updates(message as RetryDirect))
+          as RetryDirect;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use RetryDirect() / RetryDirect.new instead')
+  static RetryDirect create() => RetryDirect._();
+  static $pb.GeneratedMessage $_createMessage() => RetryDirect._();
+  @$core.override
+  RetryDirect createEmptyInstance() => RetryDirect._();
+  @$core.pragma('dart2js:noInline')
+  static RetryDirect getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RetryDirect>(
+          RetryDirect.$_createMessage);
+  static RetryDirect? _defaultInstance;
 }
 
 class SdpOffer extends $pb.GeneratedMessage {

@@ -43,8 +43,13 @@ message SignalMessage {
     IceCandidate candidate = 12;
     Ping ping = 13;
     LanHello lan_hello = 14;        // 只走局域网，见下文
+    RetryDirect retry_direct = 15;
   }
 }
+
+// 用户在应答方点了「重新连接」：只有发起方能做 ICE 重启，请它马上再试一次直连。
+// 旧版本不认识它，照旧按自己的间隔重试
+message RetryDirect {}
 
 message SdpOffer {
   string sdp = 1;

@@ -137,7 +137,13 @@ class _DeviceRow extends StatelessWidget {
               padding: const EdgeInsets.only(right: Insets.sm),
               child: Text(context.l10n.thisDeviceShort, style: context.text.bodySmall),
             )
-          else ...[
+          else if (AppScope.of(context).isReconnecting(device.id)) ...[
+            const SizedBox(width: 12, height: 12, child: CircularProgressIndicator(strokeWidth: 1.5)),
+            const SizedBox(width: Insets.xs + 2),
+            Text(context.l10n.reconnecting, style: context.text.bodySmall),
+            const SizedBox(width: Insets.sm),
+            _DeviceMenu(device: device),
+          ] else ...[
             StatusDot(
               color: device.online ? p.online : p.textFaint,
               label: device.online ? connectionLabel(device) : context.l10n.offline,
@@ -175,6 +181,10 @@ class _DeviceMenu extends StatelessWidget {
       padding: EdgeInsets.zero,
       position: PopupMenuPosition.under,
       itemBuilder: (ctx) => [
+        // 已是直连就不用了；中转时马上再试一次直连，离线时马上去找它
+        if (device.connection != ConnectionKind.CONNECTION_KIND_DIRECT &&
+            !AppScope.read(ctx).isReconnecting(device.id))
+          PopupMenuItem(value: 'reconnect', height: 34, child: Text(l.reconnect)),
         PopupMenuItem(value: 'copy', height: 34, child: Text(l.copyFingerprint)),
         // 局域网里找不到对方时（跨网段、两边都换了地址），手动告诉后台服务去哪里找
         if (!device.online)
@@ -186,6 +196,7 @@ class _DeviceMenu extends StatelessWidget {
         ),
       ],
       onSelected: (v) => switch (v) {
+        'reconnect' => _reconnect(context),
         'copy' => _copy(context),
         'address' => _setAddress(context),
         _ => _unpair(context),
@@ -194,6 +205,22 @@ class _DeviceMenu extends StatelessWidget {
         child: IconAction(icon: AppIcons.ellipsis, tooltip: ''),
       ),
     );
+  }
+
+  Future<void> _reconnect(BuildContext context) async {
+    final l = context.l10n;
+    try {
+      final kind = await AppScope.read(context).reconnect(device.id);
+      if (!context.mounted) return;
+      showToast(context, switch (kind) {
+        ConnectionKind.CONNECTION_KIND_DIRECT => l.reconnectDirect,
+        ConnectionKind.CONNECTION_KIND_RELAY => l.reconnectRelay,
+        ConnectionKind.CONNECTION_KIND_OFFLINE => l.reconnectOffline(device.name),
+        _ => l.reconnectPending,
+      });
+    } catch (e) {
+      if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+    }
   }
 
   Future<void> _copy(BuildContext context) async {

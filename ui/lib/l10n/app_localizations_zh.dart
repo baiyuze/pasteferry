@@ -1316,6 +1316,26 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get reconnect => '重新连接';
+
+  @override
+  String get reconnecting => '正在连接…';
+
+  @override
+  String get reconnectDirect => '已直连';
+
+  @override
+  String get reconnectRelay => '直连没打通，继续经中转';
+
+  @override
+  String reconnectOffline(String name) {
+    return '「$name」不在线，请确认它那边已打开隔空贴';
+  }
+
+  @override
+  String get reconnectPending => '还在连接，稍后再看';
+
+  @override
   String get renameAction => '重命名';
 
   @override
@@ -2643,6 +2663,26 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   }
 
   @override
+  String get reconnect => '重新連線';
+
+  @override
+  String get reconnecting => '正在連線…';
+
+  @override
+  String get reconnectDirect => '已直連';
+
+  @override
+  String get reconnectRelay => '直連沒有打通，繼續經中轉';
+
+  @override
+  String reconnectOffline(String name) {
+    return '「$name」不在線，請確認它那邊已開啟隔空貼';
+  }
+
+  @override
+  String get reconnectPending => '仍在連線，請稍後再看';
+
+  @override
   String get renameAction => '重新命名';
 
   @override
@@ -3968,6 +4008,26 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\n可從此通知或複製記錄重新放入剪貼簿。';
   }
+
+  @override
+  String get reconnect => '重新連線';
+
+  @override
+  String get reconnecting => '正在連線…';
+
+  @override
+  String get reconnectDirect => '已直連';
+
+  @override
+  String get reconnectRelay => '直連沒有打通，繼續經中繼';
+
+  @override
+  String reconnectOffline(String name) {
+    return '「$name」不在線上，請確認它那邊已開啟隔空貼';
+  }
+
+  @override
+  String get reconnectPending => '仍在連線，請稍後再看';
 
   @override
   String get renameAction => '重新命名';

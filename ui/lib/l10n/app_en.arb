@@ -902,6 +902,19 @@
       }
     }
   },
+  "reconnect": "Reconnect",
+  "reconnecting": "Connecting…",
+  "reconnectDirect": "Connected directly",
+  "reconnectRelay": "Couldn’t connect directly, still using the relay",
+  "reconnectOffline": "“{name}” is offline. Make sure PasteFerry is open on it.",
+  "@reconnectOffline": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reconnectPending": "Still connecting, check back in a moment",
   "renameAction": "Rename",
   "renameFavoriteTitle": "Rename favorite",
   "renameFavoriteHint": "Shown in Favorites and Quick paste, and you can search for it. Leave it empty to show the content again.",

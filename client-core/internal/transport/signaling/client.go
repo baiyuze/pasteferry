@@ -62,7 +62,7 @@ type Client struct {
 	conn      *websocket.Conn
 	url       string
 	connected bool
-	// urlChanged 在地址变化时唤醒正在等待的 Run，立即按新地址连接
+	// urlChanged 在地址变化（或 Redial）时唤醒正在等待的 Run，立即连接
 	urlChanged chan struct{}
 }
 
@@ -116,6 +116,17 @@ func (c *Client) SetURL(url string) {
 	}
 	if conn != nil {
 		conn.Close(websocket.StatusNormalClosure, "切换服务器")
+	}
+	select {
+	case c.urlChanged <- struct{}{}:
+	default:
+	}
+}
+
+// Redial 在断线时马上重连，不等退避的间隔（设备菜单里的「重新连接」）。
+func (c *Client) Redial() {
+	if c.Connected() || c.URL() == "" {
+		return
 	}
 	select {
 	case c.urlChanged <- struct{}{}:

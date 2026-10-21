@@ -67,7 +67,9 @@ type Deps struct {
 	RedeemPairingCode func(ctx context.Context, code, address string) (*pb.Device, string, error)
 	ConfirmPairing    func(ctx context.Context, session string, accept bool) error
 	Unpair            func(ctx context.Context, deviceID string) error
-	SetDeviceAddress  func(ctx context.Context, deviceID, address string) error
+	// Reconnect 是设备菜单里的「重新连接」，见 peers.Manager.Reconnect
+	Reconnect        func(ctx context.Context, deviceID string) (pb.ConnectionKind, error)
+	SetDeviceAddress func(ctx context.Context, deviceID, address string) error
 	// ShowNearby / Nearby / PairNearby 是「搜索附近设备」，见 lan/nearby.go
 	ShowNearby         func() (hide func())
 	Nearby             func() []*pb.NearbyDevice
@@ -600,6 +602,20 @@ func (s *Server) Unpair(ctx context.Context, req *pb.UnpairRequest) (*pb.Empty, 
 		return nil, status.Errorf(codes.Internal, "解除配对: %v", err)
 	}
 	return &pb.Empty{}, nil
+}
+
+func (s *Server) Reconnect(ctx context.Context, req *pb.ReconnectRequest) (*pb.ReconnectResponse, error) {
+	if s.deps.Reconnect == nil {
+		return nil, status.Error(codes.Unimplemented, "请更新后台服务后再重新连接")
+	}
+	kind, err := s.deps.Reconnect(ctx, req.GetDeviceId())
+	if errors.Is(err, peers.ErrNotPaired) {
+		return nil, status.Error(codes.NotFound, err.Error())
+	}
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+	return &pb.ReconnectResponse{Kind: kind}, nil
 }
 
 func (s *Server) SetDeviceAddress(ctx context.Context, req *pb.SetDeviceAddressRequest) (*pb.Empty, error) {

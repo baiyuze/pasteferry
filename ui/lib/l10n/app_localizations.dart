@@ -2420,6 +2420,42 @@ abstract class AppLocalizations {
   /// **'{name}\n{error}\nUse Copy to clipboard to try again, here or in History.'**
   String notifyClipboardFailedBody(String name, String error);
 
+  /// No description provided for @reconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnect'**
+  String get reconnect;
+
+  /// No description provided for @reconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting…'**
+  String get reconnecting;
+
+  /// No description provided for @reconnectDirect.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected directly'**
+  String get reconnectDirect;
+
+  /// No description provided for @reconnectRelay.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t connect directly, still using the relay'**
+  String get reconnectRelay;
+
+  /// No description provided for @reconnectOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” is offline. Make sure PasteFerry is open on it.'**
+  String reconnectOffline(String name);
+
+  /// No description provided for @reconnectPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Still connecting, check back in a moment'**
+  String get reconnectPending;
+
   /// No description provided for @renameAction.
   ///
   /// In en, this message translates to:
