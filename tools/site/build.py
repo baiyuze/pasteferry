@@ -9,6 +9,7 @@
 改了文案、结构或技术方案后运行一次，把生成的文件一起提交。只用 Python 标准库。
 """
 
+import hashlib
 import html
 import importlib.util
 import json
@@ -2648,10 +2649,29 @@ def tour_page(code: str) -> str:
 """
 
 
+# 页面里引用的 assets/ 下的样式、脚本与图片
+ASSET_REF = re.compile(r'((?:src|href|data-src)=")([^"?#]*assets/[^"?#]+\.(?:css|js|png|svg|jpg|webp))(")')
+
+
+def versioned(path: Path, text: str) -> str:
+    """给页面引用的 assets/ 下的文件加上按内容算出的版本号（?v=…）。
+    官网在 Cloudflare 后面，静态文件按地址缓存 4 小时：样式或截图改了而地址不变，
+    访客会拿到新页面配旧样式（2.4.0 上线时就这样乱过一次）。"""
+    def repl(m: re.Match) -> str:
+        url = m.group(2)
+        file = DOCS / url.lstrip("/") if url.startswith("/") else path.parent / url
+        if not file.is_file():
+            return m.group(0)
+        digest = hashlib.sha256(file.read_bytes()).hexdigest()[:10]
+        return f"{m.group(1)}{url}?v={digest}{m.group(3)}"
+    return ASSET_REF.sub(repl, text)
+
+
 def write(path: Path, text: str) -> None:
     if path.suffix == ".html":
         text = text.replace('  <meta charset="utf-8">\n',
                             '  <meta charset="utf-8">\n' + GITHUB_PAGES_REDIRECT, 1)
+        text = versioned(path, text)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
     print("✓", path.relative_to(ROOT))
