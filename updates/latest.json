@@ -1,65 +1,116 @@
 {
   "schema": 1,
-  "latest": "2.4.0",
+  "latest": "2.4.1",
   "date": "2026-10-21",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.0/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.1/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.4.0/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.4.1/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 25160543,
-      "sha256": "5589586790e0cc409862c3d2fb633a4a582cb77cffd871aad897cba6e7beb9fc"
+      "size": 25390042,
+      "sha256": "9a135ee3a94b93023d0c865aafc40149e02bf057d6462f43b9dcc17341fcaa6e"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 27220358,
-      "sha256": "06e987d8471a8d6b453f68041177662dfb0343fdb001b86a5105e33cceffdfcf"
+      "size": 27451386,
+      "sha256": "ffa630f894e8f6e3ce2e8fe08ca6293cc759fcdda8f07678f61718b579957d8b"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 50440611,
-      "sha256": "bb8fbd4071ad94da83f5480e8cccc94a097f6db7804fa00bc704862521cfe831"
+      "size": 50902508,
+      "sha256": "ff97d01bc8f7f0f95e77ffcabce88d8e3b3b107b9c0b1b387de569aecf31b50e"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 22806274,
-      "sha256": "590fa259be2d021c752f5827b8328141dfb15a22ce8385594e06787424e52cee"
+      "size": 22943059,
+      "sha256": "b75ea56d0a0d8e9d3f6dc8c6ad86bad4500ea71dee7e7125e1df45f0644b656d"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 28636810,
-      "sha256": "7ddfedcf2bfd3c5f9016ca3d6fc24307155b251c83a31ea0190b09f0eeeec14d"
+      "size": 28864108,
+      "sha256": "47231e7fd176683a3a33a874d7932704ffce9518954682e1b68b131ecd9bc8a5"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 21901332,
-      "sha256": "0fff669ad55a6f6c7830a526cee8f90d833b3467f2bf67ceef4122fa673b3bb1"
+      "size": 22090026,
+      "sha256": "844a5a3094ff9f52803a12db43f9bbfa0d08cd5e53913aaf43f13f5a658dc85a"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 20346910,
-      "sha256": "7594cfd410b6457562a9908d2c18a9460f981389f5e32616645078645992df07"
+      "size": 20536398,
+      "sha256": "196220502b07b17acbe8ed6630e0040c3bce57ddec64db0b1907df9bdd61072a"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 26496162,
-      "sha256": "04e3c04e4dada1a5f7be540e4a807a57be6a17bd0ba271ec98139257fc07671f"
+      "size": 26722383,
+      "sha256": "8abcc17f7798325523c1baa77c055adf0bd07afb95486f2392f860d42b782f1f"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 24779705,
-      "sha256": "632cbbd37284084ad4648cc08a4e4c33c3a03706841d31c336eb954e6e7368c8"
+      "size": 25000327,
+      "sha256": "553a4e87f04f4615b72cbb99ff00b069fe88ff1cd49dfcfe83c7fe488331c460"
     }
   },
   "releases": [
+    {
+      "version": "2.4.1",
+      "date": "2026-10-21",
+      "notes": {
+        "en": {
+          "changes": [
+            "Search Chinese text by pinyin, in quick paste and in History: full pinyin (huiyi), initials (hy) or a mix (huiy) all find 会议. Polyphones match every reading."
+          ],
+          "fixes": [
+            "On a Mac, Allow… in quick paste now always puts PasteFerry back in the Accessibility list, even after you removed it there.",
+            "While you type a search in quick paste, the list keeps the previous results until the new ones arrive instead of flashing “No results”."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "中文可以按拼音搜索，快捷粘贴和复制记录里都行：全拼（huiyi）、首字母（hy）或混着打（huiy）都能找到「会议」，多音字的每个读音都算。"
+          ],
+          "fixes": [
+            "Mac 上，快捷粘贴里的「去授权」现在每次都会把隔空贴重新加进「辅助功能」列表，即使你之前在那里删掉过它。",
+            "在快捷粘贴里打字搜索时，新结果出来之前列表保留上一次的结果，不再闪一下「没有找到」。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "中国語をピンインで検索できるようになりました（クイックペーストと履歴）。全ピンイン（huiyi）、頭文字（hy）、混在（huiy）のいずれでも「会议」が見つかります。多音字はすべての読みで一致します。"
+          ],
+          "fixes": [
+            "Mac で、クイックペーストの「許可する…」がいつでも PasteFerry をアクセシビリティの一覧に戻すようになりました。一覧から削除した後でも使えます。",
+            "クイックペーストで検索を入力している間、新しい結果が出るまで前の結果を表示し続け、「見つかりません」が一瞬表示されなくなりました。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "中文可以按拼音搜尋，快速貼上和複製記錄裡都行：全拼（huiyi）、首字母（hy）或混著打（huiy）都能找到「會議」，多音字的每個讀音都算。"
+          ],
+          "fixes": [
+            "Mac 上，快速貼上裡的「去授權」現在每次都會把隔空貼重新加進「輔助使用」列表，即使你之前在那裡刪除過它。",
+            "在快速貼上裡打字搜尋時，新結果出來之前列表保留上一次的結果，不再閃一下「沒有找到」。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "中文可以按拼音搜尋，快速貼上和複製記錄裏都可以：全拼（huiyi）、首字母（hy）或混着打（huiy）都能找到「會議」，多音字的每個讀音都算。"
+          ],
+          "fixes": [
+            "Mac 上，快速貼上裏的「去授權」現在每次都會把隔空貼重新加入「輔助使用」列表，即使你之前在那裏刪除過它。",
+            "在快速貼上裏打字搜尋時，新結果出來之前列表保留上一次的結果，不再閃一下「沒有找到」。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.4.0",
       "date": "2026-10-21",
