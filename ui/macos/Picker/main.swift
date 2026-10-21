@@ -252,15 +252,15 @@ final class PickerController: NSObject, NSWindowDelegate {
         return status
     }
 
-    /// 第一次请求时系统弹窗并把快捷窗口加进「辅助功能」列表；之后再请求只能打开系统设置让用户自己开。
+    /// 每次都请系统把快捷窗口登记进「辅助功能」列表（带提示），不只第一次：用户可能在列表里删掉了它，
+    /// 或者签名换过，只打开系统设置的话列表里没有隔空贴可开。第一次由系统的提示带用户去设置；
+    /// 之后系统未必再弹提示，就直接打开设置的那一页。
     private func requestAccessibility() {
         let key = "accessibilityPrompted"
-        if !UserDefaults.standard.bool(forKey: key) {
-            UserDefaults.standard.set(true, forKey: key)
-            let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
-            _ = AXIsProcessTrustedWithOptions(options)
-            return
-        }
+        let first = !UserDefaults.standard.bool(forKey: key)
+        UserDefaults.standard.set(true, forKey: key)
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        if AXIsProcessTrustedWithOptions(options) || first { return }
         if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
             NSWorkspace.shared.open(url)
         }
