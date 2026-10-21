@@ -384,5 +384,10 @@
   "notifyFailedTitle": "接收失敗",
   "notifyFailedBody": "{name}\n{error}\n可從此通知或複製記錄重試。",
   "notifyClipboardFailedTitle": "已接收，但無法寫入剪貼簿",
-  "notifyClipboardFailedBody": "{name}\n{error}\n可從此通知或複製記錄重新放入剪貼簿。"
+  "notifyClipboardFailedBody": "{name}\n{error}\n可從此通知或複製記錄重新放入剪貼簿。",
+  "renameAction": "重新命名",
+  "renameFavoriteTitle": "重新命名收藏",
+  "renameFavoriteHint": "收藏和快速貼上裡顯示這個名稱，搜尋也找得到。留空則恢復顯示內容。",
+  "renamedToast": "已重新命名",
+  "aliasClearedToast": "已恢復顯示內容"
 }

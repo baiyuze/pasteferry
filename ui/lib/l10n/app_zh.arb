@@ -384,5 +384,10 @@
   "notifyFailedTitle": "接收失败",
   "notifyFailedBody": "{name}\n{error}\n可从此通知或复制记录重试。",
   "notifyClipboardFailedTitle": "已接收，但未能写入剪贴板",
-  "notifyClipboardFailedBody": "{name}\n{error}\n可从此通知或复制记录重新放入剪贴板。"
+  "notifyClipboardFailedBody": "{name}\n{error}\n可从此通知或复制记录重新放入剪贴板。",
+  "renameAction": "重命名",
+  "renameFavoriteTitle": "重命名收藏",
+  "renameFavoriteHint": "收藏和快捷粘贴里显示这个名字，搜索也能找到它。留空则恢复显示内容。",
+  "renamedToast": "已重命名",
+  "aliasClearedToast": "已恢复显示内容"
 }

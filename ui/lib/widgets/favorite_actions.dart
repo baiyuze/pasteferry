@@ -6,6 +6,7 @@ import '../app_state.dart';
 import '../gen/pasteferry/v1/daemon.pb.dart';
 import '../i18n.dart';
 import '../platform.dart';
+import '../records.dart';
 import 'common.dart';
 
 /// 要整份复制、超过这个大小时先确认。见 design/quick-paste-and-favorites.md 第 3.2 节。
@@ -65,4 +66,76 @@ Future<bool> _confirmLargeCopy(BuildContext context, ClipRecord r) async {
     ),
   );
   return ok == true;
+}
+
+/// 给收藏起别名（重命名）。清空后保存就恢复按内容显示的标题。
+Future<void> renameFavorite(BuildContext context, AppState state, ClipRecord r) async {
+  final l = context.l10n;
+  final alias = await showDialog<String>(
+    context: context,
+    builder: (_) => _RenameDialog(record: r),
+  );
+  if (alias == null || alias.trim() == r.alias) return;
+  try {
+    await state.setAlias(r.id, alias);
+    if (context.mounted) showToast(context, alias.trim().isEmpty ? l.aliasClearedToast : l.renamedToast);
+  } catch (e) {
+    if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+  }
+}
+
+class _RenameDialog extends StatefulWidget {
+  const _RenameDialog({required this.record});
+
+  final ClipRecord record;
+
+  @override
+  State<_RenameDialog> createState() => _RenameDialogState();
+}
+
+class _RenameDialogState extends State<_RenameDialog> {
+  late final _name = TextEditingController(text: widget.record.alias)
+    ..selection = TextSelection(baseOffset: 0, extentOffset: widget.record.alias.length);
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  void _save() => Navigator.pop(context, _name.text);
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return AlertDialog(
+      title: Text(l.renameFavoriteTitle),
+      content: SizedBox(
+        width: 360,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _name,
+              autofocus: true,
+              maxLength: 100,
+              decoration: InputDecoration(
+                // 没起过别名时，提示里是现在显示的标题
+                hintText: contentTitle(widget.record),
+                counterText: '',
+              ),
+              onSubmitted: (_) => _save(),
+            ),
+            const SizedBox(height: 8),
+            Text(l.renameFavoriteHint, style: Theme.of(context).textTheme.bodySmall),
+          ],
+        ),
+      ),
+      actions: [
+        OutlinedButton(onPressed: () => Navigator.pop(context), child: Text(l.cancel)),
+        FilledButton(onPressed: _save, child: Text(l.save)),
+      ],
+    );
+  }
 }

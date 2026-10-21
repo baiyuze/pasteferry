@@ -2419,6 +2419,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name}\n{error}\nUse Copy to clipboard to try again, here or in History.'**
   String notifyClipboardFailedBody(String name, String error);
+
+  /// No description provided for @renameAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get renameAction;
+
+  /// No description provided for @renameFavoriteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename favorite'**
+  String get renameFavoriteTitle;
+
+  /// No description provided for @renameFavoriteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown in Favorites and Quick paste, and you can search for it. Leave it empty to show the content again.'**
+  String get renameFavoriteHint;
+
+  /// No description provided for @renamedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Renamed'**
+  String get renamedToast;
+
+  /// No description provided for @aliasClearedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing the content again'**
+  String get aliasClearedToast;
 }
 
 class _AppLocalizationsDelegate

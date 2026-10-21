@@ -1330,4 +1330,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\nこの通知または履歴からクリップボードに入れて再試行できます。';
   }
+
+  @override
+  String get renameAction => '名前を変更';
+
+  @override
+  String get renameFavoriteTitle => 'お気に入りの名前を変更';
+
+  @override
+  String get renameFavoriteHint =>
+      'お気に入りとクイックペーストにこの名前が表示され、検索でも見つかります。空欄にすると内容の表示に戻ります。';
+
+  @override
+  String get renamedToast => '名前を変更しました';
+
+  @override
+  String get aliasClearedToast => '内容の表示に戻しました';
 }

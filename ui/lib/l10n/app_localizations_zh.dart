@@ -1314,6 +1314,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\n可从此通知或复制记录重新放入剪贴板。';
   }
+
+  @override
+  String get renameAction => '重命名';
+
+  @override
+  String get renameFavoriteTitle => '重命名收藏';
+
+  @override
+  String get renameFavoriteHint => '收藏和快捷粘贴里显示这个名字，搜索也能找到它。留空则恢复显示内容。';
+
+  @override
+  String get renamedToast => '已重命名';
+
+  @override
+  String get aliasClearedToast => '已恢复显示内容';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -2626,6 +2641,21 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\n可從此通知或複製記錄重新放入剪貼簿。';
   }
+
+  @override
+  String get renameAction => '重新命名';
+
+  @override
+  String get renameFavoriteTitle => '重新命名收藏';
+
+  @override
+  String get renameFavoriteHint => '收藏和快速貼上裡顯示這個名稱，搜尋也找得到。留空則恢復顯示內容。';
+
+  @override
+  String get renamedToast => '已重新命名';
+
+  @override
+  String get aliasClearedToast => '已恢復顯示內容';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -3938,4 +3968,19 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\n可從此通知或複製記錄重新放入剪貼簿。';
   }
+
+  @override
+  String get renameAction => '重新命名';
+
+  @override
+  String get renameFavoriteTitle => '重新命名收藏';
+
+  @override
+  String get renameFavoriteHint => '收藏和快速貼上裡顯示這個名稱，搜尋也找得到。留空則恢復顯示內容。';
+
+  @override
+  String get renamedToast => '已重新命名';
+
+  @override
+  String get aliasClearedToast => '已恢復顯示內容';
 }

@@ -941,6 +941,7 @@ func recordProto(clip store.Clip) *pb.ClipRecord {
 	if clip.Favorite {
 		r.ExpiresAtUnix = 0 // 收藏不会过期
 		r.FavoritedAtUnix = clip.FavoritedAt.Unix()
+		r.Alias = clip.Alias // 取消收藏后别名还留在库里，只是不再显示
 	}
 	return r
 }

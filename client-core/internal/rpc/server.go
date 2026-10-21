@@ -52,7 +52,9 @@ type Deps struct {
 	SearchHistory func(query string, limit int, f store.Filter) ([]store.Clip, error)
 	// SetFavorite 收藏或取消收藏，ClipDetail 是悬停提示框的完整内容，见 sync/favorite.go
 	SetFavorite func(ctx context.Context, clipID string, favorite bool) (store.Clip, error)
-	ClipDetail  func(clipID string) (*pb.ClipDetail, error)
+	// SetAlias 给收藏起别名，见 sync.Engine.SetAlias
+	SetAlias   func(clipID, alias string) (store.Clip, error)
+	ClipDetail func(clipID string) (*pb.ClipDetail, error)
 	// 诊断报告要读的日志文件（轮转出去的旧文件在前）与崩溃日志
 	LogFiles func() (logs []string, crash string)
 	// VerboseLog 临时打开详细日志，d 不大于 0 时关闭；VerboseUntil 是打开到什么时候
@@ -329,6 +331,17 @@ func (s *Server) SetFavorite(ctx context.Context, req *pb.SetFavoriteRequest) (*
 	if errors.Is(err, store.ErrNotFound) {
 		return nil, status.Error(codes.NotFound, "找不到这条记录")
 	}
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+	return clipToProto(clip), nil
+}
+
+func (s *Server) SetAlias(_ context.Context, req *pb.SetAliasRequest) (*pb.ClipRecord, error) {
+	if s.deps.SetAlias == nil {
+		return nil, status.Error(codes.Unimplemented, "请更新后台服务后再重命名")
+	}
+	clip, err := s.deps.SetAlias(req.GetClipId(), req.GetAlias())
 	if err != nil {
 		return nil, status.Error(codes.FailedPrecondition, err.Error())
 	}

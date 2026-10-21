@@ -205,6 +205,7 @@ const ClipRecord$json = {
       '10': 'favoritedAtUnix'
     },
     {'1': 'is_link', '3': 17, '4': 1, '5': 8, '10': 'isLink'},
+    {'1': 'alias', '3': 18, '4': 1, '5': 9, '10': 'alias'},
   ],
 };
 
@@ -221,7 +222,7 @@ final $typed_data.Uint8List clipRecordDescriptor = $convert.base64Decode(
     'IAEoCVIFZXJyb3ISHwoLaW1hZ2VfY291bnQYDSABKAVSCmltYWdlQ291bnQSGgoIZmF2b3JpdG'
     'UYDiABKAhSCGZhdm9yaXRlEhwKCWZhdm9yaXRlZBgPIAEoCFIJZmF2b3JpdGVkEioKEWZhdm9y'
     'aXRlZF9hdF91bml4GBAgASgDUg9mYXZvcml0ZWRBdFVuaXgSFwoHaXNfbGluaxgRIAEoCFIGaX'
-    'NMaW5r');
+    'NMaW5rEhQKBWFsaWFzGBIgASgJUgVhbGlhcw==');
 
 @$core.Deprecated('Use subscribeRequestDescriptor instead')
 const SubscribeRequest$json = {
@@ -566,6 +567,20 @@ const SetFavoriteRequest$json = {
 final $typed_data.Uint8List setFavoriteRequestDescriptor = $convert.base64Decode(
     'ChJTZXRGYXZvcml0ZVJlcXVlc3QSFwoHY2xpcF9pZBgBIAEoCVIGY2xpcElkEhoKCGZhdm9yaX'
     'RlGAIgASgIUghmYXZvcml0ZQ==');
+
+@$core.Deprecated('Use setAliasRequestDescriptor instead')
+const SetAliasRequest$json = {
+  '1': 'SetAliasRequest',
+  '2': [
+    {'1': 'clip_id', '3': 1, '4': 1, '5': 9, '10': 'clipId'},
+    {'1': 'alias', '3': 2, '4': 1, '5': 9, '10': 'alias'},
+  ],
+};
+
+/// Descriptor for `SetAliasRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setAliasRequestDescriptor = $convert.base64Decode(
+    'Cg9TZXRBbGlhc1JlcXVlc3QSFwoHY2xpcF9pZBgBIAEoCVIGY2xpcElkEhQKBWFsaWFzGAIgAS'
+    'gJUgVhbGlhcw==');
 
 @$core.Deprecated('Use getClipDetailRequestDescriptor instead')
 const GetClipDetailRequest$json = {

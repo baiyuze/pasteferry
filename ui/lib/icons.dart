@@ -24,6 +24,7 @@ abstract final class AppIcons {
   static IconData get search => _pick(CupertinoIcons.search, FluentIcons.search_24_regular);
   static IconData get arrowDownCircle =>
       _pick(CupertinoIcons.arrow_down_circle, FluentIcons.arrow_circle_down_24_regular);
+  static IconData get pencil => _pick(CupertinoIcons.pencil, FluentIcons.edit_24_regular);
   static IconData get arrowClockwise =>
       _pick(CupertinoIcons.arrow_clockwise, FluentIcons.arrow_clockwise_24_regular);
   // 搜索框里的清除按钮：实心圆里一个叉，与系统的搜索框一致

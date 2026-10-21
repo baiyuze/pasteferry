@@ -384,5 +384,10 @@
   "notifyFailedTitle": "受信できませんでした",
   "notifyFailedBody": "{name}\n{error}\nこの通知または履歴から再試行できます。",
   "notifyClipboardFailedTitle": "受信済みですがクリップボードを更新できませんでした",
-  "notifyClipboardFailedBody": "{name}\n{error}\nこの通知または履歴からクリップボードに入れて再試行できます。"
+  "notifyClipboardFailedBody": "{name}\n{error}\nこの通知または履歴からクリップボードに入れて再試行できます。",
+  "renameAction": "名前を変更",
+  "renameFavoriteTitle": "お気に入りの名前を変更",
+  "renameFavoriteHint": "お気に入りとクイックペーストにこの名前が表示され、検索でも見つかります。空欄にすると内容の表示に戻ります。",
+  "renamedToast": "名前を変更しました",
+  "aliasClearedToast": "内容の表示に戻しました"
 }

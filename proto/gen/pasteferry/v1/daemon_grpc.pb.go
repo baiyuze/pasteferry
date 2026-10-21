@@ -54,6 +54,7 @@ const (
 	DaemonService_InstallUpdate_FullMethodName                 = "/pasteferry.v1.DaemonService/InstallUpdate"
 	DaemonService_SetFavorite_FullMethodName                   = "/pasteferry.v1.DaemonService/SetFavorite"
 	DaemonService_GetClipDetail_FullMethodName                 = "/pasteferry.v1.DaemonService/GetClipDetail"
+	DaemonService_SetAlias_FullMethodName                      = "/pasteferry.v1.DaemonService/SetAlias"
 	DaemonService_QuickPasteSession_FullMethodName             = "/pasteferry.v1.DaemonService/QuickPasteSession"
 	DaemonService_GetQuickPasteStatus_FullMethodName           = "/pasteferry.v1.DaemonService/GetQuickPasteStatus"
 	DaemonService_SendQuickPasteCommand_FullMethodName         = "/pasteferry.v1.DaemonService/SendQuickPasteCommand"
@@ -117,6 +118,8 @@ type DaemonServiceClient interface {
 	SetFavorite(ctx context.Context, in *SetFavoriteRequest, opts ...grpc.CallOption) (*ClipRecord, error)
 	// 悬停提示框要显示的完整内容。ClipRecord 的 text_preview 最多 120 个字、换行被压平，不够用
 	GetClipDetail(ctx context.Context, in *GetClipDetailRequest, opts ...grpc.CallOption) (*ClipDetail, error)
+	// 给收藏起个别名，列表里显示别名、搜索也认它。alias 为空表示去掉别名
+	SetAlias(ctx context.Context, in *SetAliasRequest, opts ...grpc.CallOption) (*ClipRecord, error)
 	// 快捷粘贴窗口进程启动后一直保持这个调用：往上报自己的状态，往下收设置页发来的命令。
 	// 调用断开就当作快捷窗口没在运行
 	QuickPasteSession(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[QuickPasteStatus, QuickPasteCommand], error)
@@ -461,6 +464,16 @@ func (c *daemonServiceClient) GetClipDetail(ctx context.Context, in *GetClipDeta
 	return out, nil
 }
 
+func (c *daemonServiceClient) SetAlias(ctx context.Context, in *SetAliasRequest, opts ...grpc.CallOption) (*ClipRecord, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClipRecord)
+	err := c.cc.Invoke(ctx, DaemonService_SetAlias_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *daemonServiceClient) QuickPasteSession(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[QuickPasteStatus, QuickPasteCommand], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &DaemonService_ServiceDesc.Streams[3], DaemonService_QuickPasteSession_FullMethodName, cOpts...)
@@ -552,6 +565,8 @@ type DaemonServiceServer interface {
 	SetFavorite(context.Context, *SetFavoriteRequest) (*ClipRecord, error)
 	// 悬停提示框要显示的完整内容。ClipRecord 的 text_preview 最多 120 个字、换行被压平，不够用
 	GetClipDetail(context.Context, *GetClipDetailRequest) (*ClipDetail, error)
+	// 给收藏起个别名，列表里显示别名、搜索也认它。alias 为空表示去掉别名
+	SetAlias(context.Context, *SetAliasRequest) (*ClipRecord, error)
 	// 快捷粘贴窗口进程启动后一直保持这个调用：往上报自己的状态，往下收设置页发来的命令。
 	// 调用断开就当作快捷窗口没在运行
 	QuickPasteSession(grpc.BidiStreamingServer[QuickPasteStatus, QuickPasteCommand]) error
@@ -658,6 +673,9 @@ func (UnimplementedDaemonServiceServer) SetFavorite(context.Context, *SetFavorit
 }
 func (UnimplementedDaemonServiceServer) GetClipDetail(context.Context, *GetClipDetailRequest) (*ClipDetail, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetClipDetail not implemented")
+}
+func (UnimplementedDaemonServiceServer) SetAlias(context.Context, *SetAliasRequest) (*ClipRecord, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetAlias not implemented")
 }
 func (UnimplementedDaemonServiceServer) QuickPasteSession(grpc.BidiStreamingServer[QuickPasteStatus, QuickPasteCommand]) error {
 	return status.Error(codes.Unimplemented, "method QuickPasteSession not implemented")
@@ -1208,6 +1226,24 @@ func _DaemonService_GetClipDetail_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_SetAlias_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAliasRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SetAlias(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SetAlias_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SetAlias(ctx, req.(*SetAliasRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DaemonService_QuickPasteSession_Handler(srv interface{}, stream grpc.ServerStream) error {
 	return srv.(DaemonServiceServer).QuickPasteSession(&grpc.GenericServerStream[QuickPasteStatus, QuickPasteCommand]{ServerStream: stream})
 }
@@ -1365,6 +1401,10 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetClipDetail",
 			Handler:    _DaemonService_GetClipDetail_Handler,
+		},
+		{
+			MethodName: "SetAlias",
+			Handler:    _DaemonService_SetAlias_Handler,
 		},
 		{
 			MethodName: "GetQuickPasteStatus",

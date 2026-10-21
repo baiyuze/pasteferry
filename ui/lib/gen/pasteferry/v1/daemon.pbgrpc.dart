@@ -275,6 +275,14 @@ class DaemonServiceClient extends $grpc.Client {
     return $createUnaryCall(_$getClipDetail, request, options: options);
   }
 
+  /// 给收藏起个别名，列表里显示别名、搜索也认它。alias 为空表示去掉别名
+  $grpc.ResponseFuture<$0.ClipRecord> setAlias(
+    $0.SetAliasRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setAlias, request, options: options);
+  }
+
   /// 快捷粘贴窗口进程启动后一直保持这个调用：往上报自己的状态，往下收设置页发来的命令。
   /// 调用断开就当作快捷窗口没在运行
   $grpc.ResponseStream<$0.QuickPasteCommand> quickPasteSession(
@@ -444,6 +452,11 @@ class DaemonServiceClient extends $grpc.Client {
           '/pasteferry.v1.DaemonService/GetClipDetail',
           ($0.GetClipDetailRequest value) => value.writeToBuffer(),
           $0.ClipDetail.fromBuffer);
+  static final _$setAlias =
+      $grpc.ClientMethod<$0.SetAliasRequest, $0.ClipRecord>(
+          '/pasteferry.v1.DaemonService/SetAlias',
+          ($0.SetAliasRequest value) => value.writeToBuffer(),
+          $0.ClipRecord.fromBuffer);
   static final _$quickPasteSession =
       $grpc.ClientMethod<$0.QuickPasteStatus, $0.QuickPasteCommand>(
           '/pasteferry.v1.DaemonService/QuickPasteSession',
@@ -696,6 +709,13 @@ abstract class DaemonServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.GetClipDetailRequest.fromBuffer(value),
         ($0.ClipDetail value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SetAliasRequest, $0.ClipRecord>(
+        'SetAlias',
+        setAlias_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.SetAliasRequest.fromBuffer(value),
+        ($0.ClipRecord value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.QuickPasteStatus, $0.QuickPasteCommand>(
         'QuickPasteSession',
         quickPasteSession,
@@ -959,6 +979,14 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.ClipDetail> getClipDetail(
       $grpc.ServiceCall call, $0.GetClipDetailRequest request);
+
+  $async.Future<$0.ClipRecord> setAlias_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SetAliasRequest> $request) async {
+    return setAlias($call, await $request);
+  }
+
+  $async.Future<$0.ClipRecord> setAlias(
+      $grpc.ServiceCall call, $0.SetAliasRequest request);
 
   $async.Stream<$0.QuickPasteCommand> quickPasteSession(
       $grpc.ServiceCall call, $async.Stream<$0.QuickPasteStatus> request);

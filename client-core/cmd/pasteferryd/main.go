@@ -436,6 +436,7 @@ func run(dataDir string) error {
 		ApplyToClipboard:         engine.ApplyToClipboardAs,
 		SearchHistory:            engine.SearchHistory,
 		SetFavorite:              engine.SetFavorite,
+		SetAlias:                 engine.SetAlias,
 		ClipDetail:               engine.ClipDetail,
 		ImagePreview:             engine.ImagePreview,
 		CacheBytesUsed:           blobs.Size,

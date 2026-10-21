@@ -901,5 +901,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "renameAction": "Rename",
+  "renameFavoriteTitle": "Rename favorite",
+  "renameFavoriteHint": "Shown in Favorites and Quick paste, and you can search for it. Leave it empty to show the content again.",
+  "renamedToast": "Renamed",
+  "aliasClearedToast": "Showing the content again"
 }

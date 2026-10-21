@@ -246,6 +246,18 @@ class _FavoriteRowState extends State<_FavoriteRow> {
       tooltip: l.unfavoriteAction,
       onTap: () => toggleFavorite(context, AppScope.read(context), r),
     );
+    // 重命名：悬停时才显示，和「放进剪贴板」一样不占眼
+    final rename = Visibility(
+      visible: _hovered,
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      child: IconAction(
+        icon: AppIcons.pencil,
+        tooltip: l.renameAction,
+        onTap: () => renameFavorite(context, AppScope.read(context), r),
+      ),
+    );
     switch (r.status) {
       case ClipStatus.CLIP_STATUS_FETCHING:
         return Row(
@@ -253,6 +265,7 @@ class _FavoriteRowState extends State<_FavoriteRow> {
           children: [
             const SizedBox(width: 72, child: LinearProgressIndicator(minHeight: 3)),
             const SizedBox(width: Insets.sm),
+            rename,
             unfavorite,
           ],
         );
@@ -266,6 +279,7 @@ class _FavoriteRowState extends State<_FavoriteRow> {
               child: Text(l.retry),
             ),
             const SizedBox(width: Insets.xs),
+            rename,
             unfavorite,
           ],
         );
@@ -283,6 +297,7 @@ class _FavoriteRowState extends State<_FavoriteRow> {
                 child: Text(l.putOnClipboard),
               ),
             ),
+            rename,
             unfavorite,
           ],
         );

@@ -1452,4 +1452,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\nUse Copy to clipboard to try again, here or in History.';
   }
+
+  @override
+  String get renameAction => 'Rename';
+
+  @override
+  String get renameFavoriteTitle => 'Rename favorite';
+
+  @override
+  String get renameFavoriteHint =>
+      'Shown in Favorites and Quick paste, and you can search for it. Leave it empty to show the content again.';
+
+  @override
+  String get renamedToast => 'Renamed';
+
+  @override
+  String get aliasClearedToast => 'Showing the content again';
 }

@@ -16,7 +16,7 @@ const pinyinScan = 2000
 // 每条文字只看开头这么多个字有没有拼音匹配，超长的文字不拖慢搜索
 const pinyinText = 5000
 
-// SearchHistory 搜索复制记录：文字内容或文件名包含 query 的，不分大小写，按时间倒序，最多 limit 条。
+// SearchHistory 搜索复制记录：文字内容、文件名或收藏的别名包含 query 的，不分大小写，按时间倒序，最多 limit 条。
 //
 // 数据库只能粗筛（见 store.SearchClips），这里按用户看得到的文字再核对一遍：
 // HTML 记录看纯文本，不看标签。匹配处不在预览片段里的文字记录，预览换成匹配处前后的一段，
@@ -38,6 +38,10 @@ func (e *Engine) SearchHistory(query string, limit int, f store.Filter) ([]store
 	}
 	out := candidates[:0]
 	for _, c := range candidates {
+		if c.Favorite && indexFold(c.Alias, q) >= 0 {
+			out = append(out, c)
+			continue
+		}
 		if c.Kind != store.KindImage && slices.ContainsFunc(c.Items, func(it store.Item) bool {
 			return indexFold(it.Name, q) >= 0
 		}) {
@@ -96,6 +100,10 @@ func (e *Engine) searchPinyin(py string, f store.Filter, found []store.Clip) ([]
 		}
 		for _, c := range page {
 			if seen[c.ID] {
+				continue
+			}
+			if c.Favorite && pinyin.Index(c.Alias, py) >= 0 {
+				out = append(out, c)
 				continue
 			}
 			if c.Kind != store.KindImage && slices.ContainsFunc(c.Items, func(it store.Item) bool {

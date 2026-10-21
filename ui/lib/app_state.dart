@@ -713,6 +713,15 @@ class AppState extends ChangeNotifier implements RecordDetails {
     return r;
   }
 
+  /// 给收藏起别名，[alias] 为空表示去掉。
+  Future<ClipRecord> setAlias(String clipId, String alias) async {
+    final r = await _client.setAlias(SetAliasRequest(clipId: clipId, alias: alias));
+    _upsert(r);
+    _favoriteSearch.patch(r);
+    notifyListeners();
+    return r;
+  }
+
   /// 悬停提示框要显示的完整内容。
   @override
   Future<ClipDetail> clipDetail(String clipId) async {
@@ -906,6 +915,7 @@ class _RecordSearch {
 /// 只在后台服务不支持搜索时用；正常情况下由后台服务按全文搜索。
 bool matchesSearch(ClipRecord r, String query) {
   final q = query.toLowerCase();
+  if (r.favorite && r.alias.toLowerCase().contains(q)) return true;
   if (r.kind != ClipKind.CLIP_KIND_IMAGE &&
       r.items.any((i) => i.name.toLowerCase().contains(q))) {
     return true;

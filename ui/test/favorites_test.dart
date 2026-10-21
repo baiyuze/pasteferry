@@ -1,5 +1,6 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:pasteferry_ui/app_state.dart';
@@ -39,6 +40,16 @@ class _FavState extends AppState {
     }
     debugEvent(Event(clipAdded: back));
     return back;
+  }
+
+  final aliasCalls = <(String, String)>[];
+
+  @override
+  Future<ClipRecord> setAlias(String clipId, String alias) async {
+    aliasCalls.add((clipId, alias));
+    final r = favorites.firstWhere((r) => r.id == clipId).deepCopy()..alias = alias.trim();
+    debugEvent(Event(clipUpdated: r));
+    return r;
   }
 
   @override
@@ -159,6 +170,43 @@ void main() {
     await tester.tap(find.text('撤销'));
     await tester.pump();
     expect(state.calls.last, ('fav-of-text', true));
+  });
+
+  testWidgets('收藏可以重命名：列表显示别名，内容挪到第二行；留空恢复', (tester) async {
+    final fav = _image.deepCopy()
+      ..id = 'fav-of-image'
+      ..favorite = true
+      ..favoritedAtUnix = _now;
+    final state = _seed(favorites: [fav]);
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    await tester.pump();
+    await tester.tap(find.text('收藏').first);
+    await tester.pumpAndSettle();
+
+    final mouse = await _hover(tester, find.textContaining('来自 Windows PC'));
+    await tester.tap(find.byTooltip('重命名'));
+    await tester.pumpAndSettle();
+    expect(find.text('重命名收藏'), findsOneWidget);
+    await tester.enterText(find.descendant(of: find.byType(AlertDialog), matching: find.byType(TextField)), '  报销单截图 ');
+    await tester.tap(find.text('保存'));
+    await tester.pumpAndSettle();
+    expect(state.aliasCalls.single, ('fav-of-image', '  报销单截图 '));
+    expect(find.text('报销单截图'), findsOneWidget);
+    expect(find.textContaining('图片 · 来自 Windows PC'), findsOneWidget);
+    expect(find.text('已重命名'), findsOneWidget);
+
+    // 清空就恢复按内容显示
+    await mouse.moveTo(tester.getCenter(find.text('报销单截图')));
+    await tester.pump();
+    await tester.tap(find.byTooltip('重命名'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.descendant(of: find.byType(AlertDialog), matching: find.byType(TextField)), '');
+    await tester.tap(find.text('保存'));
+    await tester.pumpAndSettle();
+    expect(state.aliasCalls.last, ('fav-of-image', ''));
+    expect(find.text('报销单截图'), findsNothing);
+    expect(find.textContaining('图片 · '), findsNothing);
+    expect(find.text('已恢复显示内容'), findsOneWidget);
   });
 
   testWidgets('鼠标停一会儿显示完整内容，移开就消失', (tester) async {
