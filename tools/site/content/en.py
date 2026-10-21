@@ -299,7 +299,6 @@ C = {
        'out. Allowances and availability may change; check the app.'])],
 
     "closing": "Two computers, one clipboard.",
-    "source": "View the source on GitHub",
     "footer_license": "PasteFerry is open source under the GNU AGPL-3.0.",
     "footer_label": "Footer",
     "footer_links": [

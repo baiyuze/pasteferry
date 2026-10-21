@@ -16,6 +16,14 @@ COPY = {
     "nav_security": ("安全与隐私", "安全與隱私", "安全與私隱", "Security", "セキュリティ"),
     "nav_changelog": ("更新记录", "更新記錄", "更新記錄", "Changelog", "更新履歴"),
     "nav_more_label": ("更多页面", "更多頁面", "更多頁面", "More pages", "その他のページ"),
+    # 顶栏与结尾的 GitHub Star 按钮。按钮上的 Star 是 GitHub 的用词，各语言都不翻译
+    "gh_aria": ("在 GitHub 上给隔空贴点 Star", "在 GitHub 上給隔空貼點 Star", "在 GitHub 上給隔空貼按 Star",
+                "Star PasteFerry on GitHub", "GitHub で PasteFerry にスターを付ける"),
+    "star_ask": ("觉得好用？去 GitHub 点个 Star，让更多人看到它。", "覺得好用？到 GitHub 點個 Star，讓更多人看到它。",
+                 "覺得好用？到 GitHub 按個 Star，讓更多人看到它。",
+                 "Find it useful? Star it on GitHub so more people discover it.",
+                 "気に入ったら GitHub でスターを。もっと多くの人に届きます。"),
+    "star_button": ("在 GitHub 上点 Star", "在 GitHub 上點 Star", "在 GitHub 上按 Star", "Star on GitHub", "GitHub でスター"),
 
     # ── 首页 ──
     "badge": ("2.4 新功能：按 {key} 快捷粘贴 →", "2.4 新功能：按 {key} 快速貼上 →", "2.4 新功能：按 {key} 快速貼上 →",

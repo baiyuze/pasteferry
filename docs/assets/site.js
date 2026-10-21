@@ -200,6 +200,34 @@
     reveals.forEach(function (el) { el.classList.add("in"); });
   }
 
+  // GitHub Star 按钮上的星数：向 GitHub 取一次，在本地存一小时（GitHub 对不登录的访问每小时限 60 次）。
+  // 取不到时只显示 Star，不影响链接
+  var stars = document.querySelectorAll("[data-gh-stars]");
+  if (stars.length && window.fetch) {
+    var show = function (n) {
+      var text = n >= 1000 ? (n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, "") + "k" : String(n);
+      stars.forEach(function (a) {
+        var box = a.querySelector(".gh-count");
+        box.querySelector("b").textContent = text;
+        box.hidden = false;
+      });
+    };
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem("pasteferry-stars") || "null"); } catch (e) {}
+    if (cached && Date.now() - cached.at < 3600 * 1000) {
+      show(cached.n);
+    } else {
+      fetch("https://api.github.com/repos/baiyuze/pasteferry", { headers: { Accept: "application/vnd.github+json" } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) {
+          if (!d || typeof d.stargazers_count !== "number") return;
+          show(d.stargazers_count);
+          try { localStorage.setItem("pasteferry-stars", JSON.stringify({ n: d.stargazers_count, at: Date.now() })); } catch (e) {}
+        })
+        .catch(function () {});
+    }
+  }
+
   // 选过语言，以后打开首页就直接是这种语言，不再按浏览器语言跳转
   document.querySelectorAll("a[data-lang]").forEach(function (link) {
     link.addEventListener("click", function () {

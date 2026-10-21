@@ -2858,3 +2858,113 @@ kbd {
     transition: none;
   }
 }
+
+/* ── GitHub 的 Star 按钮：顶栏一个，首页与功能页结尾一个大的。星数由 site.js 填 ── */
+
+.bar nav .gh {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 1.9rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.bar nav .gh:hover {
+  border-color: var(--ink-2);
+  color: var(--ink);
+}
+
+.gh svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+.gh-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding-left: 0.45rem;
+  border-left: 1px solid var(--rule-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.gh-count[hidden] {
+  display: none;
+}
+
+.gh .gh-star {
+  width: 0.8rem;
+  height: 0.8rem;
+  color: #e3b341;
+}
+
+.gh-count b {
+  font-weight: 600;
+}
+
+/* 窄屏只留标志和星数；手机上收进「更多」菜单 */
+@media (max-width: 46rem) {
+  .bar nav .gh .gh-label {
+    display: none;
+  }
+}
+
+@media (max-width: 30rem) {
+  .bar nav .gh {
+    display: none;
+  }
+}
+
+.menu .narrow-gh {
+  display: none;
+}
+
+@media (max-width: 30rem) {
+  .menu .narrow-gh {
+    display: block;
+  }
+}
+
+/* 结尾：一句话加一个大按钮 */
+.star-ask {
+  margin-top: 3rem;
+}
+
+.star-ask p {
+  margin: 0 0 1rem;
+  color: var(--dim);
+  font-size: 1rem;
+}
+
+.gh.big {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.9rem;
+  padding: 0 1.3rem;
+  border: 1.5px solid var(--rule-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.gh.big:hover {
+  border-color: var(--ink-2);
+  text-decoration: none;
+}
+
+.gh.big svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.gh.big .gh-star {
+  width: 0.95rem;
+  height: 0.95rem;
+}
