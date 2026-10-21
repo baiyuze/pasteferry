@@ -13,7 +13,7 @@ OUT=$(mktemp -d)
 trap 'rm -rf "$OUT"' EXIT
 ARCH=$(docker version --format '{{.Server.Arch}}')
 
-echo "▶ 编译 natlab（linux/$ARCH）"
+echo "▶ 编译 natlab（linux/${ARCH}）"
 (cd client-core && CGO_ENABLED=0 GOOS=linux GOARCH=$ARCH go build -o "$OUT/natlab" ./cmd/natlab)
 
 echo "▶ 准备实验室镜像"

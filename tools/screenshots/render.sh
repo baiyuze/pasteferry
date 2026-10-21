@@ -20,11 +20,11 @@ for lang in zh zh-tw zh-hk en ja; do
   out=docs/assets/screenshots
   [ "$lang" = zh ] || out="$out/$lang"
 
-  echo "▶ 渲染界面（$lang）"
+  echo "▶ 渲染界面（${lang}）"
   rm -rf ui/tool/screenshots/out
   (cd ui && SCREENSHOT_FONTS="$FONTS" SCREENSHOT_LANG="$lang" flutter test tool/screenshots/screenshots_test.dart 2>&1 | tail -1)
 
-  echo "▶ 加窗口外框（$lang）"
+  echo "▶ 加窗口外框（${lang}）"
   mkdir -p "$out"
   swift tools/screenshots/frame.swift ui/tool/screenshots/out "$out"
 done

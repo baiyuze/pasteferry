@@ -323,5 +323,5 @@ check_lan "两个网段，两台都挡入站，一边记得" routed offline "-ad
 check_lan "两个网段之间被隔离" isolated offline "-addr $B" "-addr $A"
 
 echo
-echo "通过 $PASS，失败 $FAIL"
+echo "通过 ${PASS}，失败 $FAIL"
 [[ $FAIL -eq 0 ]]

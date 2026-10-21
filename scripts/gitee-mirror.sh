@@ -51,7 +51,7 @@ trap 'rm -f "$ASKPASS"' EXIT
 printf '#!/bin/sh\ncase "$1" in Username*) echo %s ;; *) security find-generic-password -s pasteferry-gitee-token -w ;; esac\n' "$OWNER" >"$ASKPASS"
 chmod 700 "$ASKPASS"
 # 推的是本地记录的 origin/main（先 git fetch），而不是本地 main，免得带上还没推到 GitHub 的提交
-git merge-base --is-ancestor "$TAG" refs/remotes/origin/main || { echo "origin/main 里没有 $TAG，先 git fetch" >&2; exit 1; }
+git merge-base --is-ancestor "$TAG" refs/remotes/origin/main || { echo "origin/main 里没有 ${TAG}，先 git fetch" >&2; exit 1; }
 GIT_ASKPASS=$ASKPASS GIT_TERMINAL_PROMPT=0 git push -q "https://gitee.com/$OWNER/$REPO.git" \
     refs/remotes/origin/main:refs/heads/main 'refs/tags/*:refs/tags/*'
 

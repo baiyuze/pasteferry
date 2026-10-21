@@ -20,7 +20,7 @@ LABEL="com.pasteferry.daemon"
 PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 LOG_DIR="$HOME/Library/Logs/PasteFerry"
 
-[[ -d "$APP_SRC" ]] || { echo "找不到 $APP_SRC，请先运行 ./scripts/build.sh"; exit 1; }
+[[ -d "$APP_SRC" ]] || { echo "找不到 ${APP_SRC}，请先运行 ./scripts/build.sh"; exit 1; }
 
 echo "▶ 停止已在运行的实例"
 launchctl bootout "gui/$(id -u)/$LABEL" 2>/dev/null || true

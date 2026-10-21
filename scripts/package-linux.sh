@@ -31,7 +31,7 @@ OUT=dist/linux
 APP=$OUT/PasteFerry
 rm -rf "$OUT" && mkdir -p "$APP"
 
-echo "▶ 后台服务与命令行（$VERSION，$ARCH）"
+echo "▶ 后台服务与命令行（${VERSION}，${ARCH}）"
 # 纯 Go，不依赖 glibc 版本：剪贴板经 X11 协议直接通信，不链接 libX11
 (cd client-core && CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=$VERSION" \
     -o "../$APP/pasteferryd" ./cmd/pasteferryd)
