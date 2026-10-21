@@ -60,6 +60,81 @@ func TestSearchHistory(t *testing.T) {
 	}
 }
 
+func TestSearchHistoryByPinyin(t *testing.T) {
+	e := newBacklogEngine(t, &fakePeers{})
+	now := time.Now().Truncate(time.Second)
+	long := strings.Repeat("前面的内容很长，", 30) + "快递单号 7712 3456 0098"
+	clips := []store.Clip{
+		{ID: "meeting", Kind: store.KindText, TextContent: "会议链接：https://meeting.example.com/j/8823"},
+		{ID: "long", Kind: store.KindText, TextContent: long, TextPreview: preview(long)},
+		{ID: "file", Kind: store.KindFile, Items: []store.Item{{Name: "合同扫描件.pdf"}}},
+		// 原文里就有 hy（why），按原文也能找到
+		{ID: "english", Kind: store.KindText, TextContent: "why not"},
+		{ID: "fav", Kind: store.KindText, TextContent: "周报模板：本周完成", Favorite: true},
+	}
+	for i, c := range clips {
+		c.Status = store.StatusReady
+		c.CreatedAt = now.Add(time.Duration(i) * time.Minute)
+		c.ExpiresAt = c.CreatedAt.Add(time.Hour)
+		if c.TextPreview == "" {
+			c.TextPreview = preview(c.TextContent)
+		}
+		if c.Favorite {
+			c.FavoritedAt = c.CreatedAt
+			c.ExpiresAt = store.FavoriteExpiry
+		}
+		if err := e.store.PutClip(c); err != nil {
+			t.Fatal(err)
+		}
+	}
+	ids := func(query string, f store.Filter) []string {
+		got, err := e.SearchHistory(query, 50, f)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var out []string
+		for _, c := range got {
+			out = append(out, c.ID)
+		}
+		return out
+	}
+	same := func(a, b []string) bool { return strings.Join(a, ",") == strings.Join(b, ",") }
+
+	for _, q := range []string{"huiyi", "hy", "Hui Yi", "hui'yi", "huiylj"} {
+		got := ids(q, store.Filter{})
+		if q == "hy" {
+			// 按原文找到的 why 和按拼音找到的会议，合在一起按时间倒序
+			if !same(got, []string{"english", "meeting"}) {
+				t.Errorf("%q：%v", q, got)
+			}
+			continue
+		}
+		if !same(got, []string{"meeting"}) {
+			t.Errorf("%q：%v", q, got)
+		}
+	}
+	if got := ids("hetong", store.Filter{}); !same(got, []string{"file"}) {
+		t.Errorf("文件名也按拼音找：%v", got)
+	}
+	got, err := e.SearchHistory("kuaididanhao", 50, store.Filter{})
+	if err != nil || len(got) != 1 || got[0].ID != "long" {
+		t.Fatalf("长文本后半段的拼音匹配：%v %v", got, err)
+	}
+	if p := got[0].TextPreview; !strings.HasPrefix(p, "…") || !strings.Contains(p, "快递单号") {
+		t.Errorf("预览没有换到匹配处：%q", p)
+	}
+	if got := ids("zbmb", store.Filter{Favorites: true}); !same(got, []string{"fav"}) {
+		t.Errorf("收藏里也按拼音找：%v", got)
+	}
+	if got := ids("zbmb", store.Filter{}); len(got) != 0 {
+		t.Errorf("复制记录里不该搜到收藏：%v", got)
+	}
+	// 一个字母不按拼音找，免得什么都匹配
+	if got := ids("y", store.Filter{}); len(got) != 1 || got[0] != "english" {
+		t.Errorf("一个字母只按原文找：%v", got)
+	}
+}
+
 func TestIndexFold(t *testing.T) {
 	q := []rune("straße")
 	if i := indexFold("Die STRAßE ist lang", q); i != 4 {
