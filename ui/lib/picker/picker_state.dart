@@ -67,6 +67,9 @@ class PickerState extends ChangeNotifier implements RecordDetails {
   int _selected = 0;
   bool _byPointer = false;
   List<ClipRecord>? _results;
+  // 上一个搜索词的结果：新的结果回来之前，在已加载的记录里又找不到时接着显示它。
+  // 按拼音搜（huiyi 找「会议」）只有后台服务做得到，不然每打一个字母列表都会闪一下「没有找到」
+  List<ClipRecord>? _previous;
   Timer? _searchTimer;
   int _searchSeq = 0;
   String? _error;
@@ -105,8 +108,10 @@ class PickerState extends ChangeNotifier implements RecordDetails {
     final f = _tab.filter;
     final base = f == null ? _favorites : _records.where(f.matches).toList();
     if (_query.trim().isEmpty) return base;
+    if (_results != null) return _results!;
     // 后台服务的结果回来之前，先在已加载的里面找，打字时列表立刻有反应
-    return _results ?? base.where((r) => matchesSearch(r, _query.trim())).toList();
+    final local = base.where((r) => matchesSearch(r, _query.trim())).toList();
+    return local.isEmpty && _previous != null ? _previous! : local;
   }
 
   // ─────────────────────────── 启动与连接 ───────────────────────────
@@ -330,6 +335,7 @@ class PickerState extends ChangeNotifier implements RecordDetails {
     _selected = 0;
     _byPointer = false;
     _results = null;
+    _previous = null;
     _searchTimer?.cancel();
     _searchSeq++;
     _error = null;
@@ -350,6 +356,7 @@ class PickerState extends ChangeNotifier implements RecordDetails {
     _selected = 0;
     _byPointer = false;
     _results = null;
+    _previous = null;
     _scheduleSearch(Duration.zero);
     notifyListeners();
   }
@@ -363,6 +370,7 @@ class PickerState extends ChangeNotifier implements RecordDetails {
     _query = q;
     _selected = 0;
     _byPointer = false;
+    _previous = q.trim().isEmpty ? null : _results ?? _previous;
     _results = null;
     _error = null;
     _scheduleSearch(const Duration(milliseconds: 150));

@@ -26,6 +26,9 @@ class _TestPicker extends PickerState {
   final favorited = <(String, bool)>[];
   final searches = <(String, PickerTab)>[];
 
+  /// 后台服务对这些搜索词给出的结果（比如按拼音找到的）；不在这里的当作不支持搜索的旧版后台服务
+  final answers = <String, List<ClipRecord>>{};
+
   @override
   Future<void> requestApply(String id, bool plain) async => applied.add((id, plain));
 
@@ -38,7 +41,8 @@ class _TestPicker extends PickerState {
   @override
   Future<ListHistoryResponse> requestSearch(String query, PickerTab tab) async {
     searches.add((query, tab));
-    return ListHistoryResponse(searched: false);
+    final found = answers[query];
+    return found == null ? ListHistoryResponse(searched: false) : ListHistoryResponse(records: found, searched: true);
   }
 
   @override
@@ -249,6 +253,29 @@ void main() {
     await tester.tap(find.text('去授权'));
     await tester.pump();
     expect(calls.map((c) => c.method), contains('requestPermission'));
+  });
+
+  testWidgets('按拼音搜：只有后台服务找得到，结果回来之前列表接着显示上一次的结果，不闪「没有找到」', (tester) async {
+    final s = await open(tester);
+    s.answers['huiyi'] = [_records[0]];
+    s.answers['huiyix'] = [];
+    await tester.enterText(find.byType(TextField), 'huiyi');
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.pump();
+    expect(s.visible.map((r) => r.id), ['a']);
+    expect(find.textContaining('会议改到周四'), findsOneWidget);
+
+    // 多打一个字母：本地找不到，后台服务还没回话，列表不变
+    await tester.enterText(find.byType(TextField), 'huiyix');
+    await tester.pump();
+    expect(s.visible.map((r) => r.id), ['a']);
+    expect(find.textContaining('没有找到'), findsNothing);
+
+    // 后台服务说没有，这才显示「没有找到」
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.pump();
+    expect(s.visible, isEmpty);
+    expect(find.textContaining('没有找到'), findsOneWidget);
   });
 
   group('滚动', () {
