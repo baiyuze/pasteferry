@@ -1,6 +1,6 @@
 module github.com/baiyuze/pasteferry/client-core
 
-go 1.26.9
+go 1.26.10
 
 require modernc.org/sqlite v1.59.0
 

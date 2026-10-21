@@ -1,6 +1,6 @@
 module github.com/baiyuze/pasteferry/server
 
-go 1.26.9
+go 1.26.10
 
 replace github.com/baiyuze/pasteferry/proto => ../proto
 
