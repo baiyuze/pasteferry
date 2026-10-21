@@ -1,65 +1,116 @@
 {
   "schema": 1,
-  "latest": "2.4.1",
-  "date": "2026-10-21",
+  "latest": "2.4.2",
+  "date": "2026-10-22",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.1/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.2/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.4.1/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.4.2/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 25390042,
-      "sha256": "9a135ee3a94b93023d0c865aafc40149e02bf057d6462f43b9dcc17341fcaa6e"
+      "size": 25405097,
+      "sha256": "85f543f57f8b1316a7a562547c571463df0a741996764db129279c2bf2659e19"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 27451386,
-      "sha256": "ffa630f894e8f6e3ce2e8fe08ca6293cc759fcdda8f07678f61718b579957d8b"
+      "size": 27473494,
+      "sha256": "8547077052b625f2818ada8dab3417682331c7604b0d85ad5d8d2a477d80b29e"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 50902508,
-      "sha256": "ff97d01bc8f7f0f95e77ffcabce88d8e3b3b107b9c0b1b387de569aecf31b50e"
+      "size": 50934948,
+      "sha256": "3056b47f7a71fd7aacc20335be69bda3649565df947aa0286405f0e9204589aa"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 22943059,
-      "sha256": "b75ea56d0a0d8e9d3f6dc8c6ad86bad4500ea71dee7e7125e1df45f0644b656d"
+      "size": 22956157,
+      "sha256": "0f74812c13f8086f75f37c59964c9ebe91cb251b7f51c3f0adf5a6856c171836"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 28864108,
-      "sha256": "47231e7fd176683a3a33a874d7932704ffce9518954682e1b68b131ecd9bc8a5"
+      "size": 28882364,
+      "sha256": "d73998ca8d116ac8dfec77e734277499132a3085ad683be61290e00a69c695a7"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22090026,
-      "sha256": "844a5a3094ff9f52803a12db43f9bbfa0d08cd5e53913aaf43f13f5a658dc85a"
+      "size": 22117102,
+      "sha256": "0ad108d6353b23dbf6489965f2d76aef95bf356a3ee03e3fa00364e8a191fe50"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 20536398,
-      "sha256": "196220502b07b17acbe8ed6630e0040c3bce57ddec64db0b1907df9bdd61072a"
+      "size": 20558938,
+      "sha256": "7ac14d82f087c5d7c628a80753b48ced10b798c6d7bc0b42a5d6982161ce99ed"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 26722383,
-      "sha256": "8abcc17f7798325523c1baa77c055adf0bd07afb95486f2392f860d42b782f1f"
+      "size": 26739574,
+      "sha256": "dc4e654565838c09326279c877949aee5418e79deea0daf3a5990feab3023be7"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25000327,
-      "sha256": "553a4e87f04f4615b72cbb99ff00b069fe88ff1cd49dfcfe83c7fe488331c460"
+      "size": 25017955,
+      "sha256": "531c8d4f9f91b06f5e0db2d6097d670e639d0c2acd397933cac552749271fec0"
     }
   },
   "releases": [
+    {
+      "version": "2.4.2",
+      "date": "2026-10-22",
+      "notes": {
+        "en": {
+          "changes": [
+            "A paired device on a relay or offline now has Reconnect in its menu. It tries a direct connection right away instead of waiting for the next automatic retry, and stays on the relay without dropping the connection if a direct one still isn't possible. Devices that are already connected directly don't show it.",
+            "Favorites can be renamed: hover over a favorite and click the pencil to give it a name, such as “Expense receipt” for a screenshot. Favorites and quick paste show the name, and search finds it, by pinyin too. Clear the name to show the content again."
+          ],
+          "fixes": [
+            "Clicking a favorited image in Favorites said “This image has been deleted from the history” instead of showing it. It opens the preview now."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "设备菜单里新增「重新连接」：经中转或离线的设备，点一下马上再试一次直连，不用等下一次自动重试；仍然打不通就继续经中转，连接不断。已经直连的设备不显示这一项。",
+            "收藏可以重命名：鼠标停在收藏上，点铅笔给它起个名字，比如把一张截图叫「报销单」。收藏页和快捷粘贴里显示这个名字，搜索也能找到它，拼音也行。清空名字就恢复显示内容。"
+          ],
+          "fixes": [
+            "在收藏页点收藏的图片，会提示「这条图片记录已被删除」，看不到图片。现在能正常打开预览。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "デバイスのメニューに「再接続」を追加しました。中継経由やオフラインのデバイスで選ぶと、次の自動再試行を待たずにすぐ直接接続を試します。つながらない場合は接続を切らずに中継のまま使い続けます。直接接続済みのデバイスには表示されません。",
+            "お気に入りの名前を変更できるようになりました。お気に入りにポインタを置いて鉛筆をクリックすると、スクリーンショットに「経費の領収書」のような名前を付けられます。お気に入りとクイックペーストに名前が表示され、検索（ピンインも可）でも見つかります。名前を消すと内容の表示に戻ります。"
+          ],
+          "fixes": [
+            "お気に入りで画像をクリックすると、画像の代わりに「この画像は履歴から削除されました」と表示されていました。現在はプレビューが開きます。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "裝置選單新增「重新連線」：經中繼或離線的裝置，點一下馬上再試一次直連，不用等下一次自動重試；仍然打不通就繼續經中繼，連線不中斷。已經直連的裝置不顯示這一項。",
+            "收藏可以重新命名：滑鼠停在收藏上，點鉛筆幫它取個名稱，例如把一張截圖叫「報帳單」。收藏頁和快速貼上裡顯示這個名稱，搜尋也找得到，拼音也可以。清除名稱就恢復顯示內容。"
+          ],
+          "fixes": [
+            "在收藏頁點收藏的圖片，會提示「這筆圖片記錄已被刪除」，看不到圖片。現在能正常開啟預覽。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "裝置選單新增「重新連線」：經中轉或離線的裝置，按一下馬上再試一次直連，不用等下一次自動重試；仍然打不通就繼續經中轉，連線不中斷。已經直連的裝置不顯示這一項。",
+            "收藏可以重新命名：滑鼠停在收藏上，按鉛筆為它改個名稱，例如把一張截圖叫「報銷單」。收藏頁和快速貼上裏顯示這個名稱，搜尋也找得到，拼音也可以。清除名稱就恢復顯示內容。"
+          ],
+          "fixes": [
+            "在收藏頁按收藏的圖片，會提示「這條圖片記錄已被刪除」，看不到圖片。現在能正常開啟預覽。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.4.1",
       "date": "2026-10-21",
