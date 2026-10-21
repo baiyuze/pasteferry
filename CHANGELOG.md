@@ -1,5 +1,30 @@
 # 更新记录 / Changelog
 
+## 2.4.1 — 2026-10-21
+
+Search Chinese text by pinyin, plus two quick paste fixes.
+
+### Changes
+
+- **Pinyin search**: search Chinese text by pinyin, in quick paste and in
+  History: full pinyin (huiyi), initials (hy) or a mix (huiy) all find 会议.
+  Polyphones match every reading.
+
+### Fixes
+
+- On a Mac, Allow… in quick paste now always puts PasteFerry back in the
+  Accessibility list, even after you removed it there.
+- While you type a search in quick paste, the list keeps the previous results
+  until the new ones arrive instead of flashing “No results”.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended. Pinyin search runs in the
+  background service of each computer, so update the computers where you
+  search. Mac permissions granted to 2.4.0 are kept.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged.
+
 ## 2.4.0 — 2026-10-21
 
 Quick paste: press ⌥V or Alt+V in any app to pick from your history and

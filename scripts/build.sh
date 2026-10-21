@@ -17,7 +17,7 @@ cd "$(dirname "$0")/.."
 source scripts/sign.sh
 
 DIST=dist
-VERSION=${VERSION:-2.4.0}
+VERSION=${VERSION:-2.4.1}
 APP_BUILD=${APP_BUILD:-$(git rev-parse --short=8 HEAD)}
 rm -rf "$DIST" && mkdir -p "$DIST"
 

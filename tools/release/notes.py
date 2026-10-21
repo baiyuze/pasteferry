@@ -12,6 +12,29 @@ MAX_RELEASES = 10
 
 RELEASES = [
     {
+        "version": "2.4.1",
+        "date": "2026-10-21",
+        "changes": [
+            ("Search Chinese text by pinyin, in quick paste and in History: full pinyin (huiyi), initials (hy) or a mix (huiy) all find 会议. Polyphones match every reading.",
+             "中文可以按拼音搜索，快捷粘贴和复制记录里都行：全拼（huiyi）、首字母（hy）或混着打（huiy）都能找到「会议」，多音字的每个读音都算。",
+             "中国語をピンインで検索できるようになりました（クイックペーストと履歴）。全ピンイン（huiyi）、頭文字（hy）、混在（huiy）のいずれでも「会议」が見つかります。多音字はすべての読みで一致します。",
+             "中文可以按拼音搜尋，快速貼上和複製記錄裡都行：全拼（huiyi）、首字母（hy）或混著打（huiy）都能找到「會議」，多音字的每個讀音都算。",
+             "中文可以按拼音搜尋，快速貼上和複製記錄裏都可以：全拼（huiyi）、首字母（hy）或混着打（huiy）都能找到「會議」，多音字的每個讀音都算。"),
+        ],
+        "fixes": [
+            ("On a Mac, Allow… in quick paste now always puts PasteFerry back in the Accessibility list, even after you removed it there.",
+             "Mac 上，快捷粘贴里的「去授权」现在每次都会把隔空贴重新加进「辅助功能」列表，即使你之前在那里删掉过它。",
+             "Mac で、クイックペーストの「許可する…」がいつでも PasteFerry をアクセシビリティの一覧に戻すようになりました。一覧から削除した後でも使えます。",
+             "Mac 上，快速貼上裡的「去授權」現在每次都會把隔空貼重新加進「輔助使用」列表，即使你之前在那裡刪除過它。",
+             "Mac 上，快速貼上裏的「去授權」現在每次都會把隔空貼重新加入「輔助使用」列表，即使你之前在那裏刪除過它。"),
+            ("While you type a search in quick paste, the list keeps the previous results until the new ones arrive instead of flashing “No results”.",
+             "在快捷粘贴里打字搜索时，新结果出来之前列表保留上一次的结果，不再闪一下「没有找到」。",
+             "クイックペーストで検索を入力している間、新しい結果が出るまで前の結果を表示し続け、「見つかりません」が一瞬表示されなくなりました。",
+             "在快速貼上裡打字搜尋時，新結果出來之前列表保留上一次的結果，不再閃一下「沒有找到」。",
+             "在快速貼上裏打字搜尋時，新結果出來之前列表保留上一次的結果，不再閃一下「沒有找到」。"),
+        ],
+    },
+    {
         "version": "2.4.0",
         "date": "2026-10-21",
         "changes": [
