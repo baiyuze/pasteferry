@@ -1,5 +1,36 @@
 # 更新记录 / Changelog
 
+## 2.4.2 — 2026-10-22
+
+Reconnect a device from its menu and give your favorites names, plus a fix
+for previewing favorited images.
+
+### Changes
+
+- **Reconnect**: a paired device on a relay or offline now has Reconnect in
+  its menu. It tries a direct connection right away instead of waiting for
+  the next automatic retry, and stays on the relay without dropping the
+  connection if a direct one still isn't possible. Devices that are already
+  connected directly don't show it.
+- **Rename favorites**: hover over a favorite and click the pencil to give it
+  a name, such as “Expense receipt” for a screenshot. Favorites and quick
+  paste show the name, and search finds it, by pinyin too. Clear the name to
+  show the content again.
+
+### Fixes
+
+- Clicking a favorited image in Favorites said “This image has been deleted
+  from the history” instead of showing it. It opens the preview now.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended. Reconnect is quickest when
+  both devices run 2.4.2: when the other device is older, a reconnect started
+  from this side may wait for that device's own retry.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged; 2.4.2 adds an optional
+  reconnect request that older versions ignore.
+
 ## 2.4.1 — 2026-10-21
 
 Search Chinese text by pinyin, plus two quick paste fixes.

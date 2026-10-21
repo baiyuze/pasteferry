@@ -12,6 +12,29 @@ MAX_RELEASES = 10
 
 RELEASES = [
     {
+        "version": "2.4.2",
+        "date": "2026-10-22",
+        "changes": [
+            ("A paired device on a relay or offline now has Reconnect in its menu. It tries a direct connection right away instead of waiting for the next automatic retry, and stays on the relay without dropping the connection if a direct one still isn't possible. Devices that are already connected directly don't show it.",
+             "设备菜单里新增「重新连接」：经中转或离线的设备，点一下马上再试一次直连，不用等下一次自动重试；仍然打不通就继续经中转，连接不断。已经直连的设备不显示这一项。",
+             "デバイスのメニューに「再接続」を追加しました。中継経由やオフラインのデバイスで選ぶと、次の自動再試行を待たずにすぐ直接接続を試します。つながらない場合は接続を切らずに中継のまま使い続けます。直接接続済みのデバイスには表示されません。",
+             "裝置選單新增「重新連線」：經中繼或離線的裝置，點一下馬上再試一次直連，不用等下一次自動重試；仍然打不通就繼續經中繼，連線不中斷。已經直連的裝置不顯示這一項。",
+             "裝置選單新增「重新連線」：經中轉或離線的裝置，按一下馬上再試一次直連，不用等下一次自動重試；仍然打不通就繼續經中轉，連線不中斷。已經直連的裝置不顯示這一項。"),
+            ("Favorites can be renamed: hover over a favorite and click the pencil to give it a name, such as “Expense receipt” for a screenshot. Favorites and quick paste show the name, and search finds it, by pinyin too. Clear the name to show the content again.",
+             "收藏可以重命名：鼠标停在收藏上，点铅笔给它起个名字，比如把一张截图叫「报销单」。收藏页和快捷粘贴里显示这个名字，搜索也能找到它，拼音也行。清空名字就恢复显示内容。",
+             "お気に入りの名前を変更できるようになりました。お気に入りにポインタを置いて鉛筆をクリックすると、スクリーンショットに「経費の領収書」のような名前を付けられます。お気に入りとクイックペーストに名前が表示され、検索（ピンインも可）でも見つかります。名前を消すと内容の表示に戻ります。",
+             "收藏可以重新命名：滑鼠停在收藏上，點鉛筆幫它取個名稱，例如把一張截圖叫「報帳單」。收藏頁和快速貼上裡顯示這個名稱，搜尋也找得到，拼音也可以。清除名稱就恢復顯示內容。",
+             "收藏可以重新命名：滑鼠停在收藏上，按鉛筆為它改個名稱，例如把一張截圖叫「報銷單」。收藏頁和快速貼上裏顯示這個名稱，搜尋也找得到，拼音也可以。清除名稱就恢復顯示內容。"),
+        ],
+        "fixes": [
+            ("Clicking a favorited image in Favorites said “This image has been deleted from the history” instead of showing it. It opens the preview now.",
+             "在收藏页点收藏的图片，会提示「这条图片记录已被删除」，看不到图片。现在能正常打开预览。",
+             "お気に入りで画像をクリックすると、画像の代わりに「この画像は履歴から削除されました」と表示されていました。現在はプレビューが開きます。",
+             "在收藏頁點收藏的圖片，會提示「這筆圖片記錄已被刪除」，看不到圖片。現在能正常開啟預覽。",
+             "在收藏頁按收藏的圖片，會提示「這條圖片記錄已被刪除」，看不到圖片。現在能正常開啟預覽。"),
+        ],
+    },
+    {
         "version": "2.4.1",
         "date": "2026-10-21",
         "changes": [
