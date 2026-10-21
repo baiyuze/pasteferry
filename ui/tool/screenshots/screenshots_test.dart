@@ -136,15 +136,16 @@ ClipRecord _favorite(ClipRecord r, Duration ago) => r
   ..favorite = true
   ..favoritedAtUnix = _ago(ago);
 
-/// 收藏页的演示数据：常用的文字、链接、文件。收藏页按收藏时间从新到旧排
+/// 收藏页的演示数据：常用的文字、链接、文件。收藏页按收藏时间从新到旧排。
+/// 例子里不用编出来的公司名、真实的地址
 List<ClipRecord> _favorites() => <ClipRecord>[
       _favorite(
           _clip('f1', ClipKind.CLIP_KIND_TEXT,
-              preview: _t('发票抬头：上海隔空科技有限公司　税号 91310104MA1K000000',
-                  'Billing: Ferry Labs Ltd · VAT GB 123 4567 89',
-                  '請求先：株式会社フェリーラボ　登録番号 T1234567890123',
-                  tw: '發票抬頭：隔空科技股份有限公司　統一編號 12345678',
-                  hk: '發票抬頭：隔空科技有限公司　商業登記號碼 12345678'),
+              preview: _t('周报模板：本周完成 / 下周计划 / 需要协助',
+                  'Weekly report: done this week / next week / blockers',
+                  '週報テンプレート：今週の成果／来週の予定／相談事項',
+                  tw: '週報範本：本週完成 / 下週計畫 / 需要協助',
+                  hk: '週報範本：本週完成 / 下週計劃 / 需要協助'),
               outgoing: true, size: 72, ago: const Duration(days: 12)),
           const Duration(days: 12)),
       _favorite(
@@ -627,9 +628,8 @@ List<ClipRecord> _pickerRecords() => [
       _clip('p6', ClipKind.CLIP_KIND_FILE, status: ClipStatus.CLIP_STATUS_REMOTE_ONLY,
           size: 812 * _mb, ago: const Duration(hours: 20),
           items: [ClipItem(name: 'PasteFerry.dmg', size: Int64(812 * _mb))]),
-      _pick('p7', _t('收货地址：上海市徐汇区漕溪北路 88 号 5 楼', 'Ship to: 221B Baker Street, London NW1 6XE',
-          'お届け先：東京都渋谷区神南 1-2-3 5F',
-          tw: '收件地址：台北市信義區松仁路 88 號 5 樓', hk: '送貨地址：九龍尖沙咀廣東道 88 號 5 樓'),
+      _pick('p7', _t('快递单号：7712 3456 0098', 'Tracking number: 7712 3456 0098', '追跡番号：7712 3456 0098',
+          tw: '物流單號：7712 3456 0098', hk: '速遞單號：7712 3456 0098'),
           const Duration(hours: 22), favorited: true),
       _pick('p8', "SELECT id, status FROM orders WHERE created_at > now() - interval '1 day'", const Duration(hours: 23)),
       _pick('p9', 'pnpm install', const Duration(hours: 26)),
