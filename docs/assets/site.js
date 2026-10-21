@@ -201,10 +201,11 @@
   }
 
   // GitHub Star 按钮上的星数：向 GitHub 取一次，在本地存一小时（GitHub 对不登录的访问每小时限 60 次）。
-  // 取不到时只显示 Star，不影响链接
+  // 取不到、或者还不到两位数时只显示 Star，不影响链接
   var stars = document.querySelectorAll("[data-gh-stars]");
   if (stars.length && window.fetch) {
     var show = function (n) {
+      if (n < 10) return;
       var text = n >= 1000 ? (n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, "") + "k" : String(n);
       stars.forEach(function (a) {
         var box = a.querySelector(".gh-count");
