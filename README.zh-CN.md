@@ -5,14 +5,16 @@
 <h1 align="center">隔空贴 PasteFerry</h1>
 
 <p align="center">
-  在这台电脑复制，到那台电脑粘贴。Mac、Windows、Linux 互通。<br>
-  文本、图片、文件、整个文件夹都可以，不限账号，不限是否在同一个网络。
+  在这台电脑复制，到那台电脑粘贴；按一下 <kbd>⌥V</kbd>，复制过的随叫随到。<br>
+  Mac、Windows、Linux 互通，不限账号；不在同一个网络，也能打洞直连。
 </p>
 
 <p align="center">
   <a href="https://pasteferry.cc/download/"><strong>下载</strong></a>
   ·
   <a href="https://pasteferry.cc/">项目主页</a>
+  ·
+  <a href="https://pasteferry.cc/features/">功能演示</a>
   ·
   <a href="https://gitee.com/baiyuze/pasteferry/releases">国内镜像（Gitee）</a>
   ·
@@ -28,14 +30,16 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/screenshots/history.png" alt="隔空贴的复制记录界面：来自其他 Mac 的文件、图片和文字">
+  <img src="docs/assets/screenshots/card-picker-dark.png" width="640" alt="快捷粘贴窗口：搜索框、全部/文本/链接/图片/文件/收藏六个页签，下面是带序号的复制记录">
 </p>
+
+<p align="center">如果隔空贴帮到了你，欢迎点一个 ⭐ Star，让更多人看到它。</p>
 
 ## 它解决什么问题
 
-通用剪贴板要同一个 Apple ID、两台离得近；隔空投送每次都要点接收，也不管剪贴板；发给自己要手动下载，文件还留在别人的服务器上。一台 Mac、一台 Windows 时，系统自带的办法一个都用不了。
+通用剪贴板要同一个 Apple ID、两台离得近；隔空投送每次都要点接收；发给自己要手动下载，文件还留在别人的服务器上。一台 Mac 一台 Windows 时，系统自带的办法一个都用不了。
 
-隔空贴的做法是：两台电脑配对一次，之后在一台上复制，另一台上直接粘贴。Mac 与 Mac、Mac 与 Windows、Windows 与 Windows 都可以。同一个网络里装好就能用，不需要服务器；跨网络时，在两台电脑的「设置」中开启「使用官方服务」即可，无需自建或填写地址。优先打洞直连，失败后自动加密中转，服务器无法解密内容。自建服务器与 Tailscale 继续可用。
+隔空贴的做法：两台电脑配对一次，之后在一台上复制，另一台直接粘贴。复制过的内容都在复制记录里，按 <kbd>⌥V</kbd>（Windows、Linux 上是 <kbd>Alt</kbd>+<kbd>V</kbd>）就能找出来贴进正在用的 App。
 
 | | 隔空贴 | 通用剪贴板 | 隔空投送 | 聊天软件 |
 |---|:-:|:-:|:-:|:-:|
@@ -44,29 +48,64 @@
 | 复制后直接粘贴，不用点接收 | ✓ | ✓ | — | — |
 | Mac 与 Windows 之间 | ✓ | — | — | ✓ |
 | 文件与整个文件夹 | ✓ | 不稳定 | ✓ | 打包后可以 |
-| 复制历史，可以找回之前的内容 | ✓ | — | — | 翻聊天记录 |
+| 复制历史，随时找回 | ✓ | — | — | 翻聊天记录 |
 | 仅自己的设备可解密内容 | ✓ | ✓ | ✓ | — |
 
 ## 功能
 
-- **文本、带格式的文本、图片、文件、文件夹**都能同步。复制什么，对面粘贴出来就是什么。
-- **按大小分流**：50 MB 以内（可调）复制时直接推送；更大的文件只同步一条记录，需要时再拉取。
-- **复制记录**：所有设备上最近 3 天（可调）复制过的内容，图片可以预览。
-- **同一网络里不需要服务器**：自动发现，输入配对码就能用；不在同一网段时多输一个地址。
-- **直连优先，自动中转**，公司双线这类多出口网络也能直连。
-- **配对时核对安全指纹**，防止服务器或网络上的第三方冒充你的设备。
-- **后台常驻**，开机自启，崩溃自动恢复。简体中文、繁体中文、英文、日文界面。
+### 在这台复制，到那台粘贴
+
+- **文本、带格式的文本、图片、文件、整个文件夹**都能同步，复制什么，对面粘贴出来就是什么。
+- **按大小分流**：50 MB 以内（可调）复制时就传好；更大的只同步一条记录，需要时点一下再取。
+- **对方离线也不丢**：这期间复制的，连上后补进对方的复制记录。
+
+### 快捷粘贴（2.4 新增）
+
+- 在任何 App 里按 <kbd>⌥V</kbd>（Windows、Linux 上是 <kbd>Alt</kbd>+<kbd>V</kbd>），复制记录出现在屏幕中间。
+- 打几个字搜索，**中文可以打拼音**：`huiyi` 或 `hy` 都能找到「会议」。
+- 按 <kbd>1</kbd>–<kbd>9</kbd> 或回车，选中的内容直接粘贴到刚才的光标处；<kbd>⇧</kbd><kbd>↩</kbd> 粘贴纯文本，<kbd>⌘</kbd><kbd>↩</kbd> 只复制。快捷键可以在设置里更换或关闭。
+
+### 复制记录与收藏
+
+- **复制记录**：所有设备最近 3 天（可调）复制过的内容，可以按文本、链接、图片、文件筛选。鼠标停一下就能看到全文、大图或完整的文件列表。
+- **收藏**：常用的内容点一下星标另存一份，不会过期，清空复制记录也还在。
 
 <table>
   <tr>
-    <td><img src="docs/assets/screenshots/devices.png" alt="设备页：已配对的设备、直连或中转状态"></td>
-    <td><img src="docs/assets/screenshots/verify.png" alt="配对时核对两台设备上显示的安全指纹"></td>
+    <td><img src="docs/assets/screenshots/hover-dark.png" alt="复制记录：鼠标停在一条会议记录上，提示框显示全文"></td>
+    <td><img src="docs/assets/screenshots/favorites-dark.png" alt="收藏页：周报模板、常用回复、下载链接等收藏"></td>
   </tr>
 </table>
 
+### 其他
+
+- 后台常驻，开机自启，崩溃自动恢复；App 里检查更新，确认后自动安装。
+- 简体中文、繁体中文（台湾、香港）、英文、日文界面。
+
+## 核心：打洞直连
+
+隔空贴的一切都建立在「两台电脑直接连起来」上：内容在两台电脑之间直接传，不经过谁的服务器。
+
+```mermaid
+flowchart LR
+    A["电脑 A<br>在这里复制"] -- 信令：交换连接信息 --> S[("官方服务<br>或自建服务器")]
+    B["电脑 B<br>在这里粘贴"] -- 信令 --> S
+    A <== "打洞直连 · DTLS 端到端加密" ==> B
+    A -. "打不通时：加密中转" .-> S
+```
+
+- **同一网络里不需要服务器**：靠 mDNS 互相发现，输入配对码就能直连。
+- **跨网络时服务器只牵线**：官方服务或自建服务器帮两台电脑交换连接信息，然后它们打洞直连（WebRTC，基于 [pion](https://github.com/pion/webrtc)）。
+- **多出口网络也能直连**：公司双线这类网络按目标地址选出口。隔空贴在同一个 UDP 端口上同时询问多台 STUN 服务器，拿到每个出口的地址一并告诉对端；还会安排好哪一边先发包，避开会占住端口的路由器。实测公司 4 个出口与家里宽带之间可以直连。
+- **打不通才中转**：中转转发的是端到端加密的数据包，服务器解不开；空闲时会再试打洞，成功后切回直连。
+- **配对时核对安全指纹**：两块屏幕显示同样的两行指纹，之后的每条消息都带签名，服务器无法冒充你的设备。
+- **每次提交都在实验室里验证**：[NAT 打洞实验室](tools/natlab) 用 Linux 网络命名空间和 iptables 模拟家用路由器、多出口网络、端口随机分配的 NAT 等 16 种场景，用隔空贴真实的连接代码各跑一遍。
+
+细节见[工作原理](https://pasteferry.cc/how/)与技术方案：[多出口网络的 NAT 打洞](design/nat-traversal.md)、[局域网直连](design/lan-mode.md)。
+
 ## 开始使用
 
-第一次用？跟着**[快速开始](https://pasteferry.cc/start/)**一步步来，有截图。需要**每台电脑装一个 App**；同一个网络里这就够了，跨网络时开启官方服务，也可自建服务器或使用 Tailscale。
+第一次用？跟着 **[快速开始](https://pasteferry.cc/start/)** 一步步来，有截图。
 
 **1. 在每台电脑上安装 App**，到 **[下载页](https://pasteferry.cc/download/)** 选：
 
@@ -74,53 +113,43 @@
 - **Windows** 10/11：[安装程序](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-Setup.exe)或[便携版](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-windows-x64.zip)。
 - **Linux**（X11，或带 XWayland 的 Wayland 桌面）：Ubuntu、Debian 用 `.deb`（[x64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-amd64.deb)、[ARM64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-arm64.deb)），其他发行版用 `tar.gz`（[x64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-amd64.tar.gz)、[ARM64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-arm64.tar.gz)），解压后运行 `./PasteFerry/install.sh` 加进应用菜单。
 
-还没有公证和代码签名：Mac 上第一次打开时到 **系统设置 → 隐私与安全性** 点 **仍要打开**；Windows 上点 **更多信息 → 仍要运行**。然后点 **启用后台同步**。Windows 防火墙询问、macOS 询问能否查找本地网络上的设备时，都选择允许。
+Mac 版还没有经过 Apple 公证，Windows 版还没有代码签名：Mac 上第一次打开时到 **系统设置 → 隐私与安全性** 点 **仍要打开**；Windows 上点 **更多信息 → 仍要运行**。然后点 **启用后台同步**。Windows 防火墙询问、macOS 询问能否查找本地网络上的设备时，都选择允许。想让快捷粘贴直接粘贴，Mac 上按 <kbd>⌥V</kbd> 后点底栏的 **去授权**，在「辅助功能」里打开隔空贴。
 
-**2. 配对。**一台点 **设备 → 添加设备 → 生成配对码**，另一台点 **输入配对码**；官方服务不需要填 IP；仅局域网跨网段或 Tailscale 配对时，展开地址栏输入对方地址。两边显示的两行安全指纹完全一致后再确认。之后在任意一台上复制，另一台就能直接粘贴。
+**2. 配对。**一台点 **设备 → 添加设备 → 生成配对码**，另一台点 **输入配对码**。两边显示的两行安全指纹完全一致后再确认。之后在任意一台上复制，另一台就能直接粘贴。
 
-**3. 跨网络时（可选）。**两台电脑均开启「使用官方服务」后再配对，已有配对关系可以继续使用。新安装默认关闭，由你主动开启。详见[官方服务教程](https://pasteferry.cc/official/)。其他连接方式仍然可用：
+**3. 跨网络时（可选）**，选一种连接方式：
 
 | 方式 | 适合 | 要准备 |
 |---|---|---|
-| **[官方服务](https://pasteferry.cc/official/)** | 跨网络，无需自建服务器 | 每台电脑开启一个开关；当前默认每机器额度组每日 100 MB 中转流量，上下行合计，直连不消耗此额度 |
-| **[同一网络](https://pasteferry.cc/lan/)** | 电脑都连着同一个路由器（家里或办公室） | 什么都不用 |
-| **[公网服务器](https://pasteferry.cc/cloud/)** | 电脑分散在不同网络里，想在哪儿都能同步 | 一台有公网 IP 的 Linux 云主机，最低配置就够 |
-| **[Tailscale](https://pasteferry.cc/tailscale/)** | 要跨网络，但没有公网服务器 | 每台电脑都装 [Tailscale](https://tailscale.com)，配对时输入对方的 Tailscale 地址 |
+| **[官方服务](https://pasteferry.cc/official/)** | 跨网络，不想自建服务器 | 每台电脑在「设置」里打开「使用官方服务」（默认关闭）。打不通直连时的中转当前默认每天 100 MB，直连不计 |
+| **[同一网络](https://pasteferry.cc/lan/)** | 电脑都连着同一个路由器 | 什么都不用 |
+| **[公网服务器](https://pasteferry.cc/cloud/)** | 想完全自己掌控 | 一台有公网 IP 的 Linux 云主机，最低配置就够 |
+| **[Tailscale](https://pasteferry.cc/tailscale/)** | 跨网络，但没有服务器 | 每台电脑都装 [Tailscale](https://tailscale.com)，配对时输入对方的 Tailscale 地址 |
 
-选择自建时的安装命令（可选）：
-
-```bash
-curl -LO https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-linux-amd64.tar.gz
-tar xzf pasteferry-server-linux-amd64.tar.gz && cd pasteferry-server-linux-amd64
-sudo ./install.sh <服务器公网IP>
-```
-
-放行 TCP 8787、UDP 3478 与 UDP 32768–60999，然后在每台电脑的 **设置 → 自定义服务器** 填入 `ws://<服务器地址>:8787/signal`，点击「保存并连接」。Docker 部署与全部参数见[服务器部署说明](server/deploy/README.md)。国内云服务器的域名没有备案时，客户端里请直接填 IP。
+自建服务器只要一条安装命令，见[服务器部署说明](server/deploy/README.md)（Linux、macOS、Windows、Docker）。
 
 | | 要求 |
 |---|---|
 | **Mac 客户端** | macOS 13 Ventura 及以上；Apple 芯片与 Intel 芯片 |
 | **Windows 客户端** | Windows 10 与 11，x64 |
 | **Linux 客户端** | x64 或 ARM64；X11 桌面，或带 XWayland 的 Wayland 桌面（GNOME、KDE 默认都带）；GTK 3 |
-| **服务器** | 自建时可选，使用官方服务无需部署：Linux（x86_64、ARM64；systemd 或 Docker）、macOS，或 Windows 10/11 x64 |
+| **服务器** | 可选：Linux（x86_64、ARM64；systemd 或 Docker）、macOS，或 Windows 10/11 x64 |
 | **iPhone / iPad** | 暂不支持：iOS 不允许 App 在后台监听剪贴板 |
-
-官网现已迁至 **[pasteferry.cc](https://pasteferry.cc/)**，原 GitHub Pages 地址会自动跳转。
 
 ## 文档
 
 - [工作原理](guide/how-it-works.zh-CN.md)：架构、NAT 打洞、安全模型、兜底、踩过的坑
 - [排障](guide/troubleshooting.zh-CN.md)与已知限制
-- [官方服务](https://pasteferry.cc/official/) · [快速开始](https://pasteferry.cc/start/) · [同一网络](https://pasteferry.cc/lan/) · [公网服务器](https://pasteferry.cc/cloud/) · [Tailscale](https://pasteferry.cc/tailscale/) · [在局域网里部署服务器](https://pasteferry.cc/server/)，都是图文教程
-- [服务器部署说明](server/deploy/README.md)：Windows、macOS、Linux、Docker、Tailscale
-- [从源码构建](guide/building.zh-CN.md)
-- 技术方案：[局域网直连](design/lan-mode.md)、[多出口网络的 NAT 打洞](design/nat-traversal.md)、[Windows 客户端](design/windows-client.md)
+- 图文教程：[快速开始](https://pasteferry.cc/start/) · [官方服务](https://pasteferry.cc/official/) · [同一网络](https://pasteferry.cc/lan/) · [公网服务器](https://pasteferry.cc/cloud/) · [Tailscale](https://pasteferry.cc/tailscale/)
+- [服务器部署说明](server/deploy/README.md)、[从源码构建](guide/building.zh-CN.md)
+- 技术方案：[多出口网络的 NAT 打洞](design/nat-traversal.md)、[局域网直连](design/lan-mode.md)、[快捷粘贴与收藏](design/quick-paste-and-favorites.md)、[Windows 客户端](design/windows-client.md)
+- [隐私说明](PRIVACY.md)、[安全说明](SECURITY.md)、[官方服务的公开协议](design/official-gateway.md)
 - [更新记录](CHANGELOG.md)
+
+## 支持一下
+
+隔空贴免费开源。如果它帮到了你，**点一个 ⭐ Star** 就是最好的支持，也能让更多需要它的人看到。遇到问题或有想法，欢迎[提 issue](https://github.com/baiyuze/pasteferry/issues)。
 
 ## 许可
 
 隔空贴以 [GNU AGPL-3.0](LICENSE) 免费开源：任何人（包括公司）都可以使用和修改，但分发它、或通过网络提供修改过的版本时，必须以同样的许可公开你的源码。详见 [LICENSING.md](LICENSING.md)。1.2.0 及更早的版本仍适用 MIT 许可。
-
-## 可选官方服务（2.1）
-
-新安装默认关闭官方公网。在设置中开启“使用官方服务”后，先尝试直连，失败才申请官方中转；侧栏显示每日额度、用量和更新时间，MB 保留两位小数。当前默认每机器额度组每日 100 MB，上下行合计，北京时间零点重置；直连不消耗中转额度，用尽后仍可直连。额度与可用性可能调整，以客户端显示为准。官方中转要求双方使用兼容客户端，局域网和自建服务器可独立运行。详见[隐私说明](PRIVACY.md)、[安全说明](SECURITY.md)及[公开协议](design/official-gateway.md)。
