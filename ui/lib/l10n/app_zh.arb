@@ -331,7 +331,6 @@
   "officialRoutesFootnote": "直连时不经过官方中转，也不消耗额度。",
   "officialDeviceID": "设备 ID",
   "officialWarning": "今日中转额度已使用 90%，直连不消耗此额度。",
-  "officialAccounting": "上下行合计，包含加密传输开销；只统计官方中转，不统计直连内容或流量。",
   "updateCheck": "检查更新",
   "updateCheckEllipsis": "检查更新…",
   "updateAuto": "自动检查更新",

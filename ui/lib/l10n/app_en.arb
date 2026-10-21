@@ -719,7 +719,6 @@
   "officialRoutesFootnote": "Direct connections don't go through the official relay and don't use the allowance.",
   "officialDeviceID": "Device ID",
   "officialWarning": "90% of the daily relay allowance has been used. Direct connections do not consume it.",
-  "officialAccounting": "Upload and download combined, including encryption overhead. Only official relay usage is measured; direct content and traffic are not recorded.",
   "updateCheck": "Check for updates",
   "updateCheckEllipsis": "Check for updates…",
   "updateAuto": "Check for updates automatically",

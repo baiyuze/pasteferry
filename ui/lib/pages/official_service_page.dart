@@ -50,7 +50,6 @@ class OfficialServicePage extends StatelessWidget {
             children: [
               GroupSection(
                 title: l.officialToday,
-                footnote: l.officialAccounting,
                 child: _allowance(context),
               ),
               if (peers.isNotEmpty)
@@ -108,7 +107,6 @@ class OfficialServicePage extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(l.officialPrivacy, style: context.text.bodySmall),
             ],
           ),
         ),

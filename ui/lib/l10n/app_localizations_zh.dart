@@ -1122,9 +1122,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get officialWarning => '今日中转额度已使用 90%，直连不消耗此额度。';
 
   @override
-  String get officialAccounting => '上下行合计，包含加密传输开销；只统计官方中转，不统计直连内容或流量。';
-
-  @override
   String get updateCheck => '检查更新';
 
   @override
@@ -2437,9 +2434,6 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get officialWarning => '今日中轉額度已使用 90%，直連不消耗此額度。';
 
   @override
-  String get officialAccounting => '上下行合計，包含加密傳輸開銷；只統計官方中轉，不統計直連內容或流量。';
-
-  @override
   String get updateCheck => '檢查更新';
 
   @override
@@ -3750,9 +3744,6 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get officialWarning => '今日中繼額度已使用 90%，直連不消耗此額度。';
-
-  @override
-  String get officialAccounting => '上下行合計，包含加密傳輸開銷；僅統計官方中繼，不統計直連內容或流量。';
 
   @override
   String get updateCheck => '檢查更新';

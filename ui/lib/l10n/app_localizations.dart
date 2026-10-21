@@ -2096,12 +2096,6 @@ abstract class AppLocalizations {
   /// **'90% of the daily relay allowance has been used. Direct connections do not consume it.'**
   String get officialWarning;
 
-  /// No description provided for @officialAccounting.
-  ///
-  /// In en, this message translates to:
-  /// **'Upload and download combined, including encryption overhead. Only official relay usage is measured; direct content and traffic are not recorded.'**
-  String get officialAccounting;
-
   /// No description provided for @updateCheck.
   ///
   /// In en, this message translates to:

@@ -381,7 +381,6 @@ S = [
     ('officialRoutesFootnote', "Direct connections don't go through the official relay and don't use the allowance.", '直连时不经过官方中转，也不消耗额度。', '直接接続は公式中継を経由せず、残量も消費しません。', '直連時不經過官方中繼，也不消耗額度。', '直連時不經過官方中轉，也不消耗額度。'),
     ('officialDeviceID', 'Device ID', '设备 ID', '端末 ID', '裝置 ID', '裝置 ID'),
     ('officialWarning', '90% of the daily relay allowance has been used. Direct connections do not consume it.', '今日中转额度已使用 90%，直连不消耗此额度。', '本日の中継上限の90%を使用しました。直接接続ではこの残量は消費しません。', '今日中繼額度已使用 90%，直連不消耗此額度。', '今日中轉額度已使用 90%，直連不消耗此額度。'),
-    ('officialAccounting', 'Upload and download combined, including encryption overhead. Only official relay usage is measured; direct content and traffic are not recorded.', '上下行合计，包含加密传输开销；只统计官方中转，不统计直连内容或流量。', '暗号化の通信量を含む送受信の合計です。公式中継のみ計測し、直接接続の内容や通信量は記録しません。', '上下行合計，包含加密傳輸開銷；僅統計官方中繼，不統計直連內容或流量。', '上下行合計，包含加密傳輸開銷；只統計官方中轉，不統計直連內容或流量。'),
 
     # Updates: checked against the signed update list on GitHub and Gitee.
     ("updateCheck", "Check for updates", "检查更新", "アップデートを確認", "檢查更新", "檢查更新"),

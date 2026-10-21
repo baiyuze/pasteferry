@@ -1132,10 +1132,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get officialWarning => '本日の中継上限の90%を使用しました。直接接続ではこの残量は消費しません。';
 
   @override
-  String get officialAccounting =>
-      '暗号化の通信量を含む送受信の合計です。公式中継のみ計測し、直接接続の内容や通信量は記録しません。';
-
-  @override
   String get updateCheck => 'アップデートを確認';
 
   @override

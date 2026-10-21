@@ -331,7 +331,6 @@
   "officialRoutesFootnote": "直連時不經過官方中轉，也不消耗額度。",
   "officialDeviceID": "裝置 ID",
   "officialWarning": "今日中轉額度已使用 90%，直連不消耗此額度。",
-  "officialAccounting": "上下行合計，包含加密傳輸開銷；只統計官方中轉，不統計直連內容或流量。",
   "updateCheck": "檢查更新",
   "updateCheckEllipsis": "檢查更新…",
   "updateAuto": "自動檢查更新",

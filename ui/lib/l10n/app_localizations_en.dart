@@ -1246,10 +1246,6 @@ class AppLocalizationsEn extends AppLocalizations {
       '90% of the daily relay allowance has been used. Direct connections do not consume it.';
 
   @override
-  String get officialAccounting =>
-      'Upload and download combined, including encryption overhead. Only official relay usage is measured; direct content and traffic are not recorded.';
-
-  @override
   String get updateCheck => 'Check for updates';
 
   @override
