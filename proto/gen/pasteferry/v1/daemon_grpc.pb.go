@@ -35,6 +35,7 @@ const (
 	DaemonService_RedeemPairingCode_FullMethodName             = "/pasteferry.v1.DaemonService/RedeemPairingCode"
 	DaemonService_ConfirmPairing_FullMethodName                = "/pasteferry.v1.DaemonService/ConfirmPairing"
 	DaemonService_Unpair_FullMethodName                        = "/pasteferry.v1.DaemonService/Unpair"
+	DaemonService_Reconnect_FullMethodName                     = "/pasteferry.v1.DaemonService/Reconnect"
 	DaemonService_SetDeviceAddress_FullMethodName              = "/pasteferry.v1.DaemonService/SetDeviceAddress"
 	DaemonService_WatchNearby_FullMethodName                   = "/pasteferry.v1.DaemonService/WatchNearby"
 	DaemonService_PairNearby_FullMethodName                    = "/pasteferry.v1.DaemonService/PairNearby"
@@ -80,6 +81,9 @@ type DaemonServiceClient interface {
 	// 配对双方各自确认指纹后才真正互信
 	ConfirmPairing(ctx context.Context, in *ConfirmPairingRequest, opts ...grpc.CallOption) (*Empty, error)
 	Unpair(ctx context.Context, in *UnpairRequest, opts ...grpc.CallOption) (*Empty, error)
+	// 重新连接：已是直连时什么也不做；否则马上再试一次直连，打不通照旧走中转。
+	// 最多等十几秒，返回那时的连接状态
+	Reconnect(ctx context.Context, in *ReconnectRequest, opts ...grpc.CallOption) (*ReconnectResponse, error)
 	// 手动告诉后台服务某台设备的局域网地址：跨网段、或两边都换了地址时用
 	SetDeviceAddress(ctx context.Context, in *SetDeviceAddressRequest, opts ...grpc.CallOption) (*Empty, error)
 	// 「搜索附近设备」窗口打开期间保持这个调用，窗口关掉时取消。期间本机在局域网里公开设备名，
@@ -250,6 +254,16 @@ func (c *daemonServiceClient) Unpair(ctx context.Context, in *UnpairRequest, opt
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
 	err := c.cc.Invoke(ctx, DaemonService_Unpair_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) Reconnect(ctx context.Context, in *ReconnectRequest, opts ...grpc.CallOption) (*ReconnectResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReconnectResponse)
+	err := c.cc.Invoke(ctx, DaemonService_Reconnect_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -527,6 +541,9 @@ type DaemonServiceServer interface {
 	// 配对双方各自确认指纹后才真正互信
 	ConfirmPairing(context.Context, *ConfirmPairingRequest) (*Empty, error)
 	Unpair(context.Context, *UnpairRequest) (*Empty, error)
+	// 重新连接：已是直连时什么也不做；否则马上再试一次直连，打不通照旧走中转。
+	// 最多等十几秒，返回那时的连接状态
+	Reconnect(context.Context, *ReconnectRequest) (*ReconnectResponse, error)
 	// 手动告诉后台服务某台设备的局域网地址：跨网段、或两边都换了地址时用
 	SetDeviceAddress(context.Context, *SetDeviceAddressRequest) (*Empty, error)
 	// 「搜索附近设备」窗口打开期间保持这个调用，窗口关掉时取消。期间本机在局域网里公开设备名，
@@ -616,6 +633,9 @@ func (UnimplementedDaemonServiceServer) ConfirmPairing(context.Context, *Confirm
 }
 func (UnimplementedDaemonServiceServer) Unpair(context.Context, *UnpairRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Unpair not implemented")
+}
+func (UnimplementedDaemonServiceServer) Reconnect(context.Context, *ReconnectRequest) (*ReconnectResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Reconnect not implemented")
 }
 func (UnimplementedDaemonServiceServer) SetDeviceAddress(context.Context, *SetDeviceAddressRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetDeviceAddress not implemented")
@@ -894,6 +914,24 @@ func _DaemonService_Unpair_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DaemonServiceServer).Unpair(ctx, req.(*UnpairRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_Reconnect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReconnectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).Reconnect(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_Reconnect_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).Reconnect(ctx, req.(*ReconnectRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1333,6 +1371,10 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Unpair",
 			Handler:    _DaemonService_Unpair_Handler,
+		},
+		{
+			MethodName: "Reconnect",
+			Handler:    _DaemonService_Reconnect_Handler,
 		},
 		{
 			MethodName: "SetDeviceAddress",

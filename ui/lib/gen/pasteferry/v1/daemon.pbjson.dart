@@ -804,6 +804,38 @@ const UnpairRequest$json = {
 final $typed_data.Uint8List unpairRequestDescriptor = $convert.base64Decode(
     'Cg1VbnBhaXJSZXF1ZXN0EhsKCWRldmljZV9pZBgBIAEoCVIIZGV2aWNlSWQ=');
 
+@$core.Deprecated('Use reconnectRequestDescriptor instead')
+const ReconnectRequest$json = {
+  '1': 'ReconnectRequest',
+  '2': [
+    {'1': 'device_id', '3': 1, '4': 1, '5': 9, '10': 'deviceId'},
+  ],
+};
+
+/// Descriptor for `ReconnectRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List reconnectRequestDescriptor = $convert.base64Decode(
+    'ChBSZWNvbm5lY3RSZXF1ZXN0EhsKCWRldmljZV9pZBgBIAEoCVIIZGV2aWNlSWQ=');
+
+@$core.Deprecated('Use reconnectResponseDescriptor instead')
+const ReconnectResponse$json = {
+  '1': 'ReconnectResponse',
+  '2': [
+    {
+      '1': 'kind',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.pasteferry.v1.ConnectionKind',
+      '10': 'kind'
+    },
+  ],
+};
+
+/// Descriptor for `ReconnectResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List reconnectResponseDescriptor = $convert.base64Decode(
+    'ChFSZWNvbm5lY3RSZXNwb25zZRIxCgRraW5kGAEgASgOMh0ucGFzdGVmZXJyeS52MS5Db25uZW'
+    'N0aW9uS2luZFIEa2luZA==');
+
 @$core.Deprecated('Use setDeviceAddressRequestDescriptor instead')
 const SetDeviceAddressRequest$json = {
   '1': 'SetDeviceAddressRequest',

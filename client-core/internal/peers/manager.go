@@ -1063,6 +1063,54 @@ func (m *Manager) Unpair(ctx context.Context, deviceID string) error {
 	return nil
 }
 
+// reconnectWait 是「重新连接」最多等多久再报告结果。换直连的 ICE 重启通常几秒内就有结果
+const reconnectWait = 15 * time.Second
+
+// Reconnect 是设备菜单里的「重新连接」。已是直连时什么也不做；不在线的马上去找它
+// （局域网里打招呼、信令服务器断着的马上重连），找到就发起连接；走中转的马上再试一次直连，
+// 打不通照旧走中转。直连了就立即返回，否则最多等 reconnectWait，返回那时的连接状态。
+func (m *Manager) Reconnect(ctx context.Context, deviceID string) (pb.ConnectionKind, error) {
+	m.mu.RLock()
+	_, ok := m.known[deviceID]
+	m.mu.RUnlock()
+	if !ok {
+		return pb.ConnectionKind_CONNECTION_KIND_UNSPECIFIED, ErrNotPaired
+	}
+	if m.p2p.State(deviceID) == p2p.StateDirect {
+		return pb.ConnectionKind_CONNECTION_KIND_DIRECT, nil
+	}
+	m.log.Info("用户要求重新连接", "device", deviceID, "state", m.p2p.State(deviceID))
+	m.client.Redial()
+	m.lan.PeersChanged()
+
+	deadline := time.Now().Add(reconnectWait)
+	asked := false
+	for {
+		st := m.p2p.State(deviceID)
+		if st == p2p.StateDirect {
+			return pb.ConnectionKind_CONNECTION_KIND_DIRECT, nil
+		}
+		if !asked && m.IsOnline(deviceID) {
+			asked = true
+			if err := m.p2p.RetryDirect(ctx, deviceID); err != nil {
+				m.log.Debug("重新连接没有发起", "device", deviceID, "err", err)
+			}
+		}
+		if time.Now().After(deadline) {
+			break
+		}
+		select {
+		case <-ctx.Done():
+			return st.Proto(), nil
+		case <-time.After(250 * time.Millisecond):
+		}
+	}
+	if !m.IsOnline(deviceID) {
+		return pb.ConnectionKind_CONNECTION_KIND_OFFLINE, nil
+	}
+	return m.p2p.State(deviceID).Proto(), nil
+}
+
 // SetDeviceAddress 记下用户手动输入的某台设备的地址，并立即去那里找它。
 func (m *Manager) SetDeviceAddress(ctx context.Context, deviceID, address string) error {
 	m.mu.RLock()

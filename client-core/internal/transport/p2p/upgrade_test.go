@@ -17,12 +17,25 @@ import (
 type signalBus struct {
 	mu      sync.Mutex
 	targets map[string]*Manager
+	offers  map[string]int // 每台设备发出过几个 offer
+}
+
+func (b *signalBus) offersFrom(id string) int {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.offers[id]
 }
 
 func (b *signalBus) send(from string) func(context.Context, string, *pb.SignalMessage) error {
 	return func(_ context.Context, to string, msg *pb.SignalMessage) error {
 		b.mu.Lock()
 		target := b.targets[to]
+		if msg.GetOffer() != nil {
+			if b.offers == nil {
+				b.offers = map[string]int{}
+			}
+			b.offers[from]++
+		}
 		b.mu.Unlock()
 		if target != nil {
 			go func() {
@@ -83,7 +96,14 @@ func newTestNode(t *testing.T, bus *signalBus, id string) *testNode {
 // connectPair 让 alice（不礼让、负责发起）与 bob 直连，返回两端。
 func connectPair(t *testing.T) (alice, bob *testNode) {
 	t.Helper()
-	bus := &signalBus{targets: map[string]*Manager{}}
+	alice, bob, _ = connectPairOn(t)
+	return alice, bob
+}
+
+// connectPairOn 同 connectPair，另外返回两端之间的信令通道。
+func connectPairOn(t *testing.T) (alice, bob *testNode, bus *signalBus) {
+	t.Helper()
+	bus = &signalBus{targets: map[string]*Manager{}}
 	alice = newTestNode(t, bus, "alice")
 	bob = newTestNode(t, bus, "bob")
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
@@ -93,7 +113,7 @@ func connectPair(t *testing.T) (alice, bob *testNode) {
 	}
 	waitState(t, alice, "bob", StateDirect, 20*time.Second)
 	waitState(t, bob, "alice", StateDirect, 20*time.Second)
-	return alice, bob
+	return alice, bob, bus
 }
 
 func waitState(t *testing.T, n *testNode, peerID string, want ConnState, timeout time.Duration) {

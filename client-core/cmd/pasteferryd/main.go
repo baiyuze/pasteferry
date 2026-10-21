@@ -419,6 +419,7 @@ func run(dataDir string) error {
 		RedeemPairingCode:        peerMgr.RedeemPairingCode,
 		ConfirmPairing:           peerMgr.ConfirmPairing,
 		Unpair:                   peerMgr.Unpair,
+		Reconnect:                peerMgr.Reconnect,
 		SetDeviceAddress:         peerMgr.SetDeviceAddress,
 		LogFiles:                 func() ([]string, string) { return logFiles(dataDir) },
 		VerboseLog:               verbose.Set,

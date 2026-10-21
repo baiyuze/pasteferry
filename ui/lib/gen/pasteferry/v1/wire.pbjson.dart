@@ -122,6 +122,15 @@ const SignalMessage$json = {
       '9': 0,
       '10': 'lanHello'
     },
+    {
+      '1': 'retry_direct',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.RetryDirect',
+      '9': 0,
+      '10': 'retryDirect'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -139,8 +148,18 @@ final $typed_data.Uint8List signalMessageDescriptor = $convert.base64Decode(
     'ZXISMgoGYW5zd2VyGAsgASgLMhgucGFzdGVmZXJyeS52MS5TZHBBbnN3ZXJIAFIGYW5zd2VyEj'
     'sKCWNhbmRpZGF0ZRgMIAEoCzIbLnBhc3RlZmVycnkudjEuSWNlQ2FuZGlkYXRlSABSCWNhbmRp'
     'ZGF0ZRIpCgRwaW5nGA0gASgLMhMucGFzdGVmZXJyeS52MS5QaW5nSABSBHBpbmcSNgoJbGFuX2'
-    'hlbGxvGA4gASgLMhcucGFzdGVmZXJyeS52MS5MYW5IZWxsb0gAUghsYW5IZWxsb0IJCgdwYXls'
-    'b2Fk');
+    'hlbGxvGA4gASgLMhcucGFzdGVmZXJyeS52MS5MYW5IZWxsb0gAUghsYW5IZWxsbxI/CgxyZXRy'
+    'eV9kaXJlY3QYDyABKAsyGi5wYXN0ZWZlcnJ5LnYxLlJldHJ5RGlyZWN0SABSC3JldHJ5RGlyZW'
+    'N0QgkKB3BheWxvYWQ=');
+
+@$core.Deprecated('Use retryDirectDescriptor instead')
+const RetryDirect$json = {
+  '1': 'RetryDirect',
+};
+
+/// Descriptor for `RetryDirect`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List retryDirectDescriptor =
+    $convert.base64Decode('CgtSZXRyeURpcmVjdA==');
 
 @$core.Deprecated('Use sdpOfferDescriptor instead')
 const SdpOffer$json = {

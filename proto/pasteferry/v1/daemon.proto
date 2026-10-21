@@ -29,6 +29,9 @@ service DaemonService {
   // 配对双方各自确认指纹后才真正互信
   rpc ConfirmPairing(ConfirmPairingRequest) returns (Empty);
   rpc Unpair(UnpairRequest) returns (Empty);
+  // 重新连接：已是直连时什么也不做；否则马上再试一次直连，打不通照旧走中转。
+  // 最多等十几秒，返回那时的连接状态
+  rpc Reconnect(ReconnectRequest) returns (ReconnectResponse);
   // 手动告诉后台服务某台设备的局域网地址：跨网段、或两边都换了地址时用
   rpc SetDeviceAddress(SetDeviceAddressRequest) returns (Empty);
   // 「搜索附近设备」窗口打开期间保持这个调用，窗口关掉时取消。期间本机在局域网里公开设备名，
@@ -379,6 +382,14 @@ message PairNearbyRequest {
 
 message UnpairRequest {
   string device_id = 1;
+}
+
+message ReconnectRequest {
+  string device_id = 1;
+}
+
+message ReconnectResponse {
+  ConnectionKind kind = 1;
 }
 
 message SetDeviceAddressRequest {

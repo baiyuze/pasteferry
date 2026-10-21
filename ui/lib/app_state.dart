@@ -619,6 +619,27 @@ class AppState extends ChangeNotifier implements RecordDetails {
   Future<void> requestLocalNetworkPermission() =>
       _client.requestLocalNetworkPermission(Empty());
 
+  final Set<String> _reconnecting = {};
+
+  /// 这台设备正在「重新连接」，列表里显示「正在连接」
+  bool isReconnecting(String deviceId) => _reconnecting.contains(deviceId);
+
+  /// 设备菜单里的「重新连接」：后台服务最多等十几秒，返回那时的连接状态。
+  Future<ConnectionKind> reconnect(String deviceId) async {
+    _reconnecting.add(deviceId);
+    notifyListeners();
+    try {
+      final r = await _client.reconnect(
+        ReconnectRequest(deviceId: deviceId),
+        options: CallOptions(timeout: const Duration(seconds: 30)),
+      );
+      return r.kind;
+    } finally {
+      _reconnecting.remove(deviceId);
+      notifyListeners();
+    }
+  }
+
   Future<void> unpair(String deviceId) async {
     await _client.unpair(UnpairRequest(deviceId: deviceId));
     _peers = _peers.where((p) => p.id != deviceId).toList();

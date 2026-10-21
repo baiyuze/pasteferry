@@ -116,6 +116,15 @@ class DaemonServiceClient extends $grpc.Client {
     return $createUnaryCall(_$unpair, request, options: options);
   }
 
+  /// 重新连接：已是直连时什么也不做；否则马上再试一次直连，打不通照旧走中转。
+  /// 最多等十几秒，返回那时的连接状态
+  $grpc.ResponseFuture<$0.ReconnectResponse> reconnect(
+    $0.ReconnectRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$reconnect, request, options: options);
+  }
+
   /// 手动告诉后台服务某台设备的局域网地址：跨网段、或两边都换了地址时用
   $grpc.ResponseFuture<$0.Empty> setDeviceAddress(
     $0.SetDeviceAddressRequest request, {
@@ -362,6 +371,11 @@ class DaemonServiceClient extends $grpc.Client {
       '/pasteferry.v1.DaemonService/Unpair',
       ($0.UnpairRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
+  static final _$reconnect =
+      $grpc.ClientMethod<$0.ReconnectRequest, $0.ReconnectResponse>(
+          '/pasteferry.v1.DaemonService/Reconnect',
+          ($0.ReconnectRequest value) => value.writeToBuffer(),
+          $0.ReconnectResponse.fromBuffer);
   static final _$setDeviceAddress =
       $grpc.ClientMethod<$0.SetDeviceAddressRequest, $0.Empty>(
           '/pasteferry.v1.DaemonService/SetDeviceAddress',
@@ -565,6 +579,13 @@ abstract class DaemonServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.UnpairRequest.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ReconnectRequest, $0.ReconnectResponse>(
+        'Reconnect',
+        reconnect_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.ReconnectRequest.fromBuffer(value),
+        ($0.ReconnectResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.SetDeviceAddressRequest, $0.Empty>(
         'SetDeviceAddress',
         setDeviceAddress_Pre,
@@ -828,6 +849,14 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.Empty> unpair(
       $grpc.ServiceCall call, $0.UnpairRequest request);
+
+  $async.Future<$0.ReconnectResponse> reconnect_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.ReconnectRequest> $request) async {
+    return reconnect($call, await $request);
+  }
+
+  $async.Future<$0.ReconnectResponse> reconnect(
+      $grpc.ServiceCall call, $0.ReconnectRequest request);
 
   $async.Future<$0.Empty> setDeviceAddress_Pre($grpc.ServiceCall $call,
       $async.Future<$0.SetDeviceAddressRequest> $request) async {

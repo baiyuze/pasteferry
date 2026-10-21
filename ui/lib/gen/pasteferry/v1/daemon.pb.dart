@@ -2681,6 +2681,121 @@ class UnpairRequest extends $pb.GeneratedMessage {
   void clearDeviceId() => $_clearField(1);
 }
 
+class ReconnectRequest extends $pb.GeneratedMessage {
+  factory ReconnectRequest({
+    $core.String? deviceId,
+  }) {
+    final result = ReconnectRequest._();
+    if (deviceId != null) result.deviceId = deviceId;
+    return result;
+  }
+
+  ReconnectRequest._();
+
+  factory ReconnectRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ReconnectRequest()..mergeFromBuffer(data, registry);
+  factory ReconnectRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ReconnectRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ReconnectRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ReconnectRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'deviceId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ReconnectRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ReconnectRequest copyWith(void Function(ReconnectRequest) updates) =>
+      super.copyWith((message) => updates(message as ReconnectRequest))
+          as ReconnectRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ReconnectRequest() / ReconnectRequest.new instead')
+  static ReconnectRequest create() => ReconnectRequest._();
+  static $pb.GeneratedMessage $_createMessage() => ReconnectRequest._();
+  @$core.override
+  ReconnectRequest createEmptyInstance() => ReconnectRequest._();
+  @$core.pragma('dart2js:noInline')
+  static ReconnectRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReconnectRequest>(
+          ReconnectRequest.$_createMessage);
+  static ReconnectRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get deviceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set deviceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasDeviceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDeviceId() => $_clearField(1);
+}
+
+class ReconnectResponse extends $pb.GeneratedMessage {
+  factory ReconnectResponse({
+    ConnectionKind? kind,
+  }) {
+    final result = ReconnectResponse._();
+    if (kind != null) result.kind = kind;
+    return result;
+  }
+
+  ReconnectResponse._();
+
+  factory ReconnectResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ReconnectResponse()..mergeFromBuffer(data, registry);
+  factory ReconnectResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ReconnectResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ReconnectResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ReconnectResponse.$_createMessage)
+    ..aE<ConnectionKind>(1, _omitFieldNames ? '' : 'kind',
+        enumValues: ConnectionKind.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ReconnectResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ReconnectResponse copyWith(void Function(ReconnectResponse) updates) =>
+      super.copyWith((message) => updates(message as ReconnectResponse))
+          as ReconnectResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ReconnectResponse() / ReconnectResponse.new instead')
+  static ReconnectResponse create() => ReconnectResponse._();
+  static $pb.GeneratedMessage $_createMessage() => ReconnectResponse._();
+  @$core.override
+  ReconnectResponse createEmptyInstance() => ReconnectResponse._();
+  @$core.pragma('dart2js:noInline')
+  static ReconnectResponse getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReconnectResponse>(
+          ReconnectResponse.$_createMessage);
+  static ReconnectResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  ConnectionKind get kind => $_getN(0);
+  @$pb.TagNumber(1)
+  set kind(ConnectionKind value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasKind() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKind() => $_clearField(1);
+}
+
 class SetDeviceAddressRequest extends $pb.GeneratedMessage {
   factory SetDeviceAddressRequest({
     $core.String? deviceId,

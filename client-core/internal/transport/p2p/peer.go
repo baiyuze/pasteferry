@@ -895,21 +895,36 @@ func (p *Peer) stopUpgradeLocked() {
 	}
 }
 
+// UpgradeNow 马上试一次换成直连（设备菜单里的「重新连接」）：不等 upgradeDelays 的间隔，
+// 有数据在传也照样试（重启只让传输停顿几秒）。只有发起方能做，见 Manager.RetryDirect。
+//
+// 尝试次数不清零：谁先发包要接着自动重试轮流换（见 tryUpgrade），不然每次点都是同一种顺序，
+// 只有另一种顺序打得通的网络里点多少次也没用。
+func (p *Peer) UpgradeNow() {
+	p.mu.Lock()
+	p.stopUpgradeLocked()
+	p.mu.Unlock()
+	p.upgrade(true)
+}
+
 // tryUpgrade 在走中转时用 ICE 重启再打一次洞。
 //
 // pion 一旦选定 candidate 对就不会再换。走中转常常只是输了一场赛跑：对端刚启动，
 // 出口还没探测完，中转的等待时限就到了；之后直连其实打得通，却再没有机会。
 // ICE 重启让两端重新收集地址、同时再打一次洞。仍打不通就照旧落回中转，
 // 下一次隔得更久再试（upgradeDelays）。
-func (p *Peer) tryUpgrade() {
+func (p *Peer) tryUpgrade() { p.upgrade(false) }
+
+// upgrade 做 tryUpgrade 的事；force 时有数据在传也不推迟。
+func (p *Peer) upgrade(force bool) {
 	p.mu.Lock()
 	p.upgradeTimer = nil
-	relay := p.pc != nil && p.state == StateRelay
+	relay := p.pc != nil && p.state == StateRelay && !p.forceRelay
 	p.mu.Unlock()
 	if !relay {
 		return
 	}
-	if p.busy() {
+	if !force && p.busy() {
 		// 有数据在传，重启会让它停顿几秒，等空闲了再试
 		p.mu.Lock()
 		p.scheduleUpgradeLocked(upgradeIdle)
