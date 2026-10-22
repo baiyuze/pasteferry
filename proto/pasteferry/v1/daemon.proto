@@ -82,6 +82,24 @@ service DaemonService {
   rpc GetQuickPasteStatus(Empty) returns (QuickPasteStatus);
   // 设置页转给快捷窗口的命令。快捷窗口没在运行时返回 FAILED_PRECONDITION
   rpc SendQuickPasteCommand(QuickPasteCommand) returns (Empty);
+
+  // ── 隔空传送：把文件直接发给某一台设备，见 design/send-files.md ──
+  // 发给一台设备。立即返回这一批的记录，之后的状态与进度走 transfer_changed 事件。
+  // 对方不在线或不支持时返回 FAILED_PRECONDITION；路径不存在返回 INVALID_ARGUMENT。
+  // 要经官方服务中转而 allow_relay 为 false 时返回 FAILED_PRECONDITION，消息为 "relay"，界面确认后再调一次
+  rpc SendFiles(SendFilesRequest) returns (Transfer);
+  // 取消一批（发出的或收到的都可以），两边都停下
+  rpc CancelTransfer(TransferRef) returns (Empty);
+  // 发出的、已中断的一批从断点继续；对方已清掉没收完的部分时从头再发
+  rpc ResumeTransfer(TransferRef) returns (Empty);
+  rpc ListTransfers(ListTransfersRequest) returns (ListTransfersResponse);
+  // 只删记录，不删文件；进行中的不删
+  rpc DeleteTransfers(DeleteTransfersRequest) returns (Empty);
+  // 打开隔空传送页时调用：收到的都标为看过，侧边栏的数字清零
+  rpc MarkTransfersSeen(Empty) returns (Empty);
+  // 检查保存位置能否写入。path 为空时检查当前设置的位置。
+  // 在 macOS 上会在这时触发系统的文件夹授权弹窗，所以要在用户看着界面时调用
+  rpc CheckReceiveDir(CheckReceiveDirRequest) returns (CheckReceiveDirResponse);
 }
 
 message Empty {}
@@ -176,6 +194,12 @@ message Device {
   // 用此值调 ConfirmPairing 完成或拒绝配对。
   // 配对码的发起方是被动收到兑换通知的，靠这个字段把确认入口推给界面。
   string pairing_session = 8;
+  // 对方声明能接收隔空传送（PeerFeatures 里有 send_files_v1）。旧版本为 false
+  bool receives_files = 9;
+  // 对方关闭了接收文件
+  bool receive_disabled = 10;
+  // 在同一个局域网里能直接找到对方，隔空传送的雷达据此把它放在内圈
+  bool lan_reachable = 11;
 }
 
 // macOS 剪贴板授权状态，对应 NSPasteboardAccessBehavior。
@@ -202,6 +226,12 @@ message Event {
     // 设置保存后推送，快捷窗口据此重新注册快捷键
     Config config_changed = 9;
     QuickPasteStatus quick_paste_changed = 10;
+    // 隔空传送的一批新建、状态变化或进度更新（进度 0.2 秒节流）
+    Transfer transfer_changed = 11;
+    string transfer_removed = 12;         // transfer id
+    // 让界面切到某一页："send" 是隔空传送页（用户点了隔空传送的通知）。
+    // 界面是被这次点击拉起来的话还没订阅，后台服务在它订阅时补发最近 15 秒内的这一条
+    string navigate = 13;
   }
 }
 
@@ -426,6 +456,13 @@ message Config {
   string quick_paste_hotkey = 21;
   // 选中后只放进剪贴板，不模拟粘贴
   bool quick_paste_copy_only = 22;
+
+  // 隔空传送收到的文件存到哪里。空字符串表示系统的「下载」文件夹
+  string receive_dir = 23;
+  // 不接收其他设备发来的文件。写成反向的：旧配置没有这一项时就是开启
+  bool receive_disabled = 24;
+  // 收到文件时不发系统通知
+  bool receive_notify_disabled = 25;
 }
 
 enum ServiceMode {
@@ -584,4 +621,84 @@ message GetImagePreviewResponse {
   string path = 1;   // 界面可以直接解码的图片文件；HEIC 等格式是转换出来的 PNG
   int32 count = 2;   // 这条记录在本机实际能预览的图片数
   string name = 3;   // 文件名；剪贴板里的图片没有文件名，为空
+}
+
+// ─────────────────────────── 隔空传送 ───────────────────────────
+
+message SendFilesRequest {
+  string device_id = 1;
+  // 拖进来或选中的文件与文件夹在本机的完整路径
+  repeated string paths = 2;
+  // 用户已确认可以经官方服务中转
+  bool allow_relay = 3;
+}
+
+message TransferRef {
+  string id = 1;
+}
+
+enum TransferDirection {
+  TRANSFER_DIRECTION_UNSPECIFIED = 0;
+  TRANSFER_DIRECTION_OUTGOING = 1;
+  TRANSFER_DIRECTION_INCOMING = 2;
+}
+
+message Transfer {
+  string id = 1;
+  TransferDirection direction = 2;
+  string device_id = 3;
+  string device_name = 4;
+  // queued（排队）/ scanning（统计中）/ waiting（等对方应答或重新连接）/ active /
+  // paused（官方中转额度用完）/ interrupted / done / failed / cancelled / declined / expired
+  string status = 5;
+  repeated ClipItem items = 6;       // 顶层的文件和文件夹
+  // 收到的：顶层项目的最终路径（与 items 一一对应）；发出的：源路径
+  repeated string paths = 7;
+  int64 total_bytes = 8;
+  int64 done_bytes = 9;
+  int64 file_count = 10;
+  double bytes_per_second = 11;
+  // 失败、回绝、取消的原因，固定代码，界面翻译：no_space、dest_unavailable、
+  // file_too_large、disabled、unsupported、offline、source_changed、source_missing、
+  // read_error、write_failed、hash_mismatch、cancelled、peer_cancelled、relay_quota 等
+  string error = 12;
+  int64 shortfall_bytes = 13;        // no_space 时还差多少
+  bool relayed = 14;                 // 这一批经中转
+  bool seen = 15;                    // 收到的：用户在隔空传送页看过
+  int64 created_at_unix = 16;
+  int64 finished_at_unix = 17;
+  int64 scanned_files = 18;          // 统计阶段已找到的文件数
+  string current_file = 19;          // 正在传的文件，相对路径；最多每 0.5 秒换一次
+  int64 current_index = 20;          // 它是第几个文件，从 1 开始
+  // 收到的：顶层项目是否还在原处（用户移走或删除后为 false），与 paths 一一对应
+  repeated bool present = 21;
+}
+
+message ListTransfersRequest {
+  TransferDirection direction = 1;   // UNSPECIFIED 表示两类都要
+  int32 limit = 2;
+  int64 before_unix = 3;             // 分页游标
+}
+
+message ListTransfersResponse {
+  repeated Transfer transfers = 1;
+}
+
+message DeleteTransfersRequest {
+  repeated string ids = 1;
+  bool all = 2;
+  TransferDirection direction = 3;   // all 时只清这一类；UNSPECIFIED 表示两类都清
+}
+
+message CheckReceiveDirRequest {
+  string path = 1;
+}
+
+message CheckReceiveDirResponse {
+  bool ok = 1;
+  // not_found / not_directory / not_writable / permission_denied
+  string error = 2;
+  int64 free_bytes = 3;
+  // 实际检查的位置：path 为空时是当前设置的位置，没设置时是系统的「下载」文件夹
+  string path = 4;
 }

@@ -89,6 +89,9 @@ type Deps struct {
 	InstallUpdate  func(version string, uiPID int) error
 	UpdateNotice   func() string
 	LastUpdate     func() *pb.UpdateResult
+
+	// Transfers 是隔空传送；为 nil 时相应的方法返回 Unimplemented
+	Transfers Transfers
 }
 
 func (s *Server) GetNotificationStatus(ctx context.Context, _ *pb.Empty) (*pb.NotificationStatus, error) {
@@ -218,6 +221,12 @@ func (s *Server) Subscribe(req *pb.SubscribeRequest,
 	// 立即推一次状态，让 UI 不必等到下次变化才知道当前情况
 	if st, err := s.GetStatus(stream.Context(), &pb.Empty{}); err == nil {
 		if err := stream.Send(EventStatusChanged(st)); err != nil {
+			return err
+		}
+	}
+	// 界面是被刚才点的通知拉起来的：补上那次「切到某一页」
+	if page := s.hub.RecentNavigate(15 * time.Second); page != "" {
+		if err := stream.Send(EventNavigate(page)); err != nil {
 			return err
 		}
 	}

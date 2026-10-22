@@ -57,6 +57,13 @@ const (
 	DaemonService_QuickPasteSession_FullMethodName             = "/pasteferry.v1.DaemonService/QuickPasteSession"
 	DaemonService_GetQuickPasteStatus_FullMethodName           = "/pasteferry.v1.DaemonService/GetQuickPasteStatus"
 	DaemonService_SendQuickPasteCommand_FullMethodName         = "/pasteferry.v1.DaemonService/SendQuickPasteCommand"
+	DaemonService_SendFiles_FullMethodName                     = "/pasteferry.v1.DaemonService/SendFiles"
+	DaemonService_CancelTransfer_FullMethodName                = "/pasteferry.v1.DaemonService/CancelTransfer"
+	DaemonService_ResumeTransfer_FullMethodName                = "/pasteferry.v1.DaemonService/ResumeTransfer"
+	DaemonService_ListTransfers_FullMethodName                 = "/pasteferry.v1.DaemonService/ListTransfers"
+	DaemonService_DeleteTransfers_FullMethodName               = "/pasteferry.v1.DaemonService/DeleteTransfers"
+	DaemonService_MarkTransfersSeen_FullMethodName             = "/pasteferry.v1.DaemonService/MarkTransfersSeen"
+	DaemonService_CheckReceiveDir_FullMethodName               = "/pasteferry.v1.DaemonService/CheckReceiveDir"
 )
 
 // DaemonServiceClient is the client API for DaemonService service.
@@ -124,6 +131,23 @@ type DaemonServiceClient interface {
 	GetQuickPasteStatus(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*QuickPasteStatus, error)
 	// 设置页转给快捷窗口的命令。快捷窗口没在运行时返回 FAILED_PRECONDITION
 	SendQuickPasteCommand(ctx context.Context, in *QuickPasteCommand, opts ...grpc.CallOption) (*Empty, error)
+	// ── 隔空传送：把文件直接发给某一台设备，见 design/send-files.md ──
+	// 发给一台设备。立即返回这一批的记录，之后的状态与进度走 transfer_changed 事件。
+	// 对方不在线或不支持时返回 FAILED_PRECONDITION；路径不存在返回 INVALID_ARGUMENT。
+	// 要经官方服务中转而 allow_relay 为 false 时返回 FAILED_PRECONDITION，消息为 "relay"，界面确认后再调一次
+	SendFiles(ctx context.Context, in *SendFilesRequest, opts ...grpc.CallOption) (*Transfer, error)
+	// 取消一批（发出的或收到的都可以），两边都停下
+	CancelTransfer(ctx context.Context, in *TransferRef, opts ...grpc.CallOption) (*Empty, error)
+	// 发出的、已中断的一批从断点继续；对方已清掉没收完的部分时从头再发
+	ResumeTransfer(ctx context.Context, in *TransferRef, opts ...grpc.CallOption) (*Empty, error)
+	ListTransfers(ctx context.Context, in *ListTransfersRequest, opts ...grpc.CallOption) (*ListTransfersResponse, error)
+	// 只删记录，不删文件；进行中的不删
+	DeleteTransfers(ctx context.Context, in *DeleteTransfersRequest, opts ...grpc.CallOption) (*Empty, error)
+	// 打开隔空传送页时调用：收到的都标为看过，侧边栏的数字清零
+	MarkTransfersSeen(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error)
+	// 检查保存位置能否写入。path 为空时检查当前设置的位置。
+	// 在 macOS 上会在这时触发系统的文件夹授权弹窗，所以要在用户看着界面时调用
+	CheckReceiveDir(ctx context.Context, in *CheckReceiveDirRequest, opts ...grpc.CallOption) (*CheckReceiveDirResponse, error)
 }
 
 type daemonServiceClient struct {
@@ -494,6 +518,76 @@ func (c *daemonServiceClient) SendQuickPasteCommand(ctx context.Context, in *Qui
 	return out, nil
 }
 
+func (c *daemonServiceClient) SendFiles(ctx context.Context, in *SendFilesRequest, opts ...grpc.CallOption) (*Transfer, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Transfer)
+	err := c.cc.Invoke(ctx, DaemonService_SendFiles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) CancelTransfer(ctx context.Context, in *TransferRef, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_CancelTransfer_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) ResumeTransfer(ctx context.Context, in *TransferRef, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_ResumeTransfer_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) ListTransfers(ctx context.Context, in *ListTransfersRequest, opts ...grpc.CallOption) (*ListTransfersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListTransfersResponse)
+	err := c.cc.Invoke(ctx, DaemonService_ListTransfers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) DeleteTransfers(ctx context.Context, in *DeleteTransfersRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_DeleteTransfers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) MarkTransfersSeen(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_MarkTransfersSeen_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) CheckReceiveDir(ctx context.Context, in *CheckReceiveDirRequest, opts ...grpc.CallOption) (*CheckReceiveDirResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CheckReceiveDirResponse)
+	err := c.cc.Invoke(ctx, DaemonService_CheckReceiveDir_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DaemonServiceServer is the server API for DaemonService service.
 // All implementations must embed UnimplementedDaemonServiceServer
 // for forward compatibility.
@@ -559,6 +653,23 @@ type DaemonServiceServer interface {
 	GetQuickPasteStatus(context.Context, *Empty) (*QuickPasteStatus, error)
 	// 设置页转给快捷窗口的命令。快捷窗口没在运行时返回 FAILED_PRECONDITION
 	SendQuickPasteCommand(context.Context, *QuickPasteCommand) (*Empty, error)
+	// ── 隔空传送：把文件直接发给某一台设备，见 design/send-files.md ──
+	// 发给一台设备。立即返回这一批的记录，之后的状态与进度走 transfer_changed 事件。
+	// 对方不在线或不支持时返回 FAILED_PRECONDITION；路径不存在返回 INVALID_ARGUMENT。
+	// 要经官方服务中转而 allow_relay 为 false 时返回 FAILED_PRECONDITION，消息为 "relay"，界面确认后再调一次
+	SendFiles(context.Context, *SendFilesRequest) (*Transfer, error)
+	// 取消一批（发出的或收到的都可以），两边都停下
+	CancelTransfer(context.Context, *TransferRef) (*Empty, error)
+	// 发出的、已中断的一批从断点继续；对方已清掉没收完的部分时从头再发
+	ResumeTransfer(context.Context, *TransferRef) (*Empty, error)
+	ListTransfers(context.Context, *ListTransfersRequest) (*ListTransfersResponse, error)
+	// 只删记录，不删文件；进行中的不删
+	DeleteTransfers(context.Context, *DeleteTransfersRequest) (*Empty, error)
+	// 打开隔空传送页时调用：收到的都标为看过，侧边栏的数字清零
+	MarkTransfersSeen(context.Context, *Empty) (*Empty, error)
+	// 检查保存位置能否写入。path 为空时检查当前设置的位置。
+	// 在 macOS 上会在这时触发系统的文件夹授权弹窗，所以要在用户看着界面时调用
+	CheckReceiveDir(context.Context, *CheckReceiveDirRequest) (*CheckReceiveDirResponse, error)
 	mustEmbedUnimplementedDaemonServiceServer()
 }
 
@@ -667,6 +778,27 @@ func (UnimplementedDaemonServiceServer) GetQuickPasteStatus(context.Context, *Em
 }
 func (UnimplementedDaemonServiceServer) SendQuickPasteCommand(context.Context, *QuickPasteCommand) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method SendQuickPasteCommand not implemented")
+}
+func (UnimplementedDaemonServiceServer) SendFiles(context.Context, *SendFilesRequest) (*Transfer, error) {
+	return nil, status.Error(codes.Unimplemented, "method SendFiles not implemented")
+}
+func (UnimplementedDaemonServiceServer) CancelTransfer(context.Context, *TransferRef) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method CancelTransfer not implemented")
+}
+func (UnimplementedDaemonServiceServer) ResumeTransfer(context.Context, *TransferRef) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResumeTransfer not implemented")
+}
+func (UnimplementedDaemonServiceServer) ListTransfers(context.Context, *ListTransfersRequest) (*ListTransfersResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListTransfers not implemented")
+}
+func (UnimplementedDaemonServiceServer) DeleteTransfers(context.Context, *DeleteTransfersRequest) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteTransfers not implemented")
+}
+func (UnimplementedDaemonServiceServer) MarkTransfersSeen(context.Context, *Empty) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method MarkTransfersSeen not implemented")
+}
+func (UnimplementedDaemonServiceServer) CheckReceiveDir(context.Context, *CheckReceiveDirRequest) (*CheckReceiveDirResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CheckReceiveDir not implemented")
 }
 func (UnimplementedDaemonServiceServer) mustEmbedUnimplementedDaemonServiceServer() {}
 func (UnimplementedDaemonServiceServer) testEmbeddedByValue()                       {}
@@ -1251,6 +1383,132 @@ func _DaemonService_SendQuickPasteCommand_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_SendFiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendFilesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SendFiles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SendFiles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SendFiles(ctx, req.(*SendFilesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_CancelTransfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TransferRef)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).CancelTransfer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_CancelTransfer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).CancelTransfer(ctx, req.(*TransferRef))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_ResumeTransfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TransferRef)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).ResumeTransfer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_ResumeTransfer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).ResumeTransfer(ctx, req.(*TransferRef))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_ListTransfers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTransfersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).ListTransfers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_ListTransfers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).ListTransfers(ctx, req.(*ListTransfersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_DeleteTransfers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTransfersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).DeleteTransfers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_DeleteTransfers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).DeleteTransfers(ctx, req.(*DeleteTransfersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_MarkTransfersSeen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).MarkTransfersSeen(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_MarkTransfersSeen_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).MarkTransfersSeen(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_CheckReceiveDir_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckReceiveDirRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).CheckReceiveDir(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_CheckReceiveDir_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).CheckReceiveDir(ctx, req.(*CheckReceiveDirRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DaemonService_ServiceDesc is the grpc.ServiceDesc for DaemonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1373,6 +1631,34 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendQuickPasteCommand",
 			Handler:    _DaemonService_SendQuickPasteCommand_Handler,
+		},
+		{
+			MethodName: "SendFiles",
+			Handler:    _DaemonService_SendFiles_Handler,
+		},
+		{
+			MethodName: "CancelTransfer",
+			Handler:    _DaemonService_CancelTransfer_Handler,
+		},
+		{
+			MethodName: "ResumeTransfer",
+			Handler:    _DaemonService_ResumeTransfer_Handler,
+		},
+		{
+			MethodName: "ListTransfers",
+			Handler:    _DaemonService_ListTransfers_Handler,
+		},
+		{
+			MethodName: "DeleteTransfers",
+			Handler:    _DaemonService_DeleteTransfers_Handler,
+		},
+		{
+			MethodName: "MarkTransfersSeen",
+			Handler:    _DaemonService_MarkTransfersSeen_Handler,
+		},
+		{
+			MethodName: "CheckReceiveDir",
+			Handler:    _DaemonService_CheckReceiveDir_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

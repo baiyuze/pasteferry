@@ -37,6 +37,10 @@ type Options struct {
 	Language     func() string
 	Fetch, Apply func(context.Context, string) error
 	Record       func(string) (*pb.ClipRecord, error)
+	// 隔空传送的通知：Reveal 在访达（资源管理器、文件管理器）里显示收到的文件，
+	// OpenPage 打开主窗口并切到某一页（"send"）
+	Reveal   func(transferID string) error
+	OpenPage func(page string) error
 }
 
 type Manager struct {
@@ -151,7 +155,73 @@ func (m *Manager) Completed(r *pb.ClipRecord, result *pb.ClipboardWriteResult) {
 	}
 }
 
+// 隔空传送通知的 ID 前缀，与复制记录的通知区分开
+const transferPrefix = "transfer-"
+
+// Transfer 发一条隔空传送的通知：kind 是 incoming（较大的传输开始了）、received、failed。
+// 同一批的通知用同一个 ID，后一条替换前一条。folder 是保存位置在通知里的叫法。
+func (m *Manager) Transfer(kind string, t *pb.Transfer, folder string) {
+	lang := ""
+	if m.opts.Language != nil {
+		lang = m.opts.Language()
+	}
+	if lang == "" {
+		lang = systemLanguage()
+	}
+	name := ""
+	if items := t.GetItems(); len(items) > 0 {
+		name = items[0].GetName()
+		if len(items) > 1 {
+			name += fmt.Sprintf(" (+%d)", len(items)-1)
+		}
+	}
+	if len([]rune(name)) > 120 {
+		name = string([]rune(name)[:117]) + "…"
+	}
+	if folder == "downloads" {
+		folder = translate(lang, "downloadsFolder")
+	}
+	errText := translate(lang, "transferError_"+t.GetError())
+	if errText == "" {
+		errText = translate(lang, "transferErrorOther")
+	}
+	replace := strings.NewReplacer("{name}", name, "{device}", t.GetDeviceName(),
+		"{size}", humanSize(t.GetTotalBytes()), "{folder}", folder, "{error}", errText)
+	reveal := map[string]string{"darwin": "showInFinder", "windows": "showInFolder"}[runtime.GOOS]
+	if reveal == "" {
+		reveal = "openFolder"
+	}
+	var title, body, action, label string
+	switch kind {
+	case "incoming":
+		title, body, action, label = "transferIncomingTitle", "transferIncomingBody", "open", "viewProgress"
+	case "received":
+		title, body, action, label = "transferReceivedTitle", "transferReceivedBody", "reveal", reveal
+	default:
+		title, body, action, label = "transferFailedTitle", "transferFailedBody", "open", "viewProgress"
+	}
+	id := transferPrefix + t.GetId()
+	notice := Message{ID: id, Title: replace.Replace(translate(lang, title)), Body: replace.Replace(translate(lang, body)),
+		Action: action, ActionLabel: translate(lang, label)}
+	m.mu.Lock()
+	m.pending[id] = notice
+	m.mu.Unlock()
+	select {
+	case m.wake <- struct{}{}:
+	default:
+	}
+}
+
 func (m *Manager) Activate(ctx context.Context, id, action string) error {
+	if transferID, ok := strings.CutPrefix(id, transferPrefix); ok {
+		if action == "reveal" && m.opts.Reveal != nil {
+			return m.opts.Reveal(transferID)
+		}
+		if m.opts.OpenPage != nil {
+			return m.opts.OpenPage("send")
+		}
+		return OpenUI()
+	}
 	if action == "open" {
 		return OpenUI()
 	}
@@ -200,6 +270,24 @@ func OpenUI() error {
 		cmd = exec.Command(filepath.Join(filepath.Dir(exe), "PasteFerry.exe"))
 	default:
 		cmd = exec.Command(filepath.Join(filepath.Dir(exe), "pasteferry"))
+	}
+	if err := cmd.Start(); err != nil {
+		return err
+	}
+	go cmd.Wait()
+	return nil
+}
+
+// Reveal 在访达、资源管理器里显示并选中 path；Linux 上的文件管理器各不相同，打开它所在的文件夹。
+func Reveal(path string) error {
+	var cmd *exec.Cmd
+	switch runtime.GOOS {
+	case "darwin":
+		cmd = exec.Command("/usr/bin/open", "-R", path)
+	case "windows":
+		cmd = exec.Command("explorer.exe", "/select,", path)
+	default:
+		cmd = exec.Command("xdg-open", filepath.Dir(path))
 	}
 	if err := cmd.Start(); err != nil {
 		return err

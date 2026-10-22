@@ -2074,6 +2074,11 @@ type PeerMessage struct {
 	//	*PeerMessage_Done
 	//	*PeerMessage_Link
 	//	*PeerMessage_Display
+	//	*PeerMessage_Features
+	//	*PeerMessage_SendOffer
+	//	*PeerMessage_SendAnswer
+	//	*PeerMessage_SendCancel
+	//	*PeerMessage_SendResult
 	Payload       isPeerMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -2179,6 +2184,51 @@ func (x *PeerMessage) GetDisplay() *PeerDisplay {
 	return nil
 }
 
+func (x *PeerMessage) GetFeatures() *PeerFeatures {
+	if x != nil {
+		if x, ok := x.Payload.(*PeerMessage_Features); ok {
+			return x.Features
+		}
+	}
+	return nil
+}
+
+func (x *PeerMessage) GetSendOffer() *SendOffer {
+	if x != nil {
+		if x, ok := x.Payload.(*PeerMessage_SendOffer); ok {
+			return x.SendOffer
+		}
+	}
+	return nil
+}
+
+func (x *PeerMessage) GetSendAnswer() *SendAnswer {
+	if x != nil {
+		if x, ok := x.Payload.(*PeerMessage_SendAnswer); ok {
+			return x.SendAnswer
+		}
+	}
+	return nil
+}
+
+func (x *PeerMessage) GetSendCancel() *SendCancel {
+	if x != nil {
+		if x, ok := x.Payload.(*PeerMessage_SendCancel); ok {
+			return x.SendCancel
+		}
+	}
+	return nil
+}
+
+func (x *PeerMessage) GetSendResult() *SendResult {
+	if x != nil {
+		if x, ok := x.Payload.(*PeerMessage_SendResult); ok {
+			return x.SendResult
+		}
+	}
+	return nil
+}
+
 type isPeerMessage_Payload interface {
 	isPeerMessage_Payload()
 }
@@ -2211,6 +2261,27 @@ type PeerMessage_Display struct {
 	Display *PeerDisplay `protobuf:"bytes,7,opt,name=display,proto3,oneof"` // 仅通过加密的设备间通道交换真实名称
 }
 
+type PeerMessage_Features struct {
+	Features *PeerFeatures `protobuf:"bytes,8,opt,name=features,proto3,oneof"` // 连接建立后互相告知本端支持哪些功能
+}
+
+type PeerMessage_SendOffer struct {
+	// 隔空传送：把文件直接发给某一台设备，见 design/send-files.md
+	SendOffer *SendOffer `protobuf:"bytes,9,opt,name=send_offer,json=sendOffer,proto3,oneof"`
+}
+
+type PeerMessage_SendAnswer struct {
+	SendAnswer *SendAnswer `protobuf:"bytes,10,opt,name=send_answer,json=sendAnswer,proto3,oneof"`
+}
+
+type PeerMessage_SendCancel struct {
+	SendCancel *SendCancel `protobuf:"bytes,11,opt,name=send_cancel,json=sendCancel,proto3,oneof"`
+}
+
+type PeerMessage_SendResult struct {
+	SendResult *SendResult `protobuf:"bytes,12,opt,name=send_result,json=sendResult,proto3,oneof"`
+}
+
 func (*PeerMessage_Offer) isPeerMessage_Payload() {}
 
 func (*PeerMessage_Fetch) isPeerMessage_Payload() {}
@@ -2225,6 +2296,64 @@ func (*PeerMessage_Link) isPeerMessage_Payload() {}
 
 func (*PeerMessage_Display) isPeerMessage_Payload() {}
 
+func (*PeerMessage_Features) isPeerMessage_Payload() {}
+
+func (*PeerMessage_SendOffer) isPeerMessage_Payload() {}
+
+func (*PeerMessage_SendAnswer) isPeerMessage_Payload() {}
+
+func (*PeerMessage_SendCancel) isPeerMessage_Payload() {}
+
+func (*PeerMessage_SendResult) isPeerMessage_Payload() {}
+
+// 连接就绪后各自发一次，与 LinkInfo 一起；功能开关变了再发一次。
+// 旧版本不发，也不认识它，对方据此当作不支持。
+type PeerFeatures struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// "send_files_v1"：能接收隔空传送。关闭了接收时不带它，改带 "send_files_off"，
+	// 对方的雷达显示「不接收文件」而不是「需要更新」
+	Features      []string `protobuf:"bytes,1,rep,name=features,proto3" json:"features,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PeerFeatures) Reset() {
+	*x = PeerFeatures{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PeerFeatures) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PeerFeatures) ProtoMessage() {}
+
+func (x *PeerFeatures) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PeerFeatures.ProtoReflect.Descriptor instead.
+func (*PeerFeatures) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *PeerFeatures) GetFeatures() []string {
+	if x != nil {
+		return x.Features
+	}
+	return nil
+}
+
 // 连接就绪后各自发一次。只有本端能确定自己发出的数据是否走 TURN：
 // 对端经中转发来的包，在本端看来可能只是一个普通地址（peer-reflexive），
 // 单靠自己的视角会把中转误判成直连。两端交换后，任一端经中转即显示为中转。
@@ -2237,7 +2366,7 @@ type LinkInfo struct {
 
 func (x *LinkInfo) Reset() {
 	*x = LinkInfo{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[26]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2249,7 +2378,7 @@ func (x *LinkInfo) String() string {
 func (*LinkInfo) ProtoMessage() {}
 
 func (x *LinkInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[26]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2262,7 +2391,7 @@ func (x *LinkInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LinkInfo.ProtoReflect.Descriptor instead.
 func (*LinkInfo) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{26}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *LinkInfo) GetRelayed() bool {
@@ -2282,7 +2411,7 @@ type PeerDisplay struct {
 
 func (x *PeerDisplay) Reset() {
 	*x = PeerDisplay{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[27]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2294,7 +2423,7 @@ func (x *PeerDisplay) String() string {
 func (*PeerDisplay) ProtoMessage() {}
 
 func (x *PeerDisplay) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[27]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2307,7 +2436,7 @@ func (x *PeerDisplay) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeerDisplay.ProtoReflect.Descriptor instead.
 func (*PeerDisplay) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{27}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *PeerDisplay) GetName() string {
@@ -2347,7 +2476,7 @@ type ClipOffer struct {
 
 func (x *ClipOffer) Reset() {
 	*x = ClipOffer{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[28]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2359,7 +2488,7 @@ func (x *ClipOffer) String() string {
 func (*ClipOffer) ProtoMessage() {}
 
 func (x *ClipOffer) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[28]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2372,7 +2501,7 @@ func (x *ClipOffer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClipOffer.ProtoReflect.Descriptor instead.
 func (*ClipOffer) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{28}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *ClipOffer) GetClipId() string {
@@ -2448,7 +2577,7 @@ type PeerFetch struct {
 
 func (x *PeerFetch) Reset() {
 	*x = PeerFetch{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[29]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2460,7 +2589,7 @@ func (x *PeerFetch) String() string {
 func (*PeerFetch) ProtoMessage() {}
 
 func (x *PeerFetch) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[29]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2473,7 +2602,7 @@ func (x *PeerFetch) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeerFetch.ProtoReflect.Descriptor instead.
 func (*PeerFetch) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{29}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *PeerFetch) GetClipId() string {
@@ -2493,7 +2622,7 @@ type FetchReject struct {
 
 func (x *FetchReject) Reset() {
 	*x = FetchReject{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[30]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2505,7 +2634,7 @@ func (x *FetchReject) String() string {
 func (*FetchReject) ProtoMessage() {}
 
 func (x *FetchReject) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[30]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2518,7 +2647,7 @@ func (x *FetchReject) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchReject.ProtoReflect.Descriptor instead.
 func (*FetchReject) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{30}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *FetchReject) GetClipId() string {
@@ -2549,7 +2678,7 @@ type TransferHeader struct {
 
 func (x *TransferHeader) Reset() {
 	*x = TransferHeader{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[31]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2561,7 +2690,7 @@ func (x *TransferHeader) String() string {
 func (*TransferHeader) ProtoMessage() {}
 
 func (x *TransferHeader) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[31]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2574,7 +2703,7 @@ func (x *TransferHeader) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransferHeader.ProtoReflect.Descriptor instead.
 func (*TransferHeader) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{31}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *TransferHeader) GetClipId() string {
@@ -2625,7 +2754,7 @@ type TransferDone struct {
 
 func (x *TransferDone) Reset() {
 	*x = TransferDone{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[32]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2637,7 +2766,7 @@ func (x *TransferDone) String() string {
 func (*TransferDone) ProtoMessage() {}
 
 func (x *TransferDone) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[32]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2650,7 +2779,7 @@ func (x *TransferDone) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransferDone.ProtoReflect.Descriptor instead.
 func (*TransferDone) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{32}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *TransferDone) GetClipId() string {
@@ -2686,6 +2815,617 @@ func (x *TransferDone) GetSha256() []byte {
 		return x.Sha256
 	}
 	return nil
+}
+
+type SendOffer struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	TransferId string                 `protobuf:"bytes,1,opt,name=transfer_id,json=transferId,proto3" json:"transfer_id,omitempty"`
+	// 第几次发起，从 1 开始。数据通道名带上它，旧的通道晚到时直接丢弃
+	Attempt uint32 `protobuf:"varint,2,opt,name=attempt,proto3" json:"attempt,omitempty"`
+	// 顶层的文件和文件夹，显示用；文件夹的 size 是里面文件的总大小
+	Items      []*ClipItem `protobuf:"bytes,3,rep,name=items,proto3" json:"items,omitempty"`
+	TotalBytes int64       `protobuf:"varint,4,opt,name=total_bytes,json=totalBytes,proto3" json:"total_bytes,omitempty"`
+	FileCount  int64       `protobuf:"varint,5,opt,name=file_count,json=fileCount,proto3" json:"file_count,omitempty"`
+	// 最大的单个文件，接收方据此判断 FAT32 这类单文件 4 GB 的上限
+	LargestFile   int64 `protobuf:"varint,6,opt,name=largest_file,json=largestFile,proto3" json:"largest_file,omitempty"`
+	CreatedAtUnix int64 `protobuf:"varint,7,opt,name=created_at_unix,json=createdAtUnix,proto3" json:"created_at_unix,omitempty"`
+	// 续传：同一个 transfer_id 再次发起
+	Resume        bool `protobuf:"varint,8,opt,name=resume,proto3" json:"resume,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendOffer) Reset() {
+	*x = SendOffer{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendOffer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendOffer) ProtoMessage() {}
+
+func (x *SendOffer) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendOffer.ProtoReflect.Descriptor instead.
+func (*SendOffer) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *SendOffer) GetTransferId() string {
+	if x != nil {
+		return x.TransferId
+	}
+	return ""
+}
+
+func (x *SendOffer) GetAttempt() uint32 {
+	if x != nil {
+		return x.Attempt
+	}
+	return 0
+}
+
+func (x *SendOffer) GetItems() []*ClipItem {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+func (x *SendOffer) GetTotalBytes() int64 {
+	if x != nil {
+		return x.TotalBytes
+	}
+	return 0
+}
+
+func (x *SendOffer) GetFileCount() int64 {
+	if x != nil {
+		return x.FileCount
+	}
+	return 0
+}
+
+func (x *SendOffer) GetLargestFile() int64 {
+	if x != nil {
+		return x.LargestFile
+	}
+	return 0
+}
+
+func (x *SendOffer) GetCreatedAtUnix() int64 {
+	if x != nil {
+		return x.CreatedAtUnix
+	}
+	return 0
+}
+
+func (x *SendOffer) GetResume() bool {
+	if x != nil {
+		return x.Resume
+	}
+	return false
+}
+
+type SendAnswer struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	TransferId string                 `protobuf:"bytes,1,opt,name=transfer_id,json=transferId,proto3" json:"transfer_id,omitempty"`
+	Attempt    uint32                 `protobuf:"varint,2,opt,name=attempt,proto3" json:"attempt,omitempty"`
+	Accepted   bool                   `protobuf:"varint,3,opt,name=accepted,proto3" json:"accepted,omitempty"`
+	// 回绝的原因，固定代码：disabled / no_space / dest_unavailable / file_too_large /
+	// busy / unknown_transfer / cancelled
+	Reason         string `protobuf:"bytes,4,opt,name=reason,proto3" json:"reason,omitempty"`
+	ShortfallBytes int64  `protobuf:"varint,5,opt,name=shortfall_bytes,json=shortfallBytes,proto3" json:"shortfall_bytes,omitempty"` // no_space 时还差多少
+	ResumeIndex    int64  `protobuf:"varint,6,opt,name=resume_index,json=resumeIndex,proto3" json:"resume_index,omitempty"`          // 从第几个条目开始（全新传输为 0）
+	ResumeOffset   int64  `protobuf:"varint,7,opt,name=resume_offset,json=resumeOffset,proto3" json:"resume_offset,omitempty"`       // 这个条目已经收到多少字节
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *SendAnswer) Reset() {
+	*x = SendAnswer{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendAnswer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendAnswer) ProtoMessage() {}
+
+func (x *SendAnswer) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendAnswer.ProtoReflect.Descriptor instead.
+func (*SendAnswer) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *SendAnswer) GetTransferId() string {
+	if x != nil {
+		return x.TransferId
+	}
+	return ""
+}
+
+func (x *SendAnswer) GetAttempt() uint32 {
+	if x != nil {
+		return x.Attempt
+	}
+	return 0
+}
+
+func (x *SendAnswer) GetAccepted() bool {
+	if x != nil {
+		return x.Accepted
+	}
+	return false
+}
+
+func (x *SendAnswer) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *SendAnswer) GetShortfallBytes() int64 {
+	if x != nil {
+		return x.ShortfallBytes
+	}
+	return 0
+}
+
+func (x *SendAnswer) GetResumeIndex() int64 {
+	if x != nil {
+		return x.ResumeIndex
+	}
+	return 0
+}
+
+func (x *SendAnswer) GetResumeOffset() int64 {
+	if x != nil {
+		return x.ResumeOffset
+	}
+	return 0
+}
+
+// 任何一方取消，或者发送方读源文件出错时发出。对方停下并清理没收完的部分
+type SendCancel struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	TransferId string                 `protobuf:"bytes,1,opt,name=transfer_id,json=transferId,proto3" json:"transfer_id,omitempty"`
+	// cancelled / source_changed / source_missing / read_error / dest_unavailable
+	Reason        string `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendCancel) Reset() {
+	*x = SendCancel{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendCancel) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendCancel) ProtoMessage() {}
+
+func (x *SendCancel) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendCancel.ProtoReflect.Descriptor instead.
+func (*SendCancel) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *SendCancel) GetTransferId() string {
+	if x != nil {
+		return x.TransferId
+	}
+	return ""
+}
+
+func (x *SendCancel) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+// 接收方全部收完（或中途失败）后回给发送方
+type SendResult struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	TransferId string                 `protobuf:"bytes,1,opt,name=transfer_id,json=transferId,proto3" json:"transfer_id,omitempty"`
+	Attempt    uint32                 `protobuf:"varint,2,opt,name=attempt,proto3" json:"attempt,omitempty"`
+	Ok         bool                   `protobuf:"varint,3,opt,name=ok,proto3" json:"ok,omitempty"`
+	// hash_mismatch / write_failed / dest_unavailable / bad_stream
+	Error         string `protobuf:"bytes,4,opt,name=error,proto3" json:"error,omitempty"`
+	FailedIndex   int64  `protobuf:"varint,5,opt,name=failed_index,json=failedIndex,proto3" json:"failed_index,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendResult) Reset() {
+	*x = SendResult{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendResult) ProtoMessage() {}
+
+func (x *SendResult) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendResult.ProtoReflect.Descriptor instead.
+func (*SendResult) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *SendResult) GetTransferId() string {
+	if x != nil {
+		return x.TransferId
+	}
+	return ""
+}
+
+func (x *SendResult) GetAttempt() uint32 {
+	if x != nil {
+		return x.Attempt
+	}
+	return 0
+}
+
+func (x *SendResult) GetOk() bool {
+	if x != nil {
+		return x.Ok
+	}
+	return false
+}
+
+func (x *SendResult) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+func (x *SendResult) GetFailedIndex() int64 {
+	if x != nil {
+		return x.FailedIndex
+	}
+	return 0
+}
+
+// 隔空传送数据流里的帧：4 字节大端长度 + 序列化的 SendFrame。
+// file 之后紧跟 size - offset 个字节的文件内容（目录和链接没有内容），
+// 普通文件的内容之后是 file_end。最后是 end。整个帧流再经 zstd 压缩。
+type SendFrame struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Payload:
+	//
+	//	*SendFrame_File
+	//	*SendFrame_FileEnd
+	//	*SendFrame_End
+	Payload       isSendFrame_Payload `protobuf_oneof:"payload"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendFrame) Reset() {
+	*x = SendFrame{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendFrame) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendFrame) ProtoMessage() {}
+
+func (x *SendFrame) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendFrame.ProtoReflect.Descriptor instead.
+func (*SendFrame) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *SendFrame) GetPayload() isSendFrame_Payload {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
+func (x *SendFrame) GetFile() *SendFileStart {
+	if x != nil {
+		if x, ok := x.Payload.(*SendFrame_File); ok {
+			return x.File
+		}
+	}
+	return nil
+}
+
+func (x *SendFrame) GetFileEnd() *SendFileEnd {
+	if x != nil {
+		if x, ok := x.Payload.(*SendFrame_FileEnd); ok {
+			return x.FileEnd
+		}
+	}
+	return nil
+}
+
+func (x *SendFrame) GetEnd() *SendStreamEnd {
+	if x != nil {
+		if x, ok := x.Payload.(*SendFrame_End); ok {
+			return x.End
+		}
+	}
+	return nil
+}
+
+type isSendFrame_Payload interface {
+	isSendFrame_Payload()
+}
+
+type SendFrame_File struct {
+	File *SendFileStart `protobuf:"bytes,1,opt,name=file,proto3,oneof"`
+}
+
+type SendFrame_FileEnd struct {
+	FileEnd *SendFileEnd `protobuf:"bytes,2,opt,name=file_end,json=fileEnd,proto3,oneof"`
+}
+
+type SendFrame_End struct {
+	End *SendStreamEnd `protobuf:"bytes,3,opt,name=end,proto3,oneof"`
+}
+
+func (*SendFrame_File) isSendFrame_Payload() {}
+
+func (*SendFrame_FileEnd) isSendFrame_Payload() {}
+
+func (*SendFrame_End) isSendFrame_Payload() {}
+
+type SendFileStart struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Index         int64                  `protobuf:"varint,1,opt,name=index,proto3" json:"index,omitempty"` // 在清单里的序号，从 0 开始
+	Path          string                 `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`    // 相对路径，正斜杠分隔，第一段是顶层项目的名字
+	Size          int64                  `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	IsDir         bool                   `protobuf:"varint,4,opt,name=is_dir,json=isDir,proto3" json:"is_dir,omitempty"`
+	Mode          uint32                 `protobuf:"varint,5,opt,name=mode,proto3" json:"mode,omitempty"` // 权限位，只用来保留可执行位
+	MtimeUnix     int64                  `protobuf:"varint,6,opt,name=mtime_unix,json=mtimeUnix,proto3" json:"mtime_unix,omitempty"`
+	Offset        int64                  `protobuf:"varint,7,opt,name=offset,proto3" json:"offset,omitempty"`                          // 从文件的第几个字节开始发（续传）
+	LinkTarget    string                 `protobuf:"bytes,8,opt,name=link_target,json=linkTarget,proto3" json:"link_target,omitempty"` // 非空表示这是符号链接
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendFileStart) Reset() {
+	*x = SendFileStart{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendFileStart) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendFileStart) ProtoMessage() {}
+
+func (x *SendFileStart) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendFileStart.ProtoReflect.Descriptor instead.
+func (*SendFileStart) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *SendFileStart) GetIndex() int64 {
+	if x != nil {
+		return x.Index
+	}
+	return 0
+}
+
+func (x *SendFileStart) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *SendFileStart) GetSize() int64 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
+func (x *SendFileStart) GetIsDir() bool {
+	if x != nil {
+		return x.IsDir
+	}
+	return false
+}
+
+func (x *SendFileStart) GetMode() uint32 {
+	if x != nil {
+		return x.Mode
+	}
+	return 0
+}
+
+func (x *SendFileStart) GetMtimeUnix() int64 {
+	if x != nil {
+		return x.MtimeUnix
+	}
+	return 0
+}
+
+func (x *SendFileStart) GetOffset() int64 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+func (x *SendFileStart) GetLinkTarget() string {
+	if x != nil {
+		return x.LinkTarget
+	}
+	return ""
+}
+
+type SendFileEnd struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Sha256        []byte                 `protobuf:"bytes,1,opt,name=sha256,proto3" json:"sha256,omitempty"` // 整个文件的 SHA-256，续传时也是整个文件的
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendFileEnd) Reset() {
+	*x = SendFileEnd{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendFileEnd) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendFileEnd) ProtoMessage() {}
+
+func (x *SendFileEnd) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendFileEnd.ProtoReflect.Descriptor instead.
+func (*SendFileEnd) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *SendFileEnd) GetSha256() []byte {
+	if x != nil {
+		return x.Sha256
+	}
+	return nil
+}
+
+type SendStreamEnd struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendStreamEnd) Reset() {
+	*x = SendStreamEnd{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendStreamEnd) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendStreamEnd) ProtoMessage() {}
+
+func (x *SendStreamEnd) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendStreamEnd.ProtoReflect.Descriptor instead.
+func (*SendStreamEnd) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{41}
 }
 
 var File_pasteferry_v1_wire_proto protoreflect.FileDescriptor
@@ -2836,7 +3576,7 @@ const file_pasteferry_v1_wire_proto_rawDesc = "" +
 	"\binstance\x18\x01 \x01(\tR\binstance\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
 	"\bplatform\x18\x03 \x01(\tR\bplatform\x12\x14\n" +
-	"\x05token\x18\x04 \x01(\tR\x05token\"\x85\x03\n" +
+	"\x05token\x18\x04 \x01(\tR\x05token\"\xb5\x05\n" +
 	"\vPeerMessage\x120\n" +
 	"\x05offer\x18\x01 \x01(\v2\x18.pasteferry.v1.ClipOfferH\x00R\x05offer\x120\n" +
 	"\x05fetch\x18\x02 \x01(\v2\x18.pasteferry.v1.PeerFetchH\x00R\x05fetch\x124\n" +
@@ -2844,8 +3584,20 @@ const file_pasteferry_v1_wire_proto_rawDesc = "" +
 	"\x06header\x18\x04 \x01(\v2\x1d.pasteferry.v1.TransferHeaderH\x00R\x06header\x121\n" +
 	"\x04done\x18\x05 \x01(\v2\x1b.pasteferry.v1.TransferDoneH\x00R\x04done\x12-\n" +
 	"\x04link\x18\x06 \x01(\v2\x17.pasteferry.v1.LinkInfoH\x00R\x04link\x126\n" +
-	"\adisplay\x18\a \x01(\v2\x1a.pasteferry.v1.PeerDisplayH\x00R\adisplayB\t\n" +
-	"\apayload\"$\n" +
+	"\adisplay\x18\a \x01(\v2\x1a.pasteferry.v1.PeerDisplayH\x00R\adisplay\x129\n" +
+	"\bfeatures\x18\b \x01(\v2\x1b.pasteferry.v1.PeerFeaturesH\x00R\bfeatures\x129\n" +
+	"\n" +
+	"send_offer\x18\t \x01(\v2\x18.pasteferry.v1.SendOfferH\x00R\tsendOffer\x12<\n" +
+	"\vsend_answer\x18\n" +
+	" \x01(\v2\x19.pasteferry.v1.SendAnswerH\x00R\n" +
+	"sendAnswer\x12<\n" +
+	"\vsend_cancel\x18\v \x01(\v2\x19.pasteferry.v1.SendCancelH\x00R\n" +
+	"sendCancel\x12<\n" +
+	"\vsend_result\x18\f \x01(\v2\x19.pasteferry.v1.SendResultH\x00R\n" +
+	"sendResultB\t\n" +
+	"\apayload\"*\n" +
+	"\fPeerFeatures\x12\x1a\n" +
+	"\bfeatures\x18\x01 \x03(\tR\bfeatures\"$\n" +
 	"\bLinkInfo\x12\x18\n" +
 	"\arelayed\x18\x01 \x01(\bR\arelayed\"=\n" +
 	"\vPeerDisplay\x12\x12\n" +
@@ -2880,7 +3632,61 @@ const file_pasteferry_v1_wire_proto_rawDesc = "" +
 	"\tstream_id\x18\x02 \x01(\tR\bstreamId\x12\x0e\n" +
 	"\x02ok\x18\x03 \x01(\bR\x02ok\x12\x14\n" +
 	"\x05error\x18\x04 \x01(\tR\x05error\x12\x16\n" +
-	"\x06sha256\x18\x05 \x01(\fR\x06sha256*V\n" +
+	"\x06sha256\x18\x05 \x01(\fR\x06sha256\"\x98\x02\n" +
+	"\tSendOffer\x12\x1f\n" +
+	"\vtransfer_id\x18\x01 \x01(\tR\n" +
+	"transferId\x12\x18\n" +
+	"\aattempt\x18\x02 \x01(\rR\aattempt\x12-\n" +
+	"\x05items\x18\x03 \x03(\v2\x17.pasteferry.v1.ClipItemR\x05items\x12\x1f\n" +
+	"\vtotal_bytes\x18\x04 \x01(\x03R\n" +
+	"totalBytes\x12\x1d\n" +
+	"\n" +
+	"file_count\x18\x05 \x01(\x03R\tfileCount\x12!\n" +
+	"\flargest_file\x18\x06 \x01(\x03R\vlargestFile\x12&\n" +
+	"\x0fcreated_at_unix\x18\a \x01(\x03R\rcreatedAtUnix\x12\x16\n" +
+	"\x06resume\x18\b \x01(\bR\x06resume\"\xec\x01\n" +
+	"\n" +
+	"SendAnswer\x12\x1f\n" +
+	"\vtransfer_id\x18\x01 \x01(\tR\n" +
+	"transferId\x12\x18\n" +
+	"\aattempt\x18\x02 \x01(\rR\aattempt\x12\x1a\n" +
+	"\baccepted\x18\x03 \x01(\bR\baccepted\x12\x16\n" +
+	"\x06reason\x18\x04 \x01(\tR\x06reason\x12'\n" +
+	"\x0fshortfall_bytes\x18\x05 \x01(\x03R\x0eshortfallBytes\x12!\n" +
+	"\fresume_index\x18\x06 \x01(\x03R\vresumeIndex\x12#\n" +
+	"\rresume_offset\x18\a \x01(\x03R\fresumeOffset\"E\n" +
+	"\n" +
+	"SendCancel\x12\x1f\n" +
+	"\vtransfer_id\x18\x01 \x01(\tR\n" +
+	"transferId\x12\x16\n" +
+	"\x06reason\x18\x02 \x01(\tR\x06reason\"\x90\x01\n" +
+	"\n" +
+	"SendResult\x12\x1f\n" +
+	"\vtransfer_id\x18\x01 \x01(\tR\n" +
+	"transferId\x12\x18\n" +
+	"\aattempt\x18\x02 \x01(\rR\aattempt\x12\x0e\n" +
+	"\x02ok\x18\x03 \x01(\bR\x02ok\x12\x14\n" +
+	"\x05error\x18\x04 \x01(\tR\x05error\x12!\n" +
+	"\ffailed_index\x18\x05 \x01(\x03R\vfailedIndex\"\xb5\x01\n" +
+	"\tSendFrame\x122\n" +
+	"\x04file\x18\x01 \x01(\v2\x1c.pasteferry.v1.SendFileStartH\x00R\x04file\x127\n" +
+	"\bfile_end\x18\x02 \x01(\v2\x1a.pasteferry.v1.SendFileEndH\x00R\afileEnd\x120\n" +
+	"\x03end\x18\x03 \x01(\v2\x1c.pasteferry.v1.SendStreamEndH\x00R\x03endB\t\n" +
+	"\apayload\"\xd0\x01\n" +
+	"\rSendFileStart\x12\x14\n" +
+	"\x05index\x18\x01 \x01(\x03R\x05index\x12\x12\n" +
+	"\x04path\x18\x02 \x01(\tR\x04path\x12\x12\n" +
+	"\x04size\x18\x03 \x01(\x03R\x04size\x12\x15\n" +
+	"\x06is_dir\x18\x04 \x01(\bR\x05isDir\x12\x12\n" +
+	"\x04mode\x18\x05 \x01(\rR\x04mode\x12\x1d\n" +
+	"\n" +
+	"mtime_unix\x18\x06 \x01(\x03R\tmtimeUnix\x12\x16\n" +
+	"\x06offset\x18\a \x01(\x03R\x06offset\x12\x1f\n" +
+	"\vlink_target\x18\b \x01(\tR\n" +
+	"linkTarget\"%\n" +
+	"\vSendFileEnd\x12\x16\n" +
+	"\x06sha256\x18\x01 \x01(\fR\x06sha256\"\x0f\n" +
+	"\rSendStreamEnd*V\n" +
 	"\vCompression\x12\x1b\n" +
 	"\x17COMPRESSION_UNSPECIFIED\x10\x00\x12\x14\n" +
 	"\x10COMPRESSION_NONE\x10\x01\x12\x14\n" +
@@ -2903,7 +3709,7 @@ func file_pasteferry_v1_wire_proto_rawDescGZIP() []byte {
 }
 
 var file_pasteferry_v1_wire_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_pasteferry_v1_wire_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_pasteferry_v1_wire_proto_msgTypes = make([]protoimpl.MessageInfo, 42)
 var file_pasteferry_v1_wire_proto_goTypes = []any{
 	(Compression)(0),              // 0: pasteferry.v1.Compression
 	(Packaging)(0),                // 1: pasteferry.v1.Packaging
@@ -2933,15 +3739,24 @@ var file_pasteferry_v1_wire_proto_goTypes = []any{
 	(*LanPairReject)(nil),         // 25: pasteferry.v1.LanPairReject
 	(*LanNearbyPing)(nil),         // 26: pasteferry.v1.LanNearbyPing
 	(*PeerMessage)(nil),           // 27: pasteferry.v1.PeerMessage
-	(*LinkInfo)(nil),              // 28: pasteferry.v1.LinkInfo
-	(*PeerDisplay)(nil),           // 29: pasteferry.v1.PeerDisplay
-	(*ClipOffer)(nil),             // 30: pasteferry.v1.ClipOffer
-	(*PeerFetch)(nil),             // 31: pasteferry.v1.PeerFetch
-	(*FetchReject)(nil),           // 32: pasteferry.v1.FetchReject
-	(*TransferHeader)(nil),        // 33: pasteferry.v1.TransferHeader
-	(*TransferDone)(nil),          // 34: pasteferry.v1.TransferDone
-	(ClipKind)(0),                 // 35: pasteferry.v1.ClipKind
-	(*ClipItem)(nil),              // 36: pasteferry.v1.ClipItem
+	(*PeerFeatures)(nil),          // 28: pasteferry.v1.PeerFeatures
+	(*LinkInfo)(nil),              // 29: pasteferry.v1.LinkInfo
+	(*PeerDisplay)(nil),           // 30: pasteferry.v1.PeerDisplay
+	(*ClipOffer)(nil),             // 31: pasteferry.v1.ClipOffer
+	(*PeerFetch)(nil),             // 32: pasteferry.v1.PeerFetch
+	(*FetchReject)(nil),           // 33: pasteferry.v1.FetchReject
+	(*TransferHeader)(nil),        // 34: pasteferry.v1.TransferHeader
+	(*TransferDone)(nil),          // 35: pasteferry.v1.TransferDone
+	(*SendOffer)(nil),             // 36: pasteferry.v1.SendOffer
+	(*SendAnswer)(nil),            // 37: pasteferry.v1.SendAnswer
+	(*SendCancel)(nil),            // 38: pasteferry.v1.SendCancel
+	(*SendResult)(nil),            // 39: pasteferry.v1.SendResult
+	(*SendFrame)(nil),             // 40: pasteferry.v1.SendFrame
+	(*SendFileStart)(nil),         // 41: pasteferry.v1.SendFileStart
+	(*SendFileEnd)(nil),           // 42: pasteferry.v1.SendFileEnd
+	(*SendStreamEnd)(nil),         // 43: pasteferry.v1.SendStreamEnd
+	(ClipKind)(0),                 // 44: pasteferry.v1.ClipKind
+	(*ClipItem)(nil),              // 45: pasteferry.v1.ClipItem
 }
 var file_pasteferry_v1_wire_proto_depIdxs = []int32{
 	4,  // 0: pasteferry.v1.SignalMessage.offer:type_name -> pasteferry.v1.SdpOffer
@@ -2969,22 +3784,31 @@ var file_pasteferry_v1_wire_proto_depIdxs = []int32{
 	25, // 22: pasteferry.v1.LanPacket.pair_reject:type_name -> pasteferry.v1.LanPairReject
 	23, // 23: pasteferry.v1.LanPacket.nearby_request:type_name -> pasteferry.v1.LanPairSigned
 	26, // 24: pasteferry.v1.LanPacket.nearby_ping:type_name -> pasteferry.v1.LanNearbyPing
-	30, // 25: pasteferry.v1.PeerMessage.offer:type_name -> pasteferry.v1.ClipOffer
-	31, // 26: pasteferry.v1.PeerMessage.fetch:type_name -> pasteferry.v1.PeerFetch
-	32, // 27: pasteferry.v1.PeerMessage.reject:type_name -> pasteferry.v1.FetchReject
-	33, // 28: pasteferry.v1.PeerMessage.header:type_name -> pasteferry.v1.TransferHeader
-	34, // 29: pasteferry.v1.PeerMessage.done:type_name -> pasteferry.v1.TransferDone
-	28, // 30: pasteferry.v1.PeerMessage.link:type_name -> pasteferry.v1.LinkInfo
-	29, // 31: pasteferry.v1.PeerMessage.display:type_name -> pasteferry.v1.PeerDisplay
-	35, // 32: pasteferry.v1.ClipOffer.kind:type_name -> pasteferry.v1.ClipKind
-	36, // 33: pasteferry.v1.ClipOffer.items:type_name -> pasteferry.v1.ClipItem
-	0,  // 34: pasteferry.v1.TransferHeader.compression:type_name -> pasteferry.v1.Compression
-	1,  // 35: pasteferry.v1.TransferHeader.packaging:type_name -> pasteferry.v1.Packaging
-	36, // [36:36] is the sub-list for method output_type
-	36, // [36:36] is the sub-list for method input_type
-	36, // [36:36] is the sub-list for extension type_name
-	36, // [36:36] is the sub-list for extension extendee
-	0,  // [0:36] is the sub-list for field type_name
+	31, // 25: pasteferry.v1.PeerMessage.offer:type_name -> pasteferry.v1.ClipOffer
+	32, // 26: pasteferry.v1.PeerMessage.fetch:type_name -> pasteferry.v1.PeerFetch
+	33, // 27: pasteferry.v1.PeerMessage.reject:type_name -> pasteferry.v1.FetchReject
+	34, // 28: pasteferry.v1.PeerMessage.header:type_name -> pasteferry.v1.TransferHeader
+	35, // 29: pasteferry.v1.PeerMessage.done:type_name -> pasteferry.v1.TransferDone
+	29, // 30: pasteferry.v1.PeerMessage.link:type_name -> pasteferry.v1.LinkInfo
+	30, // 31: pasteferry.v1.PeerMessage.display:type_name -> pasteferry.v1.PeerDisplay
+	28, // 32: pasteferry.v1.PeerMessage.features:type_name -> pasteferry.v1.PeerFeatures
+	36, // 33: pasteferry.v1.PeerMessage.send_offer:type_name -> pasteferry.v1.SendOffer
+	37, // 34: pasteferry.v1.PeerMessage.send_answer:type_name -> pasteferry.v1.SendAnswer
+	38, // 35: pasteferry.v1.PeerMessage.send_cancel:type_name -> pasteferry.v1.SendCancel
+	39, // 36: pasteferry.v1.PeerMessage.send_result:type_name -> pasteferry.v1.SendResult
+	44, // 37: pasteferry.v1.ClipOffer.kind:type_name -> pasteferry.v1.ClipKind
+	45, // 38: pasteferry.v1.ClipOffer.items:type_name -> pasteferry.v1.ClipItem
+	0,  // 39: pasteferry.v1.TransferHeader.compression:type_name -> pasteferry.v1.Compression
+	1,  // 40: pasteferry.v1.TransferHeader.packaging:type_name -> pasteferry.v1.Packaging
+	45, // 41: pasteferry.v1.SendOffer.items:type_name -> pasteferry.v1.ClipItem
+	41, // 42: pasteferry.v1.SendFrame.file:type_name -> pasteferry.v1.SendFileStart
+	42, // 43: pasteferry.v1.SendFrame.file_end:type_name -> pasteferry.v1.SendFileEnd
+	43, // 44: pasteferry.v1.SendFrame.end:type_name -> pasteferry.v1.SendStreamEnd
+	45, // [45:45] is the sub-list for method output_type
+	45, // [45:45] is the sub-list for method input_type
+	45, // [45:45] is the sub-list for extension type_name
+	45, // [45:45] is the sub-list for extension extendee
+	0,  // [0:45] is the sub-list for field type_name
 }
 
 func init() { file_pasteferry_v1_wire_proto_init() }
@@ -3032,6 +3856,16 @@ func file_pasteferry_v1_wire_proto_init() {
 		(*PeerMessage_Done)(nil),
 		(*PeerMessage_Link)(nil),
 		(*PeerMessage_Display)(nil),
+		(*PeerMessage_Features)(nil),
+		(*PeerMessage_SendOffer)(nil),
+		(*PeerMessage_SendAnswer)(nil),
+		(*PeerMessage_SendCancel)(nil),
+		(*PeerMessage_SendResult)(nil),
+	}
+	file_pasteferry_v1_wire_proto_msgTypes[38].OneofWrappers = []any{
+		(*SendFrame_File)(nil),
+		(*SendFrame_FileEnd)(nil),
+		(*SendFrame_End)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -3039,7 +3873,7 @@ func file_pasteferry_v1_wire_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pasteferry_v1_wire_proto_rawDesc), len(file_pasteferry_v1_wire_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   33,
+			NumMessages:   42,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

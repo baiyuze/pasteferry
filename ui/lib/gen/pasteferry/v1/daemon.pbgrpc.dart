@@ -300,6 +300,65 @@ class DaemonServiceClient extends $grpc.Client {
     return $createUnaryCall(_$sendQuickPasteCommand, request, options: options);
   }
 
+  /// ── 隔空传送：把文件直接发给某一台设备，见 design/send-files.md ──
+  /// 发给一台设备。立即返回这一批的记录，之后的状态与进度走 transfer_changed 事件。
+  /// 对方不在线或不支持时返回 FAILED_PRECONDITION；路径不存在返回 INVALID_ARGUMENT。
+  /// 要经官方服务中转而 allow_relay 为 false 时返回 FAILED_PRECONDITION，消息为 "relay"，界面确认后再调一次
+  $grpc.ResponseFuture<$0.Transfer> sendFiles(
+    $0.SendFilesRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$sendFiles, request, options: options);
+  }
+
+  /// 取消一批（发出的或收到的都可以），两边都停下
+  $grpc.ResponseFuture<$0.Empty> cancelTransfer(
+    $0.TransferRef request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$cancelTransfer, request, options: options);
+  }
+
+  /// 发出的、已中断的一批从断点继续；对方已清掉没收完的部分时从头再发
+  $grpc.ResponseFuture<$0.Empty> resumeTransfer(
+    $0.TransferRef request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$resumeTransfer, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ListTransfersResponse> listTransfers(
+    $0.ListTransfersRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listTransfers, request, options: options);
+  }
+
+  /// 只删记录，不删文件；进行中的不删
+  $grpc.ResponseFuture<$0.Empty> deleteTransfers(
+    $0.DeleteTransfersRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$deleteTransfers, request, options: options);
+  }
+
+  /// 打开隔空传送页时调用：收到的都标为看过，侧边栏的数字清零
+  $grpc.ResponseFuture<$0.Empty> markTransfersSeen(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$markTransfersSeen, request, options: options);
+  }
+
+  /// 检查保存位置能否写入。path 为空时检查当前设置的位置。
+  /// 在 macOS 上会在这时触发系统的文件夹授权弹窗，所以要在用户看着界面时调用
+  $grpc.ResponseFuture<$0.CheckReceiveDirResponse> checkReceiveDir(
+    $0.CheckReceiveDirRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$checkReceiveDir, request, options: options);
+  }
+
   // method descriptors
 
   static final _$subscribe = $grpc.ClientMethod<$0.SubscribeRequest, $0.Event>(
@@ -459,6 +518,38 @@ class DaemonServiceClient extends $grpc.Client {
           '/pasteferry.v1.DaemonService/SendQuickPasteCommand',
           ($0.QuickPasteCommand value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
+  static final _$sendFiles =
+      $grpc.ClientMethod<$0.SendFilesRequest, $0.Transfer>(
+          '/pasteferry.v1.DaemonService/SendFiles',
+          ($0.SendFilesRequest value) => value.writeToBuffer(),
+          $0.Transfer.fromBuffer);
+  static final _$cancelTransfer = $grpc.ClientMethod<$0.TransferRef, $0.Empty>(
+      '/pasteferry.v1.DaemonService/CancelTransfer',
+      ($0.TransferRef value) => value.writeToBuffer(),
+      $0.Empty.fromBuffer);
+  static final _$resumeTransfer = $grpc.ClientMethod<$0.TransferRef, $0.Empty>(
+      '/pasteferry.v1.DaemonService/ResumeTransfer',
+      ($0.TransferRef value) => value.writeToBuffer(),
+      $0.Empty.fromBuffer);
+  static final _$listTransfers =
+      $grpc.ClientMethod<$0.ListTransfersRequest, $0.ListTransfersResponse>(
+          '/pasteferry.v1.DaemonService/ListTransfers',
+          ($0.ListTransfersRequest value) => value.writeToBuffer(),
+          $0.ListTransfersResponse.fromBuffer);
+  static final _$deleteTransfers =
+      $grpc.ClientMethod<$0.DeleteTransfersRequest, $0.Empty>(
+          '/pasteferry.v1.DaemonService/DeleteTransfers',
+          ($0.DeleteTransfersRequest value) => value.writeToBuffer(),
+          $0.Empty.fromBuffer);
+  static final _$markTransfersSeen = $grpc.ClientMethod<$0.Empty, $0.Empty>(
+      '/pasteferry.v1.DaemonService/MarkTransfersSeen',
+      ($0.Empty value) => value.writeToBuffer(),
+      $0.Empty.fromBuffer);
+  static final _$checkReceiveDir =
+      $grpc.ClientMethod<$0.CheckReceiveDirRequest, $0.CheckReceiveDirResponse>(
+          '/pasteferry.v1.DaemonService/CheckReceiveDir',
+          ($0.CheckReceiveDirRequest value) => value.writeToBuffer(),
+          $0.CheckReceiveDirResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('pasteferry.v1.DaemonService')
@@ -717,6 +808,60 @@ abstract class DaemonServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.QuickPasteCommand.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SendFilesRequest, $0.Transfer>(
+        'SendFiles',
+        sendFiles_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.SendFilesRequest.fromBuffer(value),
+        ($0.Transfer value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TransferRef, $0.Empty>(
+        'CancelTransfer',
+        cancelTransfer_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.TransferRef.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TransferRef, $0.Empty>(
+        'ResumeTransfer',
+        resumeTransfer_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.TransferRef.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.ListTransfersRequest, $0.ListTransfersResponse>(
+            'ListTransfers',
+            listTransfers_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.ListTransfersRequest.fromBuffer(value),
+            ($0.ListTransfersResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DeleteTransfersRequest, $0.Empty>(
+        'DeleteTransfers',
+        deleteTransfers_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.DeleteTransfersRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
+        'MarkTransfersSeen',
+        markTransfersSeen_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.CheckReceiveDirRequest,
+            $0.CheckReceiveDirResponse>(
+        'CheckReceiveDir',
+        checkReceiveDir_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.CheckReceiveDirRequest.fromBuffer(value),
+        ($0.CheckReceiveDirResponse value) => value.writeToBuffer()));
   }
 
   $async.Stream<$0.Event> subscribe_Pre($grpc.ServiceCall $call,
@@ -978,4 +1123,62 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.Empty> sendQuickPasteCommand(
       $grpc.ServiceCall call, $0.QuickPasteCommand request);
+
+  $async.Future<$0.Transfer> sendFiles_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SendFilesRequest> $request) async {
+    return sendFiles($call, await $request);
+  }
+
+  $async.Future<$0.Transfer> sendFiles(
+      $grpc.ServiceCall call, $0.SendFilesRequest request);
+
+  $async.Future<$0.Empty> cancelTransfer_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.TransferRef> $request) async {
+    return cancelTransfer($call, await $request);
+  }
+
+  $async.Future<$0.Empty> cancelTransfer(
+      $grpc.ServiceCall call, $0.TransferRef request);
+
+  $async.Future<$0.Empty> resumeTransfer_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.TransferRef> $request) async {
+    return resumeTransfer($call, await $request);
+  }
+
+  $async.Future<$0.Empty> resumeTransfer(
+      $grpc.ServiceCall call, $0.TransferRef request);
+
+  $async.Future<$0.ListTransfersResponse> listTransfers_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.ListTransfersRequest> $request) async {
+    return listTransfers($call, await $request);
+  }
+
+  $async.Future<$0.ListTransfersResponse> listTransfers(
+      $grpc.ServiceCall call, $0.ListTransfersRequest request);
+
+  $async.Future<$0.Empty> deleteTransfers_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.DeleteTransfersRequest> $request) async {
+    return deleteTransfers($call, await $request);
+  }
+
+  $async.Future<$0.Empty> deleteTransfers(
+      $grpc.ServiceCall call, $0.DeleteTransfersRequest request);
+
+  $async.Future<$0.Empty> markTransfersSeen_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return markTransfersSeen($call, await $request);
+  }
+
+  $async.Future<$0.Empty> markTransfersSeen(
+      $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.CheckReceiveDirResponse> checkReceiveDir_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.CheckReceiveDirRequest> $request) async {
+    return checkReceiveDir($call, await $request);
+  }
+
+  $async.Future<$0.CheckReceiveDirResponse> checkReceiveDir(
+      $grpc.ServiceCall call, $0.CheckReceiveDirRequest request);
 }

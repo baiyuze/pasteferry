@@ -2523,6 +2523,11 @@ enum PeerMessage_Payload {
   done,
   link,
   display,
+  features,
+  sendOffer,
+  sendAnswer,
+  sendCancel,
+  sendResult,
   notSet
 }
 
@@ -2536,6 +2541,11 @@ class PeerMessage extends $pb.GeneratedMessage {
     TransferDone? done,
     LinkInfo? link,
     PeerDisplay? display,
+    PeerFeatures? features,
+    SendOffer? sendOffer,
+    SendAnswer? sendAnswer,
+    SendCancel? sendCancel,
+    SendResult? sendResult,
   }) {
     final result = PeerMessage._();
     if (offer != null) result.offer = offer;
@@ -2545,6 +2555,11 @@ class PeerMessage extends $pb.GeneratedMessage {
     if (done != null) result.done = done;
     if (link != null) result.link = link;
     if (display != null) result.display = display;
+    if (features != null) result.features = features;
+    if (sendOffer != null) result.sendOffer = sendOffer;
+    if (sendAnswer != null) result.sendAnswer = sendAnswer;
+    if (sendCancel != null) result.sendCancel = sendCancel;
+    if (sendResult != null) result.sendResult = sendResult;
     return result;
   }
 
@@ -2566,13 +2581,18 @@ class PeerMessage extends $pb.GeneratedMessage {
     5: PeerMessage_Payload.done,
     6: PeerMessage_Payload.link,
     7: PeerMessage_Payload.display,
+    8: PeerMessage_Payload.features,
+    9: PeerMessage_Payload.sendOffer,
+    10: PeerMessage_Payload.sendAnswer,
+    11: PeerMessage_Payload.sendCancel,
+    12: PeerMessage_Payload.sendResult,
     0: PeerMessage_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PeerMessage',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: PeerMessage.$_createMessage)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
     ..aOM<ClipOffer>(1, _omitFieldNames ? '' : 'offer',
         subBuilder: ClipOffer.$_createMessage)
     ..aOM<PeerFetch>(2, _omitFieldNames ? '' : 'fetch',
@@ -2587,6 +2607,16 @@ class PeerMessage extends $pb.GeneratedMessage {
         subBuilder: LinkInfo.$_createMessage)
     ..aOM<PeerDisplay>(7, _omitFieldNames ? '' : 'display',
         subBuilder: PeerDisplay.$_createMessage)
+    ..aOM<PeerFeatures>(8, _omitFieldNames ? '' : 'features',
+        subBuilder: PeerFeatures.$_createMessage)
+    ..aOM<SendOffer>(9, _omitFieldNames ? '' : 'sendOffer',
+        subBuilder: SendOffer.$_createMessage)
+    ..aOM<SendAnswer>(10, _omitFieldNames ? '' : 'sendAnswer',
+        subBuilder: SendAnswer.$_createMessage)
+    ..aOM<SendCancel>(11, _omitFieldNames ? '' : 'sendCancel',
+        subBuilder: SendCancel.$_createMessage)
+    ..aOM<SendResult>(12, _omitFieldNames ? '' : 'sendResult',
+        subBuilder: SendResult.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2618,6 +2648,11 @@ class PeerMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   @$pb.TagNumber(6)
   @$pb.TagNumber(7)
+  @$pb.TagNumber(8)
+  @$pb.TagNumber(9)
+  @$pb.TagNumber(10)
+  @$pb.TagNumber(11)
+  @$pb.TagNumber(12)
   PeerMessage_Payload whichPayload() =>
       _PeerMessage_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(1)
@@ -2627,6 +2662,11 @@ class PeerMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   @$pb.TagNumber(6)
   @$pb.TagNumber(7)
+  @$pb.TagNumber(8)
+  @$pb.TagNumber(9)
+  @$pb.TagNumber(10)
+  @$pb.TagNumber(11)
+  @$pb.TagNumber(12)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -2705,6 +2745,117 @@ class PeerMessage extends $pb.GeneratedMessage {
   void clearDisplay() => $_clearField(7);
   @$pb.TagNumber(7)
   PeerDisplay ensureDisplay() => $_ensure(6);
+
+  @$pb.TagNumber(8)
+  PeerFeatures get features => $_getN(7);
+  @$pb.TagNumber(8)
+  set features(PeerFeatures value) => $_setField(8, value);
+  @$pb.TagNumber(8)
+  $core.bool hasFeatures() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearFeatures() => $_clearField(8);
+  @$pb.TagNumber(8)
+  PeerFeatures ensureFeatures() => $_ensure(7);
+
+  /// 隔空传送：把文件直接发给某一台设备，见 design/send-files.md
+  @$pb.TagNumber(9)
+  SendOffer get sendOffer => $_getN(8);
+  @$pb.TagNumber(9)
+  set sendOffer(SendOffer value) => $_setField(9, value);
+  @$pb.TagNumber(9)
+  $core.bool hasSendOffer() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearSendOffer() => $_clearField(9);
+  @$pb.TagNumber(9)
+  SendOffer ensureSendOffer() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  SendAnswer get sendAnswer => $_getN(9);
+  @$pb.TagNumber(10)
+  set sendAnswer(SendAnswer value) => $_setField(10, value);
+  @$pb.TagNumber(10)
+  $core.bool hasSendAnswer() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearSendAnswer() => $_clearField(10);
+  @$pb.TagNumber(10)
+  SendAnswer ensureSendAnswer() => $_ensure(9);
+
+  @$pb.TagNumber(11)
+  SendCancel get sendCancel => $_getN(10);
+  @$pb.TagNumber(11)
+  set sendCancel(SendCancel value) => $_setField(11, value);
+  @$pb.TagNumber(11)
+  $core.bool hasSendCancel() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearSendCancel() => $_clearField(11);
+  @$pb.TagNumber(11)
+  SendCancel ensureSendCancel() => $_ensure(10);
+
+  @$pb.TagNumber(12)
+  SendResult get sendResult => $_getN(11);
+  @$pb.TagNumber(12)
+  set sendResult(SendResult value) => $_setField(12, value);
+  @$pb.TagNumber(12)
+  $core.bool hasSendResult() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearSendResult() => $_clearField(12);
+  @$pb.TagNumber(12)
+  SendResult ensureSendResult() => $_ensure(11);
+}
+
+/// 连接就绪后各自发一次，与 LinkInfo 一起；功能开关变了再发一次。
+/// 旧版本不发，也不认识它，对方据此当作不支持。
+class PeerFeatures extends $pb.GeneratedMessage {
+  factory PeerFeatures({
+    $core.Iterable<$core.String>? features,
+  }) {
+    final result = PeerFeatures._();
+    if (features != null) result.features.addAll(features);
+    return result;
+  }
+
+  PeerFeatures._();
+
+  factory PeerFeatures.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PeerFeatures()..mergeFromBuffer(data, registry);
+  factory PeerFeatures.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PeerFeatures()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PeerFeatures',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: PeerFeatures.$_createMessage)
+    ..pPS(1, _omitFieldNames ? '' : 'features')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PeerFeatures clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PeerFeatures copyWith(void Function(PeerFeatures) updates) =>
+      super.copyWith((message) => updates(message as PeerFeatures))
+          as PeerFeatures;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use PeerFeatures() / PeerFeatures.new instead')
+  static PeerFeatures create() => PeerFeatures._();
+  static $pb.GeneratedMessage $_createMessage() => PeerFeatures._();
+  @$core.override
+  PeerFeatures createEmptyInstance() => PeerFeatures._();
+  @$core.pragma('dart2js:noInline')
+  static PeerFeatures getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PeerFeatures>(
+          PeerFeatures.$_createMessage);
+  static PeerFeatures? _defaultInstance;
+
+  /// "send_files_v1"：能接收隔空传送。关闭了接收时不带它，改带 "send_files_off"，
+  /// 对方的雷达显示「不接收文件」而不是「需要更新」
+  @$pb.TagNumber(1)
+  $pb.PbList<$core.String> get features => $_getList(0);
 }
 
 /// 连接就绪后各自发一次。只有本端能确定自己发出的数据是否走 TURN：
@@ -3324,6 +3475,797 @@ class TransferDone extends $pb.GeneratedMessage {
   $core.bool hasSha256() => $_has(4);
   @$pb.TagNumber(5)
   void clearSha256() => $_clearField(5);
+}
+
+class SendOffer extends $pb.GeneratedMessage {
+  factory SendOffer({
+    $core.String? transferId,
+    $core.int? attempt,
+    $core.Iterable<$0.ClipItem>? items,
+    $fixnum.Int64? totalBytes,
+    $fixnum.Int64? fileCount,
+    $fixnum.Int64? largestFile,
+    $fixnum.Int64? createdAtUnix,
+    $core.bool? resume,
+  }) {
+    final result = SendOffer._();
+    if (transferId != null) result.transferId = transferId;
+    if (attempt != null) result.attempt = attempt;
+    if (items != null) result.items.addAll(items);
+    if (totalBytes != null) result.totalBytes = totalBytes;
+    if (fileCount != null) result.fileCount = fileCount;
+    if (largestFile != null) result.largestFile = largestFile;
+    if (createdAtUnix != null) result.createdAtUnix = createdAtUnix;
+    if (resume != null) result.resume = resume;
+    return result;
+  }
+
+  SendOffer._();
+
+  factory SendOffer.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendOffer()..mergeFromBuffer(data, registry);
+  factory SendOffer.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendOffer()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SendOffer',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SendOffer.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'transferId')
+    ..aI(2, _omitFieldNames ? '' : 'attempt', fieldType: $pb.PbFieldType.OU3)
+    ..pPM<$0.ClipItem>(3, _omitFieldNames ? '' : 'items',
+        subBuilder: $0.ClipItem.$_createMessage)
+    ..aInt64(4, _omitFieldNames ? '' : 'totalBytes')
+    ..aInt64(5, _omitFieldNames ? '' : 'fileCount')
+    ..aInt64(6, _omitFieldNames ? '' : 'largestFile')
+    ..aInt64(7, _omitFieldNames ? '' : 'createdAtUnix')
+    ..aOB(8, _omitFieldNames ? '' : 'resume')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendOffer clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendOffer copyWith(void Function(SendOffer) updates) =>
+      super.copyWith((message) => updates(message as SendOffer)) as SendOffer;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SendOffer() / SendOffer.new instead')
+  static SendOffer create() => SendOffer._();
+  static $pb.GeneratedMessage $_createMessage() => SendOffer._();
+  @$core.override
+  SendOffer createEmptyInstance() => SendOffer._();
+  @$core.pragma('dart2js:noInline')
+  static SendOffer getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SendOffer>(SendOffer.$_createMessage);
+  static SendOffer? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get transferId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set transferId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTransferId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTransferId() => $_clearField(1);
+
+  /// 第几次发起，从 1 开始。数据通道名带上它，旧的通道晚到时直接丢弃
+  @$pb.TagNumber(2)
+  $core.int get attempt => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set attempt($core.int value) => $_setUnsignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAttempt() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAttempt() => $_clearField(2);
+
+  /// 顶层的文件和文件夹，显示用；文件夹的 size 是里面文件的总大小
+  @$pb.TagNumber(3)
+  $pb.PbList<$0.ClipItem> get items => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get totalBytes => $_getI64(3);
+  @$pb.TagNumber(4)
+  set totalBytes($fixnum.Int64 value) => $_setInt64(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasTotalBytes() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearTotalBytes() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get fileCount => $_getI64(4);
+  @$pb.TagNumber(5)
+  set fileCount($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasFileCount() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearFileCount() => $_clearField(5);
+
+  /// 最大的单个文件，接收方据此判断 FAT32 这类单文件 4 GB 的上限
+  @$pb.TagNumber(6)
+  $fixnum.Int64 get largestFile => $_getI64(5);
+  @$pb.TagNumber(6)
+  set largestFile($fixnum.Int64 value) => $_setInt64(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasLargestFile() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearLargestFile() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $fixnum.Int64 get createdAtUnix => $_getI64(6);
+  @$pb.TagNumber(7)
+  set createdAtUnix($fixnum.Int64 value) => $_setInt64(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasCreatedAtUnix() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearCreatedAtUnix() => $_clearField(7);
+
+  /// 续传：同一个 transfer_id 再次发起
+  @$pb.TagNumber(8)
+  $core.bool get resume => $_getBF(7);
+  @$pb.TagNumber(8)
+  set resume($core.bool value) => $_setBool(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasResume() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearResume() => $_clearField(8);
+}
+
+class SendAnswer extends $pb.GeneratedMessage {
+  factory SendAnswer({
+    $core.String? transferId,
+    $core.int? attempt,
+    $core.bool? accepted,
+    $core.String? reason,
+    $fixnum.Int64? shortfallBytes,
+    $fixnum.Int64? resumeIndex,
+    $fixnum.Int64? resumeOffset,
+  }) {
+    final result = SendAnswer._();
+    if (transferId != null) result.transferId = transferId;
+    if (attempt != null) result.attempt = attempt;
+    if (accepted != null) result.accepted = accepted;
+    if (reason != null) result.reason = reason;
+    if (shortfallBytes != null) result.shortfallBytes = shortfallBytes;
+    if (resumeIndex != null) result.resumeIndex = resumeIndex;
+    if (resumeOffset != null) result.resumeOffset = resumeOffset;
+    return result;
+  }
+
+  SendAnswer._();
+
+  factory SendAnswer.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendAnswer()..mergeFromBuffer(data, registry);
+  factory SendAnswer.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendAnswer()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SendAnswer',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SendAnswer.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'transferId')
+    ..aI(2, _omitFieldNames ? '' : 'attempt', fieldType: $pb.PbFieldType.OU3)
+    ..aOB(3, _omitFieldNames ? '' : 'accepted')
+    ..aOS(4, _omitFieldNames ? '' : 'reason')
+    ..aInt64(5, _omitFieldNames ? '' : 'shortfallBytes')
+    ..aInt64(6, _omitFieldNames ? '' : 'resumeIndex')
+    ..aInt64(7, _omitFieldNames ? '' : 'resumeOffset')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendAnswer clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendAnswer copyWith(void Function(SendAnswer) updates) =>
+      super.copyWith((message) => updates(message as SendAnswer)) as SendAnswer;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SendAnswer() / SendAnswer.new instead')
+  static SendAnswer create() => SendAnswer._();
+  static $pb.GeneratedMessage $_createMessage() => SendAnswer._();
+  @$core.override
+  SendAnswer createEmptyInstance() => SendAnswer._();
+  @$core.pragma('dart2js:noInline')
+  static SendAnswer getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SendAnswer>(SendAnswer.$_createMessage);
+  static SendAnswer? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get transferId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set transferId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTransferId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTransferId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get attempt => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set attempt($core.int value) => $_setUnsignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAttempt() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAttempt() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get accepted => $_getBF(2);
+  @$pb.TagNumber(3)
+  set accepted($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasAccepted() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAccepted() => $_clearField(3);
+
+  /// 回绝的原因，固定代码：disabled / no_space / dest_unavailable / file_too_large /
+  /// busy / unknown_transfer / cancelled
+  @$pb.TagNumber(4)
+  $core.String get reason => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set reason($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasReason() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearReason() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get shortfallBytes => $_getI64(4);
+  @$pb.TagNumber(5)
+  set shortfallBytes($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasShortfallBytes() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearShortfallBytes() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $fixnum.Int64 get resumeIndex => $_getI64(5);
+  @$pb.TagNumber(6)
+  set resumeIndex($fixnum.Int64 value) => $_setInt64(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasResumeIndex() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearResumeIndex() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $fixnum.Int64 get resumeOffset => $_getI64(6);
+  @$pb.TagNumber(7)
+  set resumeOffset($fixnum.Int64 value) => $_setInt64(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasResumeOffset() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearResumeOffset() => $_clearField(7);
+}
+
+/// 任何一方取消，或者发送方读源文件出错时发出。对方停下并清理没收完的部分
+class SendCancel extends $pb.GeneratedMessage {
+  factory SendCancel({
+    $core.String? transferId,
+    $core.String? reason,
+  }) {
+    final result = SendCancel._();
+    if (transferId != null) result.transferId = transferId;
+    if (reason != null) result.reason = reason;
+    return result;
+  }
+
+  SendCancel._();
+
+  factory SendCancel.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendCancel()..mergeFromBuffer(data, registry);
+  factory SendCancel.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendCancel()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SendCancel',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SendCancel.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'transferId')
+    ..aOS(2, _omitFieldNames ? '' : 'reason')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendCancel clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendCancel copyWith(void Function(SendCancel) updates) =>
+      super.copyWith((message) => updates(message as SendCancel)) as SendCancel;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SendCancel() / SendCancel.new instead')
+  static SendCancel create() => SendCancel._();
+  static $pb.GeneratedMessage $_createMessage() => SendCancel._();
+  @$core.override
+  SendCancel createEmptyInstance() => SendCancel._();
+  @$core.pragma('dart2js:noInline')
+  static SendCancel getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SendCancel>(SendCancel.$_createMessage);
+  static SendCancel? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get transferId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set transferId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTransferId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTransferId() => $_clearField(1);
+
+  /// cancelled / source_changed / source_missing / read_error / dest_unavailable
+  @$pb.TagNumber(2)
+  $core.String get reason => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set reason($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasReason() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearReason() => $_clearField(2);
+}
+
+/// 接收方全部收完（或中途失败）后回给发送方
+class SendResult extends $pb.GeneratedMessage {
+  factory SendResult({
+    $core.String? transferId,
+    $core.int? attempt,
+    $core.bool? ok,
+    $core.String? error,
+    $fixnum.Int64? failedIndex,
+  }) {
+    final result = SendResult._();
+    if (transferId != null) result.transferId = transferId;
+    if (attempt != null) result.attempt = attempt;
+    if (ok != null) result.ok = ok;
+    if (error != null) result.error = error;
+    if (failedIndex != null) result.failedIndex = failedIndex;
+    return result;
+  }
+
+  SendResult._();
+
+  factory SendResult.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendResult()..mergeFromBuffer(data, registry);
+  factory SendResult.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendResult()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SendResult',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SendResult.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'transferId')
+    ..aI(2, _omitFieldNames ? '' : 'attempt', fieldType: $pb.PbFieldType.OU3)
+    ..aOB(3, _omitFieldNames ? '' : 'ok')
+    ..aOS(4, _omitFieldNames ? '' : 'error')
+    ..aInt64(5, _omitFieldNames ? '' : 'failedIndex')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendResult clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendResult copyWith(void Function(SendResult) updates) =>
+      super.copyWith((message) => updates(message as SendResult)) as SendResult;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SendResult() / SendResult.new instead')
+  static SendResult create() => SendResult._();
+  static $pb.GeneratedMessage $_createMessage() => SendResult._();
+  @$core.override
+  SendResult createEmptyInstance() => SendResult._();
+  @$core.pragma('dart2js:noInline')
+  static SendResult getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SendResult>(SendResult.$_createMessage);
+  static SendResult? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get transferId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set transferId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTransferId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTransferId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get attempt => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set attempt($core.int value) => $_setUnsignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAttempt() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAttempt() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get ok => $_getBF(2);
+  @$pb.TagNumber(3)
+  set ok($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasOk() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearOk() => $_clearField(3);
+
+  /// hash_mismatch / write_failed / dest_unavailable / bad_stream
+  @$pb.TagNumber(4)
+  $core.String get error => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set error($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasError() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearError() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get failedIndex => $_getI64(4);
+  @$pb.TagNumber(5)
+  set failedIndex($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasFailedIndex() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearFailedIndex() => $_clearField(5);
+}
+
+enum SendFrame_Payload { file, fileEnd, end, notSet }
+
+/// 隔空传送数据流里的帧：4 字节大端长度 + 序列化的 SendFrame。
+/// file 之后紧跟 size - offset 个字节的文件内容（目录和链接没有内容），
+/// 普通文件的内容之后是 file_end。最后是 end。整个帧流再经 zstd 压缩。
+class SendFrame extends $pb.GeneratedMessage {
+  factory SendFrame({
+    SendFileStart? file,
+    SendFileEnd? fileEnd,
+    SendStreamEnd? end,
+  }) {
+    final result = SendFrame._();
+    if (file != null) result.file = file;
+    if (fileEnd != null) result.fileEnd = fileEnd;
+    if (end != null) result.end = end;
+    return result;
+  }
+
+  SendFrame._();
+
+  factory SendFrame.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendFrame()..mergeFromBuffer(data, registry);
+  factory SendFrame.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendFrame()..mergeFromJson(json, registry);
+
+  static const $core.Map<$core.int, SendFrame_Payload> _SendFrame_PayloadByTag =
+      {
+    1: SendFrame_Payload.file,
+    2: SendFrame_Payload.fileEnd,
+    3: SendFrame_Payload.end,
+    0: SendFrame_Payload.notSet
+  };
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SendFrame',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SendFrame.$_createMessage)
+    ..oo(0, [1, 2, 3])
+    ..aOM<SendFileStart>(1, _omitFieldNames ? '' : 'file',
+        subBuilder: SendFileStart.$_createMessage)
+    ..aOM<SendFileEnd>(2, _omitFieldNames ? '' : 'fileEnd',
+        subBuilder: SendFileEnd.$_createMessage)
+    ..aOM<SendStreamEnd>(3, _omitFieldNames ? '' : 'end',
+        subBuilder: SendStreamEnd.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendFrame clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendFrame copyWith(void Function(SendFrame) updates) =>
+      super.copyWith((message) => updates(message as SendFrame)) as SendFrame;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SendFrame() / SendFrame.new instead')
+  static SendFrame create() => SendFrame._();
+  static $pb.GeneratedMessage $_createMessage() => SendFrame._();
+  @$core.override
+  SendFrame createEmptyInstance() => SendFrame._();
+  @$core.pragma('dart2js:noInline')
+  static SendFrame getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SendFrame>(SendFrame.$_createMessage);
+  static SendFrame? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
+  SendFrame_Payload whichPayload() => _SendFrame_PayloadByTag[$_whichOneof(0)]!;
+  @$pb.TagNumber(1)
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
+  void clearPayload() => $_clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  SendFileStart get file => $_getN(0);
+  @$pb.TagNumber(1)
+  set file(SendFileStart value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasFile() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFile() => $_clearField(1);
+  @$pb.TagNumber(1)
+  SendFileStart ensureFile() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  SendFileEnd get fileEnd => $_getN(1);
+  @$pb.TagNumber(2)
+  set fileEnd(SendFileEnd value) => $_setField(2, value);
+  @$pb.TagNumber(2)
+  $core.bool hasFileEnd() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFileEnd() => $_clearField(2);
+  @$pb.TagNumber(2)
+  SendFileEnd ensureFileEnd() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  SendStreamEnd get end => $_getN(2);
+  @$pb.TagNumber(3)
+  set end(SendStreamEnd value) => $_setField(3, value);
+  @$pb.TagNumber(3)
+  $core.bool hasEnd() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearEnd() => $_clearField(3);
+  @$pb.TagNumber(3)
+  SendStreamEnd ensureEnd() => $_ensure(2);
+}
+
+class SendFileStart extends $pb.GeneratedMessage {
+  factory SendFileStart({
+    $fixnum.Int64? index,
+    $core.String? path,
+    $fixnum.Int64? size,
+    $core.bool? isDir,
+    $core.int? mode,
+    $fixnum.Int64? mtimeUnix,
+    $fixnum.Int64? offset,
+    $core.String? linkTarget,
+  }) {
+    final result = SendFileStart._();
+    if (index != null) result.index = index;
+    if (path != null) result.path = path;
+    if (size != null) result.size = size;
+    if (isDir != null) result.isDir = isDir;
+    if (mode != null) result.mode = mode;
+    if (mtimeUnix != null) result.mtimeUnix = mtimeUnix;
+    if (offset != null) result.offset = offset;
+    if (linkTarget != null) result.linkTarget = linkTarget;
+    return result;
+  }
+
+  SendFileStart._();
+
+  factory SendFileStart.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendFileStart()..mergeFromBuffer(data, registry);
+  factory SendFileStart.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendFileStart()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SendFileStart',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SendFileStart.$_createMessage)
+    ..aInt64(1, _omitFieldNames ? '' : 'index')
+    ..aOS(2, _omitFieldNames ? '' : 'path')
+    ..aInt64(3, _omitFieldNames ? '' : 'size')
+    ..aOB(4, _omitFieldNames ? '' : 'isDir')
+    ..aI(5, _omitFieldNames ? '' : 'mode', fieldType: $pb.PbFieldType.OU3)
+    ..aInt64(6, _omitFieldNames ? '' : 'mtimeUnix')
+    ..aInt64(7, _omitFieldNames ? '' : 'offset')
+    ..aOS(8, _omitFieldNames ? '' : 'linkTarget')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendFileStart clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendFileStart copyWith(void Function(SendFileStart) updates) =>
+      super.copyWith((message) => updates(message as SendFileStart))
+          as SendFileStart;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SendFileStart() / SendFileStart.new instead')
+  static SendFileStart create() => SendFileStart._();
+  static $pb.GeneratedMessage $_createMessage() => SendFileStart._();
+  @$core.override
+  SendFileStart createEmptyInstance() => SendFileStart._();
+  @$core.pragma('dart2js:noInline')
+  static SendFileStart getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SendFileStart>(
+          SendFileStart.$_createMessage);
+  static SendFileStart? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get index => $_getI64(0);
+  @$pb.TagNumber(1)
+  set index($fixnum.Int64 value) => $_setInt64(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasIndex() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIndex() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get path => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set path($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasPath() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPath() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get size => $_getI64(2);
+  @$pb.TagNumber(3)
+  set size($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasSize() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSize() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get isDir => $_getBF(3);
+  @$pb.TagNumber(4)
+  set isDir($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasIsDir() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearIsDir() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get mode => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set mode($core.int value) => $_setUnsignedInt32(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasMode() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearMode() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $fixnum.Int64 get mtimeUnix => $_getI64(5);
+  @$pb.TagNumber(6)
+  set mtimeUnix($fixnum.Int64 value) => $_setInt64(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasMtimeUnix() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearMtimeUnix() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $fixnum.Int64 get offset => $_getI64(6);
+  @$pb.TagNumber(7)
+  set offset($fixnum.Int64 value) => $_setInt64(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasOffset() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearOffset() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get linkTarget => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set linkTarget($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasLinkTarget() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearLinkTarget() => $_clearField(8);
+}
+
+class SendFileEnd extends $pb.GeneratedMessage {
+  factory SendFileEnd({
+    $core.List<$core.int>? sha256,
+  }) {
+    final result = SendFileEnd._();
+    if (sha256 != null) result.sha256 = sha256;
+    return result;
+  }
+
+  SendFileEnd._();
+
+  factory SendFileEnd.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendFileEnd()..mergeFromBuffer(data, registry);
+  factory SendFileEnd.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendFileEnd()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SendFileEnd',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SendFileEnd.$_createMessage)
+    ..a<$core.List<$core.int>>(
+        1, _omitFieldNames ? '' : 'sha256', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendFileEnd clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendFileEnd copyWith(void Function(SendFileEnd) updates) =>
+      super.copyWith((message) => updates(message as SendFileEnd))
+          as SendFileEnd;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SendFileEnd() / SendFileEnd.new instead')
+  static SendFileEnd create() => SendFileEnd._();
+  static $pb.GeneratedMessage $_createMessage() => SendFileEnd._();
+  @$core.override
+  SendFileEnd createEmptyInstance() => SendFileEnd._();
+  @$core.pragma('dart2js:noInline')
+  static SendFileEnd getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SendFileEnd>(
+          SendFileEnd.$_createMessage);
+  static SendFileEnd? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get sha256 => $_getN(0);
+  @$pb.TagNumber(1)
+  set sha256($core.List<$core.int> value) => $_setBytes(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSha256() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSha256() => $_clearField(1);
+}
+
+class SendStreamEnd extends $pb.GeneratedMessage {
+  factory SendStreamEnd() => SendStreamEnd._();
+
+  SendStreamEnd._();
+
+  factory SendStreamEnd.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendStreamEnd()..mergeFromBuffer(data, registry);
+  factory SendStreamEnd.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendStreamEnd()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SendStreamEnd',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SendStreamEnd.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendStreamEnd clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendStreamEnd copyWith(void Function(SendStreamEnd) updates) =>
+      super.copyWith((message) => updates(message as SendStreamEnd))
+          as SendStreamEnd;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SendStreamEnd() / SendStreamEnd.new instead')
+  static SendStreamEnd create() => SendStreamEnd._();
+  static $pb.GeneratedMessage $_createMessage() => SendStreamEnd._();
+  @$core.override
+  SendStreamEnd createEmptyInstance() => SendStreamEnd._();
+  @$core.pragma('dart2js:noInline')
+  static SendStreamEnd getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SendStreamEnd>(
+          SendStreamEnd.$_createMessage);
+  static SendStreamEnd? _defaultInstance;
 }
 
 const $core.bool _omitFieldNames =

@@ -89,6 +89,8 @@ type Manager struct {
 	// serverOnline 是信令服务器报告的在线状态；局域网的在线状态在 lan 里
 	serverOnline map[string]bool
 	conn         map[string]p2p.ConnState // P2P 连接状态（直连/中转）
+	// features 是对端在 PeerFeatures 里声明的功能，见 wire.proto。没收到过的设备没有条目
+	features map[string]map[string]bool
 	pending      map[string]*pendingPair  // session -> 待确认配对
 	// stashed 暂存配对确认前到达的信令，按对端 device_id 归集
 	stashed map[string][]*pb.SignalMessage
@@ -142,6 +144,7 @@ func NewManager(opts Options) (*Manager, error) {
 		known:           make(map[string]store.Device),
 		serverOnline:    make(map[string]bool),
 		conn:            make(map[string]p2p.ConnState),
+		features:        make(map[string]map[string]bool),
 		pending:         make(map[string]*pendingPair),
 		stashed:         make(map[string][]*pb.SignalMessage),
 	}
@@ -175,6 +178,10 @@ func NewManager(opts Options) (*Manager, error) {
 		OnMessage: func(id string, msg *pb.PeerMessage) {
 			if display := msg.GetDisplay(); display != nil {
 				m.updatePeerDisplay(id, display)
+				return
+			}
+			if f := msg.GetFeatures(); f != nil {
+				m.updatePeerFeatures(id, f)
 				return
 			}
 			if opts.OnPeerMessage != nil {
@@ -336,6 +343,68 @@ func (m *Manager) OfficialUsage() *pb.OfficialUsage {
 	}
 	u := m.gateway.Usage()
 	return &pb.OfficialUsage{Available: u.Available, Day: u.Day, QuotaGroup: u.Group, UploadBytes: u.Upload, DownloadBytes: u.Download, LimitBytes: u.Limit, RemainingBytes: u.Remaining, ResetAtUnix: u.ResetAt, UpdatedAtUnix: u.UpdatedAt, Reason: u.Reason}
+}
+
+// 本机支持的功能，随 PeerFeatures 告诉对端
+const (
+	FeatureSendFiles    = "send_files_v1"
+	FeatureSendFilesOff = "send_files_off" // 能接收隔空传送，但用户关掉了
+)
+
+func (m *Manager) featuresMessage() *pb.PeerMessage {
+	f := []string{FeatureSendFiles}
+	if m.loadConfig().ReceiveDisabled {
+		f = []string{FeatureSendFilesOff}
+	}
+	return &pb.PeerMessage{Payload: &pb.PeerMessage_Features{Features: &pb.PeerFeatures{Features: f}}}
+}
+
+// BroadcastFeatures 在本机的功能开关变了以后（比如关掉了接收文件）告诉所有连着的设备。
+func (m *Manager) BroadcastFeatures() {
+	msg := m.featuresMessage()
+	for _, id := range m.pairedIDs() {
+		if connected(m.p2p.State(id)) {
+			_ = m.p2p.Send(id, msg)
+		}
+	}
+}
+
+func (m *Manager) updatePeerFeatures(id string, f *pb.PeerFeatures) {
+	set := make(map[string]bool, len(f.GetFeatures()))
+	for i, name := range f.GetFeatures() {
+		if i >= 64 || len(name) > 64 {
+			break
+		}
+		set[name] = true
+	}
+	m.mu.Lock()
+	_, ok := m.known[id]
+	if ok {
+		m.features[id] = set
+	}
+	m.mu.Unlock()
+	if d, ok := m.device(id); ok {
+		m.notify(d)
+	}
+}
+
+// SendFilesSupport 返回对端能不能接收隔空传送：supported 为 false 说明是旧版本（或者还没收到它的声明），
+// disabled 说明它关掉了接收。
+func (m *Manager) SendFilesSupport(deviceID string) (supported, disabled bool) {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	f := m.features[deviceID]
+	return f[FeatureSendFiles] || f[FeatureSendFilesOff], f[FeatureSendFilesOff]
+}
+
+// ConnState 返回与某台设备的 P2P 连接状态。
+func (m *Manager) ConnState(deviceID string) p2p.ConnState { return m.p2p.State(deviceID) }
+
+// DeviceName 返回已配对设备的名字，没有这台设备时返回空字符串。
+func (m *Manager) DeviceName(deviceID string) string {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	return m.known[deviceID].Name
 }
 
 func (m *Manager) updatePeerDisplay(id string, display *pb.PeerDisplay) {
@@ -565,6 +634,7 @@ func (m *Manager) handleP2PState(deviceID string, state p2p.ConnState) {
 	if connected(state) && !connected(prev) {
 		cfg := m.loadConfig()
 		_ = m.p2p.Send(deviceID, &pb.PeerMessage{Payload: &pb.PeerMessage_Display{Display: &pb.PeerDisplay{Name: cfg.DeviceName, Platform: runtime.GOOS}}})
+		_ = m.p2p.Send(deviceID, m.featuresMessage())
 	}
 
 	m.log.Info("P2P 连接状态", "device", deviceID, "state", state)
@@ -1048,6 +1118,7 @@ func (m *Manager) Unpair(ctx context.Context, deviceID string) error {
 	delete(m.known, deviceID)
 	delete(m.serverOnline, deviceID)
 	delete(m.conn, deviceID)
+	delete(m.features, deviceID)
 	m.mu.Unlock()
 
 	// 已经不再互信，连接也不该留着
@@ -1176,6 +1247,7 @@ func (m *Manager) toProtoLocked(d store.Device, online bool, session string) *pb
 		// 已有 P2P 通道时显示具体是直连还是中转，便于用户排查网络问题
 		conn = m.conn[d.ID].Proto()
 	}
+	f := m.features[d.ID]
 	return &pb.Device{
 		Id:                   d.ID,
 		Name:                 d.Name,
@@ -1185,6 +1257,9 @@ func (m *Manager) toProtoLocked(d store.Device, online bool, session string) *pb
 		PublicKeyFingerprint: deviceid.Fingerprint(d.PublicKey),
 		PairedAtUnix:         d.PairedAt.Unix(),
 		PairingSession:       session,
+		ReceivesFiles:        f[FeatureSendFiles] || f[FeatureSendFilesOff],
+		ReceiveDisabled:      f[FeatureSendFilesOff],
+		LanReachable:         online && m.lan.Reachable(d.ID),
 	}
 }
 

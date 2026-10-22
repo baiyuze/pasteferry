@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"sync"
+	"time"
 
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
@@ -15,6 +16,9 @@ type Hub struct {
 	mu     sync.Mutex
 	subs   map[int]chan *pb.Event
 	nextID int
+	// 最近一次「切到某一页」，见 Navigate
+	navPage string
+	navAt   time.Time
 }
 
 func NewHub() *Hub {
@@ -51,6 +55,28 @@ func (h *Hub) Publish(e *pb.Event) {
 			// 该订阅者积压严重，丢弃这条而不是阻塞其他订阅者
 		}
 	}
+}
+
+// Navigate 让界面切到某一页，并记下来：界面是被这次点击拉起来的话，订阅时补发给它。
+func (h *Hub) Navigate(page string) {
+	h.mu.Lock()
+	h.navPage, h.navAt = page, time.Now()
+	h.mu.Unlock()
+	h.Publish(EventNavigate(page))
+}
+
+// RecentNavigate 返回 within 之内的那次「切到某一页」，没有时返回空字符串。
+func (h *Hub) RecentNavigate(within time.Duration) string {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if h.navPage == "" || time.Since(h.navAt) > within {
+		return ""
+	}
+	return h.navPage
+}
+
+func EventNavigate(page string) *pb.Event {
+	return &pb.Event{Payload: &pb.Event_Navigate{Navigate: page}}
 }
 
 func (h *Hub) SubscriberCount() int {

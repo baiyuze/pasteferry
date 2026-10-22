@@ -561,6 +561,9 @@ class Device extends $pb.GeneratedMessage {
     $core.String? publicKeyFingerprint,
     $fixnum.Int64? pairedAtUnix,
     $core.String? pairingSession,
+    $core.bool? receivesFiles,
+    $core.bool? receiveDisabled,
+    $core.bool? lanReachable,
   }) {
     final result = Device._();
     if (id != null) result.id = id;
@@ -572,6 +575,9 @@ class Device extends $pb.GeneratedMessage {
       result.publicKeyFingerprint = publicKeyFingerprint;
     if (pairedAtUnix != null) result.pairedAtUnix = pairedAtUnix;
     if (pairingSession != null) result.pairingSession = pairingSession;
+    if (receivesFiles != null) result.receivesFiles = receivesFiles;
+    if (receiveDisabled != null) result.receiveDisabled = receiveDisabled;
+    if (lanReachable != null) result.lanReachable = lanReachable;
     return result;
   }
 
@@ -597,6 +603,9 @@ class Device extends $pb.GeneratedMessage {
     ..aOS(6, _omitFieldNames ? '' : 'publicKeyFingerprint')
     ..aInt64(7, _omitFieldNames ? '' : 'pairedAtUnix')
     ..aOS(8, _omitFieldNames ? '' : 'pairingSession')
+    ..aOB(9, _omitFieldNames ? '' : 'receivesFiles')
+    ..aOB(10, _omitFieldNames ? '' : 'receiveDisabled')
+    ..aOB(11, _omitFieldNames ? '' : 'lanReachable')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -693,6 +702,36 @@ class Device extends $pb.GeneratedMessage {
   $core.bool hasPairingSession() => $_has(7);
   @$pb.TagNumber(8)
   void clearPairingSession() => $_clearField(8);
+
+  /// 对方声明能接收隔空传送（PeerFeatures 里有 send_files_v1）。旧版本为 false
+  @$pb.TagNumber(9)
+  $core.bool get receivesFiles => $_getBF(8);
+  @$pb.TagNumber(9)
+  set receivesFiles($core.bool value) => $_setBool(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasReceivesFiles() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearReceivesFiles() => $_clearField(9);
+
+  /// 对方关闭了接收文件
+  @$pb.TagNumber(10)
+  $core.bool get receiveDisabled => $_getBF(9);
+  @$pb.TagNumber(10)
+  set receiveDisabled($core.bool value) => $_setBool(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasReceiveDisabled() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearReceiveDisabled() => $_clearField(10);
+
+  /// 在同一个局域网里能直接找到对方，隔空传送的雷达据此把它放在内圈
+  @$pb.TagNumber(11)
+  $core.bool get lanReachable => $_getBF(10);
+  @$pb.TagNumber(11)
+  set lanReachable($core.bool value) => $_setBool(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasLanReachable() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearLanReachable() => $_clearField(11);
 }
 
 enum Event_Payload {
@@ -706,6 +745,9 @@ enum Event_Payload {
   clipboardWritten,
   configChanged,
   quickPasteChanged,
+  transferChanged,
+  transferRemoved,
+  navigate,
   notSet
 }
 
@@ -721,6 +763,9 @@ class Event extends $pb.GeneratedMessage {
     ClipboardWriteResult? clipboardWritten,
     Config? configChanged,
     QuickPasteStatus? quickPasteChanged,
+    Transfer? transferChanged,
+    $core.String? transferRemoved,
+    $core.String? navigate,
   }) {
     final result = Event._();
     if (clipAdded != null) result.clipAdded = clipAdded;
@@ -733,6 +778,9 @@ class Event extends $pb.GeneratedMessage {
     if (clipboardWritten != null) result.clipboardWritten = clipboardWritten;
     if (configChanged != null) result.configChanged = configChanged;
     if (quickPasteChanged != null) result.quickPasteChanged = quickPasteChanged;
+    if (transferChanged != null) result.transferChanged = transferChanged;
+    if (transferRemoved != null) result.transferRemoved = transferRemoved;
+    if (navigate != null) result.navigate = navigate;
     return result;
   }
 
@@ -756,13 +804,16 @@ class Event extends $pb.GeneratedMessage {
     8: Event_Payload.clipboardWritten,
     9: Event_Payload.configChanged,
     10: Event_Payload.quickPasteChanged,
+    11: Event_Payload.transferChanged,
+    12: Event_Payload.transferRemoved,
+    13: Event_Payload.navigate,
     0: Event_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Event',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: Event.$_createMessage)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
     ..aOM<ClipRecord>(1, _omitFieldNames ? '' : 'clipAdded',
         subBuilder: ClipRecord.$_createMessage)
     ..aOM<ClipRecord>(2, _omitFieldNames ? '' : 'clipUpdated',
@@ -782,6 +833,10 @@ class Event extends $pb.GeneratedMessage {
         subBuilder: Config.$_createMessage)
     ..aOM<QuickPasteStatus>(10, _omitFieldNames ? '' : 'quickPasteChanged',
         subBuilder: QuickPasteStatus.$_createMessage)
+    ..aOM<Transfer>(11, _omitFieldNames ? '' : 'transferChanged',
+        subBuilder: Transfer.$_createMessage)
+    ..aOS(12, _omitFieldNames ? '' : 'transferRemoved')
+    ..aOS(13, _omitFieldNames ? '' : 'navigate')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -814,6 +869,9 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   @$pb.TagNumber(9)
   @$pb.TagNumber(10)
+  @$pb.TagNumber(11)
+  @$pb.TagNumber(12)
+  @$pb.TagNumber(13)
   Event_Payload whichPayload() => _Event_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(1)
   @$pb.TagNumber(2)
@@ -825,6 +883,9 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   @$pb.TagNumber(9)
   @$pb.TagNumber(10)
+  @$pb.TagNumber(11)
+  @$pb.TagNumber(12)
+  @$pb.TagNumber(13)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -933,6 +994,38 @@ class Event extends $pb.GeneratedMessage {
   void clearQuickPasteChanged() => $_clearField(10);
   @$pb.TagNumber(10)
   QuickPasteStatus ensureQuickPasteChanged() => $_ensure(9);
+
+  /// 隔空传送的一批新建、状态变化或进度更新（进度 0.2 秒节流）
+  @$pb.TagNumber(11)
+  Transfer get transferChanged => $_getN(10);
+  @$pb.TagNumber(11)
+  set transferChanged(Transfer value) => $_setField(11, value);
+  @$pb.TagNumber(11)
+  $core.bool hasTransferChanged() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearTransferChanged() => $_clearField(11);
+  @$pb.TagNumber(11)
+  Transfer ensureTransferChanged() => $_ensure(10);
+
+  @$pb.TagNumber(12)
+  $core.String get transferRemoved => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set transferRemoved($core.String value) => $_setString(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasTransferRemoved() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearTransferRemoved() => $_clearField(12);
+
+  /// 让界面切到某一页："send" 是隔空传送页（用户点了隔空传送的通知）。
+  /// 界面是被这次点击拉起来的话还没订阅，后台服务在它订阅时补发最近 15 秒内的这一条
+  @$pb.TagNumber(13)
+  $core.String get navigate => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set navigate($core.String value) => $_setString(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasNavigate() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearNavigate() => $_clearField(13);
 }
 
 class NotificationStatus extends $pb.GeneratedMessage {
@@ -2694,6 +2787,9 @@ class Config extends $pb.GeneratedMessage {
     $core.bool? quickPasteDisabled,
     $core.String? quickPasteHotkey,
     $core.bool? quickPasteCopyOnly,
+    $core.String? receiveDir,
+    $core.bool? receiveDisabled,
+    $core.bool? receiveNotifyDisabled,
   }) {
     final result = Config._();
     if (autoSyncThresholdBytes != null)
@@ -2724,6 +2820,10 @@ class Config extends $pb.GeneratedMessage {
     if (quickPasteHotkey != null) result.quickPasteHotkey = quickPasteHotkey;
     if (quickPasteCopyOnly != null)
       result.quickPasteCopyOnly = quickPasteCopyOnly;
+    if (receiveDir != null) result.receiveDir = receiveDir;
+    if (receiveDisabled != null) result.receiveDisabled = receiveDisabled;
+    if (receiveNotifyDisabled != null)
+      result.receiveNotifyDisabled = receiveNotifyDisabled;
     return result;
   }
 
@@ -2763,6 +2863,9 @@ class Config extends $pb.GeneratedMessage {
     ..aOB(20, _omitFieldNames ? '' : 'quickPasteDisabled')
     ..aOS(21, _omitFieldNames ? '' : 'quickPasteHotkey')
     ..aOB(22, _omitFieldNames ? '' : 'quickPasteCopyOnly')
+    ..aOS(23, _omitFieldNames ? '' : 'receiveDir')
+    ..aOB(24, _omitFieldNames ? '' : 'receiveDisabled')
+    ..aOB(25, _omitFieldNames ? '' : 'receiveNotifyDisabled')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2997,6 +3100,36 @@ class Config extends $pb.GeneratedMessage {
   $core.bool hasQuickPasteCopyOnly() => $_has(21);
   @$pb.TagNumber(22)
   void clearQuickPasteCopyOnly() => $_clearField(22);
+
+  /// 隔空传送收到的文件存到哪里。空字符串表示系统的「下载」文件夹
+  @$pb.TagNumber(23)
+  $core.String get receiveDir => $_getSZ(22);
+  @$pb.TagNumber(23)
+  set receiveDir($core.String value) => $_setString(22, value);
+  @$pb.TagNumber(23)
+  $core.bool hasReceiveDir() => $_has(22);
+  @$pb.TagNumber(23)
+  void clearReceiveDir() => $_clearField(23);
+
+  /// 不接收其他设备发来的文件。写成反向的：旧配置没有这一项时就是开启
+  @$pb.TagNumber(24)
+  $core.bool get receiveDisabled => $_getBF(23);
+  @$pb.TagNumber(24)
+  set receiveDisabled($core.bool value) => $_setBool(23, value);
+  @$pb.TagNumber(24)
+  $core.bool hasReceiveDisabled() => $_has(23);
+  @$pb.TagNumber(24)
+  void clearReceiveDisabled() => $_clearField(24);
+
+  /// 收到文件时不发系统通知
+  @$pb.TagNumber(25)
+  $core.bool get receiveNotifyDisabled => $_getBF(24);
+  @$pb.TagNumber(25)
+  set receiveNotifyDisabled($core.bool value) => $_setBool(24, value);
+  @$pb.TagNumber(25)
+  $core.bool hasReceiveNotifyDisabled() => $_has(24);
+  @$pb.TagNumber(25)
+  void clearReceiveNotifyDisabled() => $_clearField(25);
 }
 
 class OfficialUsage extends $pb.GeneratedMessage {
@@ -4757,6 +4890,797 @@ class GetImagePreviewResponse extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(2);
   @$pb.TagNumber(3)
   void clearName() => $_clearField(3);
+}
+
+class SendFilesRequest extends $pb.GeneratedMessage {
+  factory SendFilesRequest({
+    $core.String? deviceId,
+    $core.Iterable<$core.String>? paths,
+    $core.bool? allowRelay,
+  }) {
+    final result = SendFilesRequest._();
+    if (deviceId != null) result.deviceId = deviceId;
+    if (paths != null) result.paths.addAll(paths);
+    if (allowRelay != null) result.allowRelay = allowRelay;
+    return result;
+  }
+
+  SendFilesRequest._();
+
+  factory SendFilesRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendFilesRequest()..mergeFromBuffer(data, registry);
+  factory SendFilesRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SendFilesRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SendFilesRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SendFilesRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'deviceId')
+    ..pPS(2, _omitFieldNames ? '' : 'paths')
+    ..aOB(3, _omitFieldNames ? '' : 'allowRelay')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendFilesRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SendFilesRequest copyWith(void Function(SendFilesRequest) updates) =>
+      super.copyWith((message) => updates(message as SendFilesRequest))
+          as SendFilesRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SendFilesRequest() / SendFilesRequest.new instead')
+  static SendFilesRequest create() => SendFilesRequest._();
+  static $pb.GeneratedMessage $_createMessage() => SendFilesRequest._();
+  @$core.override
+  SendFilesRequest createEmptyInstance() => SendFilesRequest._();
+  @$core.pragma('dart2js:noInline')
+  static SendFilesRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SendFilesRequest>(
+          SendFilesRequest.$_createMessage);
+  static SendFilesRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get deviceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set deviceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasDeviceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDeviceId() => $_clearField(1);
+
+  /// 拖进来或选中的文件与文件夹在本机的完整路径
+  @$pb.TagNumber(2)
+  $pb.PbList<$core.String> get paths => $_getList(1);
+
+  /// 用户已确认可以经官方服务中转
+  @$pb.TagNumber(3)
+  $core.bool get allowRelay => $_getBF(2);
+  @$pb.TagNumber(3)
+  set allowRelay($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasAllowRelay() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAllowRelay() => $_clearField(3);
+}
+
+class TransferRef extends $pb.GeneratedMessage {
+  factory TransferRef({
+    $core.String? id,
+  }) {
+    final result = TransferRef._();
+    if (id != null) result.id = id;
+    return result;
+  }
+
+  TransferRef._();
+
+  factory TransferRef.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TransferRef()..mergeFromBuffer(data, registry);
+  factory TransferRef.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TransferRef()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TransferRef',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: TransferRef.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TransferRef clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TransferRef copyWith(void Function(TransferRef) updates) =>
+      super.copyWith((message) => updates(message as TransferRef))
+          as TransferRef;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TransferRef() / TransferRef.new instead')
+  static TransferRef create() => TransferRef._();
+  static $pb.GeneratedMessage $_createMessage() => TransferRef._();
+  @$core.override
+  TransferRef createEmptyInstance() => TransferRef._();
+  @$core.pragma('dart2js:noInline')
+  static TransferRef getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TransferRef>(
+          TransferRef.$_createMessage);
+  static TransferRef? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+}
+
+class Transfer extends $pb.GeneratedMessage {
+  factory Transfer({
+    $core.String? id,
+    TransferDirection? direction,
+    $core.String? deviceId,
+    $core.String? deviceName,
+    $core.String? status,
+    $core.Iterable<ClipItem>? items,
+    $core.Iterable<$core.String>? paths,
+    $fixnum.Int64? totalBytes,
+    $fixnum.Int64? doneBytes,
+    $fixnum.Int64? fileCount,
+    $core.double? bytesPerSecond,
+    $core.String? error,
+    $fixnum.Int64? shortfallBytes,
+    $core.bool? relayed,
+    $core.bool? seen,
+    $fixnum.Int64? createdAtUnix,
+    $fixnum.Int64? finishedAtUnix,
+    $fixnum.Int64? scannedFiles,
+    $core.String? currentFile,
+    $fixnum.Int64? currentIndex,
+    $core.Iterable<$core.bool>? present,
+  }) {
+    final result = Transfer._();
+    if (id != null) result.id = id;
+    if (direction != null) result.direction = direction;
+    if (deviceId != null) result.deviceId = deviceId;
+    if (deviceName != null) result.deviceName = deviceName;
+    if (status != null) result.status = status;
+    if (items != null) result.items.addAll(items);
+    if (paths != null) result.paths.addAll(paths);
+    if (totalBytes != null) result.totalBytes = totalBytes;
+    if (doneBytes != null) result.doneBytes = doneBytes;
+    if (fileCount != null) result.fileCount = fileCount;
+    if (bytesPerSecond != null) result.bytesPerSecond = bytesPerSecond;
+    if (error != null) result.error = error;
+    if (shortfallBytes != null) result.shortfallBytes = shortfallBytes;
+    if (relayed != null) result.relayed = relayed;
+    if (seen != null) result.seen = seen;
+    if (createdAtUnix != null) result.createdAtUnix = createdAtUnix;
+    if (finishedAtUnix != null) result.finishedAtUnix = finishedAtUnix;
+    if (scannedFiles != null) result.scannedFiles = scannedFiles;
+    if (currentFile != null) result.currentFile = currentFile;
+    if (currentIndex != null) result.currentIndex = currentIndex;
+    if (present != null) result.present.addAll(present);
+    return result;
+  }
+
+  Transfer._();
+
+  factory Transfer.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      Transfer()..mergeFromBuffer(data, registry);
+  factory Transfer.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      Transfer()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Transfer',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: Transfer.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aE<TransferDirection>(2, _omitFieldNames ? '' : 'direction',
+        enumValues: TransferDirection.values)
+    ..aOS(3, _omitFieldNames ? '' : 'deviceId')
+    ..aOS(4, _omitFieldNames ? '' : 'deviceName')
+    ..aOS(5, _omitFieldNames ? '' : 'status')
+    ..pPM<ClipItem>(6, _omitFieldNames ? '' : 'items',
+        subBuilder: ClipItem.$_createMessage)
+    ..pPS(7, _omitFieldNames ? '' : 'paths')
+    ..aInt64(8, _omitFieldNames ? '' : 'totalBytes')
+    ..aInt64(9, _omitFieldNames ? '' : 'doneBytes')
+    ..aInt64(10, _omitFieldNames ? '' : 'fileCount')
+    ..aD(11, _omitFieldNames ? '' : 'bytesPerSecond')
+    ..aOS(12, _omitFieldNames ? '' : 'error')
+    ..aInt64(13, _omitFieldNames ? '' : 'shortfallBytes')
+    ..aOB(14, _omitFieldNames ? '' : 'relayed')
+    ..aOB(15, _omitFieldNames ? '' : 'seen')
+    ..aInt64(16, _omitFieldNames ? '' : 'createdAtUnix')
+    ..aInt64(17, _omitFieldNames ? '' : 'finishedAtUnix')
+    ..aInt64(18, _omitFieldNames ? '' : 'scannedFiles')
+    ..aOS(19, _omitFieldNames ? '' : 'currentFile')
+    ..aInt64(20, _omitFieldNames ? '' : 'currentIndex')
+    ..p<$core.bool>(21, _omitFieldNames ? '' : 'present', $pb.PbFieldType.KB)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Transfer clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Transfer copyWith(void Function(Transfer) updates) =>
+      super.copyWith((message) => updates(message as Transfer)) as Transfer;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use Transfer() / Transfer.new instead')
+  static Transfer create() => Transfer._();
+  static $pb.GeneratedMessage $_createMessage() => Transfer._();
+  @$core.override
+  Transfer createEmptyInstance() => Transfer._();
+  @$core.pragma('dart2js:noInline')
+  static Transfer getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<Transfer>(Transfer.$_createMessage);
+  static Transfer? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  TransferDirection get direction => $_getN(1);
+  @$pb.TagNumber(2)
+  set direction(TransferDirection value) => $_setField(2, value);
+  @$pb.TagNumber(2)
+  $core.bool hasDirection() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDirection() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get deviceId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set deviceId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasDeviceId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDeviceId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get deviceName => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set deviceName($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasDeviceName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearDeviceName() => $_clearField(4);
+
+  /// queued（排队）/ scanning（统计中）/ waiting（等对方应答或重新连接）/ active /
+  /// paused（官方中转额度用完）/ interrupted / done / failed / cancelled / declined / expired
+  @$pb.TagNumber(5)
+  $core.String get status => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set status($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasStatus() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearStatus() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $pb.PbList<ClipItem> get items => $_getList(5);
+
+  /// 收到的：顶层项目的最终路径（与 items 一一对应）；发出的：源路径
+  @$pb.TagNumber(7)
+  $pb.PbList<$core.String> get paths => $_getList(6);
+
+  @$pb.TagNumber(8)
+  $fixnum.Int64 get totalBytes => $_getI64(7);
+  @$pb.TagNumber(8)
+  set totalBytes($fixnum.Int64 value) => $_setInt64(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasTotalBytes() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearTotalBytes() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $fixnum.Int64 get doneBytes => $_getI64(8);
+  @$pb.TagNumber(9)
+  set doneBytes($fixnum.Int64 value) => $_setInt64(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasDoneBytes() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearDoneBytes() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $fixnum.Int64 get fileCount => $_getI64(9);
+  @$pb.TagNumber(10)
+  set fileCount($fixnum.Int64 value) => $_setInt64(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasFileCount() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearFileCount() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.double get bytesPerSecond => $_getN(10);
+  @$pb.TagNumber(11)
+  set bytesPerSecond($core.double value) => $_setDouble(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasBytesPerSecond() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearBytesPerSecond() => $_clearField(11);
+
+  /// 失败、回绝、取消的原因，固定代码，界面翻译：no_space、dest_unavailable、
+  /// file_too_large、disabled、unsupported、offline、source_changed、source_missing、
+  /// read_error、write_failed、hash_mismatch、cancelled、peer_cancelled、relay_quota 等
+  @$pb.TagNumber(12)
+  $core.String get error => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set error($core.String value) => $_setString(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasError() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearError() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $fixnum.Int64 get shortfallBytes => $_getI64(12);
+  @$pb.TagNumber(13)
+  set shortfallBytes($fixnum.Int64 value) => $_setInt64(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasShortfallBytes() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearShortfallBytes() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.bool get relayed => $_getBF(13);
+  @$pb.TagNumber(14)
+  set relayed($core.bool value) => $_setBool(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasRelayed() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearRelayed() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.bool get seen => $_getBF(14);
+  @$pb.TagNumber(15)
+  set seen($core.bool value) => $_setBool(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasSeen() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearSeen() => $_clearField(15);
+
+  @$pb.TagNumber(16)
+  $fixnum.Int64 get createdAtUnix => $_getI64(15);
+  @$pb.TagNumber(16)
+  set createdAtUnix($fixnum.Int64 value) => $_setInt64(15, value);
+  @$pb.TagNumber(16)
+  $core.bool hasCreatedAtUnix() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearCreatedAtUnix() => $_clearField(16);
+
+  @$pb.TagNumber(17)
+  $fixnum.Int64 get finishedAtUnix => $_getI64(16);
+  @$pb.TagNumber(17)
+  set finishedAtUnix($fixnum.Int64 value) => $_setInt64(16, value);
+  @$pb.TagNumber(17)
+  $core.bool hasFinishedAtUnix() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearFinishedAtUnix() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  $fixnum.Int64 get scannedFiles => $_getI64(17);
+  @$pb.TagNumber(18)
+  set scannedFiles($fixnum.Int64 value) => $_setInt64(17, value);
+  @$pb.TagNumber(18)
+  $core.bool hasScannedFiles() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearScannedFiles() => $_clearField(18);
+
+  @$pb.TagNumber(19)
+  $core.String get currentFile => $_getSZ(18);
+  @$pb.TagNumber(19)
+  set currentFile($core.String value) => $_setString(18, value);
+  @$pb.TagNumber(19)
+  $core.bool hasCurrentFile() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearCurrentFile() => $_clearField(19);
+
+  @$pb.TagNumber(20)
+  $fixnum.Int64 get currentIndex => $_getI64(19);
+  @$pb.TagNumber(20)
+  set currentIndex($fixnum.Int64 value) => $_setInt64(19, value);
+  @$pb.TagNumber(20)
+  $core.bool hasCurrentIndex() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearCurrentIndex() => $_clearField(20);
+
+  /// 收到的：顶层项目是否还在原处（用户移走或删除后为 false），与 paths 一一对应
+  @$pb.TagNumber(21)
+  $pb.PbList<$core.bool> get present => $_getList(20);
+}
+
+class ListTransfersRequest extends $pb.GeneratedMessage {
+  factory ListTransfersRequest({
+    TransferDirection? direction,
+    $core.int? limit,
+    $fixnum.Int64? beforeUnix,
+  }) {
+    final result = ListTransfersRequest._();
+    if (direction != null) result.direction = direction;
+    if (limit != null) result.limit = limit;
+    if (beforeUnix != null) result.beforeUnix = beforeUnix;
+    return result;
+  }
+
+  ListTransfersRequest._();
+
+  factory ListTransfersRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ListTransfersRequest()..mergeFromBuffer(data, registry);
+  factory ListTransfersRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ListTransfersRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ListTransfersRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ListTransfersRequest.$_createMessage)
+    ..aE<TransferDirection>(1, _omitFieldNames ? '' : 'direction',
+        enumValues: TransferDirection.values)
+    ..aI(2, _omitFieldNames ? '' : 'limit')
+    ..aInt64(3, _omitFieldNames ? '' : 'beforeUnix')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListTransfersRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListTransfersRequest copyWith(void Function(ListTransfersRequest) updates) =>
+      super.copyWith((message) => updates(message as ListTransfersRequest))
+          as ListTransfersRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use ListTransfersRequest() / ListTransfersRequest.new instead')
+  static ListTransfersRequest create() => ListTransfersRequest._();
+  static $pb.GeneratedMessage $_createMessage() => ListTransfersRequest._();
+  @$core.override
+  ListTransfersRequest createEmptyInstance() => ListTransfersRequest._();
+  @$core.pragma('dart2js:noInline')
+  static ListTransfersRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListTransfersRequest>(
+          ListTransfersRequest.$_createMessage);
+  static ListTransfersRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  TransferDirection get direction => $_getN(0);
+  @$pb.TagNumber(1)
+  set direction(TransferDirection value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasDirection() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDirection() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get limit => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set limit($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasLimit() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLimit() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get beforeUnix => $_getI64(2);
+  @$pb.TagNumber(3)
+  set beforeUnix($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasBeforeUnix() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearBeforeUnix() => $_clearField(3);
+}
+
+class ListTransfersResponse extends $pb.GeneratedMessage {
+  factory ListTransfersResponse({
+    $core.Iterable<Transfer>? transfers,
+  }) {
+    final result = ListTransfersResponse._();
+    if (transfers != null) result.transfers.addAll(transfers);
+    return result;
+  }
+
+  ListTransfersResponse._();
+
+  factory ListTransfersResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ListTransfersResponse()..mergeFromBuffer(data, registry);
+  factory ListTransfersResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ListTransfersResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ListTransfersResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ListTransfersResponse.$_createMessage)
+    ..pPM<Transfer>(1, _omitFieldNames ? '' : 'transfers',
+        subBuilder: Transfer.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListTransfersResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListTransfersResponse copyWith(
+          void Function(ListTransfersResponse) updates) =>
+      super.copyWith((message) => updates(message as ListTransfersResponse))
+          as ListTransfersResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use ListTransfersResponse() / ListTransfersResponse.new instead')
+  static ListTransfersResponse create() => ListTransfersResponse._();
+  static $pb.GeneratedMessage $_createMessage() => ListTransfersResponse._();
+  @$core.override
+  ListTransfersResponse createEmptyInstance() => ListTransfersResponse._();
+  @$core.pragma('dart2js:noInline')
+  static ListTransfersResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListTransfersResponse>(
+          ListTransfersResponse.$_createMessage);
+  static ListTransfersResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Transfer> get transfers => $_getList(0);
+}
+
+class DeleteTransfersRequest extends $pb.GeneratedMessage {
+  factory DeleteTransfersRequest({
+    $core.Iterable<$core.String>? ids,
+    $core.bool? all,
+    TransferDirection? direction,
+  }) {
+    final result = DeleteTransfersRequest._();
+    if (ids != null) result.ids.addAll(ids);
+    if (all != null) result.all = all;
+    if (direction != null) result.direction = direction;
+    return result;
+  }
+
+  DeleteTransfersRequest._();
+
+  factory DeleteTransfersRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      DeleteTransfersRequest()..mergeFromBuffer(data, registry);
+  factory DeleteTransfersRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      DeleteTransfersRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'DeleteTransfersRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: DeleteTransfersRequest.$_createMessage)
+    ..pPS(1, _omitFieldNames ? '' : 'ids')
+    ..aOB(2, _omitFieldNames ? '' : 'all')
+    ..aE<TransferDirection>(3, _omitFieldNames ? '' : 'direction',
+        enumValues: TransferDirection.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteTransfersRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DeleteTransfersRequest copyWith(
+          void Function(DeleteTransfersRequest) updates) =>
+      super.copyWith((message) => updates(message as DeleteTransfersRequest))
+          as DeleteTransfersRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use DeleteTransfersRequest() / DeleteTransfersRequest.new instead')
+  static DeleteTransfersRequest create() => DeleteTransfersRequest._();
+  static $pb.GeneratedMessage $_createMessage() => DeleteTransfersRequest._();
+  @$core.override
+  DeleteTransfersRequest createEmptyInstance() => DeleteTransfersRequest._();
+  @$core.pragma('dart2js:noInline')
+  static DeleteTransfersRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DeleteTransfersRequest>(
+          DeleteTransfersRequest.$_createMessage);
+  static DeleteTransfersRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<$core.String> get ids => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.bool get all => $_getBF(1);
+  @$pb.TagNumber(2)
+  set all($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAll() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAll() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  TransferDirection get direction => $_getN(2);
+  @$pb.TagNumber(3)
+  set direction(TransferDirection value) => $_setField(3, value);
+  @$pb.TagNumber(3)
+  $core.bool hasDirection() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDirection() => $_clearField(3);
+}
+
+class CheckReceiveDirRequest extends $pb.GeneratedMessage {
+  factory CheckReceiveDirRequest({
+    $core.String? path,
+  }) {
+    final result = CheckReceiveDirRequest._();
+    if (path != null) result.path = path;
+    return result;
+  }
+
+  CheckReceiveDirRequest._();
+
+  factory CheckReceiveDirRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CheckReceiveDirRequest()..mergeFromBuffer(data, registry);
+  factory CheckReceiveDirRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CheckReceiveDirRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CheckReceiveDirRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: CheckReceiveDirRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'path')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CheckReceiveDirRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CheckReceiveDirRequest copyWith(
+          void Function(CheckReceiveDirRequest) updates) =>
+      super.copyWith((message) => updates(message as CheckReceiveDirRequest))
+          as CheckReceiveDirRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use CheckReceiveDirRequest() / CheckReceiveDirRequest.new instead')
+  static CheckReceiveDirRequest create() => CheckReceiveDirRequest._();
+  static $pb.GeneratedMessage $_createMessage() => CheckReceiveDirRequest._();
+  @$core.override
+  CheckReceiveDirRequest createEmptyInstance() => CheckReceiveDirRequest._();
+  @$core.pragma('dart2js:noInline')
+  static CheckReceiveDirRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CheckReceiveDirRequest>(
+          CheckReceiveDirRequest.$_createMessage);
+  static CheckReceiveDirRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get path => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set path($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasPath() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPath() => $_clearField(1);
+}
+
+class CheckReceiveDirResponse extends $pb.GeneratedMessage {
+  factory CheckReceiveDirResponse({
+    $core.bool? ok,
+    $core.String? error,
+    $fixnum.Int64? freeBytes,
+    $core.String? path,
+  }) {
+    final result = CheckReceiveDirResponse._();
+    if (ok != null) result.ok = ok;
+    if (error != null) result.error = error;
+    if (freeBytes != null) result.freeBytes = freeBytes;
+    if (path != null) result.path = path;
+    return result;
+  }
+
+  CheckReceiveDirResponse._();
+
+  factory CheckReceiveDirResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CheckReceiveDirResponse()..mergeFromBuffer(data, registry);
+  factory CheckReceiveDirResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CheckReceiveDirResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CheckReceiveDirResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: CheckReceiveDirResponse.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'ok')
+    ..aOS(2, _omitFieldNames ? '' : 'error')
+    ..aInt64(3, _omitFieldNames ? '' : 'freeBytes')
+    ..aOS(4, _omitFieldNames ? '' : 'path')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CheckReceiveDirResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CheckReceiveDirResponse copyWith(
+          void Function(CheckReceiveDirResponse) updates) =>
+      super.copyWith((message) => updates(message as CheckReceiveDirResponse))
+          as CheckReceiveDirResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use CheckReceiveDirResponse() / CheckReceiveDirResponse.new instead')
+  static CheckReceiveDirResponse create() => CheckReceiveDirResponse._();
+  static $pb.GeneratedMessage $_createMessage() => CheckReceiveDirResponse._();
+  @$core.override
+  CheckReceiveDirResponse createEmptyInstance() => CheckReceiveDirResponse._();
+  @$core.pragma('dart2js:noInline')
+  static CheckReceiveDirResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CheckReceiveDirResponse>(
+          CheckReceiveDirResponse.$_createMessage);
+  static CheckReceiveDirResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get ok => $_getBF(0);
+  @$pb.TagNumber(1)
+  set ok($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasOk() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearOk() => $_clearField(1);
+
+  /// not_found / not_directory / not_writable / permission_denied
+  @$pb.TagNumber(2)
+  $core.String get error => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set error($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearError() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get freeBytes => $_getI64(2);
+  @$pb.TagNumber(3)
+  set freeBytes($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasFreeBytes() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearFreeBytes() => $_clearField(3);
+
+  /// 实际检查的位置：path 为空时是当前设置的位置，没设置时是系统的「下载」文件夹
+  @$pb.TagNumber(4)
+  $core.String get path => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set path($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasPath() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPath() => $_clearField(4);
 }
 
 const $core.bool _omitFieldNames =

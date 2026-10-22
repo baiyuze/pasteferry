@@ -66,6 +66,21 @@ type Config struct {
 	QuickPasteHotkey string `json:"quick_paste_hotkey,omitempty"`
 	// QuickPasteCopyOnly 选中后只放进剪贴板，不模拟粘贴
 	QuickPasteCopyOnly bool `json:"quick_paste_copy_only,omitempty"`
+
+	// ReceiveDir 是隔空传送收到的文件存放的位置，空字符串表示系统的「下载」文件夹（见 DownloadsDir）
+	ReceiveDir string `json:"receive_dir,omitempty"`
+	// ReceiveDisabled 不接收其他设备隔空传送过来的文件。写成反向的，旧配置文件没有这一项时就是开启。
+	ReceiveDisabled bool `json:"receive_disabled,omitempty"`
+	// ReceiveNotifyDisabled 收到隔空传送的文件时不发系统通知
+	ReceiveNotifyDisabled bool `json:"receive_notify_disabled,omitempty"`
+}
+
+// EffectiveReceiveDir 返回隔空传送实际的保存位置。
+func (c Config) EffectiveReceiveDir() string {
+	if c.ReceiveDir != "" {
+		return c.ReceiveDir
+	}
+	return DownloadsDir()
 }
 
 // CurrentVersion 是当前的配置格式版本。

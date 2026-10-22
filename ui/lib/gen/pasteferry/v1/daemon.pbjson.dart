@@ -126,6 +126,22 @@ final $typed_data.Uint8List serviceModeDescriptor = $convert.base64Decode(
     '1PREVfTEFOEAESGQoVU0VSVklDRV9NT0RFX09GRklDSUFMEAISFwoTU0VSVklDRV9NT0RFX0NV'
     'U1RPTRAD');
 
+@$core.Deprecated('Use transferDirectionDescriptor instead')
+const TransferDirection$json = {
+  '1': 'TransferDirection',
+  '2': [
+    {'1': 'TRANSFER_DIRECTION_UNSPECIFIED', '2': 0},
+    {'1': 'TRANSFER_DIRECTION_OUTGOING', '2': 1},
+    {'1': 'TRANSFER_DIRECTION_INCOMING', '2': 2},
+  ],
+};
+
+/// Descriptor for `TransferDirection`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List transferDirectionDescriptor = $convert.base64Decode(
+    'ChFUcmFuc2ZlckRpcmVjdGlvbhIiCh5UUkFOU0ZFUl9ESVJFQ1RJT05fVU5TUEVDSUZJRUQQAB'
+    'IfChtUUkFOU0ZFUl9ESVJFQ1RJT05fT1VUR09JTkcQARIfChtUUkFOU0ZFUl9ESVJFQ1RJT05f'
+    'SU5DT01JTkcQAg==');
+
 @$core.Deprecated('Use emptyDescriptor instead')
 const Empty$json = {
   '1': 'Empty',
@@ -277,6 +293,9 @@ const Device$json = {
     },
     {'1': 'paired_at_unix', '3': 7, '4': 1, '5': 3, '10': 'pairedAtUnix'},
     {'1': 'pairing_session', '3': 8, '4': 1, '5': 9, '10': 'pairingSession'},
+    {'1': 'receives_files', '3': 9, '4': 1, '5': 8, '10': 'receivesFiles'},
+    {'1': 'receive_disabled', '3': 10, '4': 1, '5': 8, '10': 'receiveDisabled'},
+    {'1': 'lan_reachable', '3': 11, '4': 1, '5': 8, '10': 'lanReachable'},
   ],
 };
 
@@ -287,7 +306,9 @@ final $typed_data.Uint8List deviceDescriptor = $convert.base64Decode(
     'BSABKA4yHS5wYXN0ZWZlcnJ5LnYxLkNvbm5lY3Rpb25LaW5kUgpjb25uZWN0aW9uEjQKFnB1Ym'
     'xpY19rZXlfZmluZ2VycHJpbnQYBiABKAlSFHB1YmxpY0tleUZpbmdlcnByaW50EiQKDnBhaXJl'
     'ZF9hdF91bml4GAcgASgDUgxwYWlyZWRBdFVuaXgSJwoPcGFpcmluZ19zZXNzaW9uGAggASgJUg'
-    '5wYWlyaW5nU2Vzc2lvbg==');
+    '5wYWlyaW5nU2Vzc2lvbhIlCg5yZWNlaXZlc19maWxlcxgJIAEoCFINcmVjZWl2ZXNGaWxlcxIp'
+    'ChByZWNlaXZlX2Rpc2FibGVkGAogASgIUg9yZWNlaXZlRGlzYWJsZWQSIwoNbGFuX3JlYWNoYW'
+    'JsZRgLIAEoCFIMbGFuUmVhY2hhYmxl');
 
 @$core.Deprecated('Use eventDescriptor instead')
 const Event$json = {
@@ -375,6 +396,24 @@ const Event$json = {
       '9': 0,
       '10': 'quickPasteChanged'
     },
+    {
+      '1': 'transfer_changed',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.Transfer',
+      '9': 0,
+      '10': 'transferChanged'
+    },
+    {
+      '1': 'transfer_removed',
+      '3': 12,
+      '4': 1,
+      '5': 9,
+      '9': 0,
+      '10': 'transferRemoved'
+    },
+    {'1': 'navigate', '3': 13, '4': 1, '5': 9, '9': 0, '10': 'navigate'},
   ],
   '8': [
     {'1': 'payload'},
@@ -395,7 +434,9 @@ final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
     'l0ZVJlc3VsdEgAUhBjbGlwYm9hcmRXcml0dGVuEj4KDmNvbmZpZ19jaGFuZ2VkGAkgASgLMhUu'
     'cGFzdGVmZXJyeS52MS5Db25maWdIAFINY29uZmlnQ2hhbmdlZBJRChNxdWlja19wYXN0ZV9jaG'
     'FuZ2VkGAogASgLMh8ucGFzdGVmZXJyeS52MS5RdWlja1Bhc3RlU3RhdHVzSABSEXF1aWNrUGFz'
-    'dGVDaGFuZ2VkQgkKB3BheWxvYWQ=');
+    'dGVDaGFuZ2VkEkQKEHRyYW5zZmVyX2NoYW5nZWQYCyABKAsyFy5wYXN0ZWZlcnJ5LnYxLlRyYW'
+    '5zZmVySABSD3RyYW5zZmVyQ2hhbmdlZBIrChB0cmFuc2Zlcl9yZW1vdmVkGAwgASgJSABSD3Ry'
+    'YW5zZmVyUmVtb3ZlZBIcCghuYXZpZ2F0ZRgNIAEoCUgAUghuYXZpZ2F0ZUIJCgdwYXlsb2Fk');
 
 @$core.Deprecated('Use notificationStatusDescriptor instead')
 const NotificationStatus$json = {
@@ -897,6 +938,15 @@ const Config$json = {
       '5': 8,
       '10': 'quickPasteCopyOnly'
     },
+    {'1': 'receive_dir', '3': 23, '4': 1, '5': 9, '10': 'receiveDir'},
+    {'1': 'receive_disabled', '3': 24, '4': 1, '5': 8, '10': 'receiveDisabled'},
+    {
+      '1': 'receive_notify_disabled',
+      '3': 25,
+      '4': 1,
+      '5': 8,
+      '10': 'receiveNotifyDisabled'
+    },
   ],
 };
 
@@ -919,7 +969,9 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'GBMgASgJUhF1cGRhdGVTa2lwVmVyc2lvbhIwChRxdWlja19wYXN0ZV9kaXNhYmxlZBgUIAEoCF'
     'IScXVpY2tQYXN0ZURpc2FibGVkEiwKEnF1aWNrX3Bhc3RlX2hvdGtleRgVIAEoCVIQcXVpY2tQ'
     'YXN0ZUhvdGtleRIxChVxdWlja19wYXN0ZV9jb3B5X29ubHkYFiABKAhSEnF1aWNrUGFzdGVDb3'
-    'B5T25seQ==');
+    'B5T25seRIfCgtyZWNlaXZlX2RpchgXIAEoCVIKcmVjZWl2ZURpchIpChByZWNlaXZlX2Rpc2Fi'
+    'bGVkGBggASgIUg9yZWNlaXZlRGlzYWJsZWQSNgoXcmVjZWl2ZV9ub3RpZnlfZGlzYWJsZWQYGS'
+    'ABKAhSFXJlY2VpdmVOb3RpZnlEaXNhYmxlZA==');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {
@@ -1314,3 +1366,184 @@ final $typed_data.Uint8List getImagePreviewResponseDescriptor =
     $convert.base64Decode(
         'ChdHZXRJbWFnZVByZXZpZXdSZXNwb25zZRISCgRwYXRoGAEgASgJUgRwYXRoEhQKBWNvdW50GA'
         'IgASgFUgVjb3VudBISCgRuYW1lGAMgASgJUgRuYW1l');
+
+@$core.Deprecated('Use sendFilesRequestDescriptor instead')
+const SendFilesRequest$json = {
+  '1': 'SendFilesRequest',
+  '2': [
+    {'1': 'device_id', '3': 1, '4': 1, '5': 9, '10': 'deviceId'},
+    {'1': 'paths', '3': 2, '4': 3, '5': 9, '10': 'paths'},
+    {'1': 'allow_relay', '3': 3, '4': 1, '5': 8, '10': 'allowRelay'},
+  ],
+};
+
+/// Descriptor for `SendFilesRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendFilesRequestDescriptor = $convert.base64Decode(
+    'ChBTZW5kRmlsZXNSZXF1ZXN0EhsKCWRldmljZV9pZBgBIAEoCVIIZGV2aWNlSWQSFAoFcGF0aH'
+    'MYAiADKAlSBXBhdGhzEh8KC2FsbG93X3JlbGF5GAMgASgIUgphbGxvd1JlbGF5');
+
+@$core.Deprecated('Use transferRefDescriptor instead')
+const TransferRef$json = {
+  '1': 'TransferRef',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `TransferRef`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List transferRefDescriptor =
+    $convert.base64Decode('CgtUcmFuc2ZlclJlZhIOCgJpZBgBIAEoCVICaWQ=');
+
+@$core.Deprecated('Use transferDescriptor instead')
+const Transfer$json = {
+  '1': 'Transfer',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {
+      '1': 'direction',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.pasteferry.v1.TransferDirection',
+      '10': 'direction'
+    },
+    {'1': 'device_id', '3': 3, '4': 1, '5': 9, '10': 'deviceId'},
+    {'1': 'device_name', '3': 4, '4': 1, '5': 9, '10': 'deviceName'},
+    {'1': 'status', '3': 5, '4': 1, '5': 9, '10': 'status'},
+    {
+      '1': 'items',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.ClipItem',
+      '10': 'items'
+    },
+    {'1': 'paths', '3': 7, '4': 3, '5': 9, '10': 'paths'},
+    {'1': 'total_bytes', '3': 8, '4': 1, '5': 3, '10': 'totalBytes'},
+    {'1': 'done_bytes', '3': 9, '4': 1, '5': 3, '10': 'doneBytes'},
+    {'1': 'file_count', '3': 10, '4': 1, '5': 3, '10': 'fileCount'},
+    {'1': 'bytes_per_second', '3': 11, '4': 1, '5': 1, '10': 'bytesPerSecond'},
+    {'1': 'error', '3': 12, '4': 1, '5': 9, '10': 'error'},
+    {'1': 'shortfall_bytes', '3': 13, '4': 1, '5': 3, '10': 'shortfallBytes'},
+    {'1': 'relayed', '3': 14, '4': 1, '5': 8, '10': 'relayed'},
+    {'1': 'seen', '3': 15, '4': 1, '5': 8, '10': 'seen'},
+    {'1': 'created_at_unix', '3': 16, '4': 1, '5': 3, '10': 'createdAtUnix'},
+    {'1': 'finished_at_unix', '3': 17, '4': 1, '5': 3, '10': 'finishedAtUnix'},
+    {'1': 'scanned_files', '3': 18, '4': 1, '5': 3, '10': 'scannedFiles'},
+    {'1': 'current_file', '3': 19, '4': 1, '5': 9, '10': 'currentFile'},
+    {'1': 'current_index', '3': 20, '4': 1, '5': 3, '10': 'currentIndex'},
+    {'1': 'present', '3': 21, '4': 3, '5': 8, '10': 'present'},
+  ],
+};
+
+/// Descriptor for `Transfer`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List transferDescriptor = $convert.base64Decode(
+    'CghUcmFuc2ZlchIOCgJpZBgBIAEoCVICaWQSPgoJZGlyZWN0aW9uGAIgASgOMiAucGFzdGVmZX'
+    'JyeS52MS5UcmFuc2ZlckRpcmVjdGlvblIJZGlyZWN0aW9uEhsKCWRldmljZV9pZBgDIAEoCVII'
+    'ZGV2aWNlSWQSHwoLZGV2aWNlX25hbWUYBCABKAlSCmRldmljZU5hbWUSFgoGc3RhdHVzGAUgAS'
+    'gJUgZzdGF0dXMSLQoFaXRlbXMYBiADKAsyFy5wYXN0ZWZlcnJ5LnYxLkNsaXBJdGVtUgVpdGVt'
+    'cxIUCgVwYXRocxgHIAMoCVIFcGF0aHMSHwoLdG90YWxfYnl0ZXMYCCABKANSCnRvdGFsQnl0ZX'
+    'MSHQoKZG9uZV9ieXRlcxgJIAEoA1IJZG9uZUJ5dGVzEh0KCmZpbGVfY291bnQYCiABKANSCWZp'
+    'bGVDb3VudBIoChBieXRlc19wZXJfc2Vjb25kGAsgASgBUg5ieXRlc1BlclNlY29uZBIUCgVlcn'
+    'JvchgMIAEoCVIFZXJyb3ISJwoPc2hvcnRmYWxsX2J5dGVzGA0gASgDUg5zaG9ydGZhbGxCeXRl'
+    'cxIYCgdyZWxheWVkGA4gASgIUgdyZWxheWVkEhIKBHNlZW4YDyABKAhSBHNlZW4SJgoPY3JlYX'
+    'RlZF9hdF91bml4GBAgASgDUg1jcmVhdGVkQXRVbml4EigKEGZpbmlzaGVkX2F0X3VuaXgYESAB'
+    'KANSDmZpbmlzaGVkQXRVbml4EiMKDXNjYW5uZWRfZmlsZXMYEiABKANSDHNjYW5uZWRGaWxlcx'
+    'IhCgxjdXJyZW50X2ZpbGUYEyABKAlSC2N1cnJlbnRGaWxlEiMKDWN1cnJlbnRfaW5kZXgYFCAB'
+    'KANSDGN1cnJlbnRJbmRleBIYCgdwcmVzZW50GBUgAygIUgdwcmVzZW50');
+
+@$core.Deprecated('Use listTransfersRequestDescriptor instead')
+const ListTransfersRequest$json = {
+  '1': 'ListTransfersRequest',
+  '2': [
+    {
+      '1': 'direction',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.pasteferry.v1.TransferDirection',
+      '10': 'direction'
+    },
+    {'1': 'limit', '3': 2, '4': 1, '5': 5, '10': 'limit'},
+    {'1': 'before_unix', '3': 3, '4': 1, '5': 3, '10': 'beforeUnix'},
+  ],
+};
+
+/// Descriptor for `ListTransfersRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listTransfersRequestDescriptor = $convert.base64Decode(
+    'ChRMaXN0VHJhbnNmZXJzUmVxdWVzdBI+CglkaXJlY3Rpb24YASABKA4yIC5wYXN0ZWZlcnJ5Ln'
+    'YxLlRyYW5zZmVyRGlyZWN0aW9uUglkaXJlY3Rpb24SFAoFbGltaXQYAiABKAVSBWxpbWl0Eh8K'
+    'C2JlZm9yZV91bml4GAMgASgDUgpiZWZvcmVVbml4');
+
+@$core.Deprecated('Use listTransfersResponseDescriptor instead')
+const ListTransfersResponse$json = {
+  '1': 'ListTransfersResponse',
+  '2': [
+    {
+      '1': 'transfers',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.Transfer',
+      '10': 'transfers'
+    },
+  ],
+};
+
+/// Descriptor for `ListTransfersResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listTransfersResponseDescriptor = $convert.base64Decode(
+    'ChVMaXN0VHJhbnNmZXJzUmVzcG9uc2USNQoJdHJhbnNmZXJzGAEgAygLMhcucGFzdGVmZXJyeS'
+    '52MS5UcmFuc2ZlclIJdHJhbnNmZXJz');
+
+@$core.Deprecated('Use deleteTransfersRequestDescriptor instead')
+const DeleteTransfersRequest$json = {
+  '1': 'DeleteTransfersRequest',
+  '2': [
+    {'1': 'ids', '3': 1, '4': 3, '5': 9, '10': 'ids'},
+    {'1': 'all', '3': 2, '4': 1, '5': 8, '10': 'all'},
+    {
+      '1': 'direction',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.pasteferry.v1.TransferDirection',
+      '10': 'direction'
+    },
+  ],
+};
+
+/// Descriptor for `DeleteTransfersRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deleteTransfersRequestDescriptor = $convert.base64Decode(
+    'ChZEZWxldGVUcmFuc2ZlcnNSZXF1ZXN0EhAKA2lkcxgBIAMoCVIDaWRzEhAKA2FsbBgCIAEoCF'
+    'IDYWxsEj4KCWRpcmVjdGlvbhgDIAEoDjIgLnBhc3RlZmVycnkudjEuVHJhbnNmZXJEaXJlY3Rp'
+    'b25SCWRpcmVjdGlvbg==');
+
+@$core.Deprecated('Use checkReceiveDirRequestDescriptor instead')
+const CheckReceiveDirRequest$json = {
+  '1': 'CheckReceiveDirRequest',
+  '2': [
+    {'1': 'path', '3': 1, '4': 1, '5': 9, '10': 'path'},
+  ],
+};
+
+/// Descriptor for `CheckReceiveDirRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List checkReceiveDirRequestDescriptor =
+    $convert.base64Decode(
+        'ChZDaGVja1JlY2VpdmVEaXJSZXF1ZXN0EhIKBHBhdGgYASABKAlSBHBhdGg=');
+
+@$core.Deprecated('Use checkReceiveDirResponseDescriptor instead')
+const CheckReceiveDirResponse$json = {
+  '1': 'CheckReceiveDirResponse',
+  '2': [
+    {'1': 'ok', '3': 1, '4': 1, '5': 8, '10': 'ok'},
+    {'1': 'error', '3': 2, '4': 1, '5': 9, '10': 'error'},
+    {'1': 'free_bytes', '3': 3, '4': 1, '5': 3, '10': 'freeBytes'},
+    {'1': 'path', '3': 4, '4': 1, '5': 9, '10': 'path'},
+  ],
+};
+
+/// Descriptor for `CheckReceiveDirResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List checkReceiveDirResponseDescriptor = $convert.base64Decode(
+    'ChdDaGVja1JlY2VpdmVEaXJSZXNwb25zZRIOCgJvaxgBIAEoCFICb2sSFAoFZXJyb3IYAiABKA'
+    'lSBWVycm9yEh0KCmZyZWVfYnl0ZXMYAyABKANSCWZyZWVCeXRlcxISCgRwYXRoGAQgASgJUgRw'
+    'YXRo');

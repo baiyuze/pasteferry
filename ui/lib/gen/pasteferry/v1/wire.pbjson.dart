@@ -767,6 +767,51 @@ const PeerMessage$json = {
       '9': 0,
       '10': 'display'
     },
+    {
+      '1': 'features',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.PeerFeatures',
+      '9': 0,
+      '10': 'features'
+    },
+    {
+      '1': 'send_offer',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.SendOffer',
+      '9': 0,
+      '10': 'sendOffer'
+    },
+    {
+      '1': 'send_answer',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.SendAnswer',
+      '9': 0,
+      '10': 'sendAnswer'
+    },
+    {
+      '1': 'send_cancel',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.SendCancel',
+      '9': 0,
+      '10': 'sendCancel'
+    },
+    {
+      '1': 'send_result',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.SendResult',
+      '9': 0,
+      '10': 'sendResult'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -781,8 +826,25 @@ final $typed_data.Uint8List peerMessageDescriptor = $convert.base64Decode(
     'QSNwoGaGVhZGVyGAQgASgLMh0ucGFzdGVmZXJyeS52MS5UcmFuc2ZlckhlYWRlckgAUgZoZWFk'
     'ZXISMQoEZG9uZRgFIAEoCzIbLnBhc3RlZmVycnkudjEuVHJhbnNmZXJEb25lSABSBGRvbmUSLQ'
     'oEbGluaxgGIAEoCzIXLnBhc3RlZmVycnkudjEuTGlua0luZm9IAFIEbGluaxI2CgdkaXNwbGF5'
-    'GAcgASgLMhoucGFzdGVmZXJyeS52MS5QZWVyRGlzcGxheUgAUgdkaXNwbGF5QgkKB3BheWxvYW'
-    'Q=');
+    'GAcgASgLMhoucGFzdGVmZXJyeS52MS5QZWVyRGlzcGxheUgAUgdkaXNwbGF5EjkKCGZlYXR1cm'
+    'VzGAggASgLMhsucGFzdGVmZXJyeS52MS5QZWVyRmVhdHVyZXNIAFIIZmVhdHVyZXMSOQoKc2Vu'
+    'ZF9vZmZlchgJIAEoCzIYLnBhc3RlZmVycnkudjEuU2VuZE9mZmVySABSCXNlbmRPZmZlchI8Cg'
+    'tzZW5kX2Fuc3dlchgKIAEoCzIZLnBhc3RlZmVycnkudjEuU2VuZEFuc3dlckgAUgpzZW5kQW5z'
+    'd2VyEjwKC3NlbmRfY2FuY2VsGAsgASgLMhkucGFzdGVmZXJyeS52MS5TZW5kQ2FuY2VsSABSCn'
+    'NlbmRDYW5jZWwSPAoLc2VuZF9yZXN1bHQYDCABKAsyGS5wYXN0ZWZlcnJ5LnYxLlNlbmRSZXN1'
+    'bHRIAFIKc2VuZFJlc3VsdEIJCgdwYXlsb2Fk');
+
+@$core.Deprecated('Use peerFeaturesDescriptor instead')
+const PeerFeatures$json = {
+  '1': 'PeerFeatures',
+  '2': [
+    {'1': 'features', '3': 1, '4': 3, '5': 9, '10': 'features'},
+  ],
+};
+
+/// Descriptor for `PeerFeatures`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List peerFeaturesDescriptor = $convert
+    .base64Decode('CgxQZWVyRmVhdHVyZXMSGgoIZmVhdHVyZXMYASADKAlSCGZlYXR1cmVz');
 
 @$core.Deprecated('Use linkInfoDescriptor instead')
 const LinkInfo$json = {
@@ -925,3 +987,175 @@ final $typed_data.Uint8List transferDoneDescriptor = $convert.base64Decode(
     'CgxUcmFuc2ZlckRvbmUSFwoHY2xpcF9pZBgBIAEoCVIGY2xpcElkEhsKCXN0cmVhbV9pZBgCIA'
     'EoCVIIc3RyZWFtSWQSDgoCb2sYAyABKAhSAm9rEhQKBWVycm9yGAQgASgJUgVlcnJvchIWCgZz'
     'aGEyNTYYBSABKAxSBnNoYTI1Ng==');
+
+@$core.Deprecated('Use sendOfferDescriptor instead')
+const SendOffer$json = {
+  '1': 'SendOffer',
+  '2': [
+    {'1': 'transfer_id', '3': 1, '4': 1, '5': 9, '10': 'transferId'},
+    {'1': 'attempt', '3': 2, '4': 1, '5': 13, '10': 'attempt'},
+    {
+      '1': 'items',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.ClipItem',
+      '10': 'items'
+    },
+    {'1': 'total_bytes', '3': 4, '4': 1, '5': 3, '10': 'totalBytes'},
+    {'1': 'file_count', '3': 5, '4': 1, '5': 3, '10': 'fileCount'},
+    {'1': 'largest_file', '3': 6, '4': 1, '5': 3, '10': 'largestFile'},
+    {'1': 'created_at_unix', '3': 7, '4': 1, '5': 3, '10': 'createdAtUnix'},
+    {'1': 'resume', '3': 8, '4': 1, '5': 8, '10': 'resume'},
+  ],
+};
+
+/// Descriptor for `SendOffer`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendOfferDescriptor = $convert.base64Decode(
+    'CglTZW5kT2ZmZXISHwoLdHJhbnNmZXJfaWQYASABKAlSCnRyYW5zZmVySWQSGAoHYXR0ZW1wdB'
+    'gCIAEoDVIHYXR0ZW1wdBItCgVpdGVtcxgDIAMoCzIXLnBhc3RlZmVycnkudjEuQ2xpcEl0ZW1S'
+    'BWl0ZW1zEh8KC3RvdGFsX2J5dGVzGAQgASgDUgp0b3RhbEJ5dGVzEh0KCmZpbGVfY291bnQYBS'
+    'ABKANSCWZpbGVDb3VudBIhCgxsYXJnZXN0X2ZpbGUYBiABKANSC2xhcmdlc3RGaWxlEiYKD2Ny'
+    'ZWF0ZWRfYXRfdW5peBgHIAEoA1INY3JlYXRlZEF0VW5peBIWCgZyZXN1bWUYCCABKAhSBnJlc3'
+    'VtZQ==');
+
+@$core.Deprecated('Use sendAnswerDescriptor instead')
+const SendAnswer$json = {
+  '1': 'SendAnswer',
+  '2': [
+    {'1': 'transfer_id', '3': 1, '4': 1, '5': 9, '10': 'transferId'},
+    {'1': 'attempt', '3': 2, '4': 1, '5': 13, '10': 'attempt'},
+    {'1': 'accepted', '3': 3, '4': 1, '5': 8, '10': 'accepted'},
+    {'1': 'reason', '3': 4, '4': 1, '5': 9, '10': 'reason'},
+    {'1': 'shortfall_bytes', '3': 5, '4': 1, '5': 3, '10': 'shortfallBytes'},
+    {'1': 'resume_index', '3': 6, '4': 1, '5': 3, '10': 'resumeIndex'},
+    {'1': 'resume_offset', '3': 7, '4': 1, '5': 3, '10': 'resumeOffset'},
+  ],
+};
+
+/// Descriptor for `SendAnswer`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendAnswerDescriptor = $convert.base64Decode(
+    'CgpTZW5kQW5zd2VyEh8KC3RyYW5zZmVyX2lkGAEgASgJUgp0cmFuc2ZlcklkEhgKB2F0dGVtcH'
+    'QYAiABKA1SB2F0dGVtcHQSGgoIYWNjZXB0ZWQYAyABKAhSCGFjY2VwdGVkEhYKBnJlYXNvbhgE'
+    'IAEoCVIGcmVhc29uEicKD3Nob3J0ZmFsbF9ieXRlcxgFIAEoA1IOc2hvcnRmYWxsQnl0ZXMSIQ'
+    'oMcmVzdW1lX2luZGV4GAYgASgDUgtyZXN1bWVJbmRleBIjCg1yZXN1bWVfb2Zmc2V0GAcgASgD'
+    'UgxyZXN1bWVPZmZzZXQ=');
+
+@$core.Deprecated('Use sendCancelDescriptor instead')
+const SendCancel$json = {
+  '1': 'SendCancel',
+  '2': [
+    {'1': 'transfer_id', '3': 1, '4': 1, '5': 9, '10': 'transferId'},
+    {'1': 'reason', '3': 2, '4': 1, '5': 9, '10': 'reason'},
+  ],
+};
+
+/// Descriptor for `SendCancel`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendCancelDescriptor = $convert.base64Decode(
+    'CgpTZW5kQ2FuY2VsEh8KC3RyYW5zZmVyX2lkGAEgASgJUgp0cmFuc2ZlcklkEhYKBnJlYXNvbh'
+    'gCIAEoCVIGcmVhc29u');
+
+@$core.Deprecated('Use sendResultDescriptor instead')
+const SendResult$json = {
+  '1': 'SendResult',
+  '2': [
+    {'1': 'transfer_id', '3': 1, '4': 1, '5': 9, '10': 'transferId'},
+    {'1': 'attempt', '3': 2, '4': 1, '5': 13, '10': 'attempt'},
+    {'1': 'ok', '3': 3, '4': 1, '5': 8, '10': 'ok'},
+    {'1': 'error', '3': 4, '4': 1, '5': 9, '10': 'error'},
+    {'1': 'failed_index', '3': 5, '4': 1, '5': 3, '10': 'failedIndex'},
+  ],
+};
+
+/// Descriptor for `SendResult`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendResultDescriptor = $convert.base64Decode(
+    'CgpTZW5kUmVzdWx0Eh8KC3RyYW5zZmVyX2lkGAEgASgJUgp0cmFuc2ZlcklkEhgKB2F0dGVtcH'
+    'QYAiABKA1SB2F0dGVtcHQSDgoCb2sYAyABKAhSAm9rEhQKBWVycm9yGAQgASgJUgVlcnJvchIh'
+    'CgxmYWlsZWRfaW5kZXgYBSABKANSC2ZhaWxlZEluZGV4');
+
+@$core.Deprecated('Use sendFrameDescriptor instead')
+const SendFrame$json = {
+  '1': 'SendFrame',
+  '2': [
+    {
+      '1': 'file',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.SendFileStart',
+      '9': 0,
+      '10': 'file'
+    },
+    {
+      '1': 'file_end',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.SendFileEnd',
+      '9': 0,
+      '10': 'fileEnd'
+    },
+    {
+      '1': 'end',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.SendStreamEnd',
+      '9': 0,
+      '10': 'end'
+    },
+  ],
+  '8': [
+    {'1': 'payload'},
+  ],
+};
+
+/// Descriptor for `SendFrame`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendFrameDescriptor = $convert.base64Decode(
+    'CglTZW5kRnJhbWUSMgoEZmlsZRgBIAEoCzIcLnBhc3RlZmVycnkudjEuU2VuZEZpbGVTdGFydE'
+    'gAUgRmaWxlEjcKCGZpbGVfZW5kGAIgASgLMhoucGFzdGVmZXJyeS52MS5TZW5kRmlsZUVuZEgA'
+    'UgdmaWxlRW5kEjAKA2VuZBgDIAEoCzIcLnBhc3RlZmVycnkudjEuU2VuZFN0cmVhbUVuZEgAUg'
+    'NlbmRCCQoHcGF5bG9hZA==');
+
+@$core.Deprecated('Use sendFileStartDescriptor instead')
+const SendFileStart$json = {
+  '1': 'SendFileStart',
+  '2': [
+    {'1': 'index', '3': 1, '4': 1, '5': 3, '10': 'index'},
+    {'1': 'path', '3': 2, '4': 1, '5': 9, '10': 'path'},
+    {'1': 'size', '3': 3, '4': 1, '5': 3, '10': 'size'},
+    {'1': 'is_dir', '3': 4, '4': 1, '5': 8, '10': 'isDir'},
+    {'1': 'mode', '3': 5, '4': 1, '5': 13, '10': 'mode'},
+    {'1': 'mtime_unix', '3': 6, '4': 1, '5': 3, '10': 'mtimeUnix'},
+    {'1': 'offset', '3': 7, '4': 1, '5': 3, '10': 'offset'},
+    {'1': 'link_target', '3': 8, '4': 1, '5': 9, '10': 'linkTarget'},
+  ],
+};
+
+/// Descriptor for `SendFileStart`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendFileStartDescriptor = $convert.base64Decode(
+    'Cg1TZW5kRmlsZVN0YXJ0EhQKBWluZGV4GAEgASgDUgVpbmRleBISCgRwYXRoGAIgASgJUgRwYX'
+    'RoEhIKBHNpemUYAyABKANSBHNpemUSFQoGaXNfZGlyGAQgASgIUgVpc0RpchISCgRtb2RlGAUg'
+    'ASgNUgRtb2RlEh0KCm10aW1lX3VuaXgYBiABKANSCW10aW1lVW5peBIWCgZvZmZzZXQYByABKA'
+    'NSBm9mZnNldBIfCgtsaW5rX3RhcmdldBgIIAEoCVIKbGlua1RhcmdldA==');
+
+@$core.Deprecated('Use sendFileEndDescriptor instead')
+const SendFileEnd$json = {
+  '1': 'SendFileEnd',
+  '2': [
+    {'1': 'sha256', '3': 1, '4': 1, '5': 12, '10': 'sha256'},
+  ],
+};
+
+/// Descriptor for `SendFileEnd`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendFileEndDescriptor = $convert
+    .base64Decode('CgtTZW5kRmlsZUVuZBIWCgZzaGEyNTYYASABKAxSBnNoYTI1Ng==');
+
+@$core.Deprecated('Use sendStreamEndDescriptor instead')
+const SendStreamEnd$json = {
+  '1': 'SendStreamEnd',
+};
+
+/// Descriptor for `SendStreamEnd`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendStreamEndDescriptor =
+    $convert.base64Decode('Cg1TZW5kU3RyZWFtRW5k');

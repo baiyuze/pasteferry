@@ -79,11 +79,14 @@ func configToProto(c config.Config) *pb.Config {
 		Language:               c.Language,
 		LanDisabled:            c.LANDisabled,
 		ServiceMode:            serviceModeToProto(c), CustomSignalingUrl: c.CustomSignalingURL, OfficialNoticeAck: c.OfficialNoticeAck,
-		UpdateCheckDisabled: c.UpdateCheckDisabled,
-		UpdateSkipVersion:   c.UpdateSkipVersion,
-		QuickPasteDisabled:  c.QuickPasteDisabled,
-		QuickPasteHotkey:    c.QuickPasteHotkey,
-		QuickPasteCopyOnly:  c.QuickPasteCopyOnly,
+		UpdateCheckDisabled:   c.UpdateCheckDisabled,
+		UpdateSkipVersion:     c.UpdateSkipVersion,
+		QuickPasteDisabled:    c.QuickPasteDisabled,
+		QuickPasteHotkey:      c.QuickPasteHotkey,
+		QuickPasteCopyOnly:    c.QuickPasteCopyOnly,
+		ReceiveDir:            c.ReceiveDir,
+		ReceiveDisabled:       c.ReceiveDisabled,
+		ReceiveNotifyDisabled: c.ReceiveNotifyDisabled,
 	}
 }
 
@@ -154,6 +157,10 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	// 空字符串就是默认快捷键
 	c.QuickPasteHotkey = in.GetQuickPasteHotkey()
 	c.QuickPasteCopyOnly = in.GetQuickPasteCopyOnly()
+	// 空字符串就是系统的「下载」文件夹
+	c.ReceiveDir = in.GetReceiveDir()
+	c.ReceiveDisabled = in.GetReceiveDisabled()
+	c.ReceiveNotifyDisabled = in.GetReceiveNotifyDisabled()
 	return c
 }
 

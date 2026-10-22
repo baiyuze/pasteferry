@@ -55,6 +55,7 @@ build_universal server ./cmd/pasteferry-server "$DIST/pasteferry-server" \
 
 # ── 把 daemon 包成 .app ──
 APP="$DIST/PasteFerryDaemon.app"
+FOLDER_USAGE_EN="PasteFerry reads the files you send to your other computers and saves the files they send you."
 mkdir -p "$APP/Contents/MacOS"
 mv "$DIST/pasteferryd" "$APP/Contents/MacOS/pasteferryd"
 cat > "$APP/Contents/Info.plist" <<PLIST
@@ -78,23 +79,39 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <string>PasteFerry finds your other computers on this network and syncs the clipboard with them directly.</string>
     <key>NSBonjourServices</key>
     <array><string>_pasteferry._udp</string></array>
+    <!-- 隔空传送：后台服务读用户发出的文件、把收到的文件存进「下载」等文件夹，第一次时系统弹窗请用户允许 -->
+    <key>NSDesktopFolderUsageDescription</key>    <string>$FOLDER_USAGE_EN</string>
+    <key>NSDocumentsFolderUsageDescription</key>  <string>$FOLDER_USAGE_EN</string>
+    <key>NSDownloadsFolderUsageDescription</key>  <string>$FOLDER_USAGE_EN</string>
+    <key>NSRemovableVolumesUsageDescription</key> <string>$FOLDER_USAGE_EN</string>
+    <key>NSNetworkVolumesUsageDescription</key>   <string>$FOLDER_USAGE_EN</string>
 </dict>
 </plist>
 PLIST
 # 系统设置的「隐私与安全性」列表里会显示后台服务，给它同一个图标
 mkdir -p "$APP/Contents/Resources"
 cp assets/brand/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
-# 本地网络权限弹窗里的说明，按系统语言显示
+# 本地网络与文件夹权限弹窗里的说明，按系统语言显示。$2 是本地网络，$3 是文件夹（隔空传送）
 localize() {
     mkdir -p "$APP/Contents/Resources/$1.lproj"
-    printf '"NSLocalNetworkUsageDescription" = "%s";\n' "$2" \
-        > "$APP/Contents/Resources/$1.lproj/InfoPlist.strings"
+    {
+        printf '"NSLocalNetworkUsageDescription" = "%s";\n' "$2"
+        for key in NSDesktopFolderUsageDescription NSDocumentsFolderUsageDescription \
+            NSDownloadsFolderUsageDescription NSRemovableVolumesUsageDescription NSNetworkVolumesUsageDescription; do
+            printf '"%s" = "%s";\n' "$key" "$3"
+        done
+    } > "$APP/Contents/Resources/$1.lproj/InfoPlist.strings"
 }
-localize en "PasteFerry finds your other computers on this network and syncs the clipboard with them directly."
-localize zh-Hans "PasteFerry 在局域网里查找你的其他电脑，直接与它们同步剪贴板。"
-localize zh-Hant "PasteFerry 會在區域網路中尋找你的其他電腦，直接與它們同步剪貼簿。"
-localize zh-HK "PasteFerry 會在區域網絡中尋找你的其他電腦，直接與它們同步剪貼簿。"
-localize ja "PasteFerry はこのネットワーク上のほかのコンピューターを見つけ、クリップボードを直接同期します。"
+localize en "PasteFerry finds your other computers on this network and syncs the clipboard with them directly." \
+    "$FOLDER_USAGE_EN"
+localize zh-Hans "PasteFerry 在局域网里查找你的其他电脑，直接与它们同步剪贴板。" \
+    "隔空贴要读取你发给其他电脑的文件，并保存它们发给你的文件。"
+localize zh-Hant "PasteFerry 會在區域網路中尋找你的其他電腦，直接與它們同步剪貼簿。" \
+    "隔空貼要讀取你傳給其他電腦的檔案，並儲存它們傳給你的檔案。"
+localize zh-HK "PasteFerry 會在區域網絡中尋找你的其他電腦，直接與它們同步剪貼簿。" \
+    "隔空貼要讀取你傳給其他電腦的檔案，並儲存它們傳給你的檔案。"
+localize ja "PasteFerry はこのネットワーク上のほかのコンピューターを見つけ、クリップボードを直接同期します。" \
+    "PasteFerry は、ほかのコンピューターに送るファイルを読み取り、送られてきたファイルを保存します。"
 sign "$APP"
 echo "  ✓ $APP"
 

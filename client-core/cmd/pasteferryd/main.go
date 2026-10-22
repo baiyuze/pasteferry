@@ -26,7 +26,9 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/identity"
 	"github.com/baiyuze/pasteferry/client-core/internal/notifications"
 	"github.com/baiyuze/pasteferry/client-core/internal/peers"
+	"github.com/baiyuze/pasteferry/client-core/internal/power"
 	"github.com/baiyuze/pasteferry/client-core/internal/rpc"
+	"github.com/baiyuze/pasteferry/client-core/internal/send"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
 	syncengine "github.com/baiyuze/pasteferry/client-core/internal/sync"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/lan"
@@ -239,6 +241,7 @@ func run(dataDir string) error {
 
 	// ── 设备配对与信令（引擎稍后注入）──
 	var engine *syncengine.Engine
+	var sender *send.Engine
 	notifier := notifications.New(ctx, notifications.Options{
 		Enabled: dataDir == "", Loop: loop, Language: func() string { return loadCfg().Language },
 		Fetch: func(ctx context.Context, id string) error { return engine.Fetch(ctx, id) },
@@ -249,6 +252,22 @@ func run(dataDir string) error {
 				return nil, err
 			}
 			return rpc.ClipToProto(clip), nil
+		},
+		Reveal: func(id string) error {
+			t, err := db.GetTransfer(id)
+			if err != nil {
+				return err
+			}
+			for _, p := range t.Paths {
+				if _, err := os.Lstat(p); err == nil {
+					return notifications.Reveal(p)
+				}
+			}
+			return notifications.Reveal(t.DestDir)
+		},
+		OpenPage: func(page string) error {
+			hub.Navigate(page)
+			return notifications.OpenUI()
 		},
 	})
 	defer notifier.Close()
@@ -278,11 +297,22 @@ func run(dataDir string) error {
 			}
 		},
 		OnPeerMessage: func(deviceID string, msg *pb.PeerMessage) {
+			if sender != nil && sender.HandleMessage(deviceID, msg) {
+				return
+			}
 			if engine != nil {
 				engine.HandlePeerMessage(ctx, deviceID, msg)
 			}
 		},
 		OnPeerStream: func(deviceID, label string, stream *p2p.Stream) {
+			if send.IsStream(label) {
+				if sender != nil {
+					sender.HandleStream(deviceID, label, stream)
+				} else {
+					stream.Close()
+				}
+				return
+			}
 			if engine != nil {
 				engine.HandlePeerStream(deviceID, label, stream)
 			}
@@ -290,6 +320,9 @@ func run(dataDir string) error {
 		OnPeerReady: func(deviceID string) {
 			if engine != nil {
 				go engine.PeerReady(ctx, deviceID)
+			}
+			if sender != nil {
+				go sender.PeerReady(deviceID)
 			}
 		},
 	})
@@ -350,7 +383,52 @@ func run(dataDir string) error {
 
 	defer engine.Close()
 
+	// ── 隔空传送 ──
+	sender = send.New(send.Options{
+		Store:      db,
+		LoadConfig: loadCfg,
+		Send:       peerMgr.P2P().Send,
+		OpenStream: peerMgr.P2P().OpenStream,
+		Peer: func(deviceID string) send.Peer {
+			_, list := peerMgr.Devices()
+			for _, d := range list {
+				if d.GetId() != deviceID {
+					continue
+				}
+				state := peerMgr.ConnState(deviceID)
+				return send.Peer{
+					Known: true, Name: d.GetName(), Online: d.GetOnline(),
+					Connected: state == p2p.StateDirect || state == p2p.StateRelay,
+					Relayed:   state == p2p.StateRelay,
+					Supported: d.GetReceivesFiles(), Disabled: d.GetReceiveDisabled(),
+				}
+			}
+			return send.Peer{}
+		},
+		RelayQuotaExhausted: func() bool {
+			u := peerMgr.OfficialUsage()
+			return u != nil && (u.GetReason() == "quota_exhausted" || u.GetReason() == "global_exhausted" ||
+				(u.GetAvailable() && u.GetLimitBytes() > 0 && u.GetRemainingBytes() <= 0))
+		},
+		Inhibit: func() func() { return power.Inhibit("PasteFerry is transferring files") },
+		OnChange: func(t *pb.Transfer) {
+			hub.Publish(rpc.EventTransferChanged(t))
+		},
+		OnRemoved: func(id string) {
+			hub.Publish(rpc.EventTransferRemoved(id))
+		},
+		OnNotice: func(kind send.NoticeKind, t *pb.Transfer) {
+			if loadCfg().ReceiveNotifyDisabled {
+				return
+			}
+			name := map[send.NoticeKind]string{send.NoticeIncoming: "incoming", send.NoticeReceived: "received", send.NoticeFailed: "failed"}[kind]
+			notifier.Transfer(name, t, receivedFolder(t))
+		},
+	})
+	defer sender.Close()
+
 	go peerMgr.Run(ctx)
+	sender.Start()
 	go watcher.Run(ctx)
 
 	// ── 过期回收 ──
@@ -382,6 +460,10 @@ func run(dataDir string) error {
 		}
 		if c.LANDisabled != prev.LANDisabled {
 			peerMgr.SetLANEnabled(!c.LANDisabled)
+		}
+		// 关掉或打开接收文件后，让对方的雷达立即更新
+		if c.ReceiveDisabled != prev.ReceiveDisabled {
+			peerMgr.BroadcastFeatures()
 		}
 		if c.EffectiveSignalingURL() != prev.EffectiveSignalingURL() || c.ServiceMode != prev.ServiceMode || c.LANDisabled != prev.LANDisabled ||
 			c.UpdateCheckDisabled != prev.UpdateCheckDisabled || c.UpdateSkipVersion != prev.UpdateSkipVersion {
@@ -468,6 +550,7 @@ func run(dataDir string) error {
 		NotificationStatus:   notifier.Status,
 		RequestNotifications: notifier.Request,
 		ActivateNotification: notifier.Activate,
+		Transfers:            sender,
 	}
 	wireUpdater(&deps, updater)
 	srv := rpc.NewServer(deps, hub, token)
@@ -586,4 +669,17 @@ func permissionToProto(p clipboard.Permission) pb.ClipboardPermission {
 	default:
 		return pb.ClipboardPermission_CLIPBOARD_PERMISSION_UNSPECIFIED
 	}
+}
+
+// receivedFolder 是通知里对保存位置的叫法：系统的「下载」文件夹叫 "downloads"（通知按语言翻译），
+// 其他位置用文件夹的名字。
+func receivedFolder(t *pb.Transfer) string {
+	if len(t.GetPaths()) == 0 {
+		return ""
+	}
+	dir := filepath.Dir(t.GetPaths()[0])
+	if filepath.Clean(dir) == filepath.Clean(config.DownloadsDir()) {
+		return "downloads"
+	}
+	return filepath.Base(dir)
 }

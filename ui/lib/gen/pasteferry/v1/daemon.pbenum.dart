@@ -192,5 +192,30 @@ class ServiceMode extends $pb.ProtobufEnum {
   const ServiceMode._(super.value, super.name);
 }
 
+class TransferDirection extends $pb.ProtobufEnum {
+  static const TransferDirection TRANSFER_DIRECTION_UNSPECIFIED =
+      TransferDirection._(
+          0, _omitEnumNames ? '' : 'TRANSFER_DIRECTION_UNSPECIFIED');
+  static const TransferDirection TRANSFER_DIRECTION_OUTGOING =
+      TransferDirection._(
+          1, _omitEnumNames ? '' : 'TRANSFER_DIRECTION_OUTGOING');
+  static const TransferDirection TRANSFER_DIRECTION_INCOMING =
+      TransferDirection._(
+          2, _omitEnumNames ? '' : 'TRANSFER_DIRECTION_INCOMING');
+
+  static const $core.List<TransferDirection> values = <TransferDirection>[
+    TRANSFER_DIRECTION_UNSPECIFIED,
+    TRANSFER_DIRECTION_OUTGOING,
+    TRANSFER_DIRECTION_INCOMING,
+  ];
+
+  static final $core.List<TransferDirection?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 2);
+  static TransferDirection? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const TransferDirection._(super.value, super.name);
+}
+
 const $core.bool _omitEnumNames =
     $core.bool.fromEnvironment('protobuf.omit_enum_names');

@@ -249,6 +249,9 @@ CREATE INDEX IF NOT EXISTS idx_clips_source   ON clips(source_clip_id) WHERE sou
 CREATE INDEX IF NOT EXISTS idx_clips_favorite ON clips(favorite, favorited_at DESC);`); err != nil {
 		return fmt.Errorf("建索引: %w", err)
 	}
+	if err := s.migrateTransfers(); err != nil {
+		return err
+	}
 	return s.backfillLinks()
 }
 
