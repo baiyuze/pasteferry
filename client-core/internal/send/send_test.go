@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sync"
 	"testing"
 	"time"
@@ -239,7 +240,12 @@ func TestSendFilesAndFolder(t *testing.T) {
 	if info, err := os.Stat(filepath.Join(p.b.recvDir, "照片", "空文件夹")); err != nil || !info.IsDir() {
 		t.Fatal("空文件夹没有收到")
 	}
-	if link, err := os.Readlink(filepath.Join(p.b.recvDir, "照片", "最新")); err != nil || link != "2026/IMG_1.HEIC" {
+	// 普通用户在 Windows 上建不了符号链接，接收方跳过它；其他平台照原样建
+	if runtime.GOOS == "windows" {
+		if _, err := os.Lstat(filepath.Join(p.b.recvDir, "照片", "最新")); !os.IsNotExist(err) {
+			t.Fatalf("Windows 上应当跳过符号链接：%v", err)
+		}
+	} else if link, err := os.Readlink(filepath.Join(p.b.recvDir, "照片", "最新")); err != nil || link != "2026/IMG_1.HEIC" {
 		t.Fatalf("符号链接不对：%q %v", link, err)
 	}
 	if _, err := os.Stat(filepath.Join(p.b.recvDir, partialDir)); !os.IsNotExist(err) {
