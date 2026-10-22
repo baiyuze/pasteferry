@@ -3778,7 +3778,7 @@ class SendAnswer extends $pb.GeneratedMessage {
   void clearAccepted() => $_clearField(3);
 
   /// 回绝的原因，固定代码：disabled / no_space / dest_unavailable / file_too_large /
-  /// busy / unknown_transfer / cancelled
+  /// busy / unknown_transfer / cancelled；already_done（2.5.1）：续传时发现上次已经收完，发送方直接标为送达
   @$pb.TagNumber(4)
   $core.String get reason => $_getSZ(3);
   @$pb.TagNumber(4)

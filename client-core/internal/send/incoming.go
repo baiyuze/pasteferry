@@ -141,6 +141,12 @@ func (e *Engine) handleOffer(from string, offer *pb.SendOffer) {
 
 	switch {
 	case offer.GetResume():
+		if getErr == nil && existing.Direction == store.Incoming && existing.DeviceID == from &&
+			existing.Status == store.TransferDone {
+			// 已经收完了，只是结果没传到对方那里：告诉它，不要从头再发
+			answer(&pb.SendAnswer{Reason: "already_done"})
+			return
+		}
 		if getErr != nil || existing.Direction != store.Incoming || existing.DeviceID != from ||
 			store.TransferFinished(existing.Status) {
 			answer(&pb.SendAnswer{Reason: "unknown_transfer"})

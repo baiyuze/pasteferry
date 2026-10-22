@@ -253,6 +253,13 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 			return
 		}
 		if !answer.GetAccepted() {
+			if answer.GetReason() == "already_done" {
+				// 上次其实已经收完了，只是结果没传回来（比如走局域网快速通道时控制通道恰好断了）
+				t.DoneBytes = t.TotalBytes
+				e.finish(t, store.TransferDone, "")
+				e.log.Info("隔空传送已送达（对方上次已收完）", "transfer", t.ID, "to", t.DeviceID)
+				return
+			}
 			if answer.GetReason() == "unknown_transfer" && !fresh {
 				// 对方已经清掉了没收完的部分（或者换了电脑重装过），从头再发
 				fresh = true
@@ -299,7 +306,7 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 		case <-ctx.Done():
 			e.stopped(t, context.Cause(ctx))
 			return
-		case <-time.After(resultTimeout):
+		case <-time.After(e.opts.ResultTimeout):
 			e.interrupt(e.withProgress(t))
 			return
 		}

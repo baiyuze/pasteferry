@@ -222,3 +222,30 @@ func TestNoLANAddrUsesDataChannel(t *testing.T) {
 		t.Fatalf("应当走数据通道：连上 %d 次，数据通道 %d 次", st.dials.Load(), st.channels.Load())
 	}
 }
+
+// 文件走 TCP 收完了，「已收到」却没传回去（控制通道恰好断了）：续传时对方说已经收完，
+// 发送方直接标为送达，不会从头再发一份
+func TestResultLostAfterLANTransfer(t *testing.T) {
+	p := newPair(t)
+	useLAN(t, p, false)
+	p.a.eng.opts.ResultTimeout = time.Second
+	p.b.mu.Lock()
+	p.b.dropResult = true
+	p.b.mu.Unlock()
+	src := t.TempDir()
+	data := randomBytes(t, 3<<20)
+	writeFile(t, filepath.Join(src, "a.bin"), data)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a.bin")}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	waitStatus(t, p.b, tr.GetId(), store.TransferDone)
+	waitStatus(t, p.a, tr.GetId(), store.TransferInterrupted)
+
+	p.a.eng.PeerReady("bob")
+	waitStatus(t, p.a, tr.GetId(), store.TransferDone)
+	sameFile(t, data, filepath.Join(p.b.recvDir, "a.bin"))
+	if _, err := os.Stat(filepath.Join(p.b.recvDir, "a (2).bin")); !os.IsNotExist(err) {
+		t.Fatal("不该再收一份")
+	}
+}

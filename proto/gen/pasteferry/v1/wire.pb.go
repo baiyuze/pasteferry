@@ -2981,7 +2981,7 @@ type SendAnswer struct {
 	Attempt    uint32                 `protobuf:"varint,2,opt,name=attempt,proto3" json:"attempt,omitempty"`
 	Accepted   bool                   `protobuf:"varint,3,opt,name=accepted,proto3" json:"accepted,omitempty"`
 	// 回绝的原因，固定代码：disabled / no_space / dest_unavailable / file_too_large /
-	// busy / unknown_transfer / cancelled
+	// busy / unknown_transfer / cancelled；already_done（2.5.1）：续传时发现上次已经收完，发送方直接标为送达
 	Reason         string `protobuf:"bytes,4,opt,name=reason,proto3" json:"reason,omitempty"`
 	ShortfallBytes int64  `protobuf:"varint,5,opt,name=shortfall_bytes,json=shortfallBytes,proto3" json:"shortfall_bytes,omitempty"` // no_space 时还差多少
 	ResumeIndex    int64  `protobuf:"varint,6,opt,name=resume_index,json=resumeIndex,proto3" json:"resume_index,omitempty"`          // 从第几个条目开始（全新传输为 0）

@@ -114,6 +114,7 @@ type Options struct {
 
 	// 测试用
 	AnswerTimeout time.Duration
+	ResultTimeout time.Duration
 	Now           func() time.Time
 }
 
@@ -144,6 +145,9 @@ func New(opts Options) *Engine {
 	}
 	if opts.AnswerTimeout <= 0 {
 		opts.AnswerTimeout = defaultAnswerTimeout
+	}
+	if opts.ResultTimeout <= 0 {
+		opts.ResultTimeout = resultTimeout
 	}
 	if opts.Now == nil {
 		opts.Now = time.Now

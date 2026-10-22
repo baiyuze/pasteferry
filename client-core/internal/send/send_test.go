@@ -26,11 +26,12 @@ type side struct {
 	db      *store.Store
 	recvDir string
 
-	mu       sync.Mutex
-	cfg      config.Config
-	offers   []*pb.SendOffer // 发出去的 SendOffer，看续传位置用
-	answers  []*pb.SendAnswer
-	blockOut bool // 模拟连接断了：控制消息发不出去
+	mu         sync.Mutex
+	cfg        config.Config
+	offers     []*pb.SendOffer // 发出去的 SendOffer，看续传位置用
+	answers    []*pb.SendAnswer
+	blockOut   bool // 模拟连接断了：控制消息发不出去
+	dropResult bool // 模拟「已收到」的结果在路上丢了
 }
 
 func (s *side) config() config.Config {
@@ -121,6 +122,10 @@ func (p *pair) newSide(t *testing.T, id, peer string) *side {
 		Send: func(to string, msg *pb.PeerMessage) error {
 			s.mu.Lock()
 			blocked := s.blockOut
+			if msg.GetSendResult() != nil && s.dropResult {
+				s.mu.Unlock()
+				return nil
+			}
 			if o := msg.GetSendOffer(); o != nil {
 				s.offers = append(s.offers, o)
 			}
