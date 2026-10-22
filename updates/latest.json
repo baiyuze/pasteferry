@@ -1,65 +1,126 @@
 {
   "schema": 1,
-  "latest": "2.5.0",
+  "latest": "2.5.1",
   "date": "2026-10-22",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.0/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.1/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.0/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.1/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 25881895,
-      "sha256": "08b0608b610ac4ae4f0d8c400d613a983276073746af077d12cc3032eb048951"
+      "size": 25939412,
+      "sha256": "e0620da95bc19e19d504dde16e5f823b24edae025dfad7ffd0d88716078cce88"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 27967163,
-      "sha256": "597198a70e6693a28c064470cf482ff6a10df9109440f28261c3c6f1bccc2347"
+      "size": 28046025,
+      "sha256": "8aaef02b84f2281af86719114c4cf936d34bbef21def709c0cb49054f980157d"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 51890412,
-      "sha256": "938a25ed0ce08b9bcf124db490e859e08e1706372c03fceddb91e723c7fc36ec"
+      "size": 52041840,
+      "sha256": "21aac7abe76f9fc49b519429608608149351d6f5478fbb318cded06e41087eb3"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 23304442,
-      "sha256": "ad332343b7994a5ac4f088c477dfd752ce7aabb7147bd32182d40e1e0dcb6d6d"
+      "size": 23348525,
+      "sha256": "144764256313891acbc2af6f18bc9085fcfd222b5e339d2e09ab8220bc3f5b8f"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 29382971,
-      "sha256": "aa0d99fb31c694faba709db0bd208f7ca04c7f7b83ab0c2b7304c0b75f57097e"
+      "size": 29457964,
+      "sha256": "1c4954a429918e4f38daa6f0b62c908c98a742fb2e0a7973d153ba27b1a89fd8"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22462568,
-      "sha256": "64bc6838d1668fde3232814fd129899fc62813e531ddbd0750ff42e5548f65e2"
+      "size": 22519492,
+      "sha256": "7c26cbdb560824e673ba407fc00e09d632566dfaaecae6e0bb66f066ec80f51b"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 20887804,
-      "sha256": "5b4918ab4e31034b8acb58b6f5e00bdf37e39d21c8e90c6205613f127f71895d"
+      "size": 20944354,
+      "sha256": "d0b2a1abb631190dfde183e2c7289f57fa565788ae2f4a315d6560cf03edcbc0"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 27182429,
-      "sha256": "695edbbfa4a83b66a37c6a11d3b274cb3ec7119d243d469d5bc10f4bb3f4adf9"
+      "size": 27258609,
+      "sha256": "acb8c7cc2e240aa4ba46c437a5556fa46a6369fcafc8c470c5aa66019c56c65a"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25453092,
-      "sha256": "fe8eb19c3ea5105be77a54f02ed75dc0cbf1a6191e7c4d7615dda06f7e10cab9"
+      "size": 25517156,
+      "sha256": "7710e25cadbd0d4f83794ddc1752b743b1c3e8ac8e5d370433434104cc408261"
     }
   },
   "releases": [
+    {
+      "version": "2.5.1",
+      "date": "2026-10-22",
+      "notes": {
+        "en": {
+          "changes": [
+            "Send Files uses an encrypted TCP fast link on the local network. A 1 GB file reached 144.3 MB/s from Mac to a Linux VM, up from 18.7 MB/s. If the fast link is unavailable, transfers automatically use the existing data channel; internet and relay transfers keep their existing transport.",
+            "On Windows, the firewall Allow button now permits both UDP and TCP traffic for PasteFerry."
+          ],
+          "fixes": [
+            "A transfer whose request was lost while the receiver restarted could stay interrupted after reconnection. It now retries once after a short delay when the devices are already connected.",
+            "If the delivery receipt is lost, resuming a completed transfer now marks it as delivered instead of sending a second copy.",
+            "The Send Files page now keeps the radar and transfer list side by side at every window size when that layout is selected. Device labels no longer overlap in narrow windows."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "同一局域网里的隔空传送改用加密的 TCP 快速通道。Mac 向 Linux 虚拟机发送 1 GB 文件，实测从 18.7 MB/s 提到 144.3 MB/s。快速通道不可用时自动退回原数据通道；外网与中转保持原来的传输方式。",
+            "Windows 设置里的防火墙「放行」按钮现在同时允许隔空贴的 UDP 和 TCP 通信。"
+          ],
+          "fixes": [
+            "修复接收方重启时丢失发送请求、重连后传输仍停在「已中断」的问题。两台已经连上时，现在会稍等片刻自动补试一次。",
+            "文件已收完但送达回执丢失时，续传会直接标为已送达，不再重新发送一份。",
+            "选择左右布局时，隔空传送页现在在所有窗口大小下都保持雷达与列表左右排列；窄窗口里的设备名称不再重叠。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "同じローカルネットワーク内のファイル送信に、暗号化された TCP 高速接続を使います。Mac から Linux 仮想マシンへ 1 GB のファイルを送る実測で、18.7 MB/s から 144.3 MB/s に向上しました。高速接続が使えない場合は従来のデータチャネルへ自動で切り替わり、インターネットと中継の転送方式は従来どおりです。",
+            "Windows のファイアウォールの「許可」ボタンが、PasteFerry の UDP と TCP の両方の通信を許可するようになりました。"
+          ],
+          "fixes": [
+            "受信側の再起動中に送信要求が失われると、再接続後も転送が中断のままになる問題を修正しました。すでに接続されている場合は、少し待ってから自動で一度再試行します。",
+            "受信完了の通知が失われても、完了済みの転送を再開すると送信済みとして扱い、同じファイルを再送しなくなりました。",
+            "左右配置を選択した場合、ウィンドウの大きさにかかわらずレーダーと転送一覧を横に並べるようになりました。狭いウィンドウでもデバイス名が重なりません。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "同一區域網路裡的隔空傳送改用加密的 TCP 快速通道。Mac 向 Linux 虛擬機傳送 1 GB 檔案，實測從 18.7 MB/s 提高到 144.3 MB/s。快速通道無法使用時自動退回原資料通道；外網與中繼維持原來的傳輸方式。",
+            "Windows 設定裡的防火牆「放行」按鈕現在同時允許隔空貼的 UDP 和 TCP 通訊。"
+          ],
+          "fixes": [
+            "修正接收方重新啟動時遺失傳送請求、重新連線後傳輸仍停在「已中斷」的問題。兩台已經連上時，現在會稍等片刻自動補試一次。",
+            "檔案已收完但送達回報遺失時，續傳會直接標為已送達，不再重新傳送一份。",
+            "選擇左右配置時，隔空傳送頁現在在所有視窗大小下都維持雷達與列表左右排列；窄視窗裡的裝置名稱不再重疊。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "同一區域網絡裏的隔空傳送改用加密的 TCP 快速通道。Mac 向 Linux 虛擬機傳送 1 GB 檔案，實測從 18.7 MB/s 提升至 144.3 MB/s。快速通道無法使用時自動退回原數據通道；外網與中轉維持原來的傳輸方式。",
+            "Windows 設定裏的防火牆「放行」按鈕現在同時允許隔空貼的 UDP 和 TCP 通訊。"
+          ],
+          "fixes": [
+            "修正接收方重新啟動時遺失傳送請求、重新連線後傳輸仍停在「已中斷」的問題。兩部電腦已經連上時，現在會稍等片刻自動補試一次。",
+            "檔案已收完但送達回報遺失時，續傳會直接標為已送達，不再重新傳送一份。",
+            "選擇左右排列時，隔空傳送頁現在在所有視窗大小下都維持雷達與列表左右排列；窄視窗裏的裝置名稱不再重疊。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.5.0",
       "date": "2026-10-22",
