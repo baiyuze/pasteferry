@@ -1,65 +1,116 @@
 {
   "schema": 1,
-  "latest": "2.4.2",
+  "latest": "2.5.0",
   "date": "2026-10-22",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.2/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.0/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.4.2/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.0/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 25405097,
-      "sha256": "85f543f57f8b1316a7a562547c571463df0a741996764db129279c2bf2659e19"
+      "size": 25881895,
+      "sha256": "08b0608b610ac4ae4f0d8c400d613a983276073746af077d12cc3032eb048951"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 27473494,
-      "sha256": "8547077052b625f2818ada8dab3417682331c7604b0d85ad5d8d2a477d80b29e"
+      "size": 27967163,
+      "sha256": "597198a70e6693a28c064470cf482ff6a10df9109440f28261c3c6f1bccc2347"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 50934948,
-      "sha256": "3056b47f7a71fd7aacc20335be69bda3649565df947aa0286405f0e9204589aa"
+      "size": 51890412,
+      "sha256": "938a25ed0ce08b9bcf124db490e859e08e1706372c03fceddb91e723c7fc36ec"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 22956157,
-      "sha256": "0f74812c13f8086f75f37c59964c9ebe91cb251b7f51c3f0adf5a6856c171836"
+      "size": 23304442,
+      "sha256": "ad332343b7994a5ac4f088c477dfd752ce7aabb7147bd32182d40e1e0dcb6d6d"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 28882364,
-      "sha256": "d73998ca8d116ac8dfec77e734277499132a3085ad683be61290e00a69c695a7"
+      "size": 29382971,
+      "sha256": "aa0d99fb31c694faba709db0bd208f7ca04c7f7b83ab0c2b7304c0b75f57097e"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22117102,
-      "sha256": "0ad108d6353b23dbf6489965f2d76aef95bf356a3ee03e3fa00364e8a191fe50"
+      "size": 22462568,
+      "sha256": "64bc6838d1668fde3232814fd129899fc62813e531ddbd0750ff42e5548f65e2"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 20558938,
-      "sha256": "7ac14d82f087c5d7c628a80753b48ced10b798c6d7bc0b42a5d6982161ce99ed"
+      "size": 20887804,
+      "sha256": "5b4918ab4e31034b8acb58b6f5e00bdf37e39d21c8e90c6205613f127f71895d"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 26739574,
-      "sha256": "dc4e654565838c09326279c877949aee5418e79deea0daf3a5990feab3023be7"
+      "size": 27182429,
+      "sha256": "695edbbfa4a83b66a37c6a11d3b274cb3ec7119d243d469d5bc10f4bb3f4adf9"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25017955,
-      "sha256": "531c8d4f9f91b06f5e0db2d6097d670e639d0c2acd397933cac552749271fec0"
+      "size": 25453092,
+      "sha256": "fe8eb19c3ea5105be77a54f02ed75dc0cbf1a6191e7c4d7615dda06f7e10cab9"
     }
   },
   "releases": [
+    {
+      "version": "2.5.0",
+      "date": "2026-10-22",
+      "notes": {
+        "en": {
+          "changes": [
+            "Send Files: a new Send Files page shows your paired devices on a radar. Drop files or whole folders onto a device, or click it and choose them, to send them straight to that computer. There's no size limit, and received files go to your Downloads folder (changeable in Settings) instead of your history.",
+            "Transfers show progress, speed and time left. If the connection drops, they pick up where they stopped: automatically within 30 minutes, or later with Continue. Every file is checked with SHA-256, and the computer doesn't fall asleep while files are moving.",
+            "When only the official relay gets through, you're asked before sending. A transfer pauses when the day's allowance runs out and continues once the devices connect directly or the allowance resets.",
+            "Settings has a Send Files section: turn receiving on or off, choose where files are saved, turn notifications on or off, and put the transfer list beside or below the radar.",
+            "The sidebar is grouped: History, Favorites and Send Files first, then Devices, Official service and Settings."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "隔空传送：新的「隔空传送」页把配对过的设备排在雷达上。把文件或整个文件夹拖到一台设备上，或者点它再选择文件，就直接发到那台电脑。不限大小；收到的文件存到「下载」（可以在设置里改），不进复制记录。",
+            "传输时显示进度、速度和剩余时间。连接断了会从断点接着传：30 分钟内自动继续，更晚的话点「继续」。每个文件都用 SHA-256 校验，传输期间电脑不会自动睡眠。",
+            "只能经官方中转时，发送前会先问你。当天额度用完时传输暂停，两台连上直连或额度恢复后自动继续。",
+            "设置里新增「隔空传送」一组：接收开关、保存位置、通知，以及传输列表放在雷达右边还是下面。",
+            "侧边栏分成两组：复制记录、收藏、隔空传送在上，设备、官方服务、设置在下。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "ファイル送信：新しい「ファイル送信」ページでは、ペアリングしたデバイスがレーダーに並びます。ファイルやフォルダをデバイスにドロップするか、クリックして選ぶと、そのパソコンへ直接送ります。サイズ無制限で、受信したファイルは履歴ではなく「ダウンロード」フォルダ（設定で変更可）に保存されます。",
+            "転送中は進み具合、速度、残り時間を表示します。接続が切れても中断した位置から再開します（30 分以内なら自動、それ以降は「続ける」）。ファイルはすべて SHA-256 で検証され、転送中はパソコンが自動でスリープしません。",
+            "公式の中継しか通らない場合は、送る前に確認します。その日の上限に達すると転送は一時停止し、直接接続できたときか上限がリセットされたときに自動で再開します。",
+            "設定に「ファイル送信」の項目を追加しました。受信のオン/オフ、保存先、通知、転送リストをレーダーの右に置くか下に置くかを選べます。",
+            "サイドバーを 2 つのグループに分けました。上に履歴・お気に入り・ファイル送信、下にデバイス・公式サービス・設定。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "隔空傳送：新的「隔空傳送」頁把配對過的裝置排在雷達上。把檔案或整個資料夾拖到一台裝置上，或點它再選擇檔案，就直接傳到那台電腦。不限大小；收到的檔案存到「下載」（可以在設定裡更改），不進複製記錄。",
+            "傳輸時顯示進度、速度和剩餘時間。連線中斷會從中斷處接著傳：30 分鐘內自動繼續，更晚的話點「繼續」。每個檔案都用 SHA-256 校驗，傳輸期間電腦不會自動睡眠。",
+            "只能經官方中繼時，傳送前會先問你。當天額度用完時傳輸暫停，兩台連上直連或額度恢復後自動繼續。",
+            "設定裡新增「隔空傳送」一組：接收開關、儲存位置、通知，以及傳輸列表放在雷達右邊還是下面。",
+            "側邊欄分成兩組：複製記錄、收藏、隔空傳送在上，裝置、官方服務、設定在下。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "隔空傳送：新的「隔空傳送」頁把配對過的裝置排在雷達上。把檔案或整個資料夾拖到一部裝置上，或按它再選擇檔案，就直接傳到那部電腦。不限大小；收到的檔案存到「下載」（可以在設定裏更改），不進複製記錄。",
+            "傳輸時顯示進度、速度和剩餘時間。連線中斷會從中斷處接着傳：30 分鐘內自動繼續，更晚的話按「繼續」。每個檔案都用 SHA-256 校驗，傳輸期間電腦不會自動休眠。",
+            "只能經官方中轉時，傳送前會先問你。當天額度用完時傳輸暫停，兩部電腦連上直連或額度恢復後自動繼續。",
+            "設定裏新增「隔空傳送」一組：接收開關、儲存位置、通知，以及傳輸列表放在雷達右邊還是下面。",
+            "側邊欄分成兩組：複製記錄、收藏、隔空傳送在上，裝置、官方服務、設定在下。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.4.2",
       "date": "2026-10-22",
