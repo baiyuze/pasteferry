@@ -6,6 +6,7 @@ import 'package:pasteferry_ui/app_state.dart';
 import 'package:pasteferry_ui/gen/pasteferry/v1/daemon.pb.dart';
 import 'package:pasteferry_ui/i18n.dart';
 import 'package:pasteferry_ui/main.dart';
+import 'package:pasteferry_ui/platform.dart';
 import 'package:pasteferry_ui/widgets/send_dialog.dart';
 
 const _in = TransferDirection.TRANSFER_DIRECTION_INCOMING;
@@ -167,7 +168,8 @@ void main() {
       await tester.pump();
       await tester.tap(find.text('隔空传送').first);
       await tester.pump();
-      final radar = tester.getCenter(find.text('这台 Mac'));
+      // 本机的叫法随平台变：Mac 上「这台 Mac」，其他平台「这台电脑」
+      final radar = tester.getCenter(find.text(Wording.thisDevice));
       final tabs = tester.getCenter(find.text('收到的'));
       if (stacked) {
         expect(tabs.dy, greaterThan(radar.dy), reason: '列表在雷达下面');
