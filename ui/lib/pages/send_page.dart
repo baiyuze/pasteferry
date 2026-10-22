@@ -298,12 +298,28 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
               child: _node(context, state, d),
             ));
           }
+          // 圆线断开的地方：圈顶的小字左右各让出一点；外圈两侧的设备，名字在图标下面，让出图标往下的一段
+          final captionStyle = context.text.labelSmall?.copyWith(color: p.textFaint);
+          (double, double) topGap(String text, double rx) {
+            final w = (TextPainter(text: TextSpan(text: text, style: captionStyle), textDirection: TextDirection.ltr)
+                  ..layout())
+                .width;
+            final half = math.asin(math.min(1.0, (w / 2 + 6) / rx));
+            return (-math.pi / 2 - half, half * 2);
+          }
+          final below = math.asin(math.min(1.0, (_SendNode.avatar / 2 + 40) / outerRy));
+          final outerGaps = <(double, double)>[
+            if (hasOuter) topGap(l.sendRingOther, outerRx),
+            for (final s in _slots.values)
+              if (!s.$1) _outerAngles[s.$2] == 0 ? (0.0, below) : (math.pi - below, below),
+          ];
+          final innerGaps = [topGap(l.sendRingLan, innerRx)];
           // 圈顶上的小字：内圈是同一网络，外圈是其他网络。外圈没有设备时只标内圈
           Widget caption(String text, double ry) => Positioned(
                 left: 0,
                 right: 0,
                 top: center.dy - ry - 8,
-                child: Center(child: _Label(text: text, style: context.text.labelSmall?.copyWith(color: p.textFaint))),
+                child: Center(child: _Label(text: text, style: captionStyle)),
               );
           return Stack(
             clipBehavior: Clip.none,
@@ -318,6 +334,8 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
                       inner: Size(innerRx, innerRy),
                       outer: Size(outerRx, outerRy),
                       highlight: _dragging,
+                      innerGaps: innerGaps,
+                      outerGaps: outerGaps,
                     ),
                   ),
                 ),
@@ -454,6 +472,8 @@ class _SendRadarPainter extends CustomPainter {
     required this.inner,
     required this.outer,
     required this.highlight,
+    this.innerGaps = const [],
+    this.outerGaps = const [],
   }) : super(repaint: pulse);
 
   final Animation<double> pulse;
@@ -462,6 +482,11 @@ class _SendRadarPainter extends CustomPainter {
   final Size inner;
   final Size outer;
   final bool highlight;
+
+  /// 圆线在这些地方断开（起始角度、跨过的角度，弧度，顺时针从正右方算）：圈顶上的小字、外圈两侧设备的名字。
+  /// 文字不垫底色，扩散的光带经过时也不会露出一块
+  final List<(double, double)> innerGaps;
+  final List<(double, double)> outerGaps;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -492,16 +517,38 @@ class _SendRadarPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
       ..color = highlight ? wave.withValues(alpha: 0.35) : ring;
-    canvas.drawOval(oval(inner.width, inner.height), rings);
-    canvas.drawOval(oval(outer.width, outer.height), rings);
+    _ring(canvas, oval(inner.width, inner.height), innerGaps, rings);
+    _ring(canvas, oval(outer.width, outer.height), outerGaps, rings);
+  }
+
+  /// 画一圈，跳过 gaps 里的几段
+  static void _ring(Canvas canvas, Rect rect, List<(double, double)> gaps, Paint paint) {
+    if (gaps.isEmpty) {
+      canvas.drawOval(rect, paint);
+      return;
+    }
+    const full = 2 * math.pi;
+    final sorted = [for (final (start, sweep) in gaps) ((start % full + full) % full, sweep)]
+      ..sort((a, b) => a.$1.compareTo(b.$1));
+    for (var i = 0; i < sorted.length; i++) {
+      final from = sorted[i].$1 + sorted[i].$2;
+      var to = i + 1 < sorted.length ? sorted[i + 1].$1 : sorted.first.$1 + full;
+      if (to > from) canvas.drawArc(rect, from, to - from, false, paint);
+    }
   }
 
   @override
   bool shouldRepaint(_SendRadarPainter old) =>
-      old.ring != ring || old.wave != wave || old.inner != inner || old.outer != outer || old.highlight != highlight;
+      old.ring != ring ||
+      old.wave != wave ||
+      old.inner != inner ||
+      old.outer != outer ||
+      old.highlight != highlight ||
+      old.innerGaps.toString() != innerGaps.toString() ||
+      old.outerGaps.toString() != outerGaps.toString();
 }
 
-/// 压在轨道线上的文字：底色与页面相同，线在文字处断开。
+/// 雷达上的一行文字。不垫底色：圆线在文字处由 _SendRadarPainter 断开。
 class _Label extends StatelessWidget {
   const _Label({required this.text, this.style});
 
@@ -509,11 +556,8 @@ class _Label extends StatelessWidget {
   final TextStyle? style;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        color: context.palette.background,
-        child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: style),
-      );
+  Widget build(BuildContext context) =>
+      Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: style);
 }
 
 /// 雷达上的一台设备：圆形图标、右下角表示连接方式的小圆点、名字。正在发给它时图标外面一圈进度环。
