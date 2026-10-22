@@ -170,6 +170,7 @@ class ClipRecord extends $pb.GeneratedMessage {
     $core.bool? favorited,
     $fixnum.Int64? favoritedAtUnix,
     $core.bool? isLink,
+    $core.String? alias,
   }) {
     final result = ClipRecord._();
     if (id != null) result.id = id;
@@ -189,6 +190,7 @@ class ClipRecord extends $pb.GeneratedMessage {
     if (favorited != null) result.favorited = favorited;
     if (favoritedAtUnix != null) result.favoritedAtUnix = favoritedAtUnix;
     if (isLink != null) result.isLink = isLink;
+    if (alias != null) result.alias = alias;
     return result;
   }
 
@@ -225,6 +227,7 @@ class ClipRecord extends $pb.GeneratedMessage {
     ..aOB(15, _omitFieldNames ? '' : 'favorited')
     ..aInt64(16, _omitFieldNames ? '' : 'favoritedAtUnix')
     ..aOB(17, _omitFieldNames ? '' : 'isLink')
+    ..aOS(18, _omitFieldNames ? '' : 'alias')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -398,6 +401,16 @@ class ClipRecord extends $pb.GeneratedMessage {
   $core.bool hasIsLink() => $_has(16);
   @$pb.TagNumber(17)
   void clearIsLink() => $_clearField(17);
+
+  /// 用户给收藏起的别名，空表示没有。只有收藏有
+  @$pb.TagNumber(18)
+  $core.String get alias => $_getSZ(17);
+  @$pb.TagNumber(18)
+  set alias($core.String value) => $_setString(17, value);
+  @$pb.TagNumber(18)
+  $core.bool hasAlias() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearAlias() => $_clearField(18);
 }
 
 class SubscribeRequest extends $pb.GeneratedMessage {
@@ -1727,6 +1740,75 @@ class SetFavoriteRequest extends $pb.GeneratedMessage {
   void clearFavorite() => $_clearField(2);
 }
 
+class SetAliasRequest extends $pb.GeneratedMessage {
+  factory SetAliasRequest({
+    $core.String? clipId,
+    $core.String? alias,
+  }) {
+    final result = SetAliasRequest._();
+    if (clipId != null) result.clipId = clipId;
+    if (alias != null) result.alias = alias;
+    return result;
+  }
+
+  SetAliasRequest._();
+
+  factory SetAliasRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetAliasRequest()..mergeFromBuffer(data, registry);
+  factory SetAliasRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetAliasRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SetAliasRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SetAliasRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'clipId')
+    ..aOS(2, _omitFieldNames ? '' : 'alias')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetAliasRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetAliasRequest copyWith(void Function(SetAliasRequest) updates) =>
+      super.copyWith((message) => updates(message as SetAliasRequest))
+          as SetAliasRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SetAliasRequest() / SetAliasRequest.new instead')
+  static SetAliasRequest create() => SetAliasRequest._();
+  static $pb.GeneratedMessage $_createMessage() => SetAliasRequest._();
+  @$core.override
+  SetAliasRequest createEmptyInstance() => SetAliasRequest._();
+  @$core.pragma('dart2js:noInline')
+  static SetAliasRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetAliasRequest>(
+          SetAliasRequest.$_createMessage);
+  static SetAliasRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get clipId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set clipId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasClipId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearClipId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get alias => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set alias($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAlias() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAlias() => $_clearField(2);
+}
+
 class GetClipDetailRequest extends $pb.GeneratedMessage {
   factory GetClipDetailRequest({
     $core.String? clipId,
@@ -2690,6 +2772,121 @@ class UnpairRequest extends $pb.GeneratedMessage {
   $core.bool hasDeviceId() => $_has(0);
   @$pb.TagNumber(1)
   void clearDeviceId() => $_clearField(1);
+}
+
+class ReconnectRequest extends $pb.GeneratedMessage {
+  factory ReconnectRequest({
+    $core.String? deviceId,
+  }) {
+    final result = ReconnectRequest._();
+    if (deviceId != null) result.deviceId = deviceId;
+    return result;
+  }
+
+  ReconnectRequest._();
+
+  factory ReconnectRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ReconnectRequest()..mergeFromBuffer(data, registry);
+  factory ReconnectRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ReconnectRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ReconnectRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ReconnectRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'deviceId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ReconnectRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ReconnectRequest copyWith(void Function(ReconnectRequest) updates) =>
+      super.copyWith((message) => updates(message as ReconnectRequest))
+          as ReconnectRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ReconnectRequest() / ReconnectRequest.new instead')
+  static ReconnectRequest create() => ReconnectRequest._();
+  static $pb.GeneratedMessage $_createMessage() => ReconnectRequest._();
+  @$core.override
+  ReconnectRequest createEmptyInstance() => ReconnectRequest._();
+  @$core.pragma('dart2js:noInline')
+  static ReconnectRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReconnectRequest>(
+          ReconnectRequest.$_createMessage);
+  static ReconnectRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get deviceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set deviceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasDeviceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDeviceId() => $_clearField(1);
+}
+
+class ReconnectResponse extends $pb.GeneratedMessage {
+  factory ReconnectResponse({
+    ConnectionKind? kind,
+  }) {
+    final result = ReconnectResponse._();
+    if (kind != null) result.kind = kind;
+    return result;
+  }
+
+  ReconnectResponse._();
+
+  factory ReconnectResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ReconnectResponse()..mergeFromBuffer(data, registry);
+  factory ReconnectResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ReconnectResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ReconnectResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ReconnectResponse.$_createMessage)
+    ..aE<ConnectionKind>(1, _omitFieldNames ? '' : 'kind',
+        enumValues: ConnectionKind.values)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ReconnectResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ReconnectResponse copyWith(void Function(ReconnectResponse) updates) =>
+      super.copyWith((message) => updates(message as ReconnectResponse))
+          as ReconnectResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ReconnectResponse() / ReconnectResponse.new instead')
+  static ReconnectResponse create() => ReconnectResponse._();
+  static $pb.GeneratedMessage $_createMessage() => ReconnectResponse._();
+  @$core.override
+  ReconnectResponse createEmptyInstance() => ReconnectResponse._();
+  @$core.pragma('dart2js:noInline')
+  static ReconnectResponse getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReconnectResponse>(
+          ReconnectResponse.$_createMessage);
+  static ReconnectResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  ConnectionKind get kind => $_getN(0);
+  @$pb.TagNumber(1)
+  set kind(ConnectionKind value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasKind() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKind() => $_clearField(1);
 }
 
 class SetDeviceAddressRequest extends $pb.GeneratedMessage {

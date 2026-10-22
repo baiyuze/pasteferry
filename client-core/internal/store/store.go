@@ -73,6 +73,9 @@ type Clip struct {
 	Favorited bool
 	// IsLink 表示整条文字就是一个网址，写入时由 PutClip 算好
 	IsLink bool
+	// Alias 是用户给收藏起的别名，空表示没有。取消收藏后仍留着、只是不显示，
+	// 撤销取消（再收藏一次）时随之回来
+	Alias string
 }
 
 // FavoriteExpiry 是收藏行的 expires_at。不用 0：降级到不认识收藏的旧版后台服务时，
@@ -239,6 +242,7 @@ CREATE TABLE IF NOT EXISTS meta (
 		{"favorited_at", "INTEGER NOT NULL DEFAULT 0"},
 		{"source_clip_id", "TEXT NOT NULL DEFAULT ''"},
 		{"is_link", "INTEGER NOT NULL DEFAULT 0"},
+		{"alias", "TEXT NOT NULL DEFAULT ''"},
 	} {
 		if err := s.addColumnIfMissing("clips", col.name, col.decl); err != nil {
 			return err
@@ -336,8 +340,8 @@ func (s *Store) PutClip(c Clip) error {
 INSERT INTO clips (id, kind, status, origin_device_id, origin_device_name, outgoing,
                    total_size, text_preview, text_content, text_plain, cache_path,
                    source_paths, error, created_at, expires_at,
-                   favorite, favorited_at, source_clip_id, is_link)
-VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                   favorite, favorited_at, source_clip_id, is_link, alias)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 ON CONFLICT(id) DO UPDATE SET
     status=excluded.status, total_size=excluded.total_size,
     text_preview=excluded.text_preview, text_content=excluded.text_content,
@@ -345,11 +349,11 @@ ON CONFLICT(id) DO UPDATE SET
     cache_path=excluded.cache_path, source_paths=excluded.source_paths,
     error=excluded.error, expires_at=excluded.expires_at,
     favorite=excluded.favorite, favorited_at=excluded.favorited_at,
-    source_clip_id=excluded.source_clip_id, is_link=excluded.is_link`,
+    source_clip_id=excluded.source_clip_id, is_link=excluded.is_link, alias=excluded.alias`,
 		c.ID, c.Kind, c.Status, c.OriginDeviceID, c.OriginDeviceName, c.Outgoing,
 		c.TotalSize, c.TextPreview, c.TextContent, c.TextPlain, c.CachePath,
 		string(srcJSON), c.Error, c.CreatedAt.Unix(), c.ExpiresAt.Unix(),
-		c.Favorite, favoritedAt, c.SourceClipID, c.IsLink)
+		c.Favorite, favoritedAt, c.SourceClipID, c.IsLink, c.Alias)
 	if err != nil {
 		return fmt.Errorf("写入 clip: %w", err)
 	}
@@ -406,7 +410,7 @@ func (s *Store) ListRecords(limit int, before time.Time, f Filter) ([]Clip, erro
 	return s.queryClips(q, args...)
 }
 
-// SearchClips 找出文字内容或文件名可能包含 query 的记录，按时间倒序，最多 limit 条。
+// SearchClips 找出文字内容、文件名或收藏的别名可能包含 query 的记录，按时间倒序，最多 limit 条。
 //
 // 这是粗筛：LIKE 只对 ASCII 不分大小写；没存纯文本的 HTML 记录按 HTML 源码匹配，
 // 标签名也会命中。由调用方按纯文本再核对一遍（见 sync.Engine.SearchHistory）。
@@ -426,10 +430,11 @@ func (s *Store) SearchRecords(query string, limit int, f Filter) ([]Clip, error)
 	if f.Favorites {
 		order = `favorited_at DESC, created_at DESC`
 	}
-	args := append([]any{KindText, like, KindHTML, like, like, KindImage, like}, fargs...)
+	args := append([]any{like, KindText, like, KindHTML, like, like, KindImage, like}, fargs...)
 	args = append(args, limit)
 	return s.queryClips(`SELECT `+clipCols+` FROM clips
-WHERE ((kind = ? AND text_content LIKE ? ESCAPE '\')
+WHERE ((favorite = 1 AND alias LIKE ? ESCAPE '\')
+   OR (kind = ? AND text_content LIKE ? ESCAPE '\')
    OR (kind = ? AND (text_plain LIKE ? ESCAPE '\' OR (text_plain = '' AND text_content LIKE ? ESCAPE '\')))
    OR (kind <> ? AND EXISTS (SELECT 1 FROM clip_items i WHERE i.clip_id = clips.id AND i.name LIKE ? ESCAPE '\')))`+
 		where+`
@@ -463,7 +468,7 @@ LIMIT ?`, limit)
 const clipCols = `id, kind, status, origin_device_id, origin_device_name, outgoing,
                   total_size, text_preview, text_content, text_plain, cache_path,
                   source_paths, error, created_at, expires_at,
-                  favorite, favorited_at, source_clip_id, is_link,
+                  favorite, favorited_at, source_clip_id, is_link, alias,
                   (favorite = 0 AND EXISTS (SELECT 1 FROM clips f
                       WHERE f.favorite = 1 AND f.source_clip_id = clips.id))`
 
@@ -482,7 +487,7 @@ func (s *Store) queryClips(query string, args ...any) ([]Clip, error) {
 		if err := rows.Scan(&c.ID, &c.Kind, &c.Status, &c.OriginDeviceID, &c.OriginDeviceName,
 			&c.Outgoing, &c.TotalSize, &c.TextPreview, &c.TextContent, &c.TextPlain,
 			&c.CachePath, &srcJSON, &c.Error, &created, &expires,
-			&c.Favorite, &favoritedAt, &c.SourceClipID, &c.IsLink, &c.Favorited); err != nil {
+			&c.Favorite, &favoritedAt, &c.SourceClipID, &c.IsLink, &c.Alias, &c.Favorited); err != nil {
 			return nil, err
 		}
 		c.CreatedAt = time.Unix(created, 0)
@@ -631,6 +636,18 @@ func (s *Store) TouchFavorite(id, sourceID string, at time.Time) error {
 	_, err := s.db.Exec(`UPDATE clips SET favorited_at=?, source_clip_id=? WHERE id=? AND favorite=1`,
 		at.Unix(), sourceID, id)
 	return err
+}
+
+// SetAlias 改一条收藏的别名，空串表示去掉。id 不是收藏时返回 ErrNotFound。
+func (s *Store) SetAlias(id, alias string) error {
+	res, err := s.db.Exec(`UPDATE clips SET alias=? WHERE id=? AND favorite=1`, alias, id)
+	if err != nil {
+		return err
+	}
+	if n, err := res.RowsAffected(); err == nil && n == 0 {
+		return ErrNotFound
+	}
+	return nil
 }
 
 // Unfavorite 把一条收藏改回复制记录：时间改成 now，保留期到 expires，内容的位置改成缓存目录里的 cacheRel。

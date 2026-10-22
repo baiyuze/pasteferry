@@ -83,6 +83,26 @@ func (e *Engine) SetFavorite(ctx context.Context, id string, favorite bool) (sto
 	}
 }
 
+// maxAlias 是别名最多多少个字：列表里一行放得下，再长也看不全
+const maxAlias = 100
+
+// SetAlias 给收藏 id 起个别名，alias 为空表示去掉。换行压成空格，首尾空白去掉，超长的截断。
+func (e *Engine) SetAlias(id, alias string) (store.Clip, error) {
+	e.favMu.Lock()
+	defer e.favMu.Unlock()
+	alias = strings.Join(strings.Fields(alias), " ")
+	if r := []rune(alias); len(r) > maxAlias {
+		alias = string(r[:maxAlias])
+	}
+	if err := e.store.SetAlias(id, alias); err != nil {
+		if errors.Is(err, store.ErrNotFound) {
+			return store.Clip{}, errors.New("只有收藏可以重命名")
+		}
+		return store.Clip{}, err
+	}
+	return e.emitStored(id, "")
+}
+
 // newFavorite 由复制记录 src 生成一条收藏：新的 ID，保留原来的复制时间与来源。
 func newFavorite(src store.Clip) store.Clip {
 	fav := src

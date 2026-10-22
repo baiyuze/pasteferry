@@ -332,12 +332,75 @@ func (m *Manager) Connect(ctx context.Context, deviceID string) error {
 	return p.Connect(ctx)
 }
 
+// RetryDirect 马上再试一次直连（设备菜单里的「重新连接」）。已是直连时什么也不做；
+// 打不通照旧留在中转，连接不断；还没连上的马上发起连接。
+//
+// 只有发起方（device_id 小的一方）能发起协商：本端是应答方时，请对端来试（见 wire.proto 的 RetryDirect）。
+func (m *Manager) RetryDirect(ctx context.Context, deviceID string) error {
+	if m.State(deviceID) == StateDirect {
+		return nil
+	}
+	if m.selfID > deviceID {
+		return m.sendSignal(ctx, deviceID, &pb.SignalMessage{
+			GatewayCapable: m.officialEnabled(),
+			Payload:        &pb.SignalMessage_RetryDirect{RetryDirect: &pb.RetryDirect{}},
+		})
+	}
+	return m.retryDirect(ctx, deviceID)
+}
+
+// retryDirect 是发起方这一边的 RetryDirect。
+func (m *Manager) retryDirect(ctx context.Context, deviceID string) error {
+	m.mu.RLock()
+	p := m.peers[deviceID]
+	a := m.relays[deviceID]
+	m.mu.RUnlock()
+	if p == nil {
+		return m.Connect(ctx, deviceID)
+	}
+	if p.State() == StateDirect {
+		return nil
+	}
+	if a != nil && a.peer != nil && a.peer.State() == StateRelay {
+		// 官方中转是另一条连接，照常用着；直连那条带上新探测的出口地址从头再打一次洞，
+		// 打通后发送自动换到直连（见 selectedLocked），中转随之释放
+		m.log.Info("经官方中转，按用户要求重新尝试直连", "peer", deviceID)
+		m.refreshEgress()
+		p.Close()
+		return p.Connect(ctx)
+	}
+	switch p.State() {
+	case StateRelay:
+		m.log.Info("经中转，按用户要求重新尝试直连", "peer", deviceID)
+		go p.UpgradeNow()
+	case StateOffline:
+		return p.Connect(ctx)
+	}
+	// StateConnecting：正在握手，等它的结果
+	return nil
+}
+
 // HandleSignal 把验签后的信令分派给对应的 Peer。
 func (m *Manager) HandleSignal(ctx context.Context, from string, msg *pb.SignalMessage) error {
 	if m.officialEnabled() {
 		m.mu.Lock()
 		m.capable[from] = m.capable[from] || msg.GetGatewayCapable()
 		m.mu.Unlock()
+	}
+	if msg.GetRetryDirect() != nil {
+		// 对端（应答方）的用户点了「重新连接」。只有发起方处理，应答方收到的不理，免得来回转发
+		if m.selfID < from {
+			go func() {
+				ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+				defer cancel()
+				if err := m.retryDirect(ctx, from); err != nil {
+					m.log.Debug("按对端要求重试直连失败", "peer", from, "err", err)
+				}
+			}()
+		}
+		return nil
+	}
+	if m.officialEnabled() {
 		if msg.GetOfficialRelay() {
 			return m.handleOfficialSignal(from, msg)
 		}

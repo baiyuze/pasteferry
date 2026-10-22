@@ -1332,6 +1332,42 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get reconnect => '再接続';
+
+  @override
+  String get reconnecting => '接続中…';
+
+  @override
+  String get reconnectDirect => '直接接続しました';
+
+  @override
+  String get reconnectRelay => '直接接続できなかったため、引き続き中継を使います';
+
+  @override
+  String reconnectOffline(String name) {
+    return '「$name」はオフラインです。PasteFerry が起動しているか確認してください';
+  }
+
+  @override
+  String get reconnectPending => 'まだ接続中です。しばらくしてから確認してください';
+
+  @override
+  String get renameAction => '名前を変更';
+
+  @override
+  String get renameFavoriteTitle => 'お気に入りの名前を変更';
+
+  @override
+  String get renameFavoriteHint =>
+      'お気に入りとクイックペーストにこの名前が表示され、検索でも見つかります。空欄にすると内容の表示に戻ります。';
+
+  @override
+  String get renamedToast => '名前を変更しました';
+
+  @override
+  String get aliasClearedToast => '内容の表示に戻しました';
+
+  @override
   String get navSend => 'ファイル送信';
 
   @override

@@ -35,6 +35,7 @@ const (
 	DaemonService_RedeemPairingCode_FullMethodName             = "/pasteferry.v1.DaemonService/RedeemPairingCode"
 	DaemonService_ConfirmPairing_FullMethodName                = "/pasteferry.v1.DaemonService/ConfirmPairing"
 	DaemonService_Unpair_FullMethodName                        = "/pasteferry.v1.DaemonService/Unpair"
+	DaemonService_Reconnect_FullMethodName                     = "/pasteferry.v1.DaemonService/Reconnect"
 	DaemonService_SetDeviceAddress_FullMethodName              = "/pasteferry.v1.DaemonService/SetDeviceAddress"
 	DaemonService_WatchNearby_FullMethodName                   = "/pasteferry.v1.DaemonService/WatchNearby"
 	DaemonService_PairNearby_FullMethodName                    = "/pasteferry.v1.DaemonService/PairNearby"
@@ -54,6 +55,7 @@ const (
 	DaemonService_InstallUpdate_FullMethodName                 = "/pasteferry.v1.DaemonService/InstallUpdate"
 	DaemonService_SetFavorite_FullMethodName                   = "/pasteferry.v1.DaemonService/SetFavorite"
 	DaemonService_GetClipDetail_FullMethodName                 = "/pasteferry.v1.DaemonService/GetClipDetail"
+	DaemonService_SetAlias_FullMethodName                      = "/pasteferry.v1.DaemonService/SetAlias"
 	DaemonService_QuickPasteSession_FullMethodName             = "/pasteferry.v1.DaemonService/QuickPasteSession"
 	DaemonService_GetQuickPasteStatus_FullMethodName           = "/pasteferry.v1.DaemonService/GetQuickPasteStatus"
 	DaemonService_SendQuickPasteCommand_FullMethodName         = "/pasteferry.v1.DaemonService/SendQuickPasteCommand"
@@ -86,6 +88,9 @@ type DaemonServiceClient interface {
 	// 配对双方各自确认指纹后才真正互信
 	ConfirmPairing(ctx context.Context, in *ConfirmPairingRequest, opts ...grpc.CallOption) (*Empty, error)
 	Unpair(ctx context.Context, in *UnpairRequest, opts ...grpc.CallOption) (*Empty, error)
+	// 重新连接：已是直连时什么也不做；否则马上再试一次直连，打不通照旧走中转。
+	// 最多等十几秒，返回那时的连接状态
+	Reconnect(ctx context.Context, in *ReconnectRequest, opts ...grpc.CallOption) (*ReconnectResponse, error)
 	// 手动告诉后台服务某台设备的局域网地址：跨网段、或两边都换了地址时用
 	SetDeviceAddress(ctx context.Context, in *SetDeviceAddressRequest, opts ...grpc.CallOption) (*Empty, error)
 	// 「搜索附近设备」窗口打开期间保持这个调用，窗口关掉时取消。期间本机在局域网里公开设备名，
@@ -124,6 +129,8 @@ type DaemonServiceClient interface {
 	SetFavorite(ctx context.Context, in *SetFavoriteRequest, opts ...grpc.CallOption) (*ClipRecord, error)
 	// 悬停提示框要显示的完整内容。ClipRecord 的 text_preview 最多 120 个字、换行被压平，不够用
 	GetClipDetail(ctx context.Context, in *GetClipDetailRequest, opts ...grpc.CallOption) (*ClipDetail, error)
+	// 给收藏起个别名，列表里显示别名、搜索也认它。alias 为空表示去掉别名
+	SetAlias(ctx context.Context, in *SetAliasRequest, opts ...grpc.CallOption) (*ClipRecord, error)
 	// 快捷粘贴窗口进程启动后一直保持这个调用：往上报自己的状态，往下收设置页发来的命令。
 	// 调用断开就当作快捷窗口没在运行
 	QuickPasteSession(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[QuickPasteStatus, QuickPasteCommand], error)
@@ -271,6 +278,16 @@ func (c *daemonServiceClient) Unpair(ctx context.Context, in *UnpairRequest, opt
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
 	err := c.cc.Invoke(ctx, DaemonService_Unpair_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) Reconnect(ctx context.Context, in *ReconnectRequest, opts ...grpc.CallOption) (*ReconnectResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReconnectResponse)
+	err := c.cc.Invoke(ctx, DaemonService_Reconnect_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -485,6 +502,16 @@ func (c *daemonServiceClient) GetClipDetail(ctx context.Context, in *GetClipDeta
 	return out, nil
 }
 
+func (c *daemonServiceClient) SetAlias(ctx context.Context, in *SetAliasRequest, opts ...grpc.CallOption) (*ClipRecord, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClipRecord)
+	err := c.cc.Invoke(ctx, DaemonService_SetAlias_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *daemonServiceClient) QuickPasteSession(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[QuickPasteStatus, QuickPasteCommand], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &DaemonService_ServiceDesc.Streams[3], DaemonService_QuickPasteSession_FullMethodName, cOpts...)
@@ -608,6 +635,9 @@ type DaemonServiceServer interface {
 	// 配对双方各自确认指纹后才真正互信
 	ConfirmPairing(context.Context, *ConfirmPairingRequest) (*Empty, error)
 	Unpair(context.Context, *UnpairRequest) (*Empty, error)
+	// 重新连接：已是直连时什么也不做；否则马上再试一次直连，打不通照旧走中转。
+	// 最多等十几秒，返回那时的连接状态
+	Reconnect(context.Context, *ReconnectRequest) (*ReconnectResponse, error)
 	// 手动告诉后台服务某台设备的局域网地址：跨网段、或两边都换了地址时用
 	SetDeviceAddress(context.Context, *SetDeviceAddressRequest) (*Empty, error)
 	// 「搜索附近设备」窗口打开期间保持这个调用，窗口关掉时取消。期间本机在局域网里公开设备名，
@@ -646,6 +676,8 @@ type DaemonServiceServer interface {
 	SetFavorite(context.Context, *SetFavoriteRequest) (*ClipRecord, error)
 	// 悬停提示框要显示的完整内容。ClipRecord 的 text_preview 最多 120 个字、换行被压平，不够用
 	GetClipDetail(context.Context, *GetClipDetailRequest) (*ClipDetail, error)
+	// 给收藏起个别名，列表里显示别名、搜索也认它。alias 为空表示去掉别名
+	SetAlias(context.Context, *SetAliasRequest) (*ClipRecord, error)
 	// 快捷粘贴窗口进程启动后一直保持这个调用：往上报自己的状态，往下收设置页发来的命令。
 	// 调用断开就当作快捷窗口没在运行
 	QuickPasteSession(grpc.BidiStreamingServer[QuickPasteStatus, QuickPasteCommand]) error
@@ -713,6 +745,9 @@ func (UnimplementedDaemonServiceServer) ConfirmPairing(context.Context, *Confirm
 func (UnimplementedDaemonServiceServer) Unpair(context.Context, *UnpairRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Unpair not implemented")
 }
+func (UnimplementedDaemonServiceServer) Reconnect(context.Context, *ReconnectRequest) (*ReconnectResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Reconnect not implemented")
+}
 func (UnimplementedDaemonServiceServer) SetDeviceAddress(context.Context, *SetDeviceAddressRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetDeviceAddress not implemented")
 }
@@ -769,6 +804,9 @@ func (UnimplementedDaemonServiceServer) SetFavorite(context.Context, *SetFavorit
 }
 func (UnimplementedDaemonServiceServer) GetClipDetail(context.Context, *GetClipDetailRequest) (*ClipDetail, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetClipDetail not implemented")
+}
+func (UnimplementedDaemonServiceServer) SetAlias(context.Context, *SetAliasRequest) (*ClipRecord, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetAlias not implemented")
 }
 func (UnimplementedDaemonServiceServer) QuickPasteSession(grpc.BidiStreamingServer[QuickPasteStatus, QuickPasteCommand]) error {
 	return status.Error(codes.Unimplemented, "method QuickPasteSession not implemented")
@@ -1008,6 +1046,24 @@ func _DaemonService_Unpair_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DaemonServiceServer).Unpair(ctx, req.(*UnpairRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_Reconnect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReconnectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).Reconnect(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_Reconnect_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).Reconnect(ctx, req.(*ReconnectRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1340,6 +1396,24 @@ func _DaemonService_GetClipDetail_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_SetAlias_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAliasRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SetAlias(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SetAlias_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SetAlias(ctx, req.(*SetAliasRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DaemonService_QuickPasteSession_Handler(srv interface{}, stream grpc.ServerStream) error {
 	return srv.(DaemonServiceServer).QuickPasteSession(&grpc.GenericServerStream[QuickPasteStatus, QuickPasteCommand]{ServerStream: stream})
 }
@@ -1557,6 +1631,10 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DaemonService_Unpair_Handler,
 		},
 		{
+			MethodName: "Reconnect",
+			Handler:    _DaemonService_Reconnect_Handler,
+		},
+		{
 			MethodName: "SetDeviceAddress",
 			Handler:    _DaemonService_SetDeviceAddress_Handler,
 		},
@@ -1623,6 +1701,10 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetClipDetail",
 			Handler:    _DaemonService_GetClipDetail_Handler,
+		},
+		{
+			MethodName: "SetAlias",
+			Handler:    _DaemonService_SetAlias_Handler,
 		},
 		{
 			MethodName: "GetQuickPasteStatus",

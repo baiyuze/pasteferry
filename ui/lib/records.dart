@@ -44,9 +44,16 @@ IconData kindIcon(ClipRecord r) => switch (r.kind) {
       _ => AppIcons.questionCircle,
     };
 
-/// 记录在列表里的标题。搜索时传入 [query]：一次复制了多个文件、搜到的又不是第一个时，
+/// 记录在列表里的标题：起了别名的收藏显示别名，其他的见 [contentTitle]。
+String recordTitle(ClipRecord r, {String? query}) =>
+    hasAlias(r) ? r.alias : contentTitle(r, query: query);
+
+/// 收藏起了别名。取消收藏后别名还留在后台服务里，只是不显示
+bool hasAlias(ClipRecord r) => r.favorite && r.alias.isNotEmpty;
+
+/// 按内容拼的标题。搜索时传入 [query]：一次复制了多个文件、搜到的又不是第一个时，
 /// 标题改用搜到的那个文件名打头，看得出为什么搜到了它。
-String recordTitle(ClipRecord r, {String? query}) {
+String contentTitle(ClipRecord r, {String? query}) {
   // 图片和文件的标题按当前界面语言拼：后台服务存下的摘要是写入时的中文，不会跟着换语言
   if (r.kind == ClipKind.CLIP_KIND_IMAGE) return appL10n.imageRecord;
   if (r.kind != ClipKind.CLIP_KIND_FILE && r.textPreview.isNotEmpty) {
@@ -66,8 +73,9 @@ DateTime recordTime(ClipRecord r) => DateTime.fromMillisecondsSinceEpoch(r.creat
 
 DateTime favoritedTime(ClipRecord r) => DateTime.fromMillisecondsSinceEpoch(r.favoritedAtUnix.toInt() * 1000);
 
-/// 列表里标题下面那一行：来源 · 大小 · 时间。收藏显示收藏时间。
+/// 列表里标题下面那一行：来源 · 大小 · 时间。收藏显示收藏时间；起了别名的，最前面是按内容拼的标题。
 String recordMeta(ClipRecord r) => [
+      if (hasAlias(r)) contentTitle(r),
       recordSource(r),
       if (r.totalSize > 0) humanBytes(r.totalSize.toInt()),
       r.favorite ? appL10n.favoritedAt(shortDate(favoritedTime(r))) : relativeTime(recordTime(r)),

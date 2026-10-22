@@ -110,6 +110,12 @@ class AppState extends ChangeNotifier implements RecordDetails {
   List<ClipRecord> get records => List.unmodifiable(_records);
   List<ClipRecord> get favorites => List.unmodifiable(_favorites);
 
+  /// 按 ID 找一条记录：复制记录、收藏，以及只在搜索结果里出现的较早记录都算。
+  ClipRecord? recordById(String id) =>
+      _records.where((r) => r.id == id).firstOrNull ??
+      _favorites.where((r) => r.id == id).firstOrNull ??
+      _historySearch.resultsView?.where((r) => r.id == id).firstOrNull;
+
   /// 全部收藏的大小之和。硬链接、写时复制保存的副本实际占用更少，界面上写「最多」
   int get favoritesBytes => _favorites.fold(0, (n, r) => n + r.totalSize.toInt());
 
@@ -697,6 +703,27 @@ class AppState extends ChangeNotifier implements RecordDetails {
   Future<void> requestLocalNetworkPermission() =>
       _client.requestLocalNetworkPermission(Empty());
 
+  final Set<String> _reconnecting = {};
+
+  /// 这台设备正在「重新连接」，列表里显示「正在连接」
+  bool isReconnecting(String deviceId) => _reconnecting.contains(deviceId);
+
+  /// 设备菜单里的「重新连接」：后台服务最多等十几秒，返回那时的连接状态。
+  Future<ConnectionKind> reconnect(String deviceId) async {
+    _reconnecting.add(deviceId);
+    notifyListeners();
+    try {
+      final r = await _client.reconnect(
+        ReconnectRequest(deviceId: deviceId),
+        options: CallOptions(timeout: const Duration(seconds: 30)),
+      );
+      return r.kind;
+    } finally {
+      _reconnecting.remove(deviceId);
+      notifyListeners();
+    }
+  }
+
   Future<void> unpair(String deviceId) async {
     await _client.unpair(UnpairRequest(deviceId: deviceId));
     _peers = _peers.where((p) => p.id != deviceId).toList();
@@ -787,6 +814,15 @@ class AppState extends ChangeNotifier implements RecordDetails {
     );
     _upsert(r);
     (r.favorite ? _historySearch : _favoriteSearch).remove(r.id);
+    notifyListeners();
+    return r;
+  }
+
+  /// 给收藏起别名，[alias] 为空表示去掉。
+  Future<ClipRecord> setAlias(String clipId, String alias) async {
+    final r = await _client.setAlias(SetAliasRequest(clipId: clipId, alias: alias));
+    _upsert(r);
+    _favoriteSearch.patch(r);
     notifyListeners();
     return r;
   }
@@ -1036,6 +1072,7 @@ class _RecordSearch {
 /// 只在后台服务不支持搜索时用；正常情况下由后台服务按全文搜索。
 bool matchesSearch(ClipRecord r, String query) {
   final q = query.toLowerCase();
+  if (r.favorite && r.alias.toLowerCase().contains(q)) return true;
   if (r.kind != ClipKind.CLIP_KIND_IMAGE &&
       r.items.any((i) => i.name.toLowerCase().contains(q))) {
     return true;

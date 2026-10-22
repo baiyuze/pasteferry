@@ -52,7 +52,9 @@ type Deps struct {
 	SearchHistory func(query string, limit int, f store.Filter) ([]store.Clip, error)
 	// SetFavorite 收藏或取消收藏，ClipDetail 是悬停提示框的完整内容，见 sync/favorite.go
 	SetFavorite func(ctx context.Context, clipID string, favorite bool) (store.Clip, error)
-	ClipDetail  func(clipID string) (*pb.ClipDetail, error)
+	// SetAlias 给收藏起别名，见 sync.Engine.SetAlias
+	SetAlias   func(clipID, alias string) (store.Clip, error)
+	ClipDetail func(clipID string) (*pb.ClipDetail, error)
 	// 诊断报告要读的日志文件（轮转出去的旧文件在前）与崩溃日志
 	LogFiles func() (logs []string, crash string)
 	// VerboseLog 临时打开详细日志，d 不大于 0 时关闭；VerboseUntil 是打开到什么时候
@@ -65,7 +67,9 @@ type Deps struct {
 	RedeemPairingCode func(ctx context.Context, code, address string) (*pb.Device, string, error)
 	ConfirmPairing    func(ctx context.Context, session string, accept bool) error
 	Unpair            func(ctx context.Context, deviceID string) error
-	SetDeviceAddress  func(ctx context.Context, deviceID, address string) error
+	// Reconnect 是设备菜单里的「重新连接」，见 peers.Manager.Reconnect
+	Reconnect        func(ctx context.Context, deviceID string) (pb.ConnectionKind, error)
+	SetDeviceAddress func(ctx context.Context, deviceID, address string) error
 	// ShowNearby / Nearby / PairNearby 是「搜索附近设备」，见 lan/nearby.go
 	ShowNearby         func() (hide func())
 	Nearby             func() []*pb.NearbyDevice
@@ -344,6 +348,17 @@ func (s *Server) SetFavorite(ctx context.Context, req *pb.SetFavoriteRequest) (*
 	return clipToProto(clip), nil
 }
 
+func (s *Server) SetAlias(_ context.Context, req *pb.SetAliasRequest) (*pb.ClipRecord, error) {
+	if s.deps.SetAlias == nil {
+		return nil, status.Error(codes.Unimplemented, "请更新后台服务后再重命名")
+	}
+	clip, err := s.deps.SetAlias(req.GetClipId(), req.GetAlias())
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+	return clipToProto(clip), nil
+}
+
 func (s *Server) GetClipDetail(_ context.Context, req *pb.GetClipDetailRequest) (*pb.ClipDetail, error) {
 	if s.deps.ClipDetail == nil {
 		return nil, status.Error(codes.Unimplemented, "当前版本不支持查看完整内容")
@@ -596,6 +611,20 @@ func (s *Server) Unpair(ctx context.Context, req *pb.UnpairRequest) (*pb.Empty, 
 		return nil, status.Errorf(codes.Internal, "解除配对: %v", err)
 	}
 	return &pb.Empty{}, nil
+}
+
+func (s *Server) Reconnect(ctx context.Context, req *pb.ReconnectRequest) (*pb.ReconnectResponse, error) {
+	if s.deps.Reconnect == nil {
+		return nil, status.Error(codes.Unimplemented, "请更新后台服务后再重新连接")
+	}
+	kind, err := s.deps.Reconnect(ctx, req.GetDeviceId())
+	if errors.Is(err, peers.ErrNotPaired) {
+		return nil, status.Error(codes.NotFound, err.Error())
+	}
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+	return &pb.ReconnectResponse{Kind: kind}, nil
 }
 
 func (s *Server) SetDeviceAddress(ctx context.Context, req *pb.SetDeviceAddressRequest) (*pb.Empty, error) {

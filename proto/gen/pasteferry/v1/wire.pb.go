@@ -208,6 +208,7 @@ type SignalMessage struct {
 	//	*SignalMessage_Candidate
 	//	*SignalMessage_Ping
 	//	*SignalMessage_LanHello
+	//	*SignalMessage_RetryDirect
 	Payload       isSignalMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -344,6 +345,15 @@ func (x *SignalMessage) GetLanHello() *LanHello {
 	return nil
 }
 
+func (x *SignalMessage) GetRetryDirect() *RetryDirect {
+	if x != nil {
+		if x, ok := x.Payload.(*SignalMessage_RetryDirect); ok {
+			return x.RetryDirect
+		}
+	}
+	return nil
+}
+
 type isSignalMessage_Payload interface {
 	isSignalMessage_Payload()
 }
@@ -368,6 +378,10 @@ type SignalMessage_LanHello struct {
 	LanHello *LanHello `protobuf:"bytes,14,opt,name=lan_hello,json=lanHello,proto3,oneof"` // 只走局域网，见下文
 }
 
+type SignalMessage_RetryDirect struct {
+	RetryDirect *RetryDirect `protobuf:"bytes,15,opt,name=retry_direct,json=retryDirect,proto3,oneof"`
+}
+
 func (*SignalMessage_Offer) isSignalMessage_Payload() {}
 
 func (*SignalMessage_Answer) isSignalMessage_Payload() {}
@@ -377,6 +391,46 @@ func (*SignalMessage_Candidate) isSignalMessage_Payload() {}
 func (*SignalMessage_Ping) isSignalMessage_Payload() {}
 
 func (*SignalMessage_LanHello) isSignalMessage_Payload() {}
+
+func (*SignalMessage_RetryDirect) isSignalMessage_Payload() {}
+
+// 用户在应答方点了「重新连接」：只有发起方能做 ICE 重启，请它马上再试一次直连。
+// 旧版本不认识它，照旧按自己的间隔重试
+type RetryDirect struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RetryDirect) Reset() {
+	*x = RetryDirect{}
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RetryDirect) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RetryDirect) ProtoMessage() {}
+
+func (x *RetryDirect) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RetryDirect.ProtoReflect.Descriptor instead.
+func (*RetryDirect) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{2}
+}
 
 type SdpOffer struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -394,7 +448,7 @@ type SdpOffer struct {
 
 func (x *SdpOffer) Reset() {
 	*x = SdpOffer{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[2]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -406,7 +460,7 @@ func (x *SdpOffer) String() string {
 func (*SdpOffer) ProtoMessage() {}
 
 func (x *SdpOffer) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[2]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -419,7 +473,7 @@ func (x *SdpOffer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SdpOffer.ProtoReflect.Descriptor instead.
 func (*SdpOffer) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{2}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SdpOffer) GetSdp() string {
@@ -453,7 +507,7 @@ type SdpAnswer struct {
 
 func (x *SdpAnswer) Reset() {
 	*x = SdpAnswer{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[3]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -465,7 +519,7 @@ func (x *SdpAnswer) String() string {
 func (*SdpAnswer) ProtoMessage() {}
 
 func (x *SdpAnswer) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[3]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -478,7 +532,7 @@ func (x *SdpAnswer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SdpAnswer.ProtoReflect.Descriptor instead.
 func (*SdpAnswer) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{3}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SdpAnswer) GetSdp() string {
@@ -506,7 +560,7 @@ type IceCandidate struct {
 
 func (x *IceCandidate) Reset() {
 	*x = IceCandidate{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[4]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -518,7 +572,7 @@ func (x *IceCandidate) String() string {
 func (*IceCandidate) ProtoMessage() {}
 
 func (x *IceCandidate) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[4]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -531,7 +585,7 @@ func (x *IceCandidate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IceCandidate.ProtoReflect.Descriptor instead.
 func (*IceCandidate) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{4}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *IceCandidate) GetCandidate() string {
@@ -564,7 +618,7 @@ type Ping struct {
 
 func (x *Ping) Reset() {
 	*x = Ping{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[5]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -576,7 +630,7 @@ func (x *Ping) String() string {
 func (*Ping) ProtoMessage() {}
 
 func (x *Ping) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[5]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -589,7 +643,7 @@ func (x *Ping) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Ping.ProtoReflect.Descriptor instead.
 func (*Ping) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{5}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Ping) GetSentAtUnix() int64 {
@@ -613,7 +667,7 @@ type ClientHello struct {
 
 func (x *ClientHello) Reset() {
 	*x = ClientHello{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[6]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -625,7 +679,7 @@ func (x *ClientHello) String() string {
 func (*ClientHello) ProtoMessage() {}
 
 func (x *ClientHello) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[6]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -638,7 +692,7 @@ func (x *ClientHello) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientHello.ProtoReflect.Descriptor instead.
 func (*ClientHello) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{6}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ClientHello) GetDeviceId() string {
@@ -694,7 +748,7 @@ type ServerHello struct {
 
 func (x *ServerHello) Reset() {
 	*x = ServerHello{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[7]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -706,7 +760,7 @@ func (x *ServerHello) String() string {
 func (*ServerHello) ProtoMessage() {}
 
 func (x *ServerHello) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[7]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -719,7 +773,7 @@ func (x *ServerHello) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerHello.ProtoReflect.Descriptor instead.
 func (*ServerHello) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{7}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ServerHello) GetChallenge() []byte {
@@ -755,7 +809,7 @@ type IceServer struct {
 
 func (x *IceServer) Reset() {
 	*x = IceServer{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[8]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -767,7 +821,7 @@ func (x *IceServer) String() string {
 func (*IceServer) ProtoMessage() {}
 
 func (x *IceServer) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[8]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -780,7 +834,7 @@ func (x *IceServer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IceServer.ProtoReflect.Descriptor instead.
 func (*IceServer) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{8}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *IceServer) GetUrls() []string {
@@ -821,7 +875,7 @@ type PeerPresence struct {
 
 func (x *PeerPresence) Reset() {
 	*x = PeerPresence{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[9]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -833,7 +887,7 @@ func (x *PeerPresence) String() string {
 func (*PeerPresence) ProtoMessage() {}
 
 func (x *PeerPresence) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[9]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -846,7 +900,7 @@ func (x *PeerPresence) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeerPresence.ProtoReflect.Descriptor instead.
 func (*PeerPresence) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{9}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *PeerPresence) GetDeviceId() string {
@@ -873,7 +927,7 @@ type PairingCreateRequest struct {
 
 func (x *PairingCreateRequest) Reset() {
 	*x = PairingCreateRequest{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[10]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -885,7 +939,7 @@ func (x *PairingCreateRequest) String() string {
 func (*PairingCreateRequest) ProtoMessage() {}
 
 func (x *PairingCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[10]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -898,7 +952,7 @@ func (x *PairingCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PairingCreateRequest.ProtoReflect.Descriptor instead.
 func (*PairingCreateRequest) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{10}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *PairingCreateRequest) GetDeviceName() string {
@@ -925,7 +979,7 @@ type PairingCreateResponse struct {
 
 func (x *PairingCreateResponse) Reset() {
 	*x = PairingCreateResponse{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[11]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -937,7 +991,7 @@ func (x *PairingCreateResponse) String() string {
 func (*PairingCreateResponse) ProtoMessage() {}
 
 func (x *PairingCreateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[11]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -950,7 +1004,7 @@ func (x *PairingCreateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PairingCreateResponse.ProtoReflect.Descriptor instead.
 func (*PairingCreateResponse) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{11}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *PairingCreateResponse) GetCode() string {
@@ -979,7 +1033,7 @@ type PairingRedeemRequest struct {
 
 func (x *PairingRedeemRequest) Reset() {
 	*x = PairingRedeemRequest{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[12]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -991,7 +1045,7 @@ func (x *PairingRedeemRequest) String() string {
 func (*PairingRedeemRequest) ProtoMessage() {}
 
 func (x *PairingRedeemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[12]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1004,7 +1058,7 @@ func (x *PairingRedeemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PairingRedeemRequest.ProtoReflect.Descriptor instead.
 func (*PairingRedeemRequest) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{12}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *PairingRedeemRequest) GetCode() string {
@@ -1047,7 +1101,7 @@ type PairingRedeemResponse struct {
 
 func (x *PairingRedeemResponse) Reset() {
 	*x = PairingRedeemResponse{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[13]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1059,7 +1113,7 @@ func (x *PairingRedeemResponse) String() string {
 func (*PairingRedeemResponse) ProtoMessage() {}
 
 func (x *PairingRedeemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[13]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1072,7 +1126,7 @@ func (x *PairingRedeemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PairingRedeemResponse.ProtoReflect.Descriptor instead.
 func (*PairingRedeemResponse) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{13}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *PairingRedeemResponse) GetPeerDeviceId() string {
@@ -1116,7 +1170,7 @@ type PairingRedeemed struct {
 
 func (x *PairingRedeemed) Reset() {
 	*x = PairingRedeemed{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[14]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1128,7 +1182,7 @@ func (x *PairingRedeemed) String() string {
 func (*PairingRedeemed) ProtoMessage() {}
 
 func (x *PairingRedeemed) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[14]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1141,7 +1195,7 @@ func (x *PairingRedeemed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PairingRedeemed.ProtoReflect.Descriptor instead.
 func (*PairingRedeemed) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{14}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *PairingRedeemed) GetPeerDeviceId() string {
@@ -1183,7 +1237,7 @@ type IceConfig struct {
 
 func (x *IceConfig) Reset() {
 	*x = IceConfig{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[15]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1195,7 +1249,7 @@ func (x *IceConfig) String() string {
 func (*IceConfig) ProtoMessage() {}
 
 func (x *IceConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[15]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1208,7 +1262,7 @@ func (x *IceConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IceConfig.ProtoReflect.Descriptor instead.
 func (*IceConfig) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{15}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *IceConfig) GetIceServers() []*IceServer {
@@ -1238,7 +1292,7 @@ type ServerEnvelope struct {
 
 func (x *ServerEnvelope) Reset() {
 	*x = ServerEnvelope{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[16]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1250,7 +1304,7 @@ func (x *ServerEnvelope) String() string {
 func (*ServerEnvelope) ProtoMessage() {}
 
 func (x *ServerEnvelope) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[16]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1263,7 +1317,7 @@ func (x *ServerEnvelope) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerEnvelope.ProtoReflect.Descriptor instead.
 func (*ServerEnvelope) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{16}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ServerEnvelope) GetPayload() isServerEnvelope_Payload {
@@ -1412,7 +1466,7 @@ type ClientEnvelope struct {
 
 func (x *ClientEnvelope) Reset() {
 	*x = ClientEnvelope{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[17]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1424,7 +1478,7 @@ func (x *ClientEnvelope) String() string {
 func (*ClientEnvelope) ProtoMessage() {}
 
 func (x *ClientEnvelope) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[17]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1437,7 +1491,7 @@ func (x *ClientEnvelope) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientEnvelope.ProtoReflect.Descriptor instead.
 func (*ClientEnvelope) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{17}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *ClientEnvelope) GetPayload() isClientEnvelope_Payload {
@@ -1521,7 +1575,7 @@ type ServerError struct {
 
 func (x *ServerError) Reset() {
 	*x = ServerError{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[18]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1533,7 +1587,7 @@ func (x *ServerError) String() string {
 func (*ServerError) ProtoMessage() {}
 
 func (x *ServerError) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[18]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1546,7 +1600,7 @@ func (x *ServerError) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerError.ProtoReflect.Descriptor instead.
 func (*ServerError) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{18}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ServerError) GetCode() string {
@@ -1580,7 +1634,7 @@ type LanPacket struct {
 
 func (x *LanPacket) Reset() {
 	*x = LanPacket{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[19]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1592,7 +1646,7 @@ func (x *LanPacket) String() string {
 func (*LanPacket) ProtoMessage() {}
 
 func (x *LanPacket) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[19]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1605,7 +1659,7 @@ func (x *LanPacket) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LanPacket.ProtoReflect.Descriptor instead.
 func (*LanPacket) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{19}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *LanPacket) GetPayload() isLanPacket_Payload {
@@ -1725,7 +1779,7 @@ type LanHello struct {
 
 func (x *LanHello) Reset() {
 	*x = LanHello{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[20]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1737,7 +1791,7 @@ func (x *LanHello) String() string {
 func (*LanHello) ProtoMessage() {}
 
 func (x *LanHello) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[20]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1750,7 +1804,7 @@ func (x *LanHello) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LanHello.ProtoReflect.Descriptor instead.
 func (*LanHello) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{20}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *LanHello) GetAddresses() []string {
@@ -1792,7 +1846,7 @@ type LanPairSigned struct {
 
 func (x *LanPairSigned) Reset() {
 	*x = LanPairSigned{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[21]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1804,7 +1858,7 @@ func (x *LanPairSigned) String() string {
 func (*LanPairSigned) ProtoMessage() {}
 
 func (x *LanPairSigned) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[21]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1817,7 +1871,7 @@ func (x *LanPairSigned) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LanPairSigned.ProtoReflect.Descriptor instead.
 func (*LanPairSigned) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{21}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *LanPairSigned) GetPayload() []byte {
@@ -1851,7 +1905,7 @@ type LanPairInfo struct {
 
 func (x *LanPairInfo) Reset() {
 	*x = LanPairInfo{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[22]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1863,7 +1917,7 @@ func (x *LanPairInfo) String() string {
 func (*LanPairInfo) ProtoMessage() {}
 
 func (x *LanPairInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[22]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1876,7 +1930,7 @@ func (x *LanPairInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LanPairInfo.ProtoReflect.Descriptor instead.
 func (*LanPairInfo) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{22}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *LanPairInfo) GetCode() string {
@@ -1952,7 +2006,7 @@ type LanPairReject struct {
 
 func (x *LanPairReject) Reset() {
 	*x = LanPairReject{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[23]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1964,7 +2018,7 @@ func (x *LanPairReject) String() string {
 func (*LanPairReject) ProtoMessage() {}
 
 func (x *LanPairReject) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[23]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1977,7 +2031,7 @@ func (x *LanPairReject) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LanPairReject.ProtoReflect.Descriptor instead.
 func (*LanPairReject) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{23}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *LanPairReject) GetRequestNonce() []byte {
@@ -2006,7 +2060,7 @@ type LanNearbyPing struct {
 
 func (x *LanNearbyPing) Reset() {
 	*x = LanNearbyPing{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[24]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2018,7 +2072,7 @@ func (x *LanNearbyPing) String() string {
 func (*LanNearbyPing) ProtoMessage() {}
 
 func (x *LanNearbyPing) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[24]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2031,7 +2085,7 @@ func (x *LanNearbyPing) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LanNearbyPing.ProtoReflect.Descriptor instead.
 func (*LanNearbyPing) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{24}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *LanNearbyPing) GetInstance() string {
@@ -2086,7 +2140,7 @@ type PeerMessage struct {
 
 func (x *PeerMessage) Reset() {
 	*x = PeerMessage{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[25]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2098,7 +2152,7 @@ func (x *PeerMessage) String() string {
 func (*PeerMessage) ProtoMessage() {}
 
 func (x *PeerMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[25]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2111,7 +2165,7 @@ func (x *PeerMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeerMessage.ProtoReflect.Descriptor instead.
 func (*PeerMessage) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{25}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *PeerMessage) GetPayload() isPeerMessage_Payload {
@@ -2319,7 +2373,7 @@ type PeerFeatures struct {
 
 func (x *PeerFeatures) Reset() {
 	*x = PeerFeatures{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[26]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2331,7 +2385,7 @@ func (x *PeerFeatures) String() string {
 func (*PeerFeatures) ProtoMessage() {}
 
 func (x *PeerFeatures) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[26]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2344,7 +2398,7 @@ func (x *PeerFeatures) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeerFeatures.ProtoReflect.Descriptor instead.
 func (*PeerFeatures) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{26}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *PeerFeatures) GetFeatures() []string {
@@ -2366,7 +2420,7 @@ type LinkInfo struct {
 
 func (x *LinkInfo) Reset() {
 	*x = LinkInfo{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[27]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2378,7 +2432,7 @@ func (x *LinkInfo) String() string {
 func (*LinkInfo) ProtoMessage() {}
 
 func (x *LinkInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[27]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2391,7 +2445,7 @@ func (x *LinkInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LinkInfo.ProtoReflect.Descriptor instead.
 func (*LinkInfo) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{27}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *LinkInfo) GetRelayed() bool {
@@ -2411,7 +2465,7 @@ type PeerDisplay struct {
 
 func (x *PeerDisplay) Reset() {
 	*x = PeerDisplay{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[28]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2423,7 +2477,7 @@ func (x *PeerDisplay) String() string {
 func (*PeerDisplay) ProtoMessage() {}
 
 func (x *PeerDisplay) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[28]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2436,7 +2490,7 @@ func (x *PeerDisplay) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeerDisplay.ProtoReflect.Descriptor instead.
 func (*PeerDisplay) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{28}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *PeerDisplay) GetName() string {
@@ -2476,7 +2530,7 @@ type ClipOffer struct {
 
 func (x *ClipOffer) Reset() {
 	*x = ClipOffer{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[29]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2488,7 +2542,7 @@ func (x *ClipOffer) String() string {
 func (*ClipOffer) ProtoMessage() {}
 
 func (x *ClipOffer) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[29]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2501,7 +2555,7 @@ func (x *ClipOffer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClipOffer.ProtoReflect.Descriptor instead.
 func (*ClipOffer) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{29}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ClipOffer) GetClipId() string {
@@ -2577,7 +2631,7 @@ type PeerFetch struct {
 
 func (x *PeerFetch) Reset() {
 	*x = PeerFetch{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[30]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2589,7 +2643,7 @@ func (x *PeerFetch) String() string {
 func (*PeerFetch) ProtoMessage() {}
 
 func (x *PeerFetch) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[30]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2602,7 +2656,7 @@ func (x *PeerFetch) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeerFetch.ProtoReflect.Descriptor instead.
 func (*PeerFetch) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{30}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *PeerFetch) GetClipId() string {
@@ -2622,7 +2676,7 @@ type FetchReject struct {
 
 func (x *FetchReject) Reset() {
 	*x = FetchReject{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[31]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2634,7 +2688,7 @@ func (x *FetchReject) String() string {
 func (*FetchReject) ProtoMessage() {}
 
 func (x *FetchReject) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[31]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2647,7 +2701,7 @@ func (x *FetchReject) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchReject.ProtoReflect.Descriptor instead.
 func (*FetchReject) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{31}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *FetchReject) GetClipId() string {
@@ -2678,7 +2732,7 @@ type TransferHeader struct {
 
 func (x *TransferHeader) Reset() {
 	*x = TransferHeader{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[32]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2690,7 +2744,7 @@ func (x *TransferHeader) String() string {
 func (*TransferHeader) ProtoMessage() {}
 
 func (x *TransferHeader) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[32]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2703,7 +2757,7 @@ func (x *TransferHeader) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransferHeader.ProtoReflect.Descriptor instead.
 func (*TransferHeader) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{32}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *TransferHeader) GetClipId() string {
@@ -2754,7 +2808,7 @@ type TransferDone struct {
 
 func (x *TransferDone) Reset() {
 	*x = TransferDone{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[33]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2766,7 +2820,7 @@ func (x *TransferDone) String() string {
 func (*TransferDone) ProtoMessage() {}
 
 func (x *TransferDone) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[33]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2779,7 +2833,7 @@ func (x *TransferDone) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransferDone.ProtoReflect.Descriptor instead.
 func (*TransferDone) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{33}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *TransferDone) GetClipId() string {
@@ -2837,7 +2891,7 @@ type SendOffer struct {
 
 func (x *SendOffer) Reset() {
 	*x = SendOffer{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[34]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2849,7 +2903,7 @@ func (x *SendOffer) String() string {
 func (*SendOffer) ProtoMessage() {}
 
 func (x *SendOffer) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[34]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2862,7 +2916,7 @@ func (x *SendOffer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendOffer.ProtoReflect.Descriptor instead.
 func (*SendOffer) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{34}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *SendOffer) GetTransferId() string {
@@ -2938,7 +2992,7 @@ type SendAnswer struct {
 
 func (x *SendAnswer) Reset() {
 	*x = SendAnswer{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[35]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2950,7 +3004,7 @@ func (x *SendAnswer) String() string {
 func (*SendAnswer) ProtoMessage() {}
 
 func (x *SendAnswer) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[35]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2963,7 +3017,7 @@ func (x *SendAnswer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendAnswer.ProtoReflect.Descriptor instead.
 func (*SendAnswer) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{35}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *SendAnswer) GetTransferId() string {
@@ -3027,7 +3081,7 @@ type SendCancel struct {
 
 func (x *SendCancel) Reset() {
 	*x = SendCancel{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[36]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3039,7 +3093,7 @@ func (x *SendCancel) String() string {
 func (*SendCancel) ProtoMessage() {}
 
 func (x *SendCancel) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[36]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3052,7 +3106,7 @@ func (x *SendCancel) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendCancel.ProtoReflect.Descriptor instead.
 func (*SendCancel) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{36}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *SendCancel) GetTransferId() string {
@@ -3084,7 +3138,7 @@ type SendResult struct {
 
 func (x *SendResult) Reset() {
 	*x = SendResult{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[37]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3096,7 +3150,7 @@ func (x *SendResult) String() string {
 func (*SendResult) ProtoMessage() {}
 
 func (x *SendResult) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[37]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3109,7 +3163,7 @@ func (x *SendResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendResult.ProtoReflect.Descriptor instead.
 func (*SendResult) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{37}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *SendResult) GetTransferId() string {
@@ -3164,7 +3218,7 @@ type SendFrame struct {
 
 func (x *SendFrame) Reset() {
 	*x = SendFrame{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[38]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3176,7 +3230,7 @@ func (x *SendFrame) String() string {
 func (*SendFrame) ProtoMessage() {}
 
 func (x *SendFrame) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[38]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3189,7 +3243,7 @@ func (x *SendFrame) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendFrame.ProtoReflect.Descriptor instead.
 func (*SendFrame) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{38}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *SendFrame) GetPayload() isSendFrame_Payload {
@@ -3264,7 +3318,7 @@ type SendFileStart struct {
 
 func (x *SendFileStart) Reset() {
 	*x = SendFileStart{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[39]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3276,7 +3330,7 @@ func (x *SendFileStart) String() string {
 func (*SendFileStart) ProtoMessage() {}
 
 func (x *SendFileStart) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[39]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3289,7 +3343,7 @@ func (x *SendFileStart) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendFileStart.ProtoReflect.Descriptor instead.
 func (*SendFileStart) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{39}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *SendFileStart) GetIndex() int64 {
@@ -3357,7 +3411,7 @@ type SendFileEnd struct {
 
 func (x *SendFileEnd) Reset() {
 	*x = SendFileEnd{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[40]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3369,7 +3423,7 @@ func (x *SendFileEnd) String() string {
 func (*SendFileEnd) ProtoMessage() {}
 
 func (x *SendFileEnd) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[40]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3382,7 +3436,7 @@ func (x *SendFileEnd) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendFileEnd.ProtoReflect.Descriptor instead.
 func (*SendFileEnd) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{40}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *SendFileEnd) GetSha256() []byte {
@@ -3400,7 +3454,7 @@ type SendStreamEnd struct {
 
 func (x *SendStreamEnd) Reset() {
 	*x = SendStreamEnd{}
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[41]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3412,7 +3466,7 @@ func (x *SendStreamEnd) String() string {
 func (*SendStreamEnd) ProtoMessage() {}
 
 func (x *SendStreamEnd) ProtoReflect() protoreflect.Message {
-	mi := &file_pasteferry_v1_wire_proto_msgTypes[41]
+	mi := &file_pasteferry_v1_wire_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3425,7 +3479,7 @@ func (x *SendStreamEnd) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendStreamEnd.ProtoReflect.Descriptor instead.
 func (*SendStreamEnd) Descriptor() ([]byte, []int) {
-	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{41}
+	return file_pasteferry_v1_wire_proto_rawDescGZIP(), []int{42}
 }
 
 var File_pasteferry_v1_wire_proto protoreflect.FileDescriptor
@@ -3436,7 +3490,7 @@ const file_pasteferry_v1_wire_proto_rawDesc = "" +
 	"\x06Signed\x12\x18\n" +
 	"\apayload\x18\x01 \x01(\fR\apayload\x12\x1c\n" +
 	"\tsignature\x18\x02 \x01(\fR\tsignature\x12$\n" +
-	"\x0efrom_device_id\x18\x03 \x01(\tR\ffromDeviceId\"\xae\x04\n" +
+	"\x0efrom_device_id\x18\x03 \x01(\tR\ffromDeviceId\"\xef\x04\n" +
 	"\rSignalMessage\x12%\n" +
 	"\x0etimestamp_unix\x18\x01 \x01(\x03R\rtimestampUnix\x12\x14\n" +
 	"\x05nonce\x18\x02 \x01(\fR\x05nonce\x12 \n" +
@@ -3451,8 +3505,10 @@ const file_pasteferry_v1_wire_proto_rawDesc = "" +
 	"\x06answer\x18\v \x01(\v2\x18.pasteferry.v1.SdpAnswerH\x00R\x06answer\x12;\n" +
 	"\tcandidate\x18\f \x01(\v2\x1b.pasteferry.v1.IceCandidateH\x00R\tcandidate\x12)\n" +
 	"\x04ping\x18\r \x01(\v2\x13.pasteferry.v1.PingH\x00R\x04ping\x126\n" +
-	"\tlan_hello\x18\x0e \x01(\v2\x17.pasteferry.v1.LanHelloH\x00R\blanHelloB\t\n" +
-	"\apayload\"n\n" +
+	"\tlan_hello\x18\x0e \x01(\v2\x17.pasteferry.v1.LanHelloH\x00R\blanHello\x12?\n" +
+	"\fretry_direct\x18\x0f \x01(\v2\x1a.pasteferry.v1.RetryDirectH\x00R\vretryDirectB\t\n" +
+	"\apayload\"\r\n" +
+	"\vRetryDirect\"n\n" +
 	"\bSdpOffer\x12\x10\n" +
 	"\x03sdp\x18\x01 \x01(\tR\x03sdp\x12)\n" +
 	"\x10dtls_fingerprint\x18\x02 \x01(\tR\x0fdtlsFingerprint\x12%\n" +
@@ -3709,106 +3765,108 @@ func file_pasteferry_v1_wire_proto_rawDescGZIP() []byte {
 }
 
 var file_pasteferry_v1_wire_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_pasteferry_v1_wire_proto_msgTypes = make([]protoimpl.MessageInfo, 42)
+var file_pasteferry_v1_wire_proto_msgTypes = make([]protoimpl.MessageInfo, 43)
 var file_pasteferry_v1_wire_proto_goTypes = []any{
 	(Compression)(0),              // 0: pasteferry.v1.Compression
 	(Packaging)(0),                // 1: pasteferry.v1.Packaging
 	(*Signed)(nil),                // 2: pasteferry.v1.Signed
 	(*SignalMessage)(nil),         // 3: pasteferry.v1.SignalMessage
-	(*SdpOffer)(nil),              // 4: pasteferry.v1.SdpOffer
-	(*SdpAnswer)(nil),             // 5: pasteferry.v1.SdpAnswer
-	(*IceCandidate)(nil),          // 6: pasteferry.v1.IceCandidate
-	(*Ping)(nil),                  // 7: pasteferry.v1.Ping
-	(*ClientHello)(nil),           // 8: pasteferry.v1.ClientHello
-	(*ServerHello)(nil),           // 9: pasteferry.v1.ServerHello
-	(*IceServer)(nil),             // 10: pasteferry.v1.IceServer
-	(*PeerPresence)(nil),          // 11: pasteferry.v1.PeerPresence
-	(*PairingCreateRequest)(nil),  // 12: pasteferry.v1.PairingCreateRequest
-	(*PairingCreateResponse)(nil), // 13: pasteferry.v1.PairingCreateResponse
-	(*PairingRedeemRequest)(nil),  // 14: pasteferry.v1.PairingRedeemRequest
-	(*PairingRedeemResponse)(nil), // 15: pasteferry.v1.PairingRedeemResponse
-	(*PairingRedeemed)(nil),       // 16: pasteferry.v1.PairingRedeemed
-	(*IceConfig)(nil),             // 17: pasteferry.v1.IceConfig
-	(*ServerEnvelope)(nil),        // 18: pasteferry.v1.ServerEnvelope
-	(*ClientEnvelope)(nil),        // 19: pasteferry.v1.ClientEnvelope
-	(*ServerError)(nil),           // 20: pasteferry.v1.ServerError
-	(*LanPacket)(nil),             // 21: pasteferry.v1.LanPacket
-	(*LanHello)(nil),              // 22: pasteferry.v1.LanHello
-	(*LanPairSigned)(nil),         // 23: pasteferry.v1.LanPairSigned
-	(*LanPairInfo)(nil),           // 24: pasteferry.v1.LanPairInfo
-	(*LanPairReject)(nil),         // 25: pasteferry.v1.LanPairReject
-	(*LanNearbyPing)(nil),         // 26: pasteferry.v1.LanNearbyPing
-	(*PeerMessage)(nil),           // 27: pasteferry.v1.PeerMessage
-	(*PeerFeatures)(nil),          // 28: pasteferry.v1.PeerFeatures
-	(*LinkInfo)(nil),              // 29: pasteferry.v1.LinkInfo
-	(*PeerDisplay)(nil),           // 30: pasteferry.v1.PeerDisplay
-	(*ClipOffer)(nil),             // 31: pasteferry.v1.ClipOffer
-	(*PeerFetch)(nil),             // 32: pasteferry.v1.PeerFetch
-	(*FetchReject)(nil),           // 33: pasteferry.v1.FetchReject
-	(*TransferHeader)(nil),        // 34: pasteferry.v1.TransferHeader
-	(*TransferDone)(nil),          // 35: pasteferry.v1.TransferDone
-	(*SendOffer)(nil),             // 36: pasteferry.v1.SendOffer
-	(*SendAnswer)(nil),            // 37: pasteferry.v1.SendAnswer
-	(*SendCancel)(nil),            // 38: pasteferry.v1.SendCancel
-	(*SendResult)(nil),            // 39: pasteferry.v1.SendResult
-	(*SendFrame)(nil),             // 40: pasteferry.v1.SendFrame
-	(*SendFileStart)(nil),         // 41: pasteferry.v1.SendFileStart
-	(*SendFileEnd)(nil),           // 42: pasteferry.v1.SendFileEnd
-	(*SendStreamEnd)(nil),         // 43: pasteferry.v1.SendStreamEnd
-	(ClipKind)(0),                 // 44: pasteferry.v1.ClipKind
-	(*ClipItem)(nil),              // 45: pasteferry.v1.ClipItem
+	(*RetryDirect)(nil),           // 4: pasteferry.v1.RetryDirect
+	(*SdpOffer)(nil),              // 5: pasteferry.v1.SdpOffer
+	(*SdpAnswer)(nil),             // 6: pasteferry.v1.SdpAnswer
+	(*IceCandidate)(nil),          // 7: pasteferry.v1.IceCandidate
+	(*Ping)(nil),                  // 8: pasteferry.v1.Ping
+	(*ClientHello)(nil),           // 9: pasteferry.v1.ClientHello
+	(*ServerHello)(nil),           // 10: pasteferry.v1.ServerHello
+	(*IceServer)(nil),             // 11: pasteferry.v1.IceServer
+	(*PeerPresence)(nil),          // 12: pasteferry.v1.PeerPresence
+	(*PairingCreateRequest)(nil),  // 13: pasteferry.v1.PairingCreateRequest
+	(*PairingCreateResponse)(nil), // 14: pasteferry.v1.PairingCreateResponse
+	(*PairingRedeemRequest)(nil),  // 15: pasteferry.v1.PairingRedeemRequest
+	(*PairingRedeemResponse)(nil), // 16: pasteferry.v1.PairingRedeemResponse
+	(*PairingRedeemed)(nil),       // 17: pasteferry.v1.PairingRedeemed
+	(*IceConfig)(nil),             // 18: pasteferry.v1.IceConfig
+	(*ServerEnvelope)(nil),        // 19: pasteferry.v1.ServerEnvelope
+	(*ClientEnvelope)(nil),        // 20: pasteferry.v1.ClientEnvelope
+	(*ServerError)(nil),           // 21: pasteferry.v1.ServerError
+	(*LanPacket)(nil),             // 22: pasteferry.v1.LanPacket
+	(*LanHello)(nil),              // 23: pasteferry.v1.LanHello
+	(*LanPairSigned)(nil),         // 24: pasteferry.v1.LanPairSigned
+	(*LanPairInfo)(nil),           // 25: pasteferry.v1.LanPairInfo
+	(*LanPairReject)(nil),         // 26: pasteferry.v1.LanPairReject
+	(*LanNearbyPing)(nil),         // 27: pasteferry.v1.LanNearbyPing
+	(*PeerMessage)(nil),           // 28: pasteferry.v1.PeerMessage
+	(*PeerFeatures)(nil),          // 29: pasteferry.v1.PeerFeatures
+	(*LinkInfo)(nil),              // 30: pasteferry.v1.LinkInfo
+	(*PeerDisplay)(nil),           // 31: pasteferry.v1.PeerDisplay
+	(*ClipOffer)(nil),             // 32: pasteferry.v1.ClipOffer
+	(*PeerFetch)(nil),             // 33: pasteferry.v1.PeerFetch
+	(*FetchReject)(nil),           // 34: pasteferry.v1.FetchReject
+	(*TransferHeader)(nil),        // 35: pasteferry.v1.TransferHeader
+	(*TransferDone)(nil),          // 36: pasteferry.v1.TransferDone
+	(*SendOffer)(nil),             // 37: pasteferry.v1.SendOffer
+	(*SendAnswer)(nil),            // 38: pasteferry.v1.SendAnswer
+	(*SendCancel)(nil),            // 39: pasteferry.v1.SendCancel
+	(*SendResult)(nil),            // 40: pasteferry.v1.SendResult
+	(*SendFrame)(nil),             // 41: pasteferry.v1.SendFrame
+	(*SendFileStart)(nil),         // 42: pasteferry.v1.SendFileStart
+	(*SendFileEnd)(nil),           // 43: pasteferry.v1.SendFileEnd
+	(*SendStreamEnd)(nil),         // 44: pasteferry.v1.SendStreamEnd
+	(ClipKind)(0),                 // 45: pasteferry.v1.ClipKind
+	(*ClipItem)(nil),              // 46: pasteferry.v1.ClipItem
 }
 var file_pasteferry_v1_wire_proto_depIdxs = []int32{
-	4,  // 0: pasteferry.v1.SignalMessage.offer:type_name -> pasteferry.v1.SdpOffer
-	5,  // 1: pasteferry.v1.SignalMessage.answer:type_name -> pasteferry.v1.SdpAnswer
-	6,  // 2: pasteferry.v1.SignalMessage.candidate:type_name -> pasteferry.v1.IceCandidate
-	7,  // 3: pasteferry.v1.SignalMessage.ping:type_name -> pasteferry.v1.Ping
-	22, // 4: pasteferry.v1.SignalMessage.lan_hello:type_name -> pasteferry.v1.LanHello
-	10, // 5: pasteferry.v1.ServerHello.ice_servers:type_name -> pasteferry.v1.IceServer
-	10, // 6: pasteferry.v1.IceConfig.ice_servers:type_name -> pasteferry.v1.IceServer
-	9,  // 7: pasteferry.v1.ServerEnvelope.hello:type_name -> pasteferry.v1.ServerHello
-	2,  // 8: pasteferry.v1.ServerEnvelope.forwarded:type_name -> pasteferry.v1.Signed
-	11, // 9: pasteferry.v1.ServerEnvelope.presence:type_name -> pasteferry.v1.PeerPresence
-	13, // 10: pasteferry.v1.ServerEnvelope.pairing_created:type_name -> pasteferry.v1.PairingCreateResponse
-	15, // 11: pasteferry.v1.ServerEnvelope.pairing_redeemed_result:type_name -> pasteferry.v1.PairingRedeemResponse
-	16, // 12: pasteferry.v1.ServerEnvelope.pairing_redeemed:type_name -> pasteferry.v1.PairingRedeemed
-	20, // 13: pasteferry.v1.ServerEnvelope.error:type_name -> pasteferry.v1.ServerError
-	17, // 14: pasteferry.v1.ServerEnvelope.ice_config:type_name -> pasteferry.v1.IceConfig
-	8,  // 15: pasteferry.v1.ClientEnvelope.hello:type_name -> pasteferry.v1.ClientHello
-	2,  // 16: pasteferry.v1.ClientEnvelope.forward:type_name -> pasteferry.v1.Signed
-	12, // 17: pasteferry.v1.ClientEnvelope.pairing_create:type_name -> pasteferry.v1.PairingCreateRequest
-	14, // 18: pasteferry.v1.ClientEnvelope.pairing_redeem:type_name -> pasteferry.v1.PairingRedeemRequest
-	2,  // 19: pasteferry.v1.LanPacket.signal:type_name -> pasteferry.v1.Signed
-	23, // 20: pasteferry.v1.LanPacket.pair_request:type_name -> pasteferry.v1.LanPairSigned
-	23, // 21: pasteferry.v1.LanPacket.pair_response:type_name -> pasteferry.v1.LanPairSigned
-	25, // 22: pasteferry.v1.LanPacket.pair_reject:type_name -> pasteferry.v1.LanPairReject
-	23, // 23: pasteferry.v1.LanPacket.nearby_request:type_name -> pasteferry.v1.LanPairSigned
-	26, // 24: pasteferry.v1.LanPacket.nearby_ping:type_name -> pasteferry.v1.LanNearbyPing
-	31, // 25: pasteferry.v1.PeerMessage.offer:type_name -> pasteferry.v1.ClipOffer
-	32, // 26: pasteferry.v1.PeerMessage.fetch:type_name -> pasteferry.v1.PeerFetch
-	33, // 27: pasteferry.v1.PeerMessage.reject:type_name -> pasteferry.v1.FetchReject
-	34, // 28: pasteferry.v1.PeerMessage.header:type_name -> pasteferry.v1.TransferHeader
-	35, // 29: pasteferry.v1.PeerMessage.done:type_name -> pasteferry.v1.TransferDone
-	29, // 30: pasteferry.v1.PeerMessage.link:type_name -> pasteferry.v1.LinkInfo
-	30, // 31: pasteferry.v1.PeerMessage.display:type_name -> pasteferry.v1.PeerDisplay
-	28, // 32: pasteferry.v1.PeerMessage.features:type_name -> pasteferry.v1.PeerFeatures
-	36, // 33: pasteferry.v1.PeerMessage.send_offer:type_name -> pasteferry.v1.SendOffer
-	37, // 34: pasteferry.v1.PeerMessage.send_answer:type_name -> pasteferry.v1.SendAnswer
-	38, // 35: pasteferry.v1.PeerMessage.send_cancel:type_name -> pasteferry.v1.SendCancel
-	39, // 36: pasteferry.v1.PeerMessage.send_result:type_name -> pasteferry.v1.SendResult
-	44, // 37: pasteferry.v1.ClipOffer.kind:type_name -> pasteferry.v1.ClipKind
-	45, // 38: pasteferry.v1.ClipOffer.items:type_name -> pasteferry.v1.ClipItem
-	0,  // 39: pasteferry.v1.TransferHeader.compression:type_name -> pasteferry.v1.Compression
-	1,  // 40: pasteferry.v1.TransferHeader.packaging:type_name -> pasteferry.v1.Packaging
-	45, // 41: pasteferry.v1.SendOffer.items:type_name -> pasteferry.v1.ClipItem
-	41, // 42: pasteferry.v1.SendFrame.file:type_name -> pasteferry.v1.SendFileStart
-	42, // 43: pasteferry.v1.SendFrame.file_end:type_name -> pasteferry.v1.SendFileEnd
-	43, // 44: pasteferry.v1.SendFrame.end:type_name -> pasteferry.v1.SendStreamEnd
-	45, // [45:45] is the sub-list for method output_type
-	45, // [45:45] is the sub-list for method input_type
-	45, // [45:45] is the sub-list for extension type_name
-	45, // [45:45] is the sub-list for extension extendee
-	0,  // [0:45] is the sub-list for field type_name
+	5,  // 0: pasteferry.v1.SignalMessage.offer:type_name -> pasteferry.v1.SdpOffer
+	6,  // 1: pasteferry.v1.SignalMessage.answer:type_name -> pasteferry.v1.SdpAnswer
+	7,  // 2: pasteferry.v1.SignalMessage.candidate:type_name -> pasteferry.v1.IceCandidate
+	8,  // 3: pasteferry.v1.SignalMessage.ping:type_name -> pasteferry.v1.Ping
+	23, // 4: pasteferry.v1.SignalMessage.lan_hello:type_name -> pasteferry.v1.LanHello
+	4,  // 5: pasteferry.v1.SignalMessage.retry_direct:type_name -> pasteferry.v1.RetryDirect
+	11, // 6: pasteferry.v1.ServerHello.ice_servers:type_name -> pasteferry.v1.IceServer
+	11, // 7: pasteferry.v1.IceConfig.ice_servers:type_name -> pasteferry.v1.IceServer
+	10, // 8: pasteferry.v1.ServerEnvelope.hello:type_name -> pasteferry.v1.ServerHello
+	2,  // 9: pasteferry.v1.ServerEnvelope.forwarded:type_name -> pasteferry.v1.Signed
+	12, // 10: pasteferry.v1.ServerEnvelope.presence:type_name -> pasteferry.v1.PeerPresence
+	14, // 11: pasteferry.v1.ServerEnvelope.pairing_created:type_name -> pasteferry.v1.PairingCreateResponse
+	16, // 12: pasteferry.v1.ServerEnvelope.pairing_redeemed_result:type_name -> pasteferry.v1.PairingRedeemResponse
+	17, // 13: pasteferry.v1.ServerEnvelope.pairing_redeemed:type_name -> pasteferry.v1.PairingRedeemed
+	21, // 14: pasteferry.v1.ServerEnvelope.error:type_name -> pasteferry.v1.ServerError
+	18, // 15: pasteferry.v1.ServerEnvelope.ice_config:type_name -> pasteferry.v1.IceConfig
+	9,  // 16: pasteferry.v1.ClientEnvelope.hello:type_name -> pasteferry.v1.ClientHello
+	2,  // 17: pasteferry.v1.ClientEnvelope.forward:type_name -> pasteferry.v1.Signed
+	13, // 18: pasteferry.v1.ClientEnvelope.pairing_create:type_name -> pasteferry.v1.PairingCreateRequest
+	15, // 19: pasteferry.v1.ClientEnvelope.pairing_redeem:type_name -> pasteferry.v1.PairingRedeemRequest
+	2,  // 20: pasteferry.v1.LanPacket.signal:type_name -> pasteferry.v1.Signed
+	24, // 21: pasteferry.v1.LanPacket.pair_request:type_name -> pasteferry.v1.LanPairSigned
+	24, // 22: pasteferry.v1.LanPacket.pair_response:type_name -> pasteferry.v1.LanPairSigned
+	26, // 23: pasteferry.v1.LanPacket.pair_reject:type_name -> pasteferry.v1.LanPairReject
+	24, // 24: pasteferry.v1.LanPacket.nearby_request:type_name -> pasteferry.v1.LanPairSigned
+	27, // 25: pasteferry.v1.LanPacket.nearby_ping:type_name -> pasteferry.v1.LanNearbyPing
+	32, // 26: pasteferry.v1.PeerMessage.offer:type_name -> pasteferry.v1.ClipOffer
+	33, // 27: pasteferry.v1.PeerMessage.fetch:type_name -> pasteferry.v1.PeerFetch
+	34, // 28: pasteferry.v1.PeerMessage.reject:type_name -> pasteferry.v1.FetchReject
+	35, // 29: pasteferry.v1.PeerMessage.header:type_name -> pasteferry.v1.TransferHeader
+	36, // 30: pasteferry.v1.PeerMessage.done:type_name -> pasteferry.v1.TransferDone
+	30, // 31: pasteferry.v1.PeerMessage.link:type_name -> pasteferry.v1.LinkInfo
+	31, // 32: pasteferry.v1.PeerMessage.display:type_name -> pasteferry.v1.PeerDisplay
+	29, // 33: pasteferry.v1.PeerMessage.features:type_name -> pasteferry.v1.PeerFeatures
+	37, // 34: pasteferry.v1.PeerMessage.send_offer:type_name -> pasteferry.v1.SendOffer
+	38, // 35: pasteferry.v1.PeerMessage.send_answer:type_name -> pasteferry.v1.SendAnswer
+	39, // 36: pasteferry.v1.PeerMessage.send_cancel:type_name -> pasteferry.v1.SendCancel
+	40, // 37: pasteferry.v1.PeerMessage.send_result:type_name -> pasteferry.v1.SendResult
+	45, // 38: pasteferry.v1.ClipOffer.kind:type_name -> pasteferry.v1.ClipKind
+	46, // 39: pasteferry.v1.ClipOffer.items:type_name -> pasteferry.v1.ClipItem
+	0,  // 40: pasteferry.v1.TransferHeader.compression:type_name -> pasteferry.v1.Compression
+	1,  // 41: pasteferry.v1.TransferHeader.packaging:type_name -> pasteferry.v1.Packaging
+	46, // 42: pasteferry.v1.SendOffer.items:type_name -> pasteferry.v1.ClipItem
+	42, // 43: pasteferry.v1.SendFrame.file:type_name -> pasteferry.v1.SendFileStart
+	43, // 44: pasteferry.v1.SendFrame.file_end:type_name -> pasteferry.v1.SendFileEnd
+	44, // 45: pasteferry.v1.SendFrame.end:type_name -> pasteferry.v1.SendStreamEnd
+	46, // [46:46] is the sub-list for method output_type
+	46, // [46:46] is the sub-list for method input_type
+	46, // [46:46] is the sub-list for extension type_name
+	46, // [46:46] is the sub-list for extension extendee
+	0,  // [0:46] is the sub-list for field type_name
 }
 
 func init() { file_pasteferry_v1_wire_proto_init() }
@@ -3823,8 +3881,9 @@ func file_pasteferry_v1_wire_proto_init() {
 		(*SignalMessage_Candidate)(nil),
 		(*SignalMessage_Ping)(nil),
 		(*SignalMessage_LanHello)(nil),
+		(*SignalMessage_RetryDirect)(nil),
 	}
-	file_pasteferry_v1_wire_proto_msgTypes[16].OneofWrappers = []any{
+	file_pasteferry_v1_wire_proto_msgTypes[17].OneofWrappers = []any{
 		(*ServerEnvelope_Hello)(nil),
 		(*ServerEnvelope_Forwarded)(nil),
 		(*ServerEnvelope_Presence)(nil),
@@ -3834,13 +3893,13 @@ func file_pasteferry_v1_wire_proto_init() {
 		(*ServerEnvelope_Error)(nil),
 		(*ServerEnvelope_IceConfig)(nil),
 	}
-	file_pasteferry_v1_wire_proto_msgTypes[17].OneofWrappers = []any{
+	file_pasteferry_v1_wire_proto_msgTypes[18].OneofWrappers = []any{
 		(*ClientEnvelope_Hello)(nil),
 		(*ClientEnvelope_Forward)(nil),
 		(*ClientEnvelope_PairingCreate)(nil),
 		(*ClientEnvelope_PairingRedeem)(nil),
 	}
-	file_pasteferry_v1_wire_proto_msgTypes[19].OneofWrappers = []any{
+	file_pasteferry_v1_wire_proto_msgTypes[20].OneofWrappers = []any{
 		(*LanPacket_Signal)(nil),
 		(*LanPacket_PairRequest)(nil),
 		(*LanPacket_PairResponse)(nil),
@@ -3848,7 +3907,7 @@ func file_pasteferry_v1_wire_proto_init() {
 		(*LanPacket_NearbyRequest)(nil),
 		(*LanPacket_NearbyPing)(nil),
 	}
-	file_pasteferry_v1_wire_proto_msgTypes[25].OneofWrappers = []any{
+	file_pasteferry_v1_wire_proto_msgTypes[26].OneofWrappers = []any{
 		(*PeerMessage_Offer)(nil),
 		(*PeerMessage_Fetch)(nil),
 		(*PeerMessage_Reject)(nil),
@@ -3862,7 +3921,7 @@ func file_pasteferry_v1_wire_proto_init() {
 		(*PeerMessage_SendCancel)(nil),
 		(*PeerMessage_SendResult)(nil),
 	}
-	file_pasteferry_v1_wire_proto_msgTypes[38].OneofWrappers = []any{
+	file_pasteferry_v1_wire_proto_msgTypes[39].OneofWrappers = []any{
 		(*SendFrame_File)(nil),
 		(*SendFrame_FileEnd)(nil),
 		(*SendFrame_End)(nil),
@@ -3873,7 +3932,7 @@ func file_pasteferry_v1_wire_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pasteferry_v1_wire_proto_rawDesc), len(file_pasteferry_v1_wire_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   42,
+			NumMessages:   43,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

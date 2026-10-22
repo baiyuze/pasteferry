@@ -1454,6 +1454,43 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get reconnect => 'Reconnect';
+
+  @override
+  String get reconnecting => 'Connecting…';
+
+  @override
+  String get reconnectDirect => 'Connected directly';
+
+  @override
+  String get reconnectRelay =>
+      'Couldn’t connect directly, still using the relay';
+
+  @override
+  String reconnectOffline(String name) {
+    return '“$name” is offline. Make sure PasteFerry is open on it.';
+  }
+
+  @override
+  String get reconnectPending => 'Still connecting, check back in a moment';
+
+  @override
+  String get renameAction => 'Rename';
+
+  @override
+  String get renameFavoriteTitle => 'Rename favorite';
+
+  @override
+  String get renameFavoriteHint =>
+      'Shown in Favorites and Quick paste, and you can search for it. Leave it empty to show the content again.';
+
+  @override
+  String get renamedToast => 'Renamed';
+
+  @override
+  String get aliasClearedToast => 'Showing the content again';
+
+  @override
   String get navSend => 'Send Files';
 
   @override
