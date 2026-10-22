@@ -24,10 +24,16 @@ func activateNotification(raw string) error {
 		return fmt.Errorf("invalid notification URI")
 	}
 	verb, id := u.Query().Get("action"), u.Query().Get("clip")
-	if verb == "open" {
+	// 复制记录的「打开」只要把主窗口拉起来；隔空传送的「打开」要切到隔空传送页，由后台服务转告界面
+	if verb == "open" && !notifications.IsTransfer(id) {
 		return notifications.OpenUI()
 	}
-	if (verb != "receive" && verb != "apply") || id == "" {
+	switch {
+	case id == "":
+		return fmt.Errorf("invalid notification action")
+	case notifications.IsTransfer(id) && (verb == "open" || verb == "reveal"):
+	case verb == "receive" || verb == "apply":
+	default:
 		return fmt.Errorf("invalid notification action")
 	}
 	paths, err := config.DefaultPaths()

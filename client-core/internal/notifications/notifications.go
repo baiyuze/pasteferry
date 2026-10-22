@@ -158,6 +158,10 @@ func (m *Manager) Completed(r *pb.ClipRecord, result *pb.ClipboardWriteResult) {
 // 隔空传送通知的 ID 前缀，与复制记录的通知区分开
 const transferPrefix = "transfer-"
 
+// IsTransfer 判断通知是不是隔空传送的：它的「打开」要切到隔空传送页，还有「在文件夹中显示」，
+// 都要交给后台服务处理，不能只是把主窗口拉起来。
+func IsTransfer(id string) bool { return strings.HasPrefix(id, transferPrefix) }
+
 // Transfer 发一条隔空传送的通知：kind 是 incoming（较大的传输开始了）、received、failed。
 // 同一批的通知用同一个 ID，后一条替换前一条。folder 是保存位置在通知里的叫法。
 func (m *Manager) Transfer(kind string, t *pb.Transfer, folder string) {
