@@ -129,7 +129,8 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
   /// 窗口太窄、左右排放不下时也临时上下排。
   Widget _body(BuildContext context, AppState state, Size size) {
     final l = context.l10n;
-    final wide = !(state.config?.sendLayoutStacked ?? false) && size.width >= 760;
+    // 左栏窄于约 480 时雷达放不下设备名字（960 宽的窗口就是这样），自动上下排
+    final wide = !(state.config?.sendLayoutStacked ?? false) && size.width >= 880;
     final radar = state.peers.isEmpty
         ? EmptyState(
             icon: AppIcons.send,
