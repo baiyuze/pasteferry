@@ -655,6 +655,9 @@ class _TransferRowState extends State<_TransferRow> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    // Windows 上改过的文件名：只换了名字里不允许的字符，内容不变
+                    if (!_out && t.status == 'done' && t.renamedFiles > 0)
+                      Text(l.transferRenamed(t.renamedFiles.toInt()), style: context.text.bodySmall),
                     if (active) ...[
                       const SizedBox(height: 4),
                       LinearProgressIndicator(

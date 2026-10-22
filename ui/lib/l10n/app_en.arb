@@ -1272,5 +1272,13 @@
   },
   "saveDirNotFound": "This folder doesn’t exist.",
   "saveDirNotWritable": "PasteFerry can’t save files in this folder.",
-  "saveDirPermission": "PasteFerry isn’t allowed to use this folder. Allow it in System Settings → Privacy & Security → Files and Folders."
+  "saveDirPermission": "PasteFerry isn’t allowed to use this folder. Allow it in System Settings → Privacy & Security → Files and Folders.",
+  "transferRenamed": "{count, plural, =1{1 file name had characters Windows doesn’t allow; they were replaced with similar full-width characters} other{{count} file names had characters Windows doesn’t allow; they were replaced with similar full-width characters}}",
+  "@transferRenamed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

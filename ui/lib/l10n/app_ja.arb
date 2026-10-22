@@ -490,5 +490,6 @@
   "receiveFootnote": "ペアリングしたデバイスだけが{device}にファイルを送れます。転送中、{device}は自動でスリープしません。",
   "saveDirNotFound": "このフォルダは存在しません。",
   "saveDirNotWritable": "PasteFerry はこのフォルダにファイルを保存できません。",
-  "saveDirPermission": "PasteFerry にこのフォルダの使用が許可されていません。「システム設定 → プライバシーとセキュリティ → ファイルとフォルダ」で許可してください。"
+  "saveDirPermission": "PasteFerry にこのフォルダの使用が許可されていません。「システム設定 → プライバシーとセキュリティ → ファイルとフォルダ」で許可してください。",
+  "transferRenamed": "{count} 個のファイル名に Windows で使えない文字があったため、似た全角文字に置き換えました"
 }

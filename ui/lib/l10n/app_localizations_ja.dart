@@ -1720,4 +1720,9 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get saveDirPermission =>
       'PasteFerry にこのフォルダの使用が許可されていません。「システム設定 → プライバシーとセキュリティ → ファイルとフォルダ」で許可してください。';
+
+  @override
+  String transferRenamed(int count) {
+    return '$count 個のファイル名に Windows で使えない文字があったため、似た全角文字に置き換えました';
+  }
 }

@@ -490,5 +490,6 @@
   "receiveFootnote": "只有已配對的裝置能傳檔案給{device}。傳輸期間{device}不會自動睡眠。",
   "saveDirNotFound": "這個資料夾不存在。",
   "saveDirNotWritable": "隔空貼無法把檔案存到這個資料夾。",
-  "saveDirPermission": "隔空貼還沒有使用這個資料夾的權限。請在「系統設定 → 隱私權與安全性 → 檔案與資料夾」中允許。"
+  "saveDirPermission": "隔空貼還沒有使用這個資料夾的權限。請在「系統設定 → 隱私權與安全性 → 檔案與資料夾」中允許。",
+  "transferRenamed": "{count} 個檔名含 Windows 不支援的字元，已換成相近的全形字元"
 }

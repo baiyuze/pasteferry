@@ -1701,6 +1701,11 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get saveDirPermission =>
       '隔空贴还没有使用这个文件夹的权限。请在「系统设置 → 隐私与安全性 → 文件与文件夹」里允许。';
+
+  @override
+  String transferRenamed(int count) {
+    return '$count 个文件名含 Windows 不支持的字符，已换成相近的全角字符';
+  }
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -3400,6 +3405,11 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   @override
   String get saveDirPermission =>
       '隔空貼還沒有使用這個資料夾的權限。請在「系統設定 → 私隱與保安 → 檔案和資料夾」中允許。';
+
+  @override
+  String transferRenamed(int count) {
+    return '$count 個檔名含 Windows 不支援的字元，已換成相近的全形字元';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -5099,4 +5109,9 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   @override
   String get saveDirPermission =>
       '隔空貼還沒有使用這個資料夾的權限。請在「系統設定 → 隱私權與安全性 → 檔案與資料夾」中允許。';
+
+  @override
+  String transferRenamed(int count) {
+    return '$count 個檔名含 Windows 不支援的字元，已換成相近的全形字元';
+  }
 }

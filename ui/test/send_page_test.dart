@@ -40,7 +40,8 @@ AppState _demo(String language, {bool withActive = true}) => AppState()
       Transfer(id: 'r2', direction: _in, deviceId: 'air', deviceName: 'MacBook Air', status: 'done',
           items: [ClipItem(name: '合同扫描件.pdf'), ClipItem(name: 'notes.txt'), ClipItem(name: 'a.png')],
           paths: ['/tmp/合同扫描件.pdf', '/tmp/notes.txt', '/tmp/a.png'], present: [true, true, true],
-          totalBytes: Int64(18 << 20), fileCount: Int64(3), createdAtUnix: _now(120), finishedAtUnix: _now(100), seen: true),
+          totalBytes: Int64(18 << 20), fileCount: Int64(3), createdAtUnix: _now(120), finishedAtUnix: _now(100), seen: true,
+          renamedFiles: Int64(2)),
       Transfer(id: 'r3', direction: _in, deviceId: 'win', deviceName: 'Windows 台式机', status: 'done',
           items: [ClipItem(name: 'PasteFerry.dmg')], paths: ['/tmp/PasteFerry.dmg'], present: [false],
           totalBytes: Int64(812 << 20), fileCount: Int64(1), createdAtUnix: _now(90000), finishedAtUnix: _now(90000), seen: true),
@@ -89,6 +90,7 @@ void main() {
         final list = find.byType(Scrollable).last;
         expect(find.textContaining('IMG_2041.HEIC'), findsOneWidget);
         await tester.scrollUntilVisible(find.textContaining(l.transferItems('合同扫描件.pdf', 3, 2)), 60, scrollable: list);
+        await tester.scrollUntilVisible(find.text(l.transferRenamed(2)), 60, scrollable: list);
         await tester.scrollUntilVisible(find.textContaining(l.transferMissing), 60, scrollable: list);
         // 发出的
         await tester.tap(find.text(l.transfersSent));

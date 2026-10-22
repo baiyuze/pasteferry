@@ -3055,6 +3055,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PasteFerry isn’t allowed to use this folder. Allow it in System Settings → Privacy & Security → Files and Folders.'**
   String get saveDirPermission;
+
+  /// No description provided for @transferRenamed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 file name had characters Windows doesn’t allow; they were replaced with similar full-width characters} other{{count} file names had characters Windows doesn’t allow; they were replaced with similar full-width characters}}'**
+  String transferRenamed(int count);
 }
 
 class _AppLocalizationsDelegate

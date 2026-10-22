@@ -1867,4 +1867,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get saveDirPermission =>
       'PasteFerry isn’t allowed to use this folder. Allow it in System Settings → Privacy & Security → Files and Folders.';
+
+  @override
+  String transferRenamed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count file names had characters Windows doesn’t allow; they were replaced with similar full-width characters',
+      one:
+          '1 file name had characters Windows doesn’t allow; they were replaced with similar full-width characters',
+    );
+    return '$_temp0';
+  }
 }
