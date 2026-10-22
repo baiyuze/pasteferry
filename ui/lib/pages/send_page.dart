@@ -523,6 +523,8 @@ class _TransferList extends StatelessWidget {
                       style: context.text.bodySmall),
                 )
               : ListView.builder(
+                  // 收到的、发出的各自记住滚动位置，切换时不沿用另一边的
+                  key: PageStorageKey(direction),
                   padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.sm, Insets.lg, Insets.xl),
                   itemCount: list.length,
                   itemBuilder: (context, i) => _TransferRow(key: ValueKey(list[i].id), transfer: list[i]),
