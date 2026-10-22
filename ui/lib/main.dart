@@ -362,6 +362,8 @@ class _Sidebar extends StatelessWidget {
             trailingWidget: _SendBadge(state: state),
             onTap: () => onSelect(Section.send),
           ),
+          // 分两组：上面是用的（复制的内容、发文件），下面是管的（设备、服务、设置）
+          const SizedBox(height: Insets.lg),
           _NavItem(
             icon: AppIcons.deviceLaptop,
             label: l.navDevices,
