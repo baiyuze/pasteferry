@@ -80,9 +80,11 @@ void main() {
       testWidgets('雷达与列表', (tester) async {
         final l = await open(tester, _demo(language));
         expect(find.text(l.sendSubtitle), findsOneWidget);
-        for (final name in ['MacBook Air', 'Windows 台式机', 'Ubuntu 笔记本', 'Old PC', 'iMac']) {
+        // 外圈只有两个位置：在线的 Windows 台式机和 Old PC 优先，离线的 Ubuntu 笔记本挪到下面的小标签里
+        for (final name in ['MacBook Air', 'Windows 台式机', 'Old PC', 'iMac']) {
           expect(find.text(name), findsOneWidget, reason: name);
         }
+        expect(find.text('Ubuntu 笔记本 · ${l.offline}'), findsOneWidget);
         expect(find.text(l.sendNeedsUpdate), findsOneWidget);
         expect(find.text(l.sendNotReceiving), findsOneWidget);
         expect(find.text(l.sendRelayLeft('62.0 MB')), findsOneWidget);

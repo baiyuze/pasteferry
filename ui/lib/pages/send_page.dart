@@ -181,13 +181,16 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
     final p = context.palette;
     final l = context.l10n;
     final selfPlatform = state.self?.platform ?? Platform.operatingSystem.replaceFirst('macos', 'darwin');
-    final peers = state.peers;
+    // 能发送的设备排前面，其次是在线的，离线的最后：位置不够时先让给它们
+    int rank(Device d) => _canSend(d) ? 0 : (d.online ? 1 : 2);
+    final peers = [...state.peers]..sort((a, b) => rank(a).compareTo(rank(b)));
 
     // 分配位置：已有的不动，新来的按内外圈占空位。换了网络的设备换到另一圈。
     // 窗口矮的时候内圈的上下两个位置会压到本机，只用左右两个，其余的放外圈
     final innerSlots = height >= 240 ? _innerAngles.length : 2;
     final ids = {for (final d in peers) d.id};
     _slots.removeWhere((id, s) => !ids.contains(id) || (s.$1 && s.$2 >= innerSlots));
+    final byId = {for (final d in peers) d.id: d};
     for (final d in peers) {
       final wantInner = d.online && d.lanReachable;
       final cur = _slots[d.id];
@@ -199,7 +202,16 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
       _slots.remove(d.id);
       final used = {for (final s in _slots.values) if (s.$1 == inner) s.$2};
       final count = inner ? innerSlots : _outerAngles.length;
-      final free = List.generate(count, (i) => i).where((i) => !used.contains(i)).firstOrNull;
+      var free = List.generate(count, (i) => i).where((i) => !used.contains(i)).firstOrNull;
+      if (free == null) {
+        // 这一圈满了：占着位置的设备里排得最靠后的、比它更靠后的，让出来，挪到下面的小标签里
+        final holders = _slots.entries.where((e) => e.value.$1 == inner).toList()
+          ..sort((a, b) => rank(byId[b.key]!).compareTo(rank(byId[a.key]!)));
+        if (holders.isNotEmpty && rank(byId[holders.first.key]!) > rank(d)) {
+          free = holders.first.value.$2;
+          _slots.remove(holders.first.key);
+        }
+      }
       if (free != null) _slots[d.id] = (inner, free);
     }
     final overflow = peers.where((d) => !_slots.containsKey(d.id)).toList();
@@ -314,7 +326,8 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
                 for (final d in overflow)
                   ActionChip(
                     avatar: Icon(platformIcon(d.platform), size: 14),
-                    label: Text(d.name),
+                    // 发不了的写上原因，和雷达上一样
+                    label: Text(_canSend(d) ? d.name : '${d.name} · ${_statusOf(context, state, d)}'),
                     onPressed: _canSend(d) ? () => _openDialog(d) : null,
                   ),
               ],
@@ -326,6 +339,15 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
 
   bool _canSend(Device d) => d.online && d.receivesFiles && !d.receiveDisabled;
 
+  /// 发不了的原因，或者能发时的连接方式
+  String _statusOf(BuildContext context, AppState state, Device d) {
+    final l = context.l10n;
+    if (!d.online) return l.offline;
+    if (!d.receivesFiles) return l.sendNeedsUpdate;
+    if (d.receiveDisabled) return l.sendNotReceiving;
+    return routeLabel(l, state, d);
+  }
+
   Widget _node(BuildContext context, AppState state, Device d) {
     final l = context.l10n;
     final sending = state.sendingTo(d.id);
@@ -335,14 +357,9 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
         .any((t) => t.deviceId == d.id && t.status == 'done' && now - t.finishedAtUnix.toInt() < 3);
     final enabled = _canSend(d);
     final String status;
-    String? tip;
-    if (!d.online) {
-      status = l.offline;
-    } else if (!d.receivesFiles) {
-      status = l.sendNeedsUpdate;
-      tip = l.sendNeedsUpdateTip(d.name);
-    } else if (d.receiveDisabled) {
-      status = l.sendNotReceiving;
+    final tip = d.online && !d.receivesFiles ? l.sendNeedsUpdateTip(d.name) : null;
+    if (!enabled) {
+      status = _statusOf(context, state, d);
     } else if (sending != null && sending.status == 'active' && sending.totalBytes > 0) {
       status = '${(sending.doneBytes.toInt() * 100 / sending.totalBytes.toInt()).floor()}%';
     } else if (delivered) {
