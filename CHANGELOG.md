@@ -1,5 +1,30 @@
 # 更新记录 / Changelog
 
+## 2.5.1 — 2026-10-22
+
+Faster Send Files on the local network, with more reliable recovery and
+a layout that stays side by side.
+
+### Changes
+
+- Send Files uses an encrypted TCP fast link on the local network. A 1 GB file reached 144.3 MB/s from Mac to a Linux VM, up from 18.7 MB/s. If the fast link is unavailable, transfers automatically use the existing data channel; internet and relay transfers keep their existing transport.
+- On Windows, the firewall Allow button now permits both UDP and TCP traffic for PasteFerry.
+
+### Fixes
+
+- A transfer whose request was lost while the receiver restarted could stay interrupted after reconnection. It now retries once after a short delay when the devices are already connected.
+- If the delivery receipt is lost, resuming a completed transfer now marks it as delivered instead of sending a second copy.
+- The Send Files page now keeps the radar and transfer list side by side at every window size when that layout is selected. Device labels no longer overlap in narrow windows.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: update both computers to use the local
+  network fast link. Updating only one side is safe; transfers keep using
+  the existing data channel. Actual speed depends on the network and disks.
+- **Server**: no update needed.
+- The device-to-device protocol is backward compatible: 2.5.1 adds an
+  optional fast-link capability and address that older versions ignore.
+
 ## 2.5.0 — 2026-10-22
 
 Send Files: drop files or folders onto a device to send them straight to it.

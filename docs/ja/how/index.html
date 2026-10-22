@@ -215,7 +215,7 @@
         <div class="table-scroll">
           <table class="specs">
             <tbody>
-            <tr><th scope="row">バージョン</th><td>2.5.0（<time datetime="2026-10-22">2026 年 10 月 22 日</time>公開）</td></tr>
+            <tr><th scope="row">バージョン</th><td>2.5.1（<time datetime="2026-10-22">2026 年 10 月 22 日</time>公開）</td></tr>
             <tr><th scope="row">Mac アプリ</th><td>macOS 13 Ventura 以降。Apple シリコン版と Intel 版に分かれ、ダウンロードはそれぞれ約 25 MB で Rosetta 不要。両方で動くユニバーサル版は約 47 MB</td></tr>
             <tr><th scope="row">Windows アプリ</th><td>Windows 10 と Windows 11、x64。ユーザーごとのインストールで管理者権限不要。ダウンロードは約 23 MB</td></tr>
             <tr><th scope="row">Linux アプリ</th><td>x64 と ARM64。.deb（Debian、Ubuntu など）または tar.gz（ほかのディストリビューション）、約 22 MB。X11 のデスクトップ、または XWayland 付きの Wayland デスクトップ（GNOME、KDE などは標準で搭載）が必要。GTK 3</td></tr>
@@ -226,7 +226,7 @@
             <tr><th scope="row">暗号化と身元</th><td>DTLS によるエンドツーエンド暗号化。デバイスの身元は Ed25519 の鍵。シグナリングのメッセージはすべて署名付き</td></tr>
             <tr><th scope="row">ペアリング</th><td>5 分間有効な 6 桁のコード。0/O や 1/I のような紛らわしい文字は使わない。指紋は人が照合</td></tr>
             <tr><th scope="row">自動同期の上限</th><td>初期値 50 MB、1 MB〜1 GB で調整可能</td></tr>
-            <tr><th scope="row">ファイル送信</th><td>1 台のデバイスへ、サイズ無制限。ファイルでもフォルダごとでも。同期と同じエンドツーエンド暗号化の接続を使用。切断されても途中から再開し、ファイルごとに SHA-256 で検証</td></tr>
+            <tr><th scope="row">ファイル送信</th><td>1 台のデバイスへ、サイズ無制限。ファイルもフォルダも送信可能。同じネットワークでは暗号化 TCP 高速接続（両方が 2.5.1）を使用し、使えない場合はデータチャネルへ自動切り替え。インターネットと中継は WebRTC を継続使用。中断後も再開でき、各ファイルを SHA-256 で検証。Mac → Linux 仮想マシンに 1 GB を送る実測で 18.7 MB/s から 144.3 MB/s に向上。速度はネットワークとディスクによって異なります。</td></tr>
             <tr><th scope="row">履歴の保存期間</th><td>初期値 3 日、1 時間〜30 日で調整可能。期限が来たら自動で削除</td></tr>
             <tr><th scope="row">実測の速度</th><td>LAN の直接接続で 20 MB のファイルを約 330 ミリ秒で転送、チェックサム一致</td></tr>
             <tr><th scope="row">技術スタック</th><td>バックグラウンドサービスとサーバーは Go（Windows では Go から Win32 を直接呼び出し、Linux では Go で X11 プロトコルを直接扱う）、アプリは Flutter（3 つの OS で同じコード）、メッセージ定義は Protocol Buffers</td></tr>

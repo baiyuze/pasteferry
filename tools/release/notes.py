@@ -11,6 +11,43 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.5.1',
+ 'date': '2026-10-22',
+ 'changes': [('Send Files uses an encrypted TCP fast link on the local network. A 1 GB file reached 144.3 '
+              'MB/s from Mac to a Linux VM, up from 18.7 MB/s. If the fast link is unavailable, transfers '
+              'automatically use the existing data channel; internet and relay transfers keep their existing '
+              'transport.',
+              '同一局域网里的隔空传送改用加密的 TCP 快速通道。Mac 向 Linux 虚拟机发送 1 GB 文件，实测从 18.7 MB/s 提到 144.3 '
+              'MB/s。快速通道不可用时自动退回原数据通道；外网与中转保持原来的传输方式。',
+              '同じローカルネットワーク内のファイル送信に、暗号化された TCP 高速接続を使います。Mac から Linux 仮想マシンへ 1 GB のファイルを送る実測で、18.7 MB/s から '
+              '144.3 MB/s に向上しました。高速接続が使えない場合は従来のデータチャネルへ自動で切り替わり、インターネットと中継の転送方式は従来どおりです。',
+              '同一區域網路裡的隔空傳送改用加密的 TCP 快速通道。Mac 向 Linux 虛擬機傳送 1 GB 檔案，實測從 18.7 MB/s 提高到 144.3 '
+              'MB/s。快速通道無法使用時自動退回原資料通道；外網與中繼維持原來的傳輸方式。',
+              '同一區域網絡裏的隔空傳送改用加密的 TCP 快速通道。Mac 向 Linux 虛擬機傳送 1 GB 檔案，實測從 18.7 MB/s 提升至 144.3 '
+              'MB/s。快速通道無法使用時自動退回原數據通道；外網與中轉維持原來的傳輸方式。'),
+             ('On Windows, the firewall Allow button now permits both UDP and TCP traffic for PasteFerry.',
+              'Windows 设置里的防火墙「放行」按钮现在同时允许隔空贴的 UDP 和 TCP 通信。',
+              'Windows のファイアウォールの「許可」ボタンが、PasteFerry の UDP と TCP の両方の通信を許可するようになりました。',
+              'Windows 設定裡的防火牆「放行」按鈕現在同時允許隔空貼的 UDP 和 TCP 通訊。',
+              'Windows 設定裏的防火牆「放行」按鈕現在同時允許隔空貼的 UDP 和 TCP 通訊。')],
+ 'fixes': [('A transfer whose request was lost while the receiver restarted could stay interrupted after '
+            'reconnection. It now retries once after a short delay when the devices are already connected.',
+            '修复接收方重启时丢失发送请求、重连后传输仍停在「已中断」的问题。两台已经连上时，现在会稍等片刻自动补试一次。',
+            '受信側の再起動中に送信要求が失われると、再接続後も転送が中断のままになる問題を修正しました。すでに接続されている場合は、少し待ってから自動で一度再試行します。',
+            '修正接收方重新啟動時遺失傳送請求、重新連線後傳輸仍停在「已中斷」的問題。兩台已經連上時，現在會稍等片刻自動補試一次。',
+            '修正接收方重新啟動時遺失傳送請求、重新連線後傳輸仍停在「已中斷」的問題。兩部電腦已經連上時，現在會稍等片刻自動補試一次。'),
+           ('If the delivery receipt is lost, resuming a completed transfer now marks it as delivered '
+            'instead of sending a second copy.',
+            '文件已收完但送达回执丢失时，续传会直接标为已送达，不再重新发送一份。',
+            '受信完了の通知が失われても、完了済みの転送を再開すると送信済みとして扱い、同じファイルを再送しなくなりました。',
+            '檔案已收完但送達回報遺失時，續傳會直接標為已送達，不再重新傳送一份。',
+            '檔案已收完但送達回報遺失時，續傳會直接標為已送達，不再重新傳送一份。'),
+           ('The Send Files page now keeps the radar and transfer list side by side at every window size '
+            'when that layout is selected. Device labels no longer overlap in narrow windows.',
+            '选择左右布局时，隔空传送页现在在所有窗口大小下都保持雷达与列表左右排列；窄窗口里的设备名称不再重叠。',
+            '左右配置を選択した場合、ウィンドウの大きさにかかわらずレーダーと転送一覧を横に並べるようになりました。狭いウィンドウでもデバイス名が重なりません。',
+            '選擇左右配置時，隔空傳送頁現在在所有視窗大小下都維持雷達與列表左右排列；窄視窗裡的裝置名稱不再重疊。',
+            '選擇左右排列時，隔空傳送頁現在在所有視窗大小下都維持雷達與列表左右排列；窄視窗裏的裝置名稱不再重疊。')]},
     {
         "version": "2.5.0",
         "date": "2026-10-22",

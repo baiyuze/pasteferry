@@ -27,7 +27,7 @@ C = {
     "dl_mac": "Download for Mac",
     "dl_win": "Download for Windows",
     "dl_linux": "Download for Linux",
-    "dl_note": "Version 2.5.0, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64).",
+    "dl_note": "Version 2.5.1, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64).",
     "start_link": "New here? Set it up in three steps →",
     "stage_label": "Demo: Command C on a MacBook turns a file into a sheet that flies over a direct connection to a Windows "
                    "laptop, where Ctrl V pastes it",
@@ -214,7 +214,7 @@ C = {
 
     "specs_h2": "Specifications",
     "specs": [
-        ("Version", '2.5.0, released <time datetime="2026-10-22">October 22, 2026</time>'),
+        ("Version", '2.5.1, released <time datetime="2026-10-22">October 22, 2026</time>'),
         ("Mac app", "macOS 13 Ventura or later; separate downloads for Apple silicon and Intel, about 25 MB each, no Rosetta; "
                     "a universal version for both is about 47 MB"),
         ("Windows app", "Windows 10 and Windows 11, x64; installs per user, no administrator rights; about 23 MB download"),
@@ -227,7 +227,7 @@ C = {
         ("Encryption and identity", "End-to-end DTLS; Ed25519 device keys; every signaling message signed"),
         ("Pairing", "6-character code valid for 5 minutes, using an alphabet without look-alikes such as 0/O and 1/I; fingerprints compared by you"),
         ("Auto-sync limit", "50 MB by default, adjustable from 1 MB to 1 GB"),
-        ("Send Files", "To one device, any size, single files or whole folders; uses the same end-to-end encrypted connection as sync; resumes where it stopped after a disconnect; every file checked with SHA-256"),
+        ('Send Files', 'To one device, any size, single files or whole folders; encrypted TCP fast link on the local network (both devices need 2.5.1), automatic data-channel fallback; internet and relay use WebRTC; resumes after a disconnect; SHA-256 per file. Measured Mac to Linux VM: 144.3 MB/s for 1 GB, up from 18.7 MB/s; speed depends on the network and disks.'),
         ("History", "3 days by default, adjustable from 1 hour to 30 days; expired items removed automatically"),
         ("Measured speed", "A 20 MB file transfers in about 330 ms over a direct LAN connection, checksums matching"),
         ("Built with", "Go for the background service and server (pure Go calling Win32 on Windows and speaking the X11 protocol on Linux), Flutter for the app (one codebase for all three systems), Protocol Buffers for messages"),
