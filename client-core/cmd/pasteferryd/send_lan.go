@@ -25,10 +25,12 @@ func lanHooks(id *identity.Identity, peerMgr *peers.Manager) (listenLANFunc, dia
 	}
 	listen := func(deviceID string) (string, func(context.Context) (io.ReadCloser, string, error), bool) {
 		if !peerMgr.HasFeature(deviceID, peers.FeatureSendFilesTCP) {
+			slog.Info("对方不支持局域网快速通道，用数据通道", "device", deviceID)
 			return "", nil, false
 		}
 		ip, ok := peerMgr.P2P().LANAddr(deviceID)
 		if !ok {
+			slog.Info("不是局域网直连，用数据通道", "device", deviceID)
 			return "", nil, false
 		}
 		ln, err := link.Listen(ip, deviceID)

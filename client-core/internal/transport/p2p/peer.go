@@ -11,6 +11,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"net"
 	"net/netip"
 	"strings"
 	"sync"
@@ -223,6 +224,9 @@ func (p *Peer) State() ConnState {
 }
 
 // LANAddr 见 Manager.LANAddr。对端是 prflx 也算：局域网里对端的地址常常先从收到的包里认出来。
+//
+// 本端地址不取 candidate 对里记的那个：多条连接共用一个 UDP 端口时，它可能是监听地址（实测出现过 127.0.0.1）。
+// 改为问系统发往对端地址时用哪个源地址，这正是对端连得到的那个。
 func (p *Peer) LANAddr() (netip.Addr, bool) {
 	p.mu.Lock()
 	pc := p.pc
@@ -236,16 +240,39 @@ func (p *Peer) LANAddr() (netip.Addr, bool) {
 		return netip.Addr{}, false
 	}
 	pair, err := sctp.Transport().ICETransport().GetSelectedCandidatePair()
-	if err != nil || pair == nil || pair.Local == nil || pair.Remote == nil ||
-		pair.Local.Typ != webrtc.ICECandidateTypeHost ||
+	if err != nil || pair == nil || pair.Local == nil || pair.Remote == nil {
+		return netip.Addr{}, false
+	}
+	if pair.Local.Typ != webrtc.ICECandidateTypeHost ||
 		(pair.Remote.Typ != webrtc.ICECandidateTypeHost && pair.Remote.Typ != webrtc.ICECandidateTypePrflx) {
+		p.log.Info("不是局域网直连，隔空传送不走快速通道", "local", pair.Local.Typ.String(), "remote", pair.Remote.Typ.String())
 		return netip.Addr{}, false
 	}
-	addr, err := netip.ParseAddr(pair.Local.Address)
-	if err != nil || addr.IsLoopback() || addr.IsUnspecified() {
+	remote, err := netip.ParseAddr(pair.Remote.Address)
+	if err != nil || remote.IsLoopback() || remote.IsUnspecified() {
+		p.log.Info("对端地址不能用来开快速通道", "remote", pair.Remote.Address)
 		return netip.Addr{}, false
 	}
-	return addr.Unmap(), true
+	local, err := sourceAddrFor(remote.Unmap())
+	if err != nil {
+		p.log.Info("找不到发往对端用的本机地址", "remote", remote, "err", err)
+		return netip.Addr{}, false
+	}
+	return local, true
+}
+
+// sourceAddrFor 返回系统发往 dst 时用的本机地址。UDP 的 connect 只查路由，不发包。
+func sourceAddrFor(dst netip.Addr) (netip.Addr, error) {
+	c, err := net.DialUDP("udp", nil, net.UDPAddrFromAddrPort(netip.AddrPortFrom(dst, 9)))
+	if err != nil {
+		return netip.Addr{}, err
+	}
+	defer c.Close()
+	local := c.LocalAddr().(*net.UDPAddr).AddrPort().Addr().Unmap()
+	if !local.IsValid() || local.IsLoopback() || local.IsUnspecified() {
+		return netip.Addr{}, errors.New("没有可用的本机地址")
+	}
+	return local, nil
 }
 
 func (p *Peer) DirectAttemptReady() bool {
