@@ -1,65 +1,101 @@
 {
   "schema": 1,
-  "latest": "2.5.1",
+  "latest": "2.5.2",
   "date": "2026-10-22",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.1/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.2/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.1/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.2/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 25939412,
-      "sha256": "e0620da95bc19e19d504dde16e5f823b24edae025dfad7ffd0d88716078cce88"
+      "size": 25939985,
+      "sha256": "61521aa91cf9720fb2c6c895eb90801f338903ea9bd5ae9e30cc82157b097c0e"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 28046025,
-      "sha256": "8aaef02b84f2281af86719114c4cf936d34bbef21def709c0cb49054f980157d"
+      "size": 28044137,
+      "sha256": "85aca850671d916ebd8683261ed1302aba1a951125e6c881be218f1c85d095a8"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 52041840,
-      "sha256": "21aac7abe76f9fc49b519429608608149351d6f5478fbb318cded06e41087eb3"
+      "size": 52045232,
+      "sha256": "c43a3b3ab275584b743c0f2008b5dabed9abab71aefaedb76c3a137932730f3a"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 23348525,
-      "sha256": "144764256313891acbc2af6f18bc9085fcfd222b5e339d2e09ab8220bc3f5b8f"
+      "size": 23347187,
+      "sha256": "6ead3181f4fb73769186e62fa564b009fd16fb5cdaee0484f9eb5bb56e409deb"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 29457964,
-      "sha256": "1c4954a429918e4f38daa6f0b62c908c98a742fb2e0a7973d153ba27b1a89fd8"
+      "size": 29458528,
+      "sha256": "d9abca691f0a193fea9fd301fb9fe2943c31da8b27b22a69b7503c4fc3f4c1ee"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22519492,
-      "sha256": "7c26cbdb560824e673ba407fc00e09d632566dfaaecae6e0bb66f066ec80f51b"
+      "size": 22521176,
+      "sha256": "01284f545611048f193de6c1d20068b8200250548280a4c50c5ad68ba6a1281f"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 20944354,
-      "sha256": "d0b2a1abb631190dfde183e2c7289f57fa565788ae2f4a315d6560cf03edcbc0"
+      "size": 20944742,
+      "sha256": "b1383020238a200fbca0b0f00cda6bc9ff72fb72a50197dd8c1e75bc77f8d0ef"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 27258609,
-      "sha256": "acb8c7cc2e240aa4ba46c437a5556fa46a6369fcafc8c470c5aa66019c56c65a"
+      "size": 27258799,
+      "sha256": "06a632a1d9e479a929fbdd01e5bdf4f6da17e9182fe57c7152594ac0e6f8642c"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25517156,
-      "sha256": "7710e25cadbd0d4f83794ddc1752b743b1c3e8ac8e5d370433434104cc408261"
+      "size": 25517843,
+      "sha256": "1f7071faf3e1caf338dfed66414963dc95d9401363a29520c5a6bc31b4552f4b"
     }
   },
   "releases": [
+    {
+      "version": "2.5.2",
+      "date": "2026-10-22",
+      "notes": {
+        "en": {
+          "fixes": [
+            "An up-to-date device could incorrectly show as needing an update in Send Files when its capability announcement was lost at connection startup. The control receiver is now installed before the connection is announced, and capabilities are refreshed periodically.",
+            "The Send Files radar now stays circular in small windows. The rings, device icons and labels scale together instead of stretching into a narrow ellipse; the selected side-by-side or stacked layout is preserved."
+          ]
+        },
+        "zh-Hans": {
+          "fixes": [
+            "修复隔空传送中已更新的设备仍显示「需要更新」的问题：连接刚建立时功能声明可能丢失，现在先准备好接收器再报告已连接，并定期刷新功能声明。",
+            "小窗口下隔空传送的雷达保持正圆，圆环、设备图标和名称一起等比缩放，不再挤成长椭圆；保留设置中选择的左右或上下布局。"
+          ]
+        },
+        "ja": {
+          "fixes": [
+            "最新のデバイスでも、接続開始時に機能情報が失われると「更新が必要」と表示される問題を修正しました。接続完了を通知する前に受信処理を設定し、機能情報を定期的に更新します。",
+            "小さいウィンドウでもファイル送信のレーダーが円形を保つようになりました。輪、デバイスのアイコンと名前を同じ比率で縮小し、細長い楕円に変形しません。選択した左右・上下配置は維持されます。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "fixes": [
+            "修正隔空傳送中已更新的裝置仍顯示「需要更新」的問題：連線剛建立時功能宣告可能遺失，現在先準備好接收器再回報已連線，並定期重新整理功能宣告。",
+            "小視窗下隔空傳送的雷達維持正圓，圓環、裝置圖示和名稱一起等比例縮放，不再擠成長橢圓；保留設定中選擇的左右或上下配置。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "fixes": [
+            "修正隔空傳送中已更新的裝置仍顯示「需要更新」的問題：連線剛建立時功能聲明可能遺失，現在先準備好接收器再回報已連線，並定期更新功能聲明。",
+            "小視窗下隔空傳送的雷達維持正圓，圓環、裝置圖示和名稱一起等比例縮放，不再擠成長橢圓；保留設定中選擇的左右或上下排列。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.5.1",
       "date": "2026-10-22",
