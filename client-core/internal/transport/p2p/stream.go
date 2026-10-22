@@ -23,10 +23,17 @@ const streamQueueDepth = 256
 //
 // 这里用一个队列同时解决两者：OnMessage 在 OnDataChannel 回调中当场挂上，
 // 只负责入队；消费者从队列按序取用。入队顺序即到达顺序，不存在插队。
+//
+// 本端主动关闭（Close）时，pion 可能正在回调里往队列送新到的分片：
+// 先关 stop 让卡在队列上的回调退出，再在写锁下关队列；回调在读锁下、确认没关过才送，
+// 不会往已关闭的队列里写（那会 panic，整个后台服务跟着退出）。
 type Stream struct {
 	dc    *webrtc.DataChannel
 	queue chan []byte
+	stop  chan struct{}
 
+	mu        sync.RWMutex
+	closed    bool
 	closeOnce sync.Once
 }
 
@@ -35,13 +42,22 @@ func NewStream(dc *webrtc.DataChannel) *Stream {
 	s := &Stream{
 		dc:    dc,
 		queue: make(chan []byte, streamQueueDepth),
+		stop:  make(chan struct{}),
 	}
 
 	dc.OnMessage(func(msg webrtc.DataChannelMessage) {
 		// 必须复制：pion 复用底层缓冲，留着原切片会被后续消息覆盖
 		chunk := make([]byte, len(msg.Data))
 		copy(chunk, msg.Data)
-		s.queue <- chunk
+		s.mu.RLock()
+		defer s.mu.RUnlock()
+		if s.closed {
+			return
+		}
+		select {
+		case s.queue <- chunk:
+		case <-s.stop: // 本端已经不要了
+		}
 	})
 
 	dc.OnClose(func() { s.finish() })
@@ -87,5 +103,11 @@ func (s *Stream) Close() error {
 }
 
 func (s *Stream) finish() {
-	s.closeOnce.Do(func() { close(s.queue) })
+	s.closeOnce.Do(func() {
+		close(s.stop)
+		s.mu.Lock()
+		s.closed = true
+		close(s.queue)
+		s.mu.Unlock()
+	})
 }

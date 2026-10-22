@@ -166,3 +166,66 @@ func TestStreamBuffersEarlyMessages(t *testing.T) {
 		}
 	}
 }
+
+// TestCloseStreamWhileReceiving 锁住一次真实的崩溃：接收方在数据还在进来时主动关闭数据流
+// （隔空传送里取消或判定中断时都会这样），pion 的回调随后往已关闭的队列里送分片，
+// 整个后台服务 panic 退出。Windows 的 CI 上先暴露出来。
+func TestCloseStreamWhileReceiving(t *testing.T) {
+	r := newRelay()
+	alice := newHarness(t, "alice", r)
+	bob := newHarness(t, "bob", r)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	if err := alice.manager.Connect(ctx, "bob"); err != nil {
+		t.Fatalf("建立连接: %v", err)
+	}
+	waitConnected(t, alice, "bob")
+	waitConnected(t, bob, "alice")
+
+	chunk := make([]byte, 60*1024)
+	for round := 0; round < 5; round++ {
+		dc, err := alice.manager.OpenStream("bob", "flood")
+		if err != nil {
+			t.Fatal(err)
+		}
+		opened := make(chan struct{})
+		dc.OnOpen(func() { close(opened) })
+		select {
+		case <-opened:
+		case <-time.After(20 * time.Second):
+			t.Fatal("数据流未能打开")
+		}
+		stop := make(chan struct{})
+		go func() {
+			for {
+				select {
+				case <-stop:
+					return
+				default:
+				}
+				if dc.BufferedAmount() > 4<<20 {
+					time.Sleep(time.Millisecond)
+					continue
+				}
+				if dc.Send(chunk) != nil {
+					return
+				}
+			}
+		}()
+		st := <-bob.streams
+		// 先不读，等队列塞满：这时 pion 的回调卡在往队列写的那一步，再关掉
+		deadline := time.Now().Add(20 * time.Second)
+		for len(st.Chunks()) < cap(st.Chunks()) {
+			if time.Now().After(deadline) {
+				t.Fatal("队列一直没有塞满")
+			}
+			time.Sleep(5 * time.Millisecond)
+		}
+		time.Sleep(20 * time.Millisecond)
+		st.Close()
+		for range st.Chunks() {
+		}
+		close(stop)
+		dc.Close()
+	}
+}
