@@ -397,3 +397,30 @@ func TestNearbyNeedsBothWindows(t *testing.T) {
 		t.Fatalf("b 不该多出设备: %v", peers)
 	}
 }
+
+// 两端同版本：功能声明迟到或丢失后，刷新声明恢复接收能力与用户开关。
+func TestRefreshPeerFeatures(t *testing.T) {
+	network := lan.NewMemoryNetwork()
+	a, b := newDevice(t, "a", network, lanOnly()), newDevice(t, "b", network, lanOnly())
+	waitLANUp(t, a, b)
+	pairDevices(t, a, b, "")
+	waitDirect(t, a, b)
+	waitFor(t, "双方收到功能声明", func() bool {
+		sa, _ := a.m.SendFilesSupport(b.id())
+		sb, _ := b.m.SendFilesSupport(a.id())
+		return sa && sb
+	})
+	a.m.mu.Lock()
+	delete(a.m.features, b.id()) // 模拟没有收到对方的首条声明
+	a.m.mu.Unlock()
+	b.m.BroadcastFeatures()
+	waitFor(t, "刷新恢复接收能力", func() bool { ok, _ := a.m.SendFilesSupport(b.id()); return ok })
+	b.mu.Lock()
+	b.cfg.ReceiveDisabled = true
+	b.mu.Unlock()
+	b.m.BroadcastFeatures()
+	waitFor(t, "刷新接收开关", func() bool { ok, off := a.m.SendFilesSupport(b.id()); return ok && off })
+	if !a.m.HasFeature(b.id(), FeatureSendFilesTCP) {
+		t.Fatal("快速通道能力丢失")
+	}
+}

@@ -1087,18 +1087,6 @@ func (p *Peer) detectConnectionKind(pc *webrtc.PeerConnection) ConnState {
 }
 
 func (p *Peer) bindControl(dc *webrtc.DataChannel) {
-	p.mu.Lock()
-	p.control = dc
-	p.mu.Unlock()
-
-	dc.OnOpen(func() {
-		p.log.Debug("控制通道已打开")
-		p.maybeReady()
-	})
-	// 应答方绑定控制通道时，传输层可能早已就绪，此时不会再触发 OnOpen
-	if dc.ReadyState() == webrtc.DataChannelStateOpen {
-		p.maybeReady()
-	}
 	dc.OnMessage(func(msg webrtc.DataChannelMessage) {
 		var m pb.PeerMessage
 		if err := proto.Unmarshal(msg.Data, &m); err != nil {
@@ -1114,6 +1102,19 @@ func (p *Peer) bindControl(dc *webrtc.DataChannel) {
 			p.onMessage(&m)
 		}
 	})
+	// 必须先接住消息，再发布已连接：对端会在就绪回调里立刻发送功能声明。
+	p.mu.Lock()
+	p.control = dc
+	p.mu.Unlock()
+
+	dc.OnOpen(func() {
+		p.log.Debug("控制通道已打开")
+		p.maybeReady()
+	})
+	// 应答方绑定控制通道时，传输层可能早已就绪，此时不会再触发 OnOpen
+	if dc.ReadyState() == webrtc.DataChannelStateOpen {
+		p.maybeReady()
+	}
 }
 
 var ErrNotConnected = errors.New("与对端的连接尚未建立")

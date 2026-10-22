@@ -91,7 +91,7 @@ type Manager struct {
 	conn         map[string]p2p.ConnState // P2P 连接状态（直连/中转）
 	// features 是对端在 PeerFeatures 里声明的功能，见 wire.proto。没收到过的设备没有条目
 	features map[string]map[string]bool
-	pending      map[string]*pendingPair  // session -> 待确认配对
+	pending  map[string]*pendingPair // session -> 待确认配对
 	// stashed 暂存配对确认前到达的信令，按对端 device_id 归集
 	stashed map[string][]*pb.SignalMessage
 	active  *activeCode
@@ -285,6 +285,8 @@ func (m *Manager) SetLANEnabled(enabled bool) {
 func (m *Manager) reconnectLoop(ctx context.Context) {
 	t := time.NewTicker(10 * time.Second)
 	defer t.Stop()
+	features := time.NewTicker(time.Minute)
+	defer features.Stop()
 
 	for {
 		select {
@@ -292,6 +294,9 @@ func (m *Manager) reconnectLoop(ctx context.Context) {
 			return
 		case <-t.C:
 			m.connectPending(ctx)
+		case <-features.C:
+			// 功能声明不能只发一次：早到或切换连接时丢失后也能自行恢复。
+			m.BroadcastFeatures()
 		}
 	}
 }

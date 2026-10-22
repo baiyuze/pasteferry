@@ -2,6 +2,7 @@ package p2p_test
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"testing"
 	"time"
@@ -269,5 +270,51 @@ func TestConnectFromAnswererSideAlone(t *testing.T) {
 	case s := <-zoe.states:
 		t.Errorf("应答方不该主动改变状态，却变成了 %v", s)
 	case <-time.After(1500 * time.Millisecond):
+	}
+}
+
+// 两端一连上就发送功能声明；上层就绪回调慢一点也不能丢掉首条控制消息。
+func TestControlReceivesMessagesDuringReadyCallback(t *testing.T) {
+	for round := range 4 {
+		t.Run(fmt.Sprint(round), func(t *testing.T) {
+			r := newRelay()
+			received := map[string]chan *pb.PeerMessage{"alice": make(chan *pb.PeerMessage, 4), "bob": make(chan *pb.PeerMessage, 4)}
+			managers := map[string]*p2p.Manager{}
+			for _, id := range []string{"alice", "bob"} {
+				var m *p2p.Manager
+				m = p2p.NewManager(p2p.ManagerOptions{
+					SelfID: id, SendSignal: r.send(id),
+					OnState: func(peer string, state p2p.ConnState) {
+						if state != p2p.StateDirect && state != p2p.StateRelay {
+							return
+						}
+						if err := m.Send(peer, &pb.PeerMessage{Payload: &pb.PeerMessage_Features{Features: &pb.PeerFeatures{Features: []string{"send_files_v1"}}}}); err != nil {
+							t.Error(err)
+						}
+						time.Sleep(200 * time.Millisecond)
+					},
+					OnMessage: func(_ string, msg *pb.PeerMessage) { received[id] <- msg },
+				})
+				m.SetICEServers(nil)
+				managers[id] = m
+				r.register(id, m)
+				t.Cleanup(m.Close)
+			}
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+			if err := managers["alice"].Connect(ctx, "bob"); err != nil {
+				t.Fatal(err)
+			}
+			for _, id := range []string{"alice", "bob"} {
+				select {
+				case msg := <-received[id]:
+					if msg.GetFeatures() == nil {
+						t.Fatalf("%s missing features: %v", id, msg)
+					}
+				case <-ctx.Done():
+					t.Fatalf("%s lost the initial feature announcement", id)
+				}
+			}
+		})
 	}
 }
