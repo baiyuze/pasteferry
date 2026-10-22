@@ -76,6 +76,18 @@ the desktop client. Website visits reach Cloudflare and the hosting endpoint;
 they are not software installation or active-device counts. Consult the
 website provider's privacy policy for its network processing.
 
+The website also counts page views and download clicks by Beijing date, page
+path (without query strings), page language, release version, file and download
+source (Gitee or GitHub). These counters use no analytics cookies or persistent
+visitor IDs and retain no IP addresses or browser user agents. Random event IDs
+are retained for up to three days to deduplicate delivery; anonymous daily
+aggregates are retained indefinitely. The website's own counters honor Do Not
+Track and Global Privacy Control. Events are sent asynchronously and never
+block downloads. A click does not establish a completed download, installation
+or unique person. Direct Gitee downloads and historical mirror downloads cannot
+be reconstructed; website clicks overlap GitHub's release download counts and
+must not be added to them. Automatic app updates are outside these counters.
+
 The published client, network field list and [gateway protocol](design/official-gateway.md)
 can be audited. A private gateway's production data handling requires operator
 and deployment audit; open client source alone cannot prove it. See

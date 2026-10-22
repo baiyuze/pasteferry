@@ -844,7 +844,7 @@ C = {
                 "需要 GTK 3。在 Ubuntu 24.04 的 GNOME（Wayland）上实测过。",
             ],
         },
-        "mirror": {"lead": "在中国大陆下载慢？用 Gitee 国内镜像：", "setup": "安装程序", "portable": "便携版",
+        "mirror": {"lead": "默认从 Gitee 国内镜像下载。备用 GitHub 下载：", "setup": "安装程序", "portable": "便携版",
                    "apple": "Apple 芯片", "intel": "Intel 芯片", "universal": "通用版"},
         "more_h2": "其他",
         "more": [

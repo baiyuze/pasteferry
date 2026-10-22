@@ -78,7 +78,7 @@
 <section><h2>內容與機器識別碼</h2><p>內容與真實裝置名稱透過裝置間加密通道傳送。不收集檔名、路徑、使用者名稱、MAC、UA 或行為軌跡。原始系統識別碼不上傳；摘要只用於額度分組，並非不可偽造。</p></section>
 <section><h2>網路資訊與額度</h2><p>網路端點暫時可見路由和網路位址，官方統計庫及一般代理日誌不保存這些資訊。每日 100 MB 中繼額度，含上下行，北京時間午夜重設；直連不計入。啟用後用戶端只憑裝置簽章查詢自己的額度，不申請中繼，也不讀取機器識別碼。關閉官方服務會停止其請求、輪詢及通道。</p></section>
 <section><h2>檢查更新</h2><p>2.3.0 起，App 啟動一分鐘後和之後每天檢查一次新版本：從 GitHub 和 Gitee 下載簽過章的更新清單，請求裡不帶裝置 ID、帳號或其他識別資訊，這些服務只能看到一次普通的下載和網路位址。可以在「設定 → 關於」關閉自動檢查。新版本只有在你確認後才會安裝，而且安裝檔必須與隔空貼發布金鑰簽章的清單裡的校驗值一致。</p></section>
-<section><h2>網站與稽核</h2><p>本站使用既有的 Cloudflare Web Analytics，瀏覽量不代表軟體使用者數。用戶端、信令及 TURN 持續開源，網關協定和欄位公開；私有正式環境的儲存行為仍需部署稽核。</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
+<section><h2>網站與稽核</h2><p>本站使用 Cloudflare Web Analytics，並自行彙總官網瀏覽與下載點擊：日期、頁面路徑（不含查詢參數）、頁面語言、下載版本、檔案及來源（Gitee 或 GitHub）。不使用統計 Cookie 或持久訪客識別碼，不保存 IP 或瀏覽器 UA。隨機事件編號最多保留三天以去除重複，匿名每日彙總長期保留。尊重 Do Not Track 與 Global Privacy Control。點擊不代表下載完成、安裝量或人數，亦無法統計直接在 Gitee 下載的次數。用戶端、信令及 TURN 持續開源，網關協定和欄位公開；私有正式環境的儲存行為仍需部署稽核。</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
   <footer class="footer">
     <div class="wrap">
       <p>隔空貼以 GNU AGPL-3.0 授權開源。</p>
@@ -101,6 +101,7 @@
   </footer>
 
   <script src="../../assets/site.js?v=fb60f6e5ce" defer></script>
+  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
 </html>

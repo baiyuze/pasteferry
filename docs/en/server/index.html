@@ -162,11 +162,11 @@
             <div class="os-grid">
               <div class="os-steps">
                 <ol class="steps">
-                <li>Download <a href="https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-windows-amd64.zip">pasteferry-server-windows-amd64.zip</a> and choose Extract All.</li>
+                <li>Download <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-windows-amd64.zip">pasteferry-server-windows-amd64.zip</a> and choose Extract All.</li>
                 <li>Open the extracted folder and double-click <code>install.cmd</code>.<span class="aside">If you see "Windows protected your PC", click More info, then Run anyway; when User Account Control asks, click Yes. The server isn't code-signed yet, which is why Windows asks once.</span></li>
                 <li>Installation continues in a new window. The <code>ws://…/signal</code> address at the end is what you enter in the apps.</li>
                 </ol>
-                <a class="button" href="https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download the Windows server</a>
+                <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download the Windows server</a>
                 <ul class="points">
                 <li><strong>Runs as a Windows service:</strong> starts with Windows, no sign-in needed, no window. It appears as PasteFerry Server in Services.</li>
                 <li><strong>Firewall already allowed:</strong> the script adds an inbound rule for pasteferry-server.exe only, so there are no ports to open.</li>
@@ -228,7 +228,7 @@ In PasteFerry on each computer, set Settings &gt; Signaling server to:
                   <li>Open Terminal and run these lines:
                 <div class="code">
                   <button class="copy" type="button" data-done="Copied">Copy</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-macos.tar.gz
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-macos.tar.gz
 tar xzf pasteferry-server-macos.tar.gz
 cd pasteferry-server-macos
 ./install.sh</code></pre>
@@ -284,7 +284,7 @@ In PasteFerry on each computer, set Settings → Signaling server to:
                   <li>On the machine itself, or over ssh, run these lines:<span class="aside">On ARM, such as a Raspberry Pi with a 64-bit OS, replace <code>amd64</code> with <code>arm64</code>.</span>
                 <div class="code">
                   <button class="copy" type="button" data-done="Copied">Copy</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-linux-amd64.tar.gz
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-linux-amd64.tar.gz
 tar xzf pasteferry-server-linux-amd64.tar.gz
 cd pasteferry-server-linux-amd64
 sudo ./install.sh</code></pre>
@@ -428,6 +428,7 @@ Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768
   </footer>
 
   <script src="../../assets/site.js?v=fb60f6e5ce" defer></script>
+  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
 </html>

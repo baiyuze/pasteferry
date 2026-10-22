@@ -162,11 +162,11 @@
             <div class="os-grid">
               <div class="os-steps">
                 <ol class="steps">
-                <li>下載 <a href="https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-windows-amd64.zip">pasteferry-server-windows-amd64.zip</a>，按右鍵選擇「解壓縮全部」。</li>
+                <li>下載 <a href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-windows-amd64.zip">pasteferry-server-windows-amd64.zip</a>，按右鍵選擇「解壓縮全部」。</li>
                 <li>開啟解壓出來的資料夾，按兩下 <code>install.cmd</code>。<span class="aside">提示「Windows 已保護您的電腦」時，按「其他資訊」，再按「仍要執行」；彈出「使用者帳戶控制」時按「是」。伺服器仍未有程式碼簽署，所以會這樣詢問一次。</span></li>
                 <li>安裝會在新開啟的視窗裏進行。最後顯示的 <code>ws://…/signal</code> 就是用戶端要填的地址。</li>
                 </ol>
-                <a class="button" href="https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載 Windows 版伺服器</a>
+                <a class="button" href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載 Windows 版伺服器</a>
                 <p class="small">內地伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：<a href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-windows-amd64.zip">https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-windows-amd64.zip</a></p>
                 <ul class="points">
                 <li><strong>以 Windows 服務形式執行：</strong>開機就啟動，不用登入，也沒有視窗。在「服務」裏叫 PasteFerry Server。</li>
@@ -229,7 +229,7 @@
                   <li>開啟「終端機」，逐行執行：
                 <div class="code">
                   <button class="copy" type="button" data-done="已複製">複製</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-macos.tar.gz
+<pre><code>curl -LO https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-macos.tar.gz
 tar xzf pasteferry-server-macos.tar.gz
 cd pasteferry-server-macos
 ./install.sh</code></pre>
@@ -286,7 +286,7 @@ cd pasteferry-server-macos
                   <li>在這部機器上（或用 ssh 登入後）逐行執行：<span class="aside">ARM 裝置，例如安裝了 64 位元系統的 Raspberry Pi，請把 <code>amd64</code> 換成 <code>arm64</code>。</span>
                 <div class="code">
                   <button class="copy" type="button" data-done="已複製">複製</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-linux-amd64.tar.gz
+<pre><code>curl -LO https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.2/pasteferry-server-linux-amd64.tar.gz
 tar xzf pasteferry-server-linux-amd64.tar.gz
 cd pasteferry-server-linux-amd64
 sudo ./install.sh</code></pre>
@@ -431,6 +431,7 @@ sudo ./install.sh</code></pre>
   </footer>
 
   <script src="../../assets/site.js?v=fb60f6e5ce" defer></script>
+  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
 </html>

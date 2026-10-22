@@ -847,7 +847,7 @@ C = {
             ],
         },
         "more_h2": "其他",
-        "mirror": {"lead": "在中國大陸下載很慢的話，可以改用 Gitee 鏡像：", "setup": "安裝程式", "portable": "可攜版",
+        "mirror": {"lead": "預設從 Gitee 鏡像下載。備用 GitHub 下載：", "setup": "安裝程式", "portable": "可攜版",
                    "apple": "Apple 晶片", "intel": "Intel 晶片", "universal": "通用版"},
         "more": [
             ("伺服器", "兩台電腦在同一個網路裡不需要伺服器。跨網路時的幾種方式見<a href=\"{server}\">快速入門</a>，"

@@ -53,7 +53,8 @@ def shots_dir(code: str) -> str:
 # Cloudflare Web Analytics：不用 Cookie，只统计浏览量、来源、国家与设备。
 # token 会出现在每个页面的源码里，本来就是公开的，只能用来上报，看不到统计数据。
 # 统计原先绑定 GitHub Pages，新域名的统计需在 Cloudflare 后台配置。
-ANALYTICS = ("  <script type=\"module\" src=\"https://static.cloudflareinsights.com/beacon.min.js\" "
+ANALYTICS = ('  <script src="/assets/analytics.js" defer></script>\n'
+             "  <script type=\"module\" src=\"https://static.cloudflareinsights.com/beacon.min.js\" "
              "data-cf-beacon='{\"token\": \"7ee226baf4a949a397c4bfd69a9e7461\"}'></script>\n")
 
 # 教程页面，每种语言目录下各一份：快速开始，以及三种连接方式各一篇——
@@ -2105,10 +2106,10 @@ def download_page(code: str) -> str:
     mirror = d.get("mirror")
 
     def mirror_line(files: list[tuple[str, str]]) -> str:
-        """中文页面在按钮下面列出 Gitee 国内镜像上的同一批文件；其他语言没有这一行。"""
+        """Chinese pages offer GitHub as the alternative to the primary Gitee links."""
         if not mirror:
             return ""
-        anchors = " · ".join(f'<a href="{GITEE_DL}{name}">{label}</a>' for label, name in files)
+        anchors = " · ".join(f'<a href="{REPO}/releases/download/v{VERSION}/{name}">{label}</a>' for label, name in files)
         return f'\n                <p class="small">{mirror["lead"]}{anchors}</p>'
 
     def button(name: str, label: str, quiet: bool = False) -> str:
@@ -2721,6 +2722,11 @@ def versioned(path: Path, text: str) -> str:
 
 def write(path: Path, text: str) -> None:
     if path.suffix == ".html":
+        # Pin every asset URL to the displayed version so download attribution
+        # remains correct when a newer release is published before site deployment.
+        chinese = bool(re.search(r'<html[^>]+lang="zh(?:-CN|-TW|-HK)?"', text))
+        download_base = GITEE_DL if chinese else f"{REPO}/releases/download/v{VERSION}/"
+        text = text.replace(DL, download_base)
         text = text.replace('  <meta charset="utf-8">\n',
                             '  <meta charset="utf-8">\n' + GITHUB_PAGES_REDIRECT, 1)
         text = versioned(path, text)
