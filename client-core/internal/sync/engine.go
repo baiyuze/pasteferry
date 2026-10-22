@@ -38,15 +38,8 @@ import (
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
+// 分片大小与发送缓冲的水位见 p2p.ChunkWriter。
 const (
-	// DataChannel 单条消息的上限。SCTP 对过大的消息支持参差，
-	// 64 KiB 是各实现都稳妥的取值。
-	chunkSize = 60 * 1024
-	// 发送缓冲超过此值就暂停读取源文件，等它降下来再继续。
-	// 没有背压的话，传大文件会把内存吃光。
-	bufferHighWater = 1 << 20 // 1 MiB
-	bufferLowWater  = 256 << 10
-
 	// 预扫描的条目上限。超大目录全扫一遍会让复制动作明显卡顿，
 	// 超限时只报概要，进度条退化为未知总量。
 	maxScanEntries = 20000
@@ -506,7 +499,7 @@ func (e *Engine) pushTo(ctx context.Context, peer string, clip store.Clip) error
 	}
 
 	start := time.Now()
-	w := newChunkWriter(dc, func(sent int64) {
+	w := p2p.NewChunkWriter(dc, func(sent int64) {
 		e.emitProgress(clip.ID, sent, clip.TotalSize, start)
 	})
 

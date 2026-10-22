@@ -1,6 +1,7 @@
 package p2p
 
 import (
+	"io"
 	"sync"
 
 	"github.com/pion/webrtc/v4"
@@ -51,6 +52,28 @@ func NewStream(dc *webrtc.DataChannel) *Stream {
 // Chunks 返回按到达顺序排列的数据分片。
 // 通道在对端关闭数据流后关闭，消费者据此得知传输结束。
 func (s *Stream) Chunks() <-chan []byte { return s.queue }
+
+// Reader 把分片拼回连续的字节流。对端关闭数据流后读到 io.EOF；
+// 消费者自己判断内容是否完整（隔空传送靠帧流末尾的 end 帧）。
+func (s *Stream) Reader() io.Reader { return &streamReader{chunks: s.queue} }
+
+type streamReader struct {
+	chunks <-chan []byte
+	buf    []byte
+}
+
+func (r *streamReader) Read(p []byte) (int, error) {
+	for len(r.buf) == 0 {
+		chunk, ok := <-r.chunks
+		if !ok {
+			return 0, io.EOF
+		}
+		r.buf = chunk
+	}
+	n := copy(p, r.buf)
+	r.buf = r.buf[n:]
+	return n, nil
+}
 
 func (s *Stream) Label() string { return s.dc.Label() }
 
