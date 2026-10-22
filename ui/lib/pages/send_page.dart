@@ -203,7 +203,12 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
     final ids = {for (final d in online) d.id};
     final byId = {for (final d in online) d.id: d};
     _slots.removeWhere((id, _) => !ids.contains(id));
-    for (final d in [...online]..sort((a, b) => rank(a).compareTo(rank(b)))) {
+    // online 已按名字排好；List.sort 不保证稳定，排名相同时再按原来的顺序比
+    final order = {for (var i = 0; i < online.length; i++) online[i].id: i};
+    for (final d in [...online]..sort((a, b) {
+      final r = rank(a).compareTo(rank(b));
+      return r != 0 ? r : order[a.id]!.compareTo(order[b.id]!);
+    })) {
       final inner = d.lanReachable;
       final cur = _slots[d.id];
       if (cur != null && cur.$1 == inner) continue;
@@ -224,8 +229,10 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
   }
 
   Widget _radar(BuildContext context, AppState state) {
-    final online = state.peers.where((d) => d.online).toList();
-    final offline = state.peers.where((d) => !d.online).toList();
+    // 后台服务给的设备列表没有固定顺序：按名字排，雷达上的位置和离线那一行每次都一样
+    int byName(Device a, Device b) => a.name.toLowerCase().compareTo(b.name.toLowerCase());
+    final online = state.peers.where((d) => d.online).toList()..sort(byName);
+    final offline = state.peers.where((d) => !d.online).toList()..sort(byName);
     _assignSlots(online);
     final overflow = online.where((d) => !_slots.containsKey(d.id)).toList();
     return LayoutBuilder(builder: (context, box) => _radarIn(context, state, box.biggest, online, offline, overflow));
