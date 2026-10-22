@@ -163,6 +163,8 @@ void main() {
     (false, const Size(1180, 720)),
     (false, const Size(960, 640)),
     (false, const Size(760, 520)),
+    (false, const Size(760, 760)),
+    (true, const Size(760, 520)),
     (true, const Size(1180, 720)),
   ]) {
     testWidgets(stacked ? '设置里选了上下排，列表在雷达下面' : '默认左右排，列表在雷达右边（${size.width.round()} 宽）', (tester) async {
@@ -185,6 +187,14 @@ void main() {
         expect(tabs.dx, greaterThan(radar.dx), reason: '列表在雷达右边');
         expect(tabs.dy, lessThan(radar.dy), reason: '列表从顶上开始');
       }
+      final paints = find.byWidgetPredicate((w) => w is CustomPaint && w.painter.runtimeType.toString() == '_SendRadarPainter');
+      expect(paints, findsOneWidget);
+      final dynamic painter = tester.widget<CustomPaint>(paints).painter;
+      final Size inner = painter.inner;
+      final Size outer = painter.outer;
+      expect(inner.width, inner.height, reason: '内圈必须保持正圆');
+      expect(outer.width, outer.height, reason: '外圈必须保持正圆');
+      expect(tester.takeException(), isNull);
       // 雷达上的设备名字不压到中间的本机，也不互相压
       final selfRect = tester.getRect(self);
       final names = [

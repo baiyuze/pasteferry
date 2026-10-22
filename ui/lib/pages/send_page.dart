@@ -248,18 +248,16 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
     final selfPlatform = state.self?.platform ?? Platform.operatingSystem.replaceFirst('macos', 'darwin');
     final hasOuter = _slots.values.any((s) => !s.$1);
 
-    // 轨道的大小：外圈接近正圆，横纵比不超过 1.35，也不比宽度高。
-    // 太矮时横向至少 190，内圈斜角上的设备才不会压到中间的本机。
-    // 雷达这一栏很窄时（小窗口里列表仍在右边）：设备名字缩窄，轨道可以竖着拉长、内圈放大，同样不压到本机
-    final narrow = space.width < 420;
-    final nodeW = (space.width * 0.3).clamp(96.0, _SendNode.width);
-    final innerScale = narrow ? 0.74 : _innerScale;
-    final below = (overflow.isNotEmpty ? 40.0 : 0) + (offline.isNotEmpty ? 28.0 : 0);
-    final maxRy = (space.height - below) / 2 - 22;
-    final outerRx = math.min(math.max(maxRy * 1.35, 190.0), space.width / 2 - nodeW / 2);
-    final outerRy = math.max(80.0, math.min(maxRy, narrow ? math.max(outerRx, 190.0) : outerRx));
-    final innerRx = outerRx * innerScale;
-    final innerRy = outerRy * innerScale;
+    // 在至少 420 宽的逻辑画布上排布，再整体等比缩小；圈和节点使用同一变换。
+    // 小窗口仍左右排，但不会把圆拉成长椭圆，也不靠压缩节点间距塞进窄栏。
+    final canvasWidth = math.max(space.width, 420.0);
+    final nodeW = (canvasWidth * 0.3).clamp(110.0, _SendNode.width);
+    final below = (overflow.isNotEmpty ? 40.0 : 0) + (offline.isNotEmpty ? 40.0 : 0);
+    final maxR = math.max(146.0, (space.height - below) / 2 - 22);
+    final outerRx = math.min(maxR, canvasWidth / 2 - nodeW / 2);
+    final outerRy = outerRx;
+    final innerRx = outerRx * _innerScale;
+    final innerRy = innerRx;
 
     final radar = DropTarget(
       enable: !_dialogOpen,
@@ -378,7 +376,12 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: outerRy * 2 + 44, child: radar),
+        Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: SizedBox(width: canvasWidth, height: outerRy * 2 + 44, child: radar),
+          ),
+        ),
         if (overflow.isNotEmpty)
           Padding(
             padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.xs, Insets.xl, 0),

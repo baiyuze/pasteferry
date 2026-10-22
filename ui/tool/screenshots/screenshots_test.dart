@@ -461,6 +461,15 @@ void main() {
     });
   }
 
+  for (final (name, size) in [
+    ('send-small-short', const Size(760, 520)),
+    ('send-small-tall', const Size(760, 760)),
+  ]) {
+    testWidgets(name, (tester) async {
+      await _shoot(tester, name, state: _sendDemo(), section: Section.send, settle: false, window: size);
+    });
+  }
+
   testWidgets('send-dialog-dark', (tester) async {
     await _shoot(tester, 'send-dialog-dark', state: _sendDemo(), section: Section.send, settle: false,
         brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
