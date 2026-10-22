@@ -499,6 +499,7 @@ ICONS = {
     "clock": '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
     "globe": '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/>',
     "lock": '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+    "send": '<path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/>',
 }
 
 
@@ -561,7 +562,7 @@ def home(code: str) -> str:
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="{FEATURES}#quick-paste">{keys(f["badge"])}</a>
+        <a class="release-note" href="{FEATURES}#send">{keys(f["badge"])}</a>
         <h1 class="display">{c["h1"]}</h1>
         <p class="lede">{c["lede"]}</p>{cta(c, "", START, tour_ui["watch"])}
         <div class="stage" data-play role="img" aria-label="{esc(c["stage_label"])}">
@@ -591,9 +592,20 @@ def home(code: str) -> str:
       </div>
     </section>
 
-    <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
+        <h2 id="send-title">{f["home_send_h2"]}</h2>
+        <p class="intro">{f["home_send_intro"]}</p>
+        <figure class="spot wide" data-reveal>
+          <img src="{up}{shots}send-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["send_alt"])}">
+        </figure>
+        <p class="more"><a href="{FEATURES}#send">{f["home_send_link"]}</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
         <h2 id="qp-title">{keys(f["home_qp_h2"])}</h2>
         <p class="intro">{keys(f["home_qp_intro"])}</p>
         <figure class="spot" data-reveal>
@@ -777,7 +789,6 @@ def features_page(code: str) -> str:
         for n, u, d in f["numbers"])
     hits = "".join(f"<li>{row_icon('file' if i == 0 else 'text')}<span>{esc(h)}</span></li>"
                    for i, h in enumerate(f["search_hits"]))
-    new = f'<span class="new">{f["new_tag"]}</span>'
     n = f["net_label"]
 
     return f"""<!doctype html>
@@ -821,9 +832,23 @@ def features_page(code: str) -> str:
       </div>
     </section>
 
-    <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
+    <section class="f-section" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
+        <h2 class="f-h2" id="send-title">{f["send_h2"]}</h2>
+        <p class="f-intro">{f["send_intro"]}</p>
+        <figure class="f-shot" data-reveal>
+          <img src="{shots}send-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["send_alt"])}">
+        </figure>
+        <ul class="facts">
+{facts(f["send_points"])}
+        </ul>
+        <p class="f-note">{f["send_note"]}</p>
+      </div>
+    </section>
+
+    <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
         <h2 class="f-h2" id="qp-title">{keys(f["qp_h2"])}</h2>
         <p class="f-intro">{keys(f["qp_intro"])}</p>
       </div>
@@ -842,7 +867,6 @@ def features_page(code: str) -> str:
 
     <section class="f-section" id="favorites" aria-labelledby="fav-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
         <h2 class="f-h2" id="fav-title">{f["fav_h2"]}</h2>
         <p class="f-intro">{f["fav_intro"]}</p>
         <figure class="f-shot" data-reveal>
@@ -859,12 +883,12 @@ def features_page(code: str) -> str:
         <h2 class="f-h2" id="details-title">{f["details_h2"]}</h2>
         <div class="bento">
           <article class="cell wide" data-reveal data-filter>
-            <h3>{f["filter_title"]} {new}</h3>
+            <h3>{f["filter_title"]}</h3>
             <p>{f["filter_text"]}</p>
             {filter_demo(f, app)}
           </article>
           <article class="cell wide hover-cell" data-reveal>
-            <h3>{f["hover_title"]} {new}</h3>
+            <h3>{f["hover_title"]}</h3>
             <p>{f["hover_text"]}</p>
             <div class="crop"><img src="{shots}hover-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(f["hover_alt"])}"></div>
           </article>

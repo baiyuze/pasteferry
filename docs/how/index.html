@@ -32,7 +32,7 @@
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../assets/site.css?v=ef9a2f2f7c">
+  <link rel="stylesheet" href="../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
 </head>
 <body>
@@ -198,6 +198,7 @@
           <div><dt>对方睡眠、断网或重启</dt><dd>连接悄悄断了也能发现，立即关闭重连。这期间复制的内容会记下来，连上后补发到对方的复制记录里，但不会覆盖对方此刻剪贴板里的内容。</dd></div>
           <div><dt>服务器断开</dt><dd>自动重连，间隔从 1 秒开始翻倍、最长 30 秒，并带随机抖动，避免一群设备同时重连。同一网络里的设备不受影响，照常同步。</dd></div>
           <div><dt>文件太大</dt><dd>超过上限的只同步一条记录，需要时再拉取。拉取时源文件已经被删，会明确告诉你，而不是不明不白地失败。</dd></div>
+          <div><dt>传文件时断开</dt><dd>隔空传送传到一半断网、睡眠或程序退出，30 分钟内连上会从断点自动接着传；更晚的话点「继续」，同样从断点开始。每个文件都校验，不完整的不会出现在保存位置。</dd></div>
           <div><dt>粘贴到只认纯文本的地方</dt><dd>从网页复制的带格式文字会同时写入 HTML 和纯文本两份，粘贴到哪里都不会冒出标签。</dd></div>
           <div><dt>文件名在 Windows 上不合法</dt><dd>Mac 上可以用的冒号、问号等字符，收到时换成对应的全角字符，名字照样看得懂；只差大小写的两个文件也不会互相覆盖。</dd></div>
           <div><dt>复制的是密码</dt><dd>Windows 上，密码管理器复制的内容会带一个「不要记录」的标记，隔空贴看到就跳过：不同步，也不进复制记录。</dd></div>
@@ -225,6 +226,7 @@
             <tr><th scope="row">加密与身份</th><td>DTLS 端到端加密；设备身份为 Ed25519 密钥；信令消息逐条签名</td></tr>
             <tr><th scope="row">配对</th><td>6 位配对码，5 分钟内有效，字符集去掉了 0/O、1/I 等易混字符；配对时人工核对安全指纹</td></tr>
             <tr><th scope="row">自动同步上限</th><td>默认 50 MB，可在 1 MB 到 1 GB 之间调整</td></tr>
+            <tr><th scope="row">隔空传送</th><td>发给一台设备，不限大小，单个文件和整个文件夹都行；与同步共用端到端加密的连接；断开后从断点续传，每个文件用 SHA-256 校验</td></tr>
             <tr><th scope="row">记录保留</th><td>默认 3 天，可在 1 小时到 30 天之间调整，到期自动清理</td></tr>
             <tr><th scope="row">实测速度</th><td>局域网直连传输 20 MB 文件约 330 毫秒，校验和一致</td></tr>
             <tr><th scope="row">技术栈</th><td>后台服务与服务器用 Go（Windows 上纯 Go 调用 Win32，Linux 上纯 Go 走 X11 协议），界面用 Flutter（三个系统共用一套代码），消息定义用 Protocol Buffers</td></tr>

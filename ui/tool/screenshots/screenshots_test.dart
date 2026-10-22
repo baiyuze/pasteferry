@@ -89,6 +89,9 @@ Future<void> _loadFonts() async {
   final icons = FontLoader('packages/cupertino_icons/CupertinoIcons')
     ..addFont(rootBundle.load('packages/cupertino_icons/assets/CupertinoIcons.ttf'));
   await icons.load();
+  // 官方服务等少数地方用的是 Material 图标
+  final material = FontLoader('MaterialIcons')..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
+  await material.load();
 }
 
 final _now = DateTime.now();
@@ -182,7 +185,7 @@ AppState _demo({LinkState link = LinkState.online,
     serviceState: service,
     pendingPairing: pending,
     status: Status(
-      version: '2.4.1',
+      version: '2.5.0',
       deviceName: 'MacBook Pro',
       signalingConnected: link == LinkState.online && server.isNotEmpty,
       serverConfigured: server.isNotEmpty,
@@ -445,25 +448,22 @@ void main() {
     await _shootPicker(tester, 'card-picker-search-dark', query: 'docker');
   });
 
+  // 窗口要够宽，传输列表才在雷达右边（默认的排法）
   for (final dark in [false, true]) {
     testWidgets(dark ? 'send-dark' : 'send', (tester) async {
       await _shoot(tester, dark ? 'send-dark' : 'send',
           state: _sendDemo(),
           section: Section.send,
           brightness: dark ? Brightness.dark : Brightness.light,
+          window: const Size(1180, 720),
           settle: false, // 雷达的波纹一直在动
           arrange: () async => tester.pump(const Duration(milliseconds: 900)));
     });
   }
 
-  testWidgets('send-wide', (tester) async {
-    await _shoot(tester, 'send-wide', state: _sendDemo(), section: Section.send, settle: false,
-        window: const Size(1180, 720), arrange: () async => tester.pump(const Duration(milliseconds: 900)));
-  });
-
-  testWidgets('send-dialog', (tester) async {
-    await _shoot(tester, 'send-dialog', state: _sendDemo(), section: Section.send, settle: false,
-        arrange: () async {
+  testWidgets('send-dialog-dark', (tester) async {
+    await _shoot(tester, 'send-dialog-dark', state: _sendDemo(), section: Section.send, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
       showDialog<void>(
         context: tester.element(find.byType(Shell)),
         builder: (_) => const SendDialog(deviceId: 'air'),

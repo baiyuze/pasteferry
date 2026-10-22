@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>功能：快捷粘贴、收藏、跨设备复制记录 — 隔空贴</title>
-  <meta name="description" content="隔空贴在 Mac、Windows 与 Linux 之间同步剪贴板：复制文字、图片、文件、文件夹，到另一台直接粘贴。按 ⌥V 或 Alt+V 呼出快捷粘贴，常用内容可以收藏，复制记录能搜索、按类型筛选。">
+  <title>功能：隔空传送、快捷粘贴、收藏、跨设备复制记录 — 隔空贴</title>
+  <meta name="description" content="隔空贴在 Mac、Windows 与 Linux 之间同步剪贴板：复制文字、图片、文件、文件夹，到另一台直接粘贴。按 ⌥V 或 Alt+V 呼出快捷粘贴，常用内容可以收藏，复制记录能搜索、按类型筛选；文件再大，也能用隔空传送直接发到另一台。">
   <link rel="canonical" href="https://pasteferry.cc/features/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/features/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/features/">
@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="隔空贴">
-  <meta property="og:title" content="功能：快捷粘贴、收藏、跨设备复制记录 — 隔空贴">
-  <meta property="og:description" content="隔空贴在 Mac、Windows 与 Linux 之间同步剪贴板：复制文字、图片、文件、文件夹，到另一台直接粘贴。按 ⌥V 或 Alt+V 呼出快捷粘贴，常用内容可以收藏，复制记录能搜索、按类型筛选。">
+  <meta property="og:title" content="功能：隔空传送、快捷粘贴、收藏、跨设备复制记录 — 隔空贴">
+  <meta property="og:description" content="隔空贴在 Mac、Windows 与 Linux 之间同步剪贴板：复制文字、图片、文件、文件夹，到另一台直接粘贴。按 ⌥V 或 Alt+V 呼出快捷粘贴，常用内容可以收藏，复制记录能搜索、按类型筛选；文件再大，也能用隔空传送直接发到另一台。">
   <meta property="og:url" content="https://pasteferry.cc/features/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
   <meta property="og:image:width" content="1200">
@@ -38,7 +38,7 @@
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../assets/site.css?v=ef9a2f2f7c">
+  <link rel="stylesheet" href="../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <link rel="stylesheet" href="../assets/features.css?v=7166cbdbe2">
 </head>
@@ -93,7 +93,7 @@
         </div>
       </div>
       <figure class="f-hero-shot" data-zoom>
-        <img src="../assets/screenshots/history-dark.png?v=32bd85faf8" width="2112" height="1472" alt="隔空贴的复制记录：侧边栏有复制记录、收藏、设备、设置，列表里是来自不同电脑的文字、图片、文件和链接">
+        <img src="../assets/screenshots/history-dark.png?v=13f40e010b" width="2112" height="1472" alt="隔空贴的复制记录：侧边栏有复制记录、收藏、隔空传送、设备、设置，列表里是来自不同电脑的文字、图片、文件和链接">
       </figure>
     </section>
 
@@ -114,9 +114,25 @@
       </div>
     </section>
 
+    <section class="f-section" id="send" aria-labelledby="send-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.5 新功能</span></p>
+        <h2 class="f-h2" id="send-title">文件再大，<br>拖过去就行。</h2>
+        <p class="f-intro">打开「隔空传送」，同一网络和别处的电脑都在雷达上。把文件或文件夹拖到其中一台，就直接发过去：不经网盘，不用数据线，也不进复制记录。</p>
+        <figure class="f-shot" data-reveal>
+          <img src="../assets/screenshots/send-dark.png?v=6e2d3b418e" width="2552" height="1632" loading="lazy" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度">
+        </figure>
+        <ul class="facts">
+          <li><h3>不限大小</h3><p>几个 GB 的视频、上万个文件的文件夹，一次发过去。列表里能看到进度、速度和剩余时间。</p></li>
+          <li><h3>断了接着传</h3><p>断网、睡眠或程序退出，连上后从断点继续。每个文件都校验，不完整的不会出现。</p></li>
+          <li><h3>收到的放在一起</h3><p>默认存到「下载」，可以在设置里改。点一下就能在访达或文件夹里找到。</p></li>
+        </ul>
+        <p class="f-note">跨网络也能发：能直连就直连；只能走官方中转时，每天有 100 MB 额度，发之前会先问你，用自己的服务器中转则没有这个限制。两台都要是 2.5 或更新的版本。</p>
+      </div>
+    </section>
+
     <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">2.4 新功能</span></p>
         <h2 class="f-h2" id="qp-title">按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>，<br>最近复制的都在手边。</h2>
         <p class="f-intro">不用切到隔空贴，也不用翻聊天记录。在任何 App 里按一下快捷键，选一条，它就粘贴到你刚才的光标处。</p>
       </div>
@@ -152,11 +168,10 @@
 
     <section class="f-section" id="favorites" aria-labelledby="fav-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">2.4 新功能</span></p>
         <h2 class="f-h2" id="fav-title">常用的，<br>收藏起来。</h2>
         <p class="f-intro">周报模板、会议链接、常用回复，点一下星标就另存一份。收藏不会过期，清空复制记录也还在。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../assets/screenshots/favorites-dark.png?v=dc0e0d2428" width="2112" height="1472" loading="lazy" alt="收藏页：周报模板、常用回复、下载链接、营业执照.pdf 等五条收藏，每条右边是蓝色的星标">
+          <img src="../assets/screenshots/favorites-dark.png?v=fec56b200e" width="2112" height="1472" loading="lazy" alt="收藏页：周报模板、常用回复、下载链接、营业执照.pdf 等五条收藏，每条右边是蓝色的星标">
         </figure>
         <ul class="facts">
           <li><h3>不会被清理</h3><p>复制记录到期自动清理，收藏一直留着。</p></li>
@@ -171,14 +186,14 @@
         <h2 class="f-h2" id="details-title">细节里，<br>也替你想好了。</h2>
         <div class="bento">
           <article class="cell wide" data-reveal data-filter>
-            <h3>链接单独一栏 <span class="new">新</span></h3>
+            <h3>链接单独一栏</h3>
             <p>复制记录按类型筛选：文本、链接、图片、文件、收藏，一点就分开。</p>
             <div class="mini" aria-hidden="true"><div class="seg"><span data-tab="all" class="on">全部</span><span data-tab="text">文本</span><span data-tab="link">链接</span><span data-tab="image">图片</span><span data-tab="file">文件</span><span data-tab="fav">收藏</span></div><ul class="mini-rows"><li data-kind="text"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">会议改到周四下午 3 点</span></li><li data-kind="link"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span></li><li data-kind="image"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">图片 · 2.4 MB</span></li><li data-kind="file"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span class="t">季度汇报-终版.key</span></li><li data-kind="link" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://pasteferry.cc/download/</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li><li data-kind="text" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">周报模板：本周完成 / 下周计划</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li></ul></div>
           </article>
           <article class="cell wide hover-cell" data-reveal>
-            <h3>停一下，就看到全文 <span class="new">新</span></h3>
+            <h3>停一下，就看到全文</h3>
             <p>鼠标在一条上停半秒，弹出完整的文字、放大的图片或全部文件名，不用点开。</p>
-            <div class="crop"><img src="../assets/screenshots/hover-dark.png?v=223cd1048e" width="2112" height="1472" loading="lazy" alt="鼠标停在一条会议记录上，弹出的提示框显示它的全文：负责人、发布窗口和监控要求"></div>
+            <div class="crop"><img src="../assets/screenshots/hover-dark.png?v=e47cd24f20" width="2112" height="1472" loading="lazy" alt="鼠标停在一条会议记录上，弹出的提示框显示它的全文：负责人、发布窗口和监控要求"></div>
           </article>
           <article class="cell" data-reveal data-search>
             <h3>三天里复制的，搜得到</h3>

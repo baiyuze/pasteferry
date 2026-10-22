@@ -59,7 +59,13 @@
 - **按大小分流**：50 MB 以内（可调）复制时就传好；更大的只同步一条记录，需要时点一下再取。
 - **对方离线也不丢**：这期间复制的，连上后补进对方的复制记录。
 
-### 快捷粘贴（2.4 新增）
+### 隔空传送（2.5 新增）
+
+- 打开「隔空传送」，配对过的电脑都在雷达上。把文件或整个文件夹拖到其中一台，就直接发过去。
+- **不限大小**：能看到进度、速度和剩余时间；断了会从断点接着传，每个文件用 SHA-256 校验。
+- 收到的文件默认存到「下载」（可以改），不进复制记录。两台都要是 2.5 或更新的版本。
+
+### 快捷粘贴
 
 - 在任何 App 里按 <kbd>⌥V</kbd>（Windows、Linux 上是 <kbd>Alt</kbd>+<kbd>V</kbd>），复制记录出现在屏幕中间。
 - 打几个字搜索，**中文可以打拼音**：`huiyi` 或 `hy` 都能找到「会议」。
@@ -142,7 +148,7 @@ Mac 版还没有经过 Apple 公证，Windows 版还没有代码签名：Mac 上
 - [排障](guide/troubleshooting.zh-CN.md)与已知限制
 - 图文教程：[快速开始](https://pasteferry.cc/start/) · [官方服务](https://pasteferry.cc/official/) · [同一网络](https://pasteferry.cc/lan/) · [公网服务器](https://pasteferry.cc/cloud/) · [Tailscale](https://pasteferry.cc/tailscale/)
 - [服务器部署说明](server/deploy/README.md)、[从源码构建](guide/building.zh-CN.md)
-- 技术方案：[多出口网络的 NAT 打洞](design/nat-traversal.md)、[局域网直连](design/lan-mode.md)、[快捷粘贴与收藏](design/quick-paste-and-favorites.md)、[Windows 客户端](design/windows-client.md)
+- 技术方案：[多出口网络的 NAT 打洞](design/nat-traversal.md)、[局域网直连](design/lan-mode.md)、[快捷粘贴与收藏](design/quick-paste-and-favorites.md)、[隔空传送](design/send-files.md)、[Windows 客户端](design/windows-client.md)
 - [隐私说明](PRIVACY.md)、[安全说明](SECURITY.md)、[官方服务的公开协议](design/official-gateway.md)
 - [更新记录](CHANGELOG.md)
 

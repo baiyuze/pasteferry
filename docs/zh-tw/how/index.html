@@ -32,7 +32,7 @@
   <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../../assets/site.css?v=ef9a2f2f7c">
+  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
 </head>
 <body>
@@ -198,6 +198,7 @@
           <div><dt>對方睡眠、斷線或重新開機</dt><dd>連線悄悄斷了也能察覺，會立即關閉並重新連線。這段期間複製的內容會先記下來，連上後補送到對方的複製記錄裡，但不會覆蓋對方當下剪貼簿裡的內容。</dd></div>
           <div><dt>伺服器斷線</dt><dd>自動重新連線，間隔從 1 秒開始加倍、最長 30 秒，並加上隨機抖動，避免一大群裝置同時重連。同一個網路裡的裝置不受影響，照常同步。</dd></div>
           <div><dt>檔案太大</dt><dd>超過上限的只同步一筆記錄，需要時再拉取。拉取時如果原始檔案已經被刪除，會明確告訴你，而不是莫名其妙地失敗。</dd></div>
+          <div><dt>傳檔案時中斷</dt><dd>隔空傳送傳到一半斷網、睡眠或程式結束，30 分鐘內連上會從中斷處自動接著傳；更晚的話點「繼續」，同樣從中斷處開始。每個檔案都會校驗，不完整的不會出現在儲存位置。</dd></div>
           <div><dt>貼到只接受純文字的地方</dt><dd>從網頁複製的帶格式文字，會同時寫入 HTML 和純文字兩份，貼到哪裡都不會冒出標籤。</dd></div>
           <div><dt>檔名在 Windows 上不合法</dt><dd>Mac 上可以用的冒號、問號等字元，收到時會換成對應的全形字元，檔名照樣看得懂；只差在大小寫的兩個檔案也不會互相覆蓋。</dd></div>
           <div><dt>複製的是密碼</dt><dd>在 Windows 上，密碼管理工具複製的內容會帶一個「不要記錄」的標記，隔空貼看到就跳過：不同步，也不會進入複製記錄。</dd></div>
@@ -225,6 +226,7 @@
             <tr><th scope="row">加密與身分</th><td>DTLS 端對端加密；裝置身分為 Ed25519 金鑰；信令訊息逐則簽章</td></tr>
             <tr><th scope="row">配對</th><td>6 碼配對碼，5 分鐘內有效，字元集去掉了 0/O、1/I 等容易混淆的字元；配對時人工核對安全指紋</td></tr>
             <tr><th scope="row">自動同步上限</th><td>預設 50 MB，可在 1 MB 到 1 GB 之間調整</td></tr>
+            <tr><th scope="row">隔空傳送</th><td>傳給一台裝置，不限大小，單一檔案和整個資料夾都可以；與同步共用端對端加密的連線；中斷後從中斷處續傳，每個檔案用 SHA-256 校驗</td></tr>
             <tr><th scope="row">記錄保留</th><td>預設 3 天，可在 1 小時到 30 天之間調整，到期自動清除</td></tr>
             <tr><th scope="row">實測速度</th><td>區域網路直連傳輸 20 MB 檔案約 330 毫秒，檢查碼一致</td></tr>
             <tr><th scope="row">技術堆疊</th><td>背景服務與伺服器用 Go（Windows 上以純 Go 呼叫 Win32，Linux 上以純 Go 走 X11 協定），介面用 Flutter（三個系統共用一套程式碼），訊息定義用 Protocol Buffers</td></tr>

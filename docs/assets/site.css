@@ -2733,6 +2733,11 @@ kbd {
   width: 100%;
 }
 
+/* 隔空传送的截图是更宽的窗口 */
+.spot.wide {
+  max-width: 58rem;
+}
+
 /* 截图上方的两颗键帽：⌥ V */
 .spot-keys {
   display: flex;

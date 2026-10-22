@@ -39,7 +39,7 @@
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../assets/site.css?v=ef9a2f2f7c">
+  <link rel="stylesheet" href="../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
@@ -139,7 +139,7 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="features/#quick-paste">New in 2.4: quick paste with <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> →</a>
+        <a class="release-note" href="features/#send">New in 2.5: Send Files, straight to your other computer →</a>
         <h1 class="display">Copy on this computer.<br>Paste on that one.</h1>
         <p class="lede">Mac, Windows and Linux. Text, images, files, whole folders. No shared account required. Now connect across networks by enabling official access, with no server to host. Direct connections first, end-to-end encryption throughout.</p>
         <div class="cta">
@@ -175,9 +175,20 @@
       </div>
     </section>
 
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">New in 2.5</span></p>
+        <h2 id="send-title">Drag it over.<br>It’s there.</h2>
+        <p class="intro">Drop files or whole folders onto a computer on the radar and they go straight there. Any size, resumed if the connection drops, and kept out of your history.</p>
+        <figure class="spot wide" data-reveal>
+          <img src="../assets/screenshots/en/send-dark.png?v=5d429f895e" width="2552" height="1632" loading="lazy" alt="The Send Files page: a radar with this Mac in the middle and devices on the same network and elsewhere around it; on the right, received files, with a folder arriving and its progress and speed">
+        </figure>
+        <p class="more"><a href="features/#send">More about Send Files →</a></p>
+      </div>
+    </section>
+
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">New in 2.4</span></p>
         <h2 id="qp-title">Press <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>.<br>Everything you copied, right there.</h2>
         <p class="intro">Press it in any app and your clipboard history appears in the middle of the screen. Press a number or Return and the item is pasted where you were typing. Keep the things you reuse in Favorites.</p>
         <figure class="spot" data-reveal>
@@ -195,14 +206,14 @@
         <h2 id="grid-title">More than a shared clipboard.</h2>
         <ul class="tiles">
           <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
-            <h3>Quick paste <span class="new">New</span></h3>
-            <p>Press <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> for your history; pick an item and it’s pasted.</p>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
+            <h3>Send Files <span class="new">New</span></h3>
+            <p>Drop files or folders onto another computer. Any size.</p>
           </li>
           <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
-            <h3>Favorites <span class="new">New</span></h3>
-            <p>Keep a copy of what you reuse. It never expires.</p>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
+            <h3>Quick paste</h3>
+            <p>Press <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> for your history; pick an item and it’s pasted.</p>
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
@@ -211,8 +222,8 @@
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-            <h3>History</h3>
-            <p>Everything copied on every device, searchable and filterable.</p>
+            <h3>History and favorites</h3>
+            <p>Everything copied on every device, searchable, with favorites kept for good.</p>
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>

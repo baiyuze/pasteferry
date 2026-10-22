@@ -59,7 +59,13 @@ With PasteFerry you pair two computers once. After that, copy on one and paste o
 - **Size-aware transfer.** Anything under 50 MB (adjustable) is sent as you copy; larger files sync as a record you fetch when you need them.
 - **Nothing lost while offline.** What you copy meanwhile lands in the other computer's history once it's back.
 
-### Quick paste (new in 2.4)
+### Send Files (new in 2.5)
+
+- Open **Send Files** and your paired computers appear on a radar. Drop files or whole folders onto one and they go straight to it.
+- **Any size.** Progress, speed and time left are shown; if the connection drops, the transfer resumes where it stopped, and every file is checked with SHA-256.
+- Received files go to Downloads (changeable) and stay out of your clipboard history. Both computers need 2.5 or later.
+
+### Quick paste
 
 - Press <kbd>⌥V</kbd> (<kbd>Alt</kbd>+<kbd>V</kbd> on Windows and Linux) in any app and your history appears in the middle of the screen.
 - Type to search — Chinese text matches by pinyin, too.
@@ -142,7 +148,7 @@ Self-hosting takes one install command; see the [server deployment guide](server
 - [Troubleshooting](guide/troubleshooting.md) and known limitations
 - Guides with screenshots: [quick start](https://pasteferry.cc/en/start/) · [official service](https://pasteferry.cc/en/official/) · [same network](https://pasteferry.cc/en/lan/) · [public server](https://pasteferry.cc/en/cloud/) · [Tailscale](https://pasteferry.cc/en/tailscale/)
 - [Server deployment](server/deploy/README.md), [building from source](guide/building.md)
-- Design notes (Chinese): [NAT traversal on multi-uplink networks](design/nat-traversal.md), [local network mode](design/lan-mode.md), [quick paste and favorites](design/quick-paste-and-favorites.md), [Windows client](design/windows-client.md)
+- Design notes (Chinese): [NAT traversal on multi-uplink networks](design/nat-traversal.md), [local network mode](design/lan-mode.md), [quick paste and favorites](design/quick-paste-and-favorites.md), [Send Files](design/send-files.md), [Windows client](design/windows-client.md)
 - [Privacy](PRIVACY.md), [security](SECURITY.md), [official service protocol](design/official-gateway.md)
 - [Changelog](CHANGELOG.md)
 

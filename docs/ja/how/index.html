@@ -32,7 +32,7 @@
   <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../../assets/site.css?v=ef9a2f2f7c">
+  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
 </head>
 <body>
@@ -198,6 +198,7 @@
           <div><dt>相手がスリープ、切断、再起動した</dt><dd>黙って切れた接続にも気づき、すぐに閉じて再接続します。そのあいだにコピーしたものは記録しておき、つながったら相手の履歴に追加します。相手のいまのクリップボードは上書きしません。</dd></div>
           <div><dt>サーバーとの接続が切れた</dt><dd>自動で再接続します。間隔は 1 秒から倍々で最大 30 秒、ランダムな揺らぎ付きで、たくさんのデバイスが一斉に再接続しないようにしています。同じネットワークのデバイスは影響を受けず、そのまま同期します。</dd></div>
           <div><dt>ファイルが大きすぎる</dt><dd>上限を超えるものは記録だけを同期し、必要なときに取り込みます。そのとき元のファイルが消えていれば、あいまいな失敗ではなく、はっきりそう伝えます。</dd></div>
+          <div><dt>ファイル送信中に切断された</dt><dd>途中でネットワークが切れたり、スリープしたり、アプリが終了したりしても、30 分以内につながれば中断した位置から自動で再開します。それ以降は「続ける」を押せば、やはり続きから。ファイルはすべて検証され、不完全なものが保存先に現れることはありません。</dd></div>
           <div><dt>プレーンテキストしか受け付けない場所に貼り付ける</dt><dd>Web からコピーした書式付きテキストは HTML とプレーンテキストの両方で書き込むので、どこに貼り付けてもタグが混ざりません。</dd></div>
           <div><dt>Windows では使えないファイル名</dt><dd>Mac では使えるコロンや疑問符などは、対応する全角文字に置き換えて受け取るので、名前はそのまま読めます。大文字と小文字だけが違う 2 つのファイルが上書きし合うこともありません。</dd></div>
           <div><dt>パスワードをコピーした</dt><dd>Windows ではパスワードマネージャーがコピーした内容に「記録しない」印が付きます。PasteFerry はそれを見て飛ばします。同期も履歴への保存もしません。</dd></div>
@@ -225,6 +226,7 @@
             <tr><th scope="row">暗号化と身元</th><td>DTLS によるエンドツーエンド暗号化。デバイスの身元は Ed25519 の鍵。シグナリングのメッセージはすべて署名付き</td></tr>
             <tr><th scope="row">ペアリング</th><td>5 分間有効な 6 桁のコード。0/O や 1/I のような紛らわしい文字は使わない。指紋は人が照合</td></tr>
             <tr><th scope="row">自動同期の上限</th><td>初期値 50 MB、1 MB〜1 GB で調整可能</td></tr>
+            <tr><th scope="row">ファイル送信</th><td>1 台のデバイスへ、サイズ無制限。ファイルでもフォルダごとでも。同期と同じエンドツーエンド暗号化の接続を使用。切断されても途中から再開し、ファイルごとに SHA-256 で検証</td></tr>
             <tr><th scope="row">履歴の保存期間</th><td>初期値 3 日、1 時間〜30 日で調整可能。期限が来たら自動で削除</td></tr>
             <tr><th scope="row">実測の速度</th><td>LAN の直接接続で 20 MB のファイルを約 330 ミリ秒で転送、チェックサム一致</td></tr>
             <tr><th scope="row">技術スタック</th><td>バックグラウンドサービスとサーバーは Go（Windows では Go から Win32 を直接呼び出し、Linux では Go で X11 プロトコルを直接扱う）、アプリは Flutter（3 つの OS で同じコード）、メッセージ定義は Protocol Buffers</td></tr>

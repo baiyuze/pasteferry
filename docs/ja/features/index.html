@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>機能：クイックペースト、お気に入り、デバイスをまたぐ履歴 — PasteFerry</title>
-  <meta name="description" content="PasteFerry は Mac、Windows、Linux の間でクリップボードを同期します。テキスト、画像、ファイル、フォルダをコピーして、別のパソコンでそのままペースト。⌥V か Alt+V でクイックペースト、お気に入り、履歴の検索と種類別の表示も。">
+  <title>機能：ファイル送信、クイックペースト、お気に入り、デバイスをまたぐ履歴 — PasteFerry</title>
+  <meta name="description" content="PasteFerry は Mac、Windows、Linux の間でクリップボードを同期します。テキスト、画像、ファイル、フォルダをコピーして、別のパソコンでそのままペースト。⌥V か Alt+V でクイックペースト、お気に入り、履歴の検索と種類別の表示、どんなに大きなファイルも別のパソコンへ直接送れます。">
   <link rel="canonical" href="https://pasteferry.cc/ja/features/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/features/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/features/">
@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PasteFerry">
-  <meta property="og:title" content="機能：クイックペースト、お気に入り、デバイスをまたぐ履歴 — PasteFerry">
-  <meta property="og:description" content="PasteFerry は Mac、Windows、Linux の間でクリップボードを同期します。テキスト、画像、ファイル、フォルダをコピーして、別のパソコンでそのままペースト。⌥V か Alt+V でクイックペースト、お気に入り、履歴の検索と種類別の表示も。">
+  <meta property="og:title" content="機能：ファイル送信、クイックペースト、お気に入り、デバイスをまたぐ履歴 — PasteFerry">
+  <meta property="og:description" content="PasteFerry は Mac、Windows、Linux の間でクリップボードを同期します。テキスト、画像、ファイル、フォルダをコピーして、別のパソコンでそのままペースト。⌥V か Alt+V でクイックペースト、お気に入り、履歴の検索と種類別の表示、どんなに大きなファイルも別のパソコンへ直接送れます。">
   <meta property="og:url" content="https://pasteferry.cc/ja/features/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:image:width" content="1200">
@@ -38,7 +38,7 @@
   <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../../assets/site.css?v=ef9a2f2f7c">
+  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <link rel="stylesheet" href="../../assets/features.css?v=7166cbdbe2">
 </head>
@@ -93,7 +93,7 @@
         </div>
       </div>
       <figure class="f-hero-shot" data-zoom>
-        <img src="../../assets/screenshots/ja/history-dark.png?v=668234de65" width="2112" height="1472" alt="PasteFerry の履歴：サイドバーに履歴・お気に入り・デバイス・設定、一覧には各パソコンからのテキスト、画像、ファイル、リンク">
+        <img src="../../assets/screenshots/ja/history-dark.png?v=7ca5761917" width="2112" height="1472" alt="PasteFerry の履歴：サイドバーに履歴・お気に入り・ファイル送信・デバイス・設定、一覧には各パソコンからのテキスト、画像、ファイル、リンク">
       </figure>
     </section>
 
@@ -114,9 +114,25 @@
       </div>
     </section>
 
+    <section class="f-section" id="send" aria-labelledby="send-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.5 の新機能</span></p>
+        <h2 class="f-h2" id="send-title">どんなに大きくても、<br>ドラッグするだけ。</h2>
+        <p class="f-intro">「ファイル送信」を開くと、同じネットワークにもほかの場所にもあるパソコンがレーダーに並びます。ファイルやフォルダをどれかにドロップすれば、そのまま直接届きます。クラウドもケーブルも不要で、履歴にも残りません。</p>
+        <figure class="f-shot" data-reveal>
+          <img src="../../assets/screenshots/ja/send-dark.png?v=0bcf17bb1d" width="2552" height="1632" loading="lazy" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示">
+        </figure>
+        <ul class="facts">
+          <li><h3>サイズ無制限</h3><p>数 GB の動画も、何万ものファイルが入ったフォルダも一度に。一覧で進み具合、速度、残り時間がわかります。</p></li>
+          <li><h3>途中から再開</h3><p>ネットワークが切れても、スリープやアプリの終了でも、つながれば続きから。ファイルはすべて検証され、不完全なものは残りません。</p></li>
+          <li><h3>受信したものはまとめて</h3><p>初期設定の保存先は「ダウンロード」で、設定で変えられます。クリックひとつで Finder やファイルマネージャに表示。</p></li>
+        </ul>
+        <p class="f-note">ネットワークをまたいでも送れます。できる限り直接接続し、公式の中継しか通らない場合は 1 日 100 MB までで、送る前に確認します。自分のサーバーで中継するならこの制限はありません。両方のパソコンにバージョン 2.5 以降が必要です。</p>
+      </div>
+    </section>
+
     <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">2.4 の新機能</span></p>
         <h2 class="f-h2" id="qp-title"><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> で、<br>履歴をその場に。</h2>
         <p class="f-intro">アプリを切り替える必要も、チャットをさかのぼる必要もありません。どのアプリでもショートカットを押して選ぶだけで、カーソルの位置にペーストされます。</p>
       </div>
@@ -152,11 +168,10 @@
 
     <section class="f-section" id="favorites" aria-labelledby="fav-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">2.4 の新機能</span></p>
         <h2 class="f-h2" id="fav-title">よく使うものは、<br>お気に入りに。</h2>
         <p class="f-intro">週報のテンプレート、会議リンク、定型の返信。星をクリックすれば別に保存されます。お気に入りは期限切れにならず、履歴を消しても残ります。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/ja/favorites-dark.png?v=3533939120" width="2112" height="1472" loading="lazy" alt="お気に入りページ：週報のテンプレート、定型の返信、ダウンロードリンク、PDF など 5 件。それぞれ右に青い星">
+          <img src="../../assets/screenshots/ja/favorites-dark.png?v=516ec4cbbd" width="2112" height="1472" loading="lazy" alt="お気に入りページ：週報のテンプレート、定型の返信、ダウンロードリンク、PDF など 5 件。それぞれ右に青い星">
         </figure>
         <ul class="facts">
           <li><h3>自動では削除されない</h3><p>履歴は期限が来ると消えますが、お気に入りは残ります。</p></li>
@@ -171,14 +186,14 @@
         <h2 class="f-h2" id="details-title">細かいところまで、<br>考えてあります。</h2>
         <div class="bento">
           <article class="cell wide" data-reveal data-filter>
-            <h3>リンクは専用のタブに <span class="new">新機能</span></h3>
+            <h3>リンクは専用のタブに</h3>
             <p>履歴を種類で絞り込み：テキスト、リンク、画像、ファイル、お気に入り。クリックひとつで。</p>
             <div class="mini" aria-hidden="true"><div class="seg"><span data-tab="all" class="on">すべて</span><span data-tab="text">テキスト</span><span data-tab="link">リンク</span><span data-tab="image">画像</span><span data-tab="file">ファイル</span><span data-tab="fav">お気に入り</span></div><ul class="mini-rows"><li data-kind="text"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">打ち合わせは木曜 15 時に変更</span></li><li data-kind="link"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span></li><li data-kind="image"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">画像 · 2.4 MB</span></li><li data-kind="file"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span class="t">四半期報告_最終版.key</span></li><li data-kind="link" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://pasteferry.cc/download/</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li><li data-kind="text" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">週報テンプレート：今週の成果／来週の予定</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li></ul></div>
           </article>
           <article class="cell wide hover-cell" data-reveal>
-            <h3>ポインタを置くだけで全文 <span class="new">新機能</span></h3>
+            <h3>ポインタを置くだけで全文</h3>
             <p>項目にポインタを 0.5 秒置くと、全文、大きな画像、すべてのファイル名が表示されます。</p>
-            <div class="crop"><img src="../../assets/screenshots/ja/hover-dark.png?v=7511e7574b" width="2112" height="1472" loading="lazy" alt="会議メモにポインタを置くと、全文（担当、公開時間、監視）がカードに表示される"></div>
+            <div class="crop"><img src="../../assets/screenshots/ja/hover-dark.png?v=87794ab920" width="2112" height="1472" loading="lazy" alt="会議メモにポインタを置くと、全文（担当、公開時間、監視）がカードに表示される"></div>
           </article>
           <article class="cell" data-reveal data-search>
             <h3>コピーしたものを検索</h3>

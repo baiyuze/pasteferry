@@ -195,6 +195,7 @@ C = {
         ("The other computer sleeps, drops off or restarts", "A connection that dies silently is noticed, closed and reconnected. Anything you copy meanwhile is kept and added to the other computer's history once it's back, without overwriting what's on its clipboard now."),
         ("Server connection drops", "Reconnects automatically: the delay starts at 1 second and doubles up to 30, with jitter so devices don't all reconnect at once. Devices on the same network keep syncing."),
         ("File too large", "Above the limit only a record is synced, pulled when you need it. If the source file is gone by then, you get a clear message instead of a vague failure."),
+        ("Disconnected while sending files", "If the network drops, a computer sleeps or the app quits mid-transfer, Send Files picks up where it stopped when they reconnect within 30 minutes; after that, click Continue and it still resumes from there. Every file is checked, and incomplete ones never appear in the save folder."),
         ("Pasting into plain-text fields", "Rich text copied from the web is written as both HTML and plain text, so no markup leaks into what you paste."),
         ("A file name Windows doesn't allow", "Colons, question marks and a few other characters that are fine on a Mac arrive as the matching full-width characters, so the name still reads the same. Two names that differ only in case never overwrite each other."),
         ("Copying a password", "On Windows, password managers mark what they copy as \"don't record\". PasteFerry skips it: not synced, not kept in the history."),
@@ -226,6 +227,7 @@ C = {
         ("Encryption and identity", "End-to-end DTLS; Ed25519 device keys; every signaling message signed"),
         ("Pairing", "6-character code valid for 5 minutes, using an alphabet without look-alikes such as 0/O and 1/I; fingerprints compared by you"),
         ("Auto-sync limit", "50 MB by default, adjustable from 1 MB to 1 GB"),
+        ("Send Files", "To one device, any size, single files or whole folders; uses the same end-to-end encrypted connection as sync; resumes where it stopped after a disconnect; every file checked with SHA-256"),
         ("History", "3 days by default, adjustable from 1 hour to 30 days; expired items removed automatically"),
         ("Measured speed", "A 20 MB file transfers in about 330 ms over a direct LAN connection, checksums matching"),
         ("Built with", "Go for the background service and server (pure Go calling Win32 on Windows and speaking the X11 protocol on Linux), Flutter for the app (one codebase for all three systems), Protocol Buffers for messages"),
@@ -287,7 +289,8 @@ C = {
      ('What about large files?',
       ['By default, anything under 50 MB is pushed to the other computer as you copy it, so you can paste right '
        'away. Larger files sync as a record; pull them from the history when you need them. The limit is '
-       'adjustable in Settings.']),
+       'adjustable in Settings.',
+       'To send files straight to one computer, use Send Files: any size, kept out of your history, and resumed if the connection drops.']),
      ('Is it free? Can my company use it?',
       ['Yes. PasteFerry is open source under the GNU AGPL-3.0, so individuals and companies can use and modify '
        'it for free. If you distribute it, or offer a modified version over a network, you publish your source '

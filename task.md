@@ -74,13 +74,13 @@
   - 重名自动改成「(2)」；传输期间有 `caffeinate` 的防睡眠声明，传完即撤
 - [x] `pasteferry-cli` 加 `send`、`transfers` 两个命令
 
-- [ ] Mac ↔ Windows 虚拟机、Mac ↔ Linux 虚拟机：大文件、海量小文件、断网续传、杀进程续传
+- [x] Mac ↔ Windows 虚拟机、Mac ↔ Linux 虚拟机：互发、续传（约 18 MB/s，受虚拟网卡限制）；装好的正式界面实测（2026-10-22）
 - [ ] 官方中转：额度内、超额暂停、恢复
 - [ ] Mac 首次接收的文件夹授权弹窗；连续两个版本之间授权是否保留
-- [ ] 传输期间不睡眠
+- [x] 传输期间不睡眠（Mac 上看到 caffeinate 的声明，传完即撤；Windows、Linux 只看了代码路径）
 
 ## 6. 发版（2.5.0，等用户说发再做）
 
-- [~] 截图（`tools/screenshots` 已加 send、send-dark、send-dialog 三张，还没生成到 docs/）、官网功能页、隐私说明、`llms.txt`
-- [ ] 版本号、`CHANGELOG.md`、`tools/release/notes.py`
+- [x] 截图（send、send-dark、send-dialog-dark 生成到 docs/）、官网首页与功能页、技术规格与常见问题、`llms.txt`、README；隐私说明原有的「内容经设备间加密通道传输」已涵盖，不用改
+- [x] 版本号、`CHANGELOG.md`、`tools/release/notes.py`
 - [ ] 按 `.claude/rules/commits-and-releases.md` 发布

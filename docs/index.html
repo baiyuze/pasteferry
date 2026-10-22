@@ -39,7 +39,7 @@
   <link rel="icon" href="assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="assets/site.css?v=ef9a2f2f7c">
+  <link rel="stylesheet" href="assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     // 第一次打开时按浏览器语言跳到对应页面；在页面上选过语言后，以选的为准
@@ -164,7 +164,7 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="features/#quick-paste">2.4 新功能：按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> 快捷粘贴 →</a>
+        <a class="release-note" href="features/#send">2.5 新功能：隔空传送，文件直接发到另一台 →</a>
         <h1 class="display">在这台电脑复制，<br>到那台电脑粘贴。</h1>
         <p class="lede">Mac、Windows、Linux 互通，文字、图片、文件、整个文件夹都可以，不要求同一个账号。现在开启官方服务就能跨网络同步，无需自己搭服务器。优先直连，始终端到端加密。</p>
         <div class="cta">
@@ -200,16 +200,27 @@
       </div>
     </section>
 
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.5 新功能</span></p>
+        <h2 id="send-title">拖过去，<br>就到了。</h2>
+        <p class="intro">把文件或整个文件夹拖到雷达上的一台电脑，就直接发过去了。不限大小，断了接着传，也不占复制记录。</p>
+        <figure class="spot wide" data-reveal>
+          <img src="assets/screenshots/send-dark.png?v=6e2d3b418e" width="2552" height="1632" loading="lazy" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度">
+        </figure>
+        <p class="more"><a href="features/#send">了解隔空传送 →</a></p>
+      </div>
+    </section>
+
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">2.4 新功能</span></p>
         <h2 id="qp-title">按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>，<br>最近复制的都在手边。</h2>
         <p class="intro">在任何 App 里按一下，复制记录就出现在屏幕中间。按数字或回车，选中的内容直接粘贴进去；常用的内容收藏起来，随时取用。</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
             <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
           </div>
-          <img src="assets/screenshots/card-picker-dark.png?v=a78395569a" width="1280" height="1080" loading="lazy" alt="快捷粘贴窗口：顶部是搜索框和全部、文本、链接、图片、文件、收藏六个页签，下面是带序号的复制记录，底栏是按键说明">
+          <img src="assets/screenshots/card-picker-dark.png?v=18e434eb81" width="1280" height="1080" loading="lazy" alt="快捷粘贴窗口：顶部是搜索框和全部、文本、链接、图片、文件、收藏六个页签，下面是带序号的复制记录，底栏是按键说明">
         </figure>
         <p class="more"><a href="features/#quick-paste">了解快捷粘贴 →</a></p>
       </div>
@@ -220,14 +231,14 @@
         <h2 id="grid-title">不只是同步剪贴板。</h2>
         <ul class="tiles">
           <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
-            <h3>快捷粘贴 <span class="new">新</span></h3>
-            <p>按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> 呼出复制记录，选中就粘贴。</p>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
+            <h3>隔空传送 <span class="new">新</span></h3>
+            <p>把文件、文件夹拖到另一台电脑上，多大都行。</p>
           </li>
           <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
-            <h3>收藏 <span class="new">新</span></h3>
-            <p>常用的内容另存一份，不会过期。</p>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
+            <h3>快捷粘贴</h3>
+            <p>按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> 呼出复制记录，选中就粘贴。</p>
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
@@ -236,8 +247,8 @@
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-            <h3>复制记录</h3>
-            <p>所有设备复制过的都在这里，能搜索（打拼音也行），能按类型筛选。</p>
+            <h3>复制记录与收藏</h3>
+            <p>所有设备复制过的都在这里，能搜索（打拼音也行），常用的收藏起来。</p>
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>

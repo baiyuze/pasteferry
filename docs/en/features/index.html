@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Features: quick paste, favorites, history across devices — PasteFerry</title>
-  <meta name="description" content="PasteFerry syncs the clipboard between Mac, Windows and Linux: copy text, images, files or folders and paste them on the other computer. Press ⌥V or Alt+V for quick paste, keep favorites, and search or filter your history.">
+  <title>Features: Send Files, quick paste, favorites, history across devices — PasteFerry</title>
+  <meta name="description" content="PasteFerry syncs the clipboard between Mac, Windows and Linux: copy text, images, files or folders and paste them on the other computer. Press ⌥V or Alt+V for quick paste, keep favorites, search or filter your history, and send files of any size straight to another computer.">
   <link rel="canonical" href="https://pasteferry.cc/en/features/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/features/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/features/">
@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PasteFerry">
-  <meta property="og:title" content="Features: quick paste, favorites, history across devices — PasteFerry">
-  <meta property="og:description" content="PasteFerry syncs the clipboard between Mac, Windows and Linux: copy text, images, files or folders and paste them on the other computer. Press ⌥V or Alt+V for quick paste, keep favorites, and search or filter your history.">
+  <meta property="og:title" content="Features: Send Files, quick paste, favorites, history across devices — PasteFerry">
+  <meta property="og:description" content="PasteFerry syncs the clipboard between Mac, Windows and Linux: copy text, images, files or folders and paste them on the other computer. Press ⌥V or Alt+V for quick paste, keep favorites, search or filter your history, and send files of any size straight to another computer.">
   <meta property="og:url" content="https://pasteferry.cc/en/features/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:image:width" content="1200">
@@ -38,7 +38,7 @@
   <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../../assets/site.css?v=ef9a2f2f7c">
+  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <link rel="stylesheet" href="../../assets/features.css?v=7166cbdbe2">
 </head>
@@ -93,7 +93,7 @@
         </div>
       </div>
       <figure class="f-hero-shot" data-zoom>
-        <img src="../../assets/screenshots/en/history-dark.png?v=0191a1592a" width="2112" height="1472" alt="PasteFerry’s history: a sidebar with History, Favorites, Devices and Settings, and a list of text, images, files and links from different computers">
+        <img src="../../assets/screenshots/en/history-dark.png?v=66476608d9" width="2112" height="1472" alt="PasteFerry’s history: a sidebar with History, Favorites, Send Files, Devices and Settings, and a list of text, images, files and links from different computers">
       </figure>
     </section>
 
@@ -114,9 +114,25 @@
       </div>
     </section>
 
+    <section class="f-section" id="send" aria-labelledby="send-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">New in 2.5</span></p>
+        <h2 class="f-h2" id="send-title">Any size.<br>Just drag it over.</h2>
+        <p class="f-intro">Open Send Files and your computers, nearby or elsewhere, appear on a radar. Drop files or folders onto one and they go straight there: no cloud drive, no cable, nothing added to your history.</p>
+        <figure class="f-shot" data-reveal>
+          <img src="../../assets/screenshots/en/send-dark.png?v=5d429f895e" width="2552" height="1632" loading="lazy" alt="The Send Files page: a radar with this Mac in the middle and devices on the same network and elsewhere around it; on the right, received files, with a folder arriving and its progress and speed">
+        </figure>
+        <ul class="facts">
+          <li><h3>Any size</h3><p>Multi-gigabyte videos or folders with tens of thousands of files, in one go. The list shows progress, speed and time left.</p></li>
+          <li><h3>Picks up where it stopped</h3><p>If the network drops, a computer sleeps or the app quits, it resumes once they reconnect. Every file is checked; incomplete ones never show up.</p></li>
+          <li><h3>Received files in one place</h3><p>Saved to Downloads by default, changeable in Settings. One click shows them in Finder or your file manager.</p></li>
+        </ul>
+        <p class="f-note">Works across networks too, directly whenever possible. If only the official relay gets through, there’s a 100 MB daily allowance and you’re asked first; relaying through your own server has no such limit. Both computers need version 2.5 or later.</p>
+      </div>
+    </section>
+
     <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">New in 2.4</span></p>
         <h2 class="f-h2" id="qp-title">Press <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>.<br>Your history, right where you’re typing.</h2>
         <p class="f-intro">No switching apps, no digging through chats. Press the shortcut in any app, pick an item, and it’s pasted right where your cursor was.</p>
       </div>
@@ -152,11 +168,10 @@
 
     <section class="f-section" id="favorites" aria-labelledby="fav-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">New in 2.4</span></p>
         <h2 class="f-h2" id="fav-title">Keep what you reuse.</h2>
         <p class="f-intro">Report templates, meeting links, stock replies: star an item to keep a copy. Favorites never expire and survive clearing your history.</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/en/favorites-dark.png?v=18daeabfd2" width="2112" height="1472" loading="lazy" alt="The Favorites page: five saved items including a report template, a stock reply, a download link and a PDF, each with a blue star">
+          <img src="../../assets/screenshots/en/favorites-dark.png?v=f075528a65" width="2112" height="1472" loading="lazy" alt="The Favorites page: five saved items including a report template, a stock reply, a download link and a PDF, each with a blue star">
         </figure>
         <ul class="facts">
           <li><h3>Never cleaned up</h3><p>History expires on schedule; favorites stay.</p></li>
@@ -171,14 +186,14 @@
         <h2 class="f-h2" id="details-title">The details,<br>taken care of.</h2>
         <div class="bento">
           <article class="cell wide" data-reveal data-filter>
-            <h3>Links get their own tab <span class="new">New</span></h3>
+            <h3>Links get their own tab</h3>
             <p>Filter your history by type — text, links, images, files or favorites — in one click.</p>
             <div class="mini" aria-hidden="true"><div class="seg"><span data-tab="all" class="on">All</span><span data-tab="text">Text</span><span data-tab="link">Links</span><span data-tab="image">Images</span><span data-tab="file">Files</span><span data-tab="fav">Favorites</span></div><ul class="mini-rows"><li data-kind="text"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Meeting moved to Thursday 3 pm</span></li><li data-kind="link"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span></li><li data-kind="image"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">Image · 2.4 MB</span></li><li data-kind="file"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span class="t">Q3 review - final.key</span></li><li data-kind="link" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://pasteferry.cc/download/</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li><li data-kind="text" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Weekly report: done / next week</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li></ul></div>
           </article>
           <article class="cell wide hover-cell" data-reveal>
-            <h3>Hover to see it all <span class="new">New</span></h3>
+            <h3>Hover to see it all</h3>
             <p>Rest the pointer on an item for half a second to see the full text, a larger image or every file name.</p>
-            <div class="crop"><img src="../../assets/screenshots/en/hover-dark.png?v=4680c07a0a" width="2112" height="1472" loading="lazy" alt="The pointer rests on meeting notes and a card shows the full text: owners, release window and monitoring"></div>
+            <div class="crop"><img src="../../assets/screenshots/en/hover-dark.png?v=5520a8d2a5" width="2112" height="1472" loading="lazy" alt="The pointer rests on meeting notes and a card shows the full text: owners, release window and monitoring"></div>
           </article>
           <article class="cell" data-reveal data-search>
             <h3>Search what you copied</h3>

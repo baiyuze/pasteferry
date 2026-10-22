@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>功能：快速貼上、收藏、跨裝置複製記錄 — 隔空貼</title>
-  <meta name="description" content="隔空貼在 Mac、Windows 與 Linux 之間同步剪貼簿：複製文字、圖片、檔案、資料夾，到另一台直接貼上。按 ⌥V 或 Alt+V 叫出快速貼上，常用內容可以收藏，複製記錄能搜尋、按類型篩選。">
+  <title>功能：隔空傳送、快速貼上、收藏、跨裝置複製記錄 — 隔空貼</title>
+  <meta name="description" content="隔空貼在 Mac、Windows 與 Linux 之間同步剪貼簿：複製文字、圖片、檔案、資料夾，到另一台直接貼上。按 ⌥V 或 Alt+V 叫出快速貼上，常用內容可以收藏，複製記錄能搜尋、按類型篩選；檔案再大，也能用隔空傳送直接傳到另一台。">
   <link rel="canonical" href="https://pasteferry.cc/zh-tw/features/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/features/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/features/">
@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="隔空貼">
-  <meta property="og:title" content="功能：快速貼上、收藏、跨裝置複製記錄 — 隔空貼">
-  <meta property="og:description" content="隔空貼在 Mac、Windows 與 Linux 之間同步剪貼簿：複製文字、圖片、檔案、資料夾，到另一台直接貼上。按 ⌥V 或 Alt+V 叫出快速貼上，常用內容可以收藏，複製記錄能搜尋、按類型篩選。">
+  <meta property="og:title" content="功能：隔空傳送、快速貼上、收藏、跨裝置複製記錄 — 隔空貼">
+  <meta property="og:description" content="隔空貼在 Mac、Windows 與 Linux 之間同步剪貼簿：複製文字、圖片、檔案、資料夾，到另一台直接貼上。按 ⌥V 或 Alt+V 叫出快速貼上，常用內容可以收藏，複製記錄能搜尋、按類型篩選；檔案再大，也能用隔空傳送直接傳到另一台。">
   <meta property="og:url" content="https://pasteferry.cc/zh-tw/features/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-zh-hant.png">
   <meta property="og:image:width" content="1200">
@@ -38,7 +38,7 @@
   <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../../assets/site.css?v=ef9a2f2f7c">
+  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <link rel="stylesheet" href="../../assets/features.css?v=7166cbdbe2">
 </head>
@@ -93,7 +93,7 @@
         </div>
       </div>
       <figure class="f-hero-shot" data-zoom>
-        <img src="../../assets/screenshots/zh-tw/history-dark.png?v=df607bb81a" width="2112" height="1472" alt="隔空貼的複製記錄：側邊欄有複製記錄、收藏、裝置、設定，列表裡是來自不同電腦的文字、圖片、檔案和連結">
+        <img src="../../assets/screenshots/zh-tw/history-dark.png?v=2583a4132c" width="2112" height="1472" alt="隔空貼的複製記錄：側邊欄有複製記錄、收藏、隔空傳送、裝置、設定，列表裡是來自不同電腦的文字、圖片、檔案和連結">
       </figure>
     </section>
 
@@ -114,9 +114,25 @@
       </div>
     </section>
 
+    <section class="f-section" id="send" aria-labelledby="send-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.5 新功能</span></p>
+        <h2 class="f-h2" id="send-title">檔案再大，<br>拖過去就行。</h2>
+        <p class="f-intro">打開「隔空傳送」，同一網路和別處的電腦都在雷達上。把檔案或資料夾拖到其中一台，就直接傳過去：不經雲端硬碟，不用傳輸線，也不進複製記錄。</p>
+        <figure class="f-shot" data-reveal>
+          <img src="../../assets/screenshots/zh-tw/send-dark.png?v=0d89aa5fe2" width="2552" height="1632" loading="lazy" alt="隔空傳送頁：左邊是雷達，中間是這台 Mac，周圍是同一區域網路和其他網路裡的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度">
+        </figure>
+        <ul class="facts">
+          <li><h3>不限大小</h3><p>幾個 GB 的影片、上萬個檔案的資料夾，一次傳過去。列表裡看得到進度、速度和剩餘時間。</p></li>
+          <li><h3>中斷了接著傳</h3><p>斷網、睡眠或程式結束，連上後從中斷處繼續。每個檔案都會校驗，不完整的不會出現。</p></li>
+          <li><h3>收到的放在一起</h3><p>預設存到「下載」，可以在設定裡更改。點一下就能在 Finder 或資料夾裡找到。</p></li>
+        </ul>
+        <p class="f-note">跨網路也能傳：能直連就直連；只能走官方中繼時，每天有 100 MB 額度，傳之前會先問你，用自己的伺服器中繼則沒有這個限制。兩台都要是 2.5 或更新的版本。</p>
+      </div>
+    </section>
+
     <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">2.4 新功能</span></p>
         <h2 class="f-h2" id="qp-title">按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>，<br>最近複製的都在手邊。</h2>
         <p class="f-intro">不用切到隔空貼，也不用翻聊天記錄。在任何 App 裡按一下快速鍵，選一筆，它就貼到你剛才的游標處。</p>
       </div>
@@ -152,11 +168,10 @@
 
     <section class="f-section" id="favorites" aria-labelledby="fav-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">2.4 新功能</span></p>
         <h2 class="f-h2" id="fav-title">常用的，<br>收藏起來。</h2>
         <p class="f-intro">週報範本、會議連結、常用回覆，點一下星號就另存一份。收藏不會過期，清空複製記錄也還在。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/zh-tw/favorites-dark.png?v=0bf0a0454d" width="2112" height="1472" loading="lazy" alt="收藏頁：週報範本、常用回覆、下載連結、公司登記證明.pdf 等五筆收藏，每筆右邊是藍色的星號">
+          <img src="../../assets/screenshots/zh-tw/favorites-dark.png?v=ad8805f04d" width="2112" height="1472" loading="lazy" alt="收藏頁：週報範本、常用回覆、下載連結、公司登記證明.pdf 等五筆收藏，每筆右邊是藍色的星號">
         </figure>
         <ul class="facts">
           <li><h3>不會被清除</h3><p>複製記錄到期自動清除，收藏一直留著。</p></li>
@@ -171,14 +186,14 @@
         <h2 class="f-h2" id="details-title">細節裡，<br>也替你想好了。</h2>
         <div class="bento">
           <article class="cell wide" data-reveal data-filter>
-            <h3>連結單獨一欄 <span class="new">新</span></h3>
+            <h3>連結單獨一欄</h3>
             <p>複製記錄按類型篩選：文字、連結、圖片、檔案、收藏，一點就分開。</p>
             <div class="mini" aria-hidden="true"><div class="seg"><span data-tab="all" class="on">全部</span><span data-tab="text">文字</span><span data-tab="link">連結</span><span data-tab="image">圖片</span><span data-tab="file">檔案</span><span data-tab="fav">收藏</span></div><ul class="mini-rows"><li data-kind="text"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">會議改到週四下午 3 點</span></li><li data-kind="link"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span></li><li data-kind="image"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">圖片 · 2.4 MB</span></li><li data-kind="file"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span class="t">季度報告-定稿.key</span></li><li data-kind="link" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://pasteferry.cc/download/</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li><li data-kind="text" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">週報範本：本週完成 / 下週計畫</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li></ul></div>
           </article>
           <article class="cell wide hover-cell" data-reveal>
-            <h3>停一下，就看到全文 <span class="new">新</span></h3>
+            <h3>停一下，就看到全文</h3>
             <p>滑鼠在一筆上停半秒，彈出完整的文字、放大的圖片或全部檔名，不用點開。</p>
-            <div class="crop"><img src="../../assets/screenshots/zh-tw/hover-dark.png?v=ae29de250f" width="2112" height="1472" loading="lazy" alt="滑鼠停在一筆會議記錄上，彈出的提示框顯示它的全文：負責人、發布時段和監控要求"></div>
+            <div class="crop"><img src="../../assets/screenshots/zh-tw/hover-dark.png?v=aa74e3a945" width="2112" height="1472" loading="lazy" alt="滑鼠停在一筆會議記錄上，彈出的提示框顯示它的全文：負責人、發布時段和監控要求"></div>
           </article>
           <article class="cell" data-reveal data-search>
             <h3>三天裡複製的，搜得到</h3>
