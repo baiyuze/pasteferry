@@ -1725,4 +1725,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String transferRenamed(int count) {
     return '$count 個のファイル名に Windows で使えない文字があったため、似た全角文字に置き換えました';
   }
+
+  @override
+  String get sendRingLan => '同じネットワーク';
+
+  @override
+  String get sendRingOther => 'ほかのネットワーク';
+
+  @override
+  String sendOfflineList(String names) {
+    return 'オフライン：$names';
+  }
+
+  @override
+  String get listSeparator => '、';
+
+  @override
+  String get sendLayout => '転送リスト';
+
+  @override
+  String get sendLayoutSide => 'レーダーの右';
+
+  @override
+  String get sendLayoutBelow => 'レーダーの下';
 }

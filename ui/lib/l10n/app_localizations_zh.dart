@@ -1706,6 +1706,29 @@ class AppLocalizationsZh extends AppLocalizations {
   String transferRenamed(int count) {
     return '$count 个文件名含 Windows 不支持的字符，已换成相近的全角字符';
   }
+
+  @override
+  String get sendRingLan => '同一网络';
+
+  @override
+  String get sendRingOther => '其他网络';
+
+  @override
+  String sendOfflineList(String names) {
+    return '离线：$names';
+  }
+
+  @override
+  String get listSeparator => '、';
+
+  @override
+  String get sendLayout => '传输列表';
+
+  @override
+  String get sendLayoutSide => '在雷达右边';
+
+  @override
+  String get sendLayoutBelow => '在雷达下面';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -3410,6 +3433,29 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String transferRenamed(int count) {
     return '$count 個檔名含 Windows 不支援的字元，已換成相近的全形字元';
   }
+
+  @override
+  String get sendRingLan => '同一網絡';
+
+  @override
+  String get sendRingOther => '其他網絡';
+
+  @override
+  String sendOfflineList(String names) {
+    return '離線：$names';
+  }
+
+  @override
+  String get listSeparator => '、';
+
+  @override
+  String get sendLayout => '傳輸列表';
+
+  @override
+  String get sendLayoutSide => '在雷達右邊';
+
+  @override
+  String get sendLayoutBelow => '在雷達下面';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -5114,4 +5160,27 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String transferRenamed(int count) {
     return '$count 個檔名含 Windows 不支援的字元，已換成相近的全形字元';
   }
+
+  @override
+  String get sendRingLan => '同一網路';
+
+  @override
+  String get sendRingOther => '其他網路';
+
+  @override
+  String sendOfflineList(String names) {
+    return '離線：$names';
+  }
+
+  @override
+  String get listSeparator => '、';
+
+  @override
+  String get sendLayout => '傳輸列表';
+
+  @override
+  String get sendLayoutSide => '在雷達右邊';
+
+  @override
+  String get sendLayoutBelow => '在雷達下面';
 }

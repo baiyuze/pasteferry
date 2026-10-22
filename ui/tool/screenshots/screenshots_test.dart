@@ -286,7 +286,10 @@ AppState _sendDemo() {
           connection: ConnectionKind.CONNECTION_KIND_DIRECT, receivesFiles: true),
       Device(id: 'win', name: windows, platform: 'windows', online: true,
           connection: ConnectionKind.CONNECTION_KIND_RELAY, receivesFiles: true),
-      Device(id: 'ubuntu', name: ubuntu, platform: 'linux', receivesFiles: true),
+      Device(id: 'ubuntu', name: ubuntu, platform: 'linux', online: true, lanReachable: true,
+          connection: ConnectionKind.CONNECTION_KIND_DIRECT, receivesFiles: true),
+      Device(id: 'imac', name: 'iMac', platform: 'darwin', receivesFiles: true),
+      Device(id: 'mini', name: 'Mac mini', platform: 'darwin', receivesFiles: true),
     ],
     transfers: [
       Transfer(id: 'r1', direction: incoming, deviceId: 'air', deviceName: 'MacBook Air', status: 'active',
@@ -320,9 +323,10 @@ Future<void> _shoot(
   Brightness brightness = Brightness.light,
   Future<void> Function()? arrange,
   bool settle = true,
+  Size window = const Size(960, 640),
 }) async {
-  // 960×640 的窗口，按 Retina 2 倍渲染
-  tester.view.physicalSize = const Size(1920, 1280);
+  // 默认 960×640 的窗口，按 Retina 2 倍渲染
+  tester.view.physicalSize = window * 2;
   tester.view.devicePixelRatio = 2;
   addTearDown(tester.view.reset);
   // 平台覆盖必须在测试体内复原：框架在执行 tearDown 之前就会检查它
@@ -451,6 +455,11 @@ void main() {
           arrange: () async => tester.pump(const Duration(milliseconds: 900)));
     });
   }
+
+  testWidgets('send-wide', (tester) async {
+    await _shoot(tester, 'send-wide', state: _sendDemo(), section: Section.send, settle: false,
+        window: const Size(1180, 720), arrange: () async => tester.pump(const Duration(milliseconds: 900)));
+  });
 
   testWidgets('send-dialog', (tester) async {
     await _shoot(tester, 'send-dialog', state: _sendDemo(), section: Section.send, settle: false,

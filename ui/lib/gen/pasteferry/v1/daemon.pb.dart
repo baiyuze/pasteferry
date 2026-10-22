@@ -2987,6 +2987,7 @@ class Config extends $pb.GeneratedMessage {
     $core.String? receiveDir,
     $core.bool? receiveDisabled,
     $core.bool? receiveNotifyDisabled,
+    $core.bool? sendLayoutStacked,
   }) {
     final result = Config._();
     if (autoSyncThresholdBytes != null)
@@ -3021,6 +3022,7 @@ class Config extends $pb.GeneratedMessage {
     if (receiveDisabled != null) result.receiveDisabled = receiveDisabled;
     if (receiveNotifyDisabled != null)
       result.receiveNotifyDisabled = receiveNotifyDisabled;
+    if (sendLayoutStacked != null) result.sendLayoutStacked = sendLayoutStacked;
     return result;
   }
 
@@ -3063,6 +3065,7 @@ class Config extends $pb.GeneratedMessage {
     ..aOS(23, _omitFieldNames ? '' : 'receiveDir')
     ..aOB(24, _omitFieldNames ? '' : 'receiveDisabled')
     ..aOB(25, _omitFieldNames ? '' : 'receiveNotifyDisabled')
+    ..aOB(26, _omitFieldNames ? '' : 'sendLayoutStacked')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3327,6 +3330,16 @@ class Config extends $pb.GeneratedMessage {
   $core.bool hasReceiveNotifyDisabled() => $_has(24);
   @$pb.TagNumber(25)
   void clearReceiveNotifyDisabled() => $_clearField(25);
+
+  /// 隔空传送页里，传输列表放在雷达下面（上下排）。默认 false：放在雷达右边（左右排）
+  @$pb.TagNumber(26)
+  $core.bool get sendLayoutStacked => $_getBF(25);
+  @$pb.TagNumber(26)
+  set sendLayoutStacked($core.bool value) => $_setBool(25, value);
+  @$pb.TagNumber(26)
+  $core.bool hasSendLayoutStacked() => $_has(25);
+  @$pb.TagNumber(26)
+  void clearSendLayoutStacked() => $_clearField(26);
 }
 
 class OfficialUsage extends $pb.GeneratedMessage {

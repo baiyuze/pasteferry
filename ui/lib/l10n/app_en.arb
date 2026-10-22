@@ -1280,5 +1280,19 @@
         "type": "int"
       }
     }
-  }
+  },
+  "sendRingLan": "Same network",
+  "sendRingOther": "Other networks",
+  "sendOfflineList": "Offline: {names}",
+  "@sendOfflineList": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "listSeparator": ", ",
+  "sendLayout": "Transfer list",
+  "sendLayoutSide": "Beside the radar",
+  "sendLayoutBelow": "Below the radar"
 }

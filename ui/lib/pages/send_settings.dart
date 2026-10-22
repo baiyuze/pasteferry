@@ -97,6 +97,14 @@ class _SendSectionState extends State<SendSection> {
             ),
           ),
           SettingRow(
+            title: l.sendLayout,
+            child: Segmented<bool>(
+              value: cfg.sendLayoutStacked,
+              segments: [(false, l.sendLayoutSide), (true, l.sendLayoutBelow)],
+              onChanged: (v) => widget.onUpdate(cfg.deepCopy()..sendLayoutStacked = v),
+            ),
+          ),
+          SettingRow(
             title: l.receiveNotify,
             child: SmallSwitch(
               value: !cfg.receiveNotifyDisabled,

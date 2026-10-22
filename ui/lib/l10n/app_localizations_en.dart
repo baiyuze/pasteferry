@@ -1880,4 +1880,27 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get sendRingLan => 'Same network';
+
+  @override
+  String get sendRingOther => 'Other networks';
+
+  @override
+  String sendOfflineList(String names) {
+    return 'Offline: $names';
+  }
+
+  @override
+  String get listSeparator => ', ';
+
+  @override
+  String get sendLayout => 'Transfer list';
+
+  @override
+  String get sendLayoutSide => 'Beside the radar';
+
+  @override
+  String get sendLayoutBelow => 'Below the radar';
 }

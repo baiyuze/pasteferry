@@ -994,6 +994,13 @@ const Config$json = {
       '5': 8,
       '10': 'receiveNotifyDisabled'
     },
+    {
+      '1': 'send_layout_stacked',
+      '3': 26,
+      '4': 1,
+      '5': 8,
+      '10': 'sendLayoutStacked'
+    },
   ],
 };
 
@@ -1018,7 +1025,8 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'YXN0ZUhvdGtleRIxChVxdWlja19wYXN0ZV9jb3B5X29ubHkYFiABKAhSEnF1aWNrUGFzdGVDb3'
     'B5T25seRIfCgtyZWNlaXZlX2RpchgXIAEoCVIKcmVjZWl2ZURpchIpChByZWNlaXZlX2Rpc2Fi'
     'bGVkGBggASgIUg9yZWNlaXZlRGlzYWJsZWQSNgoXcmVjZWl2ZV9ub3RpZnlfZGlzYWJsZWQYGS'
-    'ABKAhSFXJlY2VpdmVOb3RpZnlEaXNhYmxlZA==');
+    'ABKAhSFXJlY2VpdmVOb3RpZnlEaXNhYmxlZBIuChNzZW5kX2xheW91dF9zdGFja2VkGBogASgI'
+    'UhFzZW5kTGF5b3V0U3RhY2tlZA==');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {

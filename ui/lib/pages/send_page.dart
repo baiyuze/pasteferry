@@ -30,21 +30,25 @@ class SendPage extends StatefulWidget {
   State<SendPage> createState() => _SendPageState();
 }
 
-/// 雷达上的位置（角度，0 是正右方，顺时针）。内圈放同一局域网里的设备，外圈放其他网络的和离线的。
-/// 内圈在本机的四个斜角，不和「这台 Mac」挤在一行；外圈只用左右两个位置，上下就不用给名字留地方，
-/// 圆圈能撑满雷达区。放不下的设备在雷达下面以小标签列出。
+/// 雷达上的位置（角度，0 是正右方，顺时针）。雷达上只放在线的设备，离线的在雷达下面列一行。
+/// 内圈是同一个局域网里的设备，放在本机的四个斜角，不和「这台 Mac」挤在一行；
+/// 外圈是其他网络里的设备，只用左右两个位置。放不下的在雷达下面以小标签列出。
 const _innerAngles = [-135.0, -45.0, 135.0, 45.0];
 const _outerAngles = [180.0, 0.0];
+
+/// 内圈的大小是外圈的多少
+const _innerScale = 0.62;
 
 /// 这次启动以来检查过保存位置没有：macOS 上第一次写「下载」等文件夹时系统会弹窗，要在用户看着的时候触发
 bool _receiveDirChecked = false;
 
 class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin {
+  // 从本机向外扩散的一圈柔和的光带，3.2 秒一次
   late final AnimationController _pulse =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 2800));
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 3200));
   TransferDirection _tab = TransferDirection.TRANSFER_DIRECTION_INCOMING;
 
-  /// 拖着文件经过雷达时：光标的位置，以及光标下的设备
+  /// 拖着文件经过雷达时：光标下的设备
   bool _dragging = false;
   String? _dropTarget;
 
@@ -118,13 +122,30 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
     }
     _scheduleDeliveredRefresh(state);
 
-    return LayoutBuilder(builder: (context, box) => _body(context, state, box.maxHeight));
+    return LayoutBuilder(builder: (context, box) => _body(context, state, box.biggest));
   }
 
-  Widget _body(BuildContext context, AppState state, double height) {
+  /// 默认左右排：雷达在左、列表在右，各自撑满高度。设置里可以改成上下排，雷达限高；
+  /// 窗口太窄、左右排放不下时也临时上下排。
+  Widget _body(BuildContext context, AppState state, Size size) {
     final l = context.l10n;
-    // 雷达约占页面高度的四成，最高 320，其余留给下面的列表
-    final radarHeight = (height * 0.42).clamp(220.0, 320.0);
+    final wide = !(state.config?.sendLayoutStacked ?? false) && size.width >= 760;
+    final radar = state.peers.isEmpty
+        ? EmptyState(
+            icon: AppIcons.send,
+            title: l.sendNoDevicesTitle,
+            description: l.sendNoDevicesBody,
+            action: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FilledButton(onPressed: () => showPairingDialog(context), child: Text(l.addDevice)),
+                const SizedBox(width: Insets.sm),
+                OutlinedButton(onPressed: () => showNearbyDialog(context), child: Text(l.searchNearby)),
+              ],
+            ),
+          )
+        : _radar(context, state);
+    final list = _TransferList(direction: _tab, onDirection: (d) => setState(() => _tab = d), compact: wide);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -141,26 +162,24 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
               },
             ),
           ),
-        if (state.peers.isEmpty)
-          SizedBox(
-            height: radarHeight,
-            child: EmptyState(
-              icon: AppIcons.send,
-              title: l.sendNoDevicesTitle,
-              description: l.sendNoDevicesBody,
-              action: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FilledButton(onPressed: () => showPairingDialog(context), child: Text(l.addDevice)),
-                  const SizedBox(width: Insets.sm),
-                  OutlinedButton(onPressed: () => showNearbyDialog(context), child: Text(l.searchNearby)),
-                ],
-              ),
-            ),
-          )
-        else
-          SizedBox(height: radarHeight, child: _radar(context, state, radarHeight)),
-        Expanded(child: _TransferList(direction: _tab, onDirection: (d) => setState(() => _tab = d))),
+        Expanded(
+          child: wide
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(flex: 11, child: Padding(padding: const EdgeInsets.only(bottom: Insets.xl), child: radar)),
+                    VerticalDivider(width: 1, color: context.palette.border),
+                    Expanded(flex: 9, child: list),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(height: (size.height * 0.46).clamp(240.0, 320.0), child: radar),
+                    Expanded(child: list),
+                  ],
+                ),
+        ),
       ],
     );
   }
@@ -177,34 +196,22 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
     });
   }
 
-  Widget _radar(BuildContext context, AppState state, double height) {
-    final p = context.palette;
-    final l = context.l10n;
-    final selfPlatform = state.self?.platform ?? Platform.operatingSystem.replaceFirst('macos', 'darwin');
-    // 能发送的设备排前面，其次是在线的，离线的最后：位置不够时先让给它们
-    int rank(Device d) => _canSend(d) ? 0 : (d.online ? 1 : 2);
-    final peers = [...state.peers]..sort((a, b) => rank(a).compareTo(rank(b)));
-
-    // 分配位置：已有的不动，新来的按内外圈占空位。换了网络的设备换到另一圈。
-    // 窗口矮的时候内圈的上下两个位置会压到本机，只用左右两个，其余的放外圈
-    final innerSlots = height >= 240 ? _innerAngles.length : 2;
-    final ids = {for (final d in peers) d.id};
-    _slots.removeWhere((id, s) => !ids.contains(id) || (s.$1 && s.$2 >= innerSlots));
-    final byId = {for (final d in peers) d.id: d};
-    for (final d in peers) {
-      final wantInner = d.online && d.lanReachable;
+  /// 分配雷达上的位置：已有的不动，新来的按内外圈占空位，换了网络的换到另一圈。
+  /// 能发送的排前面：一圈满了时，排得更靠后的设备让出位置，挪到下面的小标签里。
+  void _assignSlots(List<Device> online) {
+    int rank(Device d) => _canSend(d) ? 0 : 1;
+    final ids = {for (final d in online) d.id};
+    final byId = {for (final d in online) d.id: d};
+    _slots.removeWhere((id, _) => !ids.contains(id));
+    for (final d in [...online]..sort((a, b) => rank(a).compareTo(rank(b)))) {
+      final inner = d.lanReachable;
       final cur = _slots[d.id];
-      if (cur != null && cur.$1 == wantInner) continue;
-      // 内圈满了的局域网设备放外圈
-      final innerFree = _slots.entries.where((e) => e.key != d.id && e.value.$1).length < innerSlots;
-      final inner = wantInner && innerFree;
       if (cur != null && cur.$1 == inner) continue;
       _slots.remove(d.id);
       final used = {for (final s in _slots.values) if (s.$1 == inner) s.$2};
-      final count = inner ? innerSlots : _outerAngles.length;
+      final count = inner ? _innerAngles.length : _outerAngles.length;
       var free = List.generate(count, (i) => i).where((i) => !used.contains(i)).firstOrNull;
       if (free == null) {
-        // 这一圈满了：占着位置的设备里排得最靠后的、比它更靠后的，让出来，挪到下面的小标签里
         final holders = _slots.entries.where((e) => e.value.$1 == inner).toList()
           ..sort((a, b) => rank(byId[b.key]!).compareTo(rank(byId[a.key]!)));
         if (holders.isNotEmpty && rank(byId[holders.first.key]!) > rank(d)) {
@@ -214,110 +221,136 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
       }
       if (free != null) _slots[d.id] = (inner, free);
     }
-    final overflow = peers.where((d) => !_slots.containsKey(d.id)).toList();
+  }
+
+  Widget _radar(BuildContext context, AppState state) {
+    final online = state.peers.where((d) => d.online).toList();
+    final offline = state.peers.where((d) => !d.online).toList();
+    _assignSlots(online);
+    final overflow = online.where((d) => !_slots.containsKey(d.id)).toList();
+    return LayoutBuilder(builder: (context, box) => _radarIn(context, state, box.biggest, online, offline, overflow));
+  }
+
+  /// 雷达只占它需要的高度，在可用空间里垂直居中，下面紧跟着放不下的设备和离线设备。
+  Widget _radarIn(BuildContext context, AppState state, Size space, List<Device> online, List<Device> offline,
+      List<Device> overflow) {
+    final p = context.palette;
+    final l = context.l10n;
+    final selfPlatform = state.self?.platform ?? Platform.operatingSystem.replaceFirst('macos', 'darwin');
+    final hasOuter = _slots.values.any((s) => !s.$1);
+
+    // 轨道的大小：外圈接近正圆，横纵比不超过 1.35，也不比宽度高。
+    // 太矮时横向至少 190，内圈斜角上的设备才不会压到中间的本机
+    final below = (overflow.isNotEmpty ? 40.0 : 0) + (offline.isNotEmpty ? 28.0 : 0);
+    final maxRy = (space.height - below) / 2 - 22;
+    final outerRx = math.min(math.max(maxRy * 1.35, 190.0), space.width / 2 - _SendNode.width / 2);
+    final outerRy = math.max(80.0, math.min(maxRy, outerRx));
+    final innerRx = outerRx * _innerScale;
+    final innerRy = outerRy * _innerScale;
+
+    final radar = DropTarget(
+      enable: !_dialogOpen,
+      onDragEntered: (e) => setState(() {
+        _dragging = true;
+        _dropTarget = _deviceAt(e.localPosition);
+      }),
+      onDragUpdated: (e) {
+        final target = _deviceAt(e.localPosition);
+        if (target != _dropTarget) setState(() => _dropTarget = target);
+      },
+      onDragExited: (_) => setState(() {
+        _dragging = false;
+        _dropTarget = null;
+      }),
+      onDragDone: (details) {
+        final target = _deviceAt(details.localPosition);
+        setState(() {
+          _dragging = false;
+          _dropTarget = null;
+        });
+        final d = online.where((x) => x.id == target).firstOrNull;
+        if (d == null) {
+          showToast(context, l.sendDropHint);
+        } else if (_canSend(d)) {
+          sendFilesTo(context, d, droppedPaths(details));
+        }
+      },
+      child: LayoutBuilder(
+        builder: (context, box) {
+          final center = box.biggest.center(Offset.zero);
+          _nodeRects.clear();
+          final nodes = <Widget>[];
+          for (final d in online) {
+            final slot = _slots[d.id];
+            if (slot == null) continue;
+            final (inner, i) = slot;
+            final a = (inner ? _innerAngles[i] : _outerAngles[i]) * math.pi / 180;
+            final at = center +
+                Offset((inner ? innerRx : outerRx) * math.cos(a), (inner ? innerRy : outerRy) * math.sin(a));
+            final rect = Rect.fromLTWH(
+                at.dx - _SendNode.width / 2, at.dy - _SendNode.avatar / 2, _SendNode.width, _SendNode.avatar + 40);
+            _nodeRects[d.id] = rect;
+            nodes.add(Positioned(
+              key: ValueKey(d.id),
+              left: rect.left,
+              top: rect.top,
+              width: _SendNode.width,
+              child: _node(context, state, d),
+            ));
+          }
+          // 圈顶上的小字：内圈是同一网络，外圈是其他网络。外圈没有设备时只标内圈
+          Widget caption(String text, double ry) => Positioned(
+                left: 0,
+                right: 0,
+                top: center.dy - ry - 8,
+                child: Center(child: _Label(text: text, style: context.text.labelSmall?.copyWith(color: p.textFaint))),
+              );
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned.fill(
+                child: RepaintBoundary(
+                  child: CustomPaint(
+                    painter: _SendRadarPainter(
+                      pulse: _pulse,
+                      ring: p.separator,
+                      wave: p.accent,
+                      inner: Size(innerRx, innerRy),
+                      outer: Size(outerRx, outerRy),
+                      highlight: _dragging,
+                    ),
+                  ),
+                ),
+              ),
+              caption(l.sendRingLan, innerRy),
+              if (hasOuter) caption(l.sendRingOther, outerRy),
+              Positioned(
+                left: center.dx - _SendNode.width / 2,
+                top: center.dy - _SendNode.avatar / 2,
+                width: _SendNode.width,
+                child: RadarSelfNode(platform: selfPlatform, size: _SendNode.avatar),
+              ),
+              ...nodes,
+              if (_dragging && _dropTarget == null)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: -4,
+                  child: Text(l.sendDropHint, textAlign: TextAlign.center, style: context.text.bodySmall),
+                ),
+            ],
+          );
+        },
+      ),
+    );
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: DropTarget(
-            enable: !_dialogOpen,
-            onDragEntered: (e) => setState(() {
-              _dragging = true;
-              _dropTarget = _deviceAt(e.localPosition);
-            }),
-            onDragUpdated: (e) {
-              final target = _deviceAt(e.localPosition);
-              if (target != _dropTarget) setState(() => _dropTarget = target);
-            },
-            onDragExited: (_) => setState(() {
-              _dragging = false;
-              _dropTarget = null;
-            }),
-            onDragDone: (details) {
-              final target = _deviceAt(details.localPosition);
-              setState(() {
-                _dragging = false;
-                _dropTarget = null;
-              });
-              final d = peers.where((x) => x.id == target).firstOrNull;
-              if (d == null) {
-                showToast(context, l.sendDropHint);
-              } else if (_canSend(d)) {
-                sendFilesTo(context, d, droppedPaths(details));
-              }
-            },
-            child: LayoutBuilder(
-              builder: (context, box) {
-                final center = box.biggest.center(Offset.zero);
-                // 外圈撑满雷达区的高度，横纵比约 1.7：不像正圆那样左右空着，也不至于压成一条扁椭圆。
-                // 设备只在外圈左右和内圈斜角上，上下不用给名字留地方
-                final outerRy = box.maxHeight / 2 - 14;
-                final outerRx = math.min(math.max(outerRy * 1.7, 220.0), box.maxWidth / 2 - _SendNode.width / 2);
-                final innerRx = outerRx * 0.6;
-                final innerRy = outerRy * 0.6;
-                _nodeRects.clear();
-                final nodes = <Widget>[];
-                for (final d in peers) {
-                  final slot = _slots[d.id];
-                  if (slot == null) continue;
-                  final (inner, i) = slot;
-                  final a = (inner ? _innerAngles[i] : _outerAngles[i]) * math.pi / 180;
-                  final at = center +
-                      Offset((inner ? innerRx : outerRx) * math.cos(a), (inner ? innerRy : outerRy) * math.sin(a));
-                  final rect = Rect.fromLTWH(at.dx - _SendNode.width / 2, at.dy - _SendNode.avatar / 2,
-                      _SendNode.width, _SendNode.avatar + 36);
-                  _nodeRects[d.id] = rect;
-                  nodes.add(Positioned(
-                    key: ValueKey(d.id),
-                    left: rect.left,
-                    top: rect.top,
-                    width: _SendNode.width,
-                    child: _node(context, state, d),
-                  ));
-                }
-                return Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned.fill(
-                      child: RepaintBoundary(
-                        child: CustomPaint(
-                          painter: RadarPainter(
-                            pulse: _pulse,
-                            ring: p.separator,
-                            wave: p.accent,
-                            // 本机外面一小圈，再加上设备所在的内外两圈
-                            orbits: [
-                              Size(innerRx * 0.5, innerRy * 0.5),
-                              Size(innerRx, innerRy),
-                              Size(outerRx, outerRy),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: center.dx - _SendNode.width / 2,
-                      top: center.dy - _SendNode.avatar / 2,
-                      width: _SendNode.width,
-                      child: RadarSelfNode(platform: selfPlatform, size: _SendNode.avatar),
-                    ),
-                    ...nodes,
-                    if (_dragging && _dropTarget == null)
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 4,
-                        child: Text(l.sendDropHint, textAlign: TextAlign.center, style: context.text.bodySmall),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
+        SizedBox(height: outerRy * 2 + 44, child: radar),
         if (overflow.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.fromLTRB(Insets.xl, 0, Insets.xl, Insets.sm),
+            padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.xs, Insets.xl, 0),
             child: Wrap(
               spacing: Insets.sm,
               runSpacing: Insets.xs,
@@ -326,11 +359,23 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
                 for (final d in overflow)
                   ActionChip(
                     avatar: Icon(platformIcon(d.platform), size: 14),
-                    // 发不了的写上原因，和雷达上一样
+                    // 发不了的写上原因
                     label: Text(_canSend(d) ? d.name : '${d.name} · ${_statusOf(context, state, d)}'),
                     onPressed: _canSend(d) ? () => _openDialog(d) : null,
                   ),
               ],
+            ),
+          ),
+        // 离线的设备不上雷达，在这里列一行
+        if (offline.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.sm, Insets.xl, 0),
+            child: Text(
+              l.sendOfflineList(offline.map((d) => d.name).join(l.listSeparator)),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: context.text.bodySmall?.copyWith(color: p.textFaint),
             ),
           ),
       ],
@@ -350,48 +395,133 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
 
   Widget _node(BuildContext context, AppState state, Device d) {
     final l = context.l10n;
+    final p = context.palette;
     final sending = state.sendingTo(d.id);
     final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     final delivered = state
         .transfers(TransferDirection.TRANSFER_DIRECTION_OUTGOING)
         .any((t) => t.deviceId == d.id && t.status == 'done' && now - t.finishedAtUnix.toInt() < 3);
     final enabled = _canSend(d);
-    final String status;
-    final tip = d.online && !d.receivesFiles ? l.sendNeedsUpdateTip(d.name) : null;
+    // 名字下面平时不写字，只在发送中、刚送达、或者发不了的时候写一行
+    String? note;
     if (!enabled) {
-      status = _statusOf(context, state, d);
+      note = _statusOf(context, state, d);
     } else if (sending != null && sending.status == 'active' && sending.totalBytes > 0) {
-      status = '${(sending.doneBytes.toInt() * 100 / sending.totalBytes.toInt()).floor()}%';
+      note = '${(sending.doneBytes.toInt() * 100 / sending.totalBytes.toInt()).floor()}%';
     } else if (delivered) {
-      status = '✓ ${l.sendDelivered}';
-    } else {
-      status = routeLabel(l, state, d);
+      note = '✓ ${l.sendDelivered}';
     }
+    // 头像右下角的小圆点是连接方式：绿色局域网，蓝色直连，橙色中转
+    final dot = !enabled
+        ? null
+        : d.connection == ConnectionKind.CONNECTION_KIND_RELAY
+            ? p.warning
+            : d.lanReachable
+                ? p.online
+                : p.accent;
+    final tip = !d.receivesFiles ? l.sendNeedsUpdateTip(d.name) : _statusOf(context, state, d);
     double? progress;
     if (sending != null) {
       progress = sending.status == 'active' && sending.totalBytes > 0
           ? sending.doneBytes.toInt() / sending.totalBytes.toInt()
           : null;
     }
-    final node = _SendNode(
-      device: d,
-      status: status,
-      enabled: enabled,
-      dropping: _dragging && enabled,
-      dropTarget: _dropTarget == d.id && enabled,
-      sending: sending != null,
-      progress: progress,
-      onTap: enabled ? () => _openDialog(d) : null,
+    return Tooltip(
+      message: tip,
+      waitDuration: const Duration(milliseconds: 400),
+      child: _SendNode(
+        device: d,
+        note: note,
+        dot: dot,
+        enabled: enabled,
+        dropping: _dragging && enabled,
+        dropTarget: _dropTarget == d.id && enabled,
+        sending: sending != null,
+        progress: progress,
+        onTap: enabled ? () => _openDialog(d) : null,
+      ),
     );
-    return tip == null ? node : Tooltip(message: tip, child: node);
   }
 }
 
-/// 雷达上的一台已配对设备：圆形图标、名字、状态。正在发给它时图标外面一圈进度环。
+/// 隔空传送的雷达底图：内外两圈很淡的轨道，一圈柔和的光带从本机向外扩散。
+/// 拖着文件经过时轨道稍微亮一点。
+class _SendRadarPainter extends CustomPainter {
+  _SendRadarPainter({
+    required this.pulse,
+    required this.ring,
+    required this.wave,
+    required this.inner,
+    required this.outer,
+    required this.highlight,
+  }) : super(repaint: pulse);
+
+  final Animation<double> pulse;
+  final Color ring;
+  final Color wave;
+  final Size inner;
+  final Size outer;
+  final bool highlight;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final c = size.center(Offset.zero);
+    Rect oval(double rx, double ry) => Rect.fromCenter(center: c, width: rx * 2, height: ry * 2);
+
+    // 扩散的光带：边缘最亮，向里渐隐，越往外越淡
+    final t = pulse.value;
+    final k = Curves.easeOut.transform(t);
+    final rx = 30 + (outer.width - 30) * k;
+    final ry = 30 + (outer.height - 30) * k;
+    final a = 0.16 * (1 - t);
+    canvas.save();
+    canvas.translate(c.dx, c.dy);
+    canvas.scale(1, ry / rx);
+    canvas.drawCircle(
+      Offset.zero,
+      rx,
+      Paint()
+        ..shader = RadialGradient(
+          colors: [wave.withValues(alpha: 0), wave.withValues(alpha: 0), wave.withValues(alpha: a)],
+          stops: const [0, 0.72, 1],
+        ).createShader(Rect.fromCircle(center: Offset.zero, radius: rx)),
+    );
+    canvas.restore();
+
+    final rings = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..color = highlight ? wave.withValues(alpha: 0.35) : ring;
+    canvas.drawOval(oval(inner.width, inner.height), rings);
+    canvas.drawOval(oval(outer.width, outer.height), rings);
+  }
+
+  @override
+  bool shouldRepaint(_SendRadarPainter old) =>
+      old.ring != ring || old.wave != wave || old.inner != inner || old.outer != outer || old.highlight != highlight;
+}
+
+/// 压在轨道线上的文字：底色与页面相同，线在文字处断开。
+class _Label extends StatelessWidget {
+  const _Label({required this.text, this.style});
+
+  final String text;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        color: context.palette.background,
+        child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: style),
+      );
+}
+
+/// 雷达上的一台设备：圆形图标、右下角表示连接方式的小圆点、名字。正在发给它时图标外面一圈进度环。
 class _SendNode extends StatefulWidget {
   const _SendNode({
     required this.device,
-    required this.status,
+    required this.note,
+    required this.dot,
     required this.enabled,
     required this.dropping,
     required this.dropTarget,
@@ -400,11 +530,16 @@ class _SendNode extends StatefulWidget {
     this.onTap,
   });
 
-  static const width = 120.0;
-  static const avatar = 46.0;
+  static const width = 128.0;
+  static const avatar = 52.0;
 
   final Device device;
-  final String status;
+
+  /// 名字下面的一行小字，没有时不显示
+  final String? note;
+
+  /// 连接方式的颜色；发不了时为 null
+  final Color? dot;
   final bool enabled;
 
   /// 正拖着文件经过雷达：能接收的设备描边变亮
@@ -443,41 +578,44 @@ class _SendNodeState extends State<_SendNode> {
           child: SizedBox.square(
             dimension: _SendNode.avatar,
             child: Stack(
+              clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 120),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: widget.dropTarget ? p.accent.withValues(alpha: 0.08) : p.surface,
+                    color: widget.dropTarget ? Color.alphaBlend(p.accent.withValues(alpha: 0.08), p.surface) : p.surface,
                     border: Border.all(color: border, width: highlight || widget.dropping ? 1.5 : 1),
-                    boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 6, offset: Offset(0, 2))],
+                    boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 2))],
                   ),
                 ),
-                Icon(platformIcon(d.platform), size: 22, color: highlight ? p.accent : p.textDim),
+                Icon(platformIcon(d.platform), size: 24, color: highlight ? p.accent : p.textDim),
                 if (widget.sending)
                   SizedBox.expand(
                     child: CircularProgressIndicator(strokeWidth: 2, value: widget.progress),
+                  ),
+                if (widget.dot != null)
+                  Positioned(
+                    right: 2,
+                    bottom: 2,
+                    child: Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: widget.dot,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: p.background, width: 2),
+                      ),
+                    ),
                   ),
               ],
             ),
           ),
         ),
         const SizedBox(height: 6),
-        Text(
-          d.name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          style: context.text.labelMedium?.copyWith(color: p.text),
-        ),
-        Text(
-          widget.status,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          style: context.text.labelSmall,
-        ),
+        _Label(text: d.name, style: context.text.labelMedium?.copyWith(color: p.text)),
+        if (widget.note != null) _Label(text: widget.note!, style: context.text.labelSmall),
       ],
     );
 
@@ -491,7 +629,7 @@ class _SendNodeState extends State<_SendNode> {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: widget.onTap,
-          child: Opacity(opacity: widget.enabled ? 1 : 0.5, child: node),
+          child: Opacity(opacity: widget.enabled ? 1 : 0.55, child: node),
         ),
       ),
     );
@@ -500,10 +638,13 @@ class _SendNodeState extends State<_SendNode> {
 
 /// 收到的、发出的列表。
 class _TransferList extends StatelessWidget {
-  const _TransferList({required this.direction, required this.onDirection});
+  const _TransferList({required this.direction, required this.onDirection, this.compact = false});
 
   final TransferDirection direction;
   final ValueChanged<TransferDirection> onDirection;
+
+  /// 放在雷达右边时：左边距收窄一些
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -516,7 +657,7 @@ class _TransferList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.sm, Insets.xl, Insets.sm),
+          padding: EdgeInsets.fromLTRB(compact ? Insets.lg : Insets.xl, Insets.sm, Insets.xl, Insets.sm),
           child: Row(
             children: [
               Segmented<TransferDirection>(
@@ -533,7 +674,7 @@ class _TransferList extends StatelessWidget {
             ],
           ),
         ),
-        Divider(height: 1, indent: Insets.xl, endIndent: Insets.xl, color: context.palette.border),
+        Divider(height: 1, indent: compact ? Insets.lg : Insets.xl, endIndent: Insets.xl, color: context.palette.border),
         Expanded(
           child: list.isEmpty
               ? Center(

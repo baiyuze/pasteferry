@@ -80,14 +80,17 @@ void main() {
       testWidgets('雷达与列表', (tester) async {
         final l = await open(tester, _demo(language));
         expect(find.text(l.sendSubtitle), findsOneWidget);
-        // 外圈只有两个位置：在线的 Windows 台式机和 Old PC 优先，离线的 Ubuntu 笔记本挪到下面的小标签里
+        // 在线的上雷达；离线的 Ubuntu 笔记本在雷达下面列一行
         for (final name in ['MacBook Air', 'Windows 台式机', 'Old PC', 'iMac']) {
           expect(find.text(name), findsOneWidget, reason: name);
         }
-        expect(find.text('Ubuntu 笔记本 · ${l.offline}'), findsOneWidget);
+        expect(find.text(l.sendOfflineList('Ubuntu 笔记本')), findsOneWidget);
+        expect(find.text(l.sendRingLan), findsOneWidget);
+        // 发不了的在名字下面写原因；连接方式在悬停提示里
         expect(find.text(l.sendNeedsUpdate), findsOneWidget);
         expect(find.text(l.sendNotReceiving), findsOneWidget);
-        expect(find.text(l.sendRelayLeft('62.0 MB')), findsOneWidget);
+        expect(find.byTooltip(l.sendRelayLeft('62.0 MB')), findsOneWidget);
+        expect(find.byTooltip(l.sendLan), findsOneWidget);
         // 收到的。最小窗口下列表只放得下两三行，后面的要滚动
         final list = find.byType(Scrollable).last;
         expect(find.textContaining('IMG_2041.HEIC'), findsOneWidget);
@@ -121,6 +124,7 @@ void main() {
         await tester.pump();
         await tester.dragUntilVisible(find.text(l.receiveNotify), find.byType(ListView), const Offset(0, -100));
         expect(find.text(l.receiveFiles), findsOneWidget);
+        expect(find.text(l.sendLayout), findsOneWidget);
         expect(find.text(l.saveToChange), findsOneWidget);
       });
     });
@@ -151,6 +155,28 @@ void main() {
     await tester.pump();
     expect(find.text('把文件拖到一台设备上，直接发过去'), findsOneWidget);
   });
+
+  for (final stacked in [false, true]) {
+    testWidgets(stacked ? '设置里选了上下排，列表在雷达下面' : '默认左右排，列表在雷达右边', (tester) async {
+      tester.view.physicalSize = const Size(1180, 720);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      final state = _demo('zh-Hans');
+      state.config!.sendLayoutStacked = stacked;
+      await tester.pumpWidget(PasteFerryApp(state: state));
+      await tester.pump();
+      await tester.tap(find.text('隔空传送').first);
+      await tester.pump();
+      final radar = tester.getCenter(find.text('这台 Mac'));
+      final tabs = tester.getCenter(find.text('收到的'));
+      if (stacked) {
+        expect(tabs.dy, greaterThan(radar.dy), reason: '列表在雷达下面');
+      } else {
+        expect(tabs.dx, greaterThan(radar.dx), reason: '列表在雷达右边');
+        expect(tabs.dy, lessThan(radar.dy), reason: '列表从顶上开始');
+      }
+    });
+  }
 
   test('剩余时间与进度的写法', () {
     final l = lookupAppLocalizations(const Locale('zh'));

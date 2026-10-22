@@ -3061,6 +3061,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 file name had characters Windows doesn’t allow; they were replaced with similar full-width characters} other{{count} file names had characters Windows doesn’t allow; they were replaced with similar full-width characters}}'**
   String transferRenamed(int count);
+
+  /// No description provided for @sendRingLan.
+  ///
+  /// In en, this message translates to:
+  /// **'Same network'**
+  String get sendRingLan;
+
+  /// No description provided for @sendRingOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other networks'**
+  String get sendRingOther;
+
+  /// No description provided for @sendOfflineList.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline: {names}'**
+  String sendOfflineList(String names);
+
+  /// No description provided for @listSeparator.
+  ///
+  /// In en, this message translates to:
+  /// **', '**
+  String get listSeparator;
+
+  /// No description provided for @sendLayout.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer list'**
+  String get sendLayout;
+
+  /// No description provided for @sendLayoutSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Beside the radar'**
+  String get sendLayoutSide;
+
+  /// No description provided for @sendLayoutBelow.
+  ///
+  /// In en, this message translates to:
+  /// **'Below the radar'**
+  String get sendLayoutBelow;
 }
 
 class _AppLocalizationsDelegate

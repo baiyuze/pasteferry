@@ -491,5 +491,12 @@
   "saveDirNotFound": "这个文件夹不存在。",
   "saveDirNotWritable": "隔空贴不能把文件存到这个文件夹。",
   "saveDirPermission": "隔空贴还没有使用这个文件夹的权限。请在「系统设置 → 隐私与安全性 → 文件与文件夹」里允许。",
-  "transferRenamed": "{count} 个文件名含 Windows 不支持的字符，已换成相近的全角字符"
+  "transferRenamed": "{count} 个文件名含 Windows 不支持的字符，已换成相近的全角字符",
+  "sendRingLan": "同一网络",
+  "sendRingOther": "其他网络",
+  "sendOfflineList": "离线：{names}",
+  "listSeparator": "、",
+  "sendLayout": "传输列表",
+  "sendLayoutSide": "在雷达右边",
+  "sendLayoutBelow": "在雷达下面"
 }
