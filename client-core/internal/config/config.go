@@ -73,6 +73,8 @@ type Config struct {
 	ReceiveDisabled bool `json:"receive_disabled,omitempty"`
 	// ReceiveNotifyDisabled 收到隔空传送的文件时不发系统通知
 	ReceiveNotifyDisabled bool `json:"receive_notify_disabled,omitempty"`
+	// SendLayoutStacked 让隔空传送页上下排：传输列表放在雷达下面。默认左右排，只有界面用
+	SendLayoutStacked bool `json:"send_layout_stacked,omitempty"`
 }
 
 // EffectiveReceiveDir 返回隔空传送实际的保存位置。

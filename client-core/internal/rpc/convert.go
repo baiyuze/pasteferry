@@ -88,6 +88,7 @@ func configToProto(c config.Config) *pb.Config {
 		ReceiveDir:            c.ReceiveDir,
 		ReceiveDisabled:       c.ReceiveDisabled,
 		ReceiveNotifyDisabled: c.ReceiveNotifyDisabled,
+		SendLayoutStacked:     c.SendLayoutStacked,
 	}
 }
 
@@ -162,6 +163,7 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	c.ReceiveDir = in.GetReceiveDir()
 	c.ReceiveDisabled = in.GetReceiveDisabled()
 	c.ReceiveNotifyDisabled = in.GetReceiveNotifyDisabled()
+	c.SendLayoutStacked = in.GetSendLayoutStacked()
 	return c
 }
 
