@@ -1,5 +1,38 @@
 # 更新记录 / Changelog
 
+## 2.5.0 — 2026-10-22
+
+Send Files: drop files or folders onto a device to send them straight to it.
+
+### Changes
+
+- **Send Files**: a new Send Files page shows your paired devices on a radar.
+  Drop files or whole folders onto a device, or click it and choose them, to
+  send them straight to that computer. There's no size limit, and received
+  files go to your Downloads folder (changeable in Settings) instead of your
+  history.
+- **Resumable transfers**: transfers show progress, speed and time left. If
+  the connection drops, they pick up where they stopped: automatically within
+  30 minutes, or later with Continue. Every file is checked with SHA-256, and
+  the computer doesn't fall asleep while files are moving.
+- **Official relay**: when only the official relay gets through, you're asked
+  before sending. A transfer pauses when the day's allowance runs out and
+  continues once the devices connect directly or the allowance resets.
+- **Settings**: a Send Files section to turn receiving on or off, choose where
+  files are saved, turn notifications on or off, and put the transfer list
+  beside or below the radar.
+- **Sidebar**: grouped into History, Favorites and Send Files first, then
+  Devices, Official service and Settings.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: update both computers to send files
+  between them. A device still on an older version shows on the radar as
+  needing an update; clipboard sync keeps working either way.
+- **Server**: no update needed.
+- The device-to-device protocol is compatible: 2.5.0 adds a capability
+  message and new transfer messages that older versions ignore.
+
 ## 2.4.2 — 2026-10-22
 
 Reconnect a device from its menu and give your favorites names, plus a fix

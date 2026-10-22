@@ -167,7 +167,7 @@
                 <li>安裝會在新開啟的視窗裏進行。最後顯示的 <code>ws://…/signal</code> 就是用戶端要填的地址。</li>
                 </ol>
                 <a class="button" href="https://github.com/baiyuze/pasteferry/releases/latest/download/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載 Windows 版伺服器</a>
-                <p class="small">內地伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：<a href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.2/pasteferry-server-windows-amd64.zip">https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.2/pasteferry-server-windows-amd64.zip</a></p>
+                <p class="small">內地伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：<a href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.0/pasteferry-server-windows-amd64.zip">https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.0/pasteferry-server-windows-amd64.zip</a></p>
                 <ul class="points">
                 <li><strong>以 Windows 服務形式執行：</strong>開機就啟動，不用登入，也沒有視窗。在「服務」裏叫 PasteFerry Server。</li>
                 <li><strong>防火牆已經開放：</strong>腳本加入了一條只針對 pasteferry-server.exe 的輸入規則，不用自己開放端口。</li>
@@ -195,7 +195,7 @@
 <span class="t-step">&gt; 启动</span>
   √ 已启动
 
-安装完成：pasteferry-server 2.4.2，作为 Windows 服务开机自动运行
+安装完成：pasteferry-server 2.5.0，作为 Windows 服务开机自动运行
 在每台电脑的 PasteFerry「设置 → 信令服务器地址」填：
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
@@ -234,7 +234,7 @@ tar xzf pasteferry-server-macos.tar.gz
 cd pasteferry-server-macos
 ./install.sh</code></pre>
                 </div>
-                <p class="small">內地伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：<a href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.2/pasteferry-server-macos.tar.gz">https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.2/pasteferry-server-macos.tar.gz</a></p></li>
+                <p class="small">內地伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：<a href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.0/pasteferry-server-macos.tar.gz">https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.0/pasteferry-server-macos.tar.gz</a></p></li>
                 <li>最後顯示的 <code>ws://…/signal</code> 就是用戶端要填的地址。</li>
                 </ol>
                 <ul class="points">
@@ -254,7 +254,7 @@ cd pasteferry-server-macos
 <span class="t-step">▶ 启动</span>
   ✓ 已启动
 
-安装完成：pasteferry-server 2.4.2，登录这台 Mac 后自动运行
+安装完成：pasteferry-server 2.5.0，登录这台 Mac 后自动运行
 在每台电脑的 PasteFerry「设置 → 信令服务器地址」填：
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
@@ -291,7 +291,7 @@ tar xzf pasteferry-server-linux-amd64.tar.gz
 cd pasteferry-server-linux-amd64
 sudo ./install.sh</code></pre>
                 </div>
-                <p class="small">內地伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：<a href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.2/pasteferry-server-linux-amd64.tar.gz">https://gitee.com/baiyuze/pasteferry/releases/download/v2.4.2/pasteferry-server-linux-amd64.tar.gz</a></p></li>
+                <p class="small">內地伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：<a href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.0/pasteferry-server-linux-amd64.tar.gz">https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.0/pasteferry-server-linux-amd64.tar.gz</a></p></li>
                 <li>最後顯示的 <code>ws://…/signal</code> 就是用戶端要填的地址。</li>
                 </ol>
                 <ul class="points">
@@ -310,7 +310,7 @@ sudo ./install.sh</code></pre>
 <span class="t-step">▶ 启动</span>
   ✓ 已启动
 
-安装完成：pasteferry-server 2.4.2
+安装完成：pasteferry-server 2.5.0
 在每台电脑的 PasteFerry「设置 → 信令服务器地址」填：
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
@@ -348,7 +348,7 @@ sudo ./install.sh</code></pre>
         <p class="intro">在另一部電腦的瀏覽器開啟 <code>http://192.168.1.20:8787/healthz</code>（換成你的地址），看到下面這一行，就代表網絡是通的。</p>
         <figure class="browser" role="img" aria-label="用瀏覽器開啟 http://192.168.1.20:8787/healthz，頁面顯示伺服器的狀態 ok 與版本號碼">
           <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">http://192.168.1.20:8787/healthz</span></div>
-          <pre class="b-body">{"status":"ok","version":"2.4.2"}</pre>
+          <pre class="b-body">{"status":"ok","version":"2.5.0"}</pre>
         </figure>
         <p class="note">開啟不了的話，請看下面的<a href="#faq">常見問題</a>。</p>
       </div>
@@ -403,7 +403,7 @@ sudo ./install.sh</code></pre>
         <div class="cta">
           <a class="button" href="../../zh-hk/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
         </div>
-        <p class="note">版本 2.4.2，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）。</p>
+        <p class="note">版本 2.5.0，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）。</p>
         <a class="source" href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md">伺服器的完整部署說明（包括公網與 Docker）</a>
       </div>
     </section>

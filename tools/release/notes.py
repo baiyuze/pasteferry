@@ -12,6 +12,38 @@ MAX_RELEASES = 10
 
 RELEASES = [
     {
+        "version": "2.5.0",
+        "date": "2026-10-22",
+        "changes": [
+            ("Send Files: a new Send Files page shows your paired devices on a radar. Drop files or whole folders onto a device, or click it and choose them, to send them straight to that computer. There's no size limit, and received files go to your Downloads folder (changeable in Settings) instead of your history.",
+             "隔空传送：新的「隔空传送」页把配对过的设备排在雷达上。把文件或整个文件夹拖到一台设备上，或者点它再选择文件，就直接发到那台电脑。不限大小；收到的文件存到「下载」（可以在设置里改），不进复制记录。",
+             "ファイル送信：新しい「ファイル送信」ページでは、ペアリングしたデバイスがレーダーに並びます。ファイルやフォルダをデバイスにドロップするか、クリックして選ぶと、そのパソコンへ直接送ります。サイズ無制限で、受信したファイルは履歴ではなく「ダウンロード」フォルダ（設定で変更可）に保存されます。",
+             "隔空傳送：新的「隔空傳送」頁把配對過的裝置排在雷達上。把檔案或整個資料夾拖到一台裝置上，或點它再選擇檔案，就直接傳到那台電腦。不限大小；收到的檔案存到「下載」（可以在設定裡更改），不進複製記錄。",
+             "隔空傳送：新的「隔空傳送」頁把配對過的裝置排在雷達上。把檔案或整個資料夾拖到一部裝置上，或按它再選擇檔案，就直接傳到那部電腦。不限大小；收到的檔案存到「下載」（可以在設定裏更改），不進複製記錄。"),
+            ("Transfers show progress, speed and time left. If the connection drops, they pick up where they stopped: automatically within 30 minutes, or later with Continue. Every file is checked with SHA-256, and the computer doesn't fall asleep while files are moving.",
+             "传输时显示进度、速度和剩余时间。连接断了会从断点接着传：30 分钟内自动继续，更晚的话点「继续」。每个文件都用 SHA-256 校验，传输期间电脑不会自动睡眠。",
+             "転送中は進み具合、速度、残り時間を表示します。接続が切れても中断した位置から再開します（30 分以内なら自動、それ以降は「続ける」）。ファイルはすべて SHA-256 で検証され、転送中はパソコンが自動でスリープしません。",
+             "傳輸時顯示進度、速度和剩餘時間。連線中斷會從中斷處接著傳：30 分鐘內自動繼續，更晚的話點「繼續」。每個檔案都用 SHA-256 校驗，傳輸期間電腦不會自動睡眠。",
+             "傳輸時顯示進度、速度和剩餘時間。連線中斷會從中斷處接着傳：30 分鐘內自動繼續，更晚的話按「繼續」。每個檔案都用 SHA-256 校驗，傳輸期間電腦不會自動休眠。"),
+            ("When only the official relay gets through, you're asked before sending. A transfer pauses when the day's allowance runs out and continues once the devices connect directly or the allowance resets.",
+             "只能经官方中转时，发送前会先问你。当天额度用完时传输暂停，两台连上直连或额度恢复后自动继续。",
+             "公式の中継しか通らない場合は、送る前に確認します。その日の上限に達すると転送は一時停止し、直接接続できたときか上限がリセットされたときに自動で再開します。",
+             "只能經官方中繼時，傳送前會先問你。當天額度用完時傳輸暫停，兩台連上直連或額度恢復後自動繼續。",
+             "只能經官方中轉時，傳送前會先問你。當天額度用完時傳輸暫停，兩部電腦連上直連或額度恢復後自動繼續。"),
+            ("Settings has a Send Files section: turn receiving on or off, choose where files are saved, turn notifications on or off, and put the transfer list beside or below the radar.",
+             "设置里新增「隔空传送」一组：接收开关、保存位置、通知，以及传输列表放在雷达右边还是下面。",
+             "設定に「ファイル送信」の項目を追加しました。受信のオン/オフ、保存先、通知、転送リストをレーダーの右に置くか下に置くかを選べます。",
+             "設定裡新增「隔空傳送」一組：接收開關、儲存位置、通知，以及傳輸列表放在雷達右邊還是下面。",
+             "設定裏新增「隔空傳送」一組：接收開關、儲存位置、通知，以及傳輸列表放在雷達右邊還是下面。"),
+            ("The sidebar is grouped: History, Favorites and Send Files first, then Devices, Official service and Settings.",
+             "侧边栏分成两组：复制记录、收藏、隔空传送在上，设备、官方服务、设置在下。",
+             "サイドバーを 2 つのグループに分けました。上に履歴・お気に入り・ファイル送信、下にデバイス・公式サービス・設定。",
+             "側邊欄分成兩組：複製記錄、收藏、隔空傳送在上，裝置、官方服務、設定在下。",
+             "側邊欄分成兩組：複製記錄、收藏、隔空傳送在上，裝置、官方服務、設定在下。"),
+        ],
+        "fixes": [],
+    },
+    {
         "version": "2.4.2",
         "date": "2026-10-22",
         "changes": [
