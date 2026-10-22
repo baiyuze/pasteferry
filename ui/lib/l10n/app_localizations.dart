@@ -3103,6 +3103,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Below the radar'**
   String get sendLayoutBelow;
+
+  /// No description provided for @sendLayoutNarrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Moves below the radar when the window is narrow'**
+  String get sendLayoutNarrow;
 }
 
 class _AppLocalizationsDelegate

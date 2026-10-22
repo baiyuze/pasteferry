@@ -1903,4 +1903,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sendLayoutBelow => 'Below the radar';
+
+  @override
+  String get sendLayoutNarrow =>
+      'Moves below the radar when the window is narrow';
 }

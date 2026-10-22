@@ -1729,6 +1729,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sendLayoutBelow => '在雷达下面';
+
+  @override
+  String get sendLayoutNarrow => '窗口较窄时自动放到雷达下面';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -3456,6 +3459,9 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get sendLayoutBelow => '在雷達下面';
+
+  @override
+  String get sendLayoutNarrow => '視窗較窄時自動放到雷達下面';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -5183,4 +5189,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get sendLayoutBelow => '在雷達下面';
+
+  @override
+  String get sendLayoutNarrow => '視窗較窄時自動放到雷達下面';
 }

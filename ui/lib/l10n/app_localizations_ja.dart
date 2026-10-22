@@ -1748,4 +1748,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get sendLayoutBelow => 'レーダーの下';
+
+  @override
+  String get sendLayoutNarrow => 'ウィンドウが狭いときは自動でレーダーの下に表示します';
 }

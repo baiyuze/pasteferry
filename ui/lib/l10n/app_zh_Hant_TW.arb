@@ -498,5 +498,6 @@
   "listSeparator": "、",
   "sendLayout": "傳輸列表",
   "sendLayoutSide": "在雷達右邊",
-  "sendLayoutBelow": "在雷達下面"
+  "sendLayoutBelow": "在雷達下面",
+  "sendLayoutNarrow": "視窗較窄時自動放到雷達下面"
 }

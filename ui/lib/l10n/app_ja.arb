@@ -498,5 +498,6 @@
   "listSeparator": "、",
   "sendLayout": "転送リスト",
   "sendLayoutSide": "レーダーの右",
-  "sendLayoutBelow": "レーダーの下"
+  "sendLayoutBelow": "レーダーの下",
+  "sendLayoutNarrow": "ウィンドウが狭いときは自動でレーダーの下に表示します"
 }

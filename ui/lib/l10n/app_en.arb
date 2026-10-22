@@ -1294,5 +1294,6 @@
   "listSeparator": ", ",
   "sendLayout": "Transfer list",
   "sendLayoutSide": "Beside the radar",
-  "sendLayoutBelow": "Below the radar"
+  "sendLayoutBelow": "Below the radar",
+  "sendLayoutNarrow": "Moves below the radar when the window is narrow"
 }
