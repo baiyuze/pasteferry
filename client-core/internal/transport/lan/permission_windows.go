@@ -17,7 +17,7 @@ import (
 // 而且那条规则只对当时的网络类型生效。不放行时本机仍能主动连别人，
 // 但别人连不上本机——跨网段配对时要输入地址的那一方正是被连的一方。
 // 这里删掉本程序原有的入站规则（包括阻止规则，阻止优先于允许），
-// 再加一条对所有网络类型生效的 UDP 允许规则。
+// 再加对所有网络类型生效的允许规则：UDP 给同步，TCP 给隔空传送的局域网快速通道（2.5.1）。
 func RequestPermission() error {
 	exe, err := os.Executable()
 	if err != nil {
@@ -28,7 +28,8 @@ func RequestPermission() error {
 	}
 	script := fmt.Sprintf(
 		`/c netsh advfirewall firewall delete rule name=all dir=in program="%[1]s" & `+
-			`netsh advfirewall firewall add rule name="PasteFerry" dir=in action=allow program="%[1]s" protocol=UDP profile=any`,
+			`netsh advfirewall firewall add rule name="PasteFerry" dir=in action=allow program="%[1]s" protocol=UDP profile=any & `+
+			`netsh advfirewall firewall add rule name="PasteFerry" dir=in action=allow program="%[1]s" protocol=TCP profile=any`,
 		exe)
 	verb, _ := windows.UTF16PtrFromString("runas")
 	file, _ := windows.UTF16PtrFromString("cmd.exe")
