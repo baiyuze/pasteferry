@@ -101,10 +101,11 @@ void main() {
         // 发出的
         await tester.tap(find.text(l.transfersSent));
         await tester.pump();
-        await tester.scrollUntilVisible(find.text(l.continueAction), 60, scrollable: list);
+        // 最小窗口下列表很窄，按钮是图标，文字在提示里
+        await tester.scrollUntilVisible(find.byTooltip(l.continueAction), 60, scrollable: list);
         await tester.scrollUntilVisible(find.textContaining(l.reasonNoSpacePeer('MacBook Air', '1.2 GB')), 60,
             scrollable: list);
-        expect(find.text(l.transferResend), findsOneWidget);
+        expect(find.byTooltip(l.transferResend), findsOneWidget);
       });
 
       testWidgets('发送窗口', (tester) async {
@@ -157,9 +158,15 @@ void main() {
     expect(find.text('把文件拖到一台设备上，直接发过去'), findsOneWidget);
   });
 
-  for (final stacked in [false, true]) {
-    testWidgets(stacked ? '设置里选了上下排，列表在雷达下面' : '默认左右排，列表在雷达右边', (tester) async {
-      tester.view.physicalSize = const Size(1180, 720);
+  // 默认左右排，窗口再窄也是；设置里选了上下排才放到雷达下面
+  for (final (stacked, size) in [
+    (false, const Size(1180, 720)),
+    (false, const Size(960, 640)),
+    (false, const Size(760, 520)),
+    (true, const Size(1180, 720)),
+  ]) {
+    testWidgets(stacked ? '设置里选了上下排，列表在雷达下面' : '默认左右排，列表在雷达右边（${size.width.round()} 宽）', (tester) async {
+      tester.view.physicalSize = size;
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       final state = _demo('zh-Hans');
@@ -169,13 +176,27 @@ void main() {
       await tester.tap(find.text('隔空传送').first);
       await tester.pump();
       // 本机的叫法随平台变：Mac 上「这台 Mac」，其他平台「这台电脑」
-      final radar = tester.getCenter(find.text(Wording.thisDevice));
+      final self = find.text(Wording.thisDevice);
+      final radar = tester.getCenter(self);
       final tabs = tester.getCenter(find.text('收到的'));
       if (stacked) {
         expect(tabs.dy, greaterThan(radar.dy), reason: '列表在雷达下面');
       } else {
         expect(tabs.dx, greaterThan(radar.dx), reason: '列表在雷达右边');
         expect(tabs.dy, lessThan(radar.dy), reason: '列表从顶上开始');
+      }
+      // 雷达上的设备名字不压到中间的本机，也不互相压
+      final selfRect = tester.getRect(self);
+      final names = [
+        for (final d in state.peers.where((d) => d.online))
+          if (find.text(d.name).evaluate().isNotEmpty) tester.getRect(find.text(d.name).first)
+      ];
+      expect(names, isNotEmpty);
+      for (final (i, r) in names.indexed) {
+        expect(r.overlaps(selfRect), isFalse, reason: '设备名字压到了本机');
+        for (final o in names.skip(i + 1)) {
+          expect(r.overlaps(o), isFalse, reason: '两个设备的名字叠在一起');
+        }
       }
     });
   }

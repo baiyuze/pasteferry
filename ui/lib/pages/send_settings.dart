@@ -98,7 +98,6 @@ class _SendSectionState extends State<SendSection> {
           ),
           SettingRow(
             title: l.sendLayout,
-            description: l.sendLayoutNarrow,
             child: Segmented<bool>(
               value: cfg.sendLayoutStacked,
               segments: [(false, l.sendLayoutSide), (true, l.sendLayoutBelow)],

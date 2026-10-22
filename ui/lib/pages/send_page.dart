@@ -125,12 +125,10 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
     return LayoutBuilder(builder: (context, box) => _body(context, state, box.biggest));
   }
 
-  /// 默认左右排：雷达在左、列表在右，各自撑满高度。设置里可以改成上下排，雷达限高；
-  /// 窗口太窄、左右排放不下时也临时上下排。
+  /// 默认左右排：雷达在左、列表在右，各自撑满高度，窗口再窄也是这样。设置里可以改成上下排，雷达限高。
   Widget _body(BuildContext context, AppState state, Size size) {
     final l = context.l10n;
-    // 左栏窄于约 480 时雷达放不下设备名字（960 宽的窗口就是这样），自动上下排
-    final wide = !(state.config?.sendLayoutStacked ?? false) && size.width >= 880;
+    final wide = !(state.config?.sendLayoutStacked ?? false);
     final radar = state.peers.isEmpty
         ? EmptyState(
             icon: AppIcons.send,
@@ -146,7 +144,9 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
             ),
           )
         : _radar(context, state);
-    final list = _TransferList(direction: _tab, onDirection: (d) => setState(() => _tab = d), compact: wide);
+    final listWidth = (size.width * 0.45).clamp(260.0, 460.0);
+    final list = _TransferList(
+        direction: _tab, onDirection: (d) => setState(() => _tab = d), compact: wide, narrow: wide && listWidth < 340);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -168,9 +168,10 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(flex: 11, child: Padding(padding: const EdgeInsets.only(bottom: Insets.xl), child: radar)),
+                    Expanded(child: Padding(padding: const EdgeInsets.only(bottom: Insets.xl), child: radar)),
                     VerticalDivider(width: 1, color: context.palette.border),
-                    Expanded(flex: 9, child: list),
+                    // 列表占四成五（宽窗口下与雷达 11:9），最窄的窗口里也留出 260
+                    SizedBox(width: listWidth, child: list),
                   ],
                 )
               : Column(
@@ -248,13 +249,17 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
     final hasOuter = _slots.values.any((s) => !s.$1);
 
     // 轨道的大小：外圈接近正圆，横纵比不超过 1.35，也不比宽度高。
-    // 太矮时横向至少 190，内圈斜角上的设备才不会压到中间的本机
+    // 太矮时横向至少 190，内圈斜角上的设备才不会压到中间的本机。
+    // 雷达这一栏很窄时（小窗口里列表仍在右边）：设备名字缩窄，轨道可以竖着拉长、内圈放大，同样不压到本机
+    final narrow = space.width < 420;
+    final nodeW = (space.width * 0.3).clamp(96.0, _SendNode.width);
+    final innerScale = narrow ? 0.74 : _innerScale;
     final below = (overflow.isNotEmpty ? 40.0 : 0) + (offline.isNotEmpty ? 28.0 : 0);
     final maxRy = (space.height - below) / 2 - 22;
-    final outerRx = math.min(math.max(maxRy * 1.35, 190.0), space.width / 2 - _SendNode.width / 2);
-    final outerRy = math.max(80.0, math.min(maxRy, outerRx));
-    final innerRx = outerRx * _innerScale;
-    final innerRy = outerRy * _innerScale;
+    final outerRx = math.min(math.max(maxRy * 1.35, 190.0), space.width / 2 - nodeW / 2);
+    final outerRy = math.max(80.0, math.min(maxRy, narrow ? math.max(outerRx, 190.0) : outerRx));
+    final innerRx = outerRx * innerScale;
+    final innerRy = outerRy * innerScale;
 
     final radar = DropTarget(
       enable: !_dialogOpen,
@@ -296,13 +301,13 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
             final at = center +
                 Offset((inner ? innerRx : outerRx) * math.cos(a), (inner ? innerRy : outerRy) * math.sin(a));
             final rect = Rect.fromLTWH(
-                at.dx - _SendNode.width / 2, at.dy - _SendNode.avatar / 2, _SendNode.width, _SendNode.avatar + 40);
+                at.dx - nodeW / 2, at.dy - _SendNode.avatar / 2, nodeW, _SendNode.avatar + 40);
             _nodeRects[d.id] = rect;
             nodes.add(Positioned(
               key: ValueKey(d.id),
               left: rect.left,
               top: rect.top,
-              width: _SendNode.width,
+              width: nodeW,
               child: _node(context, state, d),
             ));
           }
@@ -351,9 +356,9 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
               caption(l.sendRingLan, innerRy),
               if (hasOuter) caption(l.sendRingOther, outerRy),
               Positioned(
-                left: center.dx - _SendNode.width / 2,
+                left: center.dx - nodeW / 2,
                 top: center.dy - _SendNode.avatar / 2,
-                width: _SendNode.width,
+                width: nodeW,
                 child: RadarSelfNode(platform: selfPlatform, size: _SendNode.avatar),
               ),
               ...nodes,
@@ -690,13 +695,16 @@ class _SendNodeState extends State<_SendNode> {
 
 /// 收到的、发出的列表。
 class _TransferList extends StatelessWidget {
-  const _TransferList({required this.direction, required this.onDirection, this.compact = false});
+  const _TransferList({required this.direction, required this.onDirection, this.compact = false, this.narrow = false});
 
   final TransferDirection direction;
   final ValueChanged<TransferDirection> onDirection;
 
   /// 放在雷达右边时：左边距收窄一些
   final bool compact;
+
+  /// 列表很窄（小窗口里放在雷达右边）：按钮换成带提示的图标，名字放不下时省略
+  final bool narrow;
 
   @override
   Widget build(BuildContext context) {
@@ -709,7 +717,8 @@ class _TransferList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(compact ? Insets.lg : Insets.xl, Insets.sm, Insets.xl, Insets.sm),
+          padding: EdgeInsets.fromLTRB(
+              narrow ? Insets.md : (compact ? Insets.lg : Insets.xl), Insets.sm, narrow ? Insets.md : Insets.xl, Insets.sm),
           child: Row(
             children: [
               Segmented<TransferDirection>(
@@ -722,11 +731,17 @@ class _TransferList extends StatelessWidget {
               ),
               const Spacer(),
               if (finished.isNotEmpty)
-                TextButton(onPressed: () => _clearAll(context), child: Text(l.transfersClearAll)),
+                narrow
+                    ? IconAction(icon: AppIcons.trash, tooltip: l.transfersClearAll, onTap: () => _clearAll(context))
+                    : TextButton(onPressed: () => _clearAll(context), child: Text(l.transfersClearAll)),
             ],
           ),
         ),
-        Divider(height: 1, indent: compact ? Insets.lg : Insets.xl, endIndent: Insets.xl, color: context.palette.border),
+        Divider(
+            height: 1,
+            indent: narrow ? Insets.md : (compact ? Insets.lg : Insets.xl),
+            endIndent: narrow ? Insets.md : Insets.xl,
+            color: context.palette.border),
         Expanded(
           child: list.isEmpty
               ? Center(
@@ -738,7 +753,7 @@ class _TransferList extends StatelessWidget {
                   key: PageStorageKey(direction),
                   padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.sm, Insets.lg, Insets.xl),
                   itemCount: list.length,
-                  itemBuilder: (context, i) => _TransferRow(key: ValueKey(list[i].id), transfer: list[i]),
+                  itemBuilder: (context, i) => _TransferRow(key: ValueKey(list[i].id), transfer: list[i], narrow: narrow),
                 ),
         ),
       ],
@@ -769,9 +784,10 @@ class _TransferList extends StatelessWidget {
 
 /// 列表里的一批：名称与大小；来自（发给）哪台、时间、状态；进行中的显示进度。
 class _TransferRow extends StatefulWidget {
-  const _TransferRow({super.key, required this.transfer});
+  const _TransferRow({super.key, required this.transfer, this.narrow = false});
 
   final Transfer transfer;
+  final bool narrow;
 
   @override
   State<_TransferRow> createState() => _TransferRowState();
@@ -901,14 +917,18 @@ class _TransferRowState extends State<_TransferRow> {
     final l = context.l10n;
     final state = AppScope.read(context);
     final buttons = <Widget>[];
+    // 列表很窄时用图标按钮，文字放进提示里
+    Widget button(IconData icon, String label, VoidCallback onTap) => widget.narrow
+        ? IconAction(icon: icon, tooltip: label, onTap: onTap)
+        : OutlinedButton(onPressed: onTap, child: Text(label));
     if (!_out && t.status == 'done' && _present.isNotEmpty) {
-      buttons.add(OutlinedButton(onPressed: () => revealFile(_present.first), child: Text(revealLabel(l))));
+      buttons.add(button(AppIcons.folder, revealLabel(l), () => revealFile(_present.first)));
     }
     if (_out && (t.status == 'interrupted' || t.status == 'paused')) {
-      buttons.add(OutlinedButton(onPressed: () => _run(() => state.resumeTransfer(t.id)), child: Text(l.continueAction)));
+      buttons.add(button(AppIcons.arrowClockwise, l.continueAction, () => _run(() => state.resumeTransfer(t.id))));
     }
     if (_out && (t.status == 'failed' || t.status == 'declined') && t.paths.isNotEmpty) {
-      buttons.add(OutlinedButton(onPressed: _resend, child: Text(l.transferResend)));
+      buttons.add(button(AppIcons.arrowClockwise, l.transferResend, _resend));
     }
     if (!_finished) {
       buttons.add(IconAction(icon: AppIcons.xmark, tooltip: l.cancel, onTap: () => _run(() => state.cancelTransfer(t.id))));
