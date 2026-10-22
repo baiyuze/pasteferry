@@ -5,7 +5,8 @@ import (
 	"testing"
 )
 
-// 本机两端直连（host 对 host）：LANAddr 给出一个本机网卡上的真实地址，能在上面监听
+// 本机两端直连（host 对 host）：LANAddr 给出一个能在上面监听的本机地址。
+// CI 的机器上两端经回环地址连，这时给的也是回环地址
 func TestLANAddrOnDirectConnection(t *testing.T) {
 	alice, bob := connectPair(t)
 	for _, c := range []struct {
@@ -16,7 +17,7 @@ func TestLANAddrOnDirectConnection(t *testing.T) {
 		if !ok {
 			t.Fatalf("对 %s 应当是局域网直连", c.peer)
 		}
-		if addr.IsLoopback() || addr.IsUnspecified() {
+		if addr.IsUnspecified() {
 			t.Fatalf("地址不能是 %v", addr)
 		}
 		ln, err := net.Listen("tcp", net.JoinHostPort(addr.String(), "0"))

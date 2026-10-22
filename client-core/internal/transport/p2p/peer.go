@@ -249,7 +249,7 @@ func (p *Peer) LANAddr() (netip.Addr, bool) {
 		return netip.Addr{}, false
 	}
 	remote, err := netip.ParseAddr(pair.Remote.Address)
-	if err != nil || remote.IsLoopback() || remote.IsUnspecified() {
+	if err != nil || remote.IsUnspecified() {
 		p.log.Info("对端地址不能用来开快速通道", "remote", pair.Remote.Address)
 		return netip.Addr{}, false
 	}
@@ -269,7 +269,8 @@ func sourceAddrFor(dst netip.Addr) (netip.Addr, error) {
 	}
 	defer c.Close()
 	local := c.LocalAddr().(*net.UDPAddr).AddrPort().Addr().Unmap()
-	if !local.IsValid() || local.IsLoopback() || local.IsUnspecified() {
+	// 两端在同一台电脑上时（对端是回环地址），回环地址也能用
+	if !local.IsValid() || local.IsUnspecified() || (local.IsLoopback() && !dst.IsLoopback()) {
 		return netip.Addr{}, errors.New("没有可用的本机地址")
 	}
 	return local, nil
