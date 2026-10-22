@@ -31,9 +31,9 @@ class SendPage extends StatefulWidget {
 }
 
 /// 雷达上的位置（角度，0 是正右方，顺时针）。内圈放同一局域网里的设备，外圈放其他网络的和离线的。
-/// 内外圈错开角度，名字不会叠在一起。
-const _innerAngles = [180.0, 0.0, -90.0, 90.0];
-const _outerAngles = [-145.0, -35.0, 145.0, 35.0, 180.0, 0.0];
+/// 内圈在本机的四个斜角，不和「这台 Mac」挤在一行；外圈先占左右，再占上下和外侧的斜角，与内圈错开。
+const _innerAngles = [-135.0, -45.0, 135.0, 45.0];
+const _outerAngles = [180.0, 0.0, -90.0, 90.0, -155.0, -25.0];
 
 /// 这次启动以来检查过保存位置没有：macOS 上第一次写「下载」等文件夹时系统会弹窗，要在用户看着的时候触发
 bool _receiveDirChecked = false;
@@ -122,8 +122,8 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
 
   Widget _body(BuildContext context, AppState state, double height) {
     final l = context.l10n;
-    // 雷达随窗口高度伸缩，给下面的列表至少留出几行
-    final radarHeight = (height - 330).clamp(220.0, 300.0);
+    // 雷达随窗口高度伸缩，最高 440；给上面的标题和下面的列表至少留出几行
+    final radarHeight = (height - 270).clamp(240.0, 440.0);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -184,7 +184,7 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
 
     // 分配位置：已有的不动，新来的按内外圈占空位。换了网络的设备换到另一圈。
     // 窗口矮的时候内圈的上下两个位置会压到本机，只用左右两个，其余的放外圈
-    final innerSlots = height >= 280 ? _innerAngles.length : 2;
+    final innerSlots = height >= 320 ? _innerAngles.length : 2;
     final ids = {for (final d in peers) d.id};
     _slots.removeWhere((id, s) => !ids.contains(id) || (s.$1 && s.$2 >= innerSlots));
     for (final d in peers) {
@@ -236,10 +236,12 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
             child: LayoutBuilder(
               builder: (context, box) {
                 final center = box.biggest.center(Offset.zero);
-                final outerRx = math.min(280.0, box.maxWidth / 2 - _SendNode.width / 2);
-                final innerRx = math.min(130.0, outerRx * 0.5);
-                final outerRy = math.min(110.0, box.maxHeight / 2 - 40);
-                final innerRy = outerRy * 0.62;
+                // 轨道接近正圆（横纵比 1.3）：最下面的设备下方要放得下名字和状态。
+                // 窗口矮的时候横向放宽一些，内圈斜角上的设备才不会压到中间的本机
+                final outerRy = box.maxHeight / 2 - 62;
+                final outerRx = math.min(math.max(outerRy * 1.3, 220.0), box.maxWidth / 2 - _SendNode.width / 2);
+                final innerRx = outerRx * 0.6;
+                final innerRy = outerRy * 0.6;
                 _nodeRects.clear();
                 final nodes = <Widget>[];
                 for (final d in peers) {
@@ -270,8 +272,9 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
                             pulse: _pulse,
                             ring: p.separator,
                             wave: p.accent,
-                            // 圆圈就画在设备所在的内外两圈上
+                            // 本机外面一小圈，再加上设备所在的内外两圈
                             orbits: [
+                              Size(innerRx * 0.5, innerRy * 0.5),
                               Size(innerRx, innerRy),
                               Size(outerRx, outerRy),
                             ],
