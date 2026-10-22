@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'app_state.dart';
+import 'gen/pasteferry/v1/daemon.pb.dart' show TransferDirection;
 import 'background_service.dart';
 import 'i18n.dart';
 import 'pages/devices_page.dart';
 import 'pages/favorites_page.dart';
 import 'pages/history_page.dart';
+import 'pages/send_page.dart';
 import 'pages/service_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/official_service_page.dart';
@@ -119,7 +121,7 @@ class AppScope extends InheritedNotifier<AppState> {
       context.getInheritedWidgetOfExactType<AppScope>()!.notifier!;
 }
 
-enum Section { history, favorites, devices, official, settings }
+enum Section { history, favorites, send, devices, official, settings }
 
 class Shell extends StatefulWidget {
   const Shell({super.key, this.initialSection = Section.history});
@@ -135,6 +137,7 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
   bool _pairingDialogOpen = false;
   bool _officialDialogOpen = false;
   int _seenOfficialNavigation = 0;
+  int _seenPageRequest = 0;
   String? _shownUpdateResult;
   AppLifecycleState _lifecycle = AppLifecycleState.resumed;
 
@@ -163,6 +166,11 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
     if (state.officialNavigationSerial != _seenOfficialNavigation) {
       _seenOfficialNavigation = state.officialNavigationSerial;
       if (state.officialEnabled) _section = Section.official;
+    }
+    // 点了隔空传送的通知：后台服务让界面切到隔空传送页
+    if (state.pageRequestSerial != _seenPageRequest) {
+      _seenPageRequest = state.pageRequestSerial;
+      if (state.pageRequest == 'send') _section = Section.send;
     }
     if (!state.officialEnabled && _section == Section.official) {
       _section = Section.settings;
@@ -281,6 +289,7 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
                 : switch (_section) {
                     Section.history => const HistoryPage(),
                     Section.favorites => const FavoritesPage(),
+                    Section.send => const SendPage(),
                     Section.devices => const DevicesPage(),
                     Section.official => const OfficialServicePage(),
                     Section.settings => const SettingsPage(),
@@ -346,6 +355,14 @@ class _Sidebar extends StatelessWidget {
             onTap: () => onSelect(Section.favorites),
           ),
           _NavItem(
+            icon: AppIcons.send,
+            label: l.navSend,
+            selected: current == Section.send,
+            // 有文件在收发时显示进度环，否则显示新收到、还没看过的批数
+            trailingWidget: _SendBadge(state: state),
+            onTap: () => onSelect(Section.send),
+          ),
+          _NavItem(
             icon: AppIcons.deviceLaptop,
             label: l.navDevices,
             selected: current == Section.devices,
@@ -380,6 +397,7 @@ class _NavItem extends StatefulWidget {
     required this.selected,
     required this.onTap,
     this.trailing,
+    this.trailingWidget,
   });
 
   final IconData icon;
@@ -387,6 +405,7 @@ class _NavItem extends StatefulWidget {
   final bool selected;
   final VoidCallback onTap;
   final String? trailing;
+  final Widget? trailingWidget;
 
   @override
   State<_NavItem> createState() => _NavItemState();
@@ -435,10 +454,45 @@ class _NavItemState extends State<_NavItem> {
                 ),
                 if (widget.trailing != null)
                   Text(widget.trailing!, style: context.text.labelSmall),
+                ?widget.trailingWidget,
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// 侧边栏「隔空传送」右边的标记：有文件在收发时是一个小进度环（悬停列出每一批），
+/// 否则是新收到、还没看过的批数，都没有时不显示。
+class _SendBadge extends StatelessWidget {
+  const _SendBadge({required this.state});
+
+  final AppState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final active = state.activeTransfers;
+    if (active.isEmpty) {
+      final n = state.unseenTransfers;
+      return n == 0 ? const SizedBox.shrink() : Text('$n', style: context.text.labelSmall);
+    }
+    final lines = [
+      for (final t in active)
+        () {
+          final percent = t.totalBytes > 0 ? '${(t.doneBytes.toInt() * 100 / t.totalBytes.toInt()).floor()}%' : '…';
+          return t.direction == TransferDirection.TRANSFER_DIRECTION_OUTGOING
+              ? l.sendingTo(t.deviceName, percent)
+              : l.receivingFrom(t.deviceName, percent);
+        }(),
+    ];
+    return Tooltip(
+      message: lines.join('\n'),
+      child: SizedBox.square(
+        dimension: 12,
+        child: CircularProgressIndicator(strokeWidth: 1.6, value: state.transferProgress),
       ),
     );
   }

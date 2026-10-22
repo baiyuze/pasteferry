@@ -57,5 +57,9 @@ abstract final class AppIcons {
   static IconData get starFill => _pick(CupertinoIcons.star_fill, FluentIcons.star_24_filled);
   static IconData get keyboard => _pick(CupertinoIcons.keyboard, FluentIcons.keyboard_24_regular);
   // 回车键：快捷窗口底栏的按键提示里用。字符 ↩ 在 Mac 上会被画成彩色 emoji，所以用图标
+  // 隔空传送：侧边栏的纸飞机，列表里收到（向下）与发出（向上）
+  static IconData get send => _pick(CupertinoIcons.paperplane, FluentIcons.send_24_regular);
+  static IconData get arrowDown => _pick(CupertinoIcons.arrow_down, FluentIcons.arrow_down_24_regular);
+  static IconData get arrowUp => _pick(CupertinoIcons.arrow_up, FluentIcons.arrow_up_24_regular);
   static IconData get returnKey => _pick(CupertinoIcons.return_icon, FluentIcons.arrow_enter_left_20_regular);
 }

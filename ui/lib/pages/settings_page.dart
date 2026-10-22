@@ -15,6 +15,7 @@ import '../widgets/update_dialog.dart';
 import '../icons.dart';
 import '../platform.dart';
 import 'quick_paste_settings.dart';
+import 'send_settings.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -304,6 +305,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 ),
               ),
+              SendSection(config: cfg, onUpdate: (next) => _update(state, next)),
               GroupSection(
                 title: l.whatToSync,
                 child: GroupBox(

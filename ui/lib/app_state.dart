@@ -18,6 +18,9 @@ enum LinkState { connecting, online, offline }
 /// 生成的配对码，以及本机的局域网地址（不在同一网段时对方要输入）。
 typedef PairingCode = ({String code, List<String> addresses});
 
+/// 隔空传送发不出去的原因，后台服务把它写在错误消息里（见 rpc/send.go）。
+enum SendFailure { offline, unsupported, disabled, needRelayConsent, noPaths, unknownDevice, other }
+
 /// 配对失败的原因。后台服务把原因写在错误消息开头（见 rpc/server.go 的 pairingStatus）。
 enum PairingFailure {
   notFound,
@@ -63,6 +66,13 @@ class AppState extends ChangeNotifier implements RecordDetails {
   /// 快捷粘贴窗口的状态，由后台服务转来；没连上时为 null
   QuickPasteStatus? _quickPaste;
 
+  /// 隔空传送的传输记录，收到的和发出的都在里面，按时间倒序。见 design/send-files.md
+  final List<Transfer> _transfers = [];
+
+  /// 后台服务要界面切到的页面（点了隔空传送的通知），每次请求 serial 加一
+  String _pageRequest = '';
+  int _pageRequestSerial = 0;
+
   /// 正在传输的记录的进度（0–1），只在界面上展示，传完即移除。
   final Map<String, double> _progress = {};
   final Map<String, ClipboardWriteResult> _clipboardResults = {};
@@ -104,6 +114,41 @@ class AppState extends ChangeNotifier implements RecordDetails {
   int get favoritesBytes => _favorites.fold(0, (n, r) => n + r.totalSize.toInt());
 
   QuickPasteStatus? get quickPaste => _quickPaste;
+
+  List<Transfer> transfers(TransferDirection direction) =>
+      List.unmodifiable(_transfers.where((t) => t.direction == direction));
+
+  /// 收到了、还没在隔空传送页看过的批数（侧边栏的数字）
+  int get unseenTransfers => _transfers
+      .where((t) => t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING && !t.seen && t.status == 'done')
+      .length;
+
+  /// 正在收发的批次（统计、等待、传输中），侧边栏据此显示进度环
+  List<Transfer> get activeTransfers =>
+      _transfers.where((t) => const {'scanning', 'waiting', 'active'}.contains(t.status)).toList();
+
+  /// 所有正在传的批次合起来的进度（0–1）；没有在传的为 null
+  double? get transferProgress {
+    var total = 0, done = 0;
+    for (final t in _transfers) {
+      if (t.status != 'active' && t.status != 'waiting') continue;
+      total += t.totalBytes.toInt();
+      done += t.doneBytes.toInt();
+    }
+    if (total <= 0) return activeTransfers.isEmpty ? null : 0;
+    return (done / total).clamp(0.0, 1.0);
+  }
+
+  /// 正在发给这台设备的一批（雷达上的进度环）
+  Transfer? sendingTo(String deviceId) => _transfers
+      .where((t) =>
+          t.direction == TransferDirection.TRANSFER_DIRECTION_OUTGOING &&
+          t.deviceId == deviceId &&
+          const {'scanning', 'waiting', 'active', 'queued'}.contains(t.status))
+      .lastOrNull;
+
+  String get pageRequest => _pageRequest;
+  int get pageRequestSerial => _pageRequestSerial;
 
   /// 正在搜索复制记录（搜索词不是空白）。
   bool get searching => _historySearch.active;
@@ -231,6 +276,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
       await _loadQuickPasteStatus();
 
       await _loadDevices();
+      await _loadTransfers();
       await refreshNotificationStatus();
 
       _events = conn.client
@@ -338,6 +384,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
     LinkState link = LinkState.online,
     ServiceState? serviceState,
     QuickPasteStatus? quickPaste,
+    List<Transfer> transfers = const [],
   }) {
     _status = status;
     _config = config;
@@ -350,6 +397,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
       ..clear()
       ..addAll(favorites);
     _quickPaste = quickPaste;
+    _transfers
+      ..clear()
+      ..addAll(transfers);
     _pendingPairing = pendingPairing;
     _serviceState = serviceState;
     _link = link;
@@ -457,6 +507,16 @@ class AppState extends ChangeNotifier implements RecordDetails {
       case Event_Payload.progress:
         _onProgress(ev.progress);
 
+      case Event_Payload.transferChanged:
+        _upsertTransfer(ev.transferChanged);
+
+      case Event_Payload.transferRemoved:
+        _transfers.removeWhere((t) => t.id == ev.transferRemoved);
+
+      case Event_Payload.navigate:
+        _pageRequest = ev.navigate;
+        _pageRequestSerial++;
+
       default:
         break;
     }
@@ -510,6 +570,30 @@ class AppState extends ChangeNotifier implements RecordDetails {
         0.0,
         1.0,
       );
+    }
+  }
+
+  void _upsertTransfer(Transfer t) {
+    final i = _transfers.indexWhere((x) => x.id == t.id);
+    if (i >= 0) {
+      _transfers[i] = t;
+    } else {
+      final at = _transfers.indexWhere((x) => x.createdAtUnix < t.createdAtUnix);
+      _transfers.insert(at < 0 ? _transfers.length : at, t);
+    }
+  }
+
+  Future<void> _loadTransfers() async {
+    final conn = _conn;
+    if (conn == null) return;
+    try {
+      final resp = await conn.client.listTransfers(ListTransfersRequest(limit: 500));
+      _transfers
+        ..clear()
+        ..addAll(resp.transfers);
+    } on GrpcError {
+      // 更新期间连上的可能还是不认识隔空传送的旧版后台服务
+      _transfers.clear();
     }
   }
 
@@ -794,6 +878,58 @@ class AppState extends ChangeNotifier implements RecordDetails {
     GetImagePreviewRequest(clipId: clipId, index: index),
     options: CallOptions(timeout: const Duration(seconds: 20)),
   );
+
+  // ─────────────────────────── 隔空传送 ───────────────────────────
+
+  /// 把文件发给一台设备。要经官方服务中转而用户还没同意时抛出 SendFailure.needRelayConsent。
+  Future<Transfer> sendFiles(String deviceId, List<String> paths, {bool allowRelay = false}) async {
+    final t = await _client.sendFiles(
+      SendFilesRequest(deviceId: deviceId, paths: paths, allowRelay: allowRelay),
+    );
+    _upsertTransfer(t);
+    notifyListeners();
+    return t;
+  }
+
+  Future<void> cancelTransfer(String id) => _client.cancelTransfer(TransferRef(id: id));
+
+  Future<void> resumeTransfer(String id) => _client.resumeTransfer(TransferRef(id: id));
+
+  /// 只删记录，不删文件。
+  Future<void> deleteTransfers({List<String>? ids, TransferDirection? clearAll}) async {
+    await _client.deleteTransfers(DeleteTransfersRequest(
+      ids: ids ?? const [],
+      all: clearAll != null,
+      direction: clearAll ?? TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED,
+    ));
+  }
+
+  /// 打开隔空传送页时调用：侧边栏的数字清零。
+  Future<void> markTransfersSeen() async {
+    if (unseenTransfers == 0 || _conn == null) return;
+    try {
+      await _client.markTransfersSeen(Empty());
+    } on GrpcError {
+      // 旧版后台服务没有这个接口
+    }
+  }
+
+  /// 检查保存位置能否写入；macOS 上会在这时触发系统的文件夹授权。
+  Future<CheckReceiveDirResponse> checkReceiveDir([String path = '']) =>
+      _client.checkReceiveDir(CheckReceiveDirRequest(path: path));
+
+  static SendFailure sendFailure(Object e) {
+    if (e is! GrpcError) return SendFailure.other;
+    return switch ((e.message ?? '').split(':').first.trim()) {
+      'offline' => SendFailure.offline,
+      'unsupported' => SendFailure.unsupported,
+      'disabled' => SendFailure.disabled,
+      'relay' => SendFailure.needRelayConsent,
+      'no_paths' => SendFailure.noPaths,
+      'unknown_device' => SendFailure.unknownDevice,
+      _ => SendFailure.other,
+    };
+  }
 
   Future<void> requestClipboardPermission() =>
       _client.requestClipboardPermission(Empty());

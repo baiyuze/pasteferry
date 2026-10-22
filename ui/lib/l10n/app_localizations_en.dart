@@ -1452,4 +1452,382 @@ class AppLocalizationsEn extends AppLocalizations {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\nUse Copy to clipboard to try again, here or in History.';
   }
+
+  @override
+  String get navSend => 'Send Files';
+
+  @override
+  String get sendSubtitle => 'Drag files onto a device to send them directly';
+
+  @override
+  String get sendNoDevicesTitle => 'No paired devices yet';
+
+  @override
+  String get sendNoDevicesBody =>
+      'Pair another computer first, then send files to it here.';
+
+  @override
+  String get sendDropHint => 'Drop onto a device to send';
+
+  @override
+  String sendReleaseTo(String name) {
+    return 'Release to send to $name';
+  }
+
+  @override
+  String get sendLan => 'Local network';
+
+  @override
+  String sendRelayLeft(String left) {
+    return 'Relay · $left left today';
+  }
+
+  @override
+  String get sendNeedsUpdate => 'Needs update';
+
+  @override
+  String sendNeedsUpdateTip(String name) {
+    return '$name can receive files after updating to PasteFerry 2.5 or later.';
+  }
+
+  @override
+  String get sendNotReceiving => 'Not receiving files';
+
+  @override
+  String get sendDelivered => 'Delivered';
+
+  @override
+  String sendToTitle(String name) {
+    return 'Send to $name';
+  }
+
+  @override
+  String get sendDropHere => 'Drag files or folders here';
+
+  @override
+  String get sendDropStarts => 'Sending starts as soon as you drop them';
+
+  @override
+  String get sendChooseFiles => 'Choose Files…';
+
+  @override
+  String get sendChooseFolder => 'Choose Folder…';
+
+  @override
+  String get sendDropMore => 'Drop more files to send them next';
+
+  @override
+  String sendSavedWhere(String name) {
+    return 'Files are saved where $name chooses — the Downloads folder by default.';
+  }
+
+  @override
+  String get sendCloseKeeps => 'Closing this window doesn’t stop sending';
+
+  @override
+  String get sendRemoveQueued => 'Remove';
+
+  @override
+  String get sendCannotDrop =>
+      'This item can’t be sent by dragging. Save it as a file first, or use Choose Files….';
+
+  @override
+  String sendErrOffline(String name) {
+    return '$name is offline.';
+  }
+
+  @override
+  String sendErrDisabled(String name) {
+    return '$name isn’t receiving files.';
+  }
+
+  @override
+  String get sendErrMissing => 'Some of these files no longer exist.';
+
+  @override
+  String get relayConfirmTitle => 'Send through the official relay?';
+
+  @override
+  String relayConfirmBody(String name, String left) {
+    return '$name has no direct connection to this computer right now, so the files go through the official relay at about 0.25 MB/s. $left of today’s relay allowance is left.';
+  }
+
+  @override
+  String relayConfirmOver(String size) {
+    return 'These files ($size) are more than the remaining allowance. Sending pauses when it runs out and continues when the two computers connect directly or the allowance resets tomorrow.';
+  }
+
+  @override
+  String relayConfirmWithin(String size) {
+    return 'This uses about $size of today’s allowance.';
+  }
+
+  @override
+  String get relayExhausted =>
+      'Today’s relay allowance is used up. It resets at midnight Beijing time. Two computers that connect directly have no limit.';
+
+  @override
+  String get relayDontAskToday => 'Don’t ask again today for this device';
+
+  @override
+  String get relaySendAnyway => 'Send Anyway';
+
+  @override
+  String get relayOwnServer => 'Relayed — speed depends on your server';
+
+  @override
+  String get transfersReceived => 'Received';
+
+  @override
+  String get transfersSent => 'Sent';
+
+  @override
+  String get transfersClearAll => 'Clear All';
+
+  @override
+  String get transfersClearTitle => 'Clear this list?';
+
+  @override
+  String get transfersClearBody =>
+      'Only the list is cleared. Files stay where they are.';
+
+  @override
+  String get transfersEmptyReceived =>
+      'Files other devices send you appear here';
+
+  @override
+  String get transfersEmptySent => 'Files you send appear here';
+
+  @override
+  String transferFrom(String name) {
+    return 'From $name';
+  }
+
+  @override
+  String transferTo(String name) {
+    return 'To $name';
+  }
+
+  @override
+  String transferItems(String name, int total, int others) {
+    return '$name and $others more';
+  }
+
+  @override
+  String transferFileCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count files',
+      one: '1 file',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get transferQueued => 'Queued';
+
+  @override
+  String transferScanning(String count) {
+    return 'Counting… $count files found';
+  }
+
+  @override
+  String transferWaitingPeer(String name) {
+    return 'Waiting for $name…';
+  }
+
+  @override
+  String get transferSending => 'Sending';
+
+  @override
+  String get transferReceiving => 'Receiving';
+
+  @override
+  String transferCurrent(String file, String index, String total) {
+    return 'Now: $file ($index of $total)';
+  }
+
+  @override
+  String transferLeft(String time) {
+    return '$time left';
+  }
+
+  @override
+  String etaSeconds(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n seconds',
+      one: '1 second',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String etaMinutes(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n minutes',
+      one: '1 minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String etaHours(int h, int m) {
+    return '$h h $m min';
+  }
+
+  @override
+  String get transferPaused => 'Paused: today’s relay allowance is used up';
+
+  @override
+  String get transferInterrupted => 'Interrupted — continues when reconnected';
+
+  @override
+  String transferInterruptedIncoming(String name) {
+    return 'Interrupted — waiting for $name to continue';
+  }
+
+  @override
+  String get transferCancelled => 'Cancelled';
+
+  @override
+  String transferPeerCancelled(String name) {
+    return 'Cancelled by $name';
+  }
+
+  @override
+  String get transferExpired => 'Expired';
+
+  @override
+  String get transferMissing => 'Moved or deleted';
+
+  @override
+  String transferNotSent(String reason) {
+    return 'Not sent: $reason';
+  }
+
+  @override
+  String transferNotReceived(String reason) {
+    return 'Not received: $reason';
+  }
+
+  @override
+  String reasonNoSpacePeer(String name, String size) {
+    return '$name is out of disk space ($size short)';
+  }
+
+  @override
+  String reasonNoSpace(String size) {
+    return 'not enough disk space ($size short)';
+  }
+
+  @override
+  String reasonDestUnavailablePeer(String name) {
+    return '$name’s save location is unavailable';
+  }
+
+  @override
+  String get reasonDestUnavailable =>
+      'the save location is unavailable — check it in Settings';
+
+  @override
+  String get reasonFileTooLarge =>
+      'the save location is on a FAT32 drive, which can’t hold files over 4 GB';
+
+  @override
+  String reasonDisabledPeer(String name) {
+    return '$name isn’t receiving files';
+  }
+
+  @override
+  String get reasonSourceChanged => 'a file changed while it was being sent';
+
+  @override
+  String get reasonSourceMissing => 'a file no longer exists';
+
+  @override
+  String get reasonReadError => 'a file couldn’t be read';
+
+  @override
+  String get reasonWriteFailed => 'the files couldn’t be written';
+
+  @override
+  String get reasonHashMismatch => 'a file was damaged in transit';
+
+  @override
+  String reasonUnsupported(String name) {
+    return '$name needs to update to receive files';
+  }
+
+  @override
+  String get reasonOther => 'something went wrong';
+
+  @override
+  String get revealInFinder => 'Show in Finder';
+
+  @override
+  String get revealInFolder => 'Show in Folder';
+
+  @override
+  String get revealOpenFolder => 'Open Folder';
+
+  @override
+  String get transferResend => 'Send Again';
+
+  @override
+  String get transferRemove => 'Remove from List';
+
+  @override
+  String get transferCopyPath => 'Copy Path';
+
+  @override
+  String get transferPathCopied => 'Path copied';
+
+  @override
+  String sendingTo(String name, String percent) {
+    return 'Sending to $name · $percent';
+  }
+
+  @override
+  String receivingFrom(String name, String percent) {
+    return 'Receiving from $name · $percent';
+  }
+
+  @override
+  String get receiveFiles => 'Receive files from other devices';
+
+  @override
+  String get saveTo => 'Save to';
+
+  @override
+  String get saveToChange => 'Change…';
+
+  @override
+  String get saveToDefault => 'Downloads (default)';
+
+  @override
+  String get saveToUseDefault => 'Use Downloads';
+
+  @override
+  String get receiveNotify => 'Notify when files arrive';
+
+  @override
+  String receiveFootnote(String device) {
+    return 'Only paired devices can send files to $device. While files are transferring, $device won’t go to sleep on its own.';
+  }
+
+  @override
+  String get saveDirNotFound => 'This folder doesn’t exist.';
+
+  @override
+  String get saveDirNotWritable =>
+      'PasteFerry can’t save files in this folder.';
+
+  @override
+  String get saveDirPermission =>
+      'PasteFerry isn’t allowed to use this folder. Allow it in System Settings → Privacy & Security → Files and Folders.';
 }

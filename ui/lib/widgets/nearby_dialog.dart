@@ -14,6 +14,7 @@ import '../platform.dart';
 import '../theme.dart';
 import 'common.dart';
 import 'pairing_dialog.dart';
+import 'radar.dart';
 
 Future<void> showNearbyDialog(BuildContext context) =>
     pushPairingSetupRoute(context, (_) => const NearbyDialog());
@@ -247,7 +248,7 @@ class _NearbyDialogState extends State<NearbyDialog> with SingleTickerProviderSt
             Positioned.fill(
               child: RepaintBoundary(
                 child: CustomPaint(
-                  painter: _RadarPainter(pulse: _pulse, ring: p.separator, wave: p.accent),
+                  painter: RadarPainter(pulse: _pulse, ring: p.separator, wave: p.accent),
                 ),
               ),
             ),
@@ -255,7 +256,7 @@ class _NearbyDialogState extends State<NearbyDialog> with SingleTickerProviderSt
               left: center.dx - _NearbyNode.width / 2,
               top: center.dy - _NearbyNode.avatar / 2,
               width: _NearbyNode.width,
-              child: _SelfNode(platform: selfPlatform),
+              child: RadarSelfNode(platform: selfPlatform, size: _NearbyNode.avatar),
             ),
             for (final d in _devices)
               Builder(builder: (context) {
@@ -276,77 +277,6 @@ class _NearbyDialogState extends State<NearbyDialog> with SingleTickerProviderSt
           ],
         );
       },
-    );
-  }
-}
-
-/// 雷达的底：几圈很淡的同心圆，两道波纹错开半个周期从本机向外扩散、逐渐变淡。
-class _RadarPainter extends CustomPainter {
-  _RadarPainter({required this.pulse, required this.ring, required this.wave}) : super(repaint: pulse);
-
-  final Animation<double> pulse;
-  final Color ring;
-  final Color wave;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final c = size.center(Offset.zero);
-    final maxR = size.shortestSide / 2;
-    final rings = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1
-      ..color = ring;
-    for (final f in const [0.36, 0.68, 1.0]) {
-      canvas.drawCircle(c, maxR * f, rings);
-    }
-    for (final offset in const [0.0, 0.5]) {
-      final t = (pulse.value + offset) % 1.0;
-      final r = 28 + (maxR - 28) * Curves.easeOut.transform(t);
-      canvas.drawCircle(
-        c,
-        r,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5
-          ..color = wave.withValues(alpha: 0.3 * (1 - t)),
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(_RadarPainter old) => old.ring != ring || old.wave != wave;
-}
-
-class _SelfNode extends StatelessWidget {
-  const _SelfNode({required this.platform});
-
-  final String platform;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: _NearbyNode.avatar,
-          height: _NearbyNode.avatar,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: p.surface,
-            border: Border.all(color: p.accent, width: 1.5),
-          ),
-          child: Icon(platformIcon(platform), size: 22, color: p.accent),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          Wording.thisDevice,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          style: context.text.labelMedium,
-        ),
-      ],
     );
   }
 }

@@ -1,0 +1,159 @@
+import 'package:fixnum/fixnum.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:pasteferry_ui/app_state.dart';
+import 'package:pasteferry_ui/gen/pasteferry/v1/daemon.pb.dart';
+import 'package:pasteferry_ui/i18n.dart';
+import 'package:pasteferry_ui/main.dart';
+import 'package:pasteferry_ui/widgets/send_dialog.dart';
+
+const _in = TransferDirection.TRANSFER_DIRECTION_INCOMING;
+const _out = TransferDirection.TRANSFER_DIRECTION_OUTGOING;
+
+Int64 _now([int ago = 0]) => Int64(DateTime.now().millisecondsSinceEpoch ~/ 1000 - ago);
+
+/// 各种状态都有：同一局域网、中转、离线、旧版本、关了接收的设备；收到的与发出的各种结果。
+AppState _demo(String language, {bool withActive = true}) => AppState()
+  ..debugSeed(
+    status: Status(version: '2.5.0', officialUsage: OfficialUsage(available: true, remainingBytes: Int64(62 << 20))),
+    config: Config(language: language, deviceName: 'MacBook Pro', serviceMode: ServiceMode.SERVICE_MODE_OFFICIAL),
+    self: Device(id: 'self', name: 'MacBook Pro', platform: 'darwin'),
+    peers: [
+      Device(id: 'air', name: 'MacBook Air', platform: 'darwin', online: true, lanReachable: true,
+          connection: ConnectionKind.CONNECTION_KIND_DIRECT, receivesFiles: true),
+      Device(id: 'win', name: 'Windows 台式机', platform: 'windows', online: true,
+          connection: ConnectionKind.CONNECTION_KIND_RELAY, receivesFiles: true),
+      Device(id: 'linux', name: 'Ubuntu 笔记本', platform: 'linux'),
+      Device(id: 'old', name: 'Old PC', platform: 'windows', online: true,
+          connection: ConnectionKind.CONNECTION_KIND_DIRECT),
+      Device(id: 'off', name: 'iMac', platform: 'darwin', online: true, lanReachable: true,
+          connection: ConnectionKind.CONNECTION_KIND_DIRECT, receivesFiles: true, receiveDisabled: true),
+    ],
+    transfers: [
+      if (withActive)
+        Transfer(id: 'r1', direction: _in, deviceId: 'air', deviceName: 'MacBook Air', status: 'active',
+            items: [ClipItem(name: '照片 2026-10', isDir: true, size: Int64(2 << 30))],
+            totalBytes: Int64(2 << 30), doneBytes: Int64(1 << 30), fileCount: Int64(412),
+            bytesPerSecond: 42e6, currentFile: '照片 2026-10/IMG_2041.HEIC', currentIndex: Int64(281),
+            createdAtUnix: _now(30)),
+      Transfer(id: 'r2', direction: _in, deviceId: 'air', deviceName: 'MacBook Air', status: 'done',
+          items: [ClipItem(name: '合同扫描件.pdf'), ClipItem(name: 'notes.txt'), ClipItem(name: 'a.png')],
+          paths: ['/tmp/合同扫描件.pdf', '/tmp/notes.txt', '/tmp/a.png'], present: [true, true, true],
+          totalBytes: Int64(18 << 20), fileCount: Int64(3), createdAtUnix: _now(120), finishedAtUnix: _now(100), seen: true),
+      Transfer(id: 'r3', direction: _in, deviceId: 'win', deviceName: 'Windows 台式机', status: 'done',
+          items: [ClipItem(name: 'PasteFerry.dmg')], paths: ['/tmp/PasteFerry.dmg'], present: [false],
+          totalBytes: Int64(812 << 20), fileCount: Int64(1), createdAtUnix: _now(90000), finishedAtUnix: _now(90000), seen: true),
+      if (withActive)
+        Transfer(id: 's1', direction: _out, deviceId: 'air', deviceName: 'MacBook Air', status: 'active',
+            items: [ClipItem(name: '演示视频.mov')], totalBytes: Int64(3 << 30), doneBytes: Int64(1 << 30),
+            fileCount: Int64(1), bytesPerSecond: 41e6, createdAtUnix: _now(20)),
+      Transfer(id: 's2', direction: _out, deviceId: 'win', deviceName: 'Windows 台式机', status: 'interrupted',
+          items: [ClipItem(name: 'build.zip')], paths: ['/tmp/build.zip'], totalBytes: Int64(300 << 20),
+          doneBytes: Int64(120 << 20), fileCount: Int64(1), createdAtUnix: _now(600)),
+      Transfer(id: 's3', direction: _out, deviceId: 'air', deviceName: 'MacBook Air', status: 'declined',
+          error: 'no_space', shortfallBytes: Int64(1200 << 20), items: [ClipItem(name: '照片 2026-10', isDir: true)],
+          paths: ['/tmp/照片 2026-10'], totalBytes: Int64(2 << 30), fileCount: Int64(412), createdAtUnix: _now(3600)),
+    ],
+  );
+
+void main() {
+  for (final language in ['en', 'ja', 'zh-Hans', 'zh-Hant-TW', 'zh-Hant-HK']) {
+    group('最小窗口下的 $language 隔空传送', () {
+      setUp(() {
+        final view = TestWidgetsFlutterBinding.instance.platformDispatcher.views.first;
+        view.physicalSize = const Size(760, 520);
+        view.devicePixelRatio = 1;
+      });
+      tearDown(() => TestWidgetsFlutterBinding.instance.platformDispatcher.views.first.reset());
+
+      Future<AppLocalizations> open(WidgetTester tester, AppState state) async {
+        await tester.pumpWidget(PasteFerryApp(state: state));
+        await tester.pump();
+        final l = AppLocalizations.of(tester.element(find.byType(Shell)));
+        await tester.tap(find.text(l.navSend).first);
+        await tester.pump();
+        return l;
+      }
+
+      testWidgets('雷达与列表', (tester) async {
+        final l = await open(tester, _demo(language));
+        expect(find.text(l.sendSubtitle), findsOneWidget);
+        for (final name in ['MacBook Air', 'Windows 台式机', 'Ubuntu 笔记本', 'Old PC', 'iMac']) {
+          expect(find.text(name), findsOneWidget, reason: name);
+        }
+        expect(find.text(l.sendNeedsUpdate), findsOneWidget);
+        expect(find.text(l.sendNotReceiving), findsOneWidget);
+        expect(find.text(l.sendRelayLeft('62.0 MB')), findsOneWidget);
+        // 收到的。最小窗口下列表只放得下两三行，后面的要滚动
+        final list = find.byType(Scrollable).last;
+        expect(find.textContaining('IMG_2041.HEIC'), findsOneWidget);
+        await tester.scrollUntilVisible(find.textContaining(l.transferItems('合同扫描件.pdf', 3, 2)), 60, scrollable: list);
+        await tester.scrollUntilVisible(find.textContaining(l.transferMissing), 60, scrollable: list);
+        // 发出的
+        await tester.tap(find.text(l.transfersSent));
+        await tester.pump();
+        await tester.scrollUntilVisible(find.text(l.continueAction), 60, scrollable: list);
+        await tester.scrollUntilVisible(find.textContaining(l.reasonNoSpacePeer('MacBook Air', '1.2 GB')), 60,
+            scrollable: list);
+        expect(find.text(l.transferResend), findsOneWidget);
+      });
+
+      testWidgets('发送窗口', (tester) async {
+        final l = await open(tester, _demo(language));
+        await tester.tap(find.text('MacBook Air'));
+        // 雷达的波纹一直在动，等不到 pumpAndSettle，等弹窗的动画放完就行
+        await tester.pump(const Duration(milliseconds: 400));
+        expect(find.text(l.sendToTitle('MacBook Air')), findsOneWidget);
+        expect(find.text(l.sendDropHere), findsOneWidget);
+        expect(find.text(l.sendChooseFolder), findsOneWidget);
+      });
+
+      testWidgets('设置里的隔空传送', (tester) async {
+        await tester.pumpWidget(PasteFerryApp(state: _demo(language)));
+        await tester.pump();
+        final l = AppLocalizations.of(tester.element(find.byType(Shell)));
+        await tester.tap(find.text(l.navSettings).first);
+        await tester.pump();
+        await tester.dragUntilVisible(find.text(l.receiveNotify), find.byType(ListView), const Offset(0, -100));
+        expect(find.text(l.receiveFiles), findsOneWidget);
+        expect(find.text(l.saveToChange), findsOneWidget);
+      });
+    });
+  }
+
+  testWidgets('有文件在传时侧边栏显示进度环，没有时显示新收到的个数', (tester) async {
+    final state = _demo('zh-Hans');
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    await tester.pump();
+    final ring = find.descendant(of: find.byType(Tooltip), matching: find.byType(CircularProgressIndicator));
+    expect(ring, findsOneWidget);
+
+    final idle = _demo('zh-Hans', withActive: false);
+    idle.debugEvent(Event(transferChanged: Transfer(id: 'new', direction: _in, deviceName: 'MacBook Air',
+        status: 'done', items: [ClipItem(name: 'x.txt')], createdAtUnix: _now())));
+    await tester.pumpWidget(PasteFerryApp(key: UniqueKey(), state: idle));
+    await tester.pump();
+    expect(ring, findsNothing);
+    expect(find.text('1'), findsOneWidget);
+  });
+
+  testWidgets('点了隔空传送的通知，界面切到隔空传送页', (tester) async {
+    final state = _demo('zh-Hans');
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    await tester.pump();
+    expect(find.text('把文件拖到一台设备上，直接发过去'), findsNothing);
+    state.debugEvent(Event(navigate: 'send'));
+    await tester.pump();
+    expect(find.text('把文件拖到一台设备上，直接发过去'), findsOneWidget);
+  });
+
+  test('剩余时间与进度的写法', () {
+    final l = lookupAppLocalizations(const Locale('zh'));
+    expect(etaLabel(l, 20), '20 秒');
+    expect(etaLabel(l, 90), '2 分钟');
+    expect(etaLabel(l, 3900), '1 小时 5 分');
+    final t = Transfer(totalBytes: Int64(2 << 30), doneBytes: Int64(1 << 30), bytesPerSecond: 40 * 1024 * 1024);
+    expect(progressLabel(l, t), '50% · 1.0 GB / 2.0 GB · 40.0 MB/s · 还剩 26 秒');
+  });
+}

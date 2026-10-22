@@ -1314,6 +1314,358 @@ class AppLocalizationsZh extends AppLocalizations {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\n可从此通知或复制记录重新放入剪贴板。';
   }
+
+  @override
+  String get navSend => '隔空传送';
+
+  @override
+  String get sendSubtitle => '把文件拖到一台设备上，直接发过去';
+
+  @override
+  String get sendNoDevicesTitle => '还没有配对的设备';
+
+  @override
+  String get sendNoDevicesBody => '先配对另一台电脑，之后就能在这里给它发文件。';
+
+  @override
+  String get sendDropHint => '拖到一台设备上发送';
+
+  @override
+  String sendReleaseTo(String name) {
+    return '松手发送到 $name';
+  }
+
+  @override
+  String get sendLan => '局域网';
+
+  @override
+  String sendRelayLeft(String left) {
+    return '中转 · 今日剩 $left';
+  }
+
+  @override
+  String get sendNeedsUpdate => '需要更新';
+
+  @override
+  String sendNeedsUpdateTip(String name) {
+    return '$name 更新到隔空贴 2.5 或更高版本后才能接收文件。';
+  }
+
+  @override
+  String get sendNotReceiving => '不接收文件';
+
+  @override
+  String get sendDelivered => '已送达';
+
+  @override
+  String sendToTitle(String name) {
+    return '发送到 $name';
+  }
+
+  @override
+  String get sendDropHere => '把文件或文件夹拖到这里';
+
+  @override
+  String get sendDropStarts => '松手就开始发送';
+
+  @override
+  String get sendChooseFiles => '选择文件…';
+
+  @override
+  String get sendChooseFolder => '选择文件夹…';
+
+  @override
+  String get sendDropMore => '继续拖入文件，排在后面发送';
+
+  @override
+  String sendSavedWhere(String name) {
+    return '文件存到 $name 设置的位置，默认是「下载」文件夹。';
+  }
+
+  @override
+  String get sendCloseKeeps => '关闭窗口不影响发送';
+
+  @override
+  String get sendRemoveQueued => '移除';
+
+  @override
+  String get sendCannotDrop => '这个项目不能直接拖过来发送。请先把它存成文件，或者用「选择文件…」。';
+
+  @override
+  String sendErrOffline(String name) {
+    return '$name 不在线。';
+  }
+
+  @override
+  String sendErrDisabled(String name) {
+    return '$name 关闭了接收文件。';
+  }
+
+  @override
+  String get sendErrMissing => '有文件已经不在了。';
+
+  @override
+  String get relayConfirmTitle => '经官方服务中转发送？';
+
+  @override
+  String relayConfirmBody(String name, String left) {
+    return '$name 现在和这台电脑没有直连，文件要经官方服务中转，速度约 0.25 MB/s。今天的中转额度还剩 $left。';
+  }
+
+  @override
+  String relayConfirmOver(String size) {
+    return '这些文件（$size）超出了今天剩余的额度。发到额度用完时会暂停；两台电脑连上直连、或明天额度恢复后，自动继续。';
+  }
+
+  @override
+  String relayConfirmWithin(String size) {
+    return '这次大约用掉今天额度中的 $size。';
+  }
+
+  @override
+  String get relayExhausted => '今天的中转额度已用完，北京时间 0 点恢复。两台电脑连上直连后不受限制。';
+
+  @override
+  String get relayDontAskToday => '今天发给这台设备时不再询问';
+
+  @override
+  String get relaySendAnyway => '仍然发送';
+
+  @override
+  String get relayOwnServer => '中转，速度取决于你的服务器带宽';
+
+  @override
+  String get transfersReceived => '收到的';
+
+  @override
+  String get transfersSent => '发出的';
+
+  @override
+  String get transfersClearAll => '全部清除';
+
+  @override
+  String get transfersClearTitle => '清除这个列表？';
+
+  @override
+  String get transfersClearBody => '只清除记录，文件不会被删除。';
+
+  @override
+  String get transfersEmptyReceived => '其他设备发来的文件会出现在这里';
+
+  @override
+  String get transfersEmptySent => '你发出的文件会出现在这里';
+
+  @override
+  String transferFrom(String name) {
+    return '来自 $name';
+  }
+
+  @override
+  String transferTo(String name) {
+    return '发给 $name';
+  }
+
+  @override
+  String transferItems(String name, int total, int others) {
+    return '$name 等 $total 项';
+  }
+
+  @override
+  String transferFileCount(int count) {
+    return '$count 个文件';
+  }
+
+  @override
+  String get transferQueued => '排队中';
+
+  @override
+  String transferScanning(String count) {
+    return '正在统计… 已找到 $count 个文件';
+  }
+
+  @override
+  String transferWaitingPeer(String name) {
+    return '正在联系 $name…';
+  }
+
+  @override
+  String get transferSending => '正在发送';
+
+  @override
+  String get transferReceiving => '正在接收';
+
+  @override
+  String transferCurrent(String file, String index, String total) {
+    return '正在传：$file（第 $index / $total 个）';
+  }
+
+  @override
+  String transferLeft(String time) {
+    return '还剩 $time';
+  }
+
+  @override
+  String etaSeconds(int n) {
+    return '$n 秒';
+  }
+
+  @override
+  String etaMinutes(int n) {
+    return '$n 分钟';
+  }
+
+  @override
+  String etaHours(int h, int m) {
+    return '$h 小时 $m 分';
+  }
+
+  @override
+  String get transferPaused => '已暂停：今天的中转额度用完了';
+
+  @override
+  String get transferInterrupted => '已中断，重新连上后继续';
+
+  @override
+  String transferInterruptedIncoming(String name) {
+    return '已中断 · 等 $name 继续';
+  }
+
+  @override
+  String get transferCancelled => '已取消';
+
+  @override
+  String transferPeerCancelled(String name) {
+    return '$name 取消了';
+  }
+
+  @override
+  String get transferExpired => '已过期';
+
+  @override
+  String get transferMissing => '已移动或删除';
+
+  @override
+  String transferNotSent(String reason) {
+    return '没有发出：$reason';
+  }
+
+  @override
+  String transferNotReceived(String reason) {
+    return '没有收下：$reason';
+  }
+
+  @override
+  String reasonNoSpacePeer(String name, String size) {
+    return '$name 的磁盘空间不足，还差 $size';
+  }
+
+  @override
+  String reasonNoSpace(String size) {
+    return '磁盘空间不足，还差 $size';
+  }
+
+  @override
+  String reasonDestUnavailablePeer(String name) {
+    return '$name 的保存位置不可用';
+  }
+
+  @override
+  String get reasonDestUnavailable => '保存位置不可用，请在设置里检查';
+
+  @override
+  String get reasonFileTooLarge => '保存位置在 FAT32 格式的盘上，放不下超过 4 GB 的文件';
+
+  @override
+  String reasonDisabledPeer(String name) {
+    return '$name 关闭了接收文件';
+  }
+
+  @override
+  String get reasonSourceChanged => '发送过程中有文件被修改了';
+
+  @override
+  String get reasonSourceMissing => '有文件已经不在了';
+
+  @override
+  String get reasonReadError => '有文件读取失败';
+
+  @override
+  String get reasonWriteFailed => '文件写入失败';
+
+  @override
+  String get reasonHashMismatch => '有文件在传输中损坏了';
+
+  @override
+  String reasonUnsupported(String name) {
+    return '$name 需要更新才能接收文件';
+  }
+
+  @override
+  String get reasonOther => '出了点问题';
+
+  @override
+  String get revealInFinder => '在访达中显示';
+
+  @override
+  String get revealInFolder => '在文件夹中显示';
+
+  @override
+  String get revealOpenFolder => '打开文件夹';
+
+  @override
+  String get transferResend => '重新发送';
+
+  @override
+  String get transferRemove => '从列表中移除';
+
+  @override
+  String get transferCopyPath => '拷贝路径';
+
+  @override
+  String get transferPathCopied => '已拷贝路径';
+
+  @override
+  String sendingTo(String name, String percent) {
+    return '正在发给 $name · $percent';
+  }
+
+  @override
+  String receivingFrom(String name, String percent) {
+    return '正在接收 $name 的文件 · $percent';
+  }
+
+  @override
+  String get receiveFiles => '接收其他设备发来的文件';
+
+  @override
+  String get saveTo => '保存到';
+
+  @override
+  String get saveToChange => '更改…';
+
+  @override
+  String get saveToDefault => '下载（默认）';
+
+  @override
+  String get saveToUseDefault => '改回「下载」';
+
+  @override
+  String get receiveNotify => '收到文件时通知';
+
+  @override
+  String receiveFootnote(String device) {
+    return '只有已配对的设备能给$device发文件。传输期间$device不会自动睡眠。';
+  }
+
+  @override
+  String get saveDirNotFound => '这个文件夹不存在。';
+
+  @override
+  String get saveDirNotWritable => '隔空贴不能把文件存到这个文件夹。';
+
+  @override
+  String get saveDirPermission =>
+      '隔空贴还没有使用这个文件夹的权限。请在「系统设置 → 隐私与安全性 → 文件与文件夹」里允许。';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -2626,6 +2978,358 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\n可從此通知或複製記錄重新放入剪貼簿。';
   }
+
+  @override
+  String get navSend => '隔空傳送';
+
+  @override
+  String get sendSubtitle => '把檔案拖到一部裝置上，直接傳過去';
+
+  @override
+  String get sendNoDevicesTitle => '還沒有配對的裝置';
+
+  @override
+  String get sendNoDevicesBody => '先配對另一部電腦，之後就能在這裏傳檔案給它。';
+
+  @override
+  String get sendDropHint => '拖到一部裝置上傳送';
+
+  @override
+  String sendReleaseTo(String name) {
+    return '放手以傳送到 $name';
+  }
+
+  @override
+  String get sendLan => '區域網絡';
+
+  @override
+  String sendRelayLeft(String left) {
+    return '中轉 · 今日剩 $left';
+  }
+
+  @override
+  String get sendNeedsUpdate => '需要更新';
+
+  @override
+  String sendNeedsUpdateTip(String name) {
+    return '$name 更新到隔空貼 2.5 或更新版本後才能接收檔案。';
+  }
+
+  @override
+  String get sendNotReceiving => '不接收檔案';
+
+  @override
+  String get sendDelivered => '已送達';
+
+  @override
+  String sendToTitle(String name) {
+    return '傳送到 $name';
+  }
+
+  @override
+  String get sendDropHere => '把檔案或資料夾拖到這裏';
+
+  @override
+  String get sendDropStarts => '放手就開始傳送';
+
+  @override
+  String get sendChooseFiles => '選擇檔案…';
+
+  @override
+  String get sendChooseFolder => '選擇資料夾…';
+
+  @override
+  String get sendDropMore => '繼續拖入檔案，排在後面傳送';
+
+  @override
+  String sendSavedWhere(String name) {
+    return '檔案會存到 $name 設定的位置，預設是「下載」資料夾。';
+  }
+
+  @override
+  String get sendCloseKeeps => '關閉視窗不影響傳送';
+
+  @override
+  String get sendRemoveQueued => '移除';
+
+  @override
+  String get sendCannotDrop => '這個項目不能直接拖過來傳送。請先把它存成檔案，或使用「選擇檔案…」。';
+
+  @override
+  String sendErrOffline(String name) {
+    return '$name 不在線上。';
+  }
+
+  @override
+  String sendErrDisabled(String name) {
+    return '$name 關閉了接收檔案。';
+  }
+
+  @override
+  String get sendErrMissing => '有檔案已經不在了。';
+
+  @override
+  String get relayConfirmTitle => '經官方服務中轉傳送？';
+
+  @override
+  String relayConfirmBody(String name, String left) {
+    return '$name 目前和這部電腦沒有直連，檔案要經官方服務中轉，速度約 0.25 MB/s。今天的中轉額度還剩 $left。';
+  }
+
+  @override
+  String relayConfirmOver(String size) {
+    return '這些檔案（$size）超出了今天剩餘的額度。傳到額度用完時會暫停；兩部電腦連上直連、或明天額度恢復後，自動繼續。';
+  }
+
+  @override
+  String relayConfirmWithin(String size) {
+    return '這次大約用掉今天額度中的 $size。';
+  }
+
+  @override
+  String get relayExhausted => '今天的中轉額度已用完，北京時間 0 點恢復。兩部電腦連上直連後不受限制。';
+
+  @override
+  String get relayDontAskToday => '今天傳給這部裝置時不再詢問';
+
+  @override
+  String get relaySendAnyway => '仍然傳送';
+
+  @override
+  String get relayOwnServer => '中轉，速度取決於你的伺服器頻寬';
+
+  @override
+  String get transfersReceived => '收到的';
+
+  @override
+  String get transfersSent => '傳出的';
+
+  @override
+  String get transfersClearAll => '全部清除';
+
+  @override
+  String get transfersClearTitle => '清除這個列表？';
+
+  @override
+  String get transfersClearBody => '只清除紀錄，檔案不會被刪除。';
+
+  @override
+  String get transfersEmptyReceived => '其他裝置傳來的檔案會出現在這裏';
+
+  @override
+  String get transfersEmptySent => '你傳出的檔案會出現在這裏';
+
+  @override
+  String transferFrom(String name) {
+    return '來自 $name';
+  }
+
+  @override
+  String transferTo(String name) {
+    return '傳給 $name';
+  }
+
+  @override
+  String transferItems(String name, int total, int others) {
+    return '$name 等 $total 項';
+  }
+
+  @override
+  String transferFileCount(int count) {
+    return '$count 個檔案';
+  }
+
+  @override
+  String get transferQueued => '排隊中';
+
+  @override
+  String transferScanning(String count) {
+    return '正在統計… 已找到 $count 個檔案';
+  }
+
+  @override
+  String transferWaitingPeer(String name) {
+    return '正在聯絡 $name…';
+  }
+
+  @override
+  String get transferSending => '正在傳送';
+
+  @override
+  String get transferReceiving => '正在接收';
+
+  @override
+  String transferCurrent(String file, String index, String total) {
+    return '正在傳：$file（第 $index / $total 個）';
+  }
+
+  @override
+  String transferLeft(String time) {
+    return '還剩 $time';
+  }
+
+  @override
+  String etaSeconds(int n) {
+    return '$n 秒';
+  }
+
+  @override
+  String etaMinutes(int n) {
+    return '$n 分鐘';
+  }
+
+  @override
+  String etaHours(int h, int m) {
+    return '$h 小時 $m 分';
+  }
+
+  @override
+  String get transferPaused => '已暫停：今天的中轉額度用完了';
+
+  @override
+  String get transferInterrupted => '已中斷，重新連上後繼續';
+
+  @override
+  String transferInterruptedIncoming(String name) {
+    return '已中斷 · 等 $name 繼續';
+  }
+
+  @override
+  String get transferCancelled => '已取消';
+
+  @override
+  String transferPeerCancelled(String name) {
+    return '$name 取消了';
+  }
+
+  @override
+  String get transferExpired => '已過期';
+
+  @override
+  String get transferMissing => '已移動或刪除';
+
+  @override
+  String transferNotSent(String reason) {
+    return '沒有傳出：$reason';
+  }
+
+  @override
+  String transferNotReceived(String reason) {
+    return '沒有收下：$reason';
+  }
+
+  @override
+  String reasonNoSpacePeer(String name, String size) {
+    return '$name 的磁碟空間不足，還差 $size';
+  }
+
+  @override
+  String reasonNoSpace(String size) {
+    return '磁碟空間不足，還差 $size';
+  }
+
+  @override
+  String reasonDestUnavailablePeer(String name) {
+    return '$name 的儲存位置無法使用';
+  }
+
+  @override
+  String get reasonDestUnavailable => '儲存位置無法使用，請在設定中檢查';
+
+  @override
+  String get reasonFileTooLarge => '儲存位置在 FAT32 格式的磁碟上，放不下超過 4 GB 的檔案';
+
+  @override
+  String reasonDisabledPeer(String name) {
+    return '$name 關閉了接收檔案';
+  }
+
+  @override
+  String get reasonSourceChanged => '傳送過程中有檔案被修改了';
+
+  @override
+  String get reasonSourceMissing => '有檔案已經不在了';
+
+  @override
+  String get reasonReadError => '有檔案讀取失敗';
+
+  @override
+  String get reasonWriteFailed => '檔案寫入失敗';
+
+  @override
+  String get reasonHashMismatch => '有檔案在傳輸中損毀了';
+
+  @override
+  String reasonUnsupported(String name) {
+    return '$name 需要更新才能接收檔案';
+  }
+
+  @override
+  String get reasonOther => '出了點問題';
+
+  @override
+  String get revealInFinder => '在 Finder 中顯示';
+
+  @override
+  String get revealInFolder => '在資料夾中顯示';
+
+  @override
+  String get revealOpenFolder => '打開資料夾';
+
+  @override
+  String get transferResend => '重新傳送';
+
+  @override
+  String get transferRemove => '從列表中移除';
+
+  @override
+  String get transferCopyPath => '拷貝路徑';
+
+  @override
+  String get transferPathCopied => '已拷貝路徑';
+
+  @override
+  String sendingTo(String name, String percent) {
+    return '正在傳給 $name · $percent';
+  }
+
+  @override
+  String receivingFrom(String name, String percent) {
+    return '正在接收 $name 的檔案 · $percent';
+  }
+
+  @override
+  String get receiveFiles => '接收其他裝置傳來的檔案';
+
+  @override
+  String get saveTo => '儲存到';
+
+  @override
+  String get saveToChange => '更改…';
+
+  @override
+  String get saveToDefault => '下載（預設）';
+
+  @override
+  String get saveToUseDefault => '改回「下載」';
+
+  @override
+  String get receiveNotify => '收到檔案時通知';
+
+  @override
+  String receiveFootnote(String device) {
+    return '只有已配對的裝置能傳檔案給$device。傳輸期間$device不會自動睡眠。';
+  }
+
+  @override
+  String get saveDirNotFound => '這個資料夾不存在。';
+
+  @override
+  String get saveDirNotWritable => '隔空貼無法把檔案存到這個資料夾。';
+
+  @override
+  String get saveDirPermission =>
+      '隔空貼還沒有使用這個資料夾的權限。請在「系統設定 → 私隱與保安 → 檔案和資料夾」中允許。';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -3938,4 +4642,356 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\n可從此通知或複製記錄重新放入剪貼簿。';
   }
+
+  @override
+  String get navSend => '隔空傳送';
+
+  @override
+  String get sendSubtitle => '把檔案拖到一台裝置上，直接傳過去';
+
+  @override
+  String get sendNoDevicesTitle => '還沒有配對的裝置';
+
+  @override
+  String get sendNoDevicesBody => '先配對另一台電腦，之後就能在這裡傳檔案給它。';
+
+  @override
+  String get sendDropHint => '拖到一台裝置上傳送';
+
+  @override
+  String sendReleaseTo(String name) {
+    return '放開以傳送到 $name';
+  }
+
+  @override
+  String get sendLan => '區域網路';
+
+  @override
+  String sendRelayLeft(String left) {
+    return '中繼 · 今日剩 $left';
+  }
+
+  @override
+  String get sendNeedsUpdate => '需要更新';
+
+  @override
+  String sendNeedsUpdateTip(String name) {
+    return '$name 更新到隔空貼 2.5 或更新版本後才能接收檔案。';
+  }
+
+  @override
+  String get sendNotReceiving => '不接收檔案';
+
+  @override
+  String get sendDelivered => '已送達';
+
+  @override
+  String sendToTitle(String name) {
+    return '傳送到 $name';
+  }
+
+  @override
+  String get sendDropHere => '把檔案或資料夾拖到這裡';
+
+  @override
+  String get sendDropStarts => '放開就開始傳送';
+
+  @override
+  String get sendChooseFiles => '選擇檔案…';
+
+  @override
+  String get sendChooseFolder => '選擇資料夾…';
+
+  @override
+  String get sendDropMore => '繼續拖入檔案，排在後面傳送';
+
+  @override
+  String sendSavedWhere(String name) {
+    return '檔案會存到 $name 設定的位置，預設是「下載項目」檔案夾。';
+  }
+
+  @override
+  String get sendCloseKeeps => '關閉視窗不影響傳送';
+
+  @override
+  String get sendRemoveQueued => '移除';
+
+  @override
+  String get sendCannotDrop => '這個項目不能直接拖過來傳送。請先把它存成檔案，或使用「選擇檔案…」。';
+
+  @override
+  String sendErrOffline(String name) {
+    return '$name 不在線上。';
+  }
+
+  @override
+  String sendErrDisabled(String name) {
+    return '$name 關閉了接收檔案。';
+  }
+
+  @override
+  String get sendErrMissing => '有檔案已經不在了。';
+
+  @override
+  String get relayConfirmTitle => '經官方服務中繼傳送？';
+
+  @override
+  String relayConfirmBody(String name, String left) {
+    return '$name 目前和這台電腦沒有直連，檔案要經官方服務中繼，速度約 0.25 MB/s。今天的中繼額度還剩 $left。';
+  }
+
+  @override
+  String relayConfirmOver(String size) {
+    return '這些檔案（$size）超出了今天剩餘的額度。傳到額度用完時會暫停；兩台電腦連上直連、或明天額度恢復後，自動繼續。';
+  }
+
+  @override
+  String relayConfirmWithin(String size) {
+    return '這次大約用掉今天額度中的 $size。';
+  }
+
+  @override
+  String get relayExhausted => '今天的中繼額度已用完，北京時間 0 點恢復。兩台電腦連上直連後不受限制。';
+
+  @override
+  String get relayDontAskToday => '今天傳給這台裝置時不再詢問';
+
+  @override
+  String get relaySendAnyway => '仍然傳送';
+
+  @override
+  String get relayOwnServer => '中繼，速度取決於你的伺服器頻寬';
+
+  @override
+  String get transfersReceived => '收到的';
+
+  @override
+  String get transfersSent => '傳出的';
+
+  @override
+  String get transfersClearAll => '全部清除';
+
+  @override
+  String get transfersClearTitle => '清除這個列表？';
+
+  @override
+  String get transfersClearBody => '只清除紀錄，檔案不會被刪除。';
+
+  @override
+  String get transfersEmptyReceived => '其他裝置傳來的檔案會出現在這裡';
+
+  @override
+  String get transfersEmptySent => '你傳出的檔案會出現在這裡';
+
+  @override
+  String transferFrom(String name) {
+    return '來自 $name';
+  }
+
+  @override
+  String transferTo(String name) {
+    return '傳給 $name';
+  }
+
+  @override
+  String transferItems(String name, int total, int others) {
+    return '$name 等 $total 項';
+  }
+
+  @override
+  String transferFileCount(int count) {
+    return '$count 個檔案';
+  }
+
+  @override
+  String get transferQueued => '排隊中';
+
+  @override
+  String transferScanning(String count) {
+    return '正在統計… 已找到 $count 個檔案';
+  }
+
+  @override
+  String transferWaitingPeer(String name) {
+    return '正在聯絡 $name…';
+  }
+
+  @override
+  String get transferSending => '正在傳送';
+
+  @override
+  String get transferReceiving => '正在接收';
+
+  @override
+  String transferCurrent(String file, String index, String total) {
+    return '正在傳：$file（第 $index / $total 個）';
+  }
+
+  @override
+  String transferLeft(String time) {
+    return '還剩 $time';
+  }
+
+  @override
+  String etaSeconds(int n) {
+    return '$n 秒';
+  }
+
+  @override
+  String etaMinutes(int n) {
+    return '$n 分鐘';
+  }
+
+  @override
+  String etaHours(int h, int m) {
+    return '$h 小時 $m 分';
+  }
+
+  @override
+  String get transferPaused => '已暫停：今天的中繼額度用完了';
+
+  @override
+  String get transferInterrupted => '已中斷，重新連上後繼續';
+
+  @override
+  String transferInterruptedIncoming(String name) {
+    return '已中斷 · 等 $name 繼續';
+  }
+
+  @override
+  String get transferCancelled => '已取消';
+
+  @override
+  String transferPeerCancelled(String name) {
+    return '$name 取消了';
+  }
+
+  @override
+  String get transferExpired => '已過期';
+
+  @override
+  String get transferMissing => '已移動或刪除';
+
+  @override
+  String transferNotSent(String reason) {
+    return '沒有傳出：$reason';
+  }
+
+  @override
+  String transferNotReceived(String reason) {
+    return '沒有收下：$reason';
+  }
+
+  @override
+  String reasonNoSpacePeer(String name, String size) {
+    return '$name 的磁碟空間不足，還差 $size';
+  }
+
+  @override
+  String reasonNoSpace(String size) {
+    return '磁碟空間不足，還差 $size';
+  }
+
+  @override
+  String reasonDestUnavailablePeer(String name) {
+    return '$name 的儲存位置無法使用';
+  }
+
+  @override
+  String get reasonDestUnavailable => '儲存位置無法使用，請在設定中檢查';
+
+  @override
+  String get reasonFileTooLarge => '儲存位置在 FAT32 格式的磁碟上，放不下超過 4 GB 的檔案';
+
+  @override
+  String reasonDisabledPeer(String name) {
+    return '$name 關閉了接收檔案';
+  }
+
+  @override
+  String get reasonSourceChanged => '傳送過程中有檔案被修改了';
+
+  @override
+  String get reasonSourceMissing => '有檔案已經不在了';
+
+  @override
+  String get reasonReadError => '有檔案讀取失敗';
+
+  @override
+  String get reasonWriteFailed => '檔案寫入失敗';
+
+  @override
+  String get reasonHashMismatch => '有檔案在傳輸中損毀了';
+
+  @override
+  String reasonUnsupported(String name) {
+    return '$name 需要更新才能接收檔案';
+  }
+
+  @override
+  String get reasonOther => '出了點問題';
+
+  @override
+  String get revealInFinder => '在 Finder 中顯示';
+
+  @override
+  String get revealInFolder => '在資料夾中顯示';
+
+  @override
+  String get revealOpenFolder => '打開資料夾';
+
+  @override
+  String get transferResend => '重新傳送';
+
+  @override
+  String get transferRemove => '從列表中移除';
+
+  @override
+  String get transferCopyPath => '拷貝路徑';
+
+  @override
+  String get transferPathCopied => '已拷貝路徑';
+
+  @override
+  String sendingTo(String name, String percent) {
+    return '正在傳給 $name · $percent';
+  }
+
+  @override
+  String receivingFrom(String name, String percent) {
+    return '正在接收 $name 的檔案 · $percent';
+  }
+
+  @override
+  String get receiveFiles => '接收其他裝置傳來的檔案';
+
+  @override
+  String get saveTo => '儲存到';
+
+  @override
+  String get saveToChange => '更改…';
+
+  @override
+  String get saveToDefault => '下載項目（預設）';
+
+  @override
+  String get saveToUseDefault => '改回「下載項目」';
+
+  @override
+  String get receiveNotify => '收到檔案時通知';
+
+  @override
+  String receiveFootnote(String device) {
+    return '只有已配對的裝置能傳檔案給$device。傳輸期間$device不會自動睡眠。';
+  }
+
+  @override
+  String get saveDirNotFound => '這個資料夾不存在。';
+
+  @override
+  String get saveDirNotWritable => '隔空貼無法把檔案存到這個資料夾。';
+
+  @override
+  String get saveDirPermission =>
+      '隔空貼還沒有使用這個資料夾的權限。請在「系統設定 → 隱私權與安全性 → 檔案與資料夾」中允許。';
 }

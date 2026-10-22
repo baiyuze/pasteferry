@@ -20,6 +20,7 @@ import 'package:pasteferry_ui/picker/picker_view.dart';
 import 'package:pasteferry_ui/theme.dart';
 import 'package:pasteferry_ui/widgets/nearby_dialog.dart';
 import 'package:pasteferry_ui/widgets/pairing_dialog.dart';
+import 'package:pasteferry_ui/widgets/send_dialog.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -265,6 +266,50 @@ AppState _demo({LinkState link = LinkState.online,
   return state;
 }
 
+/// 隔空传送页的演示数据：同一局域网、跨网络中转、离线的设备，收到的与发出的各种状态。
+AppState _sendDemo() {
+  final base = _demo();
+  final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+  Int64 ago(int s) => Int64(now - s);
+  const incoming = TransferDirection.TRANSFER_DIRECTION_INCOMING;
+  const outgoing = TransferDirection.TRANSFER_DIRECTION_OUTGOING;
+  final photos = _t('照片 2026-10', 'Photos 2026-10', '写真 2026-10', tw: '照片 2026-10', hk: '相片 2026-10');
+  final contract = _t('合同扫描件.pdf', 'signed-contract.pdf', '契約書_署名済み.pdf', tw: '合約掃描檔.pdf', hk: '合約掃描本.pdf');
+  final windows = _t('Windows 台式机', 'Windows Desktop', 'Windows デスクトップ', tw: 'Windows 桌機', hk: 'Windows 桌面電腦');
+  final ubuntu = _t('Ubuntu 笔记本', 'Ubuntu Laptop', 'Ubuntu ノート', tw: 'Ubuntu 筆電', hk: 'Ubuntu 手提電腦');
+  base.debugSeed(
+    status: base.status!..officialUsage = OfficialUsage(available: true, remainingBytes: Int64(62 * _mb)),
+    config: base.config!..serviceMode = ServiceMode.SERVICE_MODE_OFFICIAL,
+    self: base.self!,
+    peers: [
+      Device(id: 'air', name: 'MacBook Air', platform: 'darwin', online: true, lanReachable: true,
+          connection: ConnectionKind.CONNECTION_KIND_DIRECT, receivesFiles: true),
+      Device(id: 'win', name: windows, platform: 'windows', online: true,
+          connection: ConnectionKind.CONNECTION_KIND_RELAY, receivesFiles: true),
+      Device(id: 'ubuntu', name: ubuntu, platform: 'linux', receivesFiles: true),
+    ],
+    transfers: [
+      Transfer(id: 'r1', direction: incoming, deviceId: 'air', deviceName: 'MacBook Air', status: 'active',
+          items: [ClipItem(name: photos, isDir: true, size: Int64(2150 * _mb))],
+          totalBytes: Int64(2150 * _mb), doneBytes: Int64(1462 * _mb), fileCount: Int64(412),
+          bytesPerSecond: 42.0 * _mb, currentFile: '$photos/IMG_2041.HEIC', currentIndex: Int64(281),
+          createdAtUnix: ago(40)),
+      Transfer(id: 'r2', direction: incoming, deviceId: 'air', deviceName: 'MacBook Air', status: 'done',
+          items: [ClipItem(name: contract), ClipItem(name: 'notes.txt'), ClipItem(name: 'IMG_2042.HEIC')],
+          paths: ['/a', '/b', '/c'], present: [true, true, true], totalBytes: Int64((18.4 * _mb).round()),
+          fileCount: Int64(3), createdAtUnix: ago(200), finishedAtUnix: ago(180), seen: true),
+      Transfer(id: 'r3', direction: incoming, deviceId: 'win', deviceName: windows, status: 'done',
+          items: [ClipItem(name: 'PasteFerry-Setup.exe')], paths: ['/d'], present: [false],
+          totalBytes: Int64(42 * _mb), fileCount: Int64(1), createdAtUnix: ago(90000), finishedAtUnix: ago(90000),
+          seen: true),
+      Transfer(id: 's1', direction: outgoing, deviceId: 'air', deviceName: 'MacBook Air', status: 'done',
+          items: [ClipItem(name: 'design-assets', isDir: true)], paths: ['/e'], totalBytes: Int64(126 * _mb),
+          fileCount: Int64(58), createdAtUnix: ago(4000), finishedAtUnix: ago(3990)),
+    ],
+  );
+  return base;
+}
+
 final _boundary = GlobalKey();
 
 Future<void> _shoot(
@@ -394,6 +439,29 @@ void main() {
 
   testWidgets('card-picker-search-dark', (tester) async {
     await _shootPicker(tester, 'card-picker-search-dark', query: 'docker');
+  });
+
+  for (final dark in [false, true]) {
+    testWidgets(dark ? 'send-dark' : 'send', (tester) async {
+      await _shoot(tester, dark ? 'send-dark' : 'send',
+          state: _sendDemo(),
+          section: Section.send,
+          brightness: dark ? Brightness.dark : Brightness.light,
+          settle: false, // 雷达的波纹一直在动
+          arrange: () async => tester.pump(const Duration(milliseconds: 900)));
+    });
+  }
+
+  testWidgets('send-dialog', (tester) async {
+    await _shoot(tester, 'send-dialog', state: _sendDemo(), section: Section.send, settle: false,
+        arrange: () async {
+      showDialog<void>(
+        context: tester.element(find.byType(Shell)),
+        builder: (_) => const SendDialog(deviceId: 'air'),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    });
   });
 
   testWidgets('devices', (tester) async {

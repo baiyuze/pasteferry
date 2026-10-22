@@ -2419,6 +2419,576 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name}\n{error}\nUse Copy to clipboard to try again, here or in History.'**
   String notifyClipboardFailedBody(String name, String error);
+
+  /// No description provided for @navSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Files'**
+  String get navSend;
+
+  /// No description provided for @sendSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag files onto a device to send them directly'**
+  String get sendSubtitle;
+
+  /// No description provided for @sendNoDevicesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No paired devices yet'**
+  String get sendNoDevicesTitle;
+
+  /// No description provided for @sendNoDevicesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair another computer first, then send files to it here.'**
+  String get sendNoDevicesBody;
+
+  /// No description provided for @sendDropHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop onto a device to send'**
+  String get sendDropHint;
+
+  /// No description provided for @sendReleaseTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Release to send to {name}'**
+  String sendReleaseTo(String name);
+
+  /// No description provided for @sendLan.
+  ///
+  /// In en, this message translates to:
+  /// **'Local network'**
+  String get sendLan;
+
+  /// No description provided for @sendRelayLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Relay · {left} left today'**
+  String sendRelayLeft(String left);
+
+  /// No description provided for @sendNeedsUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs update'**
+  String get sendNeedsUpdate;
+
+  /// No description provided for @sendNeedsUpdateTip.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} can receive files after updating to PasteFerry 2.5 or later.'**
+  String sendNeedsUpdateTip(String name);
+
+  /// No description provided for @sendNotReceiving.
+  ///
+  /// In en, this message translates to:
+  /// **'Not receiving files'**
+  String get sendNotReceiving;
+
+  /// No description provided for @sendDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get sendDelivered;
+
+  /// No description provided for @sendToTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to {name}'**
+  String sendToTitle(String name);
+
+  /// No description provided for @sendDropHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag files or folders here'**
+  String get sendDropHere;
+
+  /// No description provided for @sendDropStarts.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending starts as soon as you drop them'**
+  String get sendDropStarts;
+
+  /// No description provided for @sendChooseFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Files…'**
+  String get sendChooseFiles;
+
+  /// No description provided for @sendChooseFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Folder…'**
+  String get sendChooseFolder;
+
+  /// No description provided for @sendDropMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop more files to send them next'**
+  String get sendDropMore;
+
+  /// No description provided for @sendSavedWhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Files are saved where {name} chooses — the Downloads folder by default.'**
+  String sendSavedWhere(String name);
+
+  /// No description provided for @sendCloseKeeps.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing this window doesn’t stop sending'**
+  String get sendCloseKeeps;
+
+  /// No description provided for @sendRemoveQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get sendRemoveQueued;
+
+  /// No description provided for @sendCannotDrop.
+  ///
+  /// In en, this message translates to:
+  /// **'This item can’t be sent by dragging. Save it as a file first, or use Choose Files….'**
+  String get sendCannotDrop;
+
+  /// No description provided for @sendErrOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is offline.'**
+  String sendErrOffline(String name);
+
+  /// No description provided for @sendErrDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} isn’t receiving files.'**
+  String sendErrDisabled(String name);
+
+  /// No description provided for @sendErrMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Some of these files no longer exist.'**
+  String get sendErrMissing;
+
+  /// No description provided for @relayConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send through the official relay?'**
+  String get relayConfirmTitle;
+
+  /// No description provided for @relayConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has no direct connection to this computer right now, so the files go through the official relay at about 0.25 MB/s. {left} of today’s relay allowance is left.'**
+  String relayConfirmBody(String name, String left);
+
+  /// No description provided for @relayConfirmOver.
+  ///
+  /// In en, this message translates to:
+  /// **'These files ({size}) are more than the remaining allowance. Sending pauses when it runs out and continues when the two computers connect directly or the allowance resets tomorrow.'**
+  String relayConfirmOver(String size);
+
+  /// No description provided for @relayConfirmWithin.
+  ///
+  /// In en, this message translates to:
+  /// **'This uses about {size} of today’s allowance.'**
+  String relayConfirmWithin(String size);
+
+  /// No description provided for @relayExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s relay allowance is used up. It resets at midnight Beijing time. Two computers that connect directly have no limit.'**
+  String get relayExhausted;
+
+  /// No description provided for @relayDontAskToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Don’t ask again today for this device'**
+  String get relayDontAskToday;
+
+  /// No description provided for @relaySendAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Anyway'**
+  String get relaySendAnyway;
+
+  /// No description provided for @relayOwnServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Relayed — speed depends on your server'**
+  String get relayOwnServer;
+
+  /// No description provided for @transfersReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get transfersReceived;
+
+  /// No description provided for @transfersSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get transfersSent;
+
+  /// No description provided for @transfersClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get transfersClearAll;
+
+  /// No description provided for @transfersClearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear this list?'**
+  String get transfersClearTitle;
+
+  /// No description provided for @transfersClearBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the list is cleared. Files stay where they are.'**
+  String get transfersClearBody;
+
+  /// No description provided for @transfersEmptyReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Files other devices send you appear here'**
+  String get transfersEmptyReceived;
+
+  /// No description provided for @transfersEmptySent.
+  ///
+  /// In en, this message translates to:
+  /// **'Files you send appear here'**
+  String get transfersEmptySent;
+
+  /// No description provided for @transferFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From {name}'**
+  String transferFrom(String name);
+
+  /// No description provided for @transferTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To {name}'**
+  String transferTo(String name);
+
+  /// No description provided for @transferItems.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} and {others} more'**
+  String transferItems(String name, int total, int others);
+
+  /// No description provided for @transferFileCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 file} other{{count} files}}'**
+  String transferFileCount(int count);
+
+  /// No description provided for @transferQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'Queued'**
+  String get transferQueued;
+
+  /// No description provided for @transferScanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Counting… {count} files found'**
+  String transferScanning(String count);
+
+  /// No description provided for @transferWaitingPeer.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {name}…'**
+  String transferWaitingPeer(String name);
+
+  /// No description provided for @transferSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending'**
+  String get transferSending;
+
+  /// No description provided for @transferReceiving.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiving'**
+  String get transferReceiving;
+
+  /// No description provided for @transferCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Now: {file} ({index} of {total})'**
+  String transferCurrent(String file, String index, String total);
+
+  /// No description provided for @transferLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} left'**
+  String transferLeft(String time);
+
+  /// No description provided for @etaSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 second} other{{n} seconds}}'**
+  String etaSeconds(int n);
+
+  /// No description provided for @etaMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 minute} other{{n} minutes}}'**
+  String etaMinutes(int n);
+
+  /// No description provided for @etaHours.
+  ///
+  /// In en, this message translates to:
+  /// **'{h} h {m} min'**
+  String etaHours(int h, int m);
+
+  /// No description provided for @transferPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused: today’s relay allowance is used up'**
+  String get transferPaused;
+
+  /// No description provided for @transferInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'Interrupted — continues when reconnected'**
+  String get transferInterrupted;
+
+  /// No description provided for @transferInterruptedIncoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Interrupted — waiting for {name} to continue'**
+  String transferInterruptedIncoming(String name);
+
+  /// No description provided for @transferCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get transferCancelled;
+
+  /// No description provided for @transferPeerCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled by {name}'**
+  String transferPeerCancelled(String name);
+
+  /// No description provided for @transferExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get transferExpired;
+
+  /// No description provided for @transferMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Moved or deleted'**
+  String get transferMissing;
+
+  /// No description provided for @transferNotSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent: {reason}'**
+  String transferNotSent(String reason);
+
+  /// No description provided for @transferNotReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Not received: {reason}'**
+  String transferNotReceived(String reason);
+
+  /// No description provided for @reasonNoSpacePeer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is out of disk space ({size} short)'**
+  String reasonNoSpacePeer(String name, String size);
+
+  /// No description provided for @reasonNoSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'not enough disk space ({size} short)'**
+  String reasonNoSpace(String size);
+
+  /// No description provided for @reasonDestUnavailablePeer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}’s save location is unavailable'**
+  String reasonDestUnavailablePeer(String name);
+
+  /// No description provided for @reasonDestUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'the save location is unavailable — check it in Settings'**
+  String get reasonDestUnavailable;
+
+  /// No description provided for @reasonFileTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'the save location is on a FAT32 drive, which can’t hold files over 4 GB'**
+  String get reasonFileTooLarge;
+
+  /// No description provided for @reasonDisabledPeer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} isn’t receiving files'**
+  String reasonDisabledPeer(String name);
+
+  /// No description provided for @reasonSourceChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'a file changed while it was being sent'**
+  String get reasonSourceChanged;
+
+  /// No description provided for @reasonSourceMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'a file no longer exists'**
+  String get reasonSourceMissing;
+
+  /// No description provided for @reasonReadError.
+  ///
+  /// In en, this message translates to:
+  /// **'a file couldn’t be read'**
+  String get reasonReadError;
+
+  /// No description provided for @reasonWriteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'the files couldn’t be written'**
+  String get reasonWriteFailed;
+
+  /// No description provided for @reasonHashMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'a file was damaged in transit'**
+  String get reasonHashMismatch;
+
+  /// No description provided for @reasonUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} needs to update to receive files'**
+  String reasonUnsupported(String name);
+
+  /// No description provided for @reasonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'something went wrong'**
+  String get reasonOther;
+
+  /// No description provided for @revealInFinder.
+  ///
+  /// In en, this message translates to:
+  /// **'Show in Finder'**
+  String get revealInFinder;
+
+  /// No description provided for @revealInFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Show in Folder'**
+  String get revealInFolder;
+
+  /// No description provided for @revealOpenFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Folder'**
+  String get revealOpenFolder;
+
+  /// No description provided for @transferResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Again'**
+  String get transferResend;
+
+  /// No description provided for @transferRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from List'**
+  String get transferRemove;
+
+  /// No description provided for @transferCopyPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Path'**
+  String get transferCopyPath;
+
+  /// No description provided for @transferPathCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Path copied'**
+  String get transferPathCopied;
+
+  /// No description provided for @sendingTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending to {name} · {percent}'**
+  String sendingTo(String name, String percent);
+
+  /// No description provided for @receivingFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiving from {name} · {percent}'**
+  String receivingFrom(String name, String percent);
+
+  /// No description provided for @receiveFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive files from other devices'**
+  String get receiveFiles;
+
+  /// No description provided for @saveTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to'**
+  String get saveTo;
+
+  /// No description provided for @saveToChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change…'**
+  String get saveToChange;
+
+  /// No description provided for @saveToDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads (default)'**
+  String get saveToDefault;
+
+  /// No description provided for @saveToUseDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Downloads'**
+  String get saveToUseDefault;
+
+  /// No description provided for @receiveNotify.
+  ///
+  /// In en, this message translates to:
+  /// **'Notify when files arrive'**
+  String get receiveNotify;
+
+  /// No description provided for @receiveFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only paired devices can send files to {device}. While files are transferring, {device} won’t go to sleep on its own.'**
+  String receiveFootnote(String device);
+
+  /// No description provided for @saveDirNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder doesn’t exist.'**
+  String get saveDirNotFound;
+
+  /// No description provided for @saveDirNotWritable.
+  ///
+  /// In en, this message translates to:
+  /// **'PasteFerry can’t save files in this folder.'**
+  String get saveDirNotWritable;
+
+  /// No description provided for @saveDirPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'PasteFerry isn’t allowed to use this folder. Allow it in System Settings → Privacy & Security → Files and Folders.'**
+  String get saveDirPermission;
 }
 
 class _AppLocalizationsDelegate

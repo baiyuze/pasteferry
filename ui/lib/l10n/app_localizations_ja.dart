@@ -1330,4 +1330,358 @@ class AppLocalizationsJa extends AppLocalizations {
   String notifyClipboardFailedBody(String name, String error) {
     return '$name\n$error\nこの通知または履歴からクリップボードに入れて再試行できます。';
   }
+
+  @override
+  String get navSend => 'ファイル送信';
+
+  @override
+  String get sendSubtitle => 'ファイルをデバイスにドラッグして、そのまま送ります';
+
+  @override
+  String get sendNoDevicesTitle => 'ペアリングしたデバイスがありません';
+
+  @override
+  String get sendNoDevicesBody => 'ほかのコンピューターとペアリングすると、ここからファイルを送れます。';
+
+  @override
+  String get sendDropHint => 'デバイスの上にドロップして送信';
+
+  @override
+  String sendReleaseTo(String name) {
+    return '離すと $name に送信';
+  }
+
+  @override
+  String get sendLan => 'ローカルネットワーク';
+
+  @override
+  String sendRelayLeft(String left) {
+    return '中継 · 今日の残り $left';
+  }
+
+  @override
+  String get sendNeedsUpdate => 'アップデートが必要';
+
+  @override
+  String sendNeedsUpdateTip(String name) {
+    return '$name は PasteFerry 2.5 以降にアップデートするとファイルを受信できます。';
+  }
+
+  @override
+  String get sendNotReceiving => 'ファイルを受信しない';
+
+  @override
+  String get sendDelivered => '送信済み';
+
+  @override
+  String sendToTitle(String name) {
+    return '$name に送信';
+  }
+
+  @override
+  String get sendDropHere => 'ファイルやフォルダをここにドラッグ';
+
+  @override
+  String get sendDropStarts => 'ドロップするとすぐに送信します';
+
+  @override
+  String get sendChooseFiles => 'ファイルを選択…';
+
+  @override
+  String get sendChooseFolder => 'フォルダを選択…';
+
+  @override
+  String get sendDropMore => 'さらにドロップすると続けて送信します';
+
+  @override
+  String sendSavedWhere(String name) {
+    return 'ファイルは $name で設定された場所（既定は「ダウンロード」フォルダ）に保存されます。';
+  }
+
+  @override
+  String get sendCloseKeeps => 'ウインドウを閉じても送信は続きます';
+
+  @override
+  String get sendRemoveQueued => '取り除く';
+
+  @override
+  String get sendCannotDrop =>
+      'この項目はドラッグでは送れません。ファイルとして保存するか、「ファイルを選択…」を使ってください。';
+
+  @override
+  String sendErrOffline(String name) {
+    return '$name はオフラインです。';
+  }
+
+  @override
+  String sendErrDisabled(String name) {
+    return '$name はファイルの受信をオフにしています。';
+  }
+
+  @override
+  String get sendErrMissing => '一部のファイルが見つかりません。';
+
+  @override
+  String get relayConfirmTitle => '公式サービスの中継で送信しますか？';
+
+  @override
+  String relayConfirmBody(String name, String left) {
+    return '$name は現在このコンピューターと直接つながっていないため、公式サービスの中継（約 0.25 MB/s）で送ります。今日の中継の残りは $left です。';
+  }
+
+  @override
+  String relayConfirmOver(String size) {
+    return 'これらのファイル（$size）は残りの枠を超えています。枠を使い切ると一時停止し、直接つながるか、明日枠が戻ると自動で再開します。';
+  }
+
+  @override
+  String relayConfirmWithin(String size) {
+    return '今日の枠のうち約 $size を使います。';
+  }
+
+  @override
+  String get relayExhausted =>
+      '今日の中継枠を使い切りました。北京時間の午前 0 時に戻ります。直接つながっていれば制限はありません。';
+
+  @override
+  String get relayDontAskToday => '今日はこのデバイスについて確認しない';
+
+  @override
+  String get relaySendAnyway => '送信する';
+
+  @override
+  String get relayOwnServer => '中継中 — 速度はサーバー次第です';
+
+  @override
+  String get transfersReceived => '受信';
+
+  @override
+  String get transfersSent => '送信';
+
+  @override
+  String get transfersClearAll => 'すべて消去';
+
+  @override
+  String get transfersClearTitle => 'このリストを消去しますか？';
+
+  @override
+  String get transfersClearBody => '記録だけを消去します。ファイルは削除されません。';
+
+  @override
+  String get transfersEmptyReceived => 'ほかのデバイスから届いたファイルがここに表示されます';
+
+  @override
+  String get transfersEmptySent => '送信したファイルがここに表示されます';
+
+  @override
+  String transferFrom(String name) {
+    return '$name から';
+  }
+
+  @override
+  String transferTo(String name) {
+    return '$name へ';
+  }
+
+  @override
+  String transferItems(String name, int total, int others) {
+    return '$name ほか $others 項目';
+  }
+
+  @override
+  String transferFileCount(int count) {
+    return '$count 個のファイル';
+  }
+
+  @override
+  String get transferQueued => '待機中';
+
+  @override
+  String transferScanning(String count) {
+    return '確認中… $count 個のファイル';
+  }
+
+  @override
+  String transferWaitingPeer(String name) {
+    return '$name の応答を待っています…';
+  }
+
+  @override
+  String get transferSending => '送信中';
+
+  @override
+  String get transferReceiving => '受信中';
+
+  @override
+  String transferCurrent(String file, String index, String total) {
+    return '転送中：$file（$index / $total）';
+  }
+
+  @override
+  String transferLeft(String time) {
+    return '残り $time';
+  }
+
+  @override
+  String etaSeconds(int n) {
+    return '$n 秒';
+  }
+
+  @override
+  String etaMinutes(int n) {
+    return '$n 分';
+  }
+
+  @override
+  String etaHours(int h, int m) {
+    return '$h 時間 $m 分';
+  }
+
+  @override
+  String get transferPaused => '一時停止：今日の中継枠を使い切りました';
+
+  @override
+  String get transferInterrupted => '中断 — 再接続すると続行します';
+
+  @override
+  String transferInterruptedIncoming(String name) {
+    return '中断 — $name からの再開を待っています';
+  }
+
+  @override
+  String get transferCancelled => 'キャンセルしました';
+
+  @override
+  String transferPeerCancelled(String name) {
+    return '$name がキャンセルしました';
+  }
+
+  @override
+  String get transferExpired => '期限切れ';
+
+  @override
+  String get transferMissing => '移動または削除済み';
+
+  @override
+  String transferNotSent(String reason) {
+    return '送信できませんでした：$reason';
+  }
+
+  @override
+  String transferNotReceived(String reason) {
+    return '受信できませんでした：$reason';
+  }
+
+  @override
+  String reasonNoSpacePeer(String name, String size) {
+    return '$name のディスクの空きが $size 足りません';
+  }
+
+  @override
+  String reasonNoSpace(String size) {
+    return 'ディスクの空きが $size 足りません';
+  }
+
+  @override
+  String reasonDestUnavailablePeer(String name) {
+    return '$name の保存先を使用できません';
+  }
+
+  @override
+  String get reasonDestUnavailable => '保存先を使用できません。設定を確認してください';
+
+  @override
+  String get reasonFileTooLarge => '保存先が FAT32 のディスクで、4 GB を超えるファイルを保存できません';
+
+  @override
+  String reasonDisabledPeer(String name) {
+    return '$name はファイルの受信をオフにしています';
+  }
+
+  @override
+  String get reasonSourceChanged => '送信中にファイルが変更されました';
+
+  @override
+  String get reasonSourceMissing => 'ファイルが見つかりません';
+
+  @override
+  String get reasonReadError => 'ファイルを読み取れませんでした';
+
+  @override
+  String get reasonWriteFailed => 'ファイルを書き込めませんでした';
+
+  @override
+  String get reasonHashMismatch => '転送中にファイルが破損しました';
+
+  @override
+  String reasonUnsupported(String name) {
+    return '$name はファイルを受信するためにアップデートが必要です';
+  }
+
+  @override
+  String get reasonOther => '問題が発生しました';
+
+  @override
+  String get revealInFinder => 'Finder に表示';
+
+  @override
+  String get revealInFolder => 'フォルダに表示';
+
+  @override
+  String get revealOpenFolder => 'フォルダを開く';
+
+  @override
+  String get transferResend => 'もう一度送信';
+
+  @override
+  String get transferRemove => 'リストから取り除く';
+
+  @override
+  String get transferCopyPath => 'パスをコピー';
+
+  @override
+  String get transferPathCopied => 'パスをコピーしました';
+
+  @override
+  String sendingTo(String name, String percent) {
+    return '$name に送信中 · $percent';
+  }
+
+  @override
+  String receivingFrom(String name, String percent) {
+    return '$name から受信中 · $percent';
+  }
+
+  @override
+  String get receiveFiles => 'ほかのデバイスからファイルを受信';
+
+  @override
+  String get saveTo => '保存先';
+
+  @override
+  String get saveToChange => '変更…';
+
+  @override
+  String get saveToDefault => 'ダウンロード（既定）';
+
+  @override
+  String get saveToUseDefault => '「ダウンロード」に戻す';
+
+  @override
+  String get receiveNotify => 'ファイルが届いたら通知';
+
+  @override
+  String receiveFootnote(String device) {
+    return 'ペアリングしたデバイスだけが$deviceにファイルを送れます。転送中、$deviceは自動でスリープしません。';
+  }
+
+  @override
+  String get saveDirNotFound => 'このフォルダは存在しません。';
+
+  @override
+  String get saveDirNotWritable => 'PasteFerry はこのフォルダにファイルを保存できません。';
+
+  @override
+  String get saveDirPermission =>
+      'PasteFerry にこのフォルダの使用が許可されていません。「システム設定 → プライバシーとセキュリティ → ファイルとフォルダ」で許可してください。';
 }

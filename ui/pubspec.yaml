@@ -41,6 +41,8 @@ dependencies:
   protobuf: ^6.1.0
   fixnum: ^1.1.1
   fluentui_system_icons: ^1.1.273
+  desktop_drop: ^0.8.4
+  file_selector: ^1.1.0
 
 dev_dependencies:
   flutter_test:
