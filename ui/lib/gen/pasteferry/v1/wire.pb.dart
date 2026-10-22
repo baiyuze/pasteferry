@@ -3693,6 +3693,7 @@ class SendAnswer extends $pb.GeneratedMessage {
     $fixnum.Int64? shortfallBytes,
     $fixnum.Int64? resumeIndex,
     $fixnum.Int64? resumeOffset,
+    $core.String? lanAddr,
   }) {
     final result = SendAnswer._();
     if (transferId != null) result.transferId = transferId;
@@ -3702,6 +3703,7 @@ class SendAnswer extends $pb.GeneratedMessage {
     if (shortfallBytes != null) result.shortfallBytes = shortfallBytes;
     if (resumeIndex != null) result.resumeIndex = resumeIndex;
     if (resumeOffset != null) result.resumeOffset = resumeOffset;
+    if (lanAddr != null) result.lanAddr = lanAddr;
     return result;
   }
 
@@ -3725,6 +3727,7 @@ class SendAnswer extends $pb.GeneratedMessage {
     ..aInt64(5, _omitFieldNames ? '' : 'shortfallBytes')
     ..aInt64(6, _omitFieldNames ? '' : 'resumeIndex')
     ..aInt64(7, _omitFieldNames ? '' : 'resumeOffset')
+    ..aOS(8, _omitFieldNames ? '' : 'lanAddr')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3811,6 +3814,17 @@ class SendAnswer extends $pb.GeneratedMessage {
   $core.bool hasResumeOffset() => $_has(6);
   @$pb.TagNumber(7)
   void clearResumeOffset() => $_clearField(7);
+
+  /// 局域网快速通道（2.5.1）：接收方为这次尝试临时监听的 TCP 地址（ip:port）。
+  /// 只在两端都声明 send_files_tcp_v1、且当前连接是局域网直连时给出；为空或连不上时走数据通道
+  @$pb.TagNumber(8)
+  $core.String get lanAddr => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set lanAddr($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasLanAddr() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearLanAddr() => $_clearField(8);
 }
 
 /// 任何一方取消，或者发送方读源文件出错时发出。对方停下并清理没收完的部分

@@ -6,6 +6,7 @@
 package identity
 
 import (
+	"crypto"
 	"crypto/ed25519"
 	"crypto/rand"
 	"encoding/json"
@@ -134,6 +135,9 @@ func Verify(pub ed25519.PublicKey, data, sig []byte) bool {
 
 // Fingerprint 返回供用户肉眼核对的短指纹，形如 "K7X2-M9PL-4RT8"。
 func (i *Identity) Fingerprint() string { return deviceid.Fingerprint(i.PublicKey) }
+
+// Signer 返回设备私钥，只用来给本机的 TLS 证书签名（隔空传送的局域网通道），不要拿去签别的东西。
+func (i *Identity) Signer() crypto.Signer { return i.privateKey }
 
 // 派生规则属于协议契约，与服务器共用同一份实现（proto/deviceid）。
 var (

@@ -9,11 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/pion/webrtc/v4"
-
 	"github.com/baiyuze/pasteferry/client-core/internal/pack"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
-	"github.com/baiyuze/pasteferry/client-core/internal/transport/p2p"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
@@ -27,17 +24,17 @@ type outgoing struct {
 	attempt uint32
 	answer  chan *pb.SendAnswer
 	result  chan *pb.SendResult
-	dc      *webrtc.DataChannel
+	pipe    sendPipe
 	done    chan struct{} // runOutgoing 返回时关闭
 }
 
 func (o *outgoing) abort(cause error) {
 	o.cancel(cause)
 	o.mu.Lock()
-	dc := o.dc
+	p := o.pipe
 	o.mu.Unlock()
-	if dc != nil {
-		_ = dc.Close() // 让卡在发送缓冲上的写入立刻返回
+	if p != nil {
+		_ = p.Close() // 让卡在发送缓冲上的写入立刻返回
 	}
 }
 
@@ -278,7 +275,7 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 		e.save(t)
 		e.setBusy(t.ID, true)
 
-		err = e.stream(ctx, o, t, answer.GetResumeIndex(), answer.GetResumeOffset(), filesBefore)
+		err = e.stream(ctx, o, t, answer.GetResumeIndex(), answer.GetResumeOffset(), filesBefore, answer.GetLanAddr())
 		if err != nil {
 			if ctx.Err() != nil {
 				e.stopped(t, context.Cause(ctx))
@@ -323,35 +320,24 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 	}
 }
 
-// stream 开一条数据通道，从第 index 个条目的 offset 处开始发帧流。
-func (e *Engine) stream(ctx context.Context, o *outgoing, t store.Transfer, index, offset, filesBefore int64) error {
+// stream 开这次尝试的管道（局域网 TCP 或数据通道），从第 index 个条目的 offset 处开始发帧流。
+func (e *Engine) stream(ctx context.Context, o *outgoing, t store.Transfer, index, offset, filesBefore int64, lanAddr string) error {
 	label := fmt.Sprintf("%s%s:%d", streamPrefix, t.ID, t.Attempt)
-	dc, err := e.opts.OpenStream(t.DeviceID, label)
+	p, err := e.openPipe(ctx, sendTarget{id: t.ID, device: t.DeviceID, label: label}, lanAddr)
 	if err != nil {
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
 		return fmt.Errorf("打开数据流: %w", err)
 	}
-	opened := make(chan struct{})
-	var once sync.Once
-	dc.OnOpen(func() { once.Do(func() { close(opened) }) })
-	if dc.ReadyState() == webrtc.DataChannelStateOpen {
-		once.Do(func() { close(opened) })
-	}
 	o.mu.Lock()
-	o.dc = dc
+	o.pipe = p
 	o.mu.Unlock()
-	defer dc.Close()
-	select {
-	case <-opened:
-	case <-ctx.Done():
-		return ctx.Err()
-	case <-time.After(e.opts.AnswerTimeout):
-		return errors.New("数据流打开超时")
-	}
+	defer p.Close()
 
 	m := e.meterFor(t)
 	m.start(t.DoneBytes)
-	cw := p2p.NewChunkWriter(dc, nil)
-	fw, err := pack.NewFrameWriter(cw, m.add)
+	fw, err := pack.NewFrameWriter(p, m.add)
 	if err != nil {
 		return err
 	}
@@ -390,11 +376,7 @@ func (e *Engine) stream(ctx context.Context, o *outgoing, t store.Transfer, inde
 	if err := fw.Finish(); err != nil {
 		return err
 	}
-	if err := cw.Flush(); err != nil {
-		return err
-	}
-	// 等发送缓冲排空再关通道，否则尾部数据会被丢掉
-	return cw.WaitDrained(ctx, time.Minute)
+	return p.finish(ctx)
 }
 
 // sourceErrorCode 把读源文件的错误转成发给对方、显示给用户的代码；不是源文件的问题时返回空。

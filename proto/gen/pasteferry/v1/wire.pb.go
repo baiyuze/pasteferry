@@ -2986,8 +2986,11 @@ type SendAnswer struct {
 	ShortfallBytes int64  `protobuf:"varint,5,opt,name=shortfall_bytes,json=shortfallBytes,proto3" json:"shortfall_bytes,omitempty"` // no_space 时还差多少
 	ResumeIndex    int64  `protobuf:"varint,6,opt,name=resume_index,json=resumeIndex,proto3" json:"resume_index,omitempty"`          // 从第几个条目开始（全新传输为 0）
 	ResumeOffset   int64  `protobuf:"varint,7,opt,name=resume_offset,json=resumeOffset,proto3" json:"resume_offset,omitempty"`       // 这个条目已经收到多少字节
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// 局域网快速通道（2.5.1）：接收方为这次尝试临时监听的 TCP 地址（ip:port）。
+	// 只在两端都声明 send_files_tcp_v1、且当前连接是局域网直连时给出；为空或连不上时走数据通道
+	LanAddr       string `protobuf:"bytes,8,opt,name=lan_addr,json=lanAddr,proto3" json:"lan_addr,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SendAnswer) Reset() {
@@ -3067,6 +3070,13 @@ func (x *SendAnswer) GetResumeOffset() int64 {
 		return x.ResumeOffset
 	}
 	return 0
+}
+
+func (x *SendAnswer) GetLanAddr() string {
+	if x != nil {
+		return x.LanAddr
+	}
+	return ""
 }
 
 // 任何一方取消，或者发送方读源文件出错时发出。对方停下并清理没收完的部分
@@ -3700,7 +3710,7 @@ const file_pasteferry_v1_wire_proto_rawDesc = "" +
 	"file_count\x18\x05 \x01(\x03R\tfileCount\x12!\n" +
 	"\flargest_file\x18\x06 \x01(\x03R\vlargestFile\x12&\n" +
 	"\x0fcreated_at_unix\x18\a \x01(\x03R\rcreatedAtUnix\x12\x16\n" +
-	"\x06resume\x18\b \x01(\bR\x06resume\"\xec\x01\n" +
+	"\x06resume\x18\b \x01(\bR\x06resume\"\x87\x02\n" +
 	"\n" +
 	"SendAnswer\x12\x1f\n" +
 	"\vtransfer_id\x18\x01 \x01(\tR\n" +
@@ -3710,7 +3720,8 @@ const file_pasteferry_v1_wire_proto_rawDesc = "" +
 	"\x06reason\x18\x04 \x01(\tR\x06reason\x12'\n" +
 	"\x0fshortfall_bytes\x18\x05 \x01(\x03R\x0eshortfallBytes\x12!\n" +
 	"\fresume_index\x18\x06 \x01(\x03R\vresumeIndex\x12#\n" +
-	"\rresume_offset\x18\a \x01(\x03R\fresumeOffset\"E\n" +
+	"\rresume_offset\x18\a \x01(\x03R\fresumeOffset\x12\x19\n" +
+	"\blan_addr\x18\b \x01(\tR\alanAddr\"E\n" +
 	"\n" +
 	"SendCancel\x12\x1f\n" +
 	"\vtransfer_id\x18\x01 \x01(\tR\n" +

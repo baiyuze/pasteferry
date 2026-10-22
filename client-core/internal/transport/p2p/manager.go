@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"net"
+	"net/netip"
 	"slices"
 	"strings"
 	"sync"
@@ -456,6 +457,19 @@ func (m *Manager) OpenStream(deviceID, label string) (*webrtc.DataChannel, error
 		return nil, ErrNotConnected
 	}
 	return p.OpenStream(label)
+}
+
+// LANAddr 报告与某台设备的连接是不是局域网直连（本端是网卡上的地址，对端也是），
+// 是的话返回本端用的那个地址。隔空传送据此决定能不能在这个地址上另开 TCP 通道。
+func (m *Manager) LANAddr(deviceID string) (netip.Addr, bool) {
+	m.mu.RLock()
+	p := m.selectedLocked(deviceID)
+	m.mu.RUnlock()
+
+	if p == nil {
+		return netip.Addr{}, false
+	}
+	return p.LANAddr()
 }
 
 func (m *Manager) State(deviceID string) ConnState {

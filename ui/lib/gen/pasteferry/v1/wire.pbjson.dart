@@ -1049,6 +1049,7 @@ const SendAnswer$json = {
     {'1': 'shortfall_bytes', '3': 5, '4': 1, '5': 3, '10': 'shortfallBytes'},
     {'1': 'resume_index', '3': 6, '4': 1, '5': 3, '10': 'resumeIndex'},
     {'1': 'resume_offset', '3': 7, '4': 1, '5': 3, '10': 'resumeOffset'},
+    {'1': 'lan_addr', '3': 8, '4': 1, '5': 9, '10': 'lanAddr'},
   ],
 };
 
@@ -1058,7 +1059,7 @@ final $typed_data.Uint8List sendAnswerDescriptor = $convert.base64Decode(
     'QYAiABKA1SB2F0dGVtcHQSGgoIYWNjZXB0ZWQYAyABKAhSCGFjY2VwdGVkEhYKBnJlYXNvbhgE'
     'IAEoCVIGcmVhc29uEicKD3Nob3J0ZmFsbF9ieXRlcxgFIAEoA1IOc2hvcnRmYWxsQnl0ZXMSIQ'
     'oMcmVzdW1lX2luZGV4GAYgASgDUgtyZXN1bWVJbmRleBIjCg1yZXN1bWVfb2Zmc2V0GAcgASgD'
-    'UgxyZXN1bWVPZmZzZXQ=');
+    'UgxyZXN1bWVPZmZzZXQSGQoIbGFuX2FkZHIYCCABKAlSB2xhbkFkZHI=');
 
 @$core.Deprecated('Use sendCancelDescriptor instead')
 const SendCancel$json = {

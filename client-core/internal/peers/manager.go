@@ -349,6 +349,8 @@ func (m *Manager) OfficialUsage() *pb.OfficialUsage {
 const (
 	FeatureSendFiles    = "send_files_v1"
 	FeatureSendFilesOff = "send_files_off" // 能接收隔空传送，但用户关掉了
+	// 隔空传送能走局域网 TCP 快速通道（2.5.1），见 internal/transport/lantcp
+	FeatureSendFilesTCP = "send_files_tcp_v1"
 )
 
 func (m *Manager) featuresMessage() *pb.PeerMessage {
@@ -356,6 +358,7 @@ func (m *Manager) featuresMessage() *pb.PeerMessage {
 	if m.loadConfig().ReceiveDisabled {
 		f = []string{FeatureSendFilesOff}
 	}
+	f = append(f, FeatureSendFilesTCP)
 	return &pb.PeerMessage{Payload: &pb.PeerMessage_Features{Features: &pb.PeerFeatures{Features: f}}}
 }
 
@@ -395,6 +398,13 @@ func (m *Manager) SendFilesSupport(deviceID string) (supported, disabled bool) {
 	defer m.mu.RUnlock()
 	f := m.features[deviceID]
 	return f[FeatureSendFiles] || f[FeatureSendFilesOff], f[FeatureSendFilesOff]
+}
+
+// HasFeature 报告对端是否声明了某项功能。
+func (m *Manager) HasFeature(deviceID, feature string) bool {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	return m.features[deviceID][feature]
 }
 
 // ConnState 返回与某台设备的 P2P 连接状态。

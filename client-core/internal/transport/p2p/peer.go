@@ -11,6 +11,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"net/netip"
 	"strings"
 	"sync"
 	"time"
@@ -219,6 +220,32 @@ func (p *Peer) State() ConnState {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	return p.state
+}
+
+// LANAddr 见 Manager.LANAddr。对端是 prflx 也算：局域网里对端的地址常常先从收到的包里认出来。
+func (p *Peer) LANAddr() (netip.Addr, bool) {
+	p.mu.Lock()
+	pc := p.pc
+	state := p.state
+	p.mu.Unlock()
+	if pc == nil || state != StateDirect {
+		return netip.Addr{}, false
+	}
+	sctp := pc.SCTP()
+	if sctp == nil || sctp.Transport() == nil || sctp.Transport().ICETransport() == nil {
+		return netip.Addr{}, false
+	}
+	pair, err := sctp.Transport().ICETransport().GetSelectedCandidatePair()
+	if err != nil || pair == nil || pair.Local == nil || pair.Remote == nil ||
+		pair.Local.Typ != webrtc.ICECandidateTypeHost ||
+		(pair.Remote.Typ != webrtc.ICECandidateTypeHost && pair.Remote.Typ != webrtc.ICECandidateTypePrflx) {
+		return netip.Addr{}, false
+	}
+	addr, err := netip.ParseAddr(pair.Local.Address)
+	if err != nil || addr.IsLoopback() || addr.IsUnspecified() {
+		return netip.Addr{}, false
+	}
+	return addr.Unmap(), true
 }
 
 func (p *Peer) DirectAttemptReady() bool {

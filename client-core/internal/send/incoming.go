@@ -38,12 +38,12 @@ type incoming struct {
 
 	ctx      context.Context
 	cancel   context.CancelCauseFunc
-	streamCh chan *p2p.Stream
+	streamCh chan io.ReadCloser // 数据通道或局域网 TCP，先到的那条
 	done     chan struct{}
 	active   atomic.Int64 // 最近一次收到数据的时间（UnixNano），看门狗用
 
 	mu     sync.Mutex
-	stream *p2p.Stream
+	stream io.ReadCloser
 }
 
 func (in *incoming) abort(cause error) {
@@ -134,7 +134,7 @@ func (e *Engine) handleOffer(from string, offer *pb.SendOffer) {
 	var t store.Transfer
 	in := &incoming{id: id, device: from, attempt: offer.GetAttempt(), offer: offer,
 		tops: map[string]bool{}, names: pack.NewNames(),
-		streamCh: make(chan *p2p.Stream, 1), done: make(chan struct{})}
+		streamCh: make(chan io.ReadCloser, 1), done: make(chan struct{})}
 	for _, it := range offer.GetItems() {
 		in.tops[it.GetName()] = true
 	}
@@ -227,7 +227,8 @@ func (e *Engine) handleOffer(from string, offer *pb.SendOffer) {
 		defer e.wg.Done()
 		e.runIncoming(in, t)
 	}()
-	answer(&pb.SendAnswer{Accepted: true, ResumeIndex: in.resumeIndex, ResumeOffset: in.resumeOffset})
+	answer(&pb.SendAnswer{Accepted: true, ResumeIndex: in.resumeIndex, ResumeOffset: in.resumeOffset,
+		LanAddr: e.listenLAN(in)})
 }
 
 func validOffer(o *pb.SendOffer) error {
@@ -309,6 +310,11 @@ func (e *Engine) resumePoint(in *incoming) error {
 
 // HandleStream 接管对端为隔空传送新开的数据通道。
 func (e *Engine) HandleStream(from, label string, st *p2p.Stream) {
+	e.deliverStream(from, label, newDCStream(st))
+}
+
+// deliverStream 把一条数据流（数据通道或局域网 TCP）交给对应的那一批。
+func (e *Engine) deliverStream(from, label string, st io.ReadCloser) {
 	rest := strings.TrimPrefix(label, streamPrefix)
 	id, attempt, ok := strings.Cut(rest, ":")
 	n, err := strconv.ParseUint(attempt, 10, 32)
@@ -338,7 +344,7 @@ func (e *Engine) runIncoming(in *incoming, t store.Transfer) {
 		e.mu.Unlock()
 	}()
 
-	var st *p2p.Stream
+	var st io.ReadCloser
 	select {
 	case st = <-in.streamCh:
 	case <-in.ctx.Done():
@@ -443,8 +449,8 @@ func (e *Engine) incomingStopped(in *incoming, t store.Transfer, cause error) {
 }
 
 // receive 读帧流，把条目写进临时目录，读到结束帧后收尾。
-func (e *Engine) receive(in *incoming, t store.Transfer, st *p2p.Stream) error {
-	fr, err := pack.NewFrameReader(st.Reader())
+func (e *Engine) receive(in *incoming, t store.Transfer, st io.Reader) error {
+	fr, err := pack.NewFrameReader(st)
 	if err != nil {
 		return err
 	}

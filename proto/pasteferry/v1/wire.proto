@@ -376,6 +376,9 @@ message SendAnswer {
   int64 shortfall_bytes = 5;        // no_space 时还差多少
   int64 resume_index = 6;           // 从第几个条目开始（全新传输为 0）
   int64 resume_offset = 7;          // 这个条目已经收到多少字节
+  // 局域网快速通道（2.5.1）：接收方为这次尝试临时监听的 TCP 地址（ip:port）。
+  // 只在两端都声明 send_files_tcp_v1、且当前连接是局域网直连时给出；为空或连不上时走数据通道
+  string lan_addr = 8;
 }
 
 // 任何一方取消，或者发送方读源文件出错时发出。对方停下并清理没收完的部分

@@ -384,11 +384,14 @@ func run(dataDir string) error {
 	defer engine.Close()
 
 	// ── 隔空传送 ──
+	listenLAN, dialLAN := lanHooks(id, peerMgr)
 	sender = send.New(send.Options{
 		Store:      db,
 		LoadConfig: loadCfg,
 		Send:       peerMgr.P2P().Send,
 		OpenStream: peerMgr.P2P().OpenStream,
+		ListenLAN:  listenLAN,
+		DialLAN:    dialLAN,
 		Peer: func(deviceID string) send.Peer {
 			_, list := peerMgr.Devices()
 			for _, d := range list {

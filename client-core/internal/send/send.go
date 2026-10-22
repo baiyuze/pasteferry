@@ -15,6 +15,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
+	"io"
 	"log/slog"
 	"strings"
 	"sync"
@@ -99,6 +100,13 @@ type Options struct {
 	RelayQuotaExhausted func() bool
 	// Inhibit 阻止系统空闲睡眠，返回解除的函数。有传输在进行时持有
 	Inhibit func() (release func())
+
+	// 局域网快速通道（2.5.1），两个都可以为空，为空时只用数据通道。
+	// ListenLAN 为对方这次发来的一批开一个临时 TCP 端口，返回给对方拨号的地址和等连接的函数
+	// （accept 只接一次，ctx 结束时放弃）；对方不支持、不是局域网直连或开不了端口时 ok 为 false。
+	ListenLAN func(deviceID string) (addr string, accept func(ctx context.Context) (io.ReadCloser, string, error), ok bool)
+	// DialLAN 连到对方给的地址，并写上数据流标签
+	DialLAN func(ctx context.Context, deviceID, addr, label string) (io.WriteCloser, error)
 
 	OnChange  func(*pb.Transfer)
 	OnRemoved func(id string)
