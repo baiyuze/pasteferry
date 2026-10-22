@@ -147,7 +147,7 @@ func (e *Engine) toProto(t store.Transfer) *pb.Transfer {
 		Id: t.ID, Direction: pb.TransferDirection(t.Direction), DeviceId: t.DeviceID, DeviceName: t.DeviceName,
 		Status: t.Status, Paths: t.Paths, TotalBytes: t.TotalBytes, DoneBytes: t.DoneBytes,
 		FileCount: t.FileCount, Error: t.Error, ShortfallBytes: t.Shortfall, Relayed: t.Relayed,
-		Seen: t.Seen, CreatedAtUnix: t.CreatedAt.Unix(),
+		Seen: t.Seen, CreatedAtUnix: t.CreatedAt.Unix(), RenamedFiles: t.Renamed,
 	}
 	if !t.FinishedAt.IsZero() {
 		p.FinishedAtUnix = t.FinishedAt.Unix()

@@ -1480,6 +1480,7 @@ const Transfer$json = {
     {'1': 'current_file', '3': 19, '4': 1, '5': 9, '10': 'currentFile'},
     {'1': 'current_index', '3': 20, '4': 1, '5': 3, '10': 'currentIndex'},
     {'1': 'present', '3': 21, '4': 3, '5': 8, '10': 'present'},
+    {'1': 'renamed_files', '3': 22, '4': 1, '5': 3, '10': 'renamedFiles'},
   ],
 };
 
@@ -1497,7 +1498,8 @@ final $typed_data.Uint8List transferDescriptor = $convert.base64Decode(
     'RlZF9hdF91bml4GBAgASgDUg1jcmVhdGVkQXRVbml4EigKEGZpbmlzaGVkX2F0X3VuaXgYESAB'
     'KANSDmZpbmlzaGVkQXRVbml4EiMKDXNjYW5uZWRfZmlsZXMYEiABKANSDHNjYW5uZWRGaWxlcx'
     'IhCgxjdXJyZW50X2ZpbGUYEyABKAlSC2N1cnJlbnRGaWxlEiMKDWN1cnJlbnRfaW5kZXgYFCAB'
-    'KANSDGN1cnJlbnRJbmRleBIYCgdwcmVzZW50GBUgAygIUgdwcmVzZW50');
+    'KANSDGN1cnJlbnRJbmRleBIYCgdwcmVzZW50GBUgAygIUgdwcmVzZW50EiMKDXJlbmFtZWRfZm'
+    'lsZXMYFiABKANSDHJlbmFtZWRGaWxlcw==');
 
 @$core.Deprecated('Use listTransfersRequestDescriptor instead')
 const ListTransfersRequest$json = {

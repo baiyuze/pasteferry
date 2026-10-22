@@ -5246,6 +5246,7 @@ class Transfer extends $pb.GeneratedMessage {
     $core.String? currentFile,
     $fixnum.Int64? currentIndex,
     $core.Iterable<$core.bool>? present,
+    $fixnum.Int64? renamedFiles,
   }) {
     final result = Transfer._();
     if (id != null) result.id = id;
@@ -5269,6 +5270,7 @@ class Transfer extends $pb.GeneratedMessage {
     if (currentFile != null) result.currentFile = currentFile;
     if (currentIndex != null) result.currentIndex = currentIndex;
     if (present != null) result.present.addAll(present);
+    if (renamedFiles != null) result.renamedFiles = renamedFiles;
     return result;
   }
 
@@ -5308,6 +5310,7 @@ class Transfer extends $pb.GeneratedMessage {
     ..aOS(19, _omitFieldNames ? '' : 'currentFile')
     ..aInt64(20, _omitFieldNames ? '' : 'currentIndex')
     ..p<$core.bool>(21, _omitFieldNames ? '' : 'present', $pb.PbFieldType.KB)
+    ..aInt64(22, _omitFieldNames ? '' : 'renamedFiles')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -5507,6 +5510,17 @@ class Transfer extends $pb.GeneratedMessage {
   /// 收到的：顶层项目是否还在原处（用户移走或删除后为 false），与 paths 一一对应
   @$pb.TagNumber(21)
   $pb.PbList<$core.bool> get present => $_getList(20);
+
+  /// 收到的：文件名里有本机文件系统不允许的字符、改过名的文件数。只有 Windows 上会有：
+  /// : * ? " < > | \ 换成相近的全角字符，见 pack/names.go。文件内容不受影响
+  @$pb.TagNumber(22)
+  $fixnum.Int64 get renamedFiles => $_getI64(21);
+  @$pb.TagNumber(22)
+  set renamedFiles($fixnum.Int64 value) => $_setInt64(21, value);
+  @$pb.TagNumber(22)
+  $core.bool hasRenamedFiles() => $_has(21);
+  @$pb.TagNumber(22)
+  void clearRenamedFiles() => $_clearField(22);
 }
 
 class ListTransfersRequest extends $pb.GeneratedMessage {

@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"github.com/klauspost/compress/zstd"
+	"golang.org/x/text/unicode/norm"
 	"google.golang.org/protobuf/proto"
 
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
@@ -397,6 +398,12 @@ func (n *Names) Restore(name, mapped string, isDir bool) {
 	if isDir {
 		n.d.dirs[path.Clean(name)] = mapped
 	}
+}
+
+// Renamed 判断一个条目落盘时名字是不是改过（Windows 上替换了不允许的字符，或者与只差大小写的同名条目错开）。
+// Mac 上的分解形式统一成组合形式看不出区别，不算改名。
+func Renamed(name, local string) bool {
+	return path.Base(local) != norm.NFC.String(path.Base(strings.TrimSuffix(name, "/")))
 }
 
 // Skip 表示这个条目在本机不该落盘：Windows 上的 .DS_Store 与 AppleDouble 文件。

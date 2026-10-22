@@ -692,6 +692,9 @@ message Transfer {
   int64 current_index = 20;          // 它是第几个文件，从 1 开始
   // 收到的：顶层项目是否还在原处（用户移走或删除后为 false），与 paths 一一对应
   repeated bool present = 21;
+  // 收到的：文件名里有本机文件系统不允许的字符、改过名的文件数。只有 Windows 上会有：
+  // : * ? " < > | \ 换成相近的全角字符，见 pack/names.go。文件内容不受影响
+  int64 renamed_files = 22;
 }
 
 message ListTransfersRequest {

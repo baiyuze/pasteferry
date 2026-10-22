@@ -4341,7 +4341,10 @@ type Transfer struct {
 	CurrentFile    string `protobuf:"bytes,19,opt,name=current_file,json=currentFile,proto3" json:"current_file,omitempty"`     // 正在传的文件，相对路径；最多每 0.5 秒换一次
 	CurrentIndex   int64  `protobuf:"varint,20,opt,name=current_index,json=currentIndex,proto3" json:"current_index,omitempty"` // 它是第几个文件，从 1 开始
 	// 收到的：顶层项目是否还在原处（用户移走或删除后为 false），与 paths 一一对应
-	Present       []bool `protobuf:"varint,21,rep,packed,name=present,proto3" json:"present,omitempty"`
+	Present []bool `protobuf:"varint,21,rep,packed,name=present,proto3" json:"present,omitempty"`
+	// 收到的：文件名里有本机文件系统不允许的字符、改过名的文件数。只有 Windows 上会有：
+	// : * ? " < > | \ 换成相近的全角字符，见 pack/names.go。文件内容不受影响
+	RenamedFiles  int64 `protobuf:"varint,22,opt,name=renamed_files,json=renamedFiles,proto3" json:"renamed_files,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4521,6 +4524,13 @@ func (x *Transfer) GetPresent() []bool {
 		return x.Present
 	}
 	return nil
+}
+
+func (x *Transfer) GetRenamedFiles() int64 {
+	if x != nil {
+		return x.RenamedFiles
+	}
+	return 0
 }
 
 type ListTransfersRequest struct {
@@ -5120,7 +5130,7 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\vallow_relay\x18\x03 \x01(\bR\n" +
 	"allowRelay\"\x1d\n" +
 	"\vTransferRef\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\xc4\x05\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\xe9\x05\n" +
 	"\bTransfer\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12>\n" +
 	"\tdirection\x18\x02 \x01(\x0e2 .pasteferry.v1.TransferDirectionR\tdirection\x12\x1b\n" +
@@ -5147,7 +5157,8 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\rscanned_files\x18\x12 \x01(\x03R\fscannedFiles\x12!\n" +
 	"\fcurrent_file\x18\x13 \x01(\tR\vcurrentFile\x12#\n" +
 	"\rcurrent_index\x18\x14 \x01(\x03R\fcurrentIndex\x12\x18\n" +
-	"\apresent\x18\x15 \x03(\bR\apresent\"\x8d\x01\n" +
+	"\apresent\x18\x15 \x03(\bR\apresent\x12#\n" +
+	"\rrenamed_files\x18\x16 \x01(\x03R\frenamedFiles\"\x8d\x01\n" +
 	"\x14ListTransfersRequest\x12>\n" +
 	"\tdirection\x18\x01 \x01(\x0e2 .pasteferry.v1.TransferDirectionR\tdirection\x12\x14\n" +
 	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x1f\n" +

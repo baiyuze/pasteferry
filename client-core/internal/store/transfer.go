@@ -60,6 +60,7 @@ type Transfer struct {
 	Relayed    bool
 	AllowRelay bool // 发出的：用户已同意经官方服务中转
 	Attempt    int  // 发出的：已经发起过几次
+	Renamed    int64 // 收到的：名字在本机改过的文件数
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	FinishedAt time.Time
@@ -124,7 +125,8 @@ CREATE TABLE IF NOT EXISTS transfer_entries (
 	if err != nil {
 		return fmt.Errorf("建隔空传送表: %w", err)
 	}
-	return nil
+	// 测试版建的表没有这一列
+	return s.addColumnIfMissing("transfers", "renamed", "INTEGER NOT NULL DEFAULT 0")
 }
 
 // PutTransfer 新建或整体更新一条传输记录。
@@ -150,18 +152,18 @@ func (s *Store) PutTransfer(t Transfer) error {
 	_, err = s.db.Exec(`
 INSERT INTO transfers (id, direction, device_id, device_name, status, items, paths,
                        total_bytes, done_bytes, file_count, dest_dir, error, shortfall,
-                       seen, relayed, allow_relay, attempt, created_at, updated_at, finished_at)
-VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                       seen, relayed, allow_relay, attempt, created_at, updated_at, finished_at, renamed)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 ON CONFLICT(id) DO UPDATE SET
     device_name=excluded.device_name, status=excluded.status, items=excluded.items,
     paths=excluded.paths, total_bytes=excluded.total_bytes, done_bytes=excluded.done_bytes,
     file_count=excluded.file_count, dest_dir=excluded.dest_dir, error=excluded.error,
     shortfall=excluded.shortfall, seen=excluded.seen, relayed=excluded.relayed,
     allow_relay=excluded.allow_relay, attempt=excluded.attempt,
-    updated_at=excluded.updated_at, finished_at=excluded.finished_at`,
+    updated_at=excluded.updated_at, finished_at=excluded.finished_at, renamed=excluded.renamed`,
 		t.ID, t.Direction, t.DeviceID, t.DeviceName, t.Status, string(items), string(paths),
 		t.TotalBytes, t.DoneBytes, t.FileCount, t.DestDir, t.Error, t.Shortfall,
-		t.Seen, t.Relayed, t.AllowRelay, t.Attempt, t.CreatedAt.Unix(), t.UpdatedAt.Unix(), finished)
+		t.Seen, t.Relayed, t.AllowRelay, t.Attempt, t.CreatedAt.Unix(), t.UpdatedAt.Unix(), finished, t.Renamed)
 	if err != nil {
 		return fmt.Errorf("写入传输记录: %w", err)
 	}
@@ -177,7 +179,7 @@ func nonNilItems(items []Item) []Item {
 
 const transferColumns = `id, direction, device_id, device_name, status, items, paths,
        total_bytes, done_bytes, file_count, dest_dir, error, shortfall,
-       seen, relayed, allow_relay, attempt, created_at, updated_at, finished_at`
+       seen, relayed, allow_relay, attempt, created_at, updated_at, finished_at, renamed`
 
 func (s *Store) GetTransfer(id string) (Transfer, error) {
 	list, err := s.queryTransfers(`SELECT `+transferColumns+` FROM transfers WHERE id=?`, id)
@@ -229,7 +231,7 @@ func (s *Store) queryTransfers(q string, args ...any) ([]Transfer, error) {
 		var created, updated, finished int64
 		if err := rows.Scan(&t.ID, &t.Direction, &t.DeviceID, &t.DeviceName, &t.Status, &items, &paths,
 			&t.TotalBytes, &t.DoneBytes, &t.FileCount, &t.DestDir, &t.Error, &t.Shortfall,
-			&t.Seen, &t.Relayed, &t.AllowRelay, &t.Attempt, &created, &updated, &finished); err != nil {
+			&t.Seen, &t.Relayed, &t.AllowRelay, &t.Attempt, &created, &updated, &finished, &t.Renamed); err != nil {
 			return nil, err
 		}
 		_ = json.Unmarshal([]byte(items), &t.Items)

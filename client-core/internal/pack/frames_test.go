@@ -135,3 +135,29 @@ func TestManifestDedupesTopNames(t *testing.T) {
 		t.Fatalf("同名的顶层项目应当改名：%v %v", tops, err)
 	}
 }
+
+func TestRenamedOnlyWhenTheNameReallyChanged(t *testing.T) {
+	old := windowsNames
+	windowsNames = true
+	defer func() { windowsNames = old }()
+	n := NewNames()
+	cases := []struct {
+		name    string
+		renamed bool
+	}{
+		{"资料/a:b?c.txt", true},         // Windows 不允许的字符换成全角
+		{"资料/普通文件.txt", false},         // 原样
+		{"资料/\u304b\u3099.txt", false}, // Mac 上的分解形式（か + 浊点）统一成组合形式，看不出区别，不算
+		{"资料/Readme.md", false},
+		{"资料/README.md", true}, // 与上一个只差大小写，Windows 上改成「README (2).md」
+	}
+	for _, c := range cases {
+		local, err := n.Rel(c.name, false)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got := Renamed(c.name, local); got != c.renamed {
+			t.Errorf("%q → %q：改名 %v，应为 %v", c.name, local, got, c.renamed)
+		}
+	}
+}

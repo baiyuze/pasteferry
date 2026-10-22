@@ -704,6 +704,7 @@ func noLinkParents(base, dir string, checked map[string]bool) error {
 // finalize 把收完的顶层项目从临时目录移到保存位置（重名就改名），回告对方。
 func (e *Engine) finalize(in *incoming, t store.Transfer) error {
 	var tops []store.TransferEntry
+	var renamed int64
 	for from := int64(0); ; {
 		batch, err := e.opts.Store.TransferEntries(in.id, from, 1000)
 		if err != nil {
@@ -718,6 +719,9 @@ func (e *Engine) finalize(in *incoming, t store.Transfer) error {
 			}
 			if !strings.Contains(en.Path, "/") && en.LocalPath != "" {
 				tops = append(tops, en)
+			}
+			if en.LocalPath != "" && pack.Renamed(en.Path, en.LocalPath) {
+				renamed++
 			}
 		}
 		from = batch[len(batch)-1].Index + 1
@@ -743,7 +747,7 @@ func (e *Engine) finalize(in *incoming, t store.Transfer) error {
 	_ = os.Remove(filepath.Join(in.dest, partialDir)) // 空了才删得掉
 
 	t = e.withProgress(t)
-	t.Items, t.Paths, t.DoneBytes = items, finals, t.TotalBytes
+	t.Items, t.Paths, t.DoneBytes, t.Renamed = items, finals, t.TotalBytes, renamed
 	e.finish(t, store.TransferDone, "")
 	_ = e.opts.Send(in.device, &pb.PeerMessage{Payload: &pb.PeerMessage_SendResult{SendResult: &pb.SendResult{
 		TransferId: t.ID, Attempt: in.attempt, Ok: true}}})
