@@ -32,6 +32,7 @@ type side struct {
 	answers    []*pb.SendAnswer
 	blockOut   bool // 模拟连接断了：控制消息发不出去
 	dropResult bool // 模拟「已收到」的结果在路上丢了
+	dropOffers int  // 模拟请求落在对方重启前的旧连接里
 }
 
 func (s *side) config() config.Config {
@@ -128,6 +129,11 @@ func (p *pair) newSide(t *testing.T, id, peer string) *side {
 			}
 			if o := msg.GetSendOffer(); o != nil {
 				s.offers = append(s.offers, o)
+				if s.dropOffers > 0 {
+					s.dropOffers--
+					s.mu.Unlock()
+					return nil
+				}
 			}
 			s.mu.Unlock()
 			if blocked {
@@ -261,6 +267,88 @@ func TestSendFilesAndFolder(t *testing.T) {
 	}
 	if rows, _ := p.b.db.TransferEntries(tr.GetId(), 0, 10); len(rows) != 0 {
 		t.Fatal("收完以后条目应当清掉")
+	}
+}
+
+// 重连通知到达时还在等旧连接的应答；之后超时也应自动继续。
+func TestResumeWhenReconnectPrecedesAnswerTimeout(t *testing.T) {
+	for _, lan := range []bool{false, true} {
+		t.Run(map[bool]string{false: "datachannel", true: "tcp"}[lan], func(t *testing.T) {
+			p := newPair(t)
+			if lan {
+				useLAN(t, p, false)
+			}
+			p.a.eng.opts.AnswerTimeout = 300 * time.Millisecond
+			p.a.mu.Lock()
+			p.a.dropOffers = 1
+			p.a.mu.Unlock()
+			path := filepath.Join(t.TempDir(), "restart.bin")
+			data := randomBytes(t, 1<<20)
+			writeFile(t, path, data)
+			tr, err := p.a.eng.SendFiles("bob", []string{path}, false)
+			if err != nil {
+				t.Fatal(err)
+			}
+			waitFor(t, 5*time.Second, func() bool {
+				p.a.mu.Lock()
+				defer p.a.mu.Unlock()
+				return len(p.a.offers) == 1
+			})
+			p.a.eng.PeerReady("bob")
+			waitStatus(t, p.a, tr.GetId(), store.TransferDone)
+			waitStatus(t, p.b, tr.GetId(), store.TransferDone)
+			sameFile(t, data, filepath.Join(p.b.recvDir, "restart.bin"))
+			p.a.mu.Lock()
+			defer p.a.mu.Unlock()
+			if len(p.a.offers) != 3 || !p.a.offers[1].GetResume() || p.a.offers[2].GetResume() {
+				t.Fatalf("应先续传，对方没有记录时才从头发：%v", p.a.offers)
+			}
+		})
+	}
+}
+
+func TestConnectedRetryStopsAfterOneAttempt(t *testing.T) {
+	p := newPair(t)
+	p.a.mu.Lock()
+	p.a.blockOut = true
+	p.a.mu.Unlock()
+	path := filepath.Join(t.TempDir(), "retry.txt")
+	writeFile(t, path, []byte("retry"))
+	tr, err := p.a.eng.SendFiles("bob", []string{path}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	waitFor(t, 10*time.Second, func() bool {
+		got, err := p.a.db.GetTransfer(tr.GetId())
+		return err == nil && got.Status == store.TransferInterrupted && got.Attempt == 2
+	})
+	time.Sleep(3500 * time.Millisecond)
+	p.a.mu.Lock()
+	defer p.a.mu.Unlock()
+	if len(p.a.offers) != 2 {
+		t.Fatalf("持续失败不应循环重试：%d", len(p.a.offers))
+	}
+}
+
+func TestCancelDuringConnectedRetry(t *testing.T) {
+	p := newPair(t)
+	p.a.mu.Lock()
+	p.a.blockOut = true
+	p.a.mu.Unlock()
+	path := filepath.Join(t.TempDir(), "cancel.txt")
+	writeFile(t, path, []byte("cancel"))
+	tr, err := p.a.eng.SendFiles("bob", []string{path}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	waitStatus(t, p.a, tr.GetId(), store.TransferInterrupted)
+	if err := p.a.eng.Cancel(tr.GetId()); err != nil {
+		t.Fatal(err)
+	}
+	time.Sleep(3500 * time.Millisecond)
+	got := waitStatus(t, p.a, tr.GetId(), store.TransferCancelled)
+	if got.Attempt != 1 {
+		t.Fatalf("取消后不应再发：%d", got.Attempt)
 	}
 }
 

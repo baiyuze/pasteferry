@@ -172,12 +172,21 @@ func (e *Engine) kick(deviceID string) {
 
 // runDevice 按先后顺序一批一批地发给一台设备。连接断了就停下，等 PeerReady 再来。
 func (e *Engine) runDevice(deviceID string) {
+	// 重连可能早于旧尝试的应答超时：PeerReady 看不到稍后才标为中断的批次。
+	// 每批补试一次；持续失败仍等下一次重连或用户点「继续」，不循环重发。
+	var retried string
 	for e.ctx.Err() == nil {
 		t, ok := e.nextQueued(deviceID)
 		if !ok || !e.opts.Peer(deviceID).Connected {
 			break
 		}
 		e.runOutgoing(t)
+		if retried != t.ID {
+			if cur, err := e.opts.Store.GetTransfer(t.ID); err == nil && cur.Status == store.TransferInterrupted && e.opts.Peer(deviceID).Connected {
+				retried = t.ID
+				e.retryInterrupted(cur)
+			}
+		}
 	}
 	e.mu.Lock()
 	delete(e.workers, deviceID)
@@ -186,6 +195,23 @@ func (e *Engine) runDevice(deviceID string) {
 	if _, ok := e.nextQueued(deviceID); ok && e.opts.Peer(deviceID).Connected && e.ctx.Err() == nil {
 		e.kick(deviceID)
 	}
+}
+
+// retryInterrupted 给对方重启留一点时间，等待期间的取消、手动继续和退出优先。
+func (e *Engine) retryInterrupted(t store.Transfer) {
+	timer := time.NewTimer(3 * time.Second)
+	defer timer.Stop()
+	select {
+	case <-e.ctx.Done():
+		return
+	case <-timer.C:
+	}
+	cur, err := e.opts.Store.GetTransfer(t.ID)
+	if err != nil || cur.Status != store.TransferInterrupted || cur.Attempt != t.Attempt || !e.opts.Peer(t.DeviceID).Connected {
+		return
+	}
+	cur.Status, cur.Error = store.TransferQueued, ""
+	e.save(cur)
 }
 
 func (e *Engine) nextQueued(deviceID string) (store.Transfer, bool) {
