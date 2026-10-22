@@ -14,7 +14,8 @@
 //	pasteferry-cli nearby [NAME]       搜索附近设备：给了 NAME 就在它出现时向它发起配对，否则等对方点本机
 //	pasteferry-cli address DEVICE ADDR 手动指定某台设备的地址
 //	pasteferry-cli send [-relay] DEVICE PATH...  隔空传送：把文件或文件夹发给一台设备
-//	pasteferry-cli transfers           最近收到和发出的文件
+//	pasteferry-cli transfers [-v]      最近收到和发出的文件（-v 带上 ID）
+//	pasteferry-cli cancel ID           取消一批传输
 package main
 
 import (
@@ -45,7 +46,7 @@ func main() {
 	cmd := flag.Arg(0)
 	if cmd == "" {
 		fmt.Fprintln(os.Stderr,
-			"用法: pasteferry-cli [-data-dir DIR] <status|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] DEVICE PATH...|transfers>")
+			"用法: pasteferry-cli [-data-dir DIR] <status|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] DEVICE PATH...|transfers [-v]|cancel ID>")
 		os.Exit(2)
 	}
 
@@ -104,7 +105,9 @@ func run(cmd, dataDir string) error {
 	case "send":
 		return sendFiles(ctx, client, flag.Args()[1:])
 	case "transfers":
-		return showTransfers(ctx, client)
+		return showTransfers(ctx, client, flag.Arg(1) == "-v")
+	case "cancel":
+		return cancelTransfer(ctx, client, flag.Arg(1))
 	default:
 		return fmt.Errorf("未知命令 %q", cmd)
 	}

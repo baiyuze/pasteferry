@@ -110,8 +110,8 @@ func transferLine(t *pb.Transfer) string {
 	}
 }
 
-// showTransfers 列出最近收到和发出的文件。
-func showTransfers(ctx context.Context, c pb.DaemonServiceClient) error {
+// showTransfers 列出最近收到和发出的文件。verbose 时带上 ID（取消时用）。
+func showTransfers(ctx context.Context, c pb.DaemonServiceClient, verbose bool) error {
 	resp, err := c.ListTransfers(ctx, &pb.ListTransfersRequest{Limit: 50})
 	if err != nil {
 		return err
@@ -134,7 +134,11 @@ func showTransfers(ctx context.Context, c pb.DaemonServiceClient) error {
 		if t.GetError() != "" {
 			state += " (" + t.GetError() + ")"
 		}
-		fmt.Printf("%s %s  %s %s  %s  %s  %s\n", dir, when, who, t.GetDeviceName(),
+		id := ""
+		if verbose {
+			id = t.GetId()[:8] + "  "
+		}
+		fmt.Printf("%s %s%s  %s %s  %s  %s  %s\n", dir, id, when, who, t.GetDeviceName(),
 			strings.Join(names, ", "), humanBytes(t.GetTotalBytes()), state)
 		for _, p := range t.GetPaths() {
 			if t.GetDirection() == pb.TransferDirection_TRANSFER_DIRECTION_INCOMING {
@@ -142,5 +146,34 @@ func showTransfers(ctx context.Context, c pb.DaemonServiceClient) error {
 			}
 		}
 	}
+	return nil
+}
+
+// cancelTransfer 取消一批（发出的或收到的），ID 可以只写开头几位。
+func cancelTransfer(ctx context.Context, c pb.DaemonServiceClient, prefix string) error {
+	if prefix == "" {
+		return errors.New("用法: cancel ID（pasteferry-cli transfers -v 查看 ID）")
+	}
+	resp, err := c.ListTransfers(ctx, &pb.ListTransfersRequest{Limit: 200})
+	if err != nil {
+		return err
+	}
+	var match []*pb.Transfer
+	for _, t := range resp.GetTransfers() {
+		if strings.HasPrefix(t.GetId(), prefix) {
+			match = append(match, t)
+		}
+	}
+	switch len(match) {
+	case 0:
+		return fmt.Errorf("没有 ID 以 %q 开头的传输", prefix)
+	case 1:
+	default:
+		return fmt.Errorf("有 %d 个传输的 ID 以 %q 开头，请多写几位", len(match), prefix)
+	}
+	if _, err := c.CancelTransfer(ctx, &pb.TransferRef{Id: match[0].GetId()}); err != nil {
+		return err
+	}
+	fmt.Println("已取消")
 	return nil
 }
