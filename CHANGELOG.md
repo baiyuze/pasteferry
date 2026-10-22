@@ -1,5 +1,29 @@
 # 更新记录 / Changelog
 
+## 2.5.2 — 2026-10-22
+
+Reliable device capability detection and a circular radar at small window
+sizes.
+
+### Fixes
+
+- An up-to-date device could incorrectly show as needing an update in Send
+  Files when its capability announcement was lost at connection startup. The
+  control receiver is now installed before the connection is announced, and
+  capabilities are refreshed periodically.
+- The Send Files radar now stays circular in small windows. The rings,
+  device icons and labels scale together instead of stretching into a narrow
+  ellipse; the selected side-by-side or stacked layout is preserved.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: update both computers to make capability
+  exchange reliable in both directions. Existing pairings and settings are
+  preserved.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and remains compatible with
+  2.5.0 and 2.5.1.
+
 ## 2.5.1 — 2026-10-22
 
 Faster Send Files on the local network, with more reliable recovery and

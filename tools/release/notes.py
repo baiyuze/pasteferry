@@ -11,6 +11,23 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.5.2',
+ 'date': '2026-10-22',
+ 'changes': [],
+ 'fixes': [('An up-to-date device could incorrectly show as needing an update in Send Files when its '
+            'capability announcement was lost at connection startup. The control receiver is now installed '
+            'before the connection is announced, and capabilities are refreshed periodically.',
+            '修复隔空传送中已更新的设备仍显示「需要更新」的问题：连接刚建立时功能声明可能丢失，现在先准备好接收器再报告已连接，并定期刷新功能声明。',
+            '最新のデバイスでも、接続開始時に機能情報が失われると「更新が必要」と表示される問題を修正しました。接続完了を通知する前に受信処理を設定し、機能情報を定期的に更新します。',
+            '修正隔空傳送中已更新的裝置仍顯示「需要更新」的問題：連線剛建立時功能宣告可能遺失，現在先準備好接收器再回報已連線，並定期重新整理功能宣告。',
+            '修正隔空傳送中已更新的裝置仍顯示「需要更新」的問題：連線剛建立時功能聲明可能遺失，現在先準備好接收器再回報已連線，並定期更新功能聲明。'),
+           ('The Send Files radar now stays circular in small windows. The rings, device icons and labels '
+            'scale together instead of stretching into a narrow ellipse; the selected side-by-side or '
+            'stacked layout is preserved.',
+            '小窗口下隔空传送的雷达保持正圆，圆环、设备图标和名称一起等比缩放，不再挤成长椭圆；保留设置中选择的左右或上下布局。',
+            '小さいウィンドウでもファイル送信のレーダーが円形を保つようになりました。輪、デバイスのアイコンと名前を同じ比率で縮小し、細長い楕円に変形しません。選択した左右・上下配置は維持されます。',
+            '小視窗下隔空傳送的雷達維持正圓，圓環、裝置圖示和名稱一起等比例縮放，不再擠成長橢圓；保留設定中選擇的左右或上下配置。',
+            '小視窗下隔空傳送的雷達維持正圓，圓環、裝置圖示和名稱一起等比例縮放，不再擠成長橢圓；保留設定中選擇的左右或上下排列。')]},
 {'version': '2.5.1',
  'date': '2026-10-22',
  'changes': [('Send Files uses an encrypted TCP fast link on the local network. A 1 GB file reached 144.3 '
