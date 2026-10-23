@@ -1,5 +1,30 @@
 # 更新记录 / Changelog
 
+## 2.5.3 — 2026-10-23
+
+Control which computers share your clipboard, choose whether to catch up
+after reconnecting, and quit the app completely.
+
+### Changes
+
+- Real-time clipboard sharing can now be paused globally or for each paired computer. Local history, manual downloads and Send Files remain available.
+- Offline clipboard catch-up is now off by default, including after upgrading. Reconnecting or resuming sharing starts with new copies. Optional catch-up adds up to 20 missed copies from the last 24 hours to history without replacing the current clipboard.
+- Launch at login now has its own setting. Changing it does not stop the current session, and quitting does not change the next-login preference. New installations start with it off; upgrades preserve existing login entries.
+
+### Fixes
+
+- Quit PasteFerry now stops the main window, clipboard background service and quick paste helper without immediately restarting them. Closing the window keeps the app running and explains this on first use.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: update each computer where you want the
+  new controls and complete exit behavior. Offline catch-up is disabled by
+  default after upgrading; enable it in Settings if needed. Pairings,
+  history and existing launch-at-login choices are preserved.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and remains compatible with
+  earlier 2.5.x versions.
+
 ## 2.5.2 — 2026-10-22
 
 Reliable device capability detection and a circular radar at small window

@@ -11,6 +11,37 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.5.3',
+ 'date': '2026-10-23',
+ 'changes': [('Real-time clipboard sharing can now be paused globally or for each paired computer. '
+              'Local history, manual downloads and Send Files remain available.',
+              '新增实时同步总开关和每台电脑的同步开关；暂停自动同步后，本机复制记录、手动下载和隔空传送仍可使用。',
+              'クリップボードの自動同期を全体またはパソコンごとに一時停止できます。ローカル履歴、手動ダウンロード、ファイル送信は引き続き利用できます。',
+              '新增即時同步總開關和每台電腦的同步開關；暫停自動同步後，本機複製記錄、手動下載和隔空傳送仍可使用。',
+              '新增即時同步總開關和每部電腦的同步開關；暫停自動同步後，本機複製記錄、手動下載和隔空傳送仍可使用。'),
+             ('Offline clipboard catch-up is now off by default, including after upgrading. '
+              'Reconnecting or resuming sharing starts with new copies. Optional catch-up adds up '
+              'to 20 missed copies from the last 24 hours to history without replacing the current '
+              'clipboard.',
+              '离线内容补发默认关闭，升级后也默认关闭。重连或恢复同步后只同步新复制的内容。可自行开启补发：最多补发 24 小时内的 20 条记录，不覆盖当前剪贴板。',
+              'オフライン中の未送信内容の同期は、更新後も含め初期設定でオフです。再接続・再開後は新しいコピーから同期します。有効にした場合は24時間以内の最大20件を、現在のクリップボードを上書きせず履歴に追加します。',
+              '離線內容補傳預設關閉，升級後也預設關閉。重新連線或恢復同步後只同步新複製的內容。可自行開啟補傳：最多補傳 24 小時內的 20 筆記錄，不覆寫目前的剪貼簿。',
+              '離線內容補傳預設關閉，升級後也預設關閉。重新連線或恢復同步後只同步新複製的內容。可自行開啟補傳：最多補傳 24 小時內的 20 筆記錄，不覆寫目前的剪貼簿。'),
+             ('Launch at login now has its own setting. Changing it does not stop the current '
+              'session, and quitting does not change the next-login preference. New installations '
+              'start with it off; upgrades preserve existing login entries.',
+              '新增独立的开机启动设置。修改开关不停止当前运行，退出也不改变下次登录时的启动选择。新安装默认关闭，升级保留原有的开机启动选择。',
+              'ログイン時の起動を独立して設定できます。変更しても現在の動作は停止せず、終了しても次回ログイン時の設定は変わりません。新規インストールではオフ、更新時は既存の設定を保持します。',
+              '新增獨立的開機啟動設定。變更開關不停止目前的執行，結束也不改變下次登入時的啟動選擇。新安裝預設關閉，升級保留原有的開機啟動選擇。',
+              '新增獨立的開機啟動設定。更改開關不停止目前的運作，退出也不改變下次登入時的啟動選擇。新安裝預設關閉，升級保留原有的開機啟動選擇。')],
+ 'fixes': [('Quit PasteFerry now stops the main window, clipboard background service and quick '
+            'paste helper without immediately restarting them. Closing the window keeps the app '
+            'running and explains this on first use.',
+            '「退出隔空贴」现在会结束主窗口、剪贴板后台和快捷粘贴窗口，不再立即重新拉起。关闭窗口仍会继续后台运行，首次操作时会说明。',
+            '「PasteFerry '
+            'を終了」でメイン画面、同期サービス、クイック貼り付けをすべて終了し、直後に再起動しなくなりました。ウィンドウを閉じた場合は動作を継続し、初回に説明します。',
+            '「結束隔空貼」現在會結束主視窗、剪貼簿背景服務和快速貼上視窗，不再立即重新啟動。關閉視窗仍會繼續在背景執行，首次操作時會說明。',
+            '「退出隔空貼」現在會結束主視窗、剪貼簿背景服務和快速貼上視窗，不再立即重新啟動。關閉視窗仍會繼續在背景運作，首次操作時會說明。')]},
 {'version': '2.5.2',
  'date': '2026-10-22',
  'changes': [],

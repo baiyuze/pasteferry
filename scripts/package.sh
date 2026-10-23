@@ -23,7 +23,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-export VERSION=${VERSION:-2.5.2}
+export VERSION=${VERSION:-2.5.3}
 OUT=release
 
 # 发布包一定要用 PasteFerry Code Signing 证书签名，没有就停下（见 scripts/sign.sh）
