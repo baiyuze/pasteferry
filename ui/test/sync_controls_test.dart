@@ -29,16 +29,26 @@ void main() {
       await tester.scrollUntilVisible(
         find.text(title),
         250,
-        scrollable: find.descendant(of: find.byType(ListView).last, matching: find.byType(Scrollable)).first,
+        scrollable: find
+            .descendant(
+              of: find.byType(ListView).last,
+              matching: find.byType(Scrollable),
+            )
+            .first,
       );
       final row = find.ancestor(
         of: find.text(title).first,
         matching: find.byType(SettingRow),
       );
-      await tester.ensureVisible(row);
-      await tester.tap(
-        find.descendant(of: row, matching: find.byType(SmallSwitch)),
+      final control = find.descendant(
+        of: row,
+        matching: find.byType(SmallSwitch),
       );
+      // Long descriptions can leave a row's title visible while its centered
+      // switch is below the viewport, particularly with Linux font metrics.
+      await Scrollable.ensureVisible(tester.element(control), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(control);
       await tester.pumpAndSettle();
     }
 
