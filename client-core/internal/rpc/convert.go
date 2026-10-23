@@ -89,6 +89,9 @@ func configToProto(c config.Config) *pb.Config {
 		ReceiveDisabled:       c.ReceiveDisabled,
 		ReceiveNotifyDisabled: c.ReceiveNotifyDisabled,
 		SendLayoutStacked:     c.SendLayoutStacked,
+		RealtimeSyncDisabled:  c.RealtimeSyncDisabled,
+		SyncBacklog:           c.SyncBacklog,
+		SyncDisabledPeers:     append([]string(nil), c.SyncDisabledPeers...),
 	}
 }
 
@@ -118,6 +121,9 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	c.SyncFile = in.GetSyncFile()
 	c.AutoApplyToClipboard = in.GetAutoApplyToClipboard()
 	c.LaunchAtLogin = in.GetLaunchAtLogin()
+	c.RealtimeSyncDisabled = in.GetRealtimeSyncDisabled()
+	c.SyncBacklog = in.GetSyncBacklog()
+	c.SyncDisabledPeers = append([]string(nil), in.GetSyncDisabledPeers()...)
 	c.OnlyOwnSTUN = in.GetOnlyOwnStun()
 	// 空字符串就是「跟随系统」，与「没设置」同义，直接覆盖
 	c.Language = in.GetLanguage()

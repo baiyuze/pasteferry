@@ -1101,7 +1101,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get svcStartBody =>
-      'PasteFerry runs a small background process that notices clipboard changes and stays connected to your other devices. Once on, it starts at login and keeps syncing even with this window closed.';
+      'PasteFerry runs a small background process for clipboard sync. Closing the window keeps it running. Launch at login is a separate setting and is off for new installations.';
 
   @override
   String get svcEnable => 'Turn on background sync';
@@ -1125,7 +1125,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get svcStoppedBody =>
-      'It may have just quit; the system usually restarts it within seconds. If you stay on this page, restart it with the button below.';
+      'The background service is stopped. Start it with the button below; launch at login is controlled separately in Settings.';
 
   @override
   String get svcDevBodyWin =>
@@ -1903,4 +1903,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sendLayoutBelow => 'Below the radar';
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get launchAtLogin => 'Launch at login';
+
+  @override
+  String get launchAtLoginDesc =>
+      'Start in the background when you log in. Changing this does not stop the current session.';
+
+  @override
+  String get realtimeSync => 'Real-time clipboard sync';
+
+  @override
+  String get realtimeSyncDesc =>
+      'Automatically share new copies with paired devices. Local history and Send Files remain available when off.';
+
+  @override
+  String get syncBacklog => 'Catch up after reconnecting';
+
+  @override
+  String get syncBacklogDesc =>
+      'Off by default: missed copies are skipped. When enabled, up to 20 copies from the last 24 hours enter history without replacing the clipboard.';
+
+  @override
+  String get peerRealtimeSync => 'Sync with this computer';
+
+  @override
+  String get syncPaused => 'Clipboard sync paused';
+
+  @override
+  String get quitApp => 'Quit PasteFerry';
+
+  @override
+  String get quitAppDesc =>
+      'Stop all PasteFerry processes. Your launch-at-login preference is preserved.';
+
+  @override
+  String get quitTransfersWarning =>
+      'Files are still being transferred. Quit and interrupt these transfers?';
+
+  @override
+  String get backgroundRunningTitle => 'PasteFerry will keep running';
+
+  @override
+  String get backgroundRunningBody =>
+      'Closing the window keeps sync and quick paste running. To stop everything, choose Quit PasteFerry in Settings or the app menu.';
 }

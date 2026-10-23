@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'app_state.dart';
+import 'application_lifecycle.dart';
 import 'gen/pasteferry/v1/daemon.pb.dart' show TransferDirection;
 import 'background_service.dart';
 import 'i18n.dart';
@@ -49,6 +50,7 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
   void initState() {
     super.initState();
     _state = widget.state ?? (AppState()..connect());
+    if (widget.state == null) installApplicationLifecycle(_state);
   }
 
   @override
@@ -84,6 +86,7 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
           );
           return MaterialApp(
             title: 'PasteFerry',
+            navigatorKey: appNavigatorKey,
             debugShowCheckedModeBanner: false,
             theme: light,
             darkTheme: dark,
@@ -254,7 +257,8 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
     // 自动更新后重新打开时提示一次结果
     final updated = state.lastUpdate;
     if (updated != null) {
-      final key = '${updated.fromVersion}>${updated.toVersion}@${updated.atUnix}';
+      final key =
+          '${updated.fromVersion}>${updated.toVersion}@${updated.atUnix}';
       if (key != _shownUpdateResult) {
         _shownUpdateResult = key;
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -262,7 +266,9 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
           final l = context.l10n;
           showToast(
             context,
-            updated.ok ? l.updatedTo(updated.toVersion) : l.updateNotFinished(updated.fromVersion),
+            updated.ok
+                ? l.updatedTo(updated.toVersion)
+                : l.updateNotFinished(updated.fromVersion),
             error: !updated.ok,
           );
         });
@@ -351,7 +357,9 @@ class _Sidebar extends StatelessWidget {
             icon: AppIcons.star,
             label: l.navFavorites,
             selected: current == Section.favorites,
-            trailing: state.favorites.isEmpty ? null : '${state.favorites.length}',
+            trailing: state.favorites.isEmpty
+                ? null
+                : '${state.favorites.length}',
             onTap: () => onSelect(Section.favorites),
           ),
           _NavItem(
@@ -479,12 +487,16 @@ class _SendBadge extends StatelessWidget {
     final active = state.activeTransfers;
     if (active.isEmpty) {
       final n = state.unseenTransfers;
-      return n == 0 ? const SizedBox.shrink() : Text('$n', style: context.text.labelSmall);
+      return n == 0
+          ? const SizedBox.shrink()
+          : Text('$n', style: context.text.labelSmall);
     }
     final lines = [
       for (final t in active)
         () {
-          final percent = t.totalBytes > 0 ? '${(t.doneBytes.toInt() * 100 / t.totalBytes.toInt()).floor()}%' : '…';
+          final percent = t.totalBytes > 0
+              ? '${(t.doneBytes.toInt() * 100 / t.totalBytes.toInt()).floor()}%'
+              : '…';
           return t.direction == TransferDirection.TRANSFER_DIRECTION_OUTGOING
               ? l.sendingTo(t.deviceName, percent)
               : l.receivingFrom(t.deviceName, percent);
@@ -494,7 +506,10 @@ class _SendBadge extends StatelessWidget {
       message: lines.join('\n'),
       child: SizedBox.square(
         dimension: 12,
-        child: CircularProgressIndicator(strokeWidth: 1.6, value: state.transferProgress),
+        child: CircularProgressIndicator(
+          strokeWidth: 1.6,
+          value: state.transferProgress,
+        ),
       ),
     );
   }

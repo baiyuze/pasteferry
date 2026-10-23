@@ -241,7 +241,8 @@ func (t *windowsTray) showMenu() {
 		class, _ := windows.UTF16PtrFromString("FLUTTER_RUNNER_WIN32_WINDOW")
 		title, _ := windows.UTF16PtrFromString("PasteFerry")
 		if hwnd, _, _ := trayFindWindow.Call(uintptr(unsafe.Pointer(class)), uintptr(unsafe.Pointer(title))); hwnd != 0 {
-			trayPostMessage.Call(hwnd, trayWMClose, 0, 0)
+			trayPostMessage.Call(hwnd, 0x8000+87, 0, 0)
+			return // The UI confirms active transfers and stops all helpers.
 		}
 		t.quit() // 正常退出码 0：守护进程也退出，不会误当成崩溃再拉起
 	}

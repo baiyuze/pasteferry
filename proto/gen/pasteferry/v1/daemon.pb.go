@@ -2693,9 +2693,12 @@ type Config struct {
 	// 收到文件时不发系统通知
 	ReceiveNotifyDisabled bool `protobuf:"varint,25,opt,name=receive_notify_disabled,json=receiveNotifyDisabled,proto3" json:"receive_notify_disabled,omitempty"`
 	// 隔空传送页里，传输列表放在雷达下面（上下排）。默认 false：放在雷达右边（左右排）
-	SendLayoutStacked bool `protobuf:"varint,26,opt,name=send_layout_stacked,json=sendLayoutStacked,proto3" json:"send_layout_stacked,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	SendLayoutStacked    bool     `protobuf:"varint,26,opt,name=send_layout_stacked,json=sendLayoutStacked,proto3" json:"send_layout_stacked,omitempty"`
+	RealtimeSyncDisabled bool     `protobuf:"varint,27,opt,name=realtime_sync_disabled,json=realtimeSyncDisabled,proto3" json:"realtime_sync_disabled,omitempty"`
+	SyncBacklog          bool     `protobuf:"varint,28,opt,name=sync_backlog,json=syncBacklog,proto3" json:"sync_backlog,omitempty"`
+	SyncDisabledPeers    []string `protobuf:"bytes,29,rep,name=sync_disabled_peers,json=syncDisabledPeers,proto3" json:"sync_disabled_peers,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *Config) Reset() {
@@ -2908,6 +2911,27 @@ func (x *Config) GetSendLayoutStacked() bool {
 		return x.SendLayoutStacked
 	}
 	return false
+}
+
+func (x *Config) GetRealtimeSyncDisabled() bool {
+	if x != nil {
+		return x.RealtimeSyncDisabled
+	}
+	return false
+}
+
+func (x *Config) GetSyncBacklog() bool {
+	if x != nil {
+		return x.SyncBacklog
+	}
+	return false
+}
+
+func (x *Config) GetSyncDisabledPeers() []string {
+	if x != nil {
+		return x.SyncDisabledPeers
+	}
+	return nil
 }
 
 type OfficialUsage struct {
@@ -4987,7 +5011,7 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x04kind\x18\x01 \x01(\x0e2\x1d.pasteferry.v1.ConnectionKindR\x04kind\"P\n" +
 	"\x17SetDeviceAddressRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x18\n" +
-	"\aaddress\x18\x02 \x01(\tR\aaddress\"\xe9\b\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddress\"\xf2\t\n" +
 	"\x06Config\x129\n" +
 	"\x19auto_sync_threshold_bytes\x18\x01 \x01(\x03R\x16autoSyncThresholdBytes\x12.\n" +
 	"\x13history_ttl_seconds\x18\x02 \x01(\x03R\x11historyTtlSeconds\x12*\n" +
@@ -5018,7 +5042,10 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"receiveDir\x12)\n" +
 	"\x10receive_disabled\x18\x18 \x01(\bR\x0freceiveDisabled\x126\n" +
 	"\x17receive_notify_disabled\x18\x19 \x01(\bR\x15receiveNotifyDisabled\x12.\n" +
-	"\x13send_layout_stacked\x18\x1a \x01(\bR\x11sendLayoutStacked\"\xd8\x02\n" +
+	"\x13send_layout_stacked\x18\x1a \x01(\bR\x11sendLayoutStacked\x124\n" +
+	"\x16realtime_sync_disabled\x18\x1b \x01(\bR\x14realtimeSyncDisabled\x12!\n" +
+	"\fsync_backlog\x18\x1c \x01(\bR\vsyncBacklog\x12.\n" +
+	"\x13sync_disabled_peers\x18\x1d \x03(\tR\x11syncDisabledPeers\"\xd8\x02\n" +
 	"\rOfficialUsage\x12\x1c\n" +
 	"\tavailable\x18\x01 \x01(\bR\tavailable\x12\x10\n" +
 	"\x03day\x18\x02 \x01(\tR\x03day\x12\x1f\n" +

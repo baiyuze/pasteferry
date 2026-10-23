@@ -485,6 +485,9 @@ message Config {
   bool receive_notify_disabled = 25;
   // 隔空传送页里，传输列表放在雷达下面（上下排）。默认 false：放在雷达右边（左右排）
   bool send_layout_stacked = 26;
+  bool realtime_sync_disabled = 27;
+  bool sync_backlog = 28;
+  repeated string sync_disabled_peers = 29;
 }
 
 enum ServiceMode {

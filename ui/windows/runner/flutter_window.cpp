@@ -1,6 +1,7 @@
 #include "flutter_window.h"
 
 #include <flutter_windows.h>
+#include <flutter/standard_method_codec.h>
 
 #include <optional>
 
@@ -67,6 +68,17 @@ bool FlutterWindow::OnCreate() {
     return false;
   }
   RegisterPlugins(flutter_controller_->engine());
+  lifecycle_channel_ = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+      flutter_controller_->engine()->messenger(), "com.pasteferry.app/lifecycle",
+      &flutter::StandardMethodCodec::GetInstance());
+  lifecycle_channel_->SetMethodCallHandler([this](const auto& call, auto result) {
+    if (call.method_name() == "hideWindow") {
+      ::ShowWindow(GetHandle(), SW_HIDE);
+      result->Success();
+    } else {
+      result->NotImplemented();
+    }
+  });
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([this, maximized]() {
@@ -85,6 +97,7 @@ bool FlutterWindow::OnCreate() {
 }
 
 void FlutterWindow::OnDestroy() {
+  lifecycle_channel_ = nullptr;
   if (flutter_controller_) {
     flutter_controller_ = nullptr;
   }
@@ -96,6 +109,15 @@ LRESULT
 FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
+  if (lifecycle_channel_ && (message == WM_CLOSE || message == WM_APP + 87)) {
+    SavePlacement(hwnd);
+    if (message == WM_APP + 87) {
+      ::ShowWindow(hwnd, SW_SHOW);
+      ::SetForegroundWindow(hwnd);
+    }
+    lifecycle_channel_->InvokeMethod(message == WM_CLOSE ? "closeRequested" : "quitRequested", nullptr);
+    return 0;
+  }
   // Give Flutter, including plugins, an opportunity to handle window messages.
   if (flutter_controller_) {
     std::optional<LRESULT> result =

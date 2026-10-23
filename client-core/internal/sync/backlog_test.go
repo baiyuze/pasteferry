@@ -67,6 +67,7 @@ func newBacklogEngine(t *testing.T, peers *fakePeers) *Engine {
 	}
 	t.Cleanup(func() { db.Close() })
 	cfg := config.Default()
+	cfg.SyncBacklog = true
 	return &Engine{
 		log:          slog.New(slog.NewTextHandler(io.Discard, nil)),
 		store:        db,

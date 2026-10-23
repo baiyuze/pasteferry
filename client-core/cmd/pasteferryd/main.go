@@ -15,6 +15,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"sync"
 	"syscall"
 	"time"
@@ -456,6 +457,9 @@ func run(dataDir string) error {
 		prev := loadCfg()
 		if err := saveCfg(c); err != nil {
 			return err
+		}
+		if c.RealtimeSyncDisabled != prev.RealtimeSyncDisabled || c.SyncBacklog != prev.SyncBacklog || !slices.Equal(c.SyncDisabledPeers, prev.SyncDisabledPeers) {
+			engine.ApplySyncPolicy()
 		}
 		if c.EffectiveSignalingURL() != prev.EffectiveSignalingURL() || c.ServiceMode != prev.ServiceMode {
 			slog.Info("公网连接模式已变更")

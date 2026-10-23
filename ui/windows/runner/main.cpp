@@ -55,6 +55,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   if (::GetLastError() == ERROR_ALREADY_EXISTS) {
     HWND existing = ::FindWindowW(L"FLUTTER_RUNNER_WIN32_WINDOW", L"PasteFerry");
     if (existing) {
+      ::ShowWindow(existing, SW_SHOW);
       if (::IsIconic(existing)) {
         ::ShowWindow(existing, SW_RESTORE);
       }

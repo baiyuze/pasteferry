@@ -23,6 +23,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/pion/webrtc/v4"
@@ -82,7 +83,8 @@ type Engine struct {
 	quiet map[string]bool
 
 	// 没送达对端、等连接恢复后补发的内容，见 backlog.go
-	backlog backlog
+	backlog          backlog
+	policyGeneration atomic.Uint64
 	// 上一次本机复制，用来认出同一次复制引起的重复变化，见 repeat.go
 	recentCopy repeatGuard
 
@@ -103,8 +105,8 @@ type Options struct {
 	Send       func(deviceID string, msg *pb.PeerMessage) error
 	OpenStream func(deviceID, label string) (*webrtc.DataChannel, error)
 	// PairedPeers 返回所有已配对设备，不论在线与否：连不上的记进待补发
-	PairedPeers         func() []string
-	OnRecord            func(*pb.ClipRecord)
+	PairedPeers func() []string
+	OnRecord    func(*pb.ClipRecord)
 	// OnRemoved 在引擎自己删掉一条记录时调用（取消收藏时合并掉的原记录等）
 	OnRemoved           func(clipID string)
 	OnProgress          func(*pb.TransferProgress)
@@ -147,6 +149,7 @@ func New(opts Options) *Engine {
 
 // HandleClipboardChange 在本机剪贴板变化时调用。
 func (e *Engine) HandleClipboardChange(ctx context.Context, snap clipboard.Snapshot) {
+	generation := e.policyGeneration.Load()
 	cfg := e.loadConfig()
 	if !e.kindEnabled(cfg, snap.Kind) {
 		e.log.Debug("该类型已在设置中关闭，跳过", "kind", snap.Kind)
@@ -186,6 +189,9 @@ func (e *Engine) HandleClipboardChange(ctx context.Context, snap clipboard.Snaps
 	}
 
 	e.emitRecord(clip)
+	if generation != e.policyGeneration.Load() {
+		return
+	}
 	e.offerToPeers(ctx, clip, cfg)
 }
 
@@ -338,6 +344,10 @@ func (e *Engine) HandlePeerMessage(ctx context.Context, from string, msg *pb.Pee
 func (e *Engine) handleOffer(ctx context.Context, from string, offer *pb.ClipOffer) {
 	e.offerMu.Lock()
 	defer e.offerMu.Unlock()
+	policy := e.loadConfig()
+	if !policy.SyncAllowed(from) || (offer.GetBacklog() && !policy.SyncBacklog) {
+		return
+	}
 	if existing, err := e.store.GetClip(offer.GetClipId()); err == nil {
 		// Offers are replayed after reconnect. Never erase a cache or an active
 		// manual request, and never turn an old record into a new notification.
@@ -722,7 +732,7 @@ func (e *Engine) finishReceive(r *receiver, cacheRel string, tops []string) bool
 	e.emitRecord(clip)
 	e.completePendingFavorites(clip)
 	result := &pb.ClipboardWriteResult{ClipId: clip.ID, Outcome: pb.ClipboardWriteOutcome_CLIPBOARD_WRITE_OUTCOME_PRESERVED}
-	if e.loadConfig().AutoApplyToClipboard && !quiet {
+	if cfg := e.loadConfig(); cfg.AutoApplyToClipboard && !quiet && (a.manual || cfg.SyncAllowed(clip.OriginDeviceID)) {
 		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 		defer cancel()
 		if a.manual {

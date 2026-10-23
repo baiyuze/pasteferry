@@ -19,7 +19,15 @@ enum LinkState { connecting, online, offline }
 typedef PairingCode = ({String code, List<String> addresses});
 
 /// 隔空传送发不出去的原因，后台服务把它写在错误消息里（见 rpc/send.go）。
-enum SendFailure { offline, unsupported, disabled, needRelayConsent, noPaths, unknownDevice, other }
+enum SendFailure {
+  offline,
+  unsupported,
+  disabled,
+  needRelayConsent,
+  noPaths,
+  unknownDevice,
+  other,
+}
 
 /// 配对失败的原因。后台服务把原因写在错误消息开头（见 rpc/server.go 的 pairingStatus）。
 enum PairingFailure {
@@ -100,6 +108,10 @@ class AppState extends ChangeNotifier implements RecordDetails {
   /// 连不上后台服务时，它的安装状态。界面据此决定显示欢迎页还是重启提示。
   ServiceState? _serviceState;
   bool _serviceChecked = false;
+  bool _sessionStartTried = false;
+  bool _quitting = false;
+  Future<void>? _maintenance;
+  Future<void>? _connectionWork;
 
   LinkState get link => _link;
   String? get error => _error;
@@ -117,7 +129,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
       _historySearch.resultsView?.where((r) => r.id == id).firstOrNull;
 
   /// 全部收藏的大小之和。硬链接、写时复制保存的副本实际占用更少，界面上写「最多」
-  int get favoritesBytes => _favorites.fold(0, (n, r) => n + r.totalSize.toInt());
+  int get favoritesBytes =>
+      _favorites.fold(0, (n, r) => n + r.totalSize.toInt());
 
   QuickPasteStatus? get quickPaste => _quickPaste;
 
@@ -126,12 +139,18 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// 收到了、还没在隔空传送页看过的批数（侧边栏的数字）
   int get unseenTransfers => _transfers
-      .where((t) => t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING && !t.seen && t.status == 'done')
+      .where(
+        (t) =>
+            t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING &&
+            !t.seen &&
+            t.status == 'done',
+      )
       .length;
 
   /// 正在收发的批次（统计、等待、传输中），侧边栏据此显示进度环
-  List<Transfer> get activeTransfers =>
-      _transfers.where((t) => const {'scanning', 'waiting', 'active'}.contains(t.status)).toList();
+  List<Transfer> get activeTransfers => _transfers
+      .where((t) => const {'scanning', 'waiting', 'active'}.contains(t.status))
+      .toList();
 
   /// 所有正在传的批次合起来的进度（0–1）；没有在传的为 null
   double? get transferProgress {
@@ -147,10 +166,17 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// 正在发给这台设备的一批（雷达上的进度环）
   Transfer? sendingTo(String deviceId) => _transfers
-      .where((t) =>
-          t.direction == TransferDirection.TRANSFER_DIRECTION_OUTGOING &&
-          t.deviceId == deviceId &&
-          const {'scanning', 'waiting', 'active', 'queued'}.contains(t.status))
+      .where(
+        (t) =>
+            t.direction == TransferDirection.TRANSFER_DIRECTION_OUTGOING &&
+            t.deviceId == deviceId &&
+            const {
+              'scanning',
+              'waiting',
+              'active',
+              'queued',
+            }.contains(t.status),
+      )
       .lastOrNull;
 
   String get pageRequest => _pageRequest;
@@ -253,7 +279,10 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   // ─────────────────────────── 连接 ───────────────────────────
 
-  Future<void> connect() async {
+  Future<void> connect() => _connectionWork = _connect();
+
+  Future<void> _connect() async {
+    if (_quitting) return;
     _retry?.cancel();
     _setLink(LinkState.connecting, null);
     await _replaceLegacyService();
@@ -267,18 +296,26 @@ class AppState extends ChangeNotifier implements RecordDetails {
         conn.client.listHistory(ListHistoryRequest(limit: 200)),
         conn.client.getConfig(Empty()),
         conn.client.getStatus(Empty()),
-        conn.client.listHistory(ListHistoryRequest(limit: 500, favorites: true)),
+        conn.client.listHistory(
+          ListHistoryRequest(limit: 500, favorites: true),
+        ),
       ]);
 
       _records
         ..clear()
         ..addAll((results[0] as ListHistoryResponse).records);
+      if (_quitting) {
+        await conn.close();
+        return;
+      }
       _config = results[1] as Config;
       _status = results[2] as Status;
       // 旧版后台服务不认识 favorites，会把复制记录原样返回：只收下真的收藏
       _favorites
         ..clear()
-        ..addAll((results[3] as ListHistoryResponse).records.where((r) => r.favorite));
+        ..addAll(
+          (results[3] as ListHistoryResponse).records.where((r) => r.favorite),
+        );
       await _loadQuickPasteStatus();
 
       await _loadDevices();
@@ -296,10 +333,24 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
       _serviceState = null;
       _setLink(LinkState.online, null);
-      _ensureServiceCurrent();
+      _maintenance = _ensureServiceCurrent();
       _historySearch.schedule(Duration.zero);
       _favoriteSearch.schedule(Duration.zero);
     } on DaemonNotRunning {
+      if (!_sessionStartTried && service.available && !_quitting) {
+        _sessionStartTried = true;
+        try {
+          final current = await service.state();
+          if (current != ServiceState.mustMove &&
+              current != ServiceState.unavailable) {
+            await service.install();
+            await _connect();
+            return;
+          }
+        } catch (_) {
+          /* Show the service page with a retry action. */
+        }
+      }
       await _refreshServiceState();
       _scheduleRetry(appL10n.linkServiceNotRunning);
     } catch (e) {
@@ -316,7 +367,10 @@ class AppState extends ChangeNotifier implements RecordDetails {
     if (_legacyChecked || !service.available) return;
     _legacyChecked = true;
     try {
-      if (await service.removeLegacy()) await service.install();
+      if (await service.removeLegacy()) {
+        await service.setLaunchAtLogin(true);
+        await service.install();
+      }
     } catch (_) {
       // 清理失败不影响使用：用户还可以在界面上手动启用后台同步
     }
@@ -335,7 +389,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
   /// - 覆盖安装了新版 App：launchd 里跑的还是旧进程，按新的可执行文件重启
   /// 两种情况都会让当前连接断开，随后的自动重连会连上新进程。
   Future<void> _ensureServiceCurrent() async {
-    if (!service.available || _serviceChecked) return;
+    if (!service.available || _serviceChecked || _quitting) return;
     _serviceChecked = true;
     try {
       final s = await service.state();
@@ -353,6 +407,15 @@ class AppState extends ChangeNotifier implements RecordDetails {
     } catch (_) {
       // 核对失败不影响使用：旧进程仍在正常工作
     }
+    if (_quitting) return;
+    try {
+      final enabled = await service.launchAtLogin();
+      if (_config != null && _config!.launchAtLogin != enabled) {
+        await updateConfig(_config!.deepCopy()..launchAtLogin = enabled);
+      }
+    } catch (_) {
+      /* Keep the saved value if the OS query fails. */
+    }
     await _syncQuickPaste();
   }
 
@@ -360,7 +423,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
   /// Windows、Linux 上快捷窗口由后台服务照看，这里什么都不做。
   Future<void> _syncQuickPaste() async {
     final qp = quickPasteService;
-    if (!qp.available) return;
+    if (!qp.available || _quitting) return;
     try {
       // 快捷窗口跟着后台服务走：后台服务没登记成登录项（开发时手动跑的、测试用的）就不登记它
       if (await service.state() != ServiceState.running) return;
@@ -370,7 +433,12 @@ class AppState extends ChangeNotifier implements RecordDetails {
         await qp.install();
       } else {
         final v = _quickPaste?.version ?? '';
-        if (appVersion != 'dev' && v.isNotEmpty && v != appVersion) await qp.restart();
+        if (appVersion != 'dev' && v.isNotEmpty && v != appVersion) {
+          await qp.restart();
+        }
+      }
+      if (!(_config?.quickPasteDisabled ?? false)) {
+        await qp.setLaunchAtLogin(await service.launchAtLogin());
       }
     } catch (_) {
       // 登记失败不影响主界面，设置页会显示快捷窗口没在运行
@@ -429,6 +497,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// 停用后台服务：关闭同步并取消开机自启。快捷窗口离了后台服务没法用，一起撤下，重新启用时再登记。
   Future<void> disableService() async {
+    _sessionStartTried = true;
     _retry?.cancel();
     if (quickPasteService.available) await quickPasteService.uninstall();
     await service.uninstall();
@@ -451,6 +520,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
   }
 
   void _scheduleRetry(String message) {
+    if (_quitting) return;
     _events?.cancel();
     _events = null;
     _conn?.close();
@@ -479,7 +549,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
           search.schedule(const Duration(milliseconds: 300));
         }
         // 取消收藏后同一条记录换到了复制记录里
-        (ev.clipAdded.favorite ? _historySearch : _favoriteSearch).remove(ev.clipAdded.id);
+        (ev.clipAdded.favorite ? _historySearch : _favoriteSearch).remove(
+          ev.clipAdded.id,
+        );
 
       case Event_Payload.clipUpdated:
         _upsert(ev.clipUpdated);
@@ -530,7 +602,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
   }
 
   void _upsert(ClipRecord r) {
-    if (r.status == ClipStatus.CLIP_STATUS_FETCHING) _clipboardResults.remove(r.id);
+    if (r.status == ClipStatus.CLIP_STATUS_FETCHING) {
+      _clipboardResults.remove(r.id);
+    }
     if (r.favorite) {
       _records.removeWhere((x) => x.id == r.id);
       final i = _favorites.indexWhere((x) => x.id == r.id);
@@ -584,7 +658,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
     if (i >= 0) {
       _transfers[i] = t;
     } else {
-      final at = _transfers.indexWhere((x) => x.createdAtUnix < t.createdAtUnix);
+      final at = _transfers.indexWhere(
+        (x) => x.createdAtUnix < t.createdAtUnix,
+      );
       _transfers.insert(at < 0 ? _transfers.length : at, t);
     }
   }
@@ -593,7 +669,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
     final conn = _conn;
     if (conn == null) return;
     try {
-      final resp = await conn.client.listTransfers(ListTransfersRequest(limit: 500));
+      final resp = await conn.client.listTransfers(
+        ListTransfersRequest(limit: 500),
+      );
       _transfers
         ..clear()
         ..addAll(resp.transfers);
@@ -736,7 +814,56 @@ class AppState extends ChangeNotifier implements RecordDetails {
     _config = await _client.updateConfig(next);
     if (!wasOfficial && officialEnabled) _officialNavigationSerial++;
     notifyListeners();
-    if (_config!.quickPasteDisabled != quickPasteWasDisabled) await _syncQuickPaste();
+    if (_config!.quickPasteDisabled != quickPasteWasDisabled) {
+      await _syncQuickPaste();
+    }
+  }
+
+  Future<void> setLaunchAtLogin(bool enabled) async {
+    await service.setLaunchAtLogin(enabled);
+    try {
+      if (quickPasteService.available) {
+        await quickPasteService.setLaunchAtLogin(
+          enabled && !(config?.quickPasteDisabled ?? false),
+        );
+      }
+      await updateConfig(config!.deepCopy()..launchAtLogin = enabled);
+    } catch (_) {
+      await service.setLaunchAtLogin(!enabled);
+      if (quickPasteService.available) {
+        await quickPasteService.setLaunchAtLogin(
+          !enabled && !(config?.quickPasteDisabled ?? false),
+        );
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> setPeerSync(String id, bool enabled) async {
+    final next = config!.deepCopy();
+    next.syncDisabledPeers.removeWhere((peer) => peer == id);
+    if (!enabled) next.syncDisabledPeers.add(id);
+    await updateConfig(next);
+  }
+
+  /// Stop helper jobs before the UI exits, preserving login entries.
+  Future<void> quitApplication() async {
+    _quitting = true;
+    _retry?.cancel();
+    try {
+      await _connectionWork;
+      await _maintenance;
+      await _events?.cancel();
+      _events = null;
+      await _conn?.close();
+      _conn = null;
+      if (quickPasteService.available) await quickPasteService.stop();
+      if (service.available) await service.stop();
+    } catch (_) {
+      _quitting = false;
+      _scheduleRetry(appL10n.linkServiceDisconnected);
+      rethrow;
+    }
   }
 
   // ─────────────────────────── 更新 ───────────────────────────
@@ -820,7 +947,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// 给收藏起别名，[alias] 为空表示去掉。
   Future<ClipRecord> setAlias(String clipId, String alias) async {
-    final r = await _client.setAlias(SetAliasRequest(clipId: clipId, alias: alias));
+    final r = await _client.setAlias(
+      SetAliasRequest(clipId: clipId, alias: alias),
+    );
     _upsert(r);
     _favoriteSearch.patch(r);
     notifyListeners();
@@ -861,10 +990,12 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// 输入搜索词。停顿一下再向后台服务查询，不必每敲一个字就查一次；空白表示不搜索。
   /// [notify] 为 false 用于页面销毁时清掉搜索：那时界面树已锁定，不能再通知重建。
-  void search(String query, {bool notify = true}) => _historySearch.set(query, notify: notify);
+  void search(String query, {bool notify = true}) =>
+      _historySearch.set(query, notify: notify);
 
   /// 收藏页的搜索，用法与 [search] 相同。
-  void searchFavorites(String query, {bool notify = true}) => _favoriteSearch.set(query, notify: notify);
+  void searchFavorites(String query, {bool notify = true}) =>
+      _favoriteSearch.set(query, notify: notify);
 
   /// 向后台服务搜索复制记录。界面测试与截图里由子类给出演示结果。
   @protected
@@ -874,24 +1005,32 @@ class AppState extends ChangeNotifier implements RecordDetails {
   /// 向后台服务搜索收藏。
   @protected
   Future<ListHistoryResponse> requestFavoriteSearch(String query) =>
-      _client.listHistory(ListHistoryRequest(limit: 200, query: query, favorites: true));
+      _client.listHistory(
+        ListHistoryRequest(limit: 200, query: query, favorites: true),
+      );
 
   Future<void> refreshNotificationStatus() async {
     final conn = _conn;
     if (conn == null) return;
     try {
-      final status = await conn.client.getNotificationStatus(Empty(),
-          options: CallOptions(timeout: const Duration(seconds: 12)));
+      final status = await conn.client.getNotificationStatus(
+        Empty(),
+        options: CallOptions(timeout: const Duration(seconds: 12)),
+      );
       if (_conn == conn) _notificationStatus = status;
     } on GrpcError {
-      if (_conn == conn) _notificationStatus = NotificationStatus(permission: 'unavailable');
+      if (_conn == conn) {
+        _notificationStatus = NotificationStatus(permission: 'unavailable');
+      }
     }
     if (_conn == conn) notifyListeners();
   }
 
   Future<void> requestNotifications() async {
-    _notificationStatus = await _client.requestNotificationPermission(Empty(),
-        options: CallOptions(timeout: const Duration(seconds: 20)));
+    _notificationStatus = await _client.requestNotificationPermission(
+      Empty(),
+      options: CallOptions(timeout: const Duration(seconds: 20)),
+    );
     notifyListeners();
   }
 
@@ -918,26 +1057,41 @@ class AppState extends ChangeNotifier implements RecordDetails {
   // ─────────────────────────── 隔空传送 ───────────────────────────
 
   /// 把文件发给一台设备。要经官方服务中转而用户还没同意时抛出 SendFailure.needRelayConsent。
-  Future<Transfer> sendFiles(String deviceId, List<String> paths, {bool allowRelay = false}) async {
+  Future<Transfer> sendFiles(
+    String deviceId,
+    List<String> paths, {
+    bool allowRelay = false,
+  }) async {
     final t = await _client.sendFiles(
-      SendFilesRequest(deviceId: deviceId, paths: paths, allowRelay: allowRelay),
+      SendFilesRequest(
+        deviceId: deviceId,
+        paths: paths,
+        allowRelay: allowRelay,
+      ),
     );
     _upsertTransfer(t);
     notifyListeners();
     return t;
   }
 
-  Future<void> cancelTransfer(String id) => _client.cancelTransfer(TransferRef(id: id));
+  Future<void> cancelTransfer(String id) =>
+      _client.cancelTransfer(TransferRef(id: id));
 
-  Future<void> resumeTransfer(String id) => _client.resumeTransfer(TransferRef(id: id));
+  Future<void> resumeTransfer(String id) =>
+      _client.resumeTransfer(TransferRef(id: id));
 
   /// 只删记录，不删文件。
-  Future<void> deleteTransfers({List<String>? ids, TransferDirection? clearAll}) async {
-    await _client.deleteTransfers(DeleteTransfersRequest(
-      ids: ids ?? const [],
-      all: clearAll != null,
-      direction: clearAll ?? TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED,
-    ));
+  Future<void> deleteTransfers({
+    List<String>? ids,
+    TransferDirection? clearAll,
+  }) async {
+    await _client.deleteTransfers(
+      DeleteTransfersRequest(
+        ids: ids ?? const [],
+        all: clearAll != null,
+        direction: clearAll ?? TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED,
+      ),
+    );
   }
 
   /// 打开隔空传送页时调用：侧边栏的数字清零。
@@ -1001,7 +1155,11 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
 /// 一组记录（复制记录或收藏）的搜索：搜索词、后台服务返回的结果，以及「只采用最后一次」的计数。
 class _RecordSearch {
-  _RecordSearch({required this.notify, required this.request, required this.local});
+  _RecordSearch({
+    required this.notify,
+    required this.request,
+    required this.local,
+  });
 
   final VoidCallback notify;
   final Future<ListHistoryResponse> Function(String query) request;
@@ -1015,7 +1173,8 @@ class _RecordSearch {
   int _seq = 0; // 只采用最后一次搜索的结果，先发出的请求可能后返回
 
   bool get active => query.trim().isNotEmpty;
-  List<ClipRecord>? get resultsView => _results == null ? null : List.unmodifiable(_results!);
+  List<ClipRecord>? get resultsView =>
+      _results == null ? null : List.unmodifiable(_results!);
 
   void set(String q, {bool notify = true}) {
     query = q;
@@ -1042,7 +1201,9 @@ class _RecordSearch {
     try {
       final r = await request(q);
       // 旧版后台服务不认识搜索词，会原样返回全部记录：退回到只在已加载的记录里找
-      found = r.searched ? List.of(r.records) : local().where((x) => matchesSearch(x, q)).toList();
+      found = r.searched
+          ? List.of(r.records)
+          : local().where((x) => matchesSearch(x, q)).toList();
     } catch (_) {
       found = local().where((x) => matchesSearch(x, q)).toList();
     }

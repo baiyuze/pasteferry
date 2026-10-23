@@ -4,6 +4,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 
 import '../app_state.dart';
+import '../application_lifecycle.dart';
 import '../background_service.dart';
 import '../gen/pasteferry/v1/daemon.pb.dart';
 import '../i18n.dart';
@@ -29,6 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final _nameController = TextEditingController();
   bool _serverDirty = false;
   bool _serverSaving = false;
+  bool _startupSaving = false;
   bool _nameDirty = false;
   String? _lastLoadedServer;
   String? _lastLoadedName;
@@ -93,6 +95,48 @@ class _SettingsPageState extends State<SettingsPage> {
               Insets.xxl,
             ),
             children: [
+              GroupSection(
+                title: l.general,
+                child: GroupBox(
+                  children: [
+                    SettingRow(
+                      title: l.launchAtLogin,
+                      description: l.launchAtLoginDesc,
+                      child: SmallSwitch(
+                        value: cfg.launchAtLogin,
+                        onChanged: _startupSaving || !state.service.available
+                            ? null
+                            : (v) async {
+                                setState(() => _startupSaving = true);
+                                try {
+                                  await state.setLaunchAtLogin(v);
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    showToast(
+                                      context,
+                                      AppState.describeError(e),
+                                      error: true,
+                                    );
+                                  }
+                                } finally {
+                                  if (mounted) {
+                                    setState(() => _startupSaving = false);
+                                  }
+                                }
+                              },
+                      ),
+                    ),
+                    SettingRow(
+                      title: l.quitApp,
+                      description: l.quitAppDesc,
+                      child: OutlinedButton(
+                        onPressed: () => requestApplicationQuit(context, state),
+                        child: Text(l.quitApp),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               GroupSection(
                 title: l.server,
                 child: GroupBox(
@@ -237,11 +281,34 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 ),
               ),
-              QuickPasteSection(config: cfg, onUpdate: (next) => _update(state, next)),
+              QuickPasteSection(
+                config: cfg,
+                onUpdate: (next) => _update(state, next),
+              ),
               GroupSection(
                 title: l.sync,
                 child: GroupBox(
                   children: [
+                    SettingRow(
+                      title: l.realtimeSync,
+                      description: l.realtimeSyncDesc,
+                      child: SmallSwitch(
+                        value: !cfg.realtimeSyncDisabled,
+                        onChanged: (v) => _update(
+                          state,
+                          cfg.deepCopy()..realtimeSyncDisabled = !v,
+                        ),
+                      ),
+                    ),
+                    SettingRow(
+                      title: l.syncBacklog,
+                      description: l.syncBacklogDesc,
+                      child: SmallSwitch(
+                        value: cfg.syncBacklog,
+                        onChanged: (v) =>
+                            _update(state, cfg.deepCopy()..syncBacklog = v),
+                      ),
+                    ),
                     SettingRow(
                       title: l.autoSyncLimit,
                       description: l.autoSyncLimitDesc,
@@ -305,7 +372,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 ),
               ),
-              SendSection(config: cfg, onUpdate: (next) => _update(state, next)),
+              SendSection(
+                config: cfg,
+                onUpdate: (next) => _update(state, next),
+              ),
               GroupSection(
                 title: l.whatToSync,
                 child: GroupBox(
@@ -370,7 +440,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       description: l.favoritesUsageDesc,
                       child: Text(
                         l.upToSize(humanBytes(state.favoritesBytes)),
-                        style: context.text.bodyMedium?.copyWith(color: p.textDim),
+                        style: context.text.bodyMedium?.copyWith(
+                          color: p.textDim,
+                        ),
                       ),
                     ),
                   ],
@@ -441,7 +513,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           const SizedBox(width: Insets.sm),
                           SmallSwitch(
                             value: !cfg.updateCheckDisabled,
-                            onChanged: (v) => _update(state, cfg..updateCheckDisabled = !v),
+                            onChanged: (v) =>
+                                _update(state, cfg..updateCheckDisabled = !v),
                           ),
                         ],
                       ),

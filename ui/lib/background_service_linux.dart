@@ -13,8 +13,8 @@ import 'i18n.dart';
 /// 不用 systemd 的用户服务：它不一定拿得到图形会话的环境变量，各发行版的做法也不一致。
 class LinuxBackgroundService implements BackgroundService {
   LinuxBackgroundService({String? executable, Map<String, String>? environment})
-      : _executable = executable ?? Platform.resolvedExecutable,
-        _env = environment ?? Platform.environment;
+    : _executable = executable ?? Platform.resolvedExecutable,
+      _env = environment ?? Platform.environment;
 
   static const _image = 'pasteferryd';
 
@@ -31,12 +31,15 @@ class LinuxBackgroundService implements BackgroundService {
     return v.startsWith('/') ? v : '$_home/$fallback';
   }
 
-  String get autostartPath => '${_xdg('XDG_CONFIG_HOME', '.config')}/autostart/pasteferry-daemon.desktop';
+  String get autostartPath =>
+      '${_xdg('XDG_CONFIG_HOME', '.config')}/autostart/pasteferry-daemon.desktop';
 
-  String get logPath => '${_xdg('XDG_DATA_HOME', '.local/share')}/pasteferry/logs/daemon.log';
+  String get logPath =>
+      '${_xdg('XDG_DATA_HOME', '.local/share')}/pasteferry/logs/daemon.log';
 
   @override
-  String get displayLogPath => _home.isEmpty ? logPath : logPath.replaceFirst(_home, '~');
+  String get displayLogPath =>
+      _home.isEmpty ? logPath : logPath.replaceFirst(_home, '~');
 
   @override
   bool get available => Platform.isLinux && File(daemonPath).existsSync();
@@ -48,21 +51,40 @@ class LinuxBackgroundService implements BackgroundService {
   Future<ServiceState> state() async {
     if (!available) return ServiceState.unavailable;
     final file = File(autostartPath);
-    if (!file.existsSync()) return ServiceState.notInstalled;
+    if (!file.existsSync()) {
+      return await _running() ? ServiceState.running : ServiceState.stopped;
+    }
     final exec = execLine(await file.readAsString());
-    if (exec == null || !exec.contains(quoteExecArg(daemonPath))) return ServiceState.stale;
+    if (exec == null || !exec.contains(quoteExecArg(daemonPath))) {
+      return ServiceState.stale;
+    }
     return await _running() ? ServiceState.running : ServiceState.stopped;
   }
 
   @override
-  Future<void> install() async {
+  Future<bool> launchAtLogin() async => File(autostartPath).existsSync();
+
+  @override
+  Future<void> setLaunchAtLogin(bool enabled) async {
+    final file = File(autostartPath);
+    if (!enabled) {
+      if (await file.exists()) await file.delete();
+      return;
+    }
     try {
-      final file = File(autostartPath);
       await file.parent.create(recursive: true);
       await file.writeAsString(desktopEntry(_command));
     } on FileSystemException catch (e) {
       throw ServiceException(appL10n.errAutostart(e.message));
     }
+  }
+
+  @override
+  Future<void> stop() => _stop();
+
+  @override
+  Future<void> install() async {
+    if (await launchAtLogin()) await setLaunchAtLogin(true);
     await restart();
   }
 
@@ -70,20 +92,23 @@ class LinuxBackgroundService implements BackgroundService {
   Future<void> restart() async {
     await _stop();
     // 脱离界面进程运行：关掉窗口后照常同步。环境变量随之传下去，后台服务才连得上剪贴板
-    await Process.start(daemonPath, ['-supervise'], mode: ProcessStartMode.detached);
+    await Process.start(daemonPath, [
+      '-supervise',
+    ], mode: ProcessStartMode.detached);
   }
 
   @override
   Future<void> uninstall() async {
-    final file = File(autostartPath);
-    if (file.existsSync()) await file.delete();
-    await _stop();
+    await setLaunchAtLogin(false);
+    await stop();
   }
 
   @override
   Future<bool> removeLegacy() async {
     const legacyImage = 'copysyncd';
-    final old = File('${_xdg('XDG_CONFIG_HOME', '.config')}/autostart/copysync-daemon.desktop');
+    final old = File(
+      '${_xdg('XDG_CONFIG_HOME', '.config')}/autostart/copysync-daemon.desktop',
+    );
     final enabled = old.existsSync();
     if (enabled) await old.delete();
     if (await _running(legacyImage)) await _stop(legacyImage);
@@ -96,7 +121,9 @@ class LinuxBackgroundService implements BackgroundService {
     await Process.run('pkill', [..._ownedBy, '-x', image]);
     if (await _waitGone(image, 20)) return;
     await Process.run('pkill', ['-KILL', ..._ownedBy, '-x', image]);
-    await _waitGone(image, 8);
+    if (!await _waitGone(image, 8)) {
+      throw ServiceException('The background service did not stop.');
+    }
   }
 
   Future<bool> _waitGone(String image, int checks) async {
@@ -120,7 +147,8 @@ class LinuxBackgroundService implements BackgroundService {
 }
 
 /// XDG 自启动项。NoDisplay：不出现在应用菜单里；它只是后台服务的开机启动入口。
-String desktopEntry(String exec) => '''[Desktop Entry]
+String desktopEntry(String exec) =>
+    '''[Desktop Entry]
 Type=Application
 Name=PasteFerry
 Comment=Keeps the clipboard in sync with your other devices
@@ -136,7 +164,9 @@ X-GNOME-Autostart-enabled=true
 /// 所以前三个写成两个反斜杠加原字符，反斜杠本身写成四个。
 String quoteExecArg(String arg) {
   final escaped = arg.replaceAllMapped(
-      RegExp(r'["`$\\]'), (m) => m[0] == r'\' ? r'\\\\' : r'\\' + m[0]!);
+    RegExp(r'["`$\\]'),
+    (m) => m[0] == r'\' ? r'\\\\' : r'\\' + m[0]!,
+  );
   return '"$escaped"';
 }
 

@@ -33,6 +33,11 @@ type Config struct {
 	HistoryTTL Duration `json:"history_ttl"` // 历史记录元数据保留期
 	CacheTTL   Duration `json:"cache_ttl"`   // 已落盘内容的保留期
 
+	// Sync controls affect automatic clipboard sharing, not local history or Send Files.
+	RealtimeSyncDisabled bool     `json:"realtime_sync_disabled,omitempty"`
+	SyncBacklog          bool     `json:"sync_backlog,omitempty"`
+	SyncDisabledPeers    []string `json:"sync_disabled_peers,omitempty"`
+
 	SyncText  bool `json:"sync_text"`
 	SyncHTML  bool `json:"sync_html"`
 	SyncImage bool `json:"sync_image"`
@@ -184,7 +189,7 @@ type Paths struct {
 	// 收藏另存的图片与文件。不能放在 Cache 里面：GC 会把缓存目录里不认识的文件夹当成孤儿删掉
 	Favorites string
 	Config    string
-	DB     string
+	DB        string
 	// daemon 启动后把 gRPC 端口和一次性 token 写在这里，供 UI 发现
 	Endpoint string
 }
@@ -229,8 +234,8 @@ func pathsUnder(root string) Paths {
 		Cache:     filepath.Join(root, "cache"),
 		Favorites: filepath.Join(root, "favorites"),
 		Config:    filepath.Join(root, "config.json"),
-		DB:       filepath.Join(root, "pasteferry.db"),
-		Endpoint: filepath.Join(root, "daemon.json"),
+		DB:        filepath.Join(root, "pasteferry.db"),
+		Endpoint:  filepath.Join(root, "daemon.json"),
 	}
 }
 
@@ -389,3 +394,16 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 }
 
 func (d Duration) Std() time.Duration { return time.Duration(d) }
+
+// SyncAllowed reports whether automatic clipboard sharing with peer is enabled.
+func (c Config) SyncAllowed(peer string) bool {
+	if c.RealtimeSyncDisabled {
+		return false
+	}
+	for _, id := range c.SyncDisabledPeers {
+		if id == peer {
+			return false
+		}
+	}
+	return true
+}

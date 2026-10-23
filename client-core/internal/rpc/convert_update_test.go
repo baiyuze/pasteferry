@@ -23,3 +23,19 @@ func TestUpdateSettingsRoundTrip(t *testing.T) {
 		t.Fatalf("update settings not cleared: %+v", got)
 	}
 }
+
+func TestSyncPolicyRoundTrip(t *testing.T) {
+	c := config.Default()
+	c.RealtimeSyncDisabled = true
+	c.SyncBacklog = true
+	c.SyncDisabledPeers = []string{"home", "office"}
+	got := configFromProto(configToProto(c), config.Default())
+	if !got.RealtimeSyncDisabled || !got.SyncBacklog || len(got.SyncDisabledPeers) != 2 || got.SyncDisabledPeers[0] != "home" {
+		t.Fatalf("lost policy: %+v", got)
+	}
+	in := configToProto(config.Default())
+	got = configFromProto(in, c)
+	if got.RealtimeSyncDisabled || got.SyncBacklog || len(got.SyncDisabledPeers) != 0 {
+		t.Fatalf("failed to clear policy: %+v", got)
+	}
+}

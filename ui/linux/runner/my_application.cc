@@ -9,6 +9,7 @@
 
 struct _MyApplication {
   GtkApplication parent_instance;
+  FlMethodChannel* lifecycle_channel;
   char** dart_entrypoint_arguments;
   GtkWindow* window;  // 已经打开的窗口：再次启动时把它调到前面，而不是再开一个
 };
@@ -37,6 +38,25 @@ G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 // Called when first Flutter frame received.
 static void first_frame_cb(MyApplication* self, FlView* view) {
   gtk_widget_show(gtk_widget_get_toplevel(GTK_WIDGET(view)));
+}
+
+static gboolean close_window(GtkWidget*, GdkEvent*, gpointer data) {
+  auto* self = MY_APPLICATION(data);
+  if (self->lifecycle_channel != nullptr) {
+    fl_method_channel_invoke_method(self->lifecycle_channel, "closeRequested", nullptr,
+                                   nullptr, nullptr, nullptr);
+  }
+  return TRUE;
+}
+
+static void lifecycle_method(FlMethodChannel*, FlMethodCall* call, gpointer data) {
+  auto* self = MY_APPLICATION(data);
+  if (g_strcmp0(fl_method_call_get_name(call), "hideWindow") == 0) {
+    gtk_widget_hide(GTK_WIDGET(self->window));
+    fl_method_call_respond_success(call, nullptr, nullptr);
+  } else {
+    fl_method_call_respond_not_implemented(call, nullptr);
+  }
 }
 
 // Implements GApplication::activate.
@@ -104,6 +124,12 @@ static void my_application_activate(GApplication* application) {
   gtk_widget_realize(GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+  self->lifecycle_channel = fl_method_channel_new(
+      fl_engine_get_binary_messenger(fl_view_get_engine(view)),
+      "com.pasteferry.app/lifecycle", FL_METHOD_CODEC(codec));
+  fl_method_channel_set_method_call_handler(self->lifecycle_channel, lifecycle_method, self, nullptr);
+  g_signal_connect(window, "delete-event", G_CALLBACK(close_window), self);
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
@@ -150,6 +176,7 @@ static void my_application_shutdown(GApplication* application) {
 // Implements GObject::dispose.
 static void my_application_dispose(GObject* object) {
   MyApplication* self = MY_APPLICATION(object);
+  g_clear_object(&self->lifecycle_channel);
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);
   G_OBJECT_CLASS(my_application_parent_class)->dispose(object);
 }

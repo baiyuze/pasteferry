@@ -38,8 +38,8 @@ abstract class BackgroundService {
   factory BackgroundService() => Platform.isWindows
       ? WindowsBackgroundService()
       : Platform.isLinux
-          ? LinuxBackgroundService()
-          : MacBackgroundService();
+      ? LinuxBackgroundService()
+      : MacBackgroundService();
 
   /// App 里是否带着后台服务（开发构建没有）
   bool get available;
@@ -48,6 +48,14 @@ abstract class BackgroundService {
   String get displayLogPath;
 
   Future<ServiceState> state();
+
+  Future<bool> launchAtLogin();
+
+  /// Changes the next-login entry without stopping the current session.
+  Future<void> setLaunchAtLogin(bool enabled);
+
+  /// Stops this session, preserving the next-login preference.
+  Future<void> stop();
 
   /// 注册并启动。重复调用即为修复。
   Future<void> install();
@@ -67,11 +75,15 @@ abstract class BackgroundService {
 /// 注册成 launchd 的 LaunchAgent。
 /// 用 LaunchAgent 而非 LaunchDaemon：剪贴板属于登录用户的会话，系统级进程访问不到。
 class MacBackgroundService implements BackgroundService {
-  MacBackgroundService({String? executable, String? home})
-      : _executable = executable ?? Platform.resolvedExecutable,
-        _home = home ?? Platform.environment['HOME'] ?? '';
+  MacBackgroundService({
+    String? executable,
+    String? home,
+    this.serviceLabel = label,
+  }) : _executable = executable ?? Platform.resolvedExecutable,
+       _home = home ?? Platform.environment['HOME'] ?? '';
 
   static const label = 'com.pasteferry.daemon';
+  final String serviceLabel;
 
   /// 界面 App 的 bundle ID。写进登录项，系统才知道后台服务属于哪个 App：
   /// macOS 15 的「本地网络」权限按它记账，登录项列表里也显示成 PasteFerry。
@@ -85,11 +97,14 @@ class MacBackgroundService implements BackgroundService {
 
   String get helperApp => '$_bundle/Contents/Helpers/PasteFerryDaemon.app';
   String get helperBinary => '$helperApp/Contents/MacOS/pasteferryd';
-  String get plistPath => '$_home/Library/LaunchAgents/$label.plist';
+  String get plistPath => '$_home/Library/LaunchAgents/$serviceLabel.plist';
   String get logPath => '$_home/Library/Logs/PasteFerry/daemon.log';
+  String get runtimePath =>
+      '$_home/Library/Application Support/PasteFerry/daemon.plist';
 
   @override
-  String get displayLogPath => logPath.replaceFirst(RegExp(r'^/Users/[^/]+'), '~');
+  String get displayLogPath =>
+      logPath.replaceFirst(RegExp(r'^/Users/[^/]+'), '~');
 
   /// 旧版 install.sh 装在这里，迁移时清理掉
   String get _legacyApp => '$_home/Applications/CopySyncDaemon.app';
@@ -104,19 +119,56 @@ class MacBackgroundService implements BackgroundService {
   Future<ServiceState> state() async {
     if (!available) return ServiceState.unavailable;
     if (_runningFromTemporaryLocation) return ServiceState.mustMove;
-    final plist = File(plistPath);
-    if (!await plist.exists()) return ServiceState.notInstalled;
-    final content = await plist.readAsString();
-    // 1.4.0 之前写的登录项没有 AssociatedBundleIdentifiers，重新写一份
-    if (!content.contains(helperBinary) || !content.contains(_appBundleId)) return ServiceState.stale;
     final r = await Process.run('launchctl', ['print', await _target()]);
-    if (r.exitCode != 0) return ServiceState.stopped;
-    return '${r.stdout}'.contains('state = running')
+    final file = File(runtimePath).existsSync()
+        ? File(runtimePath)
+        : File(plistPath);
+    if (!file.existsSync()) return ServiceState.notInstalled;
+    if (!(await file.readAsString()).contains(_xml(helperBinary))) {
+      return ServiceState.stale;
+    }
+    return r.exitCode == 0 && '${r.stdout}'.contains('state = running')
         ? ServiceState.running
         : ServiceState.stopped;
   }
 
-  /// 注册并启动。重复调用即为修复：先注销旧的再重新注册。
+  @override
+  Future<bool> launchAtLogin() async => File(plistPath).existsSync();
+
+  @override
+  Future<void> setLaunchAtLogin(bool enabled) async {
+    final file = File(plistPath);
+    if (enabled) {
+      await file.parent.create(recursive: true);
+      await file.writeAsString(_plist());
+    } else if (await file.exists()) {
+      await file.delete();
+    }
+  }
+
+  @override
+  Future<void> stop() async {
+    final before = await Process.run('launchctl', ['print', await _target()]);
+    final pid = RegExp(
+      r'^\s*pid = (\d+)',
+      multiLine: true,
+    ).firstMatch('${before.stdout}')?.group(1);
+    await _bootout();
+    if (pid != null) {
+      for (var i = 0; i < 40; i++) {
+        if ((await Process.run('kill', ['-0', pid])).exitCode != 0) break;
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+      }
+      if ((await Process.run('kill', ['-0', pid])).exitCode == 0) {
+        throw ServiceException('The background process did not stop.');
+      }
+    }
+    if ((await Process.run('launchctl', ['print', await _target()])).exitCode ==
+        0) {
+      throw ServiceException('The background service did not stop.');
+    }
+  }
+
   @override
   Future<void> install() async {
     await _bootout();
@@ -130,9 +182,15 @@ class MacBackgroundService implements BackgroundService {
 
     await Directory(File(plistPath).parent.path).create(recursive: true);
     await Directory(File(logPath).parent.path).create(recursive: true);
-    await File(plistPath).writeAsString(_plist());
+    await File(runtimePath).parent.create(recursive: true);
+    await File(runtimePath).writeAsString(_plist());
+    if (await launchAtLogin()) await setLaunchAtLogin(true);
 
-    final r = await Process.run('launchctl', ['bootstrap', await _domain(), plistPath]);
+    final r = await Process.run('launchctl', [
+      'bootstrap',
+      await _domain(),
+      runtimePath,
+    ]);
     if (r.exitCode != 0) {
       throw ServiceException(appL10n.errServiceStart('${r.stderr}'.trim()));
     }
@@ -141,7 +199,11 @@ class MacBackgroundService implements BackgroundService {
   /// 让 launchd 结束旧进程并按当前的 App 重新拉起。用于 App 更新后。
   @override
   Future<void> restart() async {
-    final r = await Process.run('launchctl', ['kickstart', '-k', await _target()]);
+    final r = await Process.run('launchctl', [
+      'kickstart',
+      '-k',
+      await _target(),
+    ]);
     if (r.exitCode != 0) {
       throw ServiceException(appL10n.errServiceRestart('${r.stderr}'.trim()));
     }
@@ -150,7 +212,10 @@ class MacBackgroundService implements BackgroundService {
   /// 停用并移除登录项。数据目录保留，重新启用后历史记录与配对关系都还在。
   @override
   Future<void> uninstall() async {
-    await _bootout();
+    await stop();
+    await setLaunchAtLogin(false);
+    final runtime = File(runtimePath);
+    if (await runtime.exists()) await runtime.delete();
     final plist = File(plistPath);
     if (await plist.exists()) await plist.delete();
   }
@@ -181,14 +246,15 @@ class MacBackgroundService implements BackgroundService {
     return 'gui/$_uid';
   }
 
-  Future<String> _target() async => '${await _domain()}/$label';
+  Future<String> _target() async => '${await _domain()}/$serviceLabel';
 
-  String _plist() => '''
+  String _plist() =>
+      '''
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key>              <string>$label</string>
+    <key>Label</key>              <string>$serviceLabel</string>
     <key>ProgramArguments</key>
     <array>
         <string>${_xml(helperBinary)}</string>
@@ -207,8 +273,10 @@ class MacBackgroundService implements BackgroundService {
 </plist>
 ''';
 
-  static String _xml(String s) =>
-      s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+  static String _xml(String s) => s
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;');
 }
 
 class ServiceException implements Exception {

@@ -996,7 +996,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get svcStartBody =>
-      'PasteFerry は小さなバックグラウンドプロセスを動かし、クリップボードの変化を検知して他のデバイスとつながり続けます。有効にするとログイン時に起動し、このウィンドウを閉じても同期を続けます。';
+      'PasteFerry はバックグラウンドでクリップボードを同期し、ウィンドウを閉じても動作します。ログイン時の起動は別の設定で、新規インストールではオフです。';
 
   @override
   String get svcEnable => 'バックグラウンド同期を有効にする';
@@ -1020,7 +1020,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get svcStoppedBody =>
-      '終了した直後かもしれません。通常は数秒で再起動されます。この画面のままなら、下のボタンで再起動してください。';
+      'バックグラウンドサービスは停止しています。下のボタンで起動できます。ログイン時の起動は設定で個別に選べます。';
 
   @override
   String get svcDevBodyWin =>
@@ -1748,4 +1748,48 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get sendLayoutBelow => 'レーダーの下';
+
+  @override
+  String get general => '一般';
+
+  @override
+  String get launchAtLogin => 'ログイン時に起動';
+
+  @override
+  String get launchAtLoginDesc => 'ログイン時にバックグラウンドで起動します。現在の動作は停止しません。';
+
+  @override
+  String get realtimeSync => 'クリップボードをリアルタイム同期';
+
+  @override
+  String get realtimeSyncDesc => '新しくコピーした内容を自動共有します。オフでもローカル履歴とファイル送信は利用できます。';
+
+  @override
+  String get syncBacklog => '再接続後に未送信の内容を同期';
+
+  @override
+  String get syncBacklogDesc =>
+      '初期設定はオフです。オンにすると、24時間以内の未送信内容を最大20件、クリップボードを上書きせず履歴に追加します。';
+
+  @override
+  String get peerRealtimeSync => 'このパソコンと同期';
+
+  @override
+  String get syncPaused => '同期を一時停止中';
+
+  @override
+  String get quitApp => 'PasteFerry を終了';
+
+  @override
+  String get quitAppDesc => 'すべてのプロセスを終了します。ログイン時の起動設定は保持されます。';
+
+  @override
+  String get quitTransfersWarning => 'ファイル転送中です。転送を中断して終了しますか？';
+
+  @override
+  String get backgroundRunningTitle => 'PasteFerry はバックグラウンドで動作します';
+
+  @override
+  String get backgroundRunningBody =>
+      'ウィンドウを閉じても同期とクイック貼り付けは続きます。完全に停止するには、設定またはアプリメニューの「PasteFerry を終了」を選んでください。';
 }

@@ -1,7 +1,14 @@
 import Cocoa
 import FlutterMacOS
 
-class MainFlutterWindow: NSWindow {
+class MainFlutterWindow: NSWindow, NSWindowDelegate {
+  private var lifecycleChannel: FlutterMethodChannel?
+
+  func windowShouldClose(_ sender: NSWindow) -> Bool {
+    lifecycleChannel?.invokeMethod("closeRequested", arguments: nil)
+    return false
+  }
+
   override func awakeFromNib() {
     let flutterViewController = FlutterViewController()
     self.contentViewController = flutterViewController
@@ -20,6 +27,19 @@ class MainFlutterWindow: NSWindow {
 
     RegisterGeneratedPlugins(registry: flutterViewController)
 
+    let channel = FlutterMethodChannel(name: "com.pasteferry.app/lifecycle",
+                                       binaryMessenger: flutterViewController.engine.binaryMessenger)
+    lifecycleChannel = channel
+    (NSApp.delegate as? AppDelegate)?.lifecycleChannel = channel
+    channel.setMethodCallHandler { [weak self] call, result in
+      if call.method == "hideWindow" {
+        self?.orderOut(nil)
+        result(nil)
+      } else {
+        result(FlutterMethodNotImplemented)
+      }
+    }
     super.awakeFromNib()
+    self.delegate = self
   }
 }

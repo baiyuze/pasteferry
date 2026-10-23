@@ -2988,6 +2988,9 @@ class Config extends $pb.GeneratedMessage {
     $core.bool? receiveDisabled,
     $core.bool? receiveNotifyDisabled,
     $core.bool? sendLayoutStacked,
+    $core.bool? realtimeSyncDisabled,
+    $core.bool? syncBacklog,
+    $core.Iterable<$core.String>? syncDisabledPeers,
   }) {
     final result = Config._();
     if (autoSyncThresholdBytes != null)
@@ -3023,6 +3026,11 @@ class Config extends $pb.GeneratedMessage {
     if (receiveNotifyDisabled != null)
       result.receiveNotifyDisabled = receiveNotifyDisabled;
     if (sendLayoutStacked != null) result.sendLayoutStacked = sendLayoutStacked;
+    if (realtimeSyncDisabled != null)
+      result.realtimeSyncDisabled = realtimeSyncDisabled;
+    if (syncBacklog != null) result.syncBacklog = syncBacklog;
+    if (syncDisabledPeers != null)
+      result.syncDisabledPeers.addAll(syncDisabledPeers);
     return result;
   }
 
@@ -3066,6 +3074,9 @@ class Config extends $pb.GeneratedMessage {
     ..aOB(24, _omitFieldNames ? '' : 'receiveDisabled')
     ..aOB(25, _omitFieldNames ? '' : 'receiveNotifyDisabled')
     ..aOB(26, _omitFieldNames ? '' : 'sendLayoutStacked')
+    ..aOB(27, _omitFieldNames ? '' : 'realtimeSyncDisabled')
+    ..aOB(28, _omitFieldNames ? '' : 'syncBacklog')
+    ..pPS(29, _omitFieldNames ? '' : 'syncDisabledPeers')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3340,6 +3351,27 @@ class Config extends $pb.GeneratedMessage {
   $core.bool hasSendLayoutStacked() => $_has(25);
   @$pb.TagNumber(26)
   void clearSendLayoutStacked() => $_clearField(26);
+
+  @$pb.TagNumber(27)
+  $core.bool get realtimeSyncDisabled => $_getBF(26);
+  @$pb.TagNumber(27)
+  set realtimeSyncDisabled($core.bool value) => $_setBool(26, value);
+  @$pb.TagNumber(27)
+  $core.bool hasRealtimeSyncDisabled() => $_has(26);
+  @$pb.TagNumber(27)
+  void clearRealtimeSyncDisabled() => $_clearField(27);
+
+  @$pb.TagNumber(28)
+  $core.bool get syncBacklog => $_getBF(27);
+  @$pb.TagNumber(28)
+  set syncBacklog($core.bool value) => $_setBool(27, value);
+  @$pb.TagNumber(28)
+  $core.bool hasSyncBacklog() => $_has(27);
+  @$pb.TagNumber(28)
+  void clearSyncBacklog() => $_clearField(28);
+
+  @$pb.TagNumber(29)
+  $pb.PbList<$core.String> get syncDisabledPeers => $_getList(28);
 }
 
 class OfficialUsage extends $pb.GeneratedMessage {

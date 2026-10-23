@@ -1001,6 +1001,21 @@ const Config$json = {
       '5': 8,
       '10': 'sendLayoutStacked'
     },
+    {
+      '1': 'realtime_sync_disabled',
+      '3': 27,
+      '4': 1,
+      '5': 8,
+      '10': 'realtimeSyncDisabled'
+    },
+    {'1': 'sync_backlog', '3': 28, '4': 1, '5': 8, '10': 'syncBacklog'},
+    {
+      '1': 'sync_disabled_peers',
+      '3': 29,
+      '4': 3,
+      '5': 9,
+      '10': 'syncDisabledPeers'
+    },
   ],
 };
 
@@ -1026,7 +1041,9 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'B5T25seRIfCgtyZWNlaXZlX2RpchgXIAEoCVIKcmVjZWl2ZURpchIpChByZWNlaXZlX2Rpc2Fi'
     'bGVkGBggASgIUg9yZWNlaXZlRGlzYWJsZWQSNgoXcmVjZWl2ZV9ub3RpZnlfZGlzYWJsZWQYGS'
     'ABKAhSFXJlY2VpdmVOb3RpZnlEaXNhYmxlZBIuChNzZW5kX2xheW91dF9zdGFja2VkGBogASgI'
-    'UhFzZW5kTGF5b3V0U3RhY2tlZA==');
+    'UhFzZW5kTGF5b3V0U3RhY2tlZBI0ChZyZWFsdGltZV9zeW5jX2Rpc2FibGVkGBsgASgIUhRyZW'
+    'FsdGltZVN5bmNEaXNhYmxlZBIhCgxzeW5jX2JhY2tsb2cYHCABKAhSC3N5bmNCYWNrbG9nEi4K'
+    'E3N5bmNfZGlzYWJsZWRfcGVlcnMYHSADKAlSEXN5bmNEaXNhYmxlZFBlZXJz');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {

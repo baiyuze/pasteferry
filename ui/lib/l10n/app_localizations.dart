@@ -1847,7 +1847,7 @@ abstract class AppLocalizations {
   /// No description provided for @svcStartBody.
   ///
   /// In en, this message translates to:
-  /// **'PasteFerry runs a small background process that notices clipboard changes and stays connected to your other devices. Once on, it starts at login and keeps syncing even with this window closed.'**
+  /// **'PasteFerry runs a small background process for clipboard sync. Closing the window keeps it running. Launch at login is a separate setting and is off for new installations.'**
   String get svcStartBody;
 
   /// No description provided for @svcEnable.
@@ -1889,7 +1889,7 @@ abstract class AppLocalizations {
   /// No description provided for @svcStoppedBody.
   ///
   /// In en, this message translates to:
-  /// **'It may have just quit; the system usually restarts it within seconds. If you stay on this page, restart it with the button below.'**
+  /// **'The background service is stopped. Start it with the button below; launch at login is controlled separately in Settings.'**
   String get svcStoppedBody;
 
   /// No description provided for @svcDevBodyWin.
@@ -3103,6 +3103,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Below the radar'**
   String get sendLayoutBelow;
+
+  /// No description provided for @general.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get general;
+
+  /// No description provided for @launchAtLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch at login'**
+  String get launchAtLogin;
+
+  /// No description provided for @launchAtLoginDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Start in the background when you log in. Changing this does not stop the current session.'**
+  String get launchAtLoginDesc;
+
+  /// No description provided for @realtimeSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-time clipboard sync'**
+  String get realtimeSync;
+
+  /// No description provided for @realtimeSyncDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically share new copies with paired devices. Local history and Send Files remain available when off.'**
+  String get realtimeSyncDesc;
+
+  /// No description provided for @syncBacklog.
+  ///
+  /// In en, this message translates to:
+  /// **'Catch up after reconnecting'**
+  String get syncBacklog;
+
+  /// No description provided for @syncBacklogDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Off by default: missed copies are skipped. When enabled, up to 20 copies from the last 24 hours enter history without replacing the clipboard.'**
+  String get syncBacklogDesc;
+
+  /// No description provided for @peerRealtimeSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync with this computer'**
+  String get peerRealtimeSync;
+
+  /// No description provided for @syncPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Clipboard sync paused'**
+  String get syncPaused;
+
+  /// No description provided for @quitApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Quit PasteFerry'**
+  String get quitApp;
+
+  /// No description provided for @quitAppDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop all PasteFerry processes. Your launch-at-login preference is preserved.'**
+  String get quitAppDesc;
+
+  /// No description provided for @quitTransfersWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Files are still being transferred. Quit and interrupt these transfers?'**
+  String get quitTransfersWarning;
+
+  /// No description provided for @backgroundRunningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PasteFerry will keep running'**
+  String get backgroundRunningTitle;
+
+  /// No description provided for @backgroundRunningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing the window keeps sync and quick paste running. To stop everything, choose Quit PasteFerry in Settings or the app menu.'**
+  String get backgroundRunningBody;
 }
 
 class _AppLocalizationsDelegate

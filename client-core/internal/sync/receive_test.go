@@ -93,7 +93,9 @@ func waitReceive(t *testing.T, events <-chan ReceiveEvent, stage ReceiveStage) R
 }
 
 func TestReceiveNotifiesOnlyNewLiveOffers(t *testing.T) {
-	e, events := receiveFixture(t, &receiveClipboard{}, config.Default(), 0)
+	cfg := config.Default()
+	cfg.SyncBacklog = true
+	e, events := receiveFixture(t, &receiveClipboard{}, cfg, 0)
 	offerLarge(e, "live", false)
 	offerLarge(e, "live", false)
 	offerLarge(e, "late", true)

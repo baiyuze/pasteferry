@@ -987,8 +987,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get svcStartTitle => '开始使用隔空贴';
 
   @override
-  String get svcStartBody =>
-      '隔空贴会在后台运行一个小进程，用来感知剪贴板的变化，并与你的其他设备保持连接。启用后它随系统登录自动启动，关掉这个窗口也会照常同步。';
+  String get svcStartBody => '隔空贴通过后台进程同步剪贴板，关闭窗口后仍会运行。开机启动可在设置里单独选择，新安装默认关闭。';
 
   @override
   String get svcEnable => '启用后台同步';
@@ -1011,7 +1010,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get svcStoppedTitle => '后台服务没有运行';
 
   @override
-  String get svcStoppedBody => '它可能刚刚退出，系统通常会在几秒内把它重新拉起。如果一直停在这一页，点下面的按钮重新启动。';
+  String get svcStoppedBody => '后台服务已停止。点下面的按钮启动；是否开机启动可在设置里单独选择。';
 
   @override
   String get svcDevBodyWin =>
@@ -1729,6 +1728,50 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sendLayoutBelow => '在雷达下面';
+
+  @override
+  String get general => '通用';
+
+  @override
+  String get launchAtLogin => '开机启动';
+
+  @override
+  String get launchAtLoginDesc => '登录电脑后在后台启动，不弹出主窗口。修改此项不会停止当前运行。';
+
+  @override
+  String get realtimeSync => '实时同步剪贴板';
+
+  @override
+  String get realtimeSyncDesc => '自动与配对设备同步新复制的内容。关闭后仍保存本机记录，也可手动隔空传送。';
+
+  @override
+  String get syncBacklog => '重连后补发离线内容';
+
+  @override
+  String get syncBacklogDesc =>
+      '默认关闭：离线期间未送达的内容不再补发。开启后最多补发 24 小时内的 20 条记录，不覆盖当前剪贴板。';
+
+  @override
+  String get peerRealtimeSync => '与这台电脑实时同步';
+
+  @override
+  String get syncPaused => '剪贴板同步已暂停';
+
+  @override
+  String get quitApp => '退出隔空贴';
+
+  @override
+  String get quitAppDesc => '结束隔空贴的全部进程，保留开机启动设置。';
+
+  @override
+  String get quitTransfersWarning => '还有文件正在传输，是否中断传输并退出？';
+
+  @override
+  String get backgroundRunningTitle => '隔空贴将继续在后台运行';
+
+  @override
+  String get backgroundRunningBody =>
+      '关闭窗口后，同步和快捷粘贴仍会运行。如需完全停止，请在设置或应用菜单选择「退出隔空贴」。';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -2714,8 +2757,7 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get svcStartTitle => '開始使用隔空貼';
 
   @override
-  String get svcStartBody =>
-      '隔空貼會在背景執行一個小型程序，用來偵測剪貼簿的變化，並與你的其他裝置保持連線。啟用後它會隨系統登入自動啟動，關閉這個視窗也會照常同步。';
+  String get svcStartBody => '隔空貼透過背景程序同步剪貼簿，關閉視窗後仍會運作。開機啟動可在設定裏單獨選擇，新安裝預設關閉。';
 
   @override
   String get svcEnable => '啟用背景同步';
@@ -2738,7 +2780,7 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get svcStoppedTitle => '背景服務沒有執行';
 
   @override
-  String get svcStoppedBody => '它可能剛剛結束，系統通常會在幾秒內重新啟動它。如果一直停留在這一頁，請按下面的按鈕重新啟動。';
+  String get svcStoppedBody => '背景服務已停止。按下面的按鈕啟動；是否開機啟動可在設定裏單獨選擇。';
 
   @override
   String get svcDevBodyWin =>
@@ -3456,6 +3498,50 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get sendLayoutBelow => '在雷達下面';
+
+  @override
+  String get general => '一般';
+
+  @override
+  String get launchAtLogin => '開機啟動';
+
+  @override
+  String get launchAtLoginDesc => '登入電腦後在背景啟動，不開啟主視窗。更改此項不會停止目前的運作。';
+
+  @override
+  String get realtimeSync => '即時同步剪貼簿';
+
+  @override
+  String get realtimeSyncDesc => '自動與配對裝置同步新複製的內容。關閉後仍保留本機記錄，也可手動隔空傳送。';
+
+  @override
+  String get syncBacklog => '重新連線後補傳離線內容';
+
+  @override
+  String get syncBacklogDesc =>
+      '預設關閉：離線期間未送達的內容不再補傳。開啟後最多補傳 24 小時內的 20 筆記錄，不覆寫目前的剪貼簿。';
+
+  @override
+  String get peerRealtimeSync => '與這部電腦即時同步';
+
+  @override
+  String get syncPaused => '剪貼簿同步已暫停';
+
+  @override
+  String get quitApp => '退出隔空貼';
+
+  @override
+  String get quitAppDesc => '結束隔空貼的全部程序，保留開機啟動設定。';
+
+  @override
+  String get quitTransfersWarning => '還有檔案正在傳輸，要中斷傳輸並退出嗎？';
+
+  @override
+  String get backgroundRunningTitle => '隔空貼將繼續在背景運作';
+
+  @override
+  String get backgroundRunningBody =>
+      '關閉視窗後，同步和快速貼上仍會運作。如需完全停止，請在設定或應用程式選單選擇「退出隔空貼」。';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -4441,8 +4527,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get svcStartTitle => '開始使用隔空貼';
 
   @override
-  String get svcStartBody =>
-      '隔空貼會在背景執行一個小程式，用來偵測剪貼簿的變化，並與你的其他裝置保持連線。啟用後它會隨系統登入自動啟動，關掉這個視窗也會照常同步。';
+  String get svcStartBody => '隔空貼透過背景程序同步剪貼簿，關閉視窗後仍會執行。開機啟動可在設定裡單獨選擇，新安裝預設關閉。';
 
   @override
   String get svcEnable => '啟用背景同步';
@@ -4465,7 +4550,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get svcStoppedTitle => '背景服務沒有在執行';
 
   @override
-  String get svcStoppedBody => '它可能剛剛結束，系統通常會在幾秒內把它重新啟動。如果一直停在這一頁，請點下面的按鈕重新啟動。';
+  String get svcStoppedBody => '背景服務已停止。點下面的按鈕啟動；是否開機啟動可在設定裡單獨選擇。';
 
   @override
   String get svcDevBodyWin =>
@@ -5183,4 +5268,48 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get sendLayoutBelow => '在雷達下面';
+
+  @override
+  String get general => '一般';
+
+  @override
+  String get launchAtLogin => '開機啟動';
+
+  @override
+  String get launchAtLoginDesc => '登入電腦後在背景啟動，不開啟主視窗。變更此項不會停止目前的執行。';
+
+  @override
+  String get realtimeSync => '即時同步剪貼簿';
+
+  @override
+  String get realtimeSyncDesc => '自動與配對裝置同步新複製的內容。關閉後仍保留本機記錄，也可手動隔空傳送。';
+
+  @override
+  String get syncBacklog => '重新連線後補傳離線內容';
+
+  @override
+  String get syncBacklogDesc =>
+      '預設關閉：離線期間未送達的內容不再補傳。開啟後最多補傳 24 小時內的 20 筆記錄，不覆寫目前的剪貼簿。';
+
+  @override
+  String get peerRealtimeSync => '與這台電腦即時同步';
+
+  @override
+  String get syncPaused => '剪貼簿同步已暫停';
+
+  @override
+  String get quitApp => '結束隔空貼';
+
+  @override
+  String get quitAppDesc => '結束隔空貼的全部程序，保留開機啟動設定。';
+
+  @override
+  String get quitTransfersWarning => '還有檔案正在傳輸，要中斷傳輸並結束嗎？';
+
+  @override
+  String get backgroundRunningTitle => '隔空貼將繼續在背景執行';
+
+  @override
+  String get backgroundRunningBody =>
+      '關閉視窗後，同步和快速貼上仍會執行。如需完全停止，請在設定或應用程式選單選擇「結束隔空貼」。';
 }

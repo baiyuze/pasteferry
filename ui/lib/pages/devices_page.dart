@@ -51,13 +51,20 @@ class DevicesPage extends StatelessWidget {
           ),
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(Insets.xl, 0, Insets.xl, Insets.xl),
+            padding: const EdgeInsets.fromLTRB(
+              Insets.xl,
+              0,
+              Insets.xl,
+              Insets.xl,
+            ),
             children: [
               if (state.self != null)
                 GroupSection(
                   title: Wording.thisDevice,
                   footnote: l.thisDeviceFootnote(Wording.bothDevicesInText),
-                  child: GroupBox(children: [_DeviceRow(device: state.self!, isSelf: true)]),
+                  child: GroupBox(
+                    children: [_DeviceRow(device: state.self!, isSelf: true)],
+                  ),
                 ),
               if (state.peers.isEmpty)
                 Padding(
@@ -90,7 +97,9 @@ class DevicesPage extends StatelessWidget {
                   footnote: l.pairedFootnote,
                   child: GroupBox(
                     dividerIndent: 52,
-                    children: [for (final d in state.peers) _DeviceRow(device: d)],
+                    children: [
+                      for (final d in state.peers) _DeviceRow(device: d),
+                    ],
                   ),
                 ),
             ],
@@ -113,7 +122,12 @@ class _DeviceRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.sm, Insets.md),
+      padding: const EdgeInsets.fromLTRB(
+        Insets.lg,
+        Insets.md,
+        Insets.sm,
+        Insets.md,
+      ),
       child: Row(
         children: [
           Icon(platformIcon(device.platform), size: 22, color: p.textDim),
@@ -125,20 +139,62 @@ class _DeviceRow extends StatelessWidget {
                 Text(device.name, style: context.text.labelLarge),
                 const SizedBox(height: 2),
                 Text(
-                  device.publicKeyFingerprint,
+                  (AppScope.of(context).config?.realtimeSyncDisabled == true ||
+                              (AppScope.of(context).config?.syncDisabledPeers
+                                      .contains(device.id) ??
+                                  false)) &&
+                          !isSelf
+                      ? context.l10n.syncPaused
+                      : device.publicKeyFingerprint,
                   // 等宽：用户要逐字符比对，等宽能显著降低看错的概率
-                  style: context.text.bodySmall?.copyWith(fontFamily: monoFamily, letterSpacing: 0.4),
+                  style: context.text.bodySmall?.copyWith(
+                    fontFamily: monoFamily,
+                    letterSpacing: 0.4,
+                  ),
                 ),
               ],
             ),
           ),
+          if (!isSelf) ...[
+            Tooltip(
+              message: context.l10n.peerRealtimeSync,
+              child: SmallSwitch(
+                value:
+                    !(AppScope.of(
+                          context,
+                        ).config?.syncDisabledPeers.contains(device.id) ??
+                        false),
+                onChanged: (v) async {
+                  try {
+                    await AppScope.read(context).setPeerSync(device.id, v);
+                  } catch (e) {
+                    if (context.mounted) {
+                      showToast(
+                        context,
+                        AppState.describeError(e),
+                        error: true,
+                      );
+                    }
+                  }
+                },
+              ),
+            ),
+            const SizedBox(width: Insets.md),
+          ],
           if (isSelf)
             Padding(
               padding: const EdgeInsets.only(right: Insets.sm),
-              child: Text(context.l10n.thisDeviceShort, style: context.text.bodySmall),
+              child: Text(
+                context.l10n.thisDeviceShort,
+                style: context.text.bodySmall,
+              ),
             )
           else if (AppScope.of(context).isReconnecting(device.id)) ...[
-            const SizedBox(width: 12, height: 12, child: CircularProgressIndicator(strokeWidth: 2)),
+            const SizedBox(
+              width: 12,
+              height: 12,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
             const SizedBox(width: Insets.xs + 2),
             Text(context.l10n.reconnecting, style: context.text.bodySmall),
             const SizedBox(width: Insets.sm),
@@ -146,7 +202,9 @@ class _DeviceRow extends StatelessWidget {
           ] else ...[
             StatusDot(
               color: device.online ? p.online : p.textFaint,
-              label: device.online ? connectionLabel(device) : context.l10n.offline,
+              label: device.online
+                  ? connectionLabel(device)
+                  : context.l10n.offline,
             ),
             const SizedBox(width: Insets.sm),
             _DeviceMenu(device: device),
@@ -158,15 +216,15 @@ class _DeviceRow extends StatelessWidget {
 }
 
 String connectionLabel(Device d) => switch (d.connection) {
-      ConnectionKind.CONNECTION_KIND_DIRECT => appL10n.direct,
-      ConnectionKind.CONNECTION_KIND_RELAY => appL10n.relay,
-      _ => appL10n.online,
-    };
+  ConnectionKind.CONNECTION_KIND_DIRECT => appL10n.direct,
+  ConnectionKind.CONNECTION_KIND_RELAY => appL10n.relay,
+  _ => appL10n.online,
+};
 
 IconData platformIcon(String platform) => switch (platform) {
-      'windows' || 'linux' => AppIcons.desktopComputer,
-      _ => AppIcons.deviceLaptop,
-    };
+  'windows' || 'linux' => AppIcons.desktopComputer,
+  _ => AppIcons.deviceLaptop,
+};
 
 class _DeviceMenu extends StatelessWidget {
   const _DeviceMenu({required this.device});
@@ -184,15 +242,30 @@ class _DeviceMenu extends StatelessWidget {
         // 已是直连就不用了；中转时马上再试一次直连，离线时马上去找它
         if (device.connection != ConnectionKind.CONNECTION_KIND_DIRECT &&
             !AppScope.read(ctx).isReconnecting(device.id))
-          PopupMenuItem(value: 'reconnect', height: 34, child: Text(l.reconnect)),
-        PopupMenuItem(value: 'copy', height: 34, child: Text(l.copyFingerprint)),
+          PopupMenuItem(
+            value: 'reconnect',
+            height: 34,
+            child: Text(l.reconnect),
+          ),
+        PopupMenuItem(
+          value: 'copy',
+          height: 34,
+          child: Text(l.copyFingerprint),
+        ),
         // 局域网里找不到对方时（跨网段、两边都换了地址），手动告诉后台服务去哪里找
         if (!device.online)
-          PopupMenuItem(value: 'address', height: 34, child: Text(l.enterAddressEllipsis)),
+          PopupMenuItem(
+            value: 'address',
+            height: 34,
+            child: Text(l.enterAddressEllipsis),
+          ),
         PopupMenuItem(
           value: 'unpair',
           height: 34,
-          child: Text(l.unpairEllipsis, style: TextStyle(color: ctx.palette.danger)),
+          child: Text(
+            l.unpairEllipsis,
+            style: TextStyle(color: ctx.palette.danger),
+          ),
         ),
       ],
       onSelected: (v) => switch (v) {
@@ -217,14 +290,18 @@ class _DeviceMenu extends StatelessWidget {
         switch (kind) {
           ConnectionKind.CONNECTION_KIND_DIRECT => l.reconnectDirect,
           ConnectionKind.CONNECTION_KIND_RELAY => l.reconnectRelay,
-          ConnectionKind.CONNECTION_KIND_OFFLINE => l.reconnectOffline(device.name),
+          ConnectionKind.CONNECTION_KIND_OFFLINE => l.reconnectOffline(
+            device.name,
+          ),
           _ => l.reconnectPending,
         },
         // 没连上直连就不打对勾：仍经中转、对方不在线都用提醒的样式
         error: kind != ConnectionKind.CONNECTION_KIND_DIRECT,
       );
     } catch (e) {
-      if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+      if (context.mounted) {
+        showToast(context, AppState.describeError(e), error: true);
+      }
     }
   }
 
@@ -260,8 +337,14 @@ class _DeviceMenu extends StatelessWidget {
           ),
         ),
         actions: [
-          OutlinedButton(onPressed: () => Navigator.pop(ctx), child: Text(l.cancel)),
-          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text), child: Text(l.save)),
+          OutlinedButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, controller.text),
+            child: Text(l.save),
+          ),
         ],
       ),
     );
@@ -273,15 +356,11 @@ class _DeviceMenu extends StatelessWidget {
     } catch (e) {
       if (!context.mounted) return;
       final failure = AppState.pairingFailure(e);
-      showToast(
-        context,
-        switch (failure) {
-          PairingFailure.badAddress => l.addressInvalid,
-          PairingFailure.noChannel => l.pairNoChannel,
-          _ => AppState.describeError(e),
-        },
-        error: true,
-      );
+      showToast(context, switch (failure) {
+        PairingFailure.badAddress => l.addressInvalid,
+        PairingFailure.noChannel => l.pairNoChannel,
+        _ => AppState.describeError(e),
+      }, error: true);
     }
   }
 
@@ -294,7 +373,10 @@ class _DeviceMenu extends StatelessWidget {
         title: Text(l.unpairTitle(device.name)),
         content: Text(l.unpairBody),
         actions: [
-          OutlinedButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l.cancel)),
+          OutlinedButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l.cancel),
+          ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: FilledButton.styleFrom(backgroundColor: ctx.palette.danger),
@@ -308,7 +390,9 @@ class _DeviceMenu extends StatelessWidget {
       await state.unpair(device.id);
       if (context.mounted) showToast(context, l.unpaired);
     } catch (e) {
-      if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+      if (context.mounted) {
+        showToast(context, AppState.describeError(e), error: true);
+      }
     }
   }
 }
@@ -328,7 +412,9 @@ class LanBlockedNotice extends StatelessWidget {
           try {
             await AppScope.read(context).requestLocalNetworkPermission();
           } catch (e) {
-            if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+            if (context.mounted) {
+              showToast(context, AppState.describeError(e), error: true);
+            }
           }
         },
         child: Text(l.openSystemSettings),
