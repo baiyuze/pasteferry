@@ -1,65 +1,121 @@
 {
   "schema": 1,
-  "latest": "2.5.2",
-  "date": "2026-10-22",
+  "latest": "2.5.3",
+  "date": "2026-10-23",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.2/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.3/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.2/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.3/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 25939985,
-      "sha256": "61521aa91cf9720fb2c6c895eb90801f338903ea9bd5ae9e30cc82157b097c0e"
+      "size": 25969878,
+      "sha256": "4dae362fab7da5f574f783788130bbc3aebd3c699f351410709b0fd301ef08f2"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 28044137,
-      "sha256": "85aca850671d916ebd8683261ed1302aba1a951125e6c881be218f1c85d095a8"
+      "size": 28064920,
+      "sha256": "dadfe321d0cdab903d6b5dd4680f907e772ec1e523a9cbb363801aee87d60ec0"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 52045232,
-      "sha256": "c43a3b3ab275584b743c0f2008b5dabed9abab71aefaedb76c3a137932730f3a"
+      "size": 52085655,
+      "sha256": "b149f266ef491973d27e19266d39784232b56546ab608d35ff043af46d90df53"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 23347187,
-      "sha256": "6ead3181f4fb73769186e62fa564b009fd16fb5cdaee0484f9eb5bb56e409deb"
+      "size": 23357315,
+      "sha256": "81dd4c725855c342066b5df80ef37506be772bf9df0ff8db3d0d468cc21f9e88"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 29458528,
-      "sha256": "d9abca691f0a193fea9fd301fb9fe2943c31da8b27b22a69b7503c4fc3f4c1ee"
+      "size": 29476914,
+      "sha256": "463c810eaa6b398e3b3ae29b6697d286d00a8f9191061bb585177e4fffbca453"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22521176,
-      "sha256": "01284f545611048f193de6c1d20068b8200250548280a4c50c5ad68ba6a1281f"
+      "size": 22527622,
+      "sha256": "1d0f8234a2f9ffec57af25bf3ffd9d74f3a01cd94826510b6db3e6b83e61df3f"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 20944742,
-      "sha256": "b1383020238a200fbca0b0f00cda6bc9ff72fb72a50197dd8c1e75bc77f8d0ef"
+      "size": 20957426,
+      "sha256": "ae90bb2367778ddb89a32b31c509025619190248c068dfaf0faa20d5f76639cc"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 27258799,
-      "sha256": "06a632a1d9e479a929fbdd01e5bdf4f6da17e9182fe57c7152594ac0e6f8642c"
+      "size": 27276999,
+      "sha256": "9d9e1dc151d76802e64292073326dd7afea3994f2fd1a4db21d639ff5f01d2a0"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25517843,
-      "sha256": "1f7071faf3e1caf338dfed66414963dc95d9401363a29520c5a6bc31b4552f4b"
+      "size": 25533019,
+      "sha256": "d3690cdc7fa35ca20fb5a36b274e83f0b808dfd6b909319feb56e9cf50ea5ecf"
     }
   },
   "releases": [
+    {
+      "version": "2.5.3",
+      "date": "2026-10-23",
+      "notes": {
+        "en": {
+          "changes": [
+            "Real-time clipboard sharing can now be paused globally or for each paired computer. Local history, manual downloads and Send Files remain available.",
+            "Offline clipboard catch-up is now off by default, including after upgrading. Reconnecting or resuming sharing starts with new copies. Optional catch-up adds up to 20 missed copies from the last 24 hours to history without replacing the current clipboard.",
+            "Launch at login now has its own setting. Changing it does not stop the current session, and quitting does not change the next-login preference. New installations start with it off; upgrades preserve existing login entries."
+          ],
+          "fixes": [
+            "Quit PasteFerry now stops the main window, clipboard background service and quick paste helper without immediately restarting them. Closing the window keeps the app running and explains this on first use."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "新增实时同步总开关和每台电脑的同步开关；暂停自动同步后，本机复制记录、手动下载和隔空传送仍可使用。",
+            "离线内容补发默认关闭，升级后也默认关闭。重连或恢复同步后只同步新复制的内容。可自行开启补发：最多补发 24 小时内的 20 条记录，不覆盖当前剪贴板。",
+            "新增独立的开机启动设置。修改开关不停止当前运行，退出也不改变下次登录时的启动选择。新安装默认关闭，升级保留原有的开机启动选择。"
+          ],
+          "fixes": [
+            "「退出隔空贴」现在会结束主窗口、剪贴板后台和快捷粘贴窗口，不再立即重新拉起。关闭窗口仍会继续后台运行，首次操作时会说明。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "クリップボードの自動同期を全体またはパソコンごとに一時停止できます。ローカル履歴、手動ダウンロード、ファイル送信は引き続き利用できます。",
+            "オフライン中の未送信内容の同期は、更新後も含め初期設定でオフです。再接続・再開後は新しいコピーから同期します。有効にした場合は24時間以内の最大20件を、現在のクリップボードを上書きせず履歴に追加します。",
+            "ログイン時の起動を独立して設定できます。変更しても現在の動作は停止せず、終了しても次回ログイン時の設定は変わりません。新規インストールではオフ、更新時は既存の設定を保持します。"
+          ],
+          "fixes": [
+            "「PasteFerry を終了」でメイン画面、同期サービス、クイック貼り付けをすべて終了し、直後に再起動しなくなりました。ウィンドウを閉じた場合は動作を継続し、初回に説明します。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "新增即時同步總開關和每台電腦的同步開關；暫停自動同步後，本機複製記錄、手動下載和隔空傳送仍可使用。",
+            "離線內容補傳預設關閉，升級後也預設關閉。重新連線或恢復同步後只同步新複製的內容。可自行開啟補傳：最多補傳 24 小時內的 20 筆記錄，不覆寫目前的剪貼簿。",
+            "新增獨立的開機啟動設定。變更開關不停止目前的執行，結束也不改變下次登入時的啟動選擇。新安裝預設關閉，升級保留原有的開機啟動選擇。"
+          ],
+          "fixes": [
+            "「結束隔空貼」現在會結束主視窗、剪貼簿背景服務和快速貼上視窗，不再立即重新啟動。關閉視窗仍會繼續在背景執行，首次操作時會說明。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "新增即時同步總開關和每部電腦的同步開關；暫停自動同步後，本機複製記錄、手動下載和隔空傳送仍可使用。",
+            "離線內容補傳預設關閉，升級後也預設關閉。重新連線或恢復同步後只同步新複製的內容。可自行開啟補傳：最多補傳 24 小時內的 20 筆記錄，不覆寫目前的剪貼簿。",
+            "新增獨立的開機啟動設定。更改開關不停止目前的運作，退出也不改變下次登入時的啟動選擇。新安裝預設關閉，升級保留原有的開機啟動選擇。"
+          ],
+          "fixes": [
+            "「退出隔空貼」現在會結束主視窗、剪貼簿背景服務和快速貼上視窗，不再立即重新啟動。關閉視窗仍會繼續在背景運作，首次操作時會說明。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.5.2",
       "date": "2026-10-22",
