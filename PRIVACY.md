@@ -1,94 +1,81 @@
-# Privacy and official service data
+# Privacy
 
-## Local and self-hosted use
+Also on the website in five languages: <https://pasteferry.cc/en/privacy/>.
 
-New installations start with official public service disabled. Clipboard
-history and cached files are stored locally. LAN discovery and synchronization
-use the local network. Custom servers are user-selected; their operators have
-their own retention practices. Neither mode uploads official usage telemetry.
-Optional public STUN probing reveals the source network address to selected
-STUN providers; the setting to use only the chosen server disables extra probes.
+## In short
 
-## Official access
+What you copy, the files you send, their names and your notes travel
+end-to-end encrypted between your own devices. We can't see them and don't
+store them.
 
-Enabling the official service is a deliberate setting with an explanation.
-The client first uses signaling and STUN to try a direct connection. A failed
-direct attempt with an online compatible peer is required before requesting
-official relay access. No machine fingerprint is needed for direct service.
-After the service is enabled, the client also checks its own relay allowance
-with its device signature only; this neither requests relay nor reads a machine
-identifier, so devices that always connect directly still see their allowance.
+## Service (when turned on)
 
-| Data | Purpose / retention |
-| --- | --- |
-| Device public key and signature | Prove possession of the existing identity; gateway authentication state is transient |
-| Server-derived pseudonymous device number | Access counts, first/last seen, bans and cumulative totals |
-| Application-specific machine digest | Relay quota grouping only; raw system identifier never leaves the client |
-| Daily upload/download and access totals | Per-device detail retained for 90 days; essential aggregate totals retained longer |
-| Current peer/session and routing metadata | Transient forwarding and abuse protection; not historical relationship tracking |
-| IP addresses | Necessarily visible for transport; not persisted in official statistics or ordinary proxy logs |
-
-Real computer names and OS details are not included in new official client
-handshakes/pairing requests. Paired devices exchange display names inside the
-encrypted data channel. Clipboard content, file names, paths, local usernames,
-MAC addresses, browser UA, installed software and behavior analytics are not
-fields of the gateway protocol. No third-party client analytics SDK is added.
-
-The machine digest is generated only when relay authorization is requested.
-Windows uses MachineGuid; macOS uses IOPlatformUUID; Linux uses a stable
-machine-id, never reboot-specific boot_id. A bounded, cached read is wrapped
-by a versioned PasteFerry-specific HMAC; the service hashes again with its own
-secret. These are pseudonymous identifiers, not guaranteed anonymity. Ordinary
-application reinstall generally preserves the quota group; OS reinstall,
-cloning or a modified client can change or forge it.
-
-The dashboard counts **official service devices**, not people, total installs,
-or users who choose LAN/custom servers. Recreated device keys may count again.
-
-## Usage and controls
-
-The default relay allowance is 100 MB/day, decimal bytes, upload plus download,
-reset at midnight Beijing time. Direct transfers do not consume this quota.
-Encrypted transport overhead contributes to measured relay data. The gateway
-may conservatively hold a small unresolved reservation after a crash until the
-daily reset. Unknown/stale usage is labeled unavailable, not displayed as zero.
-
-Turning off official service cancels official requests, polling and tunnels.
-There is no separate background analytics channel. Quota exhaustion affects
-official relay only; it does not turn off LAN or direct synchronization.
-No anonymous-account system can guarantee a unique natural person without
-collecting additional identity information; PasteFerry does not attempt that.
+New installs use the local network only. When you turn on Service, your
+devices connect to the official server so they can find each other across
+networks. We keep a pseudonymous device number, first and last connection
+times and daily relay usage. Only when a direct connection fails and relay is
+needed does the app derive a PasteFerry-specific machine digest, so that one
+computer shares one relay allowance. Real device names, raw system identifiers
+and content are never uploaded. The fields are listed in the
+[gateway protocol](design/official-gateway.md).
 
 ## Update checks
 
-Since 2.3.0 the app checks for a new version one minute after it starts and
-then once a day. It downloads the signed update list from GitHub and Gitee as a
-plain request with no device ID, account or other identifier, so these
-services only see an ordinary download from your network address. Automatic
-checks can be turned off in Settings → About; checking by hand still works.
-Updates are installed only after you confirm, and only if the package matches
-the checksum in a list signed with the PasteFerry release key.
+The app checks for updates once a day, fetching a signed update list from the
+PasteFerry website, GitHub and Gitee. The request to the website includes the
+version, system and language, and whether it is the first check of the day,
+week or month, to provide the right update and plan future releases. No device
+ID or account is included and IP addresses are not stored. Automatic checks
+can be turned off in Settings → About. Updates install only after you confirm,
+and only if they match a list signed with the PasteFerry release key.
 
-## Website and audit
+## Contacts
 
-The website has an existing Cloudflare Web Analytics beacon, separate from
-the desktop client. Website visits reach Cloudflare and the hosting endpoint;
-they are not software installation or active-device counts. Consult the
-website provider's privacy policy for its network processing.
+A contact sees the display name and avatar you set, the name and system of the
+computer you send from, and whether you use the local network, Service or your
+own server (for your own server, only a digest of its address). Your clipboard,
+history and other devices are never shared with contacts, and their files
+arrive only after you accept them.
 
-The website also counts page views and download clicks by Beijing date, page
-path (without query strings), page language, release version, file and download
-source (Gitee or GitHub). These counters use no analytics cookies or persistent
-visitor IDs and retain no IP addresses or browser user agents. Random event IDs
-are retained for up to three days to deduplicate delivery; anonymous daily
-aggregates are retained indefinitely. The website's own counters honor Do Not
-Track and Global Privacy Control. Events are sent asynchronously and never
-block downloads. A click does not establish a completed download, installation
-or unique person. Direct Gitee downloads and historical mirror downloads cannot
-be reconstructed; website clicks overlap GitHub's release download counts and
-must not be added to them. Automatic app updates are outside these counters.
+## Website
 
-The published client, network field list and [gateway protocol](design/official-gateway.md)
-can be audited. A private gateway's production data handling requires operator
-and deployment audit; open client source alone cannot prove it. See
-[SECURITY.md](SECURITY.md) for the trust model and reporting channel.
+The website uses Cloudflare Web Analytics and keeps its own totals of page
+views and download clicks (date, page path, page language, version and file
+downloaded). No analytics cookies or persistent visitor identifiers are used,
+and IP addresses and browser identifiers are not stored. With Do Not Track or
+Global Privacy Control turned on, the website's own counters are not sent.
+
+## How it is used
+
+This information is used to provide and improve the service, publish updates,
+keep the service secure and prevent abuse, measure and plan, and meet legal
+obligations. We don't sell it or use it for advertising.
+
+## Third parties
+
+GitHub, Gitee, Cloudflare and any server you choose handle your requests to
+them under their own privacy policies.
+
+## Retention
+
+Daily per-device detail for Service is kept for 90 days; daily totals without
+personal identity are kept indefinitely.
+
+## Your choices
+
+You can use the local network only, turn off Service, turn off automatic update
+checks, or run your own server. The PasteFerry client and server are open
+source; see [SECURITY.md](SECURITY.md) for the trust model.
+
+## Disclaimer and changes
+
+PasteFerry and Service are provided free and as is; relay allowances and
+features may change or be suspended. We are not liable for data loss or failed
+syncs caused by networks, devices, third-party services or self-hosted servers.
+Changes to this notice take effect when published on the website; continuing
+to use PasteFerry means you accept them.
+
+## Contact
+
+Questions about this notice: open an issue at
+<https://github.com/baiyuze/pasteferry/issues>.

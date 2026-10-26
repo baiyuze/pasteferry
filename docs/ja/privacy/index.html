@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>プライバシーと必要なデータ — PasteFerry</title>
-  <meta name="description" content="新規インストールではLANのみを使用します。有効にした場合のみ公式シグナリングに接続し、必要な接続統計を記録します。独自サーバーは公式へ報告しません。まず直接接続を試し、失敗した場合のみ中継の認証と端末の残量識別を行います。">
+  <title>プライバシー — PasteFerry</title>
+  <meta name="description" content="コピーした内容、送信したファイルとファイル名、メモは、あなたのデバイス間でエンドツーエンドで暗号化して送られます。私たちには見えず、保存もしません。">
   <link rel="canonical" href="https://pasteferry.cc/ja/privacy/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/privacy/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/privacy/">
@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PasteFerry">
-  <meta property="og:title" content="プライバシーと必要なデータ — PasteFerry">
-  <meta property="og:description" content="新規インストールではLANのみを使用します。有効にした場合のみ公式シグナリングに接続し、必要な接続統計を記録します。独自サーバーは公式へ報告しません。まず直接接続を試し、失敗した場合のみ中継の認証と端末の残量識別を行います。">
+  <meta property="og:title" content="プライバシー — PasteFerry">
+  <meta property="og:description" content="コピーした内容、送信したファイルとファイル名、メモは、あなたのデバイス間でエンドツーエンドで暗号化して送られます。私たちには見えず、保存もしません。">
   <meta property="og:url" content="https://pasteferry.cc/ja/privacy/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:locale" content="ja_JP">
@@ -73,13 +73,17 @@
       </nav>
     </div>
   </header>
-<main id="main" class="wrap" style="max-width:850px;padding-top:5rem;padding-bottom:5rem;line-height:1.9"><h1>プライバシーと必要なデータ</h1><section><h2>公式サービスは任意です</h2><p>新規インストールではLANのみを使用します。有効にした場合のみ公式シグナリングに接続し、必要な接続統計を記録します。独自サーバーは公式へ報告しません。まず直接接続を試し、失敗した場合のみ中継の認証と端末の残量識別を行います。</p></section>
-<section><h2>最小限の記録</h2><p>仮名化した端末番号、初回・最終接続時刻、日別中継使用量、必要な上限の紐付けと累計を保持します。端末の日別明細は90日間保持します。公式端末数は人数や全インストール数ではありません。</p></section>
-<section><h2>内容と識別子</h2><p>内容と実際の端末名は端末間の暗号化通信で送信します。ファイル名、パス、ユーザー名、MAC、UA、行動履歴を収集しません。元のシステム識別子は送信せず、専用ダイジェストを中継上限の分類にのみ使います。改変クライアントによる偽装は防ぎきれません。</p></section>
-<section><h2>ネットワークと残量</h2><p>通信先は一時的な経路・アドレスを認識しますが、公式統計と通常のプロキシログには保存しません。中継上限は送受信合計100 MB/日で、北京時間午前0時にリセットします。直接接続は消費しません。有効にするとクライアントは端末の署名だけで自分の残量を照会します。中継の申請や端末識別子の読み取りは行いません。無効化すると公式の要求、照会とトンネルを停止します。</p></section>
-<section><h2>連絡先に見えるもの</h2><p>2.6 から連絡先を追加してファイルを送り合えます。連絡先に見えるのは、設定した表示名とアイコン、送信するパソコンの名前と OS、ローカルネットワーク・サービス・自前のサーバーのどれを使っているか（自前のサーバーはアドレスのダイジェストのみで、アドレス自体は渡しません）です。クリップボード、履歴、ほかのデバイスが連絡先に渡ることはなく、相手からのファイルはあなたが受け入れたときだけ届きます。連絡先を削除すると双方から削除され、相手のアイコンもこのパソコンから消えます。</p></section>
-<section><h2>アップデートの確認</h2><p>2.3.0 以降、アプリは起動 1 分後とその後 1 日 1 回、新しいバージョンを確認します。GitHub と Gitee から署名付きのアップデート一覧をダウンロードするだけで、端末 ID、アカウントなどの識別情報は送らず、相手には通常のダウンロードとネットワークアドレスしか見えません。自動確認は「設定 → このアプリについて」でオフにできます。アップデートは確認後にのみインストールし、PasteFerry のリリース鍵で署名された一覧のチェックサムと一致するパッケージだけを使います。</p></section>
-<section><h2>ウェブサイトと監査</h2><p>当サイトはCloudflare Web Analyticsに加え、日付、ページのパス（クエリを除く）、表示言語、ダウンロードのバージョン、ファイル、配信元（GiteeまたはGitHub）別に閲覧数とクリック数を集計します。統計用Cookieや永続的な訪問者IDを使わず、IPやブラウザーUAを保存しません。重複排除用のランダムなイベントIDは最大3日、匿名の日別集計は無期限に保持します。Do Not TrackとGlobal Privacy Controlを尊重します。クリック数は完了したダウンロード、インストール数や人数を示しません。Giteeで直接行ったダウンロードは計測できません。クライアント、シグナリングとTURNはオープンソースを維持し、ゲートウェイの仕様と項目を公開します。非公開の本番環境の保持実態には配備監査が必要です。</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
+<main id="main" class="wrap" style="max-width:850px;padding-top:5rem;padding-bottom:5rem;line-height:1.9"><h1>プライバシー</h1><section><h2>ひとことで</h2><p>コピーした内容、送信したファイルとファイル名、メモは、あなたのデバイス間でエンドツーエンドで暗号化して送られます。私たちには見えず、保存もしません。</p></section>
+<section><h2>サービス（オンにした場合）</h2><p>新規インストールではローカルネットワークだけを使います。「サービス」をオンにすると、別のネットワークにあるデバイス同士が見つけ合えるよう公式サーバーに接続します。仮名化した端末番号、初回・最終接続時刻、日別の中継使用量を記録します。直接接続できず中継が必要なときだけ、同じパソコンで中継の上限を共有するための PasteFerry 専用のマシンダイジェストを作ります。実際の端末名、元のシステム識別子、内容は送信しません。</p></section>
+<section><h2>アップデートの確認</h2><p>アプリは 1 日 1 回、PasteFerry の Web サイト、GitHub、Gitee から署名付きのアップデート一覧を取得します。Web サイトへのリクエストには、バージョン、OS、言語と、その日・週・月で最初の確認かどうかを含めます。適切なアップデートの提供と今後のリリースの計画に使います。端末 ID やアカウントは含めず、IP アドレスは保存しません。自動確認は「設定 → このアプリについて」でオフにできます。アップデートは確認後にのみインストールし、PasteFerry のリリース鍵で署名された一覧と一致するものだけを使います。</p></section>
+<section><h2>連絡先</h2><p>連絡先に見えるのは、設定した表示名とアイコン、送信するパソコンの名前と OS、ローカルネットワーク・サービス・自前のサーバーのどれを使っているか（自前のサーバーはアドレスのダイジェストのみ）です。クリップボード、履歴、ほかのデバイスが連絡先に渡ることはなく、相手からのファイルはあなたが受け入れたときだけ届きます。</p></section>
+<section><h2>Web サイト</h2><p>当サイトは Cloudflare Web Analytics を使い、ページの閲覧数とダウンロードのクリック数（日付、ページのパス、表示言語、ダウンロードしたバージョンとファイル）を独自に集計しています。統計用 Cookie や永続的な訪問者 ID は使わず、IP アドレスやブラウザーの識別情報は保存しません。Do Not Track または Global Privacy Control が有効な場合、当サイト独自の集計は送信しません。</p></section>
+<section><h2>利用目的</h2><p>これらの情報は、サービスの提供と改善、アップデートの配信、セキュリティの維持と不正利用の防止、集計と計画、法令の遵守のために使います。販売したり広告に使ったりすることはありません。</p></section>
+<section><h2>第三者</h2><p>GitHub、Gitee、Cloudflare、およびあなたが選んだサーバーは、それぞれのプライバシーポリシーに従ってリクエストを扱います。</p></section>
+<section><h2>保存期間</h2><p>サービスの端末ごとの日別明細は 90 日間保存し、個人を特定しない日別の集計は無期限に保存します。</p></section>
+<section><h2>あなたの選択</h2><p>ローカルネットワークだけを使う、サービスをオフにする、自動アップデート確認をオフにする、自前のサーバーを使う、のいずれも選べます。PasteFerry のクライアントとサーバーはオープンソースです。</p></section>
+<section><h2>免責と変更</h2><p>PasteFerry とサービスは無料で現状のまま提供され、中継の上限や機能は変更・停止されることがあります。ネットワーク、デバイス、第三者のサービス、自前のサーバーが原因のデータ消失や同期の失敗について責任を負いません。本説明の変更は Web サイトで公開した時点で有効となり、引き続き利用することで変更後の内容に同意したものとみなします。</p></section>
+<section><h2>お問い合わせ</h2><p>本説明についての質問は github.com/baiyuze/pasteferry/issues で issue を作成してください。</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
   <footer class="footer">
     <div class="wrap">
       <p>PasteFerry は GNU AGPL-3.0 のオープンソースです。</p>
@@ -89,7 +93,7 @@
         <a href="https://pasteferry.cc/design/nat-traversal.html">技術資料（中国語）</a>
         <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">ライセンス</a>
         <a href="https://github.com/baiyuze/pasteferry/issues">問題を報告</a>
-        <a href="../../ja/privacy/">プライバシーと必要なデータ</a>
+        <a href="../../ja/privacy/">プライバシー</a>
       </nav>
       <nav aria-label="言語">
         <a href="../../privacy/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>

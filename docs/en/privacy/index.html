@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Privacy and essential data — PasteFerry</title>
-  <meta name="description" content="Fresh installs use LAN mode. Official access and essential connection statistics begin only when enabled. Custom servers do not report to the official service. Direct connections are attempted first; machine quota identification and relay authorization happen only after direct failure.">
+  <title>Privacy — PasteFerry</title>
+  <meta name="description" content="What you copy, the files you send, their names and your notes travel end-to-end encrypted between your own devices. We can&#x27;t see them and don&#x27;t store them.">
   <link rel="canonical" href="https://pasteferry.cc/en/privacy/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/privacy/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/privacy/">
@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PasteFerry">
-  <meta property="og:title" content="Privacy and essential data — PasteFerry">
-  <meta property="og:description" content="Fresh installs use LAN mode. Official access and essential connection statistics begin only when enabled. Custom servers do not report to the official service. Direct connections are attempted first; machine quota identification and relay authorization happen only after direct failure.">
+  <meta property="og:title" content="Privacy — PasteFerry">
+  <meta property="og:description" content="What you copy, the files you send, their names and your notes travel end-to-end encrypted between your own devices. We can&#x27;t see them and don&#x27;t store them.">
   <meta property="og:url" content="https://pasteferry.cc/en/privacy/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:locale" content="en_US">
@@ -73,13 +73,17 @@
       </nav>
     </div>
   </header>
-<main id="main" class="wrap" style="max-width:850px;padding-top:5rem;padding-bottom:5rem;line-height:1.9"><h1>Privacy and essential data</h1><section><h2>Official service is optional</h2><p>Fresh installs use LAN mode. Official access and essential connection statistics begin only when enabled. Custom servers do not report to the official service. Direct connections are attempted first; machine quota identification and relay authorization happen only after direct failure.</p></section>
-<section><h2>Minimal service records</h2><p>The gateway retains pseudonymous device numbers, first/last access times, daily relay usage, essential quota bindings and cumulative totals. Daily device detail is retained for 90 days. Official device counts are not people or total installations.</p></section>
-<section><h2>Content and identifiers</h2><p>Content and real device names travel through the encrypted device channel. The gateway does not collect filenames, paths, usernames, MAC addresses, UA or behavior trails. Raw system identifiers are not uploaded; the application-specific digest groups relay quota and can be forged by a modified client.</p></section>
-<section><h2>Network visibility and allowance</h2><p>Network endpoints necessarily see transient routing/address metadata; official statistics and ordinary proxy logs do not retain it. The default allowance is 100 MB/day, upload plus download, reset at midnight Beijing time. Direct traffic is not charged. Once enabled, the client checks its own allowance with its device signature only; this neither requests relay nor reads a machine identifier. Disabling official access stops its requests, polling and tunnels.</p></section>
-<section><h2>What contacts can see</h2><p>From 2.6 you can add contacts and send each other files. A contact sees the display name and avatar you set, the name and system of the computer you send from, and whether you use the local network, the service or your own server (for your own server, only a digest of its address, never the address). Your clipboard, history and other devices are never shared with contacts, and their files arrive only after you accept. Removing a contact removes it on both sides and deletes their avatar from this computer.</p></section>
-<section><h2>Update checks</h2><p>Since 2.3.0 the app checks for a new version a minute after it starts and then daily. It downloads the signed update list from GitHub and Gitee with no device ID, account or other identifier, so those services see only an ordinary download from your network address. Automatic checks can be turned off in Settings → About. Updates install only after you confirm, and only if the package matches the checksum in a list signed with the PasteFerry release key.</p></section>
-<section><h2>Website and audit boundary</h2><p>This website uses Cloudflare Web Analytics and aggregates website page views and download clicks by date, page path (without query strings), page language, release version, file and source (Gitee or GitHub). These counters use no analytics cookies or persistent visitor identifiers and retain no IP addresses or browser user agents. Random event IDs are retained for up to three days for deduplication; anonymous daily aggregates are retained indefinitely. Do Not Track and Global Privacy Control are respected. Clicks do not prove completed downloads, installations or people, and downloads made directly on Gitee cannot be measured. The client and signaling/TURN server remain open source, with gateway fields and protocol published. Actual private production retention still requires deployment audit.</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
+<main id="main" class="wrap" style="max-width:850px;padding-top:5rem;padding-bottom:5rem;line-height:1.9"><h1>Privacy</h1><section><h2>In short</h2><p>What you copy, the files you send, their names and your notes travel end-to-end encrypted between your own devices. We can&#x27;t see them and don&#x27;t store them.</p></section>
+<section><h2>Service (when turned on)</h2><p>New installs use the local network only. When you turn on Service, your devices connect to the official server so they can find each other across networks. We keep a pseudonymous device number, first and last connection times and daily relay usage. Only when a direct connection fails and relay is needed does the app derive a PasteFerry-specific machine digest, so that one computer shares one relay allowance. Real device names, raw system identifiers and content are never uploaded.</p></section>
+<section><h2>Update checks</h2><p>The app checks for updates once a day, fetching a signed update list from the PasteFerry website, GitHub and Gitee. The request to the website includes the version, system and language, and whether it is the first check of the day, week or month, to provide the right update and plan future releases. No device ID or account is included and IP addresses are not stored. Automatic checks can be turned off in Settings → About. Updates install only after you confirm, and only if they match a list signed with the PasteFerry release key.</p></section>
+<section><h2>Contacts</h2><p>A contact sees the display name and avatar you set, the name and system of the computer you send from, and whether you use the local network, Service or your own server (for your own server, only a digest of its address). Your clipboard, history and other devices are never shared with contacts, and their files arrive only after you accept them.</p></section>
+<section><h2>Website</h2><p>This website uses Cloudflare Web Analytics and keeps its own totals of page views and download clicks (date, page path, page language, version and file downloaded). No analytics cookies or persistent visitor identifiers are used, and IP addresses and browser identifiers are not stored. With Do Not Track or Global Privacy Control turned on, the website&#x27;s own counters are not sent.</p></section>
+<section><h2>How it is used</h2><p>This information is used to provide and improve the service, publish updates, keep the service secure and prevent abuse, measure and plan, and meet legal obligations. We don&#x27;t sell it or use it for advertising.</p></section>
+<section><h2>Third parties</h2><p>GitHub, Gitee, Cloudflare and any server you choose handle your requests to them under their own privacy policies.</p></section>
+<section><h2>Retention</h2><p>Daily per-device detail for Service is kept for 90 days; daily totals without personal identity are kept indefinitely.</p></section>
+<section><h2>Your choices</h2><p>You can use the local network only, turn off Service, turn off automatic update checks, or run your own server. The PasteFerry client and server are open source.</p></section>
+<section><h2>Disclaimer and changes</h2><p>PasteFerry and Service are provided free and as is; relay allowances and features may change or be suspended. We are not liable for data loss or failed syncs caused by networks, devices, third-party services or self-hosted servers. Changes to this notice take effect when published on the website; continuing to use PasteFerry means you accept them.</p></section>
+<section><h2>Contact</h2><p>Questions about this notice: open an issue at github.com/baiyuze/pasteferry/issues.</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
   <footer class="footer">
     <div class="wrap">
       <p>PasteFerry is open source under the GNU AGPL-3.0.</p>
@@ -89,7 +93,7 @@
         <a href="https://pasteferry.cc/design/nat-traversal.html">Design notes (Chinese)</a>
         <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">License</a>
         <a href="https://github.com/baiyuze/pasteferry/issues">Report an issue</a>
-        <a href="../../en/privacy/">Privacy and essential data</a>
+        <a href="../../en/privacy/">Privacy</a>
       </nav>
       <nav aria-label="Language">
         <a href="../../privacy/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
