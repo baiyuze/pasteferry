@@ -65,6 +65,13 @@ With PasteFerry you pair two computers once. After that, copy on one and paste o
 - **Any size.** Progress, speed and time left are shown; if the connection drops, the transfer resumes where it stopped, and every file is checked with SHA-256.
 - Received files go to Downloads (changeable) and stay out of your clipboard history. Both computers need 2.5 or later.
 
+### Send to contacts (new in 2.6)
+
+- Someone else's computer doesn't need pairing: add them as a **contact** with a one-time contact code, then drop files on their avatar, with a short note if you like.
+- **They decide.** Every batch shows a request (who, which files, your note) and arrives only once accepted; trusted contacts can be set to accept automatically.
+- **You decide who can send**: no one, contacts only (default), or everyone on the local network for 10 minutes.
+- Contacts only exchange files and images. They never see your clipboard, history or other devices. On different networks, both sides turn on the service. Both computers need 2.6 or later.
+
 ### Quick paste
 
 - Press <kbd>⌥V</kbd> (<kbd>Alt</kbd>+<kbd>V</kbd> on Windows and Linux) in any app and your history appears in the middle of the screen.
@@ -127,7 +134,7 @@ The Mac app isn't notarized by Apple and the Windows app isn't code-signed yet: 
 
 | Way | Best for | You need |
 |---|---|---|
-| **[Official service](https://pasteferry.cc/en/official/)** | Different networks, no server of your own | Turn on **Use the service** in Settings on each computer (off by default). Relay, used only when a direct connection fails, currently allows 100 MB a day; direct traffic doesn't count |
+| **[Official service](https://pasteferry.cc/en/official/)** | Different networks, no server of your own | Turn on **Use the service** in Settings → Connection on each computer (off by default). Relay, used only when a direct connection fails, currently allows 100 MB a day; direct traffic doesn't count |
 | **[Same network](https://pasteferry.cc/en/lan/)** | Computers behind one router | Nothing |
 | **[Public server](https://pasteferry.cc/en/cloud/)** | Full control | A Linux VM with a public IP; the smallest is enough |
 | **[Tailscale](https://pasteferry.cc/en/tailscale/)** | Across networks without a server | [Tailscale](https://tailscale.com) on every computer; enter the other's Tailscale address when pairing |

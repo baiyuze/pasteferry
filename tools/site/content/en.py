@@ -273,7 +273,7 @@ C = {
        "with client isolation don't let devices see each other. In that case, on the computer entering the code, "
        "click On a different subnet? and enter the address shown under the other computer's code.",
        'On Windows, allow PasteFerry when the firewall asks on first run; if you clicked Cancel, click Allow '
-       'under Settings → Local network. On a Mac, turn on PasteFerry Daemon in System Settings → Privacy &amp; '
+       'under Settings → Connection. On a Mac, turn on PasteFerry Daemon in System Settings → Privacy &amp; '
        'Security → Local Network. More in the <a href="{lan}#faq">same network guide</a>.']),
      ('Windows? Linux? iPhone?',
       ['Windows 10 and 11 (x64) are supported and work together with Macs. Files you paste on Windows are real '
@@ -449,11 +449,11 @@ C = {
 
         "clients_h2": "Enter the address on each computer",
         "clients_steps": [
-            ("Open Settings", "Open PasteFerry on each computer, including the one running the server, and go to Settings."),
-            ("Enter the address", "Under Signaling server, enter <code>ws://192.168.1.20:8787/signal</code> with your address and press Return or Enter."),
+            ("Open Settings", "Open PasteFerry on each computer, including the one running the server, and go to Settings → Connection."),
+            ("Enter the address", "Under Custom server, enter <code>ws://192.168.1.20:8787/signal</code> with your address and press Return or Enter."),
             ("Check the status", "When Connection shows a green Connected, you're set. Pair your devices under Devices and copying starts syncing."),
         ],
-        "clients_alt": "PasteFerry Settings: the signaling server is ws://192.168.1.20:8787/signal and the connection status shows Connected",
+        "clients_alt": "PasteFerry Settings → Connection: Custom server is ws://192.168.1.20:8787/signal and the connection status shows Connected",
         "clients_after": 'Haven\'t installed the app yet? See the <a href="{start}">quick start</a>.',
 
         "faq_h2": "Questions",
@@ -569,11 +569,11 @@ C = {
         "check_label": "A browser showing http://203.0.113.10:8787/healthz, with the server's status ok and its version",
 
         "clients_steps": [
-            ("Open Settings", "Open PasteFerry on each computer and go to Settings."),
-            ("Enter the public address", "Under Signaling server, enter <code>ws://203.0.113.10:8787/signal</code> with your public IP and press Return or Enter."),
+            ("Open Settings", "Open PasteFerry on each computer and go to Settings → Connection."),
+            ("Enter the public address", "Under Custom server, enter <code>ws://203.0.113.10:8787/signal</code> with your public IP and press Return or Enter."),
             ("Check the status", "When Connection shows a green Connected, you're set. If you haven't paired yet, pair under Devices."),
         ],
-        "clients_alt": "PasteFerry Settings: the signaling server is ws://203.0.113.10:8787/signal and the connection status shows Connected",
+        "clients_alt": "PasteFerry Settings → Connection: Custom server is ws://203.0.113.10:8787/signal and the connection status shows Connected",
 
         "faq": [
             ("It works by IP but not by domain", [
@@ -697,12 +697,12 @@ C = {
                                  "client isolation keep devices apart, and in many offices wired and Wi‑Fi are separate subnets: "
                                  "see <a href=\"#subnet\">different subnets</a> below."),
             ("Windows Firewall", "On first run, Windows asks whether PasteFerry may get through the firewall; allow it. If you "
-                                 "clicked Cancel, click Allow under Settings → Local network in PasteFerry, which asks for "
+                                 "clicked Cancel, click Allow under Settings → Connection in PasteFerry, which asks for "
                                  "administrator approval once."),
             ("Local Network on macOS", "From macOS 15, the first time it reaches a device on your network, macOS asks whether "
                                        "PasteFerry Daemon may find devices on your local network; allow it. If you declined, turn "
                                        "it on in System Settings → Privacy &amp; Security → Local Network."),
-            ("No server address", "Leave the server field in Settings empty. To sync across networks later, add a server or use "
+            ("No server address", "Leave the server field in Settings → Connection empty. To sync across networks later, add a server or use "
                                   "Tailscale; paired devices stay paired."),
         ],
 
@@ -739,7 +739,7 @@ C = {
             ("The other computer can't be found", [
                 "Make sure both are on the network with background sync on. Then try entering the other computer's address on the "
                 "one entering the code: if that works, they're on different subnets, or the network blocks mDNS.",
-                "Still nothing? Check the other computer's firewall. On Windows, click Allow under Settings → Local network; on a "
+                "Still nothing? Check the other computer's firewall. On Windows, click Allow under Settings → Connection; on a "
                 "Mac, make sure PasteFerry Daemon is on under System Settings → Privacy &amp; Security → Local Network and the "
                 "macOS firewall isn't blocking it.",
             ]),
@@ -864,7 +864,7 @@ C = {
                 "First make sure Tailscale is connected on both: run <code>tailscale ping other-address</code> and try again once "
                 "it answers.",
                 "If ping works but pairing doesn't, the other computer's firewall is likely blocking it. On Windows, click Allow "
-                "under Settings → Local network in PasteFerry; on a Mac, turn on PasteFerry Daemon under System Settings → Privacy "
+                "under Settings → Connection in PasteFerry; on a Mac, turn on PasteFerry Daemon under System Settings → Privacy "
                 "&amp; Security → Local Network.",
             ]),
             ("Does every computer need Tailscale?", [
@@ -872,7 +872,7 @@ C = {
                 "the <a href=\"{lan}\">same network guide</a>.",
             ]),
             ("I set up a server at home with the old guide. Do I still need it?", [
-                "No. Clear the server address in Settings on each computer and uninstall the server at home; paired devices stay "
+                "No. Clear the server address in Settings → Connection on each computer and uninstall the server at home; paired devices stay "
                 "paired. Keeping it doesn't hurt either: a server and Tailscale work together.",
             ]),
             ("Can Tailscale see what I copy?", [

@@ -195,7 +195,7 @@
   √ Running
 
 Installed: pasteferry-server 2.5.4. It runs as a Windows service and starts with Windows.
-In PasteFerry on each computer, set Settings &gt; Signaling server to:
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
 
@@ -253,7 +253,7 @@ cd pasteferry-server-macos
   ✓ Running
 
 Installed: pasteferry-server 2.5.4. It starts whenever you log in to this Mac.
-In PasteFerry on each computer, set Settings → Signaling server to:
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
 
@@ -308,7 +308,7 @@ sudo ./install.sh</code></pre>
   ✓ Running
 
 Installed: pasteferry-server 2.5.4
-In PasteFerry on each computer, set Settings → Signaling server to:
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
 
@@ -355,12 +355,12 @@ Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768
       <div class="wrap">
         <h2 id="clients-title">各コンピューターにアドレスを入力</h2>
         <ol class="flow">
-          <li><h3>設定を開く</h3><p>各コンピューターで PasteFerry を開き、「設定」に進みます。サーバーを動かしているコンピューターも同じです。</p></li>
-          <li><h3>アドレスを入力</h3><p>「シグナリングサーバー」に <code>ws://192.168.1.20:8787/signal</code>（あなたのアドレス）を入力し、Return か Enter を押します。</p></li>
+          <li><h3>設定を開く</h3><p>各コンピューターで PasteFerry を開き、「設定 → 接続」に進みます。サーバーを動かしているコンピューターも同じです。</p></li>
+          <li><h3>アドレスを入力</h3><p>「カスタムサーバー」に <code>ws://192.168.1.20:8787/signal</code>（あなたのアドレス）を入力し、Return か Enter を押します。</p></li>
           <li><h3>状態を確認</h3><p>「接続状態」が緑の「接続済み」になれば完了です。「デバイス」でペアリングすれば、コピーが同期されるようになります。</p></li>
         </ol>
         <figure class="shot">
-          <img src="../../assets/screenshots/ja/settings-lan-dark.png?v=dc29447d85" width="2112" height="1472" loading="lazy" alt="PasteFerry の設定画面：シグナリングサーバーは ws://192.168.1.20:8787/signal、接続状態は接続済み">
+          <img src="../../assets/screenshots/ja/settings-lan-dark.png?v=fa73922b05" width="2112" height="1472" loading="lazy" alt="PasteFerry の「設定 → 接続」：カスタムサーバーは ws://192.168.1.20:8787/signal、接続状態は接続済み">
         </figure>
         <p class="note">アプリがまだなら、<a href="../../ja/start/">はじめかた</a>をご覧ください。</p>
       </div>

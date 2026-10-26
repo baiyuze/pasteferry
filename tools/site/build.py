@@ -1227,7 +1227,7 @@ TRANSCRIPTS = {
   √ 已启动
 
 安装完成：pasteferry-server {VERSION}，作为 Windows 服务开机自动运行
-在每台电脑的 PasteFerry「设置 → 信令服务器地址」填：
+在每台电脑的 PasteFerry「设置 → 连接 → 自定义服务器」填：
 
     ws://{LAN_IP}:8787/signal
 
@@ -1242,7 +1242,7 @@ TRANSCRIPTS = {
   ✓ 已启动
 
 安装完成：pasteferry-server {VERSION}，登录这台 Mac 后自动运行
-在每台电脑的 PasteFerry「设置 → 信令服务器地址」填：
+在每台电脑的 PasteFerry「设置 → 连接 → 自定义服务器」填：
 
     ws://{LAN_IP}:8787/signal
 
@@ -1256,7 +1256,7 @@ TRANSCRIPTS = {
   ✓ 已启动
 
 安装完成：pasteferry-server {VERSION}
-在每台电脑的 PasteFerry「设置 → 信令服务器地址」填：
+在每台电脑的 PasteFerry「设置 → 连接 → 自定义服务器」填：
 
     ws://{LAN_IP}:8787/signal
 
@@ -1276,7 +1276,7 @@ TRANSCRIPTS = {
   √ Running
 
 Installed: pasteferry-server {VERSION}. It runs as a Windows service and starts with Windows.
-In PasteFerry on each computer, set Settings > Signaling server to:
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     ws://{LAN_IP}:8787/signal
 
@@ -1291,7 +1291,7 @@ In PasteFerry on each computer, set Settings > Signaling server to:
   ✓ Running
 
 Installed: pasteferry-server {VERSION}. It starts whenever you log in to this Mac.
-In PasteFerry on each computer, set Settings → Signaling server to:
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     ws://{LAN_IP}:8787/signal
 
@@ -1305,7 +1305,7 @@ In PasteFerry on each computer, set Settings → Signaling server to:
   ✓ Running
 
 Installed: pasteferry-server {VERSION}
-In PasteFerry on each computer, set Settings → Signaling server to:
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     ws://{LAN_IP}:8787/signal
 

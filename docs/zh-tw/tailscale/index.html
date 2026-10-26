@@ -217,7 +217,7 @@
           </details>
           <details>
             <summary>配對時找不到對方？</summary>
-            <div class="answer"><p>先確認兩台的 Tailscale 都已連線：在終端機裡執行 <code>tailscale ping 對方的位址</code>，能 ping 通再試。</p><p>能 ping 通卻還是找不到，多半是對方的防火牆擋住了：對方是 Windows 的話，在它的隔空貼「設定 → 區域網路」裡點「允許」；是 Mac 的話，確認「系統設定 → 隱私權與安全性 → 本機網路」裡已開啟 PasteFerry Daemon。</p></div>
+            <div class="answer"><p>先確認兩台的 Tailscale 都已連線：在終端機裡執行 <code>tailscale ping 對方的位址</code>，能 ping 通再試。</p><p>能 ping 通卻還是找不到，多半是對方的防火牆擋住了：對方是 Windows 的話，在它的隔空貼「設定 → 連線」裡點「允許」；是 Mac 的話，確認「系統設定 → 隱私權與安全性 → 本機網路」裡已開啟 PasteFerry Daemon。</p></div>
           </details>
           <details>
             <summary>一定要每台電腦都裝 Tailscale 嗎？</summary>
@@ -225,7 +225,7 @@
           </details>
           <details>
             <summary>以前照著教學在家裡裝過伺服器，還需要它嗎？</summary>
-            <div class="answer"><p>不需要了。在每台電腦的「設定」裡清空伺服器位址，再到家裡那台電腦上解除安裝伺服器即可，已經配對的裝置不用重新配對。留著也沒關係，伺服器和 Tailscale 可以同時使用。</p></div>
+            <div class="answer"><p>不需要了。在每台電腦的「設定 → 連線」裡清空伺服器位址，再到家裡那台電腦上解除安裝伺服器即可，已經配對的裝置不用重新配對。留著也沒關係，伺服器和 Tailscale 可以同時使用。</p></div>
           </details>
           <details>
             <summary>Tailscale 能看到我複製的內容嗎？</summary>
