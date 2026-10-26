@@ -297,6 +297,8 @@ const Device$json = {
     {'1': 'receives_files', '3': 9, '4': 1, '5': 8, '10': 'receivesFiles'},
     {'1': 'receive_disabled', '3': 10, '4': 1, '5': 8, '10': 'receiveDisabled'},
     {'1': 'lan_reachable', '3': 11, '4': 1, '5': 8, '10': 'lanReachable'},
+    {'1': 'features_known', '3': 12, '4': 1, '5': 8, '10': 'featuresKnown'},
+    {'1': 'app_version', '3': 13, '4': 1, '5': 9, '10': 'appVersion'},
   ],
 };
 
@@ -309,7 +311,8 @@ final $typed_data.Uint8List deviceDescriptor = $convert.base64Decode(
     'ZF9hdF91bml4GAcgASgDUgxwYWlyZWRBdFVuaXgSJwoPcGFpcmluZ19zZXNzaW9uGAggASgJUg'
     '5wYWlyaW5nU2Vzc2lvbhIlCg5yZWNlaXZlc19maWxlcxgJIAEoCFINcmVjZWl2ZXNGaWxlcxIp'
     'ChByZWNlaXZlX2Rpc2FibGVkGAogASgIUg9yZWNlaXZlRGlzYWJsZWQSIwoNbGFuX3JlYWNoYW'
-    'JsZRgLIAEoCFIMbGFuUmVhY2hhYmxl');
+    'JsZRgLIAEoCFIMbGFuUmVhY2hhYmxlEiUKDmZlYXR1cmVzX2tub3duGAwgASgIUg1mZWF0dXJl'
+    'c0tub3duEh8KC2FwcF92ZXJzaW9uGA0gASgJUgphcHBWZXJzaW9u');
 
 @$core.Deprecated('Use eventDescriptor instead')
 const Event$json = {

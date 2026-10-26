@@ -406,6 +406,7 @@
   "sendRelayLeft": "中轉 · 今日剩 {left}",
   "sendNeedsUpdate": "需要更新",
   "sendNeedsUpdateTip": "{name} 更新到隔空貼 2.5 或更新版本後才能接收檔案。",
+  "sendConnectingTip": "正在連線 {name}，連上後就能傳送。",
   "sendNotReceiving": "不接收檔案",
   "sendDelivered": "已送達",
   "sendToTitle": "傳送到 {name}",

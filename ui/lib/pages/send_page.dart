@@ -395,7 +395,11 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
                     avatar: Icon(platformIcon(d.platform), size: 14),
                     // 发不了的写上原因
                     label: Text(_canSend(d) ? d.name : '${d.name} · ${_statusOf(context, state, d)}'),
-                    onPressed: _canSend(d) ? () => _openDialog(d) : null,
+                    onPressed: _canSend(d)
+                        ? () => _openDialog(d)
+                        : _connecting(d)
+                            ? () => _connect(state, d)
+                            : null,
                   ),
               ],
             ),
@@ -418,10 +422,19 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
 
   bool _canSend(Device d) => d.online && d.receivesFiles && !d.receiveDisabled;
 
+  /// 在线、但还不知道对方能不能收文件（还没连上、没收到它的功能声明）。
+  /// 这时不能说对方要更新：点它就先去连
+  bool _connecting(Device d) => d.online && !d.featuresKnown && !d.receivesFiles;
+
+  void _connect(AppState state, Device d) {
+    state.reconnect(d.id).catchError((_) => ConnectionKind.CONNECTION_KIND_UNSPECIFIED);
+  }
+
   /// 发不了的原因，或者能发时的连接方式
   String _statusOf(BuildContext context, AppState state, Device d) {
     final l = context.l10n;
     if (!d.online) return l.offline;
+    if (_connecting(d)) return l.reconnecting;
     if (!d.receivesFiles) return l.sendNeedsUpdate;
     if (d.receiveDisabled) return l.sendNotReceiving;
     return routeLabel(l, state, d);
@@ -453,7 +466,11 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
             : d.lanReachable
                 ? p.online
                 : p.accent;
-    final tip = !d.receivesFiles ? l.sendNeedsUpdateTip(d.name) : _statusOf(context, state, d);
+    final tip = _connecting(d)
+        ? l.sendConnectingTip(d.name)
+        : d.online && !d.receivesFiles
+            ? l.sendNeedsUpdateTip(d.name)
+            : _statusOf(context, state, d);
     double? progress;
     if (sending != null) {
       progress = sending.status == 'active' && sending.totalBytes > 0
@@ -472,7 +489,11 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
         dropTarget: _dropTarget == d.id && enabled,
         sending: sending != null,
         progress: progress,
-        onTap: enabled ? () => _openDialog(d) : null,
+        onTap: enabled
+            ? () => _openDialog(d)
+            : _connecting(d)
+                ? () => _connect(state, d)
+                : null,
       ),
     );
   }

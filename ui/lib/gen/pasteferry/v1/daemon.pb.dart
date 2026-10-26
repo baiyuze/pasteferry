@@ -577,6 +577,8 @@ class Device extends $pb.GeneratedMessage {
     $core.bool? receivesFiles,
     $core.bool? receiveDisabled,
     $core.bool? lanReachable,
+    $core.bool? featuresKnown,
+    $core.String? appVersion,
   }) {
     final result = Device._();
     if (id != null) result.id = id;
@@ -591,6 +593,8 @@ class Device extends $pb.GeneratedMessage {
     if (receivesFiles != null) result.receivesFiles = receivesFiles;
     if (receiveDisabled != null) result.receiveDisabled = receiveDisabled;
     if (lanReachable != null) result.lanReachable = lanReachable;
+    if (featuresKnown != null) result.featuresKnown = featuresKnown;
+    if (appVersion != null) result.appVersion = appVersion;
     return result;
   }
 
@@ -619,6 +623,8 @@ class Device extends $pb.GeneratedMessage {
     ..aOB(9, _omitFieldNames ? '' : 'receivesFiles')
     ..aOB(10, _omitFieldNames ? '' : 'receiveDisabled')
     ..aOB(11, _omitFieldNames ? '' : 'lanReachable')
+    ..aOB(12, _omitFieldNames ? '' : 'featuresKnown')
+    ..aOS(13, _omitFieldNames ? '' : 'appVersion')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -745,6 +751,27 @@ class Device extends $pb.GeneratedMessage {
   $core.bool hasLanReachable() => $_has(10);
   @$pb.TagNumber(11)
   void clearLanReachable() => $_clearField(11);
+
+  /// 已经知道对方支持哪些功能（2.5.4 起）：收到过它的声明（含重启前存下的），
+  /// 或者连上 5 秒仍没收到、判定为旧版本。为 false 时 receives_files 只是「还不知道」，界面不能据此说对方要更新
+  @$pb.TagNumber(12)
+  $core.bool get featuresKnown => $_getBF(11);
+  @$pb.TagNumber(12)
+  set featuresKnown($core.bool value) => $_setBool(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasFeaturesKnown() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearFeaturesKnown() => $_clearField(12);
+
+  /// 对方声明里带的版本号，旧版本为空
+  @$pb.TagNumber(13)
+  $core.String get appVersion => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set appVersion($core.String value) => $_setString(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasAppVersion() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearAppVersion() => $_clearField(13);
 }
 
 enum Event_Payload {

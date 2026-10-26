@@ -825,7 +825,12 @@ type Device struct {
 	// 对方关闭了接收文件
 	ReceiveDisabled bool `protobuf:"varint,10,opt,name=receive_disabled,json=receiveDisabled,proto3" json:"receive_disabled,omitempty"`
 	// 在同一个局域网里能直接找到对方，隔空传送的雷达据此把它放在内圈
-	LanReachable  bool `protobuf:"varint,11,opt,name=lan_reachable,json=lanReachable,proto3" json:"lan_reachable,omitempty"`
+	LanReachable bool `protobuf:"varint,11,opt,name=lan_reachable,json=lanReachable,proto3" json:"lan_reachable,omitempty"`
+	// 已经知道对方支持哪些功能（2.5.4 起）：收到过它的声明（含重启前存下的），
+	// 或者连上 5 秒仍没收到、判定为旧版本。为 false 时 receives_files 只是「还不知道」，界面不能据此说对方要更新
+	FeaturesKnown bool `protobuf:"varint,12,opt,name=features_known,json=featuresKnown,proto3" json:"features_known,omitempty"`
+	// 对方声明里带的版本号，旧版本为空
+	AppVersion    string `protobuf:"bytes,13,opt,name=app_version,json=appVersion,proto3" json:"app_version,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -935,6 +940,20 @@ func (x *Device) GetLanReachable() bool {
 		return x.LanReachable
 	}
 	return false
+}
+
+func (x *Device) GetFeaturesKnown() bool {
+	if x != nil {
+		return x.FeaturesKnown
+	}
+	return false
+}
+
+func (x *Device) GetAppVersion() string {
+	if x != nil {
+		return x.AppVersion
+	}
+	return ""
 }
 
 type Event struct {
@@ -4885,7 +4904,7 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\aclip_id\x18\x01 \x01(\tR\x06clipId\x12 \n" +
 	"\vtransferred\x18\x02 \x01(\x03R\vtransferred\x12\x14\n" +
 	"\x05total\x18\x03 \x01(\x03R\x05total\x12(\n" +
-	"\x10bytes_per_second\x18\x04 \x01(\x01R\x0ebytesPerSecond\"\x9b\x03\n" +
+	"\x10bytes_per_second\x18\x04 \x01(\x01R\x0ebytesPerSecond\"\xe3\x03\n" +
 	"\x06Device\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
@@ -4900,7 +4919,10 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x0ereceives_files\x18\t \x01(\bR\rreceivesFiles\x12)\n" +
 	"\x10receive_disabled\x18\n" +
 	" \x01(\bR\x0freceiveDisabled\x12#\n" +
-	"\rlan_reachable\x18\v \x01(\bR\flanReachable\"\xbf\x06\n" +
+	"\rlan_reachable\x18\v \x01(\bR\flanReachable\x12%\n" +
+	"\x0efeatures_known\x18\f \x01(\bR\rfeaturesKnown\x12\x1f\n" +
+	"\vapp_version\x18\r \x01(\tR\n" +
+	"appVersion\"\xbf\x06\n" +
 	"\x05Event\x12:\n" +
 	"\n" +
 	"clip_added\x18\x01 \x01(\v2\x19.pasteferry.v1.ClipRecordH\x00R\tclipAdded\x12>\n" +

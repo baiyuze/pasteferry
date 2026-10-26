@@ -2546,6 +2546,12 @@ abstract class AppLocalizations {
   /// **'{name} can receive files after updating to PasteFerry 2.5 or later.'**
   String sendNeedsUpdateTip(String name);
 
+  /// No description provided for @sendConnectingTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to {name}. You can send once it\'s connected.'**
+  String sendConnectingTip(String name);
+
   /// No description provided for @sendNotReceiving.
   ///
   /// In en, this message translates to:

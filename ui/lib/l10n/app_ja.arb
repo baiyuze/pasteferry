@@ -406,6 +406,7 @@
   "sendRelayLeft": "中継 · 今日の残り {left}",
   "sendNeedsUpdate": "アップデートが必要",
   "sendNeedsUpdateTip": "{name} は PasteFerry 2.5 以降にアップデートするとファイルを受信できます。",
+  "sendConnectingTip": "{name} に接続しています。接続したら送信できます。",
   "sendNotReceiving": "ファイルを受信しない",
   "sendDelivered": "送信済み",
   "sendToTitle": "{name} に送信",

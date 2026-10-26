@@ -27,7 +27,7 @@ AppState _demo(String language, {bool withActive = true}) => AppState()
           connection: ConnectionKind.CONNECTION_KIND_RELAY, receivesFiles: true),
       Device(id: 'linux', name: 'Ubuntu 笔记本', platform: 'linux'),
       Device(id: 'old', name: 'Old PC', platform: 'windows', online: true,
-          connection: ConnectionKind.CONNECTION_KIND_DIRECT),
+          connection: ConnectionKind.CONNECTION_KIND_DIRECT, featuresKnown: true),
       Device(id: 'off', name: 'iMac', platform: 'darwin', online: true, lanReachable: true,
           connection: ConnectionKind.CONNECTION_KIND_DIRECT, receivesFiles: true, receiveDisabled: true),
     ],
@@ -77,6 +77,27 @@ void main() {
         await tester.pump();
         return l;
       }
+
+      testWidgets('还没连上的设备写「正在连接」，不写需要更新', (tester) async {
+        final state = AppState()
+          ..debugSeed(
+            status: Status(version: '2.5.4'),
+            config: Config(language: language, deviceName: 'MacBook Pro'),
+            self: Device(id: 'self', name: 'MacBook Pro', platform: 'darwin'),
+            peers: [
+              // 在线（服务器或局域网报告）但还没连上、没收到功能声明
+              Device(id: 'new', name: 'Linux 台式机', platform: 'linux', online: true),
+              // 连上以后一直没声明，判定为旧版本
+              Device(id: 'old', name: 'Old PC', platform: 'windows', online: true,
+                  connection: ConnectionKind.CONNECTION_KIND_DIRECT, featuresKnown: true),
+            ],
+          );
+        final l = await open(tester, state);
+        expect(find.text(l.reconnecting), findsOneWidget);
+        expect(find.byTooltip(l.sendConnectingTip('Linux 台式机')), findsOneWidget);
+        expect(find.text(l.sendNeedsUpdate), findsOneWidget);
+        expect(find.byTooltip(l.sendNeedsUpdateTip('Old PC')), findsOneWidget);
+      });
 
       testWidgets('雷达与列表', (tester) async {
         final l = await open(tester, _demo(language));

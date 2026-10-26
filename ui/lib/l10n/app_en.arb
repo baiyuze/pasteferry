@@ -951,6 +951,14 @@
       }
     }
   },
+  "sendConnectingTip": "Connecting to {name}. You can send once it's connected.",
+  "@sendConnectingTip": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "sendNotReceiving": "Not receiving files",
   "sendDelivered": "Delivered",
   "sendToTitle": "Send to {name}",

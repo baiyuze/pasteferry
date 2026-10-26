@@ -1404,6 +1404,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String sendConnectingTip(String name) {
+    return '$name に接続しています。接続したら送信できます。';
+  }
+
+  @override
   String get sendNotReceiving => 'ファイルを受信しない';
 
   @override

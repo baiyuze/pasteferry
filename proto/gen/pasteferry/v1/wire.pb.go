@@ -2366,7 +2366,9 @@ type PeerFeatures struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// "send_files_v1"：能接收隔空传送。关闭了接收时不带它，改带 "send_files_off"，
 	// 对方的雷达显示「不接收文件」而不是「需要更新」
-	Features      []string `protobuf:"bytes,1,rep,name=features,proto3" json:"features,omitempty"`
+	Features []string `protobuf:"bytes,1,rep,name=features,proto3" json:"features,omitempty"`
+	// 发出这条声明的版本号（2.5.4 起）。只用来在界面上提示「需要更新到哪个版本」，不用来判断功能
+	AppVersion    string `protobuf:"bytes,2,opt,name=app_version,json=appVersion,proto3" json:"app_version,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2406,6 +2408,13 @@ func (x *PeerFeatures) GetFeatures() []string {
 		return x.Features
 	}
 	return nil
+}
+
+func (x *PeerFeatures) GetAppVersion() string {
+	if x != nil {
+		return x.AppVersion
+	}
+	return ""
 }
 
 // 连接就绪后各自发一次。只有本端能确定自己发出的数据是否走 TURN：
@@ -3661,9 +3670,11 @@ const file_pasteferry_v1_wire_proto_rawDesc = "" +
 	"sendCancel\x12<\n" +
 	"\vsend_result\x18\f \x01(\v2\x19.pasteferry.v1.SendResultH\x00R\n" +
 	"sendResultB\t\n" +
-	"\apayload\"*\n" +
+	"\apayload\"K\n" +
 	"\fPeerFeatures\x12\x1a\n" +
-	"\bfeatures\x18\x01 \x03(\tR\bfeatures\"$\n" +
+	"\bfeatures\x18\x01 \x03(\tR\bfeatures\x12\x1f\n" +
+	"\vapp_version\x18\x02 \x01(\tR\n" +
+	"appVersion\"$\n" +
 	"\bLinkInfo\x12\x18\n" +
 	"\arelayed\x18\x01 \x01(\bR\arelayed\"=\n" +
 	"\vPeerDisplay\x12\x12\n" +

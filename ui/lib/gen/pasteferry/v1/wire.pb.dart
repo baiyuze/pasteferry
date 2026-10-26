@@ -2877,9 +2877,11 @@ class PeerMessage extends $pb.GeneratedMessage {
 class PeerFeatures extends $pb.GeneratedMessage {
   factory PeerFeatures({
     $core.Iterable<$core.String>? features,
+    $core.String? appVersion,
   }) {
     final result = PeerFeatures._();
     if (features != null) result.features.addAll(features);
+    if (appVersion != null) result.appVersion = appVersion;
     return result;
   }
 
@@ -2897,6 +2899,7 @@ class PeerFeatures extends $pb.GeneratedMessage {
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: PeerFeatures.$_createMessage)
     ..pPS(1, _omitFieldNames ? '' : 'features')
+    ..aOS(2, _omitFieldNames ? '' : 'appVersion')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2925,6 +2928,16 @@ class PeerFeatures extends $pb.GeneratedMessage {
   /// 对方的雷达显示「不接收文件」而不是「需要更新」
   @$pb.TagNumber(1)
   $pb.PbList<$core.String> get features => $_getList(0);
+
+  /// 发出这条声明的版本号（2.5.4 起）。只用来在界面上提示「需要更新到哪个版本」，不用来判断功能
+  @$pb.TagNumber(2)
+  $core.String get appVersion => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set appVersion($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAppVersion() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAppVersion() => $_clearField(2);
 }
 
 /// 连接就绪后各自发一次。只有本端能确定自己发出的数据是否走 TURN：

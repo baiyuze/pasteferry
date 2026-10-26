@@ -1386,6 +1386,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String sendConnectingTip(String name) {
+    return '正在连接 $name，连上后就能发送。';
+  }
+
+  @override
   String get sendNotReceiving => '不接收文件';
 
   @override
@@ -3156,6 +3161,11 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   }
 
   @override
+  String sendConnectingTip(String name) {
+    return '正在連線 $name，連上後就能傳送。';
+  }
+
+  @override
   String get sendNotReceiving => '不接收檔案';
 
   @override
@@ -4923,6 +4933,11 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   @override
   String sendNeedsUpdateTip(String name) {
     return '$name 更新到隔空貼 2.5 或更新版本後才能接收檔案。';
+  }
+
+  @override
+  String sendConnectingTip(String name) {
+    return '正在連線 $name，連上後就能傳送。';
   }
 
   @override

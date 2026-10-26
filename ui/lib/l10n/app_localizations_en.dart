@@ -1528,6 +1528,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String sendConnectingTip(String name) {
+    return 'Connecting to $name. You can send once it\'s connected.';
+  }
+
+  @override
   String get sendNotReceiving => 'Not receiving files';
 
   @override

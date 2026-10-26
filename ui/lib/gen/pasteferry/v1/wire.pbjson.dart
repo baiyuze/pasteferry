@@ -858,12 +858,14 @@ const PeerFeatures$json = {
   '1': 'PeerFeatures',
   '2': [
     {'1': 'features', '3': 1, '4': 3, '5': 9, '10': 'features'},
+    {'1': 'app_version', '3': 2, '4': 1, '5': 9, '10': 'appVersion'},
   ],
 };
 
 /// Descriptor for `PeerFeatures`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List peerFeaturesDescriptor = $convert
-    .base64Decode('CgxQZWVyRmVhdHVyZXMSGgoIZmVhdHVyZXMYASADKAlSCGZlYXR1cmVz');
+final $typed_data.Uint8List peerFeaturesDescriptor = $convert.base64Decode(
+    'CgxQZWVyRmVhdHVyZXMSGgoIZmVhdHVyZXMYASADKAlSCGZlYXR1cmVzEh8KC2FwcF92ZXJzaW'
+    '9uGAIgASgJUgphcHBWZXJzaW9u');
 
 @$core.Deprecated('Use linkInfoDescriptor instead')
 const LinkInfo$json = {

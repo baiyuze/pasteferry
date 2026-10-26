@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/netip"
 	"runtime"
+	"sort"
 	"sync"
 	"time"
 
@@ -89,9 +90,19 @@ type Manager struct {
 	// serverOnline 是信令服务器报告的在线状态；局域网的在线状态在 lan 里
 	serverOnline map[string]bool
 	conn         map[string]p2p.ConnState // P2P 连接状态（直连/中转）
-	// features 是对端在 PeerFeatures 里声明的功能，见 wire.proto。没收到过的设备没有条目
+	// features 是对端在 PeerFeatures 里声明的功能，见 wire.proto。没收到过的设备没有条目。
+	// 启动时从数据库读回上次的声明，所以重启后不必等连上就知道对方支持什么
 	features map[string]map[string]bool
-	pending  map[string]*pendingPair // session -> 待确认配对
+	// peerVersion 是对端声明里带的版本号（2.5.4 起），旧版本没有
+	peerVersion map[string]string
+	// declared 记下本次连接里对端是否发过声明；legacy 是连上 legacyWait 后仍没声明、判定为旧版本的设备
+	declared map[string]bool
+	legacy   map[string]bool
+	// appVersion 是本机的版本号，随功能声明发给对端
+	appVersion string
+	// noFeatures 让测试模拟不发功能声明的旧版本
+	noFeatures bool
+	pending    map[string]*pendingPair // session -> 待确认配对
 	// stashed 暂存配对确认前到达的信令，按对端 device_id 归集
 	stashed map[string][]*pb.SignalMessage
 	active  *activeCode
@@ -124,7 +135,13 @@ type Options struct {
 	// LANPort / LANDiscovery 供测试替换局域网通道的端口和发现方式，默认 8788 与 mDNS
 	LANPort      int
 	LANDiscovery lan.Discovery
+	// AppVersion 是本机的版本号，随功能声明发给对端，对端用它提示「需要更新到哪个版本」
+	AppVersion string
 }
+
+// legacyWait 是连上以后等对端功能声明的时间。旧版本（2.5.0 之前）从不发声明，
+// 等这么久还没有就判定为旧版本；在此之前只能说「还不知道」
+var legacyWait = 5 * time.Second
 
 func NewManager(opts Options) (*Manager, error) {
 	log := opts.Logger
@@ -145,6 +162,10 @@ func NewManager(opts Options) (*Manager, error) {
 		serverOnline:    make(map[string]bool),
 		conn:            make(map[string]p2p.ConnState),
 		features:        make(map[string]map[string]bool),
+		peerVersion:     make(map[string]string),
+		declared:        make(map[string]bool),
+		legacy:          make(map[string]bool),
+		appVersion:      opts.AppVersion,
 		pending:         make(map[string]*pendingPair),
 		stashed:         make(map[string][]*pb.SignalMessage),
 	}
@@ -155,6 +176,10 @@ func NewManager(opts Options) (*Manager, error) {
 	}
 	for _, d := range devices {
 		m.known[d.ID] = d
+		if len(d.Features) > 0 {
+			m.features[d.ID] = featureSet(d.Features)
+			m.peerVersion[d.ID] = d.AppVersion
+		}
 	}
 
 	m.gateway, err = gateway.NewClient(opts.Identity, gateway.OfficialBaseURL, func(u gateway.Usage) {
@@ -364,7 +389,18 @@ func (m *Manager) featuresMessage() *pb.PeerMessage {
 		f = []string{FeatureSendFilesOff}
 	}
 	f = append(f, FeatureSendFilesTCP)
-	return &pb.PeerMessage{Payload: &pb.PeerMessage_Features{Features: &pb.PeerFeatures{Features: f}}}
+	return &pb.PeerMessage{Payload: &pb.PeerMessage_Features{Features: &pb.PeerFeatures{Features: f, AppVersion: m.appVersion}}}
+}
+
+func featureSet(names []string) map[string]bool {
+	set := make(map[string]bool, len(names))
+	for i, name := range names {
+		if i >= 64 || len(name) > 64 {
+			break
+		}
+		set[name] = true
+	}
+	return set
 }
 
 // BroadcastFeatures 在本机的功能开关变了以后（比如关掉了接收文件）告诉所有连着的设备。
@@ -378,19 +414,55 @@ func (m *Manager) BroadcastFeatures() {
 }
 
 func (m *Manager) updatePeerFeatures(id string, f *pb.PeerFeatures) {
-	set := make(map[string]bool, len(f.GetFeatures()))
-	for i, name := range f.GetFeatures() {
-		if i >= 64 || len(name) > 64 {
-			break
-		}
-		set[name] = true
+	set := featureSet(f.GetFeatures())
+	version := f.GetAppVersion()
+	if len(version) > 32 {
+		version = version[:32]
 	}
 	m.mu.Lock()
 	_, ok := m.known[id]
 	if ok {
 		m.features[id] = set
+		m.peerVersion[id] = version
+		m.declared[id] = true
+		delete(m.legacy, id)
 	}
 	m.mu.Unlock()
+	if !ok {
+		return
+	}
+	names := make([]string, 0, len(set))
+	for name := range set {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	if err := m.store.SetDeviceFeatures(id, names, version); err != nil {
+		m.log.Warn("保存对端功能声明失败", "device", id, "err", err)
+	}
+	if d, ok := m.device(id); ok {
+		m.notify(d)
+	}
+}
+
+// checkLegacy 在连上 legacyWait 之后检查对端发过功能声明没有：
+// 还连着却一直没发，说明是不认识声明的旧版本。
+func (m *Manager) checkLegacy(id string) {
+	m.mu.Lock()
+	_, ok := m.known[id]
+	isLegacy := ok && connected(m.conn[id]) && !m.declared[id]
+	if isLegacy {
+		m.legacy[id] = true
+		// 上次存下的声明不再可信（对方装回了旧版本）
+		delete(m.features, id)
+		delete(m.peerVersion, id)
+	}
+	m.mu.Unlock()
+	if !isLegacy {
+		return
+	}
+	if err := m.store.SetDeviceFeatures(id, nil, ""); err != nil {
+		m.log.Warn("清除对端功能声明失败", "device", id, "err", err)
+	}
 	if d, ok := m.device(id); ok {
 		m.notify(d)
 	}
@@ -645,11 +717,17 @@ func (m *Manager) handleP2PState(deviceID string, state p2p.ConnState) {
 	m.mu.Lock()
 	prev := m.conn[deviceID]
 	m.conn[deviceID] = state
+	if connected(state) && !connected(prev) {
+		m.declared[deviceID] = false
+	}
 	m.mu.Unlock()
 	if connected(state) && !connected(prev) {
 		cfg := m.loadConfig()
 		_ = m.p2p.Send(deviceID, &pb.PeerMessage{Payload: &pb.PeerMessage_Display{Display: &pb.PeerDisplay{Name: cfg.DeviceName, Platform: runtime.GOOS}}})
-		_ = m.p2p.Send(deviceID, m.featuresMessage())
+		if !m.noFeatures {
+			_ = m.p2p.Send(deviceID, m.featuresMessage())
+		}
+		time.AfterFunc(legacyWait, func() { m.checkLegacy(deviceID) })
 	}
 
 	m.log.Info("P2P 连接状态", "device", deviceID, "state", state)
@@ -1311,6 +1389,7 @@ func (m *Manager) toProtoLocked(d store.Device, online bool, session string) *pb
 		conn = m.conn[d.ID].Proto()
 	}
 	f := m.features[d.ID]
+	_, declared := m.features[d.ID]
 	return &pb.Device{
 		Id:                   d.ID,
 		Name:                 d.Name,
@@ -1323,6 +1402,8 @@ func (m *Manager) toProtoLocked(d store.Device, online bool, session string) *pb
 		ReceivesFiles:        f[FeatureSendFiles] || f[FeatureSendFilesOff],
 		ReceiveDisabled:      f[FeatureSendFilesOff],
 		LanReachable:         online && m.lan.Reachable(d.ID),
+		FeaturesKnown:        declared || m.legacy[d.ID],
+		AppVersion:           m.peerVersion[d.ID],
 	}
 }
 

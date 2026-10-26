@@ -288,6 +288,7 @@ func run(dataDir string) error {
 		Store:      db,
 		LoadConfig: loadCfg,
 		StatePath:  filepath.Join(paths.Root, "egress.json"),
+		AppVersion: version,
 		OnDeviceChanged: func(d *pb.Device) {
 			hub.Publish(rpc.EventDeviceChanged(d))
 		},

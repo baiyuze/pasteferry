@@ -273,6 +273,8 @@ message PeerFeatures {
   // "send_files_v1"：能接收隔空传送。关闭了接收时不带它，改带 "send_files_off"，
   // 对方的雷达显示「不接收文件」而不是「需要更新」
   repeated string features = 1;
+  // 发出这条声明的版本号（2.5.4 起）。只用来在界面上提示「需要更新到哪个版本」，不用来判断功能
+  string app_version = 2;
 }
 
 // 连接就绪后各自发一次。只有本端能确定自己发出的数据是否走 TURN：

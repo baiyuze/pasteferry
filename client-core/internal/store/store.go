@@ -115,6 +115,10 @@ type Device struct {
 	Platform  string
 	PublicKey []byte
 	PairedAt  time.Time
+	// Features 是对方最近一次声明的功能（PeerFeatures），AppVersion 是它当时的版本号。
+	// 存下来是为了重启后不必等连上就知道对方支持什么；空表示还没收到过
+	Features   []string
+	AppVersion string
 }
 
 type Store struct{ db *sql.DB }
@@ -252,6 +256,14 @@ CREATE TABLE IF NOT EXISTS meta (
 CREATE INDEX IF NOT EXISTS idx_clips_source   ON clips(source_clip_id) WHERE source_clip_id <> '';
 CREATE INDEX IF NOT EXISTS idx_clips_favorite ON clips(favorite, favorited_at DESC);`); err != nil {
 		return fmt.Errorf("建索引: %w", err)
+	}
+	for _, col := range []struct{ name, decl string }{
+		{"features", "TEXT NOT NULL DEFAULT ''"},
+		{"app_version", "TEXT NOT NULL DEFAULT ''"},
+	} {
+		if err := s.addColumnIfMissing("devices", col.name, col.decl); err != nil {
+			return err
+		}
 	}
 	if err := s.migrateTransfers(); err != nil {
 		return err
@@ -698,7 +710,7 @@ ON CONFLICT(id) DO UPDATE SET
 
 func (s *Store) ListDevices() ([]Device, error) {
 	rows, err := s.db.Query(`
-SELECT id, name, platform, public_key, paired_at FROM devices ORDER BY paired_at`)
+SELECT id, name, platform, public_key, paired_at, features, app_version FROM devices ORDER BY paired_at`)
 	if err != nil {
 		return nil, err
 	}
@@ -707,13 +719,24 @@ SELECT id, name, platform, public_key, paired_at FROM devices ORDER BY paired_at
 	for rows.Next() {
 		var d Device
 		var paired int64
-		if err := rows.Scan(&d.ID, &d.Name, &d.Platform, &d.PublicKey, &paired); err != nil {
+		var features string
+		if err := rows.Scan(&d.ID, &d.Name, &d.Platform, &d.PublicKey, &paired, &features, &d.AppVersion); err != nil {
 			return nil, err
 		}
 		d.PairedAt = time.Unix(paired, 0)
+		if features != "" {
+			d.Features = strings.Split(features, ",")
+		}
 		out = append(out, d)
 	}
 	return out, rows.Err()
+}
+
+// SetDeviceFeatures 记下对方最近一次声明的功能和版本号。设备不存在时什么也不做
+func (s *Store) SetDeviceFeatures(id string, features []string, appVersion string) error {
+	_, err := s.db.Exec(`UPDATE devices SET features=?, app_version=? WHERE id=?`,
+		strings.Join(features, ","), appVersion, id)
+	return err
 }
 
 func (s *Store) DeleteDevice(id string) error {

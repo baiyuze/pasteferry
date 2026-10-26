@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/http/httptest"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -422,5 +423,91 @@ func TestRefreshPeerFeatures(t *testing.T) {
 	waitFor(t, "刷新接收开关", func() bool { ok, off := a.m.SendFilesSupport(b.id()); return ok && off })
 	if !a.m.HasFeature(b.id(), FeatureSendFilesTCP) {
 		t.Fatal("快速通道能力丢失")
+	}
+}
+
+func peerDevice(t *testing.T, d *device, id string) *pb.Device {
+	t.Helper()
+	dev, ok := d.m.device(id)
+	if !ok {
+		t.Fatalf("%s 没有设备 %s", d.name, id)
+	}
+	return dev
+}
+
+// 没连上的设备只能说「还不知道」：在线（服务器或局域网报告）但 P2P 没通时，
+// 不能因为没收到声明就判定为旧版本。
+func TestFeaturesUnknownWhileNotConnected(t *testing.T) {
+	a := newDevice(t, "a", nil, lanOnly())
+	peer := store.Device{ID: "peer", Name: "peer", PublicKey: make([]byte, 32), PairedAt: time.Now()}
+	if err := a.m.store.PutDevice(peer); err != nil {
+		t.Fatal(err)
+	}
+	a.m.mu.Lock()
+	a.m.known[peer.ID] = peer
+	a.m.serverOnline[peer.ID] = true
+	a.m.mu.Unlock()
+	a.m.checkLegacy(peer.ID)
+	dev := peerDevice(t, a, peer.ID)
+	if !dev.GetOnline() || dev.GetFeaturesKnown() || dev.GetReceivesFiles() {
+		t.Fatalf("没连上就判定了功能: %v", dev)
+	}
+}
+
+// 收到声明后知道对方能收文件和它的版本号，并存进数据库；重启后不必等连上就知道。
+func TestFeaturesDeclaredAndRemembered(t *testing.T) {
+	network := lan.NewMemoryNetwork()
+	a, b := newDevice(t, "a", network, lanOnly()), newDevice(t, "b", network, lanOnly())
+	b.m.appVersion = "2.5.4"
+	waitLANUp(t, a, b)
+	pairDevices(t, a, b, "")
+	waitDirect(t, a, b)
+	waitFor(t, "a 收到 b 的声明", func() bool { return peerDevice(t, a, b.id()).GetFeaturesKnown() })
+	dev := peerDevice(t, a, b.id())
+	if !dev.GetReceivesFiles() || dev.GetAppVersion() != "2.5.4" {
+		t.Fatalf("声明不对: %v", dev)
+	}
+	devices, err := a.m.store.ListDevices()
+	if err != nil || len(devices) != 1 {
+		t.Fatalf("读设备: %v %v", devices, err)
+	}
+	got := devices[0]
+	if got.AppVersion != "2.5.4" || !slices.Contains(got.Features, FeatureSendFiles) {
+		t.Fatalf("没存下声明: %+v", got)
+	}
+
+	// 用同一个数据库再建一个 Manager，相当于重启：还没连上就知道对方的功能
+	restarted, err := NewManager(Options{
+		Identity:   a.m.identity,
+		Store:      a.m.store,
+		Logger:     slog.New(slog.NewTextHandler(io.Discard, nil)),
+		LoadConfig: lanOnly,
+		StatePath:  filepath.Join(t.TempDir(), "egress.json"),
+		LANPort:    -1,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { restarted.P2P().Close() })
+	dev, _ = restarted.device(b.id())
+	if !dev.GetFeaturesKnown() || !dev.GetReceivesFiles() || dev.GetAppVersion() != "2.5.4" {
+		t.Fatalf("重启后没读回声明: %v", dev)
+	}
+}
+
+// 旧版本从不发声明：连上 legacyWait 后仍没有，才判定为旧版本，并清掉上次存下的声明。
+func TestLegacyPeerAfterWait(t *testing.T) {
+	old := legacyWait
+	legacyWait = 300 * time.Millisecond
+	t.Cleanup(func() { legacyWait = old })
+	network := lan.NewMemoryNetwork()
+	a, b := newDevice(t, "a", network, lanOnly()), newDevice(t, "b", network, lanOnly())
+	b.m.noFeatures = true
+	waitLANUp(t, a, b)
+	pairDevices(t, a, b, "")
+	waitDirect(t, a, b)
+	waitFor(t, "判定为旧版本", func() bool { return peerDevice(t, a, b.id()).GetFeaturesKnown() })
+	if dev := peerDevice(t, a, b.id()); dev.GetReceivesFiles() || dev.GetAppVersion() != "" {
+		t.Fatalf("旧版本不该能收文件: %v", dev)
 	}
 }
