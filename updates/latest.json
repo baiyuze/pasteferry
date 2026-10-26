@@ -1,65 +1,111 @@
 {
   "schema": 1,
-  "latest": "2.5.3",
-  "date": "2026-10-23",
+  "latest": "2.5.4",
+  "date": "2026-10-26",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.3/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.4/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.3/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.4/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 25969878,
-      "sha256": "4dae362fab7da5f574f783788130bbc3aebd3c699f351410709b0fd301ef08f2"
+      "size": 25969389,
+      "sha256": "9a5077bfabf7c9d08e5a2d1867204e0f9c61704718dfce8db483c81b95b3c9b5"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 28064920,
-      "sha256": "dadfe321d0cdab903d6b5dd4680f907e772ec1e523a9cbb363801aee87d60ec0"
+      "size": 28069053,
+      "sha256": "bb7fc15c7fac3776cacd24fffcd81f64fd19f884c3b3f41c8d3492684037e89d"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 52085655,
-      "sha256": "b149f266ef491973d27e19266d39784232b56546ab608d35ff043af46d90df53"
+      "size": 52075554,
+      "sha256": "c06323790c10a7a4e80f315cd05acf8b43ba527f312bc8b8b0655b5a29d3167d"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 23357315,
-      "sha256": "81dd4c725855c342066b5df80ef37506be772bf9df0ff8db3d0d468cc21f9e88"
+      "size": 23370275,
+      "sha256": "8e256033af7fe498e40bfd98e602be8ce734cca8612dbcf0c91384e5a2ea4a81"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 29476914,
-      "sha256": "463c810eaa6b398e3b3ae29b6697d286d00a8f9191061bb585177e4fffbca453"
+      "size": 29485872,
+      "sha256": "4976f5422a8b82716e82fc21a286019460ae9a6b688d6748f4aa7883a2f84a75"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22527622,
-      "sha256": "1d0f8234a2f9ffec57af25bf3ffd9d74f3a01cd94826510b6db3e6b83e61df3f"
+      "size": 22549038,
+      "sha256": "829e74c54bb5aca5007e2c2a5d84beb763d3b82f63664525a57ee7f1332f809a"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 20957426,
-      "sha256": "ae90bb2367778ddb89a32b31c509025619190248c068dfaf0faa20d5f76639cc"
+      "size": 20974908,
+      "sha256": "d5fb5e552780061328c666102cbb318d9bab35f9ca99be00e9ea275cda82ef37"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 27276999,
-      "sha256": "9d9e1dc151d76802e64292073326dd7afea3994f2fd1a4db21d639ff5f01d2a0"
+      "size": 27292359,
+      "sha256": "3654d31f9ef29c1970a81d382921a9a0a4398bc0465821f092044ef85d2402c6"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25533019,
-      "sha256": "d3690cdc7fa35ca20fb5a36b274e83f0b808dfd6b909319feb56e9cf50ea5ecf"
+      "size": 25553779,
+      "sha256": "34528a04b77d5e332d16906d14d10dfacbed2255520886009e8fa99ef4b1a857"
     }
   },
   "releases": [
+    {
+      "version": "2.5.4",
+      "date": "2026-10-26",
+      "notes": {
+        "en": {
+          "changes": [
+            "The official service is now called Service in the app, on the website and in the guides."
+          ],
+          "fixes": [
+            "In Send Files, a paired computer that was online but not yet connected could show as needing an update, and kept doing so when no connection could be made. It now shows Connecting… until its capabilities are known (click it to reconnect), is treated as outdated only when it stays connected without announcing them, and its last known capabilities are kept across restarts."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "「官方服务」改名为「服务」，App、官网和使用指南里的叫法都已更新。"
+          ],
+          "fixes": [
+            "修复隔空传送中在线但还没连上的电脑显示「需要更新」、连不上时一直不消失的问题。现在还不知道对方能否接收时显示「正在连接…」，点它会重新连接；只有连上后一直没有报告功能的旧版本才显示「需要更新」；对方上次报告的功能在重启后仍然保留。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "「公式サービス」を「サービス」に改名しました。アプリ、Web サイト、ガイドの表記も更新しています。"
+          ],
+          "fixes": [
+            "ファイル送信で、オンラインだがまだ接続していないパソコンが「アップデートが必要」と表示され、接続できない間はそのままになる問題を修正しました。対応状況がわかるまでは「接続中…」と表示し（クリックで再接続）、接続後も機能を通知しない旧バージョンだけを「アップデートが必要」とします。最後に確認した対応状況は再起動後も保持します。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "「官方服務」改名為「服務」，App、官網和使用指南裡的名稱都已更新。"
+          ],
+          "fixes": [
+            "修正隔空傳送中在線但還沒連上的電腦顯示「需要更新」、連不上時一直不消失的問題。現在還不知道對方能否接收時顯示「正在連線…」，點它會重新連線；只有連上後一直沒有回報功能的舊版本才顯示「需要更新」；對方上次回報的功能在重新啟動後仍然保留。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "「官方服務」改名為「服務」，App、官網和使用指南裏的名稱都已更新。"
+          ],
+          "fixes": [
+            "修正隔空傳送中在線但還沒連上的電腦顯示「需要更新」、連不上時一直不消失的問題。現在還不知道對方能否接收時顯示「正在連線…」，按它會重新連線；只有連上後一直沒有回報功能的舊版本才顯示「需要更新」；對方上次回報的功能在重新啟動後仍然保留。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.5.3",
       "date": "2026-10-23",
