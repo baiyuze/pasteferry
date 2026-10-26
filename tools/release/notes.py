@@ -11,6 +11,44 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.6.0',
+ 'date': '2026-10-26',
+ 'changes': [('Send files to contacts: add someone else\'s computer once with a contact code, no pairing needed, then drop files '
+              'or images on their avatar with an optional note of up to 200 characters. Each batch arrives only after they '
+              'accept it (contacts they trust can be accepted automatically), and contacts never see your clipboard, history '
+              'or devices. On different networks, both sides turn on Service.',
+              '给好友发文件：别人的电脑不用配对，用好友码加一次好友，之后把文件或图片拖到对方头像上就能发，可以附 200 字以内的备注。每批文件都要对方接受才会传（常来往的好友可以设成自动接收）；好友看不到你的剪贴板、复制记录和设备。不在同一个网络时，两边都打开「服务」即可。',
+              '連絡先へのファイル送信：ほかの人のパソコンはペアリング不要で、連絡先コードで一度追加すれば、ファイルや画像を相手のアイコンにドロップして送れます。200 文字までのメモも添えられます。毎回相手が受け入れてから転送され（よくやり取りする相手は自動で受け入れ可能）、連絡先にクリップボード、履歴、デバイスが見えることはありません。別のネットワークでは双方でサービスをオンにします。',
+              '給好友傳檔案：別人的電腦不用配對，用好友碼加一次好友，之後把檔案或圖片拖到對方頭像上就能傳，可以附 200 字以內的備註。每批檔案都要對方接受才會傳（常往來的好友可以設成自動接收）；好友看不到你的剪貼簿、複製記錄和裝置。不在同一個網路時，兩邊都打開「服務」即可。',
+              '給好友傳檔案：別人的電腦不用配對，用好友碼加一次好友，之後把檔案或圖片拖到對方頭像上就能傳，可以附 200 字以內的備註。每批檔案都要對方接受才會傳（常來往的好友可以設成自動接收）；好友看不到你的剪貼簿、複製記錄和裝置。不在同一個網絡時，兩邊都開啟「服務」即可。'),
+             ('Choose who can send you files: no one, contacts only (the default), or everyone on the local network, '
+              'which switches back to contacts only after 10 minutes.',
+              '可以选择谁能给你发文件：均不允许、仅限好友（默认）或所有人；「所有人」只在局域网里有效，10 分钟后自动回到仅限好友。',
+              'ファイルを受け取る相手を選べます：受け取らない、連絡先のみ（初期設定）、すべての人。「すべての人」はローカルネットワーク内だけで、10 分後に連絡先のみに戻ります。',
+              '可以選擇誰能傳檔案給你：均不允許、僅限好友（預設）或所有人；「所有人」只在區域網路裡有效，10 分鐘後自動回到僅限好友。',
+              '可以選擇誰能傳檔案給你：均不允許、僅限好友（預設）或所有人；「所有人」只在區域網絡裏有效，10 分鐘後自動回到僅限好友。'),
+             ('Set a display name and avatar for your contacts. Each contact has a page with their status, '
+              'automatic accepting and every transfer between you.',
+              '可以设置给好友看的显示名和头像。每个好友有自己的页面：状态、自动接收开关，以及你们之间的全部传输记录。',
+              '連絡先に見せる表示名とアイコンを設定できます。連絡先ごとのページで、状態、自動受け入れ、やり取りしたすべての転送を確認できます。',
+              '可以設定給好友看的顯示名稱和頭像。每個好友有自己的頁面：狀態、自動接收開關，以及你們之間的全部傳輸記錄。',
+              '可以設定給好友看的顯示名稱和頭像。每個好友有自己的頁面：狀態、自動接收開關，以及你們之間的全部傳輸記錄。'),
+             ('Paste copied files or images into the Send dialog with Cmd+V or Ctrl+V.',
+              '在发送窗口里按 ⌘V 或 Ctrl+V，可以直接粘贴复制的文件或图片。',
+              '送信ダイアログで Cmd+V または Ctrl+V を押すと、コピーしたファイルや画像を貼り付けられます。',
+              '在傳送視窗裡按 ⌘V 或 Ctrl+V，可以直接貼上複製的檔案或圖片。',
+              '在傳送視窗裏按 ⌘V 或 Ctrl+V，可以直接貼上複製的檔案或圖片。'),
+             ('Settings now open on a short list of categories (General, Connection, Sync, Quick paste, Send Files, '
+              'Storage, About), each with its own page, instead of one long page.',
+              '设置改为类别列表（通用、连接、同步、快捷粘贴、隔空传送、存储、关于），点进去是各自的页面，不用再翻一整页长列表。',
+              '設定はカテゴリの一覧（一般、接続、同期、クイックペースト、ファイル送信、ストレージ、このアプリについて）になり、それぞれのページに分かれました。長い 1 ページをスクロールする必要はありません。',
+              '設定改為類別列表（一般、連線、同步、快速貼上、隔空傳送、儲存空間、關於），點進去是各自的頁面，不用再捲動一整頁長列表。',
+              '設定改為類別列表（一般、連接、同步、快速貼上、隔空傳送、儲存空間、關於），按進去是各自的頁面，不用再捲動一整頁長列表。')],
+ 'fixes': [('Notifications showed files under 1 MB as 0.0 MB; small sizes are now shown in KB or bytes.',
+            '通知里不到 1 MB 的文件显示成 0.0 MB，现在按 KB 或字节显示。',
+            '通知で 1 MB 未満のファイルが 0.0 MB と表示されていた問題を修正し、KB またはバイトで表示します。',
+            '通知中不到 1 MB 的檔案顯示成 0.0 MB，現在按 KB 或位元組顯示。',
+            '通知中不到 1 MB 的檔案顯示成 0.0 MB，現在按 KB 或位元組顯示。')]},
 {'version': '2.5.4',
  'date': '2026-10-26',
  'changes': [('The official service is now called Service in the app, on the website and in the guides.',

@@ -1,5 +1,32 @@
 # 更新记录 / Changelog
 
+## 2.6.0 — 2026-10-26
+
+Send files to other people's computers: add them as a contact once, then
+drop files on their avatar. Settings are now split into categories.
+
+### Changes
+
+- Send files to contacts: add someone else's computer once with a contact code, no pairing needed, then drop files or images on their avatar with an optional note of up to 200 characters. Each batch arrives only after they accept it (contacts they trust can be accepted automatically), and contacts never see your clipboard, history or devices. On different networks, both sides turn on Service.
+- Choose who can send you files: no one, contacts only (the default), or everyone on the local network, which switches back to contacts only after 10 minutes.
+- Set a display name and avatar for your contacts. Each contact has a page with their status, automatic accepting and every transfer between you.
+- Paste copied files or images into the Send dialog with Cmd+V or Ctrl+V.
+- Settings now open on a short list of categories (General, Connection, Sync, Quick paste, Send Files, Storage, About), each with its own page, instead of one long page.
+
+### Fixes
+
+- Notifications showed files under 1 MB as 0.0 MB; small sizes are now shown in KB or bytes.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: update both computers to use contacts;
+  a 2.5 computer reports that a contact code is not a valid pairing code.
+  Pairings, history and settings are preserved.
+- **Server**: no update needed.
+- The device-to-device protocol between paired devices is unchanged and
+  compatible with 2.5.x; contacts are a new addition that needs 2.6 on
+  both sides.
+
 ## 2.5.4 — 2026-10-26
 
 Send Files no longer asks you to update a computer that is only still
