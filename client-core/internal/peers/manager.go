@@ -173,7 +173,7 @@ type Options struct {
 	AppVersion string
 
 	// 好友（2.6.0）。Card 是发给好友的本机名片；Avatar 是本机头像（JPEG，没有时为空）；
-	// SaveAvatar 把好友发来的头像重新编码后存下，返回存放的路径
+	// SaveAvatar 把好友发来的头像重新编码后存下，返回存放的路径；jpeg 为空时删掉存着的
 	Card       func() *pb.FriendCard
 	Avatar     func() []byte
 	SaveAvatar func(deviceID string, jpeg []byte) (string, error)
@@ -1025,8 +1025,13 @@ func (m *Manager) acceptLANPair(peer lan.PeerInfo) bool {
 		m.mu.Unlock()
 		return false
 	}
-	a.used = true
 	intent := a.intent
+	if intent == lan.IntentFriend && m.roleLocked(peer.ID) == RoleSelf {
+		// 自己配对的设备来加好友：照常回复，由对方报「已经是你的设备」，本机不弹确认
+		m.mu.Unlock()
+		return true
+	}
+	a.used = true
 	m.mu.Unlock()
 
 	// 局域网里用途不一致的请求已经在 lan 里回绝了，这里两边一致

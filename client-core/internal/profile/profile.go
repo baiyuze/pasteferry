@@ -172,6 +172,14 @@ func (p *Profile) SaveFriendAvatar(deviceID string, jpeg []byte) (string, error)
 	if len(jpeg) > MaxAvatar || strings.ContainsAny(deviceID, `/\.`) || deviceID == "" {
 		return "", ErrNotImage
 	}
+	path := filepath.Join(p.friendsDir(), deviceID+".jpg")
+	if len(jpeg) == 0 {
+		// 对方换回默认头像或者不再是好友：删掉存着的
+		if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
+			return "", err
+		}
+		return "", nil
+	}
 	img, err := decodeLimited(jpeg)
 	if err != nil {
 		return "", err
@@ -182,7 +190,6 @@ func (p *Profile) SaveFriendAvatar(deviceID string, jpeg []byte) (string, error)
 	if err != nil {
 		return "", err
 	}
-	path := filepath.Join(p.friendsDir(), deviceID+".jpg")
 	if err := writeAtomic(path, out); err != nil {
 		return "", err
 	}

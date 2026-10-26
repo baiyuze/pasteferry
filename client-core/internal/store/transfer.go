@@ -67,8 +67,8 @@ type Transfer struct {
 	Shortfall  int64
 	Seen       bool
 	Relayed    bool
-	AllowRelay bool // 发出的：用户已同意经官方服务中转
-	Attempt    int  // 发出的：已经发起过几次
+	AllowRelay bool  // 发出的：用户已同意经官方服务中转
+	Attempt    int   // 发出的：已经发起过几次
 	Renamed    int64 // 收到的：名字在本机改过的文件数
 	// PeerRole 是对方的角色，旧记录为空（都是自己的设备）
 	PeerRole string

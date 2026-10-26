@@ -102,6 +102,12 @@ func TestFriendAvatarAndThumbnail(t *testing.T) {
 	if _, err := p.SaveFriendAvatar("abc", []byte("坏数据")); err == nil {
 		t.Fatal("坏数据应当拒绝")
 	}
+	if _, err := p.SaveFriendAvatar("abc", nil); err != nil {
+		t.Fatal(err)
+	}
+	if p.FriendAvatar(path) != nil {
+		t.Fatal("空头像应当删掉存着的")
+	}
 
 	img := filepath.Join(t.TempDir(), "照片.png")
 	if err := os.WriteFile(img, testImage(1000, 500), 0o600); err != nil {

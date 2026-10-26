@@ -10,6 +10,31 @@ import (
 	"time"
 )
 
+func TestEffectiveReceiveFrom(t *testing.T) {
+	now := time.Unix(1_800_000_000, 0)
+	cases := []struct {
+		c    Config
+		want string
+	}{
+		{Config{}, ReceiveFromFriends},
+		{Config{ReceiveFrom: ReceiveFromOff}, ReceiveFromOff},
+		{Config{ReceiveFrom: ReceiveFromEveryone, EveryoneUntil: now.Add(time.Minute).Unix()}, ReceiveFromEveryone},
+		// 过了 10 分钟回到「仅限好友」；没有截止时间的「所有人」也不算
+		{Config{ReceiveFrom: ReceiveFromEveryone, EveryoneUntil: now.Unix()}, ReceiveFromFriends},
+		{Config{ReceiveFrom: ReceiveFromEveryone}, ReceiveFromFriends},
+	}
+	for i, tc := range cases {
+		if got := tc.c.EffectiveReceiveFrom(now); got != tc.want {
+			t.Errorf("#%d: %q，应当是 %q", i, got, tc.want)
+		}
+	}
+	c := Config{ReceiveFrom: "anyone", EveryoneUntil: now.Unix()}
+	c.Validate()
+	if c.ReceiveFrom != "" || c.EveryoneUntil != 0 {
+		t.Fatalf("不认识的值应当清掉：%q %d", c.ReceiveFrom, c.EveryoneUntil)
+	}
+}
+
 func TestLoadCreatesDefaultsWhenMissing(t *testing.T) {
 	p := PathsUnder(t.TempDir())
 	cfg, err := Load(p)

@@ -302,6 +302,7 @@ func (m *Manager) updateFriendCard(id string, card *pb.FriendCard) {
 	}
 	c.Service, c.ServerHash = card.GetService(), card.GetCustomServerHash()
 	wantAvatar := len(card.GetAvatarHash()) > 0 && !bytes.Equal(card.GetAvatarHash(), c.AvatarHash)
+	dropAvatar := len(card.GetAvatarHash()) == 0 && c.AvatarPath != ""
 	if len(card.GetAvatarHash()) == 0 {
 		c.AvatarHash, c.AvatarPath = nil, ""
 	}
@@ -310,11 +311,24 @@ func (m *Manager) updateFriendCard(id string, card *pb.FriendCard) {
 	if err := m.store.PutContact(c); err != nil {
 		m.log.Warn("保存好友名片失败", "device", id, "err", err)
 	}
+	if dropAvatar {
+		m.dropAvatar(id)
+	}
 	if wantAvatar {
 		_ = m.p2p.Send(id, &pb.PeerMessage{Payload: &pb.PeerMessage_AvatarRequest{
 			AvatarRequest: &pb.AvatarRequest{AvatarHash: card.GetAvatarHash()}}})
 	}
 	m.notifyFriend(id)
+}
+
+// dropAvatar 删掉存着的好友头像
+func (m *Manager) dropAvatar(id string) {
+	if m.saveAvatar == nil {
+		return
+	}
+	if _, err := m.saveAvatar(id, nil); err != nil {
+		m.log.Warn("删除好友头像失败", "device", id, "err", err)
+	}
 }
 
 func (m *Manager) sendAvatar(id string, want []byte) {
@@ -883,6 +897,7 @@ func (m *Manager) RemoveFriend(ctx context.Context, id string) error {
 	if err := m.store.DeleteContact(id); err != nil {
 		return err
 	}
+	m.dropAvatar(id)
 	_ = m.store.PutPendingNotice(id, c.PublicKey, time.Now())
 	m.p2p.Disconnect(id)
 	m.mu.Lock()
@@ -956,6 +971,7 @@ func (m *Manager) handleFriendRemove(from string, r *pb.FriendRemove) {
 	m.mu.Unlock()
 	if isFriend {
 		_ = m.store.DeleteContact(from)
+		m.dropAvatar(from)
 		m.p2p.Disconnect(from)
 		m.mu.Lock()
 		delete(m.conn, from)
