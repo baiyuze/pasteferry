@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Official access: no server to host — PasteFerry</title>
-  <meta name="description" content="One switch helps your home and office computers find each other. Direct connections first, automatic encrypted relay if needed. No cloud VM or server address to configure.">
+  <title>Service: sync between home and the office without your own server — PasteFerry</title>
+  <meta name="description" content="Turn on one switch and your home and office computers can find each other. They connect directly when they can, and through our server when they can&#x27;t. No cloud VM to rent, no address to enter.">
   <link rel="canonical" href="https://pasteferry.cc/en/official/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/official/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/official/">
@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PasteFerry">
-  <meta property="og:title" content="Official access: no server to host — PasteFerry">
-  <meta property="og:description" content="One switch helps your home and office computers find each other. Direct connections first, automatic encrypted relay if needed. No cloud VM or server address to configure.">
+  <meta property="og:title" content="Service: sync between home and the office without your own server — PasteFerry">
+  <meta property="og:description" content="Turn on one switch and your home and office computers can find each other. They connect directly when they can, and through our server when they can&#x27;t. No cloud VM to rent, no address to enter.">
   <meta property="og:url" content="https://pasteferry.cc/en/official/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:locale" content="en_US">
@@ -76,26 +76,26 @@
 
   <main id="main">
     <section class="hero guide-hero"><div class="wrap">
-      <p class="crumb"><a href="../../en/">PasteFerry</a> / Official service</p>
-      <h1 class="display">Across networks, no hosting</h1>
-      <p class="lede">Install 2.1.0 or later on every computer, enable official access in Settings, then pair. Signaling introduces the devices; content travels directly whenever possible and uses encrypted relay only after direct failure.</p>
-      <a class="button" href="../../en/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download the latest app</a>
+      <p class="crumb"><a href="../../en/">PasteFerry</a> / Service</p>
+      <h1 class="display">Works between home and office</h1>
+      <p class="lede">When two computers aren&#x27;t on the same network, turn on Service and they sync. Content goes directly between them whenever possible and through the server only when it has to, encrypted all the way.</p>
+      <a class="button" href="../../en/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download the latest version</a>
     </div></section>
     <section class="section"><div class="wrap">
-      <h2>Three steps to sync across networks</h2>
-      <div class="os-grid"><ol class="steps">                <li>Install the latest app and turn on background sync on every computer.</li>
-                <li>Enable Settings → Connection → Use the service on each computer and review the notice. No official hostname or port to enter.</li>
-                <li>Show a pairing code on one computer, enter it on the other, and compare both fingerprint lines before confirming. Existing pairings are kept.</li></ol>
-        <figure class="shot"><img src="../../assets/screenshots/en/official-settings-dark.png?v=200655e6ed" width="2112" height="1472" alt="The Use the service switch in Settings, without an official address field"></figure>
+      <h2>How to turn it on</h2>
+      <div class="os-grid"><ol class="steps">                <li>Install the latest version on each computer and click Turn on background sync.</li>
+                <li>On each computer, turn on Use the service in Settings → Connection.</li>
+                <li>Show a pairing code on one computer, enter it on the other, and check that both fingerprints match before confirming. Computers you've already paired don't need to pair again.</li></ol>
+        <figure class="shot"><img src="../../assets/screenshots/en/official-settings-dark.png?v=200655e6ed" width="2112" height="1472" alt="The Use the service switch in Settings → Connection"></figure>
       </div>
     </div></section>
-    <section class="section"><div class="wrap official-copy"><h2>Direct first, relay when needed</h2><p class="intro">Official signaling exchanges connection information between online peers. The clients try STUN discovery and NAT traversal first, requesting relay only after that direct attempt fails. Content remains end-to-end encrypted.</p></div></section>
-<section class="section"><div class="wrap official-copy"><h2>Direct traffic does not use relay allowance</h2><p class="intro">The current default is 100 MB per machine quota group per day, upload plus download, resetting at midnight Beijing time. Reinstalling does not guarantee a fresh allowance. Once enabled, the usage page shows today&#x27;s allowance, the remaining amount and the update time without needing relay first, and lists whether each device is connected directly or through relay. Direct connections still work when relay allowance runs out. Allowances and availability may change; check the app.</p></div></section>
-<section class="section"><div class="wrap official-copy"><h2>Your choice to enable it</h2><p class="intro">Official access is off on fresh installs. Enabling it records the essential connection information; an application-specific machine digest is derived only when relay is requested. Real device names, raw system identifiers and copied content are not uploaded as statistics. See the privacy notice for fields and retention.</p></div></section>
-<section class="section"><div class="wrap official-copy"><h2>Self-hosting stays independent</h2><p class="intro">LAN, custom servers and Tailscale continue to work without the official gateway. Host your own public server when you need to control capacity, then use Save and connect beside its custom address.</p></div></section>
+    <section class="section"><div class="wrap official-copy"><h2>Direct whenever possible</h2><p class="intro">The server first helps the two computers exchange connection details so they can try to connect directly. This works on most home and office networks; only when it doesn&#x27;t does the server relay the data. Either way the content is encrypted, and the server can&#x27;t decrypt it.</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>100 MB of relay a day, direct unlimited</h2><p class="intro">Traffic relayed through the server is limited to 100 MB per computer per day, upload and download combined, reset at midnight Beijing time. Reinstalling the app doesn&#x27;t reset it. Direct connections don&#x27;t count, and they keep working when the allowance runs out. The usage page shows how much is left today and whether each device is connected directly or through the relay. The allowance may change; the app shows the current one.</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>Off by default</h2><p class="intro">Service is off in a new install. When you turn it on, the server records what it needs to connect devices and count the allowance. It never receives what you copy or your device names. For exactly what is recorded and for how long, see the privacy notice.</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>You don&#x27;t have to use it</h2><p class="intro">On the same network you don&#x27;t need Service. For full control, run your own server or use Tailscale, and enter your own address in Settings → Connection.</p></div></section>
     <section class="section"><div class="wrap official-copy">
-      <figure class="shot"><img src="../../assets/screenshots/en/official-usage-dark.png?v=809c7831e1" width="2112" height="1472" loading="lazy" alt="Demo usage page showing a 100.00 MB allowance and 80.00 MB remaining"></figure>
-      <p class="note"><a href="../../en/privacy/">Privacy and essential data</a> · <a href="../../en/cloud/">Self-hosting guide</a> · <a href="https://pasteferry.cc/">pasteferry.cc</a></p>
+      <figure class="shot"><img src="../../assets/screenshots/en/official-usage-dark.png?v=809c7831e1" width="2112" height="1472" loading="lazy" alt="Demo usage page for Service showing a 100.00 MB daily allowance and 80.00 MB remaining"></figure>
+      <p class="note"><a href="../../en/privacy/">Privacy notice</a> · <a href="../../en/cloud/">Self-hosting guide</a> · <a href="https://pasteferry.cc/">pasteferry.cc</a></p>
     </div></section>
   </main>
 

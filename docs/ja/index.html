@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PasteFerry：Mac、Windows、Linux のあいだでクリップボードとファイルを同期。アカウントもネットワークも別々で OK</title>
-  <meta name="description" content="PasteFerry は Mac・Windows・Linux 間でテキスト、画像、ファイル、フォルダを同期します。公式サービスを有効にすればサーバー構築なしで別ネットワーク間も接続。直接接続を優先し、必要時のみ暗号化中継。無料・オープンソース。">
+  <title>PasteFerry：Mac、Windows、Linux でクリップボードを共有し、ファイルを送り合う</title>
+  <meta name="description" content="あるパソコンでコピーして、別のパソコンでそのまま貼り付け。Mac・Windows・Linux に対応し、テキスト、画像、ファイル、フォルダを扱えます。自宅と会社のあいだでも同期できます。無料・オープンソース。">
   <link rel="canonical" href="https://pasteferry.cc/ja/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/">
@@ -25,7 +25,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PasteFerry">
   <meta property="og:title" content="PasteFerry：このコンピューターでコピーして、あのコンピューターで貼り付け">
-  <meta property="og:description" content="PasteFerry は Mac・Windows・Linux 間でテキスト、画像、ファイル、フォルダを同期します。公式サービスを有効にすればサーバー構築なしで別ネットワーク間も接続。直接接続を優先し、必要時のみ暗号化中継。無料・オープンソース。">
+  <meta property="og:description" content="あるパソコンでコピーして、別のパソコンでそのまま貼り付け。Mac・Windows・Linux に対応し、テキスト、画像、ファイル、フォルダを扱えます。自宅と会社のあいだでも同期できます。無料・オープンソース。">
   <meta property="og:url" content="https://pasteferry.cc/ja/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:image:width" content="1200">
@@ -60,7 +60,7 @@
           "隔空贴",
           "CopySync"
         ],
-        "description": "Mac、Windows、Linux のコンピューター間でクリップボードとファイルを同期するオープンソースのアプリ。テキスト、画像、ファイル、フォルダを一台でコピーし、もう一台で貼り付けられる。同じネットワークならサーバーは不要。デバイス間は WebRTC で直接つながり DTLS でエンドツーエンド暗号化、ネットワークをまたいでつながらないときはユーザーが用意したサーバーの TURN で中継する。",
+        "description": "Mac、Windows、Linux のコンピューター間でクリップボードを共有し、ファイルを送り合うオープンソースのアプリ。テキスト、画像、ファイル、フォルダを一台でコピーし、もう一台でそのまま貼り付けられる。同じネットワークならサーバーは不要で、別のネットワークでは「サービス」か自前のサーバーを使う。デバイス間は直接接続を優先し、内容はエンドツーエンド暗号化。",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "macOS 13 以降（Intel と Apple シリコン）、Windows 10、Windows 11（x64）、Linux（x64、ARM64）",
         "softwareVersion": "2.6.1",
@@ -141,13 +141,13 @@
       <div class="wrap">
         <a class="release-note" href="features/#friends">2.6 の新機能：連絡先を追加して、ファイルを直接送る →</a>
         <h1 class="display">こっちでコピーして、<br>あっちで貼り付け。</h1>
-        <p class="lede">Mac・Windows・Linux でテキスト、画像、ファイル、フォルダを同期。同じアカウントは不要。公式サービスをオンにすれば、サーバーを構築せずに別ネットワーク間でも使えます。直接接続を優先し、常にエンドツーエンド暗号化。</p>
+        <p class="lede">Mac・Windows・Linux で使え、同じアカウントでなくてもかまいません。テキスト、スクリーンショット、ファイル、フォルダまるごと、こちらでコピーしてあちらで貼り付けるだけです。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry をダウンロード</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 紹介ムービーを見る <span class="tour-duration">1:25</span></a>
         </div>
         <p class="note">バージョン 2.6.1、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。</p>
-        <a class="start-link" href="start/">はじめての方は、3 ステップのはじめかたへ →</a>
+        <a class="start-link" href="start/">はじめての方は、3 ステップで設定 →</a>
         <div class="stage" data-play role="img" aria-label="デモ：MacBook で Command C を押すと、ファイルが一枚の紙になって直接接続で Windows ノートへ飛び、そこで Ctrl V を押して貼り付けます">
           <figure class="device mac">
             <div class="screen"><div class="desk">
@@ -239,7 +239,7 @@
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
             <h3>ネットワークをまたいで</h3>
-            <p>公式サービスをオンにすれば、自宅と職場の間でも同期。</p>
+            <p>「サービス」をオンにすれば、自宅と職場の間でも同期。</p>
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
@@ -254,19 +254,19 @@
     <section class="section" id="why" aria-labelledby="why-title">
       <div class="wrap">
         <h2 id="why-title">いまある方法では足りない理由</h2>
-        <p class="intro">ユニバーサルクリップボードは同じ Apple ID で、近くにいる必要があります。AirDrop は毎回受け取り操作が要ります。自分宛てにメッセージで送ると手動でダウンロードすることになり、ファイルは他社のサーバーに残ります。Mac と Windows の組み合わせでは、標準の方法はどれも使えません。</p>
+        <p class="intro">ユニバーサルクリップボードは同じ Apple ID で、しかも近くにいる必要があります。AirDrop は毎回受け取りの操作が要ります。チャットアプリで自分に送ると、もう一度ダウンロードする手間がかかります。Mac と Windows の組み合わせでは、OS 標準の方法はどれも使えません。</p>
         <div class="block table-scroll">
           <table class="compare">
             <caption class="skip">PasteFerry とほかの方法の比較</caption>
             <thead><tr><td></td><th scope="col" class="ours">PasteFerry</th><th scope="col">ユニバーサル<br>クリップボード</th><th scope="col">AirDrop</th><th scope="col">チャットアプリ</th></tr></thead>
             <tbody>
               <tr><th scope="row">別々の Apple ID のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="partial">受け取り操作が必要</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">Mac と Windows のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">別のネットワーク（自宅と会社）</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">コピーしてすぐ貼り付け、受け取り操作なし</th><td class="yes ours">できる</td><td class="yes">できる</td><td class="no">できない</td><td class="no">できない</td></tr>
+              <tr><th scope="row">Mac と Windows、Linux のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
+              <tr><th scope="row">自宅と会社のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
+              <tr><th scope="row">コピーしてすぐ貼り付け</th><td class="yes ours">できる</td><td class="yes">できる</td><td class="no">できない</td><td class="no">できない</td></tr>
               <tr><th scope="row">ファイルとフォルダまるごと</th><td class="yes ours">できる</td><td class="partial">不安定</td><td class="yes">できる</td><td class="partial">先に圧縮</td></tr>
               <tr><th scope="row">前にコピーしたものを探す</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="partial">履歴をさかのぼる</td></tr>
-              <tr><th scope="row">内容を復号できるのは自分の端末のみ</th><td class="yes ours">可能</td><td class="yes">可能</td><td class="yes">可能</td><td class="some">アプリによる</td></tr>
+              <tr><th scope="row">自分の端末だけが復号できる</th><td class="yes ours">はい</td><td class="yes">はい</td><td class="yes">はい</td><td class="some">アプリによる</td></tr>
             </tbody>
           </table>
         </div>
@@ -276,38 +276,38 @@
     <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
         <h2 id="deploy-title">2 台をどうつなぐか</h2>
-        <p class="intro">同じネットワークならインストールしてペアリング。別ネットワークなら公式サービスをオンにするだけで、サーバーの準備は不要です。独自サーバーと Tailscale も選べます。</p>
+        <p class="intro">同じネットワークなら、入れてペアリングするだけ。別のネットワークなら「サービス」をオンにします。独自サーバーや Tailscale も使えます。</p>
         <div class="paths">
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">別ネットワーク間、構築不要</span>
-            <h3>公式サービス</h3>
-            <p>スイッチひとつで自宅と会社のパソコンを接続。直接接続を優先し、失敗時のみ暗号化中継を使います。クラウド契約やアドレス入力は不要です。</p>
-            <span class="path-go">公式サービスを有効にする →</span>
+            <span class="path-when">自宅と職場の間でも使える</span>
+            <h3>サービス</h3>
+            <p>スイッチをひとつオンにするだけで、自宅と会社のパソコンがお互いを見つけます。直接つながればそのまま、つながらなければ私たちのサーバーが中継します。クラウドサーバーの契約もアドレスの入力も要りません。</p>
+            <span class="path-go">「サービス」をオンにする →</span>
           </a>
           <a class="path" href="lan/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-            <span class="path-when">準備は何も要らない</span>
+            <span class="path-when">準備は不要</span>
             <h3>同じネットワーク</h3>
-            <p>家や会社で、同じルーターにつながっている場合。2 台にアプリを入れてペアリングコードを入力するだけ。サーバーも、電源を入れたままのコンピューターも要りません。</p>
+            <p>同じルーターにつながった 2 台なら、アプリを入れてペアリングコードを入力するだけ。サーバーは要りません。</p>
             <span class="path-go">同じネットワークでの手順 →</span>
           </a>
           <a class="path" href="cloud/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">容量と運用を自分で管理</span>
+            <span class="path-when">自分のサーバーで、中継は無制限</span>
             <h3>独自の公開サーバー</h3>
-            <p>グローバル IP を持つ Linux のクラウドサーバー。最小構成で足ります。各コンピューターが直接つながり、自宅でも会社でも外出先でも、ほかに入れるものはありません。</p>
+            <p>グローバル IP のある Linux クラウドサーバー。最小構成で足ります。すべてのコンピューターがここにつながり、どこからでも同期できます。</p>
             <span class="path-go">公開サーバーでの手順 →</span>
           </a>
           <a class="path" href="tailscale/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
             <span class="path-when">ネットワークをまたぐ、サーバーなし</span>
             <h3>Tailscale</h3>
-            <p>各コンピューターに Tailscale を入れて同じアカウントでサインインし、ペアリング時に相手の Tailscale アドレスを入力します。自宅でも会社でも同期でき、サーバーも電源を入れたままのコンピューターも要りません。</p>
+            <p>各コンピューターに Tailscale を入れて同じアカウントでサインインし、ペアリング時に相手の Tailscale アドレスを入力します。</p>
             <span class="path-go">Tailscale での手順 →</span>
           </a>
         </div>
-        <p class="note">初めての方は<a href="start/#server">クイックスタート</a>へ。公式サービスは任意です。現在の標準中継上限は 100 MB/日で、直接通信では消費しません。</p>
+        <p class="note">はじめての方は<a href="start/#server">はじめかた</a>の手順どおりにどうぞ。「サービス」は無料で、中継は 1 日 100 MB まで、直接接続は無制限です。</p>
       </div>
     </section>
 
@@ -318,7 +318,7 @@
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry をダウンロード</a>
         </div>
         <p class="note">バージョン 2.6.1、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。</p>
-        <a class="start-link" href="start/">はじめての方は、3 ステップのはじめかたへ →</a>
+        <a class="start-link" href="start/">はじめての方は、3 ステップで設定 →</a>
         <div class="star-ask">
           <p>気に入ったら GitHub でスターを。もっと多くの人に届きます。</p>
           <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub で PasteFerry にスターを付ける"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">GitHub でスター</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>

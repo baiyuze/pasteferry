@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>隔空贴 PasteFerry：在 Mac、Windows 与 Linux 之间同步剪贴板与文件，跨账号跨网络</title>
-  <meta name="description" content="隔空贴让 Mac、Windows、Linux 之间复制粘贴文字、图片、文件和文件夹。开启「服务」即可跨网络同步，无需自建服务器；优先打洞直连，失败自动加密中转。免费开源。">
+  <title>隔空贴 PasteFerry：Mac、Windows、Linux 之间共享剪贴板、互传文件</title>
+  <meta name="description" content="在一台电脑上复制，到另一台直接粘贴。Mac、Windows、Linux 都能用，文字、图片、文件、文件夹都行，家里和公司之间也能同步。免费开源。">
   <link rel="canonical" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/">
@@ -25,7 +25,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="隔空贴">
   <meta property="og:title" content="隔空贴：在这台电脑复制，到那台电脑粘贴">
-  <meta property="og:description" content="隔空贴让 Mac、Windows、Linux 之间复制粘贴文字、图片、文件和文件夹。开启「服务」即可跨网络同步，无需自建服务器；优先打洞直连，失败自动加密中转。免费开源。">
+  <meta property="og:description" content="在一台电脑上复制，到另一台直接粘贴。Mac、Windows、Linux 都能用，文字、图片、文件、文件夹都行，家里和公司之间也能同步。免费开源。">
   <meta property="og:url" content="https://pasteferry.cc/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
   <meta property="og:image:width" content="1200">
@@ -85,7 +85,7 @@
           "PasteFerry",
           "CopySync"
         ],
-        "description": "在 Mac、Windows 与 Linux 电脑之间同步剪贴板与文件的开源工具。复制文本、图片、文件或文件夹后，另一台电脑可直接粘贴。同一网络里不需要服务器；设备间 WebRTC 直连、DTLS 端到端加密，跨网络打不通时经用户自建服务器的 TURN 中转。",
+        "description": "在 Mac、Windows 与 Linux 电脑之间共享剪贴板、互传文件的开源工具。在一台电脑上复制文字、图片、文件或文件夹，到另一台直接粘贴。同一网络里不需要服务器；不在一个网络时打开「服务」或用自建服务器。设备之间优先直连，内容端到端加密。",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "macOS 13 及以上（Intel 与 Apple 芯片）；Windows 10、Windows 11（x64）；Linux（x64、ARM64）",
         "softwareVersion": "2.6.1",
@@ -166,13 +166,13 @@
       <div class="wrap">
         <a class="release-note" href="features/#friends">2.6 新功能：加个好友，文件直接发给对方 →</a>
         <h1 class="display">在这台电脑复制，<br>到那台电脑粘贴。</h1>
-        <p class="lede">Mac、Windows、Linux 互通，文字、图片、文件、整个文件夹都可以，不要求同一个账号。现在开启「服务」就能跨网络同步，无需自己搭服务器。优先直连，始终端到端加密。</p>
+        <p class="lede">Mac、Windows、Linux 都行，不用登录同一个账号。文字、截图、文件、整个文件夹，在这台复制，到那台按一下粘贴。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 看完整演示 <span class="tour-duration">1:25</span></a>
         </div>
         <p class="note">版本 2.6.1，免费开源。macOS 13 及以上；Windows 10、11；Linux（x64 与 ARM64）。</p>
-        <a class="start-link" href="start/">第一次用？看快速开始，三步配好 →</a>
+        <a class="start-link" href="start/">第一次用？三步配好 →</a>
         <div class="stage" data-play role="img" aria-label="演示：在 MacBook 上按下 Command C，文件化作一张纸，经直连飞到 Windows 笔记本，在那里按下 Ctrl V 粘贴出来">
           <figure class="device mac">
             <div class="screen"><div class="desk">
@@ -279,19 +279,19 @@
     <section class="section" id="why" aria-labelledby="why-title">
       <div class="wrap">
         <h2 id="why-title">为什么不用现有的办法</h2>
-        <p class="intro">通用剪贴板要同一个 Apple ID、离得够近；隔空投送每次都要点接收；发给自己要手动下载，文件还留在别人的服务器上。一台 Mac 一台 Windows 时，系统自带的办法一个都用不了。</p>
+        <p class="intro">通用剪贴板要同一个 Apple ID、还得离得近；隔空投送每次都要点接收；聊天软件发给自己，还得再下载一遍。Mac 配 Windows 时，系统自带的都用不了。</p>
         <div class="block table-scroll">
           <table class="compare">
             <caption class="skip">隔空贴与其他方式的对比</caption>
             <thead><tr><td></td><th scope="col" class="ours">隔空贴</th><th scope="col">通用剪贴板</th><th scope="col">隔空投送</th><th scope="col">聊天软件</th></tr></thead>
             <tbody>
               <tr><th scope="row">不同 Apple ID 之间</th><td class="yes ours">可以</td><td class="no">不行</td><td class="partial">要对方接收</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">Mac 与 Windows 之间</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">不在同一个网络（家里和公司）</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">复制后直接粘贴，不用点接收</th><td class="yes ours">可以</td><td class="yes">可以</td><td class="no">不行</td><td class="no">不行</td></tr>
+              <tr><th scope="row">Mac 与 Windows、Linux 之间</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
+              <tr><th scope="row">家里和公司之间</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
+              <tr><th scope="row">复制完直接粘贴</th><td class="yes ours">可以</td><td class="yes">可以</td><td class="no">不行</td><td class="no">不行</td></tr>
               <tr><th scope="row">文件与整个文件夹</th><td class="yes ours">可以</td><td class="partial">不稳定</td><td class="yes">可以</td><td class="partial">要先打包</td></tr>
-              <tr><th scope="row">找回之前复制过的内容</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="partial">翻聊天记录</td></tr>
-              <tr><th scope="row">仅自己的设备可解密内容</th><td class="yes ours">可以</td><td class="yes">可以</td><td class="yes">可以</td><td class="some">视软件而定</td></tr>
+              <tr><th scope="row">找回之前复制的内容</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="partial">翻聊天记录</td></tr>
+              <tr><th scope="row">只有自己的设备能解密</th><td class="yes ours">是</td><td class="yes">是</td><td class="yes">是</td><td class="some">看软件</td></tr>
             </tbody>
           </table>
         </div>
@@ -301,38 +301,38 @@
     <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
         <h2 id="deploy-title">两台电脑怎么连起来</h2>
-        <p class="intro">同一网络里装好就能配对；不同网络里，开启「服务」即可，无需自建。也保留自建服务器与 Tailscale，按你的需要选择。</p>
+        <p class="intro">同一个网络里装好就能配对。不在一个网络，打开「服务」就行，也可以自建服务器或用 Tailscale。</p>
         <div class="paths">
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">跨网络，无需自建</span>
+            <span class="path-when">家里和公司之间也能用</span>
             <h3>服务</h3>
-            <p>打开一个开关，让家里与公司的电脑找到彼此。优先打洞直连，失败后自动中转，无需购买云主机或填写地址。</p>
+            <p>打开一个开关，家里和公司的电脑就能互相找到。能直连就直连，连不上再经我们的服务器转一下。不用买云主机，也不用填地址。</p>
             <span class="path-go">开启「服务」 →</span>
           </a>
           <a class="path" href="lan/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-            <span class="path-when">什么都不用部署</span>
+            <span class="path-when">什么都不用装</span>
             <h3>同一网络</h3>
-            <p>家里或办公室，连着同一个路由器。两台电脑装好 App，输入配对码就能同步，不需要服务器，也不需要常开的电脑。</p>
+            <p>连着同一个路由器的两台电脑，装好 App 输入配对码就能用，不需要服务器。</p>
             <span class="path-go">同一网络教程 →</span>
           </a>
           <a class="path" href="cloud/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">自己管理容量与部署</span>
+            <span class="path-when">自己的服务器，中转不限量</span>
             <h3>自建公网服务器</h3>
-            <p>一台有公网 IP 的 Linux 云主机，最低配置就够。每台电脑直接连它，在家、在公司、在外面都能用，不用另装软件。</p>
+            <p>一台有公网 IP 的 Linux 云主机，最低配置就够。所有电脑连它，在哪儿都能同步。</p>
             <span class="path-go">公网服务器部署教程 →</span>
           </a>
           <a class="path" href="tailscale/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
             <span class="path-when">跨网络，不用服务器</span>
             <h3>Tailscale</h3>
-            <p>每台电脑装上 Tailscale、登录同一个账号，配对时输入对方的 Tailscale 地址。在家、在公司都能同步，不需要服务器和常开的电脑。</p>
+            <p>每台电脑装 Tailscale、登录同一个账号，配对时填对方的 Tailscale 地址。</p>
             <span class="path-go">Tailscale 教程 →</span>
           </a>
         </div>
-        <p class="note">第一次用？跟着<a href="start/#server">快速开始</a>。「服务」可选，当前默认每日 100 MB 中转额度，直连不扣此额度。</p>
+        <p class="note">第一次用？跟着<a href="start/#server">快速开始</a>走一遍。「服务」免费，中转每天 100 MB，直连不限。</p>
       </div>
     </section>
 
@@ -343,7 +343,7 @@
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
         </div>
         <p class="note">版本 2.6.1，免费开源。macOS 13 及以上；Windows 10、11；Linux（x64 与 ARM64）。</p>
-        <a class="start-link" href="start/">第一次用？看快速开始，三步配好 →</a>
+        <a class="start-link" href="start/">第一次用？三步配好 →</a>
         <div class="star-ask">
           <p>觉得好用？去 GitHub 点个 Star，让更多人看到它。</p>
           <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="在 GitHub 上给隔空贴点 Star"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">在 GitHub 上点 Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>

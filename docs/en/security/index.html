@@ -78,7 +78,7 @@
     <section class="hero guide-hero">
       <div class="wrap">
         <p class="crumb"><a href="../../en/">PasteFerry</a></p>
-        <h1 class="display">Your server can't see what you copy</h1>
+        <h1 class="display">The server can't see what you copy</h1>
         <p class="lede">Each device is identified by a key, you verify fingerprints when pairing, every message is signed, and only your devices can decrypt what you copy.</p>
       </div>
     </section>
@@ -87,11 +87,11 @@
       <div class="wrap">
         <div class="cols">
           <ul class="points">
-            <li><strong>No accounts, no stored content.</strong> A device's identity is an Ed25519 key, and its ID is derived from the public key, so the server verifies identity without a user table.</li>
-            <li><strong>You compare fingerprints when pairing.</strong> Both screens show the same two lines: the fingerprint of each device's key. The server could swap keys in transit, but then the two screens would no longer match. That check is what stops a man in the middle.</li>
-            <li><strong>Every message after that is signed,</strong> so the server can't impersonate your device. The direct channel's certificate is checked again after the handshake; a mismatch drops the connection.</li>
-            <li><strong>The relay only forwards ciphertext.</strong> TURN carries encrypted packets, and relay credentials are issued per device and expire after 12 hours.</li>
-            <li><strong>Same on the local network.</strong> What a device broadcasts on the LAN is an anonymous token that changes daily, not its name; the name is added only while Search nearby is open. Pairing still means comparing fingerprints, and every message is still signed.</li>
+            <li><strong>No accounts, no stored content.</strong> Each device's identity is an Ed25519 key, so the server can verify it without a user table.</li>
+            <li><strong>You check fingerprints when pairing.</strong> Both screens show the same two lines. If the server swapped a key, they wouldn't match.</li>
+            <li><strong>Every message is signed,</strong> so the server can't pose as your device. Once the direct connection is up, its certificate is checked again; a mismatch drops it.</li>
+            <li><strong>The relay only forwards ciphertext.</strong> Relay credentials are issued per device and expire after 12 hours.</li>
+            <li><strong>Same on the local network.</strong> A device broadcasts only an anonymous token that changes daily, so nobody can tell whose computer it is. The name is added only while Search nearby is open.</li>
           </ul>
           <figure class="figure-card">
             <img src="../../assets/screenshots/en/card-verify-dark.png?v=0f0a9ff3bc" width="1120" height="800" alt="The fingerprint check during pairing shows R8NF-2WTC-QL5J and asks you to confirm it matches the other computer exactly">

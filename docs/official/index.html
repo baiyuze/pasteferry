@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>服务：无需自建服务器 — 隔空贴 PasteFerry</title>
-  <meta name="description" content="打开一个开关，让家里与公司的电脑找到彼此。优先打洞直连，失败后自动中转，无需购买云主机或填写地址。">
+  <title>服务：不用自己搭服务器，家里和公司也能同步 — 隔空贴</title>
+  <meta name="description" content="打开一个开关，家里和公司的电脑就能互相找到。能直连就直连，连不上再经我们的服务器转一下。不用买云主机，也不用填地址。">
   <link rel="canonical" href="https://pasteferry.cc/official/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/official/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/official/">
@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="隔空贴">
-  <meta property="og:title" content="服务：无需自建服务器 — 隔空贴 PasteFerry">
-  <meta property="og:description" content="打开一个开关，让家里与公司的电脑找到彼此。优先打洞直连，失败后自动中转，无需购买云主机或填写地址。">
+  <meta property="og:title" content="服务：不用自己搭服务器，家里和公司也能同步 — 隔空贴">
+  <meta property="og:description" content="打开一个开关，家里和公司的电脑就能互相找到。能直连就直连，连不上再经我们的服务器转一下。不用买云主机，也不用填地址。">
   <meta property="og:url" content="https://pasteferry.cc/official/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
   <meta property="og:locale" content="zh_CN">
@@ -77,25 +77,25 @@
   <main id="main">
     <section class="hero guide-hero"><div class="wrap">
       <p class="crumb"><a href="../">隔空贴</a> / 服务</p>
-      <h1 class="display">跨网络，无需自建</h1>
-      <p class="lede">每台电脑安装 2.1.0 或更新版本，在设置中开启「服务」，再配对。信令帮助设备找到彼此，内容优先直接传输，打洞失败才走加密中转。</p>
+      <h1 class="display">家里和公司之间也能用</h1>
+      <p class="lede">两台电脑不在一个网络里时，打开「服务」就能同步。内容尽量在两台电脑之间直接传，连不上才经服务器转发，全程加密。</p>
       <a class="button" href="../download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载最新版本</a>
     </div></section>
     <section class="section"><div class="wrap">
-      <h2>三个步骤，开始跨网络同步</h2>
-      <div class="os-grid"><ol class="steps">                <li>在需要同步的每台电脑上安装最新版本，启用后台同步。</li>
-                <li>在每台电脑的「设置 → 连接」中开启「使用服务」，阅读并确认说明。不用填写官方域名或端口。</li>
-                <li>一台生成配对码，另一台输入；核对两边的安全指纹后确认。已有配对关系可以继续使用。</li></ol>
-        <figure class="shot"><img src="../assets/screenshots/official-settings-dark.png?v=48cbce24e5" width="2112" height="1472" alt="设置中的使用服务开关，无需填写官方地址"></figure>
+      <h2>怎么开</h2>
+      <div class="os-grid"><ol class="steps">                <li>每台电脑装好最新版，点「启用后台同步」。</li>
+                <li>在每台电脑的「设置 → 连接」里打开「使用服务」。</li>
+                <li>一台显示配对码，另一台输入，核对两边的安全指纹后确认。已经配对过的不用重新配。</li></ol>
+        <figure class="shot"><img src="../assets/screenshots/official-settings-dark.png?v=48cbce24e5" width="2112" height="1472" alt="「设置 → 连接」里的「使用服务」开关"></figure>
       </div>
     </div></section>
-    <section class="section"><div class="wrap official-copy"><h2>先直连，再中转</h2><p class="intro">官方信令只帮助在线设备交换连接信息。客户端先用 STUN 探测和打洞；本轮直连失败后，才申请服务中转。传输内容始终端到端加密。</p></div></section>
-<section class="section"><div class="wrap official-copy"><h2>直连不消耗中转额度</h2><p class="intro">当前默认每机器额度组每日 100 MB 中转流量，上传与下载合计，北京时间零点重置。重新安装不会保证获得新额度。开启后用量页即显示今日额度、剩余量与更新时间，不必先用中转，并列出每台设备当前是直连还是中转；额度用尽仍可直连。额度与服务可用性可能调整，以客户端显示为准。</p></div></section>
-<section class="section"><div class="wrap official-copy"><h2>由你决定是否开启</h2><p class="intro">新安装默认关闭。开启后记录必要的接入信息；仅申请中转时派生项目专用机器摘要。真实设备名、原始系统标识和复制内容不会作为统计上传。完整字段与保留期限见隐私说明。</p></div></section>
-<section class="section"><div class="wrap official-copy"><h2>仍可独立自建</h2><p class="intro">局域网、自定义服务器和 Tailscale 继续可用，不依赖官方网关。需要自行管理容量时，可选择自建公网服务器；在自定义地址旁点击「保存并连接」。</p></div></section>
+    <section class="section"><div class="wrap official-copy"><h2>能直连就不中转</h2><p class="intro">服务器先帮两台电脑交换连接信息，让它们尝试直接相连。大多数家庭和公司网络都能连上；实在连不上，才由服务器转发。不管哪种方式，内容都是加密的，服务器解不开。</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>中转每天 100 MB，直连不限</h2><p class="intro">经服务器中转的流量，每台电脑每天 100 MB（上传下载合计），北京时间零点重置，重装 App 不会重置。直连不算在内，额度用完了直连照样能用。用量页能看到今天还剩多少，以及每台设备现在是直连还是中转。额度以后可能调整，以 App 里显示的为准。</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>默认关闭</h2><p class="intro">新装的 App 默认不开。打开后，服务器会记录连接和计算额度所需的信息，不会收到你复制的内容和设备名。具体记了什么、存多久，见隐私说明。</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>也可以不用它</h2><p class="intro">同一网络里不需要服务。想完全自己掌控，也可以自建服务器或者用 Tailscale，在「设置 → 连接」里填自己的地址就行。</p></div></section>
     <section class="section"><div class="wrap official-copy">
       <figure class="shot"><img src="../assets/screenshots/official-usage-dark.png?v=abf6e90b73" width="2112" height="1472" loading="lazy" alt="「服务」用量页的演示数据：每日 100.00 MB、剩余 80.00 MB"></figure>
-      <p class="note"><a href="../privacy/">隐私与必要数据</a> · <a href="../cloud/">自建服务器教程</a> · <a href="https://pasteferry.cc/">pasteferry.cc</a></p>
+      <p class="note"><a href="../privacy/">隐私说明</a> · <a href="../cloud/">自建服务器教程</a> · <a href="https://pasteferry.cc/">pasteferry.cc</a></p>
     </div></section>
   </main>
 

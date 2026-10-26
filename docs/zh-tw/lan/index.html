@@ -129,7 +129,7 @@
           <div><dt>在同一個網路裡</dt><dd>兩台電腦連著同一台路由器就行，Wi‑Fi 與有線混用也可以。訪客網路、開了「AP 隔離」的 Wi‑Fi 不讓裝置互相連線；公司裡的有線和無線常常不在同一個網段，這時請看下面的<a href="#subnet">不在同一網段</a>。</dd></div>
           <div><dt>Windows 防火牆</dt><dd>第一次執行時，Windows 會詢問是否允許隔空貼通過防火牆，請選擇允許。如果按過取消，到隔空貼的「設定 → 連線」裡點「允許」，會要求一次系統管理員權限。</dd></div>
           <div><dt>macOS 的本機網路權限</dt><dd>從 macOS 15 起，第一次連線區域網路裡的裝置時，系統會詢問是否允許 PasteFerry Daemon 尋找區域網路上的裝置，請選擇允許。拒絕過的話，到「系統設定 → 隱私權與安全性 → 本機網路」裡開啟它。</dd></div>
-          <div><dt>不用填伺服器</dt><dd>「設定 → 連線」裡的伺服器位址留空就行。以後要跨網路同步，再填上伺服器或改用 Tailscale，已經配對的裝置不用重新配對。</dd></div>
+          <div><dt>不用填伺服器</dt><dd>「設定 → 連線」裡的伺服器位址留空就行。以後要跨網路同步，開啟「服務」就行，已經配對的裝置不用重新配對。</dd></div>
         </dl>
       </div>
     </section>
@@ -151,12 +151,12 @@
             </figure>
           </div>
           <figure class="shot">
-            <img src="../../assets/screenshots/zh-tw/pairing-dark.png?v=2eaae1a6dc" width="2112" height="1472" loading="lazy" alt="添加設備：顯示配對碼 K7MP2X，下面是本機地址 192.168.1.20">
+            <img src="../../assets/screenshots/zh-tw/pairing-dark.png?v=2eaae1a6dc" width="2112" height="1472" loading="lazy" alt="新增裝置：顯示配對碼 K7MP2X，下面是本機位址 192.168.1.20">
           </figure>
         </div>
         <div class="os-grid qs-grid">
           <div class="qs-app">
-            <h3>不用配對碼：搜索附近設備</h3>
+            <h3>不用配對碼：搜尋附近裝置</h3>
             <ol class="steps">
               <li>兩台電腦都打開「裝置」，點「搜尋附近裝置」。視窗開著的期間，同一個網路裡的裝置才看得到這台電腦的名稱。</li>
               <li>對方出現在雷達上之後，點一下它。兩邊螢幕會顯示同樣的兩行安全指紋，核對一致後各自確認。</li>
@@ -164,7 +164,7 @@
             </ol>
           </div>
           <figure class="shot">
-            <img src="../../assets/screenshots/zh-tw/nearby-dark.png?v=5b7b45f70a" width="2112" height="1472" loading="lazy" alt="附近的設備：本機在中間，周圍是同樣開著這個視窗的設計部 PC、會議室的 iMac，以及已經配對過的 MacBook Air">
+            <img src="../../assets/screenshots/zh-tw/nearby-dark.png?v=5b7b45f70a" width="2112" height="1472" loading="lazy" alt="附近的裝置：本機在中間，周圍是同樣開著這個視窗的設計部 PC、會議室的 iMac，以及已經配對過的 MacBook Air">
           </figure>
         </div>
       </div>
@@ -201,7 +201,7 @@
           </details>
           <details>
             <summary>離開這個網路後還能同步嗎？</summary>
-            <div class="answer"><p>不能，回到這個網路後會自動恢復，這段期間複製的內容會補送到對方的複製記錄裡。要在不同網路之間同步，加一台<a href="../../zh-tw/cloud/">雲端伺服器</a>，或改用<a href="../../zh-tw/tailscale/">Tailscale</a>，已經配對的裝置不用重新配對。</p></div>
+            <div class="answer"><p>不能，回到這個網路後會自動恢復。要在不同網路之間同步，開啟<a href="../../zh-tw/official/">服務</a>就行，也可以用<a href="../../zh-tw/cloud/">雲端伺服器</a>或<a href="../../zh-tw/tailscale/">Tailscale</a>，已經配對的裝置不用重新配對。</p></div>
           </details>
           <details>
             <summary>位址變了怎麼辦？</summary>

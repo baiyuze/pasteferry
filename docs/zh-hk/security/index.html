@@ -44,13 +44,13 @@
       <nav aria-label="頁面導覽">
         <a href="../../zh-hk/features/">功能</a>
         <a class="mid" href="../../zh-hk/start/">快速開始</a>
-        <a class="wide" href="../../zh-hk/start/#server">連線方式</a>
+        <a class="wide" href="../../zh-hk/start/#server">連接方式</a>
         <a href="../../zh-hk/download/">下載</a>
         <details class="menu">
           <summary aria-label="更多頁面" class="current"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
             <li class="narrow"><a href="../../zh-hk/start/">快速開始</a></li>
-            <li class="narrow"><a href="../../zh-hk/start/#server">連線方式</a></li>
+            <li class="narrow"><a href="../../zh-hk/start/#server">連接方式</a></li>
             <li><a href="../../zh-hk/how/">運作原理</a></li>
             <li><a href="./" aria-current="page">安全與私隱</a></li>
             <li><a href="../../zh-hk/faq/">常見問題</a></li>
@@ -87,11 +87,11 @@
       <div class="wrap">
         <div class="cols">
           <ul class="points">
-            <li><strong>伺服器不儲存帳戶，也不儲存內容。</strong>裝置身份是一把 Ed25519 密鑰，裝置 ID 由公鑰計算得出，伺服器不需要用戶資料表就能驗證身份。</li>
-            <li><strong>配對時由你核對安全指紋。</strong>兩部電腦的螢幕會顯示同樣的兩行：雙方各自公鑰的指紋。伺服器有能力替換轉發中的公鑰，但替換之後兩邊螢幕就對不上，這一步就是防範中間人攻擊的關卡。</li>
-            <li><strong>之後的每條訊息都帶簽名，</strong>伺服器無法冒充你的裝置。直連通道的證書在握手後還會再核對一次，不一致就立即中斷。</li>
-            <li><strong>中轉也只是轉發密文。</strong>TURN 轉發的是加密後的封包，中轉憑證按裝置個別簽發，12 小時後失效。</li>
-            <li><strong>區域網絡裏也一樣。</strong>裝置在區域網絡裏廣播的只是一個每天都會改變的匿名標識，看不出是誰的電腦，只有開啟「搜尋附近裝置」時才會帶上裝置名稱；配對同樣要核對指紋，之後的訊息同樣帶簽名。</li>
+            <li><strong>沒有帳戶，不存內容。</strong>每部裝置的身份是一把 Ed25519 密鑰，伺服器不需要用戶資料表就能驗證。</li>
+            <li><strong>配對時由你核對指紋。</strong>兩邊螢幕顯示同樣的兩行指紋。伺服器即使替換了公鑰，兩邊也會對不上。</li>
+            <li><strong>每條訊息都帶簽名。</strong>伺服器冒充不了你的裝置。直連建立後還會再核對一次證書，不一致就立即中斷。</li>
+            <li><strong>中轉也只是轉發密文。</strong>中轉憑證按裝置個別簽發，12 小時後失效。</li>
+            <li><strong>區域網絡裏也一樣。</strong>廣播的只是每天都會改變的匿名標識，看不出是誰的電腦；只有開啟「搜尋附近裝置」時才帶上裝置名稱。</li>
           </ul>
           <figure class="figure-card">
             <img src="../../assets/screenshots/zh-hk/card-verify-dark.png?v=1a083f711d" width="1120" height="800" alt="配對時的「核對安全指紋」對話框，顯示 R8NF-2WTC-QL5J，要求與另一部電腦上顯示的完全一致">

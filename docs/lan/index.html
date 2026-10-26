@@ -129,7 +129,7 @@
           <div><dt>在同一个网络里</dt><dd>两台电脑连着同一个路由器就行，Wi‑Fi 与有线混用也可以。访客网络、开了「AP 隔离」的 Wi‑Fi 不让设备互相访问；公司里有线和无线常常不在一个网段，这时看下面的<a href="#subnet">不在同一网段</a>。</dd></div>
           <div><dt>Windows 防火墙</dt><dd>第一次运行时，Windows 会问是否允许隔空贴通过防火墙，选允许。点过取消的话，在隔空贴的「设置 → 连接」里点「放行」，会请求一次管理员权限。</dd></div>
           <div><dt>macOS 的本地网络权限</dt><dd>macOS 15 起，第一次连接局域网里的设备时，系统会问是否允许 PasteFerry Daemon 查找本地网络上的设备，选允许。拒绝过的话，到「系统设置 → 隐私与安全性 → 本地网络」里打开它。</dd></div>
-          <div><dt>不用填服务器</dt><dd>「设置 → 连接」里的服务器地址留空就行。以后要跨网络同步，再填上服务器或者改用 Tailscale，已经配对的设备不用重新配对。</dd></div>
+          <div><dt>不用填服务器</dt><dd>「设置 → 连接」里的服务器地址留空就行。以后要跨网络同步，打开「服务」就行，已经配对的设备不用重新配对。</dd></div>
         </dl>
       </div>
     </section>
@@ -201,7 +201,7 @@
           </details>
           <details>
             <summary>离开这个网络后还能同步吗？</summary>
-            <div class="answer"><p>不能，回到这个网络后自动恢复，这期间复制的内容会补发到对方的复制记录里。要在不同网络之间同步，加一台<a href="../cloud/">公网服务器</a>，或者改用<a href="../tailscale/">Tailscale</a>，已经配对的设备不用重新配对。</p></div>
+            <div class="answer"><p>不能，回到这个网络后自动恢复。要在不同网络之间同步，打开<a href="../official/">服务</a>就行，也可以用<a href="../cloud/">公网服务器</a>或<a href="../tailscale/">Tailscale</a>，已经配对的设备不用重新配对。</p></div>
           </details>
           <details>
             <summary>地址变了怎么办？</summary>

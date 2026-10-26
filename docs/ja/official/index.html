@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>公式サービス：サーバーの準備は不要 — PasteFerry</title>
-  <meta name="description" content="スイッチひとつで自宅と会社のパソコンを接続。直接接続を優先し、失敗時のみ暗号化中継を使います。クラウド契約やアドレス入力は不要です。">
+  <title>サービス：サーバーを立てずに、自宅と会社のあいだで同期 — PasteFerry</title>
+  <meta name="description" content="スイッチをひとつオンにするだけで、自宅と会社のパソコンがお互いを見つけます。直接つながればそのまま、つながらなければ私たちのサーバーが中継します。クラウドサーバーの契約もアドレスの入力も要りません。">
   <link rel="canonical" href="https://pasteferry.cc/ja/official/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/official/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/official/">
@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PasteFerry">
-  <meta property="og:title" content="公式サービス：サーバーの準備は不要 — PasteFerry">
-  <meta property="og:description" content="スイッチひとつで自宅と会社のパソコンを接続。直接接続を優先し、失敗時のみ暗号化中継を使います。クラウド契約やアドレス入力は不要です。">
+  <meta property="og:title" content="サービス：サーバーを立てずに、自宅と会社のあいだで同期 — PasteFerry">
+  <meta property="og:description" content="スイッチをひとつオンにするだけで、自宅と会社のパソコンがお互いを見つけます。直接つながればそのまま、つながらなければ私たちのサーバーが中継します。クラウドサーバーの契約もアドレスの入力も要りません。">
   <meta property="og:url" content="https://pasteferry.cc/ja/official/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:locale" content="ja_JP">
@@ -76,26 +76,26 @@
 
   <main id="main">
     <section class="hero guide-hero"><div class="wrap">
-      <p class="crumb"><a href="../../ja/">PasteFerry</a> / 公式サービス</p>
-      <h1 class="display">別ネットワーク間、構築不要</h1>
-      <p class="lede">各パソコンに 2.1.0 以降を入れ、設定で公式サービスを有効にしてペアリングします。シグナリングが端末を引き合わせ、内容はまず直接送信。直接接続に失敗した場合のみ暗号化中継を使います。</p>
+      <p class="crumb"><a href="../../ja/">PasteFerry</a> / サービス</p>
+      <h1 class="display">自宅と職場の間でも使える</h1>
+      <p class="lede">2 台が別のネットワークにあるときは、「サービス」をオンにすれば同期できます。内容はできるだけ 2 台のあいだで直接送り、つながらないときだけサーバーが中継します。どちらの場合も暗号化されます。</p>
       <a class="button" href="../../ja/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>最新版をダウンロード</a>
     </div></section>
     <section class="section"><div class="wrap">
-      <h2>3 ステップでネットワークを越えて同期</h2>
-      <div class="os-grid"><ol class="steps">                <li>同期する各パソコンに最新版を入れ、バックグラウンド同期を有効にします。</li>
-                <li>各パソコンで「設定 → 接続 → サービスを使う」をオンにし、必要なデータの説明を確認します。公式のホスト名やポートの入力は不要です。</li>
-                <li>一方でコードを表示し、もう一方で入力。両画面の指紋を照合して確認します。既存のペアリングはそのまま使えます。</li></ol>
-        <figure class="shot"><img src="../../assets/screenshots/ja/official-settings-dark.png?v=b7970e6f95" width="2112" height="1472" alt="公式アドレスの入力が不要な設定画面の公式サービススイッチ"></figure>
+      <h2>オンにする手順</h2>
+      <div class="os-grid"><ol class="steps">                <li>各パソコンに最新版を入れ、「バックグラウンド同期を有効にする」をクリックします。</li>
+                <li>各パソコンの「設定 → 接続」で「サービスを使う」をオンにします。</li>
+                <li>一台でペアリングコードを表示し、もう一台で入力して、両方の画面の指紋を照合してから確定します。ペアリング済みのデバイスはそのまま使えます。</li></ol>
+        <figure class="shot"><img src="../../assets/screenshots/ja/official-settings-dark.png?v=b7970e6f95" width="2112" height="1472" alt="「設定 → 接続」の「サービスを使う」スイッチ"></figure>
       </div>
     </div></section>
-    <section class="section"><div class="wrap official-copy"><h2>直接接続を先に、中継は必要なときだけ</h2><p class="intro">公式シグナリングはオンライン端末間の接続情報を交換します。まず STUN と NAT トラバーサルを試し、その試行に失敗した場合のみ中継を申請します。内容は常にエンドツーエンド暗号化されます。</p></div></section>
-<section class="section"><div class="wrap official-copy"><h2>直接通信は中継残量を消費しません</h2><p class="intro">現在の標準中継上限は端末の上限グループごとに送受信合計 100 MB/日で、北京時間午前 0 時にリセットします。再インストールで新たな残量が得られる保証はありません。有効にすると、中継を使う前から使用量画面に本日の上限、残量、更新時刻を表示し、各デバイスが直接接続か中継かも一覧できます。上限に達しても直接接続は利用できます。上限と提供状況は変更される場合があるため、アプリでご確認ください。</p></div></section>
-<section class="section"><div class="wrap official-copy"><h2>有効にするかは自分で選べます</h2><p class="intro">新規インストールではオフです。有効にした場合のみ必要な接続情報を記録し、中継申請時にのみ専用の端末ダイジェストを導出します。実際の端末名、元のシステム識別子、コピー内容を統計として送信しません。項目と保持期間はプライバシー説明をご覧ください。</p></div></section>
-<section class="section"><div class="wrap official-copy"><h2>独自サーバーも引き続き利用可能</h2><p class="intro">LAN、独自サーバー、Tailscale は公式ゲートウェイから独立して動作します。容量を自分で管理したい場合はサーバーを構築し、独自アドレスの横にある「保存して接続」を使えます。</p></div></section>
+    <section class="section"><div class="wrap official-copy"><h2>直接つながれば中継しない</h2><p class="intro">サーバーはまず 2 台の接続情報の交換を手伝い、直接つながるよう試みます。ほとんどの家庭と会社のネットワークではこれでつながり、どうしてもつながらないときだけサーバーが中継します。どちらの場合も内容は暗号化されていて、サーバーには読めません。</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>中継は 1 日 100 MB、直接接続は無制限</h2><p class="intro">サーバーで中継する通信は、パソコン 1 台につき 1 日 100 MB（送受信の合計）です。北京時間の午前 0 時にリセットされ、アプリを入れ直してもリセットされません。直接接続は数えないので、使い切っても直接接続はそのまま使えます。使用量のページで、今日の残りと、各デバイスがいま直接接続か中継かを確認できます。上限は今後変わることがあり、アプリに表示される値が最新です。</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>初期設定はオフ</h2><p class="intro">新しく入れたアプリではオフになっています。オンにすると、サーバーは接続と残量の計算に必要な情報を記録します。コピーした内容とデバイス名は受け取りません。何をどのくらいの期間記録するかは、プライバシーに関する説明をご覧ください。</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>使わなくてもかまいません</h2><p class="intro">同じネットワークなら「サービス」は不要です。すべて自分で管理したいなら、独自サーバーを立てるか Tailscale を使い、「設定 → 接続」に自分のアドレスを入力します。</p></div></section>
     <section class="section"><div class="wrap official-copy">
-      <figure class="shot"><img src="../../assets/screenshots/ja/official-usage-dark.png?v=b9ea714887" width="2112" height="1472" loading="lazy" alt="上限 100.00 MB、残量 80.00 MB のデモ使用量画面"></figure>
-      <p class="note"><a href="../../ja/privacy/">プライバシーと必要なデータ</a> · <a href="../../ja/cloud/">独自サーバーの構築</a> · <a href="https://pasteferry.cc/">pasteferry.cc</a></p>
+      <figure class="shot"><img src="../../assets/screenshots/ja/official-usage-dark.png?v=b9ea714887" width="2112" height="1472" loading="lazy" alt="「サービス」の使用量ページ（デモデータ）：1 日 100.00 MB、残り 80.00 MB"></figure>
+      <p class="note"><a href="../../ja/privacy/">プライバシーに関する説明</a> · <a href="../../ja/cloud/">独自サーバーの構築</a> · <a href="https://pasteferry.cc/">pasteferry.cc</a></p>
     </div></section>
   </main>
 

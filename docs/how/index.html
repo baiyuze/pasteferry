@@ -86,11 +86,11 @@
     <section class="section" aria-labelledby="flow-title">
       <div class="wrap">
         <h2 id="flow-title">按下复制之后</h2>
-        <p class="intro">文字、图片、文件、整个文件夹，都走同一条路。</p>
+        <p class="intro">文字、图片、文件、文件夹，走的是同一条路。</p>
         <ol class="flow">
-          <li><h3>察觉</h3><p>Mac 上，后台服务每隔一小段时间看一眼剪贴板的变更计数，只看计数和类型，不需要授权，也不会弹出系统提示；Windows 上，复制的那一刻系统就会通知它。</p></li>
-          <li><h3>传输</h3><p>文本随消息一起发出；50 MB 以内的图片和文件打包成流立即推送；更大的文件只发一条记录，等你需要时再传。</p></li>
-          <li><h3>粘贴</h3><p>另一台电脑先把内容存到本地，再写入剪贴板。按下 ⌘V 或 Ctrl+V 粘贴出来的，就是本地的真实文件。</p></li>
+          <li><h3>发现</h3><p>Mac 上，后台服务定时看一眼剪贴板有没有变，只看变化不读内容，所以不会弹授权提示；Windows 上，复制时系统会通知它。</p></li>
+          <li><h3>传输</h3><p>文字直接发过去；50 MB 以内的图片和文件马上传；更大的只发一条记录，要用时再传。</p></li>
+          <li><h3>粘贴</h3><p>另一台先把内容存到本地，再放进剪贴板。按 ⌘V 或 Ctrl+V 粘贴出来的，就是真实的文件。</p></li>
         </ol>
       </div>
     </section>
@@ -98,11 +98,11 @@
     <section class="section" id="diagram" aria-labelledby="how-title">
       <div class="wrap">
         <h2 id="how-title">隔空贴的连接方式</h2>
-        <p class="intro">同一网络里，设备无需服务器就能找到彼此；跨网络时，「服务」或自建服务器帮助交换连接信息。优先打洞直连，失败后才使用加密中转。下图展示通用的信令与中转结构。</p>
+        <p class="intro">同一个网络里，两台电脑不用服务器就能互相找到。不在一个网络时，由「服务」或你自己的服务器帮忙交换连接信息，然后尽量直连；连不上才经服务器转发，内容同样加密。</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
             <title id="diagram-title">隔空贴的连接方式</title>
-            <desc id="diagram-desc">电脑 A 与电脑 B（Mac 或 Windows）之间是 WebRTC 直连；两台电脑都通过信令连接到信令与中转服务；直连失败时，数据经服务器的 TURN 中转。</desc>
+            <desc id="diagram-desc">电脑 A 与电脑 B 之间是 WebRTC 直连；两台电脑都通过信令连到服务器；直连失败时，数据经服务器的 TURN 中转。</desc>
             <rect class="d-box" x="360" y="24" width="240" height="96" rx="14"/>
             <text class="d-title" x="480" y="64" text-anchor="middle">信令与中转服务</text>
             <text class="d-sub" x="480" y="92" text-anchor="middle">信令、STUN、TURN 中转</text>
@@ -111,16 +111,16 @@
             <path class="d-relay" d="M196 210V100H360"/>
             <path class="d-relay" d="M764 210V100H600"/>
             <text class="d-note" x="210" y="50">信令：交换连接信息</text>
-            <text class="d-note" x="210" y="128">中转：仅在打不通直连时</text>
+            <text class="d-note" x="210" y="128">中转：只在直连不通时</text>
             <rect class="d-box" x="40" y="210" width="240" height="120" rx="14"/>
             <text class="d-title" x="160" y="262" text-anchor="middle">Mac</text>
             <text class="d-sub" x="160" y="290" text-anchor="middle">在这里复制</text>
             <rect class="d-box" x="680" y="210" width="240" height="120" rx="14"/>
-            <text class="d-title" x="800" y="262" text-anchor="middle">Mac 或 Windows</text>
+            <text class="d-title" x="800" y="262" text-anchor="middle">Mac、Windows 或 Linux</text>
             <text class="d-sub" x="800" y="290" text-anchor="middle">在这里粘贴</text>
             <path class="d-direct" d="M280 270H680"/>
             <text class="d-label" x="480" y="256" text-anchor="middle">WebRTC 直连，DTLS 加密</text>
-            <text class="d-note" x="480" y="298" text-anchor="middle">数据只在两台电脑之间传输</text>
+            <text class="d-note" x="480" y="298" text-anchor="middle">数据只在两台电脑之间传</text>
             <g class="d-legend" transform="translate(40 372)">
               <path class="d-direct" d="M0 0H28"/><text x="38" y="5">数据（直连）</text>
               <path class="d-relay" d="M210 0H238"/><text x="248" y="5">数据（中转，备用）</text>
@@ -128,9 +128,9 @@
             </g>
           </svg>
           <ul class="points diagram-text">
-            <li><strong>WebRTC 直连，DTLS 加密</strong> 数据只在两台电脑之间传输</li>
+            <li><strong>WebRTC 直连，DTLS 加密</strong> 数据只在两台电脑之间传</li>
             <li><strong>信令与中转服务</strong> 信令、STUN、TURN 中转</li>
-            <li>中转：仅在打不通直连时</li>
+            <li>中转：只在直连不通时</li>
           </ul>
         </figure>
       </div>
@@ -139,22 +139,22 @@
     <section class="section" id="multi-uplink" aria-labelledby="multi-title">
       <div class="wrap">
         <h2 id="multi-title">公司网络也能直连</h2>
-        <p class="intro">公司双线、运营商地址池这类网络有多个出口，按目标地址选走哪一个。只探测一次只会知道其中一个出口，只能经服务器中转。隔空贴会探测每个出口，把地址都告诉对端。</p>
+        <p class="intro">双线、多出口的公司网络，按目标地址决定走哪个出口。只探测一次只能知道其中一个，所以以前只能中转。隔空贴会把每个出口都探出来，交给对方逐个尝试。</p>
         <div class="cols">
           <div>
             <h3>做了什么</h3>
             <ul class="points">
-              <li><strong>共用一个端口。</strong>所有连接从同一个本地 UDP 端口收发，向不同服务器问到的地址才对得上。</li>
-              <li><strong>探测每个出口。</strong>在这个端口上同时询问 7 台 IP 分散的服务器，网络有几个出口就拿到几个地址；被 DNS 污染的地址先过滤掉。</li>
-              <li><strong>全部告诉对端。</strong>对端逐个尝试，与实际出口吻合的那一个能打通。</li>
-              <li><strong>记住见过的出口。</strong>某次漏掉的出口如果不改端口，就用「出口 IP + 本地端口」推算补上。</li>
-              <li><strong>定好谁先发包。</strong>有的路由器收到对方先到的包会占住端口。一方先公布出口地址，另一方先往那边发包再公布自己的；重试时两种顺序轮流用。</li>
-              <li><strong>空闲时重试直连。</strong>直连失败且中转可用时，先通过中转保持同步。连接空闲时可重试打洞，成功后切回直连并释放中转。</li>
+              <li><strong>共用一个端口。</strong>所有连接从同一个 UDP 端口收发，问到的地址才对得上。</li>
+              <li><strong>探测每个出口。</strong>同时问 7 台分散在各地的服务器，有几个出口就拿到几个地址。</li>
+              <li><strong>全部告诉对方。</strong>对方逐个尝试，和实际出口对上的那个就能连通。</li>
+              <li><strong>记住见过的出口。</strong>某次漏掉的出口，用以前见过的地址补上。</li>
+              <li><strong>定好谁先发包。</strong>有的路由器会被对方先到的包占住端口，所以双方按顺序发，重试时换个顺序。</li>
+              <li><strong>空闲时再试直连。</strong>先用中转保证能同步，没在传东西时再试直连，连上就不再占用中转。</li>
             </ul>
           </div>
           <div>
-            <h3>用真实的网络拓扑验证</h3>
-            <p class="small">NAT 打洞实验室用 Linux 网络命名空间与 iptables 搭出这些拓扑，用隔空贴真实的连接代码各跑一遍，每次提交代码都自动运行。</p>
+            <h3>用真实的网络拓扑测试</h3>
+            <p class="small">打洞实验室用 Linux 网络命名空间和 iptables 搭出这些网络，跑隔空贴真实的连接代码，每次提交都自动运行。</p>
             <div class="table-scroll">
               <table>
                 <thead><tr><th scope="col">场景</th><th scope="col">结果</th></tr></thead>
@@ -178,8 +178,8 @@
                 </tbody>
               </table>
             </div>
-            <p class="small">实测：一台在 4 个出口的公司网络里的 Mac 与家里的 Mac，改造前只能中转，速度被服务器带宽限制在 0.6 MB/s；改造后直连，连上服务器后约 3 秒建立。</p>
-            <p class="small">测量过程、设计取舍与踩过的坑见<a href="../design/nat-traversal.html">技术方案</a>。</p>
+            <p class="small">实测：公司 4 个出口的 Mac 和家里的 Mac，改之前只能中转，速度被服务器带宽卡在 0.6 MB/s；改之后直连，约 3 秒连上。</p>
+            <p class="small">测量过程和设计取舍见<a href="../design/nat-traversal.html">技术方案</a>。</p>
           </div>
         </div>
       </div>
@@ -187,24 +187,20 @@
 
     <section class="section" id="fallbacks" aria-labelledby="fallback-title">
       <div class="wrap">
-        <h2 id="fallback-title">出问题的时候会发生什么</h2>
-        <p class="intro">每个人的网络环境都不一样。下面这些情况都考虑过，也都有对应的测试。</p>
+        <h2 id="fallback-title">出问题的时候</h2>
+        <p class="intro">这些情况都考虑过，也都有测试。</p>
         <dl class="fallbacks">
-          <div><dt>同一网络里找不到对方</dt><dd>不同网段、访客网络、开了 AP 隔离的 Wi‑Fi 会挡住局域网发现。配对时输入对方配对码下面显示的地址就行；之后地址会被记住，两边都换了地址时，在设备列表里给它重新输入一次。</dd></div>
-          <div><dt>系统拦着局域网</dt><dd>macOS 15 起，后台服务连接局域网里的设备要你允许；Windows 第一次运行时会问防火墙。没放行时 App 会提示，并给出直达的按钮。</dd></div>
-          <div><dt>两台电脑打不通直连</dt><dd>服务模式在直连失败后，按当前额度申请中转；自建模式使用自己的 TURN 中转。两种方式的内容均保持端到端加密。</dd></div>
-          <div><dt>公共 STUN 服务器连不上</dt><dd>国内访问公共 STUN 时通时断。服务器自带 STUN，客户端优先用它。</dd></div>
-          <div><dt>从中转切回直连</dt><dd>直连失败且中转可用时，先通过中转保持同步。连接空闲时可重试打洞，成功后切回直连并释放中转。</dd></div>
-          <div><dt>对方睡眠、断网或重启</dt><dd>连接悄悄断了也能发现，立即关闭重连。这期间复制的内容会记下来，连上后补发到对方的复制记录里，但不会覆盖对方此刻剪贴板里的内容。</dd></div>
-          <div><dt>服务器断开</dt><dd>自动重连，间隔从 1 秒开始翻倍、最长 30 秒，并带随机抖动，避免一群设备同时重连。同一网络里的设备不受影响，照常同步。</dd></div>
-          <div><dt>文件太大</dt><dd>超过上限的只同步一条记录，需要时再拉取。拉取时源文件已经被删，会明确告诉你，而不是不明不白地失败。</dd></div>
-          <div><dt>传文件时断开</dt><dd>隔空传送传到一半断网、睡眠或程序退出，30 分钟内连上会从断点自动接着传；更晚的话点「继续」，同样从断点开始。每个文件都校验，不完整的不会出现在保存位置。</dd></div>
-          <div><dt>粘贴到只认纯文本的地方</dt><dd>从网页复制的带格式文字会同时写入 HTML 和纯文本两份，粘贴到哪里都不会冒出标签。</dd></div>
-          <div><dt>文件名在 Windows 上不合法</dt><dd>Mac 上可以用的冒号、问号等字符，收到时换成对应的全角字符，名字照样看得懂；只差大小写的两个文件也不会互相覆盖。</dd></div>
-          <div><dt>复制的是密码</dt><dd>Windows 上，密码管理器复制的内容会带一个「不要记录」的标记，隔空贴看到就跳过：不同步，也不进复制记录。</dd></div>
-          <div><dt>还没授权读取剪贴板</dt><dd>不去读内容，否则后台进程会卡在一个看不见的系统弹窗上。App 里会提示你去授权，并给出直达按钮。</dd></div>
-          <div><dt>后台服务崩溃</dt><dd>Mac 上由系统的 launchd、Windows 上由隔空贴自带的守护进程自动拉起，10 秒节流，不会疯狂重启。</dd></div>
-          <div><dt>更新了 App，或者把它挪了位置</dt><dd>打开 App 时会自动校正登录项，并把后台服务重启到新版本。</dd></div>
+          <div><dt>同一网络里找不到对方</dt><dd>不同网段、访客网络、开了 AP 隔离的 Wi‑Fi 会挡住发现。配对时填上对方的地址就行，之后会记住。</dd></div>
+          <div><dt>系统拦着局域网</dt><dd>macOS 15 起要允许「本地网络」，Windows 第一次运行会问防火墙。没放行时 App 会提示，并给出直达按钮。</dd></div>
+          <div><dt>打不通直连</dt><dd>用「服务」时经服务器中转，每天 100 MB；用自己的服务器时不限量。内容都是端到端加密的。</dd></div>
+          <div><dt>对方睡眠、断网或重启</dt><dd>连接断了能马上发现并重连。这期间复制的内容可以在连上后补发到对方的复制记录（默认关闭），不会覆盖对方当前的剪贴板。</dd></div>
+          <div><dt>服务器断开</dt><dd>自动重连，间隔从 1 秒逐步加到 30 秒。同一网络里的设备不受影响。</dd></div>
+          <div><dt>文件太大</dt><dd>超过上限的只同步一条记录，要用时再传。源文件已经删了的话，会直接告诉你。</dd></div>
+          <div><dt>传文件时断开</dt><dd>隔空传送 30 分钟内连上会自动接着传，更晚就点「继续」。每个文件都校验，不完整的不会出现在保存位置。</dd></div>
+          <div><dt>粘贴到只认纯文本的地方</dt><dd>带格式的文字同时写入 HTML 和纯文本两份，粘贴到哪里都不会冒出标签。</dd></div>
+          <div><dt>文件名在 Windows 上不合法</dt><dd>冒号、问号这类字符换成全角，名字照样看得懂；只差大小写的两个文件不会互相覆盖。</dd></div>
+          <div><dt>复制的是密码</dt><dd>Windows 上密码管理器标了「不要记录」的内容，隔空贴直接跳过，不同步也不进记录。</dd></div>
+          <div><dt>后台服务崩溃或 App 更新</dt><dd>系统会自动把它拉起来；更新或挪了位置后，打开 App 时会自动重启到新版本。</dd></div>
         </dl>
       </div>
     </section>
@@ -219,15 +215,15 @@
             <tr><th scope="row">Mac 客户端</th><td>macOS 13 Ventura 及以上；Apple 芯片与 Intel 芯片各有一个安装包，约 25 MB，不需要 Rosetta；也有两种芯片通用的版本，约 47 MB</td></tr>
             <tr><th scope="row">Windows 客户端</th><td>Windows 10 与 Windows 11，x64；按用户安装，不需要管理员权限；安装包约 23 MB</td></tr>
             <tr><th scope="row">Linux 客户端</th><td>x64 与 ARM64；.deb（Debian、Ubuntu 等）或 tar.gz（其他发行版），约 22 MB；需要 X11 桌面，或者带 XWayland 的 Wayland 桌面（GNOME、KDE 等默认都带）；GTK 3</td></tr>
-            <tr><th scope="row">服务器</th><td>仅自建时需要部署；使用服务无需自备服务器。自建支持 Linux x86_64/ARM64、macOS 与 Windows 10/11 x64。</td></tr>
+            <tr><th scope="row">服务器</th><td>用「服务」或在同一网络里都不需要。自建的话，支持 Linux x86_64/ARM64、macOS 与 Windows 10/11 x64。</td></tr>
             <tr><th scope="row">界面语言</th><td>简体中文、繁體中文（台灣、香港）、English、日本語，默认跟随系统，可在设置里切换</td></tr>
             <tr><th scope="row">同步的内容</th><td>纯文本、带格式的文本、图片与截图、文件、文件夹，可以按类型关闭</td></tr>
             <tr><th scope="row">传输</th><td>WebRTC 数据通道，直连优先，打不通时经 TURN 中转；同一网络里经 mDNS 发现、UDP 8788 交换连接信息；多出口网络逐个探测每个出口；文件以 tar + zstd 流式打包</td></tr>
             <tr><th scope="row">加密与身份</th><td>DTLS 端到端加密；设备身份为 Ed25519 密钥；信令消息逐条签名</td></tr>
             <tr><th scope="row">配对</th><td>6 位配对码，5 分钟内有效，字符集去掉了 0/O、1/I 等易混字符；配对时人工核对安全指纹</td></tr>
             <tr><th scope="row">自动同步上限</th><td>默认 50 MB，可在 1 MB 到 1 GB 之间调整</td></tr>
-            <tr><th scope="row">隔空传送</th><td>传给一台设备，不限大小，单个文件和整个文件夹都可以；局域网使用加密 TCP 快速通道（两端需 2.5.1），不可用时自动退回数据通道；外网与中转仍用 WebRTC；中断后续传，每个文件用 SHA-256 校验。Mac → Linux 虚拟机传 1 GB 实测 144.3 MB/s，之前为 18.7 MB/s；实际速度取决于网络与磁盘。</td></tr>
-            <tr><th scope="row">好友</th><td>加好友用 F 开头的 7 位好友码，经局域网或服务交换，可核对安全码；好友之间只能互发文件和图片，可附 200 字以内的备注，每批都要对方接受；剪贴板、复制记录、设备列表不给好友；收到的文件去掉可执行权限，Mac 上打隔离标记；两端需 2.6</td></tr>
+            <tr><th scope="row">隔空传送</th><td>发给一台设备，不限大小，文件和整个文件夹都行；局域网里走加密的 TCP 通道（两端需 2.5.1），用不了时退回 WebRTC；外网和中转用 WebRTC；断了接着传，每个文件用 SHA-256 校验。Mac 发 1 GB 到 Linux 虚拟机实测 144.3 MB/s，实际速度看网络和硬盘。</td></tr>
+            <tr><th scope="row">好友</th><td>F 开头的 7 位好友码，经局域网或「服务」交换，可以核对安全码；好友之间只能互发文件和图片，可附 200 字以内的备注，每批都要对方接受；好友看不到你的剪贴板、复制记录和设备；收到的文件去掉可执行权限，Mac 上加隔离标记；两端需 2.6 或更新</td></tr>
             <tr><th scope="row">记录保留</th><td>默认 3 天，可在 1 小时到 30 天之间调整，到期自动清理</td></tr>
             <tr><th scope="row">实测速度</th><td>局域网直连传输 20 MB 文件约 330 毫秒，校验和一致</td></tr>
             <tr><th scope="row">技术栈</th><td>后台服务与服务器用 Go（Windows 上纯 Go 调用 Win32，Linux 上纯 Go 走 X11 协议），界面用 Flutter（三个系统共用一套代码），消息定义用 Protocol Buffers</td></tr>

@@ -41,34 +41,18 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "開啟 UU 遠程時，為甚麼不斷出現 .uuremote_ 檔案？",
+      "name": "和 Mac 內建的「通用剪貼簿」有甚麼分別？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "UU 遠程會在系統剪貼簿裏寫入臨時佔位檔案，舊版隔空貼把它們當成普通檔案反覆記錄和轉發。1.3.2 會在傳送和接收時過濾已確認的佔位命名，並在啟動時清理純佔位記錄。正常的空檔案、隱藏檔案和大檔案不受此規則影響。50 MB 只決定是否自動傳輸，與 UU 的 UDP P2P 設定無關。建議兩端都升級；其他軟件如果也同步剪貼簿，仍可能產生普通內容的重複記錄。"
+        "text": "「通用剪貼簿」只在同一個 Apple ID 的 Apple 裝置之間有效，裝置還要在附近。隔空貼不看帳戶，Mac、Windows、Linux 都能互通，家裏和公司之間也能同步，複製過的內容還能在複製記錄裏找回。 如果你只有兩部同一個 Apple ID 的 Mac，平時主要複製文字，系統內建的已經夠用。"
       }
     },
     {
       "@type": "Question",
-      "name": "和 macOS 內建的「通用剪貼簿」有甚麼分別？",
+      "name": "和 AirDrop 有甚麼分別？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Mac、Windows、Linux 互通，文字、圖片、檔案、整個資料夾都可以，不要求同一帳戶。現在啟用「服務」就能跨網絡同步，無需自行架設伺服器。優先直連，始終端到端加密。 如果你的兩部 Mac 用同一個 Apple ID、總是放在一起、主要複製文字，系統內建的功能已經足夠。"
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "伺服器會看到我複製的內容嗎？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "伺服器無法解密複製內容：直連時內容不經過中轉伺服器；中轉時轉發端到端加密封包。「服務」保留必要裝置與用量統計，詳見私隱說明。原始碼可供審計，不代表能證明私有正式環境的儲存行為。"
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "公司網絡（雙線、多出口）能直連嗎？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "能。這類網絡按目標地址選擇出口，隔空貼會在同一個端口上向多部伺服器探測，取得每個出口的地址後一併發給對方，由對方逐個嘗試。實測公司 4 個出口與家用寬頻之間可以直連。對方是端口隨機分配的 NAT 時仍會經中轉。"
+        "text": "AirDrop 只在 Apple 裝置之間、而且在附近時才能用，每次都要對方按接受。隔空貼的「隔空傳送」在 Mac、Windows、Linux 之間都能傳，不在同一個網絡也可以，大檔案中斷了能接着傳。自己的電腦之間不用按接受；傳給好友時，對方按一下接受就可以。"
       }
     },
     {
@@ -76,7 +60,7 @@
       "name": "一定要自己準備伺服器嗎？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "不需要。不同網絡時，在兩部電腦上啟用服務即可，不用購買雲端主機或填寫地址。預設關閉，目前提供每日 100 MB 中轉額度，直連不消耗此額度。區域網絡、自建伺服器與 Tailscale 繼續可用。"
+        "text": "不用。兩部電腦在同一個網絡裏，裝好就能配對。不在同一個網絡，在兩部電腦上開啟服務就可以，不用買雲端伺服器，也不用填地址。 想自己掌控的話，也可以用自建伺服器或 Tailscale。"
       }
     },
     {
@@ -84,7 +68,23 @@
       "name": "家裏沒有公網 IP，能在家和公司之間同步嗎？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "不需要。不同網絡時，在兩部電腦上啟用服務即可，不用購買雲端主機或填寫地址。預設關閉，目前提供每日 100 MB 中轉額度，直連不消耗此額度。區域網絡、自建伺服器與 Tailscale 繼續可用。"
+        "text": "能。開啟服務，兩部電腦會先嘗試直接相連，大多數家用寬頻和公司網絡都連得上；連不上時經伺服器轉發，每日有 100 MB 額度。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "伺服器能看到我複製的內容嗎？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "看不到。內容只有你的裝置能解密：直連時不經過伺服器，經中轉時伺服器轉發的也只是加密後的資料。 用「服務」時，伺服器會記錄連接和計算額度所需的資訊，詳情見私隱說明。用戶端和伺服器的程式碼都是公開的。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "中轉額度有多少？用完了怎麼辦？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "每部電腦每日 100 MB，上傳下載合計，北京時間零點重設。直連不計額度，用完了直連照樣能用。額度日後可能調整，以 App 裏顯示的為準。 中轉用得多的話，可以自建伺服器，不限量。"
       }
     },
     {
@@ -92,23 +92,15 @@
       "name": "在同一個網絡裏，為甚麼找不到另一部電腦？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "先看兩部是否真的在同一個網段：公司裏的有線和無線網絡、訪客網絡、開啟了「AP 隔離」的 Wi‑Fi 往往互不相通，區域網絡發現無法穿過。這時在輸入配對碼的那部電腦按「不在同一網段？」，填上另一部電腦配對碼下面顯示的地址。 在 Windows 上，第一次執行時防火牆會詢問，要選擇允許；如果按過取消，可在「設定 → 連接」裏按「允許」。在 Mac 上，要在「系統設定 → 私隱與保安 → 本地網絡」裏開啟 PasteFerry Daemon。詳情見同一網絡教學。"
+        "text": "先確認兩部真的在同一個網段：公司裏的有線和無線、訪客網絡、開啟了「AP 隔離」的 Wi‑Fi 往往互不相通。這時在輸入配對碼的那部按「不在同一網段？」，填上另一部配對碼下面顯示的地址。 在 Windows 上，第一次執行時防火牆會詢問，要選允許；按過取消的話，在「設定 → 連接」裏按「允許」。在 Mac 上，在「系統設定 → 私隱與保安 → 本地網絡」裏開啟 PasteFerry Daemon。詳情見同一網絡教學。"
       }
     },
     {
       "@type": "Question",
-      "name": "支援 Windows 和 Linux 嗎？iPhone 呢？",
+      "name": "能把檔案傳到別人的電腦嗎？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "支援 Windows 10 與 Windows 11（x64），與 Mac 互通。複製的檔案在 Windows 上貼上後就是真實檔案，可以直接貼進檔案總管、微信、Office。 也支援 x64 與 ARM64 的 Linux 桌面：X11，或帶 XWayland 的 Wayland 桌面（GNOME、KDE 等預設都已包含）。複製的檔案可以直接貼進檔案管理員。 暫不支援 iPhone 和 iPad：iOS 不允許 App 在背景監測剪貼簿，做不到複製後即時同步。"
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "為甚麼第一次開啟時系統會阻擋一下？",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "隔空貼仍未經 Apple 公證，Windows 版也仍未有程式碼簽署，兩者都需要每年付費的證書。 在 Mac 上，到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」；在 Windows 上，在「Windows 已保護您的電腦」提示裏按「其他資訊」，再按「仍要執行」。兩者都只需要做一次。"
+        "text": "能。2.6 起可以加好友：對方在「好友」頁按「新增好友」給出好友碼，你輸入，兩邊確認就加上了，不用配對。之後把檔案拖到對方的頭像上，對方按接受就開始傳，還可以附一句備註。 好友之間只傳檔案和圖片，看不到彼此的剪貼簿、複製記錄和裝置。誰能傳給你，在隔空傳送頁底部選擇：均不允許、只限好友或所有人（只在區域網絡，10 分鐘後自動關閉）。"
       }
     },
     {
@@ -116,15 +108,31 @@
       "name": "大檔案怎樣處理？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "預設 50 MB 以內的內容在你複製時就會推送到另一部電腦，那邊可以直接貼上；更大的檔案只同步一條記錄，需要時在複製記錄裏按「拉取到本機」再傳送。上限可以在設定裏調整。 想把檔案直接傳給某一部電腦，用「隔空傳送」：不限大小，不進複製記錄，中斷了會接着傳。"
+        "text": "50 MB 以內的內容，複製時已經傳到另一部，那邊直接貼上就可以。更大的檔案先只同步一條記錄，需要時在複製記錄裏按「接收」再傳。這個上限可以在設定裏更改。 想把大檔案直接傳到某一部電腦，用「隔空傳送」：不限大小，中斷了接着傳。"
       }
     },
     {
       "@type": "Question",
-      "name": "可以把檔案傳到別人的電腦嗎？",
+      "name": "公司網絡（雙線、多出口）能直連嗎？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "可以。2.6 起可以加好友：對方在隔空傳送裏按右上角的「新增好友」給出好友碼，你輸入，兩邊確認就加上了，不用配對。之後把檔案拖到對方的頭像上，對方接受後就開始傳，可以附一句備註。 好友之間只傳檔案和圖片，不同步剪貼簿，也看不到彼此的複製記錄和裝置。誰能傳給你，在隔空傳送頁底部選：均不允許、僅限好友或所有人（只在區域網絡，10 分鐘後自動關閉）。"
+        "text": "能。這類網絡有好幾個出口，隔空貼會把每個出口的地址都探測出來，交給對方逐個嘗試。實測公司 4 個出口的網絡和家用寬頻之間可以直連。對方的路由器每次隨機換端口時，仍然只能中轉。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "支援 Windows 和 Linux 嗎？iPhone 呢？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "支援 Windows 10、11（x64）和 Linux（x64、ARM64，X11 或帶 XWayland 的 Wayland 桌面，GNOME、KDE 預設都已包含）。複製的檔案貼上後就是真實檔案，能直接貼進檔案總管、檔案管理員、微信、Office。 iPhone 和 iPad 暫不支援：iOS 不允許 App 在背景讀取剪貼簿，做不到複製後即時同步。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "為甚麼第一次開啟時系統會阻擋一下？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "隔空貼仍未做 Apple 公證和 Windows 程式碼簽署，兩者都要每年付費買證書。 在 Mac 上，到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」；在 Windows 上，在「Windows 已保護您的電腦」裏按「其他資訊」，再按「仍要執行」。只需要做一次。"
       }
     },
     {
@@ -132,15 +140,15 @@
       "name": "免費嗎？公司可以用嗎？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "免費。隔空貼以 GNU AGPL-3.0 開源，個人和公司都可以免費使用和修改。分發它，或透過網絡提供修改過的版本時，需要以同樣的授權公開原始碼。"
+        "text": "免費。隔空貼以 GNU AGPL-3.0 開源，個人和公司都能免費使用、免費修改。如果你分發它，或者把修改過的版本放到網上給別人用，需要同樣公開原始碼。"
       }
     },
     {
       "@type": "Question",
-      "name": "服務中轉不限量嗎？",
+      "name": "開啟 UU 遠程時，為甚麼不斷出現 .uuremote_ 檔案？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "目前預設每機器額度組每日 100 MB 中轉流量，上傳與下載合計，北京時間午夜重設。重新安裝不保證獲得新額度。用量頁顯示實際額度、剩餘量與更新時間；額度用完仍可直連。額度與服務可用性可能調整，以用戶端顯示為準。"
+        "text": "UU 遠程會在剪貼簿裏寫入臨時佔位檔案，1.3.2 以前的隔空貼把它們當成普通檔案同步。升級到新版本就好了，正常的空檔案、隱藏檔案不受影響。"
       }
     }
   ]
@@ -156,13 +164,13 @@
       <nav aria-label="頁面導覽">
         <a href="../../zh-hk/features/">功能</a>
         <a class="mid" href="../../zh-hk/start/">快速開始</a>
-        <a class="wide" href="../../zh-hk/start/#server">連線方式</a>
+        <a class="wide" href="../../zh-hk/start/#server">連接方式</a>
         <a href="../../zh-hk/download/">下載</a>
         <details class="menu">
           <summary aria-label="更多頁面" class="current"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
             <li class="narrow"><a href="../../zh-hk/start/">快速開始</a></li>
-            <li class="narrow"><a href="../../zh-hk/start/#server">連線方式</a></li>
+            <li class="narrow"><a href="../../zh-hk/start/#server">連接方式</a></li>
             <li><a href="../../zh-hk/how/">運作原理</a></li>
             <li><a href="../../zh-hk/security/">安全與私隱</a></li>
             <li><a href="./" aria-current="page">常見問題</a></li>
@@ -199,56 +207,60 @@
       <div class="wrap">
         <div class="faq">
           <details>
-            <summary>開啟 UU 遠程時，為甚麼不斷出現 .uuremote_ 檔案？</summary>
-            <div class="answer"><p>UU 遠程會在系統剪貼簿裏寫入臨時佔位檔案，舊版隔空貼把它們當成普通檔案反覆記錄和轉發。1.3.2 會在傳送和接收時過濾已確認的佔位命名，並在啟動時清理純佔位記錄。正常的空檔案、隱藏檔案和大檔案不受此規則影響。50 MB 只決定是否自動傳輸，與 UU 的 UDP P2P 設定無關。建議兩端都升級；其他軟件如果也同步剪貼簿，仍可能產生普通內容的重複記錄。</p></div>
+            <summary>和 Mac 內建的「通用剪貼簿」有甚麼分別？</summary>
+            <div class="answer"><p>「通用剪貼簿」只在同一個 Apple ID 的 Apple 裝置之間有效，裝置還要在附近。隔空貼不看帳戶，Mac、Windows、Linux 都能互通，家裏和公司之間也能同步，複製過的內容還能在複製記錄裏找回。</p><p>如果你只有兩部同一個 Apple ID 的 Mac，平時主要複製文字，系統內建的已經夠用。</p></div>
           </details>
           <details>
-            <summary>和 macOS 內建的「通用剪貼簿」有甚麼分別？</summary>
-            <div class="answer"><p>Mac、Windows、Linux 互通，文字、圖片、檔案、整個資料夾都可以，不要求同一帳戶。現在啟用「服務」就能跨網絡同步，無需自行架設伺服器。優先直連，始終端到端加密。</p><p>如果你的兩部 Mac 用同一個 Apple ID、總是放在一起、主要複製文字，系統內建的功能已經足夠。</p></div>
-          </details>
-          <details>
-            <summary>伺服器會看到我複製的內容嗎？</summary>
-            <div class="answer"><p>伺服器無法解密複製內容：直連時內容不經過中轉伺服器；中轉時轉發端到端加密封包。「服務」保留必要裝置與用量統計，詳見私隱說明。原始碼可供審計，不代表能證明私有正式環境的儲存行為。</p></div>
-          </details>
-          <details>
-            <summary>公司網絡（雙線、多出口）能直連嗎？</summary>
-            <div class="answer"><p>能。這類網絡按目標地址選擇出口，隔空貼會在同一個端口上向多部伺服器探測，取得每個出口的地址後一併發給對方，由對方逐個嘗試。實測公司 4 個出口與家用寬頻之間可以直連。對方是端口隨機分配的 NAT 時仍會經中轉。</p></div>
+            <summary>和 AirDrop 有甚麼分別？</summary>
+            <div class="answer"><p>AirDrop 只在 Apple 裝置之間、而且在附近時才能用，每次都要對方按接受。隔空貼的「隔空傳送」在 Mac、Windows、Linux 之間都能傳，不在同一個網絡也可以，大檔案中斷了能接着傳。自己的電腦之間不用按接受；傳給好友時，對方按一下接受就可以。</p></div>
           </details>
           <details>
             <summary>一定要自己準備伺服器嗎？</summary>
-            <div class="answer"><p>不需要。不同網絡時，在兩部電腦上啟用<a href="../../zh-hk/official/">服務</a>即可，不用購買雲端主機或填寫地址。預設關閉，目前提供每日 100 MB 中轉額度，直連不消耗此額度。區域網絡、<a href="../../zh-hk/cloud/">自建伺服器</a>與 <a href="../../zh-hk/tailscale/">Tailscale</a> 繼續可用。</p></div>
+            <div class="answer"><p>不用。兩部電腦在同一個網絡裏，裝好就能配對。不在同一個網絡，在兩部電腦上開啟<a href="../../zh-hk/official/">服務</a>就可以，不用買雲端伺服器，也不用填地址。</p><p>想自己掌控的話，也可以用<a href="../../zh-hk/cloud/">自建伺服器</a>或 <a href="../../zh-hk/tailscale/">Tailscale</a>。</p></div>
           </details>
           <details>
             <summary>家裏沒有公網 IP，能在家和公司之間同步嗎？</summary>
-            <div class="answer"><p>不需要。不同網絡時，在兩部電腦上啟用<a href="../../zh-hk/official/">服務</a>即可，不用購買雲端主機或填寫地址。預設關閉，目前提供每日 100 MB 中轉額度，直連不消耗此額度。區域網絡、<a href="../../zh-hk/cloud/">自建伺服器</a>與 <a href="../../zh-hk/tailscale/">Tailscale</a> 繼續可用。</p></div>
+            <div class="answer"><p>能。開啟<a href="../../zh-hk/official/">服務</a>，兩部電腦會先嘗試直接相連，大多數家用寬頻和公司網絡都連得上；連不上時經伺服器轉發，每日有 100 MB 額度。</p></div>
+          </details>
+          <details>
+            <summary>伺服器能看到我複製的內容嗎？</summary>
+            <div class="answer"><p>看不到。內容只有你的裝置能解密：直連時不經過伺服器，經中轉時伺服器轉發的也只是加密後的資料。</p><p>用「服務」時，伺服器會記錄連接和計算額度所需的資訊，詳情見<a href="../../zh-hk/privacy/">私隱說明</a>。用戶端和伺服器的程式碼都是公開的。</p></div>
+          </details>
+          <details>
+            <summary>中轉額度有多少？用完了怎麼辦？</summary>
+            <div class="answer"><p>每部電腦每日 100 MB，上傳下載合計，北京時間零點重設。直連不計額度，用完了直連照樣能用。額度日後可能調整，以 App 裏顯示的為準。</p><p>中轉用得多的話，可以<a href="../../zh-hk/cloud/">自建伺服器</a>，不限量。</p></div>
           </details>
           <details>
             <summary>在同一個網絡裏，為甚麼找不到另一部電腦？</summary>
-            <div class="answer"><p>先看兩部是否真的在同一個網段：公司裏的有線和無線網絡、訪客網絡、開啟了「AP 隔離」的 Wi‑Fi 往往互不相通，區域網絡發現無法穿過。這時在輸入配對碼的那部電腦按「不在同一網段？」，填上另一部電腦配對碼下面顯示的地址。</p><p>在 Windows 上，第一次執行時防火牆會詢問，要選擇允許；如果按過取消，可在「設定 → 連接」裏按「允許」。在 Mac 上，要在「系統設定 → 私隱與保安 → 本地網絡」裏開啟 PasteFerry Daemon。詳情見<a href="../../zh-hk/lan/#faq">同一網絡教學</a>。</p></div>
+            <div class="answer"><p>先確認兩部真的在同一個網段：公司裏的有線和無線、訪客網絡、開啟了「AP 隔離」的 Wi‑Fi 往往互不相通。這時在輸入配對碼的那部按「不在同一網段？」，填上另一部配對碼下面顯示的地址。</p><p>在 Windows 上，第一次執行時防火牆會詢問，要選允許；按過取消的話，在「設定 → 連接」裏按「允許」。在 Mac 上，在「系統設定 → 私隱與保安 → 本地網絡」裏開啟 PasteFerry Daemon。詳情見<a href="../../zh-hk/lan/#faq">同一網絡教學</a>。</p></div>
           </details>
           <details>
-            <summary>支援 Windows 和 Linux 嗎？iPhone 呢？</summary>
-            <div class="answer"><p>支援 Windows 10 與 Windows 11（x64），與 Mac 互通。複製的檔案在 Windows 上貼上後就是真實檔案，可以直接貼進檔案總管、微信、Office。</p><p>也支援 x64 與 ARM64 的 Linux 桌面：X11，或帶 XWayland 的 Wayland 桌面（GNOME、KDE 等預設都已包含）。複製的檔案可以直接貼進檔案管理員。</p><p>暫不支援 iPhone 和 iPad：iOS 不允許 App 在背景監測剪貼簿，做不到複製後即時同步。</p></div>
-          </details>
-          <details>
-            <summary>為甚麼第一次開啟時系統會阻擋一下？</summary>
-            <div class="answer"><p>隔空貼仍未經 Apple 公證，Windows 版也仍未有程式碼簽署，兩者都需要每年付費的證書。</p><p>在 Mac 上，到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」；在 Windows 上，在「Windows 已保護您的電腦」提示裏按「其他資訊」，再按「仍要執行」。兩者都只需要做一次。</p></div>
+            <summary>能把檔案傳到別人的電腦嗎？</summary>
+            <div class="answer"><p>能。2.6 起可以加好友：對方在「好友」頁按「新增好友」給出好友碼，你輸入，兩邊確認就加上了，不用配對。之後把檔案拖到對方的頭像上，對方按接受就開始傳，還可以附一句備註。</p><p>好友之間只傳檔案和圖片，看不到彼此的剪貼簿、複製記錄和裝置。誰能傳給你，在隔空傳送頁底部選擇：均不允許、只限好友或所有人（只在區域網絡，10 分鐘後自動關閉）。</p></div>
           </details>
           <details>
             <summary>大檔案怎樣處理？</summary>
-            <div class="answer"><p>預設 50 MB 以內的內容在你複製時就會推送到另一部電腦，那邊可以直接貼上；更大的檔案只同步一條記錄，需要時在複製記錄裏按「拉取到本機」再傳送。上限可以在設定裏調整。</p><p>想把檔案直接傳給某一部電腦，用「隔空傳送」：不限大小，不進複製記錄，中斷了會接着傳。</p></div>
+            <div class="answer"><p>50 MB 以內的內容，複製時已經傳到另一部，那邊直接貼上就可以。更大的檔案先只同步一條記錄，需要時在複製記錄裏按「接收」再傳。這個上限可以在設定裏更改。</p><p>想把大檔案直接傳到某一部電腦，用「隔空傳送」：不限大小，中斷了接着傳。</p></div>
           </details>
           <details>
-            <summary>可以把檔案傳到別人的電腦嗎？</summary>
-            <div class="answer"><p>可以。2.6 起可以加好友：對方在隔空傳送裏按右上角的「新增好友」給出好友碼，你輸入，兩邊確認就加上了，不用配對。之後把檔案拖到對方的頭像上，對方接受後就開始傳，可以附一句備註。</p><p>好友之間只傳檔案和圖片，不同步剪貼簿，也看不到彼此的複製記錄和裝置。誰能傳給你，在隔空傳送頁底部選：均不允許、僅限好友或所有人（只在區域網絡，10 分鐘後自動關閉）。</p></div>
+            <summary>公司網絡（雙線、多出口）能直連嗎？</summary>
+            <div class="answer"><p>能。這類網絡有好幾個出口，隔空貼會把每個出口的地址都探測出來，交給對方逐個嘗試。實測公司 4 個出口的網絡和家用寬頻之間可以直連。對方的路由器每次隨機換端口時，仍然只能中轉。</p></div>
+          </details>
+          <details>
+            <summary>支援 Windows 和 Linux 嗎？iPhone 呢？</summary>
+            <div class="answer"><p>支援 Windows 10、11（x64）和 Linux（x64、ARM64，X11 或帶 XWayland 的 Wayland 桌面，GNOME、KDE 預設都已包含）。複製的檔案貼上後就是真實檔案，能直接貼進檔案總管、檔案管理員、微信、Office。</p><p>iPhone 和 iPad 暫不支援：iOS 不允許 App 在背景讀取剪貼簿，做不到複製後即時同步。</p></div>
+          </details>
+          <details>
+            <summary>為甚麼第一次開啟時系統會阻擋一下？</summary>
+            <div class="answer"><p>隔空貼仍未做 Apple 公證和 Windows 程式碼簽署，兩者都要每年付費買證書。</p><p>在 Mac 上，到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」；在 Windows 上，在「Windows 已保護您的電腦」裏按「其他資訊」，再按「仍要執行」。只需要做一次。</p></div>
           </details>
           <details>
             <summary>免費嗎？公司可以用嗎？</summary>
-            <div class="answer"><p>免費。隔空貼以 GNU AGPL-3.0 開源，個人和公司都可以免費使用和修改。分發它，或透過網絡提供修改過的版本時，需要以同樣的授權公開原始碼。</p></div>
+            <div class="answer"><p>免費。隔空貼以 GNU AGPL-3.0 開源，個人和公司都能免費使用、免費修改。如果你分發它，或者把修改過的版本放到網上給別人用，需要同樣公開原始碼。</p></div>
           </details>
           <details>
-            <summary>服務中轉不限量嗎？</summary>
-            <div class="answer"><p>目前預設每機器額度組每日 100 MB 中轉流量，上傳與下載合計，北京時間午夜重設。重新安裝不保證獲得新額度。用量頁顯示實際額度、剩餘量與更新時間；額度用完仍可直連。額度與服務可用性可能調整，以用戶端顯示為準。</p></div>
+            <summary>開啟 UU 遠程時，為甚麼不斷出現 .uuremote_ 檔案？</summary>
+            <div class="answer"><p>UU 遠程會在剪貼簿裏寫入臨時佔位檔案，1.3.2 以前的隔空貼把它們當成普通檔案同步。升級到新版本就好了，正常的空檔案、隱藏檔案不受影響。</p></div>
           </details>
         </div>
         <p class="more"><a href="https://github.com/baiyuze/pasteferry/issues">回報問題 →</a></p>

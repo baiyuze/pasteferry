@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>快速开始：三步用上隔空贴</title>
-  <meta name="description" content="第一次用隔空贴？在每台电脑上安装 App；两台在同一个网络里就直接配对，不需要服务器；跨网络时选公网服务器或 Tailscale。之后就能在 Mac 与 Windows 之间复制粘贴。">
+  <meta name="description" content="第一次用隔空贴？每台电脑装上 App；在同一个网络里直接配对，不在一个网络就打开「服务」。之后在一台复制，到另一台粘贴。">
   <link rel="canonical" href="https://pasteferry.cc/start/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/start/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/start/">
@@ -24,7 +24,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="隔空贴">
   <meta property="og:title" content="快速开始：三步用上隔空贴">
-  <meta property="og:description" content="第一次用隔空贴？在每台电脑上安装 App；两台在同一个网络里就直接配对，不需要服务器；跨网络时选公网服务器或 Tailscale。之后就能在 Mac 与 Windows 之间复制粘贴。">
+  <meta property="og:description" content="第一次用隔空贴？每台电脑装上 App；在同一个网络里直接配对，不在一个网络就打开「服务」。之后在一台复制，到另一台粘贴。">
   <meta property="og:url" content="https://pasteferry.cc/start/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
   <meta property="og:locale" content="zh_CN">
@@ -79,7 +79,7 @@
       <div class="wrap">
         <p class="crumb"><a href=".././">隔空贴</a> / 快速开始</p>
         <h1 class="display">快速开始</h1>
-        <p class="lede">装好 App，选一种连接方式，再把两台电脑配对。同一个网络里几分钟就好，之后复制就会自动同步。</p>
+        <p class="lede">装好 App，选一种连接方式，再把两台电脑配对。同一个网络里几分钟就好。</p>
         <ol class="guide-toc">
           <li><a href="#app">安装 App</a></li>
           <li><a href="#server">选连接方式</a></li>
@@ -132,7 +132,7 @@
       <div class="wrap">
         <p class="eyebrow">第 2 步</p>
         <h2 id="server-title">选一种连接方式</h2>
-        <p class="intro">同一网络里装好就能配对；不同网络里，开启「服务」即可，无需自建。也保留自建服务器与 Tailscale，按你的需要选择。</p>
+        <p class="intro">在同一个网络里，装好就能配对。不在一个网络，打开「服务」就行。想自己掌控，也可以自建服务器或用 Tailscale。</p>
         <div class="os-tabs" data-tabs="plan">
           <div class="tablist" role="tablist" aria-label="连接方式" hidden>
             <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">服务</button>
@@ -146,18 +146,18 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>在需要同步的每台电脑上安装最新版本，启用后台同步。</li>
-                  <li>在每台电脑的「设置 → 连接」中开启「使用服务」，阅读并确认说明。不用填写官方域名或端口。</li>
-                  <li>一台生成配对码，另一台输入；核对两边的安全指纹后确认。已有配对关系可以继续使用。</li>
+                  <li>每台电脑装好最新版，点「启用后台同步」。</li>
+                  <li>在每台电脑的「设置 → 连接」里打开「使用服务」。</li>
+                  <li>一台显示配对码，另一台输入，核对两边的安全指纹后确认。已经配对过的不用重新配。</li>
                 </ol>
-                <p class="plan-address">新安装默认关闭。开启后记录必要的接入信息；仅申请中转时派生项目专用机器摘要。真实设备名、原始系统标识和复制内容不会作为统计上传。完整字段与保留期限见隐私说明。</p>
+                <p class="plan-address">新装的 App 默认不开。打开后，服务器会记录连接和计算额度所需的信息，不会收到你复制的内容和设备名。具体记了什么、存多久，见隐私说明。</p>
                 <a class="button quiet" href="../official/">开启「服务」 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
                 <dl>
-                  <div><dt>先直连，再中转</dt><dd>官方信令只帮助在线设备交换连接信息。客户端先用 STUN 探测和打洞；本轮直连失败后，才申请服务中转。传输内容始终端到端加密。</dd></div>
-                  <div><dt>直连不消耗中转额度</dt><dd>当前默认每机器额度组每日 100 MB 中转流量，上传与下载合计，北京时间零点重置。重新安装不会保证获得新额度。开启后用量页即显示今日额度、剩余量与更新时间，不必先用中转，并列出每台设备当前是直连还是中转；额度用尽仍可直连。额度与服务可用性可能调整，以客户端显示为准。</dd></div>
+                  <div><dt>能直连就不中转</dt><dd>服务器先帮两台电脑交换连接信息，让它们尝试直接相连。大多数家庭和公司网络都能连上；实在连不上，才由服务器转发。不管哪种方式，内容都是加密的，服务器解不开。</dd></div>
+                  <div><dt>中转每天 100 MB，直连不限</dt><dd>经服务器中转的流量，每台电脑每天 100 MB（上传下载合计），北京时间零点重置，重装 App 不会重置。直连不算在内，额度用完了直连照样能用。用量页能看到今天还剩多少，以及每台设备现在是直连还是中转。额度以后可能调整，以 App 里显示的为准。</dd></div>
                 </dl>
               </div>
             </div>
@@ -169,18 +169,18 @@
               <div>
                 <ol class="steps">
                   <li>每台电脑装好 App，点「启用后台同步」。</li>
-                  <li>Windows 防火墙询问时选择允许；macOS 询问能否查找本地网络上的设备时，也选择允许。</li>
-                  <li>一台显示配对码，另一台输入它，核对指纹。不在同一网段时，再输入配对码下面显示的地址，见<a href="../lan/#subnet">同一网络教程</a>。</li>
+                  <li>Windows 防火墙和 macOS「查找本地网络设备」的询问都选允许。</li>
+                  <li>一台显示配对码，另一台输入，核对指纹。不在同一网段时，再填配对码下面的地址，见<a href="../lan/#subnet">同一网络教程</a>。</li>
                 </ol>
-                <p class="plan-address">不需要填服务器地址。</p>
+                <p class="plan-address">不用填服务器地址。</p>
                 <a class="button quiet" href="../lan/">同一网络教程 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
                 <dl>
-                  <div><dt>适合</dt><dd>电脑都在同一个 Wi‑Fi 或有线网络里，比如家里或办公室。</dd></div>
-                  <div><dt>要准备</dt><dd>什么都不用。每台电脑装好 App 就行。</dd></div>
-                  <div><dt>要注意</dt><dd>离开这个网络就不同步，回来后自动恢复。公司里有线和无线不在同一网段时，配对时多输一个地址。</dd></div>
+                  <div><dt>适合</dt><dd>家里或办公室，两台电脑连同一个 Wi‑Fi 或有线网络。</dd></div>
+                  <div><dt>要准备</dt><dd>不用准备，每台电脑装好 App 就行。</dd></div>
+                  <div><dt>要注意</dt><dd>离开这个网络就不同步，回来自动恢复。有线和无线不在一个网段时，配对时多填一个地址。</dd></div>
                 </dl>
               </div>
             </div>
@@ -192,18 +192,18 @@
               <div>
                 <ol class="steps">
                   <li>在云厂商的安全组里放行 TCP 8787、UDP 3478 和 UDP 32768–60999。</li>
-                  <li>ssh 登录服务器，下载并运行安装脚本，带上它的公网 IP：<code>sudo ./install.sh 公网IP</code>。</li>
-                  <li>在每台电脑的「设置 → 连接」里填服务器地址 <code>ws://公网IP:8787/signal</code>，按回车，再配对。</li>
+                  <li>ssh 登录服务器，下载并运行安装脚本：<code>sudo ./install.sh 公网IP</code>。</li>
+                  <li>每台电脑在「设置 → 连接」里填 <code>ws://公网IP:8787/signal</code>，按回车，再配对。</li>
                 </ol>
-                <p class="plan-address">在浏览器里打开 <code>http://公网IP:8787/healthz</code>，能看到 ok 就装好了。</p>
+                <p class="plan-address">浏览器打开 <code>http://公网IP:8787/healthz</code>，显示 ok 就装好了。</p>
                 <a class="button quiet" href="../cloud/">公网服务器部署教程 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
                 <dl>
-                  <div><dt>适合</dt><dd>自己管理容量与部署</dd></div>
-                  <div><dt>要准备</dt><dd>一台有公网 IP 的 Linux 云主机，最低配置就够，需要 root。</dd></div>
-                  <div><dt>要注意</dt><dd>云主机要花钱。打不通直连时走中转，速度受服务器带宽限制。国内域名没有备案时，客户端要填 IP。</dd></div>
+                  <div><dt>适合</dt><dd>想自己掌控服务器，或者中转流量用得多。</dd></div>
+                  <div><dt>要准备</dt><dd>一台有公网 IP 的 Linux 云主机，需要 root。</dd></div>
+                  <div><dt>要注意</dt><dd>云主机要花钱；中转速度受它的带宽限制。国内域名没备案时，客户端要填 IP。</dd></div>
                 </dl>
               </div>
             </div>
@@ -215,18 +215,18 @@
               <div>
                 <ol class="steps">
                   <li>每台电脑装上 Tailscale，登录同一个账号。</li>
-                  <li>在要配对的那台电脑上运行 <code>tailscale ip -4</code>，记下 100 开头的地址。</li>
-                  <li>配对时，输入配对码的那台点「不在同一网段？」，填上这个地址。</li>
+                  <li>在对方电脑上运行 <code>tailscale ip -4</code>，记下 100 开头的地址。</li>
+                  <li>配对时点「不在同一网段？」，填上这个地址。</li>
                 </ol>
-                <p class="plan-address">不需要服务器。Tailscale 地址不会变，只在配对时输入一次。</p>
+                <p class="plan-address">不需要服务器。Tailscale 地址不会变，配对时填一次就行。</p>
                 <a class="button quiet" href="../tailscale/">Tailscale 教程 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
                 <dl>
-                  <div><dt>适合</dt><dd>电脑在不同的网络里，又没有公网服务器。</dd></div>
+                  <div><dt>适合</dt><dd>已经在用 Tailscale，或者不想依赖任何服务器。</dd></div>
                   <div><dt>要准备</dt><dd>每台电脑都装 Tailscale，登录同一个账号。</dd></div>
-                  <div><dt>要注意</dt><dd>所有用隔空贴的电脑都要装 Tailscale 并保持连接。Tailscale 自己打不通时经境外中转，在国内会慢。</dd></div>
+                  <div><dt>要注意</dt><dd>Tailscale 要一直连着。它自己打不通时走境外中转，国内会慢。</dd></div>
                 </dl>
               </div>
             </div>

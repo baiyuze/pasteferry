@@ -533,7 +533,7 @@ def home(code: str) -> str:
         f'              <tr><th scope="row">{label}</th>' + "".join(
             f'<td class="{cls}{" ours" if i == 0 else ""}">{val}</td>' for i, (cls, val) in enumerate(cells)) + "</tr>"
         for label, cells in c["compare_rows"])
-    links = {"official": OFFICIAL, "lan": LAN, "cloud": CLOUD, "server": GUIDE, "ts": TAILSCALE, "start": START}
+    links = {"official": OFFICIAL, "lan": LAN, "cloud": CLOUD, "server": GUIDE, "ts": TAILSCALE, "start": START, "privacy": PRIVACY}
     tiles = "\n".join(
         f"""          <li class="tile">
             {icon(name)}
@@ -1182,7 +1182,7 @@ def faq_page(code: str) -> str:
     up = "../" * (path + FAQ).count("/")
     base = up + path
     links = {"official": base + OFFICIAL, "lan": base + LAN, "cloud": base + CLOUD, "server": base + GUIDE,
-             "ts": base + TAILSCALE, "start": base + START}
+             "ts": base + TAILSCALE, "start": base + START, "privacy": base + PRIVACY}
     faq_ld = json.dumps({
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -1476,7 +1476,7 @@ cd pasteferry-server-macos
         explorer.append(f'                  <li{cls}><span class="f-icon {kind}" aria-hidden="true"></span>'
                         f'<span class="f-name">{name}</span>{mark}</li>')
     explorer = "\n".join(explorer)
-    links = {"home": home_href, "lan": base + LAN, "cloud": base + CLOUD, "ts": base + TAILSCALE, "start": base + START}
+    links = {"home": home_href, "official": base + OFFICIAL, "lan": base + LAN, "cloud": base + CLOUD, "ts": base + TAILSCALE, "start": base + START}
     prep = "\n".join(f"          <div><dt>{h}</dt><dd>{fill(p, links)}</dd></div>" for h, p in g["prep"])
     d = g["diagram"]
 
@@ -1683,7 +1683,7 @@ def cloud_page(code: str) -> str:
     base = up + path
     shots = up + shots_dir(code)
     t = TRANSCRIPTS["zh" if code.startswith("zh") else "en"]
-    links = {"home": home_href, "lan": base + LAN, "server": base + GUIDE, "ts": base + TAILSCALE,
+    links = {"home": home_href, "official": base + OFFICIAL, "lan": base + LAN, "server": base + GUIDE, "ts": base + TAILSCALE,
              "start": base + START, "deploy": f"{REPO}/blob/main/server/deploy/README.md"}
     d = cl["diagram"]
     install = f"""curl -LO {DL}pasteferry-server-linux-amd64.tar.gz
@@ -1868,7 +1868,7 @@ def start_page(code: str) -> str:
     home_href = up + (path or "./")
     base = up + path
     shots = up + shots_dir(code)
-    links = {"home": home_href, "lan": base + LAN, "cloud": base + CLOUD, "server": base + GUIDE,
+    links = {"home": home_href, "official": base + OFFICIAL, "lan": base + LAN, "cloud": base + CLOUD, "server": base + GUIDE,
              "ts": base + TAILSCALE, "issues": REPO + "/issues"}
 
     def step(n: int) -> str:
@@ -1980,7 +1980,7 @@ def lan_page(code: str) -> str:
     home_href = up + (path or "./")
     base = up + path
     shots = up + shots_dir(code)
-    links = {"home": home_href, "cloud": base + CLOUD, "server": base + GUIDE, "ts": base + TAILSCALE,
+    links = {"home": home_href, "official": base + OFFICIAL, "cloud": base + CLOUD, "server": base + GUIDE, "ts": base + TAILSCALE,
              "start": base + START, "design": up + "design/lan-mode.html"}
     d = ln["diagram"]
 
@@ -2258,7 +2258,7 @@ def tailscale_page(code: str) -> str:
     home_href = up + (path or "./")
     base = up + path
     shots = up + shots_dir(code)
-    links = {"home": home_href, "lan": base + LAN, "cloud": base + CLOUD, "server": base + GUIDE,
+    links = {"home": home_href, "official": base + OFFICIAL, "lan": base + LAN, "cloud": base + CLOUD, "server": base + GUIDE,
              "start": base + START}
     d = ts["diagram"]
 

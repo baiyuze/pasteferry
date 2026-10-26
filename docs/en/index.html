@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PasteFerry: sync the clipboard and files between Mac, Windows and Linux, across accounts and networks</title>
-  <meta name="description" content="PasteFerry syncs clipboard text, images, files and folders across Mac, Windows and Linux. Enable optional official access to connect across networks without hosting a server: direct first, encrypted relay when needed. Free and open source.">
+  <title>PasteFerry: share the clipboard and send files between Mac, Windows and Linux</title>
+  <meta name="description" content="Copy on one computer and paste on another. Works on Mac, Windows and Linux with text, images, files and folders, even between home and the office. Free and open source.">
   <link rel="canonical" href="https://pasteferry.cc/en/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/">
@@ -25,7 +25,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PasteFerry">
   <meta property="og:title" content="PasteFerry: copy on this computer, paste on that one">
-  <meta property="og:description" content="PasteFerry syncs clipboard text, images, files and folders across Mac, Windows and Linux. Enable optional official access to connect across networks without hosting a server: direct first, encrypted relay when needed. Free and open source.">
+  <meta property="og:description" content="Copy on one computer and paste on another. Works on Mac, Windows and Linux with text, images, files and folders, even between home and the office. Free and open source.">
   <meta property="og:url" content="https://pasteferry.cc/en/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:image:width" content="1200">
@@ -60,7 +60,7 @@
           "隔空贴",
           "CopySync"
         ],
-        "description": "Open-source app that syncs the clipboard and files between Mac, Windows and Linux computers. Copy text, images, files or folders on one computer and paste on the other. No server is needed on the same network. Devices connect directly over WebRTC with end-to-end DTLS encryption; across networks, a server the user hosts introduces them and relays over TURN when needed.",
+        "description": "Open-source app that shares the clipboard and sends files between Mac, Windows and Linux computers. Copy text, images, files or folders on one computer and paste on the other. No server is needed on the same network; on different networks, turn on Service or use your own server. Devices connect directly when possible, and content is end-to-end encrypted.",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "macOS 13 or later (Intel and Apple silicon); Windows 10, Windows 11 (x64); Linux (x64, ARM64)",
         "softwareVersion": "2.6.1",
@@ -79,12 +79,12 @@
         "screenshot": "https://pasteferry.cc/assets/screenshots/en/history-dark.png",
         "featureList": [
           "Syncs plain text, rich text, images, files and folders",
-          "Works between Mac, Windows and Linux, across accounts and networks",
+          "Works between Mac, Windows and Linux, with no shared account, across networks",
           "No server needed on the same network, with automatic mDNS discovery",
           "Direct WebRTC connection with automatic TURN relay fallback",
           "End-to-end DTLS encryption with human-verified fingerprints at pairing",
           "Items under 50 MB pushed on copy, larger files pulled on demand",
-          "3-day history with image preview",
+          "History of the last 3 days, with image previews",
           "Interface in English, Simplified Chinese, Traditional Chinese and Japanese"
         ],
         "author": {
@@ -141,7 +141,7 @@
       <div class="wrap">
         <a class="release-note" href="features/#friends">New in 2.6: add a contact and send them files →</a>
         <h1 class="display">Copy on this computer.<br>Paste on that one.</h1>
-        <p class="lede">Mac, Windows and Linux. Text, images, files, whole folders. No shared account required. Now connect across networks by enabling official access, with no server to host. Direct connections first, end-to-end encryption throughout.</p>
+        <p class="lede">Mac, Windows or Linux, no shared account needed. Copy text, a screenshot, a file or a whole folder here, and paste it over there.</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download PasteFerry</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> Watch the full tour <span class="tour-duration">1:25</span></a>
@@ -179,7 +179,7 @@
       <div class="wrap">
         <p class="kicker"><span class="new">New in 2.6</span></p>
         <h2 id="friends-title">Your colleague’s computer,<br>just as easy.</h2>
-        <p class="intro">Someone else’s computer doesn’t need pairing — add them as a contact: they show a contact code, you enter it, and you both confirm. Then drag files onto them in Send Files, with a short note if you like. Contacts only exchange files: no shared clipboard, and neither of you sees the other’s history.</p>
+        <p class="intro">Someone else’s computer doesn’t need pairing. Add them as a contact: they show a contact code, you enter it, and you both confirm. Then drag files onto them in Send Files, with a short note if you like. Contacts only exchange files: no shared clipboard, and neither of you sees the other’s history.</p>
         <figure class="spot wide" data-reveal>
           <img src="../assets/screenshots/en/incoming-dark.png?v=14ba41d97e" width="2552" height="1632" loading="lazy" alt="The Send Files page: contacts’ avatars below the radar, and a request in the middle — a contact on a MacBook Air wants to send you files, with a note — that you can decline or accept">
         </figure>
@@ -239,7 +239,7 @@
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
             <h3>Across networks</h3>
-            <p>Turn on the official service and sync between home and work.</p>
+            <p>Turn on Service to sync between home and work.</p>
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
@@ -253,20 +253,20 @@
 
     <section class="section" id="why" aria-labelledby="why-title">
       <div class="wrap">
-        <h2 id="why-title">Why not what's already there</h2>
-        <p class="intro">Universal Clipboard needs the same Apple ID and both Macs close together. AirDrop asks you to accept every time. Messaging yourself means manual downloads and files left on someone else's server. With one Mac and one Windows PC, none of the built-in options work at all.</p>
+        <h2 id="why-title">Why not use what you already have</h2>
+        <p class="intro">Universal Clipboard needs the same Apple ID and devices close together. AirDrop makes you accept every time. Messaging yourself means downloading everything again. Between a Mac and a Windows PC, none of the built-in options work.</p>
         <div class="block table-scroll">
           <table class="compare">
             <caption class="skip">PasteFerry compared with other options</caption>
             <thead><tr><td></td><th scope="col" class="ours">PasteFerry</th><th scope="col">Universal Clipboard</th><th scope="col">AirDrop</th><th scope="col">Chat apps</th></tr></thead>
             <tbody>
               <tr><th scope="row">Different Apple IDs</th><td class="yes ours">Yes</td><td class="no">No</td><td class="partial">Needs accepting</td><td class="yes">Yes</td></tr>
-              <tr><th scope="row">Between Mac and Windows</th><td class="yes ours">Yes</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
-              <tr><th scope="row">Different networks (home and office)</th><td class="yes ours">Yes</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
-              <tr><th scope="row">Paste right away, nothing to accept</th><td class="yes ours">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
+              <tr><th scope="row">Between Mac, Windows and Linux</th><td class="yes ours">Yes</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
+              <tr><th scope="row">Between home and the office</th><td class="yes ours">Yes</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
+              <tr><th scope="row">Paste right after copying</th><td class="yes ours">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
               <tr><th scope="row">Files and whole folders</th><td class="yes ours">Yes</td><td class="partial">Unreliable</td><td class="yes">Yes</td><td class="partial">Zip first</td></tr>
               <tr><th scope="row">Find something you copied earlier</th><td class="yes ours">Yes</td><td class="no">No</td><td class="no">No</td><td class="partial">Scroll back</td></tr>
-              <tr><th scope="row">Only your devices can decrypt content</th><td class="yes ours">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="some">Varies by app</td></tr>
+              <tr><th scope="row">Only your devices can decrypt</th><td class="yes ours">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="some">Depends on the app</td></tr>
             </tbody>
           </table>
         </div>
@@ -276,38 +276,38 @@
     <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
         <h2 id="deploy-title">How your computers connect</h2>
-        <p class="intro">Same network? Install and pair. Different networks? Enable official access without hosting a server. Custom servers and Tailscale remain available when you prefer to manage the connection yourself.</p>
+        <p class="intro">On the same network, install and pair. On different networks, turn on Service, or run your own server or Tailscale.</p>
         <div class="paths">
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">Across networks, no hosting</span>
-            <h3>Official service</h3>
-            <p>One switch helps your home and office computers find each other. Direct connections first, automatic encrypted relay if needed. No cloud VM or server address to configure.</p>
-            <span class="path-go">Enable official access →</span>
+            <span class="path-when">Works between home and office</span>
+            <h3>Service</h3>
+            <p>Turn on one switch and your home and office computers can find each other. They connect directly when they can, and through our server when they can't. No cloud VM to rent, no address to enter.</p>
+            <span class="path-go">Turn on Service →</span>
           </a>
           <a class="path" href="lan/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
             <span class="path-when">Nothing to set up</span>
             <h3>Same network</h3>
-            <p>At home or in the office, behind the same router. Install the app on both computers and enter a pairing code. No server, and no computer that has to stay on.</p>
+            <p>Two computers on the same router: install the app, enter a pairing code, and you're done. No server needed.</p>
             <span class="path-go">Same network guide →</span>
           </a>
           <a class="path" href="cloud/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">Control your own capacity</span>
-            <h3>Self-hosted server</h3>
-            <p>A Linux VM with a public IP; the smallest one is enough. Every computer connects to it directly, at home, at the office or anywhere else, with nothing extra to install.</p>
+            <span class="path-when">Your server, unlimited relay</span>
+            <h3>Your own public server</h3>
+            <p>A Linux VM with a public IP; the smallest size is enough. Every computer connects to it and syncs from anywhere.</p>
             <span class="path-go">Public server guide →</span>
           </a>
           <a class="path" href="tailscale/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
             <span class="path-when">Across networks, no server</span>
             <h3>Tailscale</h3>
-            <p>Install Tailscale on each computer under one account and enter the other computer's Tailscale address when pairing. Syncs at home and at the office, with no server and no computer that has to stay on.</p>
+            <p>Install Tailscale on each computer, sign in to the same account, and enter the other computer's Tailscale address when pairing.</p>
             <span class="path-go">Tailscale guide →</span>
           </a>
         </div>
-        <p class="note">New here? Follow the <a href="start/#server">quick start</a>. Official access is optional; its current relay default is 100 MB/day, and direct traffic does not consume it.</p>
+        <p class="note">New here? Follow the <a href="start/#server">quick start</a>. Service is free: 100 MB of relay a day, direct connections unlimited.</p>
       </div>
     </section>
 
