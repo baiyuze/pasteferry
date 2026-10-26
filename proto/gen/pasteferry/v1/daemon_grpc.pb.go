@@ -79,6 +79,7 @@ const (
 	DaemonService_RemoveFriend_FullMethodName                  = "/pasteferry.v1.DaemonService/RemoveFriend"
 	DaemonService_SetFriendAutoAccept_FullMethodName           = "/pasteferry.v1.DaemonService/SetFriendAutoAccept"
 	DaemonService_BlockDevice_FullMethodName                   = "/pasteferry.v1.DaemonService/BlockDevice"
+	DaemonService_PasteFiles_FullMethodName                    = "/pasteferry.v1.DaemonService/PasteFiles"
 	DaemonService_WatchStrangers_FullMethodName                = "/pasteferry.v1.DaemonService/WatchStrangers"
 )
 
@@ -189,6 +190,8 @@ type DaemonServiceClient interface {
 	SetFriendAutoAccept(ctx context.Context, in *SetFriendAutoAcceptRequest, opts ...grpc.CallOption) (*Friend, error)
 	// 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
 	BlockDevice(ctx context.Context, in *FriendRef, opts ...grpc.CallOption) (*Empty, error)
+	// 发送窗口、头像里的「粘贴」：剪贴板里是文件时返回它们的路径；是图片时存成 PNG，返回这个文件的路径
+	PasteFiles(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PasteFilesResponse, error)
 	// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
 	WatchStrangers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Strangers], error)
 }
@@ -781,6 +784,16 @@ func (c *daemonServiceClient) BlockDevice(ctx context.Context, in *FriendRef, op
 	return out, nil
 }
 
+func (c *daemonServiceClient) PasteFiles(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PasteFilesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PasteFilesResponse)
+	err := c.cc.Invoke(ctx, DaemonService_PasteFiles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *daemonServiceClient) WatchStrangers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Strangers], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &DaemonService_ServiceDesc.Streams[4], DaemonService_WatchStrangers_FullMethodName, cOpts...)
@@ -907,6 +920,8 @@ type DaemonServiceServer interface {
 	SetFriendAutoAccept(context.Context, *SetFriendAutoAcceptRequest) (*Friend, error)
 	// 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
 	BlockDevice(context.Context, *FriendRef) (*Empty, error)
+	// 发送窗口、头像里的「粘贴」：剪贴板里是文件时返回它们的路径；是图片时存成 PNG，返回这个文件的路径
+	PasteFiles(context.Context, *Empty) (*PasteFilesResponse, error)
 	// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
 	WatchStrangers(*Empty, grpc.ServerStreamingServer[Strangers]) error
 	mustEmbedUnimplementedDaemonServiceServer()
@@ -1083,6 +1098,9 @@ func (UnimplementedDaemonServiceServer) SetFriendAutoAccept(context.Context, *Se
 }
 func (UnimplementedDaemonServiceServer) BlockDevice(context.Context, *FriendRef) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method BlockDevice not implemented")
+}
+func (UnimplementedDaemonServiceServer) PasteFiles(context.Context, *Empty) (*PasteFilesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method PasteFiles not implemented")
 }
 func (UnimplementedDaemonServiceServer) WatchStrangers(*Empty, grpc.ServerStreamingServer[Strangers]) error {
 	return status.Error(codes.Unimplemented, "method WatchStrangers not implemented")
@@ -2066,6 +2084,24 @@ func _DaemonService_BlockDevice_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_PasteFiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).PasteFiles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_PasteFiles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).PasteFiles(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DaemonService_WatchStrangers_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(Empty)
 	if err := stream.RecvMsg(m); err != nil {
@@ -2287,6 +2323,10 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BlockDevice",
 			Handler:    _DaemonService_BlockDevice_Handler,
+		},
+		{
+			MethodName: "PasteFiles",
+			Handler:    _DaemonService_PasteFiles_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

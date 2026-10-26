@@ -625,7 +625,14 @@ func run(dataDir string) error {
 			peerMgr.BroadcastCard()
 			peerMgr.ApplyEveryone()
 			hub.Publish(rpc.EventProfileChanged(prof.Proto(id.DeviceID)))
-		}},
+		}, readClipboard: func(ctx context.Context) (clipboard.Content, error) {
+			ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+			defer cancel()
+			if !watcher.Permission(ctx).CanReadSilently() {
+				return clipboard.Content{}, errNothingToPaste
+			}
+			return watcher.Read(ctx)
+		}, pasteDir: filepath.Join(paths.Root, "paste")},
 	}
 	wireUpdater(&deps, updater)
 	srv := rpc.NewServer(deps, hub, token)

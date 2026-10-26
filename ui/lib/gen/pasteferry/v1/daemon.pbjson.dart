@@ -716,6 +716,20 @@ final $typed_data.Uint8List strangersDescriptor = $convert.base64Decode(
     'CglTdHJhbmdlcnMSNQoJc3RyYW5nZXJzGAEgAygLMhcucGFzdGVmZXJyeS52MS5TdHJhbmdlcl'
     'IJc3RyYW5nZXJz');
 
+@$core.Deprecated('Use pasteFilesResponseDescriptor instead')
+const PasteFilesResponse$json = {
+  '1': 'PasteFilesResponse',
+  '2': [
+    {'1': 'paths', '3': 1, '4': 3, '5': 9, '10': 'paths'},
+    {'1': 'image', '3': 2, '4': 1, '5': 8, '10': 'image'},
+  ],
+};
+
+/// Descriptor for `PasteFilesResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List pasteFilesResponseDescriptor = $convert.base64Decode(
+    'ChJQYXN0ZUZpbGVzUmVzcG9uc2USFAoFcGF0aHMYASADKAlSBXBhdGhzEhQKBWltYWdlGAIgAS'
+    'gIUgVpbWFnZQ==');
+
 @$core.Deprecated('Use notificationStatusDescriptor instead')
 const NotificationStatus$json = {
   '1': 'NotificationStatus',

@@ -474,6 +474,14 @@ class DaemonServiceClient extends $grpc.Client {
     return $createUnaryCall(_$blockDevice, request, options: options);
   }
 
+  /// 发送窗口、头像里的「粘贴」：剪贴板里是文件时返回它们的路径；是图片时存成 PNG，返回这个文件的路径
+  $grpc.ResponseFuture<$0.PasteFilesResponse> pasteFiles(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$pasteFiles, request, options: options);
+  }
+
   /// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
   $grpc.ResponseStream<$0.Strangers> watchStrangers(
     $0.Empty request, {
@@ -745,6 +753,11 @@ class DaemonServiceClient extends $grpc.Client {
       '/pasteferry.v1.DaemonService/BlockDevice',
       ($0.FriendRef value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
+  static final _$pasteFiles =
+      $grpc.ClientMethod<$0.Empty, $0.PasteFilesResponse>(
+          '/pasteferry.v1.DaemonService/PasteFiles',
+          ($0.Empty value) => value.writeToBuffer(),
+          $0.PasteFilesResponse.fromBuffer);
   static final _$watchStrangers = $grpc.ClientMethod<$0.Empty, $0.Strangers>(
       '/pasteferry.v1.DaemonService/WatchStrangers',
       ($0.Empty value) => value.writeToBuffer(),
@@ -1172,6 +1185,13 @@ abstract class DaemonServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.FriendRef.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.PasteFilesResponse>(
+        'PasteFiles',
+        pasteFiles_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.PasteFilesResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.Strangers>(
         'WatchStrangers',
         watchStrangers_Pre,
@@ -1618,6 +1638,14 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.Empty> blockDevice(
       $grpc.ServiceCall call, $0.FriendRef request);
+
+  $async.Future<$0.PasteFilesResponse> pasteFiles_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return pasteFiles($call, await $request);
+  }
+
+  $async.Future<$0.PasteFilesResponse> pasteFiles(
+      $grpc.ServiceCall call, $0.Empty request);
 
   $async.Stream<$0.Strangers> watchStrangers_Pre(
       $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async* {

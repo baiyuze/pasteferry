@@ -126,6 +126,8 @@ service DaemonService {
   rpc SetFriendAutoAccept(SetFriendAutoAcceptRequest) returns (Friend);
   // 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
   rpc BlockDevice(FriendRef) returns (Empty);
+  // 发送窗口、头像里的「粘贴」：剪贴板里是文件时返回它们的路径；是图片时存成 PNG，返回这个文件的路径
+  rpc PasteFiles(Empty) returns (PasteFilesResponse);
   // 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
   rpc WatchStrangers(Empty) returns (stream Strangers);
 }
@@ -371,6 +373,11 @@ message Stranger {
 
 message Strangers {
   repeated Stranger strangers = 1;
+}
+
+message PasteFilesResponse {
+  repeated string paths = 1;
+  bool image = 2;   // 是剪贴板里的图片存成的文件
 }
 
 message NotificationStatus {

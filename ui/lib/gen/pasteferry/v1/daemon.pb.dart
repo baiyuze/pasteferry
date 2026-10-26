@@ -2262,6 +2262,69 @@ class Strangers extends $pb.GeneratedMessage {
   $pb.PbList<Stranger> get strangers => $_getList(0);
 }
 
+class PasteFilesResponse extends $pb.GeneratedMessage {
+  factory PasteFilesResponse({
+    $core.Iterable<$core.String>? paths,
+    $core.bool? image,
+  }) {
+    final result = PasteFilesResponse._();
+    if (paths != null) result.paths.addAll(paths);
+    if (image != null) result.image = image;
+    return result;
+  }
+
+  PasteFilesResponse._();
+
+  factory PasteFilesResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PasteFilesResponse()..mergeFromBuffer(data, registry);
+  factory PasteFilesResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PasteFilesResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PasteFilesResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: PasteFilesResponse.$_createMessage)
+    ..pPS(1, _omitFieldNames ? '' : 'paths')
+    ..aOB(2, _omitFieldNames ? '' : 'image')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PasteFilesResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PasteFilesResponse copyWith(void Function(PasteFilesResponse) updates) =>
+      super.copyWith((message) => updates(message as PasteFilesResponse))
+          as PasteFilesResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use PasteFilesResponse() / PasteFilesResponse.new instead')
+  static PasteFilesResponse create() => PasteFilesResponse._();
+  static $pb.GeneratedMessage $_createMessage() => PasteFilesResponse._();
+  @$core.override
+  PasteFilesResponse createEmptyInstance() => PasteFilesResponse._();
+  @$core.pragma('dart2js:noInline')
+  static PasteFilesResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PasteFilesResponse>(
+          PasteFilesResponse.$_createMessage);
+  static PasteFilesResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<$core.String> get paths => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.bool get image => $_getBF(1);
+  @$pb.TagNumber(2)
+  set image($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasImage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearImage() => $_clearField(2);
+}
+
 class NotificationStatus extends $pb.GeneratedMessage {
   factory NotificationStatus({
     $core.bool? supported,

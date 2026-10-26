@@ -2,8 +2,13 @@ package main
 
 import (
 	"context"
+	"errors"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/baiyuze/pasteferry/client-core/internal/clipboard"
 
 	"github.com/baiyuze/pasteferry/client-core/internal/peers"
 	"github.com/baiyuze/pasteferry/client-core/internal/profile"
@@ -21,6 +26,50 @@ type friendsAPI struct {
 	deviceID string
 	// changed 在名字或头像变了以后调用：推给界面、告诉连着的好友
 	changed func()
+	// readClipboard 读本机剪贴板（粘贴文件、图片用）；pasteDir 存放粘贴的图片
+	readClipboard func(ctx context.Context) (clipboard.Content, error)
+	pasteDir      string
+}
+
+// errNothingToPaste：剪贴板里既没有文件也没有图片
+var errNothingToPaste = errors.New("nothing_to_paste")
+
+// PasteFiles 是发送窗口、头像里的「粘贴」：剪贴板里的文件原样返回路径，图片存成 PNG 再返回
+func (f *friendsAPI) PasteFiles(ctx context.Context) (*pb.PasteFilesResponse, error) {
+	if f.readClipboard == nil {
+		return nil, errNothingToPaste
+	}
+	c, err := f.readClipboard(ctx)
+	if err != nil {
+		return nil, errNothingToPaste
+	}
+	switch {
+	case c.Kind == clipboard.KindFile && len(c.Files) > 0:
+		return &pb.PasteFilesResponse{Paths: c.Files}, nil
+	case c.Kind == clipboard.KindImage && len(c.Image) > 0:
+		if err := os.MkdirAll(f.pasteDir, 0o700); err != nil {
+			return nil, err
+		}
+		// 名字会被对方看到：只用时间，不带本机信息
+		name := "Image " + time.Now().Format("2006-01-02 15.04.05") + ".png"
+		path := filepath.Join(f.pasteDir, name)
+		if err := os.WriteFile(path, c.Image, 0o600); err != nil {
+			return nil, err
+		}
+		cleanPasteDir(f.pasteDir)
+		return &pb.PasteFilesResponse{Paths: []string{path}, Image: true}, nil
+	}
+	return nil, errNothingToPaste
+}
+
+// cleanPasteDir 删掉一天前粘贴的图片：发出去以后就用不着了
+func cleanPasteDir(dir string) {
+	entries, _ := os.ReadDir(dir)
+	for _, e := range entries {
+		if info, err := e.Info(); err == nil && time.Since(info.ModTime()) > 24*time.Hour {
+			_ = os.Remove(filepath.Join(dir, e.Name()))
+		}
+	}
 }
 
 func (f *friendsAPI) Profile() *pb.Profile { return f.profile.Proto(f.deviceID) }

@@ -29,6 +29,7 @@ type Friends interface {
 	SetFriendAutoAccept(deviceID string, auto bool) (*pb.Friend, error)
 	BlockDevice(deviceID string) error
 	WatchStrangers(ctx context.Context, send func(*pb.Strangers) error) error
+	PasteFiles(ctx context.Context) (*pb.PasteFilesResponse, error)
 }
 
 func EventFriendChanged(f *pb.Friend) *pb.Event {
@@ -200,6 +201,18 @@ func (s *Server) WatchStrangers(_ *pb.Empty, stream pb.DaemonService_WatchStrang
 		return err
 	}
 	return f.WatchStrangers(stream.Context(), stream.Send)
+}
+
+func (s *Server) PasteFiles(ctx context.Context, _ *pb.Empty) (*pb.PasteFilesResponse, error) {
+	f, err := s.friends()
+	if err != nil {
+		return nil, err
+	}
+	out, err := f.PasteFiles(ctx)
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+	return out, nil
 }
 
 // AnswerIncoming 是接收弹窗里的「接受」「拒绝」；勾了「以后自动接收」时对这个好友打开自动接收
