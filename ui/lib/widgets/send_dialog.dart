@@ -26,30 +26,36 @@ String _today() {
 }
 
 /// 把 [paths] 发给 [device]。要经官方服务中转时先问一次；出错时弹出提示。成功返回这一批。
-Future<Transfer?> sendFilesTo(BuildContext context, Device device, List<String> paths) async {
+Future<Transfer?> sendFilesTo(BuildContext context, Device device, List<String> paths) =>
+    sendFilesById(context, device.id, device.name, paths);
+
+/// 与 [sendFilesTo] 相同，按设备 ID 发：自己的设备、好友，或者「所有人」模式下的陌生设备（lan:实例名）。
+/// [note] 是备注（只给好友、陌生设备）
+Future<Transfer?> sendFilesById(BuildContext context, String id, String name, List<String> paths,
+    {String note = ''}) async {
   final l = context.l10n;
   final state = AppScope.read(context);
   if (paths.isEmpty) {
     showToast(context, l.sendCannotDrop, error: true);
     return null;
   }
-  var allowRelay = _relayConsent[device.id] == _today();
+  var allowRelay = _relayConsent[id] == _today();
   for (;;) {
     try {
-      return await state.sendFiles(device.id, paths, allowRelay: allowRelay);
+      return await state.sendFiles(id, paths, allowRelay: allowRelay, note: note);
     } on GrpcError catch (e) {
       if (!context.mounted) return null;
       switch (AppState.sendFailure(e)) {
         case SendFailure.needRelayConsent when !allowRelay:
-          if (!await confirmRelay(context, device, paths)) return null;
+          if (!await confirmRelay(context, id, name, paths)) return null;
           allowRelay = true;
           continue;
         case SendFailure.offline:
-          showToast(context, l.sendErrOffline(device.name), error: true);
+          showToast(context, l.sendErrOffline(name), error: true);
         case SendFailure.unsupported:
-          showToast(context, l.sendNeedsUpdateTip(device.name), error: true);
+          showToast(context, l.sendNeedsUpdateTip(name), error: true);
         case SendFailure.disabled:
-          showToast(context, l.sendErrDisabled(device.name), error: true);
+          showToast(context, l.sendErrDisabled(name), error: true);
         case SendFailure.noPaths:
           showToast(context, l.sendErrMissing, error: true);
         default:
@@ -64,7 +70,7 @@ Future<Transfer?> sendFilesTo(BuildContext context, Device device, List<String> 
 }
 
 /// 经官方服务中转之前问一次：速度、今天剩下的额度，这些文件会不会超出。
-Future<bool> confirmRelay(BuildContext context, Device device, List<String> paths) async {
+Future<bool> confirmRelay(BuildContext context, String id, String name, List<String> paths) async {
   final l = context.l10n;
   final usage = AppScope.read(context).officialUsage;
   final left = usage?.remainingBytes.toInt() ?? 0;
@@ -86,7 +92,7 @@ Future<bool> confirmRelay(BuildContext context, Device device, List<String> path
               if (exhausted)
                 Text(l.relayExhausted)
               else ...[
-                Text(l.relayConfirmBody(device.name, humanBytes(left))),
+                Text(l.relayConfirmBody(name, humanBytes(left))),
                 const SizedBox(height: Insets.md),
                 // 经中转的加密数据比文件本身大约多 6%
                 if (size != null && size * 1.06 > left)
@@ -115,11 +121,13 @@ Future<bool> confirmRelay(BuildContext context, Device device, List<String> path
       ),
     ),
   );
-  if (ok == true && dontAsk) _relayConsent[device.id] = _today();
+  if (ok == true && dontAsk) _relayConsent[id] = _today();
   return ok == true;
 }
 
 /// 估算要发的总大小，最多花 0.8 秒；大文件夹数不完时返回 null，确认框里就不比较额度。
+Future<int?> estimateSize(List<String> paths) => _estimateSize(paths);
+
 Future<int?> _estimateSize(List<String> paths) async {
   final watch = Stopwatch()..start();
   var total = 0;
@@ -278,7 +286,7 @@ class _SendDialogState extends State<SendDialog> {
                   children: [
                     if (batches.isNotEmpty) ...[
                       const SizedBox(height: Insets.lg),
-                      for (final t in batches.reversed) _BatchRow(transfer: t),
+                      for (final t in batches.reversed) TransferBatchRow(transfer: t),
                     ],
                     const SizedBox(height: Insets.lg),
                     DropTarget(
@@ -345,8 +353,8 @@ class _SendDialogState extends State<SendDialog> {
 }
 
 /// 发送窗口里的一批：名称、大小，进度或结果。
-class _BatchRow extends StatelessWidget {
-  const _BatchRow({required this.transfer});
+class TransferBatchRow extends StatelessWidget {
+  const TransferBatchRow({super.key, required this.transfer});
 
   final Transfer transfer;
 
@@ -356,7 +364,8 @@ class _BatchRow extends StatelessWidget {
     final p = context.palette;
     final t = transfer;
     final active = t.status == 'active';
-    final cancellable = const {'scanning', 'queued', 'waiting', 'active', 'paused', 'interrupted'}.contains(t.status);
+    final cancellable =
+        const {'scanning', 'queued', 'waiting', 'asking', 'active', 'paused', 'interrupted'}.contains(t.status);
     final status = switch (t.status) {
       'done' => l.sendDelivered,
       'active' => null,
@@ -427,7 +436,19 @@ class _BatchRow extends StatelessWidget {
 /// 一批现在的状态说明（进行中的进度另外显示）。
 String transferStatusText(AppLocalizations l, Transfer t) {
   final out = t.direction == TransferDirection.TRANSFER_DIRECTION_OUTGOING;
+  // 好友、陌生设备：对方（或本机用户）拒绝、没有回应、不接收，直接说原因
+  if (t.status == 'declined') {
+    final direct = switch (t.error) {
+      'declined' => out ? l.reasonDeclined(t.deviceName) : l.reasonYouDeclined,
+      'timeout' => out ? l.reasonTimeout(t.deviceName) : l.reasonYouIgnored,
+      'not_allowed' => l.reasonNotAllowed(t.deviceName),
+      'rate_limited' => l.reasonRateLimited(t.deviceName),
+      _ => null,
+    };
+    if (direct != null) return direct;
+  }
   return switch (t.status) {
+    'asking' => out ? l.transferAskingOut(t.deviceName) : l.transferAskingIn,
     'scanning' => l.transferScanning('${t.scannedFiles}'),
     'queued' => l.transferQueued,
     'waiting' => out ? l.transferWaitingPeer(t.deviceName) : l.transferReceiving,

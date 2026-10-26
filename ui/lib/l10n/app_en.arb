@@ -1316,5 +1316,245 @@
   "quitAppDesc": "Stop all PasteFerry processes. Your launch-at-login preference is preserved.",
   "quitTransfersWarning": "Files are still being transferred. Quit and interrupt these transfers?",
   "backgroundRunningTitle": "PasteFerry will keep running",
-  "backgroundRunningBody": "Closing the window keeps sync and quick paste running. To stop everything, choose Quit PasteFerry in Settings or the app menu."
+  "backgroundRunningBody": "Closing the window keeps sync and quick paste running. To stop everything, choose Quit PasteFerry in Settings or the app menu.",
+  "displayAs": "Shown as",
+  "editName": "Change Name",
+  "nameHint": "The name your contacts see",
+  "nameDefaultHint": "Leave empty to use your account name.",
+  "avatarTitle": "Profile Picture",
+  "avatarChoose": "Choose Image…",
+  "avatarPaste": "Paste Image",
+  "avatarReset": "Use Default Picture",
+  "avatarZoom": "Zoom",
+  "avatarDragHint": "Drag to move the picture.",
+  "avatarNoImage": "There's no image on the clipboard.",
+  "avatarBad": "This image can't be used. Choose a PNG, JPEG or GIF.",
+  "done": "Done",
+  "friendsTitle": "Contacts",
+  "addFriend": "Add Contact",
+  "friendsEmpty": "No contacts yet",
+  "friendsEmptyBody": "Add someone who also uses PasteFerry to send each other files without pairing. Contacts can only send files; they never see your clipboard.",
+  "friendSendAction": "Send…",
+  "friendHistory": "Transfers",
+  "friendHistoryTitle": "Transfers with {name}",
+  "@friendHistoryTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "friendHistoryEmpty": "No transfers yet.",
+  "friendAutoAccept": "Accept Files Automatically",
+  "friendRemove": "Remove Contact",
+  "friendRemoveTitle": "Remove {name}?",
+  "@friendRemoveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "friendRemoveBody": "You'll be removed from each other's contacts and can no longer send each other files. Past transfers stay on this computer.",
+  "friendLastActivity": "Last transfer {time}",
+  "@friendLastActivity": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "friendNoActivity": "No transfers yet",
+  "friendCodeShare": "Send this code to your contact. When they enter it in PasteFerry, you'll be added to each other's contacts.",
+  "friendCodeExpires": "Expires in {time}",
+  "@friendCodeExpires": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "friendCodeOr": "or",
+  "friendCodeEnter": "Enter their contact code",
+  "friendCodeAdd": "Add",
+  "friendCodeWaiting": "Waiting for them to enter it…",
+  "friendConfirmBody": "Add {name} to your contacts?",
+  "@friendConfirmBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "friendSafetyCode": "Check safety code (optional)",
+  "friendSafetyHint": "When you're together, compare these two lines. If they match on both computers, no one has interfered.",
+  "friendWaitingPeer": "Waiting for them to add you…",
+  "friendAdded": "{name} was added to your contacts",
+  "@friendAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "friendPeerCancelled": "{name} cancelled",
+  "@friendPeerCancelled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "friendErrFriendCode": "This is a contact code. Enter it in Add Contact on the Send Files page.",
+  "friendErrDeviceCode": "This is a pairing code. Enter it in Devices → Add Device.",
+  "friendErrOutdated": "They need PasteFerry 2.6.0 or later.",
+  "friendErrAlreadyPaired": "That computer is already one of your devices.",
+  "friendErrNoChannel": "You're not on the same network. Turn on Service on both computers to add each other.",
+  "openService": "Turn On Service…",
+  "noteLabel": "Note (optional)",
+  "noteHintEmpty": "Choose files first",
+  "noteHint": "For example: please sign page 3",
+  "noteLine": "Note: {note}",
+  "@noteLine": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "sendAction": "Send",
+  "sendItemsSummary": "{count} items · {size}",
+  "@sendItemsSummary": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "sendDropOrPaste": "Drop files or images here, or paste ({key})",
+  "@sendDropOrPaste": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "sendDropMorePaste": "Drop or paste more",
+  "sendPasteNothing": "Nothing to paste. Copy files or an image first.",
+  "sendRemoveItem": "Remove",
+  "sendFriendSaved": "{name} accepts each batch before it's sent.",
+  "@sendFriendSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferAskingOut": "Waiting for {name} to accept…",
+  "@transferAskingOut": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transferAskingIn": "Waiting for you to accept",
+  "reasonDeclined": "{name} declined",
+  "@reasonDeclined": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonTimeout": "{name} didn't respond",
+  "@reasonTimeout": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonNotAllowed": "{name} isn't accepting files",
+  "@reasonNotAllowed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonRateLimited": "{name} isn't accepting your files right now",
+  "@reasonRateLimited": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonYouDeclined": "Declined",
+  "reasonYouIgnored": "Ignored",
+  "sendAgain": "Send Again",
+  "incomingTitle": "{name} wants to send you files",
+  "@incomingTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingAlways": "Always accept files from this contact",
+  "incomingDecline": "Decline",
+  "incomingAccept": "Accept",
+  "incomingCountdown": "Declines automatically in {seconds} s",
+  "@incomingCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingStranger": "Nearby",
+  "friendsStrip": "Contacts",
+  "strangersStrip": "Nearby with Everyone on",
+  "strangerNearby": "Nearby",
+  "friendNeedService": "Turn on Service",
+  "friendCantReach": "Can't connect",
+  "reachSelfNoService": "You and {name} aren't on the same network. Turn on Service to send files; if no direct connection is possible, they go through the Service relay.",
+  "@reachSelfNoService": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reachPeerNoService": "{name} hasn't turned on Service, so you can only send files on the same network. Ask them to turn on Service in PasteFerry.",
+  "@reachPeerNoService": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reachDifferentServer": "You aren't using the same server. Turn on Service on both computers, or use the same server, to send files.",
+  "receiveFromLabel": "Let these people send me files:",
+  "receiveFromOff": "No One",
+  "receiveFromFriends": "Contacts Only",
+  "receiveFromEveryone": "Everyone",
+  "everyoneLeft": "Everyone · {minutes} min left",
+  "@everyoneLeft": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "receiveFromOffDesc": "Only your own paired computers can send you files.",
+  "receiveFromFriendsDesc": "Your contacts can send you files. You accept each batch.",
+  "receiveFromEveryoneDesc": "Anyone on the same network can send you files for 10 minutes. You accept each batch.",
+  "everyoneEnded": "Everyone is off; back to Contacts Only.",
+  "friendsCountTooltip": "Contacts",
+  "waitingAccept": "Waiting…"
 }

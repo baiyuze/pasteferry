@@ -51,6 +51,10 @@ abstract final class AppIcons {
   static IconData get doc => _pick(CupertinoIcons.doc, FluentIcons.document_24_regular);
   static IconData get chevronLeft => _pick(CupertinoIcons.chevron_left, FluentIcons.chevron_left_24_regular);
   static IconData get chevronRight => _pick(CupertinoIcons.chevron_right, FluentIcons.chevron_right_24_regular);
+  static IconData get chevronDown => _pick(CupertinoIcons.chevron_down, FluentIcons.chevron_down_24_regular);
+  static IconData get person => _pick(CupertinoIcons.person, FluentIcons.person_24_regular);
+  static IconData get people => _pick(CupertinoIcons.person_2, FluentIcons.people_24_regular);
+  static IconData get personAdd => _pick(CupertinoIcons.person_badge_plus, FluentIcons.person_add_24_regular);
   static IconData get chevronUpDown =>
       _pick(CupertinoIcons.chevron_up_chevron_down, FluentIcons.chevron_up_down_24_regular);
   static IconData get link => _pick(CupertinoIcons.link, FluentIcons.link_24_regular);

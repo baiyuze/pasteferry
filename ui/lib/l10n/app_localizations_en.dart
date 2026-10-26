@@ -1956,4 +1956,330 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get backgroundRunningBody =>
       'Closing the window keeps sync and quick paste running. To stop everything, choose Quit PasteFerry in Settings or the app menu.';
+
+  @override
+  String get displayAs => 'Shown as';
+
+  @override
+  String get editName => 'Change Name';
+
+  @override
+  String get nameHint => 'The name your contacts see';
+
+  @override
+  String get nameDefaultHint => 'Leave empty to use your account name.';
+
+  @override
+  String get avatarTitle => 'Profile Picture';
+
+  @override
+  String get avatarChoose => 'Choose Image…';
+
+  @override
+  String get avatarPaste => 'Paste Image';
+
+  @override
+  String get avatarReset => 'Use Default Picture';
+
+  @override
+  String get avatarZoom => 'Zoom';
+
+  @override
+  String get avatarDragHint => 'Drag to move the picture.';
+
+  @override
+  String get avatarNoImage => 'There\'s no image on the clipboard.';
+
+  @override
+  String get avatarBad =>
+      'This image can\'t be used. Choose a PNG, JPEG or GIF.';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get friendsTitle => 'Contacts';
+
+  @override
+  String get addFriend => 'Add Contact';
+
+  @override
+  String get friendsEmpty => 'No contacts yet';
+
+  @override
+  String get friendsEmptyBody =>
+      'Add someone who also uses PasteFerry to send each other files without pairing. Contacts can only send files; they never see your clipboard.';
+
+  @override
+  String get friendSendAction => 'Send…';
+
+  @override
+  String get friendHistory => 'Transfers';
+
+  @override
+  String friendHistoryTitle(String name) {
+    return 'Transfers with $name';
+  }
+
+  @override
+  String get friendHistoryEmpty => 'No transfers yet.';
+
+  @override
+  String get friendAutoAccept => 'Accept Files Automatically';
+
+  @override
+  String get friendRemove => 'Remove Contact';
+
+  @override
+  String friendRemoveTitle(String name) {
+    return 'Remove $name?';
+  }
+
+  @override
+  String get friendRemoveBody =>
+      'You\'ll be removed from each other\'s contacts and can no longer send each other files. Past transfers stay on this computer.';
+
+  @override
+  String friendLastActivity(String time) {
+    return 'Last transfer $time';
+  }
+
+  @override
+  String get friendNoActivity => 'No transfers yet';
+
+  @override
+  String get friendCodeShare =>
+      'Send this code to your contact. When they enter it in PasteFerry, you\'ll be added to each other\'s contacts.';
+
+  @override
+  String friendCodeExpires(String time) {
+    return 'Expires in $time';
+  }
+
+  @override
+  String get friendCodeOr => 'or';
+
+  @override
+  String get friendCodeEnter => 'Enter their contact code';
+
+  @override
+  String get friendCodeAdd => 'Add';
+
+  @override
+  String get friendCodeWaiting => 'Waiting for them to enter it…';
+
+  @override
+  String friendConfirmBody(String name) {
+    return 'Add $name to your contacts?';
+  }
+
+  @override
+  String get friendSafetyCode => 'Check safety code (optional)';
+
+  @override
+  String get friendSafetyHint =>
+      'When you\'re together, compare these two lines. If they match on both computers, no one has interfered.';
+
+  @override
+  String get friendWaitingPeer => 'Waiting for them to add you…';
+
+  @override
+  String friendAdded(String name) {
+    return '$name was added to your contacts';
+  }
+
+  @override
+  String friendPeerCancelled(String name) {
+    return '$name cancelled';
+  }
+
+  @override
+  String get friendErrFriendCode =>
+      'This is a contact code. Enter it in Add Contact on the Send Files page.';
+
+  @override
+  String get friendErrDeviceCode =>
+      'This is a pairing code. Enter it in Devices → Add Device.';
+
+  @override
+  String get friendErrOutdated => 'They need PasteFerry 2.6.0 or later.';
+
+  @override
+  String get friendErrAlreadyPaired =>
+      'That computer is already one of your devices.';
+
+  @override
+  String get friendErrNoChannel =>
+      'You\'re not on the same network. Turn on Service on both computers to add each other.';
+
+  @override
+  String get openService => 'Turn On Service…';
+
+  @override
+  String get noteLabel => 'Note (optional)';
+
+  @override
+  String get noteHintEmpty => 'Choose files first';
+
+  @override
+  String get noteHint => 'For example: please sign page 3';
+
+  @override
+  String noteLine(String note) {
+    return 'Note: $note';
+  }
+
+  @override
+  String get sendAction => 'Send';
+
+  @override
+  String sendItemsSummary(String count, String size) {
+    return '$count items · $size';
+  }
+
+  @override
+  String sendDropOrPaste(String key) {
+    return 'Drop files or images here, or paste ($key)';
+  }
+
+  @override
+  String get sendDropMorePaste => 'Drop or paste more';
+
+  @override
+  String get sendPasteNothing =>
+      'Nothing to paste. Copy files or an image first.';
+
+  @override
+  String get sendRemoveItem => 'Remove';
+
+  @override
+  String sendFriendSaved(String name) {
+    return '$name accepts each batch before it\'s sent.';
+  }
+
+  @override
+  String transferAskingOut(String name) {
+    return 'Waiting for $name to accept…';
+  }
+
+  @override
+  String get transferAskingIn => 'Waiting for you to accept';
+
+  @override
+  String reasonDeclined(String name) {
+    return '$name declined';
+  }
+
+  @override
+  String reasonTimeout(String name) {
+    return '$name didn\'t respond';
+  }
+
+  @override
+  String reasonNotAllowed(String name) {
+    return '$name isn\'t accepting files';
+  }
+
+  @override
+  String reasonRateLimited(String name) {
+    return '$name isn\'t accepting your files right now';
+  }
+
+  @override
+  String get reasonYouDeclined => 'Declined';
+
+  @override
+  String get reasonYouIgnored => 'Ignored';
+
+  @override
+  String get sendAgain => 'Send Again';
+
+  @override
+  String incomingTitle(String name) {
+    return '$name wants to send you files';
+  }
+
+  @override
+  String get incomingAlways => 'Always accept files from this contact';
+
+  @override
+  String get incomingDecline => 'Decline';
+
+  @override
+  String get incomingAccept => 'Accept';
+
+  @override
+  String incomingCountdown(String seconds) {
+    return 'Declines automatically in $seconds s';
+  }
+
+  @override
+  String get incomingStranger => 'Nearby';
+
+  @override
+  String get friendsStrip => 'Contacts';
+
+  @override
+  String get strangersStrip => 'Nearby with Everyone on';
+
+  @override
+  String get strangerNearby => 'Nearby';
+
+  @override
+  String get friendNeedService => 'Turn on Service';
+
+  @override
+  String get friendCantReach => 'Can\'t connect';
+
+  @override
+  String reachSelfNoService(String name) {
+    return 'You and $name aren\'t on the same network. Turn on Service to send files; if no direct connection is possible, they go through the Service relay.';
+  }
+
+  @override
+  String reachPeerNoService(String name) {
+    return '$name hasn\'t turned on Service, so you can only send files on the same network. Ask them to turn on Service in PasteFerry.';
+  }
+
+  @override
+  String get reachDifferentServer =>
+      'You aren\'t using the same server. Turn on Service on both computers, or use the same server, to send files.';
+
+  @override
+  String get receiveFromLabel => 'Let these people send me files:';
+
+  @override
+  String get receiveFromOff => 'No One';
+
+  @override
+  String get receiveFromFriends => 'Contacts Only';
+
+  @override
+  String get receiveFromEveryone => 'Everyone';
+
+  @override
+  String everyoneLeft(String minutes) {
+    return 'Everyone · $minutes min left';
+  }
+
+  @override
+  String get receiveFromOffDesc =>
+      'Only your own paired computers can send you files.';
+
+  @override
+  String get receiveFromFriendsDesc =>
+      'Your contacts can send you files. You accept each batch.';
+
+  @override
+  String get receiveFromEveryoneDesc =>
+      'Anyone on the same network can send you files for 10 minutes. You accept each batch.';
+
+  @override
+  String get everyoneEnded => 'Everyone is off; back to Contacts Only.';
+
+  @override
+  String get friendsCountTooltip => 'Contacts';
+
+  @override
+  String get waitingAccept => 'Waiting…';
 }

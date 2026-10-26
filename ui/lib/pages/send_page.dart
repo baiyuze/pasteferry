@@ -13,7 +13,10 @@ import '../icons.dart';
 import '../main.dart';
 import '../platform.dart';
 import '../theme.dart';
+import '../widgets/avatar.dart';
 import '../widgets/common.dart';
+import '../widgets/friend_send_dialog.dart';
+import '../widgets/friends_dialog.dart';
 import '../widgets/nearby_dialog.dart';
 import '../widgets/pairing_dialog.dart';
 import '../widgets/radar.dart';
@@ -64,10 +67,42 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
   CheckReceiveDirResponse? _dirCheck;
   Timer? _deliveredTimer;
 
+  /// 附近开着「所有人」的陌生设备（2.6.0），页面打开期间订阅
+  List<Stranger> _strangers = const [];
+  StreamSubscription<List<Stranger>>? _strangerSub;
+  Timer? _strangerRetry;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkReceiveDir());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkReceiveDir();
+      _watchStrangers();
+    });
+  }
+
+  void _watchStrangers() {
+    if (!mounted) return;
+    final state = AppScope.read(context);
+    _strangerSub?.cancel();
+    if (!state.isOnline) {
+      _strangerRetry = Timer(const Duration(seconds: 3), _watchStrangers);
+      return;
+    }
+    try {
+      _strangerSub = state.watchStrangers().listen(
+        (list) {
+          if (mounted) setState(() => _strangers = list);
+        },
+        onError: (_) {
+          // 旧版后台服务没有这个接口，或者连接断了：过一会儿再试
+          _strangerRetry = Timer(const Duration(seconds: 10), _watchStrangers);
+        },
+        cancelOnError: true,
+      );
+    } catch (_) {
+      _strangerRetry = Timer(const Duration(seconds: 10), _watchStrangers);
+    }
   }
 
   @override
@@ -83,6 +118,8 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
   @override
   void dispose() {
     _deliveredTimer?.cancel();
+    _strangerSub?.cancel();
+    _strangerRetry?.cancel();
     _pulse.dispose();
     super.dispose();
   }
@@ -129,7 +166,7 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
   Widget _body(BuildContext context, AppState state, Size size) {
     final l = context.l10n;
     final wide = !(state.config?.sendLayoutStacked ?? false);
-    final radar = state.peers.isEmpty
+    final ownRadar = state.peers.isEmpty
         ? EmptyState(
             icon: AppIcons.send,
             title: l.sendNoDevicesTitle,
@@ -144,13 +181,47 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
             ),
           )
         : _radar(context, state);
+    // 雷达下面是好友和附近开着「所有人」的设备（2.6.0）
+    final radar = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(child: ownRadar),
+        if (state.friends.isNotEmpty)
+          _PeopleStrip(
+            title: l.friendsStrip,
+            people: [for (final f in _sortedFriends(state)) _Person.friend(f)],
+          ),
+        if (_strangers.isNotEmpty)
+          _PeopleStrip(
+            title: l.strangersStrip,
+            people: [for (final st in _strangers) _Person.stranger(st)],
+          ),
+      ],
+    );
     final listWidth = (size.width * 0.45).clamp(260.0, 460.0);
     final list = _TransferList(
         direction: _tab, onDirection: (d) => setState(() => _tab = d), compact: wide, narrow: wide && listWidth < 340);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        PageHeader(title: l.navSend, subtitle: l.sendSubtitle),
+        PageHeader(
+          title: l.navSend,
+          subtitle: l.sendSubtitle,
+          actions: [
+            if (state.profile != null) const _ProfileChip(),
+            if (state.profile != null)
+              Tooltip(
+                message: l.friendsTitle,
+                child: TextButton.icon(
+                  onPressed: () => showFriendsDialog(context),
+                  icon: Icon(AppIcons.people, size: 16),
+                  label: Text(state.friends.isEmpty ? l.friendsTitle : '${l.friendsTitle} ${state.friends.length}'),
+                ),
+              ),
+            if (state.profile != null)
+              IconAction(icon: AppIcons.personAdd, tooltip: l.addFriend, onTap: () => showAddFriendDialog(context)),
+          ],
+        ),
         if (_dirCheck != null && !_dirCheck!.ok)
           Padding(
             padding: const EdgeInsets.fromLTRB(Insets.xl, 0, Insets.xl, Insets.md),
@@ -182,9 +253,18 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
                   ],
                 ),
         ),
+        if (state.profile != null) const _ReceiveFromBar(),
       ],
     );
   }
+
+  List<Friend> _sortedFriends(AppState state) => [...state.friends]
+    ..sort((a, b) {
+      final ca = friendCanSend(a), cb = friendCanSend(b);
+      if (ca != cb) return ca ? -1 : 1;
+      if (a.online != b.online) return a.online ? -1 : 1;
+      return a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase());
+    });
 
   /// 刚送达的设备在雷达上显示 3 秒「已送达」，到时间刷新一次
   void _scheduleDeliveredRefresh(AppState state) {
@@ -882,7 +962,7 @@ class _TransferRowState extends State<_TransferRow> {
             children: [
               Icon(_out ? AppIcons.arrowUp : AppIcons.arrowDown, size: 12, color: p.textFaint),
               const SizedBox(width: Insets.xs),
-              Icon(transferIcon(t), size: 18, color: p.textDim),
+              _thumb(context) ?? Icon(transferIcon(t), size: 18, color: p.textDim),
               const SizedBox(width: Insets.md),
               Expanded(
                 child: Column(
@@ -906,6 +986,9 @@ class _TransferRowState extends State<_TransferRow> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    // 好友、陌生设备的备注
+                    if (t.note.isNotEmpty)
+                      Text(l.noteLine(t.note), style: context.text.bodySmall, maxLines: 2, overflow: TextOverflow.ellipsis),
                     // Windows 上改过的文件名：只换了名字里不允许的字符，内容不变
                     if (!_out && t.status == 'done' && t.renamedFiles > 0)
                       Text(l.transferRenamed(t.renamedFiles.toInt()), style: context.text.bodySmall),
@@ -937,6 +1020,16 @@ class _TransferRowState extends State<_TransferRow> {
     );
   }
 
+  /// 收到的图片的缩略图（后台服务重新编码过的），没有时为 null
+  Widget? _thumb(BuildContext context) {
+    final path = t.thumbs.where((x) => x.isNotEmpty).firstOrNull;
+    if (path == null || !File(path).existsSync()) return null;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(Radii.sm),
+      child: Image.file(File(path), width: 36, height: 36, fit: BoxFit.cover, cacheWidth: 72),
+    );
+  }
+
   Widget _trailing(BuildContext context) {
     final l = context.l10n;
     final state = AppScope.read(context);
@@ -947,6 +1040,12 @@ class _TransferRowState extends State<_TransferRow> {
         : OutlinedButton(onPressed: onTap, child: Text(label));
     if (!_out && t.status == 'done' && _present.isNotEmpty) {
       buttons.add(button(AppIcons.folder, revealLabel(l), () => revealFile(_present.first)));
+    }
+    // 好友、陌生设备发来的，等本机用户接受：弹窗关掉了也能在这里处理
+    if (!_out && t.status == 'asking') {
+      buttons.add(button(AppIcons.xmark, l.incomingDecline, () => _run(() => state.answerIncoming(t.id, false))));
+      buttons.add(button(AppIcons.checkmark, l.incomingAccept, () => _run(() => state.answerIncoming(t.id, true))));
+      return Row(mainAxisSize: MainAxisSize.min, children: [buttons[0], const SizedBox(width: Insets.xs), buttons[1]]);
     }
     if (_out && (t.status == 'interrupted' || t.status == 'paused')) {
       buttons.add(button(AppIcons.arrowClockwise, l.continueAction, () => _run(() => state.resumeTransfer(t.id))));
@@ -966,9 +1065,15 @@ class _TransferRowState extends State<_TransferRow> {
   }
 
   Future<void> _resend() async {
-    final d = AppScope.read(context).peers.where((x) => x.id == t.deviceId).firstOrNull;
-    if (d == null) return;
-    await sendFilesTo(context, d, t.paths.toList());
+    final state = AppScope.read(context);
+    final d = state.peers.where((x) => x.id == t.deviceId).firstOrNull;
+    if (d != null) {
+      await sendFilesTo(context, d, t.paths.toList());
+      return;
+    }
+    // 好友：带上原来的备注再发一次
+    final f = state.friendById(t.deviceId);
+    if (f != null) await sendFilesById(context, f.id, f.displayName, t.paths.toList(), note: t.note);
   }
 
   Future<void> _run(Future<void> Function() action) async {
@@ -1018,4 +1123,344 @@ class _TransferDetails implements RecordDetails {
   @override
   Future<GetImagePreviewResponse> imagePreview(String clipId, {int index = 0}) async =>
       GetImagePreviewResponse(count: 0);
+}
+
+
+// ─────────────────────────── 好友（2.6.0） ───────────────────────────
+
+/// 页面右上角：本机的头像和好友看到的名字。点头像换头像，点名字改名
+class _ProfileChip extends StatelessWidget {
+  const _ProfileChip();
+
+  @override
+  Widget build(BuildContext context) {
+    final state = AppScope.of(context);
+    final l = context.l10n;
+    final name = state.profile?.displayName ?? '';
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SelfAvatarButton(size: 30),
+        const SizedBox(width: Insets.sm),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(l.displayAs, style: context.text.labelSmall),
+            InkWell(
+              onTap: () => _editName(context, name),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 140),
+                    child: Text(name, style: context.text.labelLarge, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(AppIcons.pencil, size: 12, color: context.palette.textFaint),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(width: Insets.sm),
+      ],
+    );
+  }
+
+  Future<void> _editName(BuildContext context, String current) async {
+    final l = context.l10n;
+    final c = TextEditingController(text: current);
+    final next = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l.editName),
+        content: SizedBox(
+          width: 360,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: c,
+                autofocus: true,
+                maxLength: 32,
+                decoration: InputDecoration(hintText: l.nameHint),
+                onSubmitted: (v) => Navigator.pop(ctx, v),
+              ),
+              Text(l.nameDefaultHint, style: ctx.text.bodySmall),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l.cancel)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, c.text), child: Text(l.save)),
+        ],
+      ),
+    );
+    c.dispose();
+    if (next == null || !context.mounted) return;
+    try {
+      await AppScope.read(context).setDisplayName(next.trim());
+    } catch (e) {
+      if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+    }
+  }
+}
+
+/// 雷达下面的一排人：好友，或者附近开着「所有人」的陌生设备
+class _Person {
+  _Person.friend(Friend f) : friend = f, stranger = null;
+  _Person.stranger(Stranger s) : friend = null, stranger = s;
+
+  final Friend? friend;
+  final Stranger? stranger;
+
+  String get id => friend?.id ?? stranger!.id;
+  String get name => friend?.displayName ?? stranger!.displayName;
+}
+
+class _PeopleStrip extends StatelessWidget {
+  const _PeopleStrip({required this.title, required this.people});
+
+  final String title;
+  final List<_Person> people;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.sm, Insets.xl, Insets.sm),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Text(title, style: context.text.labelSmall?.copyWith(color: p.textFaint)),
+              const SizedBox(width: Insets.sm),
+              Expanded(child: Divider(color: p.separator, height: 1)),
+            ],
+          ),
+          const SizedBox(height: Insets.sm),
+          SizedBox(
+            height: 92,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: people.length,
+              separatorBuilder: (_, _) => const SizedBox(width: Insets.sm),
+              itemBuilder: (_, i) => _PersonNode(person: people[i]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PersonNode extends StatefulWidget {
+  const _PersonNode({required this.person});
+
+  final _Person person;
+
+  @override
+  State<_PersonNode> createState() => _PersonNodeState();
+}
+
+class _PersonNodeState extends State<_PersonNode> {
+  bool _dropping = false;
+  bool _hover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final state = AppScope.of(context);
+    final l = context.l10n;
+    final p = context.palette;
+    final f = widget.person.friend;
+    final st = widget.person.stranger;
+    final canSend = f != null ? friendCanSend(f) : (st?.receivesFiles ?? false);
+    final sending = state.sendingTo(widget.person.id);
+    final status = f != null ? friendStatus(l, state, f) : l.strangerNearby;
+    final highlight = canSend && (_hover || _dropping);
+    return Tooltip(
+      message: f != null ? (reachabilityText(l, f) ?? friendTitle(f)) : widget.person.name,
+      waitDuration: const Duration(milliseconds: 400),
+      child: DropTarget(
+        enable: canSend,
+        onDragEntered: (_) => setState(() => _dropping = true),
+        onDragExited: (_) => setState(() => _dropping = false),
+        onDragDone: (details) {
+          setState(() => _dropping = false);
+          final paths = droppedPaths(details);
+          // 拖到头像上直接发，不带备注
+          sendFilesById(context, widget.person.id, widget.person.name, paths);
+        },
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (_) => setState(() => _hover = true),
+          onExit: (_) => setState(() => _hover = false),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => f != null
+                ? openFriendSend(context, f)
+                : showFriendSendDialog(context, SendTarget.stranger(st!)),
+            child: SizedBox(
+              width: 84,
+              child: Opacity(
+                opacity: canSend || (f != null && !f.featuresKnown && f.online) ? 1 : 0.55,
+                child: Column(
+                  children: [
+                    AnimatedScale(
+                      scale: _dropping ? 1.08 : 1,
+                      duration: const Duration(milliseconds: 120),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          DecoratedBox(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: highlight ? p.accent : Colors.transparent, width: 2),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(2),
+                              child: PersonAvatar(
+                                deviceId: widget.person.id,
+                                name: widget.person.name,
+                                hash: f?.avatarHash ?? const [],
+                                size: 44,
+                                dashed: st != null,
+                              ),
+                            ),
+                          ),
+                          if (sending != null)
+                            SizedBox.square(
+                              dimension: 52,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                value: sending.status == 'active' && sending.totalBytes > 0
+                                    ? sending.doneBytes.toInt() / sending.totalBytes.toInt()
+                                    : null,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(widget.person.name,
+                        style: context.text.labelMedium?.copyWith(color: p.text),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
+                    Text(
+                      sending?.status == 'asking'
+                          ? l.waitingAccept
+                          : sending?.status == 'active' && sending!.totalBytes > 0
+                              ? '${(sending.doneBytes.toInt() * 100 / sending.totalBytes.toInt()).floor()}%'
+                              : status,
+                      style: context.text.labelSmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 页面底部：谁可以给我发文件（均不允许 / 仅限好友 / 所有人）。「所有人」显示还剩几分钟
+class _ReceiveFromBar extends StatefulWidget {
+  const _ReceiveFromBar();
+
+  @override
+  State<_ReceiveFromBar> createState() => _ReceiveFromBarState();
+}
+
+class _ReceiveFromBarState extends State<_ReceiveFromBar> {
+  Timer? _tick;
+
+  @override
+  void initState() {
+    super.initState();
+    _tick = Timer.periodic(const Duration(seconds: 20), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _tick?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = AppScope.of(context);
+    final l = context.l10n;
+    final p = context.palette;
+    final v = state.receiveFrom;
+    final until = state.everyoneUntil;
+    final label = switch (v) {
+      'off' => l.receiveFromOff,
+      'everyone' when until != null =>
+        l.everyoneLeft('${math.max(1, (until.difference(DateTime.now()).inSeconds / 60).ceil())}'),
+      'everyone' => l.receiveFromEveryone,
+      _ => l.receiveFromFriends,
+    };
+    return Container(
+      decoration: BoxDecoration(border: Border(top: BorderSide(color: p.border))),
+      padding: const EdgeInsets.symmetric(horizontal: Insets.xl, vertical: Insets.sm),
+      child: Row(
+        children: [
+          Text(l.receiveFromLabel, style: context.text.bodySmall),
+          PopupMenuButton<String>(
+            tooltip: '',
+            position: PopupMenuPosition.over,
+            onSelected: (next) async {
+              try {
+                await state.setReceiveFrom(next);
+              } catch (e) {
+                if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+              }
+            },
+            itemBuilder: (_) => [
+              for (final (value, title, desc) in [
+                ('off', l.receiveFromOff, l.receiveFromOffDesc),
+                ('friends', l.receiveFromFriends, l.receiveFromFriendsDesc),
+                ('everyone', l.receiveFromEveryone, l.receiveFromEveryoneDesc),
+              ])
+                CheckedPopupMenuItem(
+                  value: value,
+                  checked: v == value,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(title),
+                      SizedBox(
+                        width: 280,
+                        child: Text(desc, style: context.text.bodySmall),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Insets.xs, vertical: 4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(label, style: context.text.bodySmall?.copyWith(color: p.accent)),
+                  const SizedBox(width: 2),
+                  Icon(AppIcons.chevronDown, size: 12, color: p.accent),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

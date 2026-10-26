@@ -18,6 +18,8 @@ import 'picker/picker_main.dart';
 import 'theme.dart';
 import 'widgets/common.dart';
 import 'widgets/pairing_dialog.dart';
+import 'widgets/friends_dialog.dart';
+import 'widgets/incoming_dialog.dart';
 import 'widgets/update_dialog.dart';
 import 'icons.dart';
 
@@ -139,6 +141,9 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
   late Section _section = widget.initialSection;
   bool _pairingDialogOpen = false;
   bool _officialDialogOpen = false;
+  // 加好友的确认框、别人发来文件等接受的弹窗（2.6.0）
+  bool _friendDialogOpen = false;
+  bool _incomingDialogOpen = false;
   int _seenOfficialNavigation = 0;
   int _seenPageRequest = 0;
   String? _shownUpdateResult;
@@ -174,6 +179,7 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
     if (state.pageRequestSerial != _seenPageRequest) {
       _seenPageRequest = state.pageRequestSerial;
       if (state.pageRequest == 'send') _section = Section.send;
+      if (state.pageRequest == 'settings') _section = Section.settings;
     }
     if (!state.officialEnabled && _section == Section.official) {
       _section = Section.settings;
@@ -191,6 +197,34 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
         }
         await showPairingConfirmDialog(context, pending);
         if (mounted) setState(() => _pairingDialogOpen = false);
+      });
+    }
+    // 有人兑换了本机的好友码：弹出确认框
+    final friendRequest = state.pendingFriendRequest;
+    if (friendRequest != null && pending == null && !_pairingDialogOpen && !_friendDialogOpen) {
+      _friendDialogOpen = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        if (state.pendingFriendRequest?.session != friendRequest.session) {
+          setState(() => _friendDialogOpen = false);
+          return;
+        }
+        // 「添加好友」窗口还开着：先关掉，确认框接着它
+        Navigator.of(context).popUntil((r) => r.isFirst);
+        state.dismissPendingFriend();
+        await showFriendConfirmDialog(context, friendRequest);
+        if (mounted) setState(() => _friendDialogOpen = false);
+      });
+    }
+    // 好友或附近的陌生设备发来文件，等用户接受
+    final asking = state.askingIncoming.firstOrNull;
+    if (asking != null && pending == null && !_pairingDialogOpen && !_friendDialogOpen && !_incomingDialogOpen) {
+      _incomingDialogOpen = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        await showIncomingDialog(context, asking);
+        state.dismissAsk(asking.id);
+        if (mounted) setState(() => _incomingDialogOpen = false);
       });
     }
     final notice = state.officialNoticeKey;

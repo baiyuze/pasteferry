@@ -1777,6 +1777,318 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get backgroundRunningBody =>
       '关闭窗口后，同步和快捷粘贴仍会运行。如需完全停止，请在设置或应用菜单选择「退出隔空贴」。';
+
+  @override
+  String get displayAs => '显示为';
+
+  @override
+  String get editName => '修改名字';
+
+  @override
+  String get nameHint => '好友看到的名字';
+
+  @override
+  String get nameDefaultHint => '留空则用系统的用户名。';
+
+  @override
+  String get avatarTitle => '设置头像';
+
+  @override
+  String get avatarChoose => '选择图片…';
+
+  @override
+  String get avatarPaste => '粘贴图片';
+
+  @override
+  String get avatarReset => '恢复默认头像';
+
+  @override
+  String get avatarZoom => '缩放';
+
+  @override
+  String get avatarDragHint => '拖动可以移动图片。';
+
+  @override
+  String get avatarNoImage => '剪贴板里没有图片。';
+
+  @override
+  String get avatarBad => '这张图片用不了，请换一张 PNG、JPEG 或 GIF。';
+
+  @override
+  String get done => '完成';
+
+  @override
+  String get friendsTitle => '好友';
+
+  @override
+  String get addFriend => '添加好友';
+
+  @override
+  String get friendsEmpty => '还没有好友';
+
+  @override
+  String get friendsEmptyBody => '加了好友，就能互相发文件，不用配对。好友只能发文件，看不到你的剪贴板。';
+
+  @override
+  String get friendSendAction => '发送…';
+
+  @override
+  String get friendHistory => '传输记录';
+
+  @override
+  String friendHistoryTitle(String name) {
+    return '和 $name 的传输';
+  }
+
+  @override
+  String get friendHistoryEmpty => '还没有传过文件。';
+
+  @override
+  String get friendAutoAccept => '自动接收此好友的文件';
+
+  @override
+  String get friendRemove => '删除好友';
+
+  @override
+  String friendRemoveTitle(String name) {
+    return '删除好友「$name」？';
+  }
+
+  @override
+  String get friendRemoveBody => '双方都会删除对方，之后互相发不了文件。以前的传输记录仍留在这台电脑上。';
+
+  @override
+  String friendLastActivity(String time) {
+    return '$time传过';
+  }
+
+  @override
+  String get friendNoActivity => '还没传过文件';
+
+  @override
+  String get friendCodeShare => '把这个码发给好友，对方在隔空贴里输入后，你们就成为好友。';
+
+  @override
+  String friendCodeExpires(String time) {
+    return '$time 后失效';
+  }
+
+  @override
+  String get friendCodeOr => '或者';
+
+  @override
+  String get friendCodeEnter => '输入对方的好友码';
+
+  @override
+  String get friendCodeAdd => '添加';
+
+  @override
+  String get friendCodeWaiting => '等待对方输入…';
+
+  @override
+  String friendConfirmBody(String name) {
+    return '添加 $name 为好友？';
+  }
+
+  @override
+  String get friendSafetyCode => '核对安全码（可选）';
+
+  @override
+  String get friendSafetyHint => '面对面时可以核对：两边显示的这两行一样，就没有被人调包。';
+
+  @override
+  String get friendWaitingPeer => '等待对方添加…';
+
+  @override
+  String friendAdded(String name) {
+    return '已添加 $name 为好友';
+  }
+
+  @override
+  String friendPeerCancelled(String name) {
+    return '$name 取消了';
+  }
+
+  @override
+  String get friendErrFriendCode => '这是好友码，请在隔空传送页的「添加好友」里输入。';
+
+  @override
+  String get friendErrDeviceCode => '这是配对码，请在「设备 → 添加设备」里输入。';
+
+  @override
+  String get friendErrOutdated => '对方需要更新到隔空贴 2.6.0 或更高版本。';
+
+  @override
+  String get friendErrAlreadyPaired => '这台电脑已经是你的设备。';
+
+  @override
+  String get friendErrNoChannel => '你们不在同一个局域网，双方都打开「服务」后才能添加。';
+
+  @override
+  String get openService => '打开服务…';
+
+  @override
+  String get noteLabel => '备注（可选）';
+
+  @override
+  String get noteHintEmpty => '先选择要发送的文件';
+
+  @override
+  String get noteHint => '比如：合同第 3 页要签字';
+
+  @override
+  String noteLine(String note) {
+    return '备注：$note';
+  }
+
+  @override
+  String get sendAction => '发送';
+
+  @override
+  String sendItemsSummary(String count, String size) {
+    return '共 $count 项 · $size';
+  }
+
+  @override
+  String sendDropOrPaste(String key) {
+    return '把文件或图片拖到这里，或粘贴（$key）';
+  }
+
+  @override
+  String get sendDropMorePaste => '继续拖入或粘贴';
+
+  @override
+  String get sendPasteNothing => '剪贴板里没有文件或图片。';
+
+  @override
+  String get sendRemoveItem => '移除';
+
+  @override
+  String sendFriendSaved(String name) {
+    return '对方点「接受」后才开始发送。';
+  }
+
+  @override
+  String transferAskingOut(String name) {
+    return '等待 $name 接受…';
+  }
+
+  @override
+  String get transferAskingIn => '等你接受';
+
+  @override
+  String reasonDeclined(String name) {
+    return '$name 拒绝了';
+  }
+
+  @override
+  String reasonTimeout(String name) {
+    return '$name 没有回应';
+  }
+
+  @override
+  String reasonNotAllowed(String name) {
+    return '$name 不接收文件';
+  }
+
+  @override
+  String reasonRateLimited(String name) {
+    return '$name 暂时不接收你的文件';
+  }
+
+  @override
+  String get reasonYouDeclined => '已拒绝';
+
+  @override
+  String get reasonYouIgnored => '已忽略';
+
+  @override
+  String get sendAgain => '再发一次';
+
+  @override
+  String incomingTitle(String name) {
+    return '$name 想发给你文件';
+  }
+
+  @override
+  String get incomingAlways => '以后自动接收此好友的文件';
+
+  @override
+  String get incomingDecline => '拒绝';
+
+  @override
+  String get incomingAccept => '接受';
+
+  @override
+  String incomingCountdown(String seconds) {
+    return '$seconds 秒后自动拒绝';
+  }
+
+  @override
+  String get incomingStranger => '附近的设备';
+
+  @override
+  String get friendsStrip => '好友';
+
+  @override
+  String get strangersStrip => '附近开着「所有人」的设备';
+
+  @override
+  String get strangerNearby => '附近';
+
+  @override
+  String get friendNeedService => '需要打开服务';
+
+  @override
+  String get friendCantReach => '无法连接';
+
+  @override
+  String reachSelfNoService(String name) {
+    return '你和 $name 不在同一个局域网。打开服务后就能给对方发文件，直连不了时经服务中转。';
+  }
+
+  @override
+  String reachPeerNoService(String name) {
+    return '$name 没有打开服务，不在同一个局域网时发不了。请对方在隔空贴里打开服务。';
+  }
+
+  @override
+  String get reachDifferentServer => '你们用的不是同一台服务器。双方都打开服务，或者改用同一台服务器后就能发。';
+
+  @override
+  String get receiveFromLabel => '允许这些人给我发文件：';
+
+  @override
+  String get receiveFromOff => '均不允许';
+
+  @override
+  String get receiveFromFriends => '仅限好友';
+
+  @override
+  String get receiveFromEveryone => '所有人';
+
+  @override
+  String everyoneLeft(String minutes) {
+    return '所有人 · 还剩 $minutes 分钟';
+  }
+
+  @override
+  String get receiveFromOffDesc => '只有你配对的电脑能发。';
+
+  @override
+  String get receiveFromFriendsDesc => '好友能发，每次由你接受。';
+
+  @override
+  String get receiveFromEveryoneDesc => '同一局域网里的人都能发，每次由你接受；10 分钟后改回「仅限好友」。';
+
+  @override
+  String get everyoneEnded => '「所有人」已结束，改回「仅限好友」。';
+
+  @override
+  String get friendsCountTooltip => '好友';
+
+  @override
+  String get waitingAccept => '等待接受';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -3552,6 +3864,318 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   @override
   String get backgroundRunningBody =>
       '關閉視窗後，同步和快速貼上仍會運作。如需完全停止，請在設定或應用程式選單選擇「退出隔空貼」。';
+
+  @override
+  String get displayAs => '顯示為';
+
+  @override
+  String get editName => '修改名稱';
+
+  @override
+  String get nameHint => '好友看到的名稱';
+
+  @override
+  String get nameDefaultHint => '留空則使用系統的用戶名稱。';
+
+  @override
+  String get avatarTitle => '設定頭像';
+
+  @override
+  String get avatarChoose => '選擇圖片…';
+
+  @override
+  String get avatarPaste => '貼上圖片';
+
+  @override
+  String get avatarReset => '恢復預設頭像';
+
+  @override
+  String get avatarZoom => '縮放';
+
+  @override
+  String get avatarDragHint => '拖曳可以移動圖片。';
+
+  @override
+  String get avatarNoImage => '剪貼簿裏沒有圖片。';
+
+  @override
+  String get avatarBad => '這張圖片無法使用，請換一張 PNG、JPEG 或 GIF。';
+
+  @override
+  String get done => '完成';
+
+  @override
+  String get friendsTitle => '好友';
+
+  @override
+  String get addFriend => '新增好友';
+
+  @override
+  String get friendsEmpty => '還沒有好友';
+
+  @override
+  String get friendsEmptyBody => '加了好友，就能互相傳檔案，不用配對。好友只能傳檔案，看不到你的剪貼簿。';
+
+  @override
+  String get friendSendAction => '傳送…';
+
+  @override
+  String get friendHistory => '傳輸記錄';
+
+  @override
+  String friendHistoryTitle(String name) {
+    return '和 $name 的傳輸';
+  }
+
+  @override
+  String get friendHistoryEmpty => '還沒有傳過檔案。';
+
+  @override
+  String get friendAutoAccept => '自動接收此好友的檔案';
+
+  @override
+  String get friendRemove => '刪除好友';
+
+  @override
+  String friendRemoveTitle(String name) {
+    return '刪除好友「$name」？';
+  }
+
+  @override
+  String get friendRemoveBody => '雙方都會刪除對方，之後互相傳不了檔案。以前的傳輸記錄仍留在這部電腦上。';
+
+  @override
+  String friendLastActivity(String time) {
+    return '$time傳過';
+  }
+
+  @override
+  String get friendNoActivity => '還沒傳過檔案';
+
+  @override
+  String get friendCodeShare => '把這個碼傳給好友，對方在隔空貼裏輸入後，你們就成為好友。';
+
+  @override
+  String friendCodeExpires(String time) {
+    return '$time 後失效';
+  }
+
+  @override
+  String get friendCodeOr => '或者';
+
+  @override
+  String get friendCodeEnter => '輸入對方的好友碼';
+
+  @override
+  String get friendCodeAdd => '新增';
+
+  @override
+  String get friendCodeWaiting => '等待對方輸入…';
+
+  @override
+  String friendConfirmBody(String name) {
+    return '新增 $name 為好友？';
+  }
+
+  @override
+  String get friendSafetyCode => '核對安全碼（可選）';
+
+  @override
+  String get friendSafetyHint => '面對面時可以核對：兩邊顯示的這兩行一樣，就沒有被人調包。';
+
+  @override
+  String get friendWaitingPeer => '等待對方新增…';
+
+  @override
+  String friendAdded(String name) {
+    return '已新增 $name 為好友';
+  }
+
+  @override
+  String friendPeerCancelled(String name) {
+    return '$name 取消了';
+  }
+
+  @override
+  String get friendErrFriendCode => '這是好友碼，請在隔空傳送頁的「新增好友」裏輸入。';
+
+  @override
+  String get friendErrDeviceCode => '這是配對碼，請在「裝置 → 新增裝置」裏輸入。';
+
+  @override
+  String get friendErrOutdated => '對方需要更新到隔空貼 2.6.0 或更新版本。';
+
+  @override
+  String get friendErrAlreadyPaired => '這部電腦已經是你的裝置。';
+
+  @override
+  String get friendErrNoChannel => '你們不在同一個區域網絡，雙方都開啟「服務」後才能新增。';
+
+  @override
+  String get openService => '開啟服務…';
+
+  @override
+  String get noteLabel => '備註（可選）';
+
+  @override
+  String get noteHintEmpty => '先選擇要傳送的檔案';
+
+  @override
+  String get noteHint => '例如：合約第 3 頁要簽名';
+
+  @override
+  String noteLine(String note) {
+    return '備註：$note';
+  }
+
+  @override
+  String get sendAction => '傳送';
+
+  @override
+  String sendItemsSummary(String count, String size) {
+    return '共 $count 項 · $size';
+  }
+
+  @override
+  String sendDropOrPaste(String key) {
+    return '把檔案或圖片拖到這裏，或貼上（$key）';
+  }
+
+  @override
+  String get sendDropMorePaste => '繼續拖入或貼上';
+
+  @override
+  String get sendPasteNothing => '剪貼簿裏沒有檔案或圖片。';
+
+  @override
+  String get sendRemoveItem => '移除';
+
+  @override
+  String sendFriendSaved(String name) {
+    return '對方按「接受」後才開始傳送。';
+  }
+
+  @override
+  String transferAskingOut(String name) {
+    return '等待 $name 接受…';
+  }
+
+  @override
+  String get transferAskingIn => '等你接受';
+
+  @override
+  String reasonDeclined(String name) {
+    return '$name 拒絕了';
+  }
+
+  @override
+  String reasonTimeout(String name) {
+    return '$name 沒有回應';
+  }
+
+  @override
+  String reasonNotAllowed(String name) {
+    return '$name 不接收檔案';
+  }
+
+  @override
+  String reasonRateLimited(String name) {
+    return '$name 暫時不接收你的檔案';
+  }
+
+  @override
+  String get reasonYouDeclined => '已拒絕';
+
+  @override
+  String get reasonYouIgnored => '已忽略';
+
+  @override
+  String get sendAgain => '再傳一次';
+
+  @override
+  String incomingTitle(String name) {
+    return '$name 想傳檔案給你';
+  }
+
+  @override
+  String get incomingAlways => '以後自動接收此好友的檔案';
+
+  @override
+  String get incomingDecline => '拒絕';
+
+  @override
+  String get incomingAccept => '接受';
+
+  @override
+  String incomingCountdown(String seconds) {
+    return '$seconds 秒後自動拒絕';
+  }
+
+  @override
+  String get incomingStranger => '附近的裝置';
+
+  @override
+  String get friendsStrip => '好友';
+
+  @override
+  String get strangersStrip => '附近開著「所有人」的裝置';
+
+  @override
+  String get strangerNearby => '附近';
+
+  @override
+  String get friendNeedService => '需要開啟服務';
+
+  @override
+  String get friendCantReach => '無法連線';
+
+  @override
+  String reachSelfNoService(String name) {
+    return '你和 $name 不在同一個區域網絡。開啟服務後就能傳檔案給對方，直連不了時經服務中轉。';
+  }
+
+  @override
+  String reachPeerNoService(String name) {
+    return '$name 沒有開啟服務，不在同一個區域網絡時傳不了。請對方在隔空貼裏開啟服務。';
+  }
+
+  @override
+  String get reachDifferentServer => '你們用的不是同一部伺服器。雙方都開啟服務，或者改用同一部伺服器後就能傳。';
+
+  @override
+  String get receiveFromLabel => '允許這些人傳檔案給我：';
+
+  @override
+  String get receiveFromOff => '均不允許';
+
+  @override
+  String get receiveFromFriends => '只限好友';
+
+  @override
+  String get receiveFromEveryone => '所有人';
+
+  @override
+  String everyoneLeft(String minutes) {
+    return '所有人 · 還剩 $minutes 分鐘';
+  }
+
+  @override
+  String get receiveFromOffDesc => '只有你配對的電腦能傳。';
+
+  @override
+  String get receiveFromFriendsDesc => '好友能傳，每次由你接受。';
+
+  @override
+  String get receiveFromEveryoneDesc => '同一區域網絡裏的人都能傳，每次由你接受；10 分鐘後改回「只限好友」。';
+
+  @override
+  String get everyoneEnded => '「所有人」已結束，改回「只限好友」。';
+
+  @override
+  String get friendsCountTooltip => '好友';
+
+  @override
+  String get waitingAccept => '等待接受';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -5327,4 +5951,316 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   @override
   String get backgroundRunningBody =>
       '關閉視窗後，同步和快速貼上仍會執行。如需完全停止，請在設定或應用程式選單選擇「結束隔空貼」。';
+
+  @override
+  String get displayAs => '顯示為';
+
+  @override
+  String get editName => '修改名稱';
+
+  @override
+  String get nameHint => '好友看到的名稱';
+
+  @override
+  String get nameDefaultHint => '留空則使用系統的使用者名稱。';
+
+  @override
+  String get avatarTitle => '設定頭像';
+
+  @override
+  String get avatarChoose => '選擇圖片…';
+
+  @override
+  String get avatarPaste => '貼上圖片';
+
+  @override
+  String get avatarReset => '恢復預設頭像';
+
+  @override
+  String get avatarZoom => '縮放';
+
+  @override
+  String get avatarDragHint => '拖曳可以移動圖片。';
+
+  @override
+  String get avatarNoImage => '剪貼簿裡沒有圖片。';
+
+  @override
+  String get avatarBad => '這張圖片無法使用，請換一張 PNG、JPEG 或 GIF。';
+
+  @override
+  String get done => '完成';
+
+  @override
+  String get friendsTitle => '好友';
+
+  @override
+  String get addFriend => '新增好友';
+
+  @override
+  String get friendsEmpty => '還沒有好友';
+
+  @override
+  String get friendsEmptyBody => '加了好友，就能互相傳檔案，不用配對。好友只能傳檔案，看不到你的剪貼簿。';
+
+  @override
+  String get friendSendAction => '傳送…';
+
+  @override
+  String get friendHistory => '傳輸記錄';
+
+  @override
+  String friendHistoryTitle(String name) {
+    return '和 $name 的傳輸';
+  }
+
+  @override
+  String get friendHistoryEmpty => '還沒有傳過檔案。';
+
+  @override
+  String get friendAutoAccept => '自動接收此好友的檔案';
+
+  @override
+  String get friendRemove => '刪除好友';
+
+  @override
+  String friendRemoveTitle(String name) {
+    return '刪除好友「$name」？';
+  }
+
+  @override
+  String get friendRemoveBody => '雙方都會刪除對方，之後互相傳不了檔案。以前的傳輸記錄仍留在這台電腦上。';
+
+  @override
+  String friendLastActivity(String time) {
+    return '$time傳過';
+  }
+
+  @override
+  String get friendNoActivity => '還沒傳過檔案';
+
+  @override
+  String get friendCodeShare => '把這個碼傳給好友，對方在隔空貼裡輸入後，你們就成為好友。';
+
+  @override
+  String friendCodeExpires(String time) {
+    return '$time 後失效';
+  }
+
+  @override
+  String get friendCodeOr => '或者';
+
+  @override
+  String get friendCodeEnter => '輸入對方的好友碼';
+
+  @override
+  String get friendCodeAdd => '新增';
+
+  @override
+  String get friendCodeWaiting => '等待對方輸入…';
+
+  @override
+  String friendConfirmBody(String name) {
+    return '新增 $name 為好友？';
+  }
+
+  @override
+  String get friendSafetyCode => '核對安全碼（選填）';
+
+  @override
+  String get friendSafetyHint => '面對面時可以核對：兩邊顯示的這兩行一樣，就沒有被人調包。';
+
+  @override
+  String get friendWaitingPeer => '等待對方新增…';
+
+  @override
+  String friendAdded(String name) {
+    return '已新增 $name 為好友';
+  }
+
+  @override
+  String friendPeerCancelled(String name) {
+    return '$name 取消了';
+  }
+
+  @override
+  String get friendErrFriendCode => '這是好友碼，請在隔空傳送頁的「新增好友」裡輸入。';
+
+  @override
+  String get friendErrDeviceCode => '這是配對碼，請在「裝置 → 新增裝置」裡輸入。';
+
+  @override
+  String get friendErrOutdated => '對方需要更新到隔空貼 2.6.0 或更新版本。';
+
+  @override
+  String get friendErrAlreadyPaired => '這台電腦已經是你的裝置。';
+
+  @override
+  String get friendErrNoChannel => '你們不在同一個區域網路，雙方都開啟「服務」後才能新增。';
+
+  @override
+  String get openService => '開啟服務…';
+
+  @override
+  String get noteLabel => '備註（選填）';
+
+  @override
+  String get noteHintEmpty => '先選擇要傳送的檔案';
+
+  @override
+  String get noteHint => '例如：合約第 3 頁要簽名';
+
+  @override
+  String noteLine(String note) {
+    return '備註：$note';
+  }
+
+  @override
+  String get sendAction => '傳送';
+
+  @override
+  String sendItemsSummary(String count, String size) {
+    return '共 $count 項 · $size';
+  }
+
+  @override
+  String sendDropOrPaste(String key) {
+    return '把檔案或圖片拖到這裡，或貼上（$key）';
+  }
+
+  @override
+  String get sendDropMorePaste => '繼續拖入或貼上';
+
+  @override
+  String get sendPasteNothing => '剪貼簿裡沒有檔案或圖片。';
+
+  @override
+  String get sendRemoveItem => '移除';
+
+  @override
+  String sendFriendSaved(String name) {
+    return '對方按「接受」後才開始傳送。';
+  }
+
+  @override
+  String transferAskingOut(String name) {
+    return '等待 $name 接受…';
+  }
+
+  @override
+  String get transferAskingIn => '等你接受';
+
+  @override
+  String reasonDeclined(String name) {
+    return '$name 拒絕了';
+  }
+
+  @override
+  String reasonTimeout(String name) {
+    return '$name 沒有回應';
+  }
+
+  @override
+  String reasonNotAllowed(String name) {
+    return '$name 不接收檔案';
+  }
+
+  @override
+  String reasonRateLimited(String name) {
+    return '$name 暫時不接收你的檔案';
+  }
+
+  @override
+  String get reasonYouDeclined => '已拒絕';
+
+  @override
+  String get reasonYouIgnored => '已忽略';
+
+  @override
+  String get sendAgain => '再傳一次';
+
+  @override
+  String incomingTitle(String name) {
+    return '$name 想傳檔案給你';
+  }
+
+  @override
+  String get incomingAlways => '以後自動接收此好友的檔案';
+
+  @override
+  String get incomingDecline => '拒絕';
+
+  @override
+  String get incomingAccept => '接受';
+
+  @override
+  String incomingCountdown(String seconds) {
+    return '$seconds 秒後自動拒絕';
+  }
+
+  @override
+  String get incomingStranger => '附近的裝置';
+
+  @override
+  String get friendsStrip => '好友';
+
+  @override
+  String get strangersStrip => '附近開著「所有人」的裝置';
+
+  @override
+  String get strangerNearby => '附近';
+
+  @override
+  String get friendNeedService => '需要開啟服務';
+
+  @override
+  String get friendCantReach => '無法連線';
+
+  @override
+  String reachSelfNoService(String name) {
+    return '你和 $name 不在同一個區域網路。開啟服務後就能傳檔案給對方，直連不了時經服務中繼。';
+  }
+
+  @override
+  String reachPeerNoService(String name) {
+    return '$name 沒有開啟服務，不在同一個區域網路時傳不了。請對方在隔空貼裡開啟服務。';
+  }
+
+  @override
+  String get reachDifferentServer => '你們用的不是同一台伺服器。雙方都開啟服務，或者改用同一台伺服器後就能傳。';
+
+  @override
+  String get receiveFromLabel => '允許這些人傳檔案給我：';
+
+  @override
+  String get receiveFromOff => '均不允許';
+
+  @override
+  String get receiveFromFriends => '僅限好友';
+
+  @override
+  String get receiveFromEveryone => '所有人';
+
+  @override
+  String everyoneLeft(String minutes) {
+    return '所有人 · 還剩 $minutes 分鐘';
+  }
+
+  @override
+  String get receiveFromOffDesc => '只有你配對的電腦能傳。';
+
+  @override
+  String get receiveFromFriendsDesc => '好友能傳，每次由你接受。';
+
+  @override
+  String get receiveFromEveryoneDesc => '同一區域網路裡的人都能傳，每次由你接受；10 分鐘後改回「僅限好友」。';
+
+  @override
+  String get everyoneEnded => '「所有人」已結束，改回「僅限好友」。';
+
+  @override
+  String get friendsCountTooltip => '好友';
+
+  @override
+  String get waitingAccept => '等待接受';
 }

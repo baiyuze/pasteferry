@@ -18,6 +18,8 @@ import 'package:pasteferry_ui/picker/picker_host.dart';
 import 'package:pasteferry_ui/picker/picker_state.dart';
 import 'package:pasteferry_ui/picker/picker_view.dart';
 import 'package:pasteferry_ui/theme.dart';
+import 'package:pasteferry_ui/widgets/friend_send_dialog.dart';
+import 'package:pasteferry_ui/widgets/friends_dialog.dart';
 import 'package:pasteferry_ui/widgets/nearby_dialog.dart';
 import 'package:pasteferry_ui/widgets/pairing_dialog.dart';
 import 'package:pasteferry_ui/widgets/send_dialog.dart';
@@ -47,6 +49,13 @@ final _cjk = switch (_lang) {
 class _DemoState extends AppState {
   @override
   Future<PairingCode> createPairingCode() async => (code: 'K7MP2X', addresses: ['192.168.1.20']);
+
+  @override
+  Future<PairingCode> createFriendCode() async => (code: 'F7K3QXM', addresses: ['192.168.1.20']);
+
+  // 「所有人」模式下附近的陌生设备：截图里不放
+  @override
+  Stream<List<Stranger>> watchStrangers() => StreamController<List<Stranger>>().stream;
 
   @override
   Future<ListHistoryResponse> requestSearch(String query) async =>
@@ -316,6 +325,55 @@ AppState _sendDemo() {
   return base;
 }
 
+/// 好友（2.6.0）的演示数据：本机的名字，三个好友（局域网、需要对方打开服务、离线），
+/// 与好友之间的传输带备注。人名都是演示用的，不对应真实的人
+AppState _friendsDemo() {
+  final base = _sendDemo();
+  final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+  Int64 ago(int s) => Int64(now - s);
+  const incoming = TransferDirection.TRANSFER_DIRECTION_INCOMING;
+  const outgoing = TransferDirection.TRANSFER_DIRECTION_OUTGOING;
+  final xm = _t('小明', 'Alex', '佐藤', tw: '小明', hk: '小明');
+  final aj = _t('阿杰', 'Jordan', '田中', tw: '阿傑', hk: '阿傑');
+  final wj = _t('王姐', 'Sam', '鈴木', tw: '王姐', hk: '王姐');
+  final contract = _t('合同扫描件.pdf', 'signed-contract.pdf', '契約書_署名済み.pdf', tw: '合約掃描檔.pdf', hk: '合約掃描本.pdf');
+  final note = _t('合同第 3 页要签字', 'Please sign page 3', '3 ページ目に署名してください', tw: '合約第 3 頁要簽名', hk: '合約第 3 頁要簽名');
+  final quote = _t('报价单.png', 'quote.png', '見積書.png', tw: '報價單.png', hk: '報價單.png');
+  final quoteNote = _t('看下这个价格', 'Does this price work?', 'この価格で大丈夫？', tw: '看一下這個價格', hk: '看看這個價錢');
+  final winDesk = _t('Win 台式机', 'Windows PC', 'Windows PC', tw: 'Win 桌機', hk: 'Win 桌面電腦');
+  final friends = [
+    Friend(id: 'f-xm', displayName: xm, deviceName: 'MacBook Air', platform: 'darwin', online: true, lanReachable: true,
+        connection: ConnectionKind.CONNECTION_KIND_DIRECT, featuresKnown: true, receivesFiles: true,
+        addedAtUnix: ago(86400 * 3), lastActivityUnix: ago(300)),
+    Friend(id: 'f-aj', displayName: aj, deviceName: winDesk, platform: 'windows', reachability: 'peer_no_service',
+        featuresKnown: true, receivesFiles: true, addedAtUnix: ago(86400 * 9), lastActivityUnix: ago(86400)),
+    Friend(id: 'f-wj', displayName: wj, deviceName: 'MacBook Pro', platform: 'darwin', featuresKnown: true,
+        receivesFiles: true, addedAtUnix: ago(86400 * 20), lastActivityUnix: ago(86400 * 6)),
+  ];
+  final transfers = [
+    Transfer(id: 'fr1', direction: incoming, deviceId: 'f-xm', deviceName: '$xm · MacBook Air', status: 'done',
+        peerRole: 'friend', note: quoteNote, items: [ClipItem(name: quote, size: Int64(640 * 1024))],
+        paths: ['/q'], present: [true], totalBytes: Int64(640 * 1024), fileCount: Int64(1),
+        createdAtUnix: ago(320), finishedAtUnix: ago(300)),
+    Transfer(id: 'fs1', direction: outgoing, deviceId: 'f-xm', deviceName: '$xm · MacBook Air', status: 'done',
+        peerRole: 'friend', note: note, items: [ClipItem(name: contract), ClipItem(name: 'notes.txt')],
+        paths: ['/c'], totalBytes: Int64((18.4 * _mb).round()), fileCount: Int64(2),
+        createdAtUnix: ago(120), finishedAtUnix: ago(110)),
+    ...base.transfers(incoming),
+    ...base.transfers(outgoing),
+  ]..sort((a, b) => b.createdAtUnix.compareTo(a.createdAtUnix));
+  base.debugSeed(
+    status: base.status!,
+    config: base.config!..receiveFrom = 'friends',
+    self: base.self!,
+    peers: base.peers,
+    friends: friends,
+    profile: Profile(displayName: _t('光光', 'Robin', '高橋', tw: '光光', hk: '光光'), deviceId: 'self'),
+    transfers: transfers,
+  );
+  return base;
+}
+
 final _boundary = GlobalKey();
 
 Future<void> _shoot(
@@ -477,6 +535,93 @@ void main() {
         context: tester.element(find.byType(Shell)),
         builder: (_) => const SendDialog(deviceId: 'air'),
       );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    });
+  });
+
+  testWidgets('friends-send-dark', (tester) async {
+    await _shoot(tester, 'friends-send-dark', state: _friendsDemo(), section: Section.send, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720));
+  });
+
+  testWidgets('friends-list-dark', (tester) async {
+    await _shoot(tester, 'friends-list-dark', state: _friendsDemo(), section: Section.send, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
+      showFriendsDialog(tester.element(find.byType(Shell)));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    });
+  });
+
+  testWidgets('add-friend-dark', (tester) async {
+    await _shoot(tester, 'add-friend-dark', state: _friendsDemo(), section: Section.send, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
+      showAddFriendDialog(tester.element(find.byType(Shell)));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    });
+  });
+
+  testWidgets('friend-send-dialog-dark', (tester) async {
+    final dir = Directory.systemTemp.createTempSync('pf-shot');
+    final files = <String>[];
+    for (final (name, size) in [
+      (_t('合同扫描件.pdf', 'signed-contract.pdf', '契約書_署名済み.pdf', tw: '合約掃描檔.pdf', hk: '合約掃描本.pdf'), 2400000),
+      (_t('附件', 'attachments', '添付ファイル', tw: '附件', hk: '附件'), 0),
+    ]) {
+      final path = '${dir.path}/$name';
+      if (size == 0) {
+        Directory(path).createSync();
+        File('$path/a.bin').writeAsBytesSync(List.filled(1500000, 0));
+      } else {
+        File(path).writeAsBytesSync(List.filled(size, 0));
+      }
+      files.add(path);
+    }
+    final state = _friendsDemo();
+    await _shoot(tester, 'friend-send-dialog-dark', state: state, section: Section.send, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
+      final f = state.friends.first;
+      showDialog<void>(
+        context: tester.element(find.byType(Shell)),
+        builder: (_) => FriendSendDialog(target: SendTarget.friend(f), initial: files),
+      );
+      await tester.pump();
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 200)));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.enterText(find.byType(TextField),
+          _t('合同第 3 页要签字', 'Please sign page 3', '3 ページ目に署名してください', tw: '合約第 3 頁要簽名', hk: '合約第 3 頁要簽名'));
+      await tester.pump();
+    });
+  });
+
+  testWidgets('incoming-dark', (tester) async {
+    final state = _friendsDemo();
+    final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    final xm = state.friends.first;
+    state.debugSeed(
+      status: state.status!,
+      config: state.config!,
+      self: state.self!,
+      peers: state.peers,
+      friends: state.friends,
+      profile: state.profile,
+      transfers: [
+        Transfer(id: 'ask', direction: TransferDirection.TRANSFER_DIRECTION_INCOMING, deviceId: xm.id,
+            deviceName: '${xm.displayName} · ${xm.deviceName}', status: 'asking', peerRole: 'friend',
+            note: _t('合同第 3 页要签字', 'Please sign page 3', '3 ページ目に署名してください', tw: '合約第 3 頁要簽名', hk: '合約第 3 頁要簽名'),
+            items: [
+              ClipItem(name: _t('合同扫描件.pdf', 'signed-contract.pdf', '契約書_署名済み.pdf', tw: '合約掃描檔.pdf', hk: '合約掃描本.pdf')),
+              ClipItem(name: 'notes.txt'),
+              ClipItem(name: 'IMG_2042.HEIC'),
+            ],
+            totalBytes: Int64((18.4 * _mb).round()), createdAtUnix: Int64(now - 3)),
+        ...state.transfers(TransferDirection.TRANSFER_DIRECTION_INCOMING),
+      ],
+    );
+    await _shoot(tester, 'incoming-dark', state: state, section: Section.send, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
     });

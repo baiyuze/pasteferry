@@ -1797,4 +1797,321 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get backgroundRunningBody =>
       'ウィンドウを閉じても同期とクイック貼り付けは続きます。完全に停止するには、設定またはアプリメニューの「PasteFerry を終了」を選んでください。';
+
+  @override
+  String get displayAs => '表示名';
+
+  @override
+  String get editName => '名前を変更';
+
+  @override
+  String get nameHint => '連絡先に表示される名前';
+
+  @override
+  String get nameDefaultHint => '空欄にするとアカウント名を使います。';
+
+  @override
+  String get avatarTitle => 'プロフィール画像';
+
+  @override
+  String get avatarChoose => '画像を選択…';
+
+  @override
+  String get avatarPaste => '画像をペースト';
+
+  @override
+  String get avatarReset => 'デフォルトの画像に戻す';
+
+  @override
+  String get avatarZoom => '拡大';
+
+  @override
+  String get avatarDragHint => 'ドラッグで位置を調整できます。';
+
+  @override
+  String get avatarNoImage => 'クリップボードに画像がありません。';
+
+  @override
+  String get avatarBad => 'この画像は使えません。PNG、JPEG、GIF を選んでください。';
+
+  @override
+  String get done => '完了';
+
+  @override
+  String get friendsTitle => '連絡先';
+
+  @override
+  String get addFriend => '連絡先を追加';
+
+  @override
+  String get friendsEmpty => '連絡先はまだありません';
+
+  @override
+  String get friendsEmptyBody =>
+      '連絡先に追加すると、ペアリングせずにファイルを送り合えます。連絡先はファイルを送れるだけで、クリップボードは見えません。';
+
+  @override
+  String get friendSendAction => '送信…';
+
+  @override
+  String get friendHistory => '転送履歴';
+
+  @override
+  String friendHistoryTitle(String name) {
+    return '$name との転送';
+  }
+
+  @override
+  String get friendHistoryEmpty => 'まだ転送していません。';
+
+  @override
+  String get friendAutoAccept => 'ファイルを自動で受け入れる';
+
+  @override
+  String get friendRemove => '連絡先を削除';
+
+  @override
+  String friendRemoveTitle(String name) {
+    return '$name を削除しますか？';
+  }
+
+  @override
+  String get friendRemoveBody =>
+      'お互いの連絡先から削除され、ファイルを送り合えなくなります。これまでの転送履歴はこのパソコンに残ります。';
+
+  @override
+  String friendLastActivity(String time) {
+    return '最終転送 $time';
+  }
+
+  @override
+  String get friendNoActivity => 'まだ転送なし';
+
+  @override
+  String get friendCodeShare =>
+      'このコードを相手に送ってください。相手が PasteFerry に入力すると、お互いの連絡先に追加されます。';
+
+  @override
+  String friendCodeExpires(String time) {
+    return 'あと $time で無効';
+  }
+
+  @override
+  String get friendCodeOr => 'または';
+
+  @override
+  String get friendCodeEnter => '相手のコードを入力';
+
+  @override
+  String get friendCodeAdd => '追加';
+
+  @override
+  String get friendCodeWaiting => '相手の入力を待っています…';
+
+  @override
+  String friendConfirmBody(String name) {
+    return '$name を連絡先に追加しますか？';
+  }
+
+  @override
+  String get friendSafetyCode => '安全コードを確認（任意）';
+
+  @override
+  String get friendSafetyHint =>
+      '対面のときに確認できます。両方のパソコンでこの 2 行が同じなら、誰にも割り込まれていません。';
+
+  @override
+  String get friendWaitingPeer => '相手の追加を待っています…';
+
+  @override
+  String friendAdded(String name) {
+    return '$name を連絡先に追加しました';
+  }
+
+  @override
+  String friendPeerCancelled(String name) {
+    return '$name がキャンセルしました';
+  }
+
+  @override
+  String get friendErrFriendCode => 'これは連絡先のコードです。ファイル送信ページの「連絡先を追加」で入力してください。';
+
+  @override
+  String get friendErrDeviceCode => 'これはペアリングコードです。「デバイス → デバイスを追加」で入力してください。';
+
+  @override
+  String get friendErrOutdated => '相手は PasteFerry 2.6.0 以降が必要です。';
+
+  @override
+  String get friendErrAlreadyPaired => 'そのパソコンはすでにあなたのデバイスです。';
+
+  @override
+  String get friendErrNoChannel => '同じネットワークにいません。両方のパソコンで「サービス」をオンにすると追加できます。';
+
+  @override
+  String get openService => 'サービスをオンにする…';
+
+  @override
+  String get noteLabel => 'メモ（任意）';
+
+  @override
+  String get noteHintEmpty => '先にファイルを選んでください';
+
+  @override
+  String get noteHint => '例：3 ページ目に署名してください';
+
+  @override
+  String noteLine(String note) {
+    return 'メモ：$note';
+  }
+
+  @override
+  String get sendAction => '送信';
+
+  @override
+  String sendItemsSummary(String count, String size) {
+    return '$count 項目 · $size';
+  }
+
+  @override
+  String sendDropOrPaste(String key) {
+    return 'ファイルや画像をここにドロップ、またはペースト（$key）';
+  }
+
+  @override
+  String get sendDropMorePaste => 'さらにドロップまたはペースト';
+
+  @override
+  String get sendPasteNothing => 'ペーストできるファイルや画像がありません。';
+
+  @override
+  String get sendRemoveItem => '削除';
+
+  @override
+  String sendFriendSaved(String name) {
+    return '相手が受け入れると送信が始まります。';
+  }
+
+  @override
+  String transferAskingOut(String name) {
+    return '$name の受け入れを待っています…';
+  }
+
+  @override
+  String get transferAskingIn => '受け入れを待っています';
+
+  @override
+  String reasonDeclined(String name) {
+    return '$name が拒否しました';
+  }
+
+  @override
+  String reasonTimeout(String name) {
+    return '$name から応答がありません';
+  }
+
+  @override
+  String reasonNotAllowed(String name) {
+    return '$name はファイルを受け付けていません';
+  }
+
+  @override
+  String reasonRateLimited(String name) {
+    return '$name は現在あなたのファイルを受け付けていません';
+  }
+
+  @override
+  String get reasonYouDeclined => '拒否しました';
+
+  @override
+  String get reasonYouIgnored => '無視しました';
+
+  @override
+  String get sendAgain => 'もう一度送る';
+
+  @override
+  String incomingTitle(String name) {
+    return '$name からファイルが届いています';
+  }
+
+  @override
+  String get incomingAlways => '今後この連絡先のファイルを自動で受け入れる';
+
+  @override
+  String get incomingDecline => '拒否';
+
+  @override
+  String get incomingAccept => '受け入れる';
+
+  @override
+  String incomingCountdown(String seconds) {
+    return '$seconds 秒後に自動で拒否';
+  }
+
+  @override
+  String get incomingStranger => '近くのデバイス';
+
+  @override
+  String get friendsStrip => '連絡先';
+
+  @override
+  String get strangersStrip => '近くで「すべての人」がオンのデバイス';
+
+  @override
+  String get strangerNearby => '近く';
+
+  @override
+  String get friendNeedService => 'サービスが必要';
+
+  @override
+  String get friendCantReach => '接続できません';
+
+  @override
+  String reachSelfNoService(String name) {
+    return '$name と同じネットワークにいません。サービスをオンにするとファイルを送れます。直接接続できないときはサービスの中継を使います。';
+  }
+
+  @override
+  String reachPeerNoService(String name) {
+    return '$name はサービスをオンにしていないため、同じネットワークにいるときしか送れません。PasteFerry でサービスをオンにしてもらってください。';
+  }
+
+  @override
+  String get reachDifferentServer =>
+      '同じサーバーを使っていません。両方でサービスをオンにするか、同じサーバーを使うと送れます。';
+
+  @override
+  String get receiveFromLabel => 'ファイルの送信を許可：';
+
+  @override
+  String get receiveFromOff => '許可しない';
+
+  @override
+  String get receiveFromFriends => '連絡先のみ';
+
+  @override
+  String get receiveFromEveryone => 'すべての人';
+
+  @override
+  String everyoneLeft(String minutes) {
+    return 'すべての人 · 残り $minutes 分';
+  }
+
+  @override
+  String get receiveFromOffDesc => 'ペアリングした自分のパソコンだけが送れます。';
+
+  @override
+  String get receiveFromFriendsDesc => '連絡先が送れます。毎回あなたが受け入れます。';
+
+  @override
+  String get receiveFromEveryoneDesc => '同じネットワークの誰でも 10 分間送れます。毎回あなたが受け入れます。';
+
+  @override
+  String get everyoneEnded => '「すべての人」が終了し、「連絡先のみ」に戻りました。';
+
+  @override
+  String get friendsCountTooltip => '連絡先';
+
+  @override
+  String get waitingAccept => '承認待ち';
 }

@@ -300,6 +300,10 @@ class _JoinTabState extends State<_JoinTab> {
           PairingFailure.codeExpired => l.codeExpired,
           PairingFailure.badAddress => l.addressInvalid,
           PairingFailure.noChannel => l.pairNoChannel,
+          PairingFailure.friendCode => l.friendErrFriendCode,
+          PairingFailure.deviceCode => l.friendErrDeviceCode,
+          PairingFailure.peerOutdated => l.friendErrOutdated,
+          PairingFailure.alreadyPaired => l.friendErrAlreadyPaired,
           PairingFailure.other => AppState.describeError(e),
         };
       });
@@ -455,7 +459,14 @@ class _PairingConfirmDialogState extends State<PairingConfirmDialog> {
       state.dismissPendingPairing(widget.peer.pairingSession);
       if (!mounted) return;
       Navigator.pop(context);
-      showToast(context, AppState.describeError(e), error: true);
+      // 对方开放的是好友码：说清楚，别只显示一串错误
+      showToast(
+        context,
+        AppState.pairingFailure(e) == PairingFailure.friendCode
+            ? context.l10n.friendErrFriendCode
+            : AppState.describeError(e),
+        error: true,
+      );
     }
   }
 

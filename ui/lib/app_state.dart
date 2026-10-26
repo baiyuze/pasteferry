@@ -26,6 +26,7 @@ enum SendFailure {
   needRelayConsent,
   noPaths,
   unknownDevice,
+  badNote,
   other,
 }
 
@@ -36,6 +37,11 @@ enum PairingFailure {
   codeExpired,
   badAddress,
   noChannel,
+  // 加好友（2.6.0）：码的用途不对、对方版本太旧、已经是自己的设备
+  friendCode,
+  deviceCode,
+  peerOutdated,
+  alreadyPaired,
   other,
 }
 
@@ -105,6 +111,24 @@ class AppState extends ChangeNotifier implements RecordDetails {
   Device? _pendingPairing;
   final Set<String> _handledPairingSessions = {};
 
+  /// 好友（2.6.0），见 design/friends-send.md
+  List<Friend> _friends = const [];
+  Profile? _profile;
+
+  /// 有人兑换了本机的好友码，等用户确认；非空时界面弹出确认框
+  FriendRequest? _pendingFriend;
+  final Set<String> _handledFriendSessions = {};
+
+  /// 加好友时对方取消了的设备（确认框据此关掉并提示）
+  final Set<String> _friendCancelled = {};
+
+  /// 头像：设备 ID（本机为空字符串）→ (哈希, 图片)。哈希变了再取
+  final Map<String, (String, Uint8List?)> _avatars = {};
+  final Set<String> _avatarLoading = {};
+
+  /// 别人发来、等用户接受的批次里，用户在弹窗里处理过的
+  final Set<String> _handledAsks = {};
+
   /// 连不上后台服务时，它的安装状态。界面据此决定显示欢迎页还是重启提示。
   ServiceState? _serviceState;
   bool _serviceChecked = false;
@@ -173,11 +197,19 @@ class AppState extends ChangeNotifier implements RecordDetails {
             const {
               'scanning',
               'waiting',
+              'asking',
               'active',
               'queued',
             }.contains(t.status),
       )
       .lastOrNull;
+
+  /// 让主窗口切到某一页（"send"、"settings"），比如好友连不上时点了「打开服务…」
+  void requestPage(String page) {
+    _pageRequest = page;
+    _pageRequestSerial++;
+    notifyListeners();
+  }
 
   String get pageRequest => _pageRequest;
   int get pageRequestSerial => _pageRequestSerial;
@@ -198,6 +230,36 @@ class AppState extends ChangeNotifier implements RecordDetails {
   double? progressOf(String clipId) => _progress[clipId];
   Device? get pendingPairing => _pendingPairing;
   ServiceState? get serviceState => _serviceState;
+
+  List<Friend> get friends => List.unmodifiable(_friends);
+  Friend? friendById(String id) => _friends.where((f) => f.id == id).firstOrNull;
+  Profile? get profile => _profile;
+  FriendRequest? get pendingFriendRequest => _pendingFriend;
+  bool friendCancelled(String deviceId) => _friendCancelled.contains(deviceId);
+
+  /// 好友、陌生设备发来、在等本机用户接受的批次（最早的在前）
+  List<Transfer> get askingIncoming => _transfers
+      .where((t) =>
+          t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING &&
+          t.status == 'asking' &&
+          !_handledAsks.contains(t.id))
+      .toList()
+      .reversed
+      .toList();
+
+  /// 谁可以给我发文件：off / friends / everyone（「所有人」过了时间由后台服务改回 friends）
+  String get receiveFrom {
+    final v = _config?.receiveFrom ?? '';
+    return v.isEmpty ? 'friends' : v;
+  }
+
+  /// 「所有人」到什么时候；没开时为 null
+  DateTime? get everyoneUntil {
+    final until = _config?.everyoneUntilUnix.toInt() ?? 0;
+    return receiveFrom == 'everyone' && until > 0
+        ? DateTime.fromMillisecondsSinceEpoch(until * 1000)
+        : null;
+  }
 
   bool get isOnline => _link == LinkState.online;
   int get onlinePeerCount => _peers.where((p) => p.online).length;
@@ -319,6 +381,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
       await _loadQuickPasteStatus();
 
       await _loadDevices();
+      await _loadFriends();
       await _loadTransfers();
       await refreshNotificationStatus();
 
@@ -459,7 +522,13 @@ class AppState extends ChangeNotifier implements RecordDetails {
     ServiceState? serviceState,
     QuickPasteStatus? quickPaste,
     List<Transfer> transfers = const [],
+    List<Friend> friends = const [],
+    Profile? profile,
+    FriendRequest? pendingFriend,
   }) {
+    _friends = friends;
+    _profile = profile;
+    _pendingFriend = pendingFriend;
     _status = status;
     _config = config;
     _self = self;
@@ -516,6 +585,23 @@ class AppState extends ChangeNotifier implements RecordDetails {
     } on GrpcError catch (e) {
       // 配对能力尚未接入时返回 Unimplemented，属预期情况
       if (e.code != StatusCode.unimplemented) rethrow;
+    }
+  }
+
+  Future<void> _loadFriends() async {
+    final conn = _conn;
+    if (conn == null) return;
+    try {
+      final results = await Future.wait([
+        conn.client.listFriends(Empty()),
+        conn.client.getProfile(Empty()),
+      ]);
+      _friends = (results[0] as ListFriendsResponse).friends;
+      _profile = results[1] as Profile;
+    } on GrpcError {
+      // 旧版后台服务没有好友
+      _friends = const [];
+      _profile = null;
     }
   }
 
@@ -594,6 +680,32 @@ class AppState extends ChangeNotifier implements RecordDetails {
       case Event_Payload.navigate:
         _pageRequest = ev.navigate;
         _pageRequestSerial++;
+
+      case Event_Payload.friendChanged:
+        final f = ev.friendChanged;
+        final i = _friends.indexWhere((x) => x.id == f.id);
+        final next = List<Friend>.from(_friends);
+        if (i >= 0) {
+          next[i] = f;
+        } else {
+          next.add(f);
+        }
+        _friends = next;
+        _friendCancelled.remove(f.id);
+
+      case Event_Payload.friendRemoved:
+        _friends = _friends.where((f) => f.id != ev.friendRemoved).toList();
+        _friendCancelled.add(ev.friendRemoved);
+        if (_pendingFriend?.deviceId == ev.friendRemoved) _pendingFriend = null;
+
+      case Event_Payload.friendRequest:
+        if (!_handledFriendSessions.contains(ev.friendRequest.session)) {
+          _pendingFriend = ev.friendRequest;
+          _friendCancelled.remove(ev.friendRequest.deviceId);
+        }
+
+      case Event_Payload.profileChanged:
+        _profile = ev.profileChanged;
 
       default:
         break;
@@ -770,6 +882,133 @@ class AppState extends ChangeNotifier implements RecordDetails {
     if (_pendingPairing?.pairingSession == handled) _pendingPairing = null;
     notifyListeners();
   }
+
+  // ─────────────────────────── 好友 ───────────────────────────
+
+  /// 生成好友码（F 加 6 位），以及本机的局域网地址
+  Future<PairingCode> createFriendCode() async {
+    final resp = await _client.createFriendCode(Empty());
+    return (code: resp.code, addresses: resp.lanAddresses.toList());
+  }
+
+  /// 输入好友码，返回对方的名片；之后在确认框里 [confirmFriend]
+  Future<FriendRequest> redeemFriendCode(String code, {String address = ''}) async {
+    final r = await _client.redeemFriendCode(
+      RedeemPairingCodeRequest(code: code.trim().toUpperCase(), address: address.trim()),
+      // 局域网里找几秒，找不到去服务器上兑换，还要等对方说明用途
+      options: CallOptions(timeout: const Duration(seconds: 40)),
+    );
+    _handledFriendSessions.add(r.session);
+    _friendCancelled.remove(r.deviceId);
+    return r;
+  }
+
+  /// 确认框里点了「添加」或「取消」。两边都添加了，好友会经事件出现在列表里
+  Future<void> confirmFriend(String session, bool accept) async {
+    _handledFriendSessions.add(session);
+    if (_pendingFriend?.session == session) _pendingFriend = null;
+    notifyListeners();
+    await _client.confirmFriend(ConfirmPairingRequest(pairingSession: session, accept: accept));
+  }
+
+  void dismissPendingFriend() {
+    final s = _pendingFriend?.session;
+    if (s != null) _handledFriendSessions.add(s);
+    _pendingFriend = null;
+    notifyListeners();
+  }
+
+  Future<void> removeFriend(String id) async {
+    await _client.removeFriend(FriendRef(deviceId: id));
+    _friends = _friends.where((f) => f.id != id).toList();
+    notifyListeners();
+  }
+
+  Future<void> setFriendAutoAccept(String id, bool on) async {
+    final f = await _client.setFriendAutoAccept(SetFriendAutoAcceptRequest(deviceId: id, autoAccept: on));
+    final i = _friends.indexWhere((x) => x.id == id);
+    if (i >= 0) {
+      _friends = List<Friend>.from(_friends)..[i] = f;
+      notifyListeners();
+    }
+  }
+
+  Future<void> setDisplayName(String name) async {
+    _profile = await _client.setDisplayName(SetDisplayNameRequest(name: name));
+    notifyListeners();
+  }
+
+  /// 设置头像：[image] 是图片数据（粘贴、拖入），否则读 [path]；裁剪区域按原图比例
+  Future<void> setAvatar({String path = '', List<int>? image, double x = 0, double y = 0, double size = 0}) async {
+    _profile = await _client.setAvatar(
+      SetAvatarRequest(path: path, image: image, cropX: x, cropY: y, cropSize: size),
+      options: CallOptions(timeout: const Duration(seconds: 20)),
+    );
+    _avatars.remove('');
+    notifyListeners();
+  }
+
+  Future<void> resetAvatar() async {
+    _profile = await _client.resetAvatar(Empty());
+    _avatars.remove('');
+    notifyListeners();
+  }
+
+  /// 头像图片（本机为空字符串）。还没取到时返回 null 并在后台去取，取到后刷新界面
+  Uint8List? avatarOf(String deviceId, List<int> hash) {
+    if (hash.isEmpty) return null;
+    final key = hash.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    final cached = _avatars[deviceId];
+    if (cached != null && cached.$1 == key) return cached.$2;
+    if (_conn == null || _avatarLoading.contains(deviceId)) return cached?.$2;
+    _avatarLoading.add(deviceId);
+    _client.getAvatar(GetAvatarRequest(deviceId: deviceId)).then((a) {
+      _avatars[deviceId] = (key, a.jpeg.isEmpty ? null : Uint8List.fromList(a.jpeg));
+      notifyListeners();
+    }).catchError((_) {}).whenComplete(() => _avatarLoading.remove(deviceId));
+    return cached?.$2;
+  }
+
+  /// 测试与截图用：直接放入一张头像
+  @visibleForTesting
+  void debugAvatar(String deviceId, List<int> hash, Uint8List? image) {
+    final key = hash.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    _avatars[deviceId] = (key, image);
+  }
+
+  /// 发送窗口、头像里的「粘贴」：剪贴板里的文件，或者剪贴板里的图片存成的文件
+  Future<PasteFilesResponse> pasteFiles() => _client.pasteFiles(Empty());
+
+  /// 隔空传送页打开期间订阅：附近开着「所有人」的陌生设备
+  Stream<List<Stranger>> watchStrangers() =>
+      _client.watchStrangers(Empty()).map((e) => e.strangers.toList());
+
+  /// 接收弹窗里的「接受」「拒绝」
+  Future<void> answerIncoming(String transferId, bool accept, {bool always = false}) async {
+    _handledAsks.add(transferId);
+    notifyListeners();
+    try {
+      await _client.answerIncoming(AnswerIncomingRequest(transferId: transferId, accept: accept, always: always));
+    } on GrpcError catch (e) {
+      // 已经过时了（对方取消、超时）：不用再提示
+      if (e.code != StatusCode.failedPrecondition) rethrow;
+    }
+  }
+
+  /// 测试用：只在界面上记下这一批处理过了
+  @visibleForTesting
+  Future<void> answerIncomingLocally(String transferId) async {
+    _handledAsks.add(transferId);
+    notifyListeners();
+  }
+
+  /// 弹窗关掉但没回答（比如用户点了别处）：这一批不再弹，留在列表里还能处理
+  void dismissAsk(String transferId) {
+    _handledAsks.add(transferId);
+    notifyListeners();
+  }
+
+  Future<void> setReceiveFrom(String v) => updateConfig(config!.deepCopy()..receiveFrom = v);
 
   /// 手动告诉后台服务某台设备的地址：跨网段、或两边都换了地址时用。
   Future<void> setDeviceAddress(String deviceId, String address) =>
@@ -1061,13 +1300,17 @@ class AppState extends ChangeNotifier implements RecordDetails {
     String deviceId,
     List<String> paths, {
     bool allowRelay = false,
+    String note = '',
   }) async {
     final t = await _client.sendFiles(
       SendFilesRequest(
         deviceId: deviceId,
         paths: paths,
         allowRelay: allowRelay,
+        note: note,
       ),
+      // 发给「所有人」模式下的陌生设备时要先连上它
+      options: CallOptions(timeout: const Duration(seconds: 30)),
     );
     _upsertTransfer(t);
     notifyListeners();
@@ -1117,6 +1360,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
       'relay' => SendFailure.needRelayConsent,
       'no_paths' => SendFailure.noPaths,
       'unknown_device' => SendFailure.unknownDevice,
+      'bad_note' => SendFailure.badNote,
       _ => SendFailure.other,
     };
   }
@@ -1148,6 +1392,10 @@ class AppState extends ChangeNotifier implements RecordDetails {
       'code_expired' => PairingFailure.codeExpired,
       'bad_address' => PairingFailure.badAddress,
       'no_channel' => PairingFailure.noChannel,
+      'friend_code' => PairingFailure.friendCode,
+      'device_code' => PairingFailure.deviceCode,
+      'peer_outdated' => PairingFailure.peerOutdated,
+      'already_paired' => PairingFailure.alreadyPaired,
       _ => PairingFailure.other,
     };
   }

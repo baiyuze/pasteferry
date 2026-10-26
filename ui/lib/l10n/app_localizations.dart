@@ -3193,6 +3193,546 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Closing the window keeps sync and quick paste running. To stop everything, choose Quit PasteFerry in Settings or the app menu.'**
   String get backgroundRunningBody;
+
+  /// No description provided for @displayAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown as'**
+  String get displayAs;
+
+  /// No description provided for @editName.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Name'**
+  String get editName;
+
+  /// No description provided for @nameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The name your contacts see'**
+  String get nameHint;
+
+  /// No description provided for @nameDefaultHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave empty to use your account name.'**
+  String get nameDefaultHint;
+
+  /// No description provided for @avatarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Picture'**
+  String get avatarTitle;
+
+  /// No description provided for @avatarChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Image…'**
+  String get avatarChoose;
+
+  /// No description provided for @avatarPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste Image'**
+  String get avatarPaste;
+
+  /// No description provided for @avatarReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Default Picture'**
+  String get avatarReset;
+
+  /// No description provided for @avatarZoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom'**
+  String get avatarZoom;
+
+  /// No description provided for @avatarDragHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to move the picture.'**
+  String get avatarDragHint;
+
+  /// No description provided for @avatarNoImage.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s no image on the clipboard.'**
+  String get avatarNoImage;
+
+  /// No description provided for @avatarBad.
+  ///
+  /// In en, this message translates to:
+  /// **'This image can\'t be used. Choose a PNG, JPEG or GIF.'**
+  String get avatarBad;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @friendsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get friendsTitle;
+
+  /// No description provided for @addFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Contact'**
+  String get addFriend;
+
+  /// No description provided for @friendsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No contacts yet'**
+  String get friendsEmpty;
+
+  /// No description provided for @friendsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add someone who also uses PasteFerry to send each other files without pairing. Contacts can only send files; they never see your clipboard.'**
+  String get friendsEmptyBody;
+
+  /// No description provided for @friendSendAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Send…'**
+  String get friendSendAction;
+
+  /// No description provided for @friendHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfers'**
+  String get friendHistory;
+
+  /// No description provided for @friendHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfers with {name}'**
+  String friendHistoryTitle(String name);
+
+  /// No description provided for @friendHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transfers yet.'**
+  String get friendHistoryEmpty;
+
+  /// No description provided for @friendAutoAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Files Automatically'**
+  String get friendAutoAccept;
+
+  /// No description provided for @friendRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Contact'**
+  String get friendRemove;
+
+  /// No description provided for @friendRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}?'**
+  String friendRemoveTitle(String name);
+
+  /// No description provided for @friendRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll be removed from each other\'s contacts and can no longer send each other files. Past transfers stay on this computer.'**
+  String get friendRemoveBody;
+
+  /// No description provided for @friendLastActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Last transfer {time}'**
+  String friendLastActivity(String time);
+
+  /// No description provided for @friendNoActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'No transfers yet'**
+  String get friendNoActivity;
+
+  /// No description provided for @friendCodeShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Send this code to your contact. When they enter it in PasteFerry, you\'ll be added to each other\'s contacts.'**
+  String get friendCodeShare;
+
+  /// No description provided for @friendCodeExpires.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires in {time}'**
+  String friendCodeExpires(String time);
+
+  /// No description provided for @friendCodeOr.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get friendCodeOr;
+
+  /// No description provided for @friendCodeEnter.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter their contact code'**
+  String get friendCodeEnter;
+
+  /// No description provided for @friendCodeAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get friendCodeAdd;
+
+  /// No description provided for @friendCodeWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for them to enter it…'**
+  String get friendCodeWaiting;
+
+  /// No description provided for @friendConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {name} to your contacts?'**
+  String friendConfirmBody(String name);
+
+  /// No description provided for @friendSafetyCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Check safety code (optional)'**
+  String get friendSafetyCode;
+
+  /// No description provided for @friendSafetyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'When you\'re together, compare these two lines. If they match on both computers, no one has interfered.'**
+  String get friendSafetyHint;
+
+  /// No description provided for @friendWaitingPeer.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for them to add you…'**
+  String get friendWaitingPeer;
+
+  /// No description provided for @friendAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} was added to your contacts'**
+  String friendAdded(String name);
+
+  /// No description provided for @friendPeerCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} cancelled'**
+  String friendPeerCancelled(String name);
+
+  /// No description provided for @friendErrFriendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a contact code. Enter it in Add Contact on the Send Files page.'**
+  String get friendErrFriendCode;
+
+  /// No description provided for @friendErrDeviceCode.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a pairing code. Enter it in Devices → Add Device.'**
+  String get friendErrDeviceCode;
+
+  /// No description provided for @friendErrOutdated.
+  ///
+  /// In en, this message translates to:
+  /// **'They need PasteFerry 2.6.0 or later.'**
+  String get friendErrOutdated;
+
+  /// No description provided for @friendErrAlreadyPaired.
+  ///
+  /// In en, this message translates to:
+  /// **'That computer is already one of your devices.'**
+  String get friendErrAlreadyPaired;
+
+  /// No description provided for @friendErrNoChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re not on the same network. Turn on Service on both computers to add each other.'**
+  String get friendErrNoChannel;
+
+  /// No description provided for @openService.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn On Service…'**
+  String get openService;
+
+  /// No description provided for @noteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get noteLabel;
+
+  /// No description provided for @noteHintEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose files first'**
+  String get noteHintEmpty;
+
+  /// No description provided for @noteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: please sign page 3'**
+  String get noteHint;
+
+  /// No description provided for @noteLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: {note}'**
+  String noteLine(String note);
+
+  /// No description provided for @sendAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendAction;
+
+  /// No description provided for @sendItemsSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items · {size}'**
+  String sendItemsSummary(String count, String size);
+
+  /// No description provided for @sendDropOrPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop files or images here, or paste ({key})'**
+  String sendDropOrPaste(String key);
+
+  /// No description provided for @sendDropMorePaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop or paste more'**
+  String get sendDropMorePaste;
+
+  /// No description provided for @sendPasteNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to paste. Copy files or an image first.'**
+  String get sendPasteNothing;
+
+  /// No description provided for @sendRemoveItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get sendRemoveItem;
+
+  /// No description provided for @sendFriendSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} accepts each batch before it\'s sent.'**
+  String sendFriendSaved(String name);
+
+  /// No description provided for @transferAskingOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {name} to accept…'**
+  String transferAskingOut(String name);
+
+  /// No description provided for @transferAskingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for you to accept'**
+  String get transferAskingIn;
+
+  /// No description provided for @reasonDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} declined'**
+  String reasonDeclined(String name);
+
+  /// No description provided for @reasonTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} didn\'t respond'**
+  String reasonTimeout(String name);
+
+  /// No description provided for @reasonNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} isn\'t accepting files'**
+  String reasonNotAllowed(String name);
+
+  /// No description provided for @reasonRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} isn\'t accepting your files right now'**
+  String reasonRateLimited(String name);
+
+  /// No description provided for @reasonYouDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get reasonYouDeclined;
+
+  /// No description provided for @reasonYouIgnored.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignored'**
+  String get reasonYouIgnored;
+
+  /// No description provided for @sendAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Again'**
+  String get sendAgain;
+
+  /// No description provided for @incomingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} wants to send you files'**
+  String incomingTitle(String name);
+
+  /// No description provided for @incomingAlways.
+  ///
+  /// In en, this message translates to:
+  /// **'Always accept files from this contact'**
+  String get incomingAlways;
+
+  /// No description provided for @incomingDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get incomingDecline;
+
+  /// No description provided for @incomingAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get incomingAccept;
+
+  /// No description provided for @incomingCountdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Declines automatically in {seconds} s'**
+  String incomingCountdown(String seconds);
+
+  /// No description provided for @incomingStranger.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby'**
+  String get incomingStranger;
+
+  /// No description provided for @friendsStrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get friendsStrip;
+
+  /// No description provided for @strangersStrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby with Everyone on'**
+  String get strangersStrip;
+
+  /// No description provided for @strangerNearby.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby'**
+  String get strangerNearby;
+
+  /// No description provided for @friendNeedService.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Service'**
+  String get friendNeedService;
+
+  /// No description provided for @friendCantReach.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t connect'**
+  String get friendCantReach;
+
+  /// No description provided for @reachSelfNoService.
+  ///
+  /// In en, this message translates to:
+  /// **'You and {name} aren\'t on the same network. Turn on Service to send files; if no direct connection is possible, they go through the Service relay.'**
+  String reachSelfNoService(String name);
+
+  /// No description provided for @reachPeerNoService.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} hasn\'t turned on Service, so you can only send files on the same network. Ask them to turn on Service in PasteFerry.'**
+  String reachPeerNoService(String name);
+
+  /// No description provided for @reachDifferentServer.
+  ///
+  /// In en, this message translates to:
+  /// **'You aren\'t using the same server. Turn on Service on both computers, or use the same server, to send files.'**
+  String get reachDifferentServer;
+
+  /// No description provided for @receiveFromLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Let these people send me files:'**
+  String get receiveFromLabel;
+
+  /// No description provided for @receiveFromOff.
+  ///
+  /// In en, this message translates to:
+  /// **'No One'**
+  String get receiveFromOff;
+
+  /// No description provided for @receiveFromFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts Only'**
+  String get receiveFromFriends;
+
+  /// No description provided for @receiveFromEveryone.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone'**
+  String get receiveFromEveryone;
+
+  /// No description provided for @everyoneLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone · {minutes} min left'**
+  String everyoneLeft(String minutes);
+
+  /// No description provided for @receiveFromOffDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Only your own paired computers can send you files.'**
+  String get receiveFromOffDesc;
+
+  /// No description provided for @receiveFromFriendsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your contacts can send you files. You accept each batch.'**
+  String get receiveFromFriendsDesc;
+
+  /// No description provided for @receiveFromEveryoneDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Anyone on the same network can send you files for 10 minutes. You accept each batch.'**
+  String get receiveFromEveryoneDesc;
+
+  /// No description provided for @everyoneEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone is off; back to Contacts Only.'**
+  String get everyoneEnded;
+
+  /// No description provided for @friendsCountTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get friendsCountTooltip;
+
+  /// No description provided for @waitingAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting…'**
+  String get waitingAccept;
 }
 
 class _AppLocalizationsDelegate
