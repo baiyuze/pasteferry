@@ -665,7 +665,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nearbyLanOffBody =>
-      '近くのデバイスを表示するには「設定」で「このネットワークでデバイスを探す」をオンにするか、コードでペアリングしてください。';
+      '近くのデバイスを表示するには「設定 → 接続」で「このネットワークでデバイスを探す」をオンにするか、コードでペアリングしてください。';
 
   @override
   String get generateCode => 'コードを表示';
@@ -726,7 +726,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get addressInvalid => 'アドレスの形式が正しくありません。192.168.1.20 のように入力してください。';
 
   @override
-  String get pairNoChannel => '先に「設定」でローカルネットワークの検出をオンにするか、サーバーを設定してください。';
+  String get pairNoChannel => '先に「設定 → 接続」でローカルネットワークの検出をオンにするか、サーバーを設定してください。';
 
   @override
   String get enterCodeShown => 'もう一台のデバイスに表示されたコードを入力してください';

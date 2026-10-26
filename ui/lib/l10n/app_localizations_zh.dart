@@ -660,7 +660,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nearbyLanOffTitle => '局域网发现已关闭';
 
   @override
-  String get nearbyLanOffBody => '在「设置」里打开「在局域网中查找设备」才能看到附近的设备，或者改用配对码。';
+  String get nearbyLanOffBody => '在「设置 → 连接」里打开「在局域网中查找设备」才能看到附近的设备，或者改用配对码。';
 
   @override
   String get generateCode => '生成配对码';
@@ -720,7 +720,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addressInvalid => '地址格式不对，应当像 192.168.1.20 这样';
 
   @override
-  String get pairNoChannel => '请先在「设置」里开启局域网发现，或者填写服务器地址。';
+  String get pairNoChannel => '请先在「设置 → 连接」里开启局域网发现，或者填写服务器地址。';
 
   @override
   String get enterCodeShown => '输入另一台设备上显示的配对码';
@@ -2771,7 +2771,7 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get nearbyLanOffTitle => '區域網絡發現已關閉';
 
   @override
-  String get nearbyLanOffBody => '在「設定」裏開啟「在區域網絡中尋找裝置」才能看到附近的裝置，或者改用配對碼。';
+  String get nearbyLanOffBody => '在「設定 → 連接」裏開啟「在區域網絡中尋找裝置」才能看到附近的裝置，或者改用配對碼。';
 
   @override
   String get generateCode => '產生配對碼';
@@ -2831,7 +2831,7 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get addressInvalid => '地址格式不正確，應該像 192.168.1.20 這樣';
 
   @override
-  String get pairNoChannel => '請先在「設定」裏開啟區域網絡發現，或者填寫伺服器地址。';
+  String get pairNoChannel => '請先在「設定 → 連接」裏開啟區域網絡發現，或者填寫伺服器地址。';
 
   @override
   String get enterCodeShown => '輸入另一部裝置上顯示的配對碼';
@@ -4882,7 +4882,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get nearbyLanOffTitle => '區域網路探索已關閉';
 
   @override
-  String get nearbyLanOffBody => '在「設定」裡開啟「在區域網路中尋找裝置」才能看到附近的裝置，或者改用配對碼。';
+  String get nearbyLanOffBody => '在「設定 → 連線」裡開啟「在區域網路中尋找裝置」才能看到附近的裝置，或者改用配對碼。';
 
   @override
   String get generateCode => '產生配對碼';
@@ -4942,7 +4942,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get addressInvalid => '位址格式不正確，應該像 192.168.1.20 這樣';
 
   @override
-  String get pairNoChannel => '請先在「設定」裡開啟區域網路探索，或者填寫伺服器位址。';
+  String get pairNoChannel => '請先在「設定 → 連線」裡開啟區域網路探索，或者填寫伺服器位址。';
 
   @override
   String get enterCodeShown => '輸入另一台裝置上顯示的配對碼';

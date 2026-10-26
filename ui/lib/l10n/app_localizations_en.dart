@@ -761,7 +761,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nearbyLanOffBody =>
-      'Turn on “Find devices on this network” in Settings to see nearby devices, or pair with a code instead.';
+      'Turn on “Find devices on this network” in Settings → Connection to see nearby devices, or pair with a code instead.';
 
   @override
   String get generateCode => 'Show a code';
@@ -826,7 +826,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pairNoChannel =>
-      'Turn on local network discovery or set a server in Settings first.';
+      'Turn on local network discovery or set a server in Settings → Connection first.';
 
   @override
   String get enterCodeShown => 'Enter the code shown on your other device';

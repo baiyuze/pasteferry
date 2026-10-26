@@ -1229,7 +1229,7 @@ abstract class AppLocalizations {
   /// No description provided for @nearbyLanOffBody.
   ///
   /// In en, this message translates to:
-  /// **'Turn on “Find devices on this network” in Settings to see nearby devices, or pair with a code instead.'**
+  /// **'Turn on “Find devices on this network” in Settings → Connection to see nearby devices, or pair with a code instead.'**
   String get nearbyLanOffBody;
 
   /// No description provided for @generateCode.
@@ -1343,7 +1343,7 @@ abstract class AppLocalizations {
   /// No description provided for @pairNoChannel.
   ///
   /// In en, this message translates to:
-  /// **'Turn on local network discovery or set a server in Settings first.'**
+  /// **'Turn on local network discovery or set a server in Settings → Connection first.'**
   String get pairNoChannel;
 
   /// No description provided for @enterCodeShown.

@@ -518,7 +518,7 @@
     }
   },
   "nearbyLanOffTitle": "Local network discovery is off",
-  "nearbyLanOffBody": "Turn on “Find devices on this network” in Settings to see nearby devices, or pair with a code instead.",
+  "nearbyLanOffBody": "Turn on “Find devices on this network” in Settings → Connection to see nearby devices, or pair with a code instead.",
   "generateCode": "Show a code",
   "enterCode": "Enter a code",
   "codeFailedTitle": "Couldn't create a pairing code",
@@ -544,7 +544,7 @@
   "codeWrong": "That code isn't right, or it has expired",
   "codeExpired": "This code has expired. Show a new one on the other device.",
   "addressInvalid": "That address isn't valid. Enter something like 192.168.1.20.",
-  "pairNoChannel": "Turn on local network discovery or set a server in Settings first.",
+  "pairNoChannel": "Turn on local network discovery or set a server in Settings → Connection first.",
   "enterCodeShown": "Enter the code shown on your other device",
   "pairingDone": "Paired",
   "pairingRejected": "Pairing declined",
