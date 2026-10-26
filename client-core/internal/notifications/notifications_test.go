@@ -90,6 +90,14 @@ func TestNativeCatalogHasEveryLocaleAndPlaceholder(t *testing.T) {
 	}
 }
 
+func TestHumanSize(t *testing.T) {
+	for n, want := range map[int64]string{5: "5 B", 2048: "2 KB", 3 << 20: "3.0 MB", 5 << 30: "5.0 GB"} {
+		if got := humanSize(n); got != want {
+			t.Errorf("humanSize(%d) = %q，应当是 %q", n, got, want)
+		}
+	}
+}
+
 func TestWindowsToastEscapesFilenamesAndKeepsFullActionIdentity(t *testing.T) {
 	n := Message{ID: "full-id/with spaces?&", Title: `<receive & paste>`, Body: `a"b & <file>`, Action: "receive", ActionLabel: `Receive "file"`}
 	markup := toastXML(n)
