@@ -16,6 +16,15 @@ const _channel = MethodChannel('pasteferry/picker');
 // 快捷窗口的按键跟着平台走：Mac 上是 ⌘，Windows 与 Linux 上是 Ctrl（序号是 Alt+数字）
 final _mac = Platform.isMacOS;
 final _cmdKey = _mac ? LogicalKeyboardKey.metaLeft : LogicalKeyboardKey.controlLeft;
+final _indexKey = _mac ? LogicalKeyboardKey.metaLeft : LogicalKeyboardKey.altLeft;
+
+/// 按住 ⌘（Mac）或 Alt 再按数字：选那一行
+Future<void> _pressIndex(WidgetTester tester, LogicalKeyboardKey digit, {PhysicalKeyboardKey? physicalKey}) async {
+  await tester.sendKeyDownEvent(_indexKey);
+  await tester.sendKeyDownEvent(digit, physicalKey: physicalKey);
+  await tester.sendKeyUpEvent(digit, physicalKey: physicalKey);
+  await tester.sendKeyUpEvent(_indexKey);
+}
 
 /// 不连后台服务：放进剪贴板、下载、收藏都记下来。
 class _TestPicker extends PickerState {
@@ -117,16 +126,16 @@ void main() {
 
   List<MethodCall> commits() => calls.where((c) => c.method == 'commit').toList();
 
-  testWidgets('前 9 条标序号，按数字直接粘贴那一条', (tester) async {
+  testWidgets('前 9 条标序号，按 ⌘ 或 Alt 加数字粘贴那一条', (tester) async {
     final s = await open(tester);
-    expect(find.text('1'), findsOneWidget);
-    expect(find.text('4'), findsOneWidget);
+    expect(find.text(_mac ? '⌘1' : 'Alt+1'), findsOneWidget);
+    expect(find.text(_mac ? '⌘4' : 'Alt+4'), findsOneWidget);
     // 「收藏」既是页签，也是底栏 ⌘D 的说明
     for (final t in ['全部', '文本', '链接', '图片', '文件', '收藏']) {
       expect(find.text(t), findsWidgets, reason: t);
     }
 
-    await tester.sendKeyEvent(LogicalKeyboardKey.digit2);
+    await _pressIndex(tester, LogicalKeyboardKey.digit2);
     await tester.pump();
     expect(s.applied, [('b', false)]);
     expect(commits().single.arguments, {'paste': true});
@@ -134,22 +143,27 @@ void main() {
 
   testWidgets('模拟输入没有扫描码、认不出物理按键时，按逻辑按键认数字', (tester) async {
     final s = await open(tester);
-    await tester.sendKeyDownEvent(LogicalKeyboardKey.digit3, physicalKey: PhysicalKeyboardKey.keyQ);
-    await tester.sendKeyUpEvent(LogicalKeyboardKey.digit3, physicalKey: PhysicalKeyboardKey.keyQ);
+    await _pressIndex(tester, LogicalKeyboardKey.digit3, physicalKey: PhysicalKeyboardKey.keyQ);
     await tester.pump();
     expect(s.applied, [('c', false)]);
   });
 
-  testWidgets('输入法收下数字键、只交来文字时（Windows 中文输入法），也按数字选那一行', (tester) async {
+  testWidgets('搜索框为空时直接按数字也是打字，拿去搜（不选那一行）', (tester) async {
     final s = await open(tester);
+    await tester.sendKeyEvent(LogicalKeyboardKey.digit2);
+    await tester.pump();
+    expect(s.applied, isEmpty);
+    // 中文输入法收下数字键、只交来文字（Windows）：同样当作搜索词
     final field = tester.widget<TextField>(find.byType(TextField));
     field.controller!.value = const TextEditingValue(text: '２', selection: TextSelection.collapsed(offset: 1));
     await tester.pump();
-    expect(s.applied, [('b', false)]);
-    expect(field.controller!.text, '');
+    expect(s.applied, isEmpty);
+    expect(field.controller!.text, '２');
+    expect(s.query, '２');
+    await tester.pump(const Duration(milliseconds: 200)); // 等搜索的计时器走完
   });
 
-  testWidgets('搜索时数字是打字，序号变成 ⌘1……', (tester) async {
+  testWidgets('搜索时数字是打字，序号照样是 ⌘1……', (tester) async {
     final s = await open(tester);
     await tester.enterText(find.byType(TextField), 'docker 2');
     await tester.pump();
@@ -231,7 +245,7 @@ void main() {
   testWidgets('设置里选了只复制：选中后不模拟粘贴，底栏写明要按 ⌘V', (tester) async {
     final s = await open(tester, config: Config(language: 'zh-Hans', quickPasteCopyOnly: true));
     expect(find.text('选中后按 ${_mac ? '⌘V' : 'Ctrl+V'} 粘贴'), findsOneWidget);
-    await tester.sendKeyEvent(LogicalKeyboardKey.digit1);
+    await _pressIndex(tester, LogicalKeyboardKey.digit1);
     await tester.pump();
     expect(s.applied.single.$1, 'a');
     expect(commits().single.arguments, {'paste': false});
@@ -242,7 +256,7 @@ void main() {
     expect(find.text('这个窗口以管理员身份运行，选中后按 ${_mac ? '⌘V' : 'Ctrl+V'} 粘贴'), findsOneWidget);
     expect(s.canPaste, isTrue);
     expect(s.pasteBlockedReason, '');
-    await tester.sendKeyEvent(LogicalKeyboardKey.digit1);
+    await _pressIndex(tester, LogicalKeyboardKey.digit1);
     await tester.pump();
     expect(s.applied.single.$1, 'a');
   });
@@ -328,7 +342,7 @@ void main() {
 
   testWidgets('没下载的大文件：先下载，下完放进剪贴板再粘贴', (tester) async {
     final s = await open(tester);
-    await tester.sendKeyEvent(LogicalKeyboardKey.digit4);
+    await _pressIndex(tester, LogicalKeyboardKey.digit4);
     await tester.pump();
     expect(s.fetched, ['big']);
     expect(s.applied, isEmpty);

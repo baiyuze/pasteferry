@@ -94,24 +94,7 @@ class _PickerViewState extends State<PickerView> {
   /// 用输入法打拼音时不拿拼音去搜，选字上屏后再搜（见 [committedText]）
   void _onSearch() {
     final q = committedText(_search.value);
-    // 搜索框原本是空的、只多了一个 1–9：和按数字键一样选那一行。
-    // Windows 上中文输入法开着时，数字键先被输入法收下，Flutter 收不到按键（见 _onKey），只收到输入法交来的字
-    final digit = s.query.isEmpty && !_composing ? _typedDigit(q) : null;
-    if (digit != null) {
-      _search.clear();
-      s.chooseIndex(digit - 1);
-      return;
-    }
     if (q != s.query) s.setQuery(q);
-  }
-
-  /// 单独一个 1–9，半角或全角
-  static int? _typedDigit(String text) {
-    if (text.length != 1) return null;
-    final c = text.codeUnitAt(0);
-    if (c >= 0x31 && c <= 0x39) return c - 0x30;
-    if (c >= 0xFF11 && c <= 0xFF19) return c - 0xFF10;
-    return null;
   }
 
   void _onShown() {
@@ -196,14 +179,11 @@ class _PickerViewState extends State<PickerView> {
       s.delete(current);
       return KeyEventResult.handled;
     }
-    // 序号：搜索框为空时直接按数字；任何时候按住 ⌘（Mac）或 Alt（Windows、Linux）
+    // 序号：按住 ⌘（Mac）或 Alt（Windows、Linux）再按数字。直接按数字是在搜索框里打字，好搜数字
     final digit = _digit(e);
-    if (digit != null && e is KeyDownEvent) {
-      final withModifier = _mac ? kb.isMetaPressed : _alt;
-      if (withModifier || (_search.text.isEmpty && !_ctrl && !kb.isMetaPressed && !_alt)) {
-        s.chooseIndex(digit - 1);
-        return KeyEventResult.handled;
-      }
+    if (digit != null && e is KeyDownEvent && (_mac ? kb.isMetaPressed : _alt)) {
+      s.chooseIndex(digit - 1);
+      return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
   }
@@ -360,7 +340,7 @@ class _PickerViewState extends State<PickerView> {
         record: list[i],
         index: i,
         selected: i == s.selected,
-        number: i < 9 ? (s.query.trim().isEmpty ? '${i + 1}' : (_mac ? '⌘${i + 1}' : 'Alt+${i + 1}')) : null,
+        number: i < 9 ? (_mac ? '⌘${i + 1}' : 'Alt+${i + 1}') : null,
         favoritesTab: s.tab == PickerTab.favorites,
         dim: p.textFaint,
       ),

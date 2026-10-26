@@ -2,7 +2,7 @@
 
 按键写成占位符，生成页面时换成 Mac 与 Windows、Linux 两种写法，由 site.js 按访问者的系统显示其中一种：
 {key} ⌥V / Alt+V，{enter} ↩ / Enter，{plain} ⇧↩ / Shift+Enter，{copyonly} ⌘↩ / Ctrl+Enter，
-{fav} ⌘D / Ctrl+D，{paste} ⌘V / Ctrl+V，{copy} ⌘C / Ctrl+C。
+{fav} ⌘D / Ctrl+D，{paste} ⌘V / Ctrl+V，{copy} ⌘C / Ctrl+C，{index} ⌘1–9 / Alt+1–9。
 
 快捷窗口演示里的页签、底栏等界面文字直接取自 App 的文案（ui/tool/l10n/strings.py），和 App 里一模一样。
 """
@@ -209,11 +209,11 @@ COPY = {
         'どのアプリでもショートカットを押して選ぶと、カーソル位置に貼り付けます。',
     ),
     "qp_steps": (
-        [('按下 {key}', '在任何 App 里都行。'), ('打几个字', '文字和文件名都能搜，前 9 条按数字选。'), ('按 {enter}，就贴好了', '{plain} 粘贴纯文本，{copyonly} 只复制。')],
-        [('按下 {key}', '在任何 App 裡都行。'), ('打幾個字', '文字和檔名都能搜，前 9 筆按數字選。'), ('按 {enter}，就貼好了', '{plain} 貼上純文字，{copyonly} 只複製。')],
-        [('按下 {key}', '在任何程式裏都可以。'), ('打幾個字', '文字和檔案名稱都能搜，前 9 項按數字選。'), ('按 {enter}，就貼好了', '{plain} 貼上純文字，{copyonly} 只複製。')],
-        [('Press {key}', 'Works in any app.'), ('Type a few letters', 'Search text and file names, or press 1–9.'), ('Press {enter}. Done.', '{plain} for plain text, {copyonly} to copy only.')],
-        [('{key} を押す', 'どのアプリでも使えます。'), ('数文字を入力', 'テキストもファイル名も検索。1〜9 で直接選べます。'), ('{enter} を押せば完了', '{plain} でプレーンテキスト、{copyonly} でコピーのみ。')],
+        [('按下 {key}', '在任何 App 里都行。'), ('打几个字', '文字和文件名都能搜，前 9 条按 {index} 选。'), ('按 {enter}，就贴好了', '{plain} 粘贴纯文本，{copyonly} 只复制。')],
+        [('按下 {key}', '在任何 App 裡都行。'), ('打幾個字', '文字和檔名都能搜，前 9 筆按 {index} 選。'), ('按 {enter}，就貼好了', '{plain} 貼上純文字，{copyonly} 只複製。')],
+        [('按下 {key}', '在任何程式裏都可以。'), ('打幾個字', '文字和檔案名稱都能搜，前 9 項按 {index} 選。'), ('按 {enter}，就貼好了', '{plain} 貼上純文字，{copyonly} 只複製。')],
+        [('Press {key}', 'Works in any app.'), ('Type a few letters', 'Search text and file names, or press {index}.'), ('Press {enter}. Done.', '{plain} for plain text, {copyonly} to copy only.')],
+        [('{key} を押す', 'どのアプリでも使えます。'), ('数文字を入力', 'テキストもファイル名も検索。{index} で直接選べます。'), ('{enter} を押せば完了', '{plain} でプレーンテキスト、{copyonly} でコピーのみ。')],
     ),
     "qp_note": (
         '快捷键可以改或关掉。Mac 上直接粘贴需要「辅助功能」权限。',
