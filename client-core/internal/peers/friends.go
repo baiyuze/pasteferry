@@ -423,6 +423,11 @@ func (m *Manager) RedeemFriendCode(ctx context.Context, code, address string) (*
 		lctx, cancel := context.WithTimeout(ctx, wait)
 		peer, err := m.lan.PairFor(lctx, code, extra, lan.IntentFriend, m.selfCard())
 		cancel()
+		if err == nil && peer.Intent != lan.IntentFriend {
+			// 2.6.0 起用途不一致会直接拒绝，应答的用途一定是好友；不是就是旧版本，它把这当成了普通配对
+			m.log.Info("对方版本太旧，不认识好友码", "device", peer.ID)
+			return nil, ErrPeerOutdated
+		}
 		if err == nil {
 			dev := store.Device{ID: peer.ID, Name: peer.Name, Platform: peer.Platform, PublicKey: peer.PublicKey}
 			session, err := m.addPendingFor(dev, false, peer.Addrs, lan.IntentFriend, peer.Intent, peer.Card)
