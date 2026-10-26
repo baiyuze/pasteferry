@@ -1,65 +1,131 @@
 {
   "schema": 1,
-  "latest": "2.5.4",
+  "latest": "2.6.0",
   "date": "2026-10-26",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.5.4/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.6.0/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.5.4/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.6.0/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 25969389,
-      "sha256": "9a5077bfabf7c9d08e5a2d1867204e0f9c61704718dfce8db483c81b95b3c9b5"
+      "size": 26464323,
+      "sha256": "bddd4e430db1537b5a7ed112d0506d72b3cf92153bc3f02901a5191541ae7d0a"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 28069053,
-      "sha256": "bb7fc15c7fac3776cacd24fffcd81f64fd19f884c3b3f41c8d3492684037e89d"
+      "size": 28592751,
+      "sha256": "728410c6011d32bc71ca51946e55f9e4709d3a6ac4c9c034fa383d14423df7a6"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 52075554,
-      "sha256": "c06323790c10a7a4e80f315cd05acf8b43ba527f312bc8b8b0655b5a29d3167d"
+      "size": 53103328,
+      "sha256": "7337cb18d6f701851fc80962ec24c40280f3b5c7318215d7d5d1f36e31568db4"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 23370275,
-      "sha256": "8e256033af7fe498e40bfd98e602be8ce734cca8612dbcf0c91384e5a2ea4a81"
+      "size": 23659084,
+      "sha256": "dad349e77d6a9e48db5bdbc2bb79101381714e54617a4a467ef2a14c3ab6181a"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 29485872,
-      "sha256": "4976f5422a8b82716e82fc21a286019460ae9a6b688d6748f4aa7883a2f84a75"
+      "size": 29902360,
+      "sha256": "6bd2bf5ca12a10f28783c5d6056f085c1f73b5c7077b238401e37c764c34822d"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22549038,
-      "sha256": "829e74c54bb5aca5007e2c2a5d84beb763d3b82f63664525a57ee7f1332f809a"
+      "size": 22816556,
+      "sha256": "67b194d7c8a0d1806c5958a3ce991d4b6e041efed6d31304d587dbce2f425aff"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 20974908,
-      "sha256": "d5fb5e552780061328c666102cbb318d9bab35f9ca99be00e9ea275cda82ef37"
+      "size": 21223520,
+      "sha256": "a39d646845366907f609ed1d52014c89c43f3697e748f6c66494901219502ce3"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 27292359,
-      "sha256": "3654d31f9ef29c1970a81d382921a9a0a4398bc0465821f092044ef85d2402c6"
+      "size": 27622603,
+      "sha256": "3acd25b33e2ea7fe084641033a75472f02c628f561ff3e8c1f06f9dcd20f36ad"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25553779,
-      "sha256": "34528a04b77d5e332d16906d14d10dfacbed2255520886009e8fa99ef4b1a857"
+      "size": 25863220,
+      "sha256": "55ba8a229f68ee915a795e9975725ee78b0a57bd61232c15bbf82db5a53dd597"
     }
   },
   "releases": [
+    {
+      "version": "2.6.0",
+      "date": "2026-10-26",
+      "notes": {
+        "en": {
+          "changes": [
+            "Send files to contacts: add someone else's computer once with a contact code, no pairing needed, then drop files or images on their avatar with an optional note of up to 200 characters. Each batch arrives only after they accept it (contacts they trust can be accepted automatically), and contacts never see your clipboard, history or devices. On different networks, both sides turn on Service.",
+            "Choose who can send you files: no one, contacts only (the default), or everyone on the local network, which switches back to contacts only after 10 minutes.",
+            "Set a display name and avatar for your contacts. Each contact has a page with their status, automatic accepting and every transfer between you.",
+            "Paste copied files or images into the Send dialog with Cmd+V or Ctrl+V.",
+            "Settings now open on a short list of categories (General, Connection, Sync, Quick paste, Send Files, Storage, About), each with its own page, instead of one long page."
+          ],
+          "fixes": [
+            "Notifications showed files under 1 MB as 0.0 MB; small sizes are now shown in KB or bytes."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "给好友发文件：别人的电脑不用配对，用好友码加一次好友，之后把文件或图片拖到对方头像上就能发，可以附 200 字以内的备注。每批文件都要对方接受才会传（常来往的好友可以设成自动接收）；好友看不到你的剪贴板、复制记录和设备。不在同一个网络时，两边都打开「服务」即可。",
+            "可以选择谁能给你发文件：均不允许、仅限好友（默认）或所有人；「所有人」只在局域网里有效，10 分钟后自动回到仅限好友。",
+            "可以设置给好友看的显示名和头像。每个好友有自己的页面：状态、自动接收开关，以及你们之间的全部传输记录。",
+            "在发送窗口里按 ⌘V 或 Ctrl+V，可以直接粘贴复制的文件或图片。",
+            "设置改为类别列表（通用、连接、同步、快捷粘贴、隔空传送、存储、关于），点进去是各自的页面，不用再翻一整页长列表。"
+          ],
+          "fixes": [
+            "通知里不到 1 MB 的文件显示成 0.0 MB，现在按 KB 或字节显示。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "連絡先へのファイル送信：ほかの人のパソコンはペアリング不要で、連絡先コードで一度追加すれば、ファイルや画像を相手のアイコンにドロップして送れます。200 文字までのメモも添えられます。毎回相手が受け入れてから転送され（よくやり取りする相手は自動で受け入れ可能）、連絡先にクリップボード、履歴、デバイスが見えることはありません。別のネットワークでは双方でサービスをオンにします。",
+            "ファイルを受け取る相手を選べます：受け取らない、連絡先のみ（初期設定）、すべての人。「すべての人」はローカルネットワーク内だけで、10 分後に連絡先のみに戻ります。",
+            "連絡先に見せる表示名とアイコンを設定できます。連絡先ごとのページで、状態、自動受け入れ、やり取りしたすべての転送を確認できます。",
+            "送信ダイアログで Cmd+V または Ctrl+V を押すと、コピーしたファイルや画像を貼り付けられます。",
+            "設定はカテゴリの一覧（一般、接続、同期、クイックペースト、ファイル送信、ストレージ、このアプリについて）になり、それぞれのページに分かれました。長い 1 ページをスクロールする必要はありません。"
+          ],
+          "fixes": [
+            "通知で 1 MB 未満のファイルが 0.0 MB と表示されていた問題を修正し、KB またはバイトで表示します。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "給好友傳檔案：別人的電腦不用配對，用好友碼加一次好友，之後把檔案或圖片拖到對方頭像上就能傳，可以附 200 字以內的備註。每批檔案都要對方接受才會傳（常往來的好友可以設成自動接收）；好友看不到你的剪貼簿、複製記錄和裝置。不在同一個網路時，兩邊都打開「服務」即可。",
+            "可以選擇誰能傳檔案給你：均不允許、僅限好友（預設）或所有人；「所有人」只在區域網路裡有效，10 分鐘後自動回到僅限好友。",
+            "可以設定給好友看的顯示名稱和頭像。每個好友有自己的頁面：狀態、自動接收開關，以及你們之間的全部傳輸記錄。",
+            "在傳送視窗裡按 ⌘V 或 Ctrl+V，可以直接貼上複製的檔案或圖片。",
+            "設定改為類別列表（一般、連線、同步、快速貼上、隔空傳送、儲存空間、關於），點進去是各自的頁面，不用再捲動一整頁長列表。"
+          ],
+          "fixes": [
+            "通知中不到 1 MB 的檔案顯示成 0.0 MB，現在按 KB 或位元組顯示。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "給好友傳檔案：別人的電腦不用配對，用好友碼加一次好友，之後把檔案或圖片拖到對方頭像上就能傳，可以附 200 字以內的備註。每批檔案都要對方接受才會傳（常來往的好友可以設成自動接收）；好友看不到你的剪貼簿、複製記錄和裝置。不在同一個網絡時，兩邊都開啟「服務」即可。",
+            "可以選擇誰能傳檔案給你：均不允許、僅限好友（預設）或所有人；「所有人」只在區域網絡裏有效，10 分鐘後自動回到僅限好友。",
+            "可以設定給好友看的顯示名稱和頭像。每個好友有自己的頁面：狀態、自動接收開關，以及你們之間的全部傳輸記錄。",
+            "在傳送視窗裏按 ⌘V 或 Ctrl+V，可以直接貼上複製的檔案或圖片。",
+            "設定改為類別列表（一般、連接、同步、快速貼上、隔空傳送、儲存空間、關於），按進去是各自的頁面，不用再捲動一整頁長列表。"
+          ],
+          "fixes": [
+            "通知中不到 1 MB 的檔案顯示成 0.0 MB，現在按 KB 或位元組顯示。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.5.4",
       "date": "2026-10-26",
