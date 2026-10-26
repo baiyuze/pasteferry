@@ -3775,6 +3775,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version, updates, feedback'**
   String get settingsAboutSummary;
+
+  /// No description provided for @friendsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send files to other people\'s computers, no pairing needed'**
+  String get friendsSubtitle;
+
+  /// No description provided for @friendsSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search contacts'**
+  String get friendsSearch;
+
+  /// No description provided for @friendsNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching contacts'**
+  String get friendsNoMatch;
+
+  /// No description provided for @friendsPick.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a contact to see your transfers or send files'**
+  String get friendsPick;
+
+  /// No description provided for @friendDropHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop files here to send them to {name}'**
+  String friendDropHint(String name);
 }
 
 class _AppLocalizationsDelegate

@@ -208,7 +208,7 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
           title: l.navSend,
           subtitle: l.sendSubtitle,
           actions: [
-            if (state.profile != null) const _ProfileChip(),
+            if (state.profile != null) const ProfileChip(),
             if (state.profile != null)
               Tooltip(
                 message: l.friendsTitle,
@@ -253,7 +253,7 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
                   ],
                 ),
         ),
-        if (state.profile != null) const _ReceiveFromBar(),
+        if (state.profile != null) const ReceiveFromBar(),
       ],
     );
   }
@@ -1129,8 +1129,8 @@ class _TransferDetails implements RecordDetails {
 // ─────────────────────────── 好友（2.6.0） ───────────────────────────
 
 /// 页面右上角：本机的头像和好友看到的名字。点头像换头像，点名字改名
-class _ProfileChip extends StatelessWidget {
-  const _ProfileChip();
+class ProfileChip extends StatelessWidget {
+  const ProfileChip({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -1373,14 +1373,17 @@ class _PersonNodeState extends State<_PersonNode> {
 }
 
 /// 页面底部：谁可以给我发文件（均不允许 / 仅限好友 / 所有人）。「所有人」显示还剩几分钟
-class _ReceiveFromBar extends StatefulWidget {
-  const _ReceiveFromBar();
+class ReceiveFromBar extends StatefulWidget {
+  const ReceiveFromBar({super.key, this.trailing});
+
+  /// 右边的部件（好友页放「我显示为」）
+  final Widget? trailing;
 
   @override
-  State<_ReceiveFromBar> createState() => _ReceiveFromBarState();
+  State<ReceiveFromBar> createState() => _ReceiveFromBarState();
 }
 
-class _ReceiveFromBarState extends State<_ReceiveFromBar> {
+class _ReceiveFromBarState extends State<ReceiveFromBar> {
   Timer? _tick;
 
   @override
@@ -1420,6 +1423,7 @@ class _ReceiveFromBarState extends State<_ReceiveFromBar> {
           PopupMenuButton<String>(
             tooltip: '',
             position: PopupMenuPosition.over,
+            constraints: const BoxConstraints(minWidth: 320, maxWidth: 320),
             onSelected: (next) async {
               try {
                 await state.setReceiveFrom(next);
@@ -1433,20 +1437,11 @@ class _ReceiveFromBarState extends State<_ReceiveFromBar> {
                 ('friends', l.receiveFromFriends, l.receiveFromFriendsDesc),
                 ('everyone', l.receiveFromEveryone, l.receiveFromEveryoneDesc),
               ])
-                CheckedPopupMenuItem(
+                PopupMenuItem(
                   value: value,
-                  checked: v == value,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(title),
-                      SizedBox(
-                        width: 280,
-                        child: Text(desc, style: context.text.bodySmall),
-                      ),
-                    ],
-                  ),
+                  height: 0,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: menuChoiceRow(context, title, desc, v == value, width: 280),
                 ),
             ],
             child: Padding(
@@ -1461,6 +1456,7 @@ class _ReceiveFromBarState extends State<_ReceiveFromBar> {
               ),
             ),
           ),
+          if (widget.trailing != null) ...[const Spacer(), widget.trailing!],
         ],
       ),
     );

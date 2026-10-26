@@ -175,7 +175,12 @@ class _FriendRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(friendTitle(f), style: context.text.labelLarge, maxLines: 1, overflow: TextOverflow.ellipsis),
-                  Text(sub, style: context.text.bodySmall?.copyWith(color: p.textDim), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(
+                    sub,
+                    style: context.text.bodySmall?.copyWith(color: p.textDim),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ],
               ),
             ),
@@ -196,51 +201,58 @@ class _FriendRow extends StatelessWidget {
     );
   }
 
-  Future<void> _menu(BuildContext context, Offset at) async {
-    final l = context.l10n;
-    final state = AppScope.read(context);
-    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-    final v = await showMenu<String>(
-      context: context,
-      position: RelativeRect.fromRect(at & const Size(1, 1), Offset.zero & overlay.size),
-      items: [
-        PopupMenuItem(value: 'send', child: Text(l.friendSendAction)),
-        PopupMenuItem(value: 'history', child: Text(l.friendHistory)),
-        CheckedPopupMenuItem(value: 'auto', checked: friend.autoAccept, child: Text(l.friendAutoAccept)),
-        const PopupMenuDivider(),
-        PopupMenuItem(value: 'remove', child: Text(l.friendRemove, style: TextStyle(color: context.palette.danger))),
-      ],
-    );
-    if (!context.mounted) return;
-    try {
-      switch (v) {
-        case 'send':
-          await openFriendSend(context, friend);
-        case 'history':
-          await showFriendHistory(context, friend);
-        case 'auto':
-          await state.setFriendAutoAccept(friend.id, !friend.autoAccept);
-        case 'remove':
-          final ok = await showDialog<bool>(
-            context: context,
-            builder: (ctx) => AlertDialog(
-              title: Text(l.friendRemoveTitle(friend.displayName)),
-              content: SizedBox(width: 380, child: Text(l.friendRemoveBody)),
-              actions: [
-                TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l.cancel)),
-                FilledButton(
-                  style: FilledButton.styleFrom(backgroundColor: context.palette.danger),
-                  onPressed: () => Navigator.pop(ctx, true),
-                  child: Text(l.friendRemove),
-                ),
-              ],
-            ),
-          );
-          if (ok == true) await state.removeFriend(friend.id);
-      }
-    } catch (e) {
-      if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+  Future<void> _menu(BuildContext context, Offset at) => showFriendMenu(context, friend, at);
+}
+
+/// 好友的菜单：发送、传输记录、自动接收、删除。detail 为真时（已经在详情里）不列「传输记录」
+Future<void> showFriendMenu(BuildContext context, Friend friend, Offset at, {bool detail = false}) async {
+  final l = context.l10n;
+  final state = AppScope.read(context);
+  final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+  final v = await showMenu<String>(
+    context: context,
+    position: RelativeRect.fromRect(at & const Size(1, 1), Offset.zero & overlay.size),
+    items: [
+      PopupMenuItem(value: 'send', height: 34, child: Text(l.friendSendAction)),
+      if (!detail) PopupMenuItem(value: 'history', height: 34, child: Text(l.friendHistory)),
+      PopupMenuItem(value: 'auto', height: 34, child: menuCheckRow(context, l.friendAutoAccept, friend.autoAccept)),
+      const PopupMenuDivider(),
+      PopupMenuItem(
+        value: 'remove',
+        height: 34,
+        child: Text(l.friendRemove, style: TextStyle(color: context.palette.danger)),
+      ),
+    ],
+  );
+  if (!context.mounted) return;
+  try {
+    switch (v) {
+      case 'send':
+        await openFriendSend(context, friend);
+      case 'history':
+        await showFriendHistory(context, friend);
+      case 'auto':
+        await state.setFriendAutoAccept(friend.id, !friend.autoAccept);
+      case 'remove':
+        final ok = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(l.friendRemoveTitle(friend.displayName)),
+            content: SizedBox(width: 380, child: Text(l.friendRemoveBody)),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l.cancel)),
+              FilledButton(
+                style: FilledButton.styleFrom(backgroundColor: context.palette.danger),
+                onPressed: () => Navigator.pop(ctx, true),
+                child: Text(l.friendRemove),
+              ),
+            ],
+          ),
+        );
+        if (ok == true) await state.removeFriend(friend.id);
     }
+  } catch (e) {
+    if (context.mounted) showToast(context, AppState.describeError(e), error: true);
   }
 }
 
@@ -402,7 +414,9 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
                       ),
                       const SizedBox(height: Insets.sm),
                       if (expired)
-                        Center(child: TextButton(onPressed: _generate, child: Text(l.retry)))
+                        Center(
+                          child: TextButton(onPressed: _generate, child: Text(l.retry)),
+                        )
                       else if (left != null)
                         Text(
                           l.friendCodeExpires('${left.inMinutes}:${(left.inSeconds % 60).toString().padLeft(2, '0')}'),
@@ -576,7 +590,10 @@ class _FriendConfirmDialogState extends State<FriendConfirmDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       for (final fp in ([r.fingerprint, r.selfFingerprint]..sort()))
-                        Text(fp, style: TextStyle(fontFamily: monoFamily, fontSize: 18, letterSpacing: 2, color: p.text)),
+                        Text(
+                          fp,
+                          style: TextStyle(fontFamily: monoFamily, fontSize: 18, letterSpacing: 2, color: p.text),
+                        ),
                       const SizedBox(height: Insets.sm),
                       Text(l.friendSafetyHint, style: context.text.bodySmall),
                     ],
@@ -610,15 +627,34 @@ class _FriendConfirmDialogState extends State<FriendConfirmDialog> {
   }
 }
 
-// ─────────────────────────── 传输记录 ───────────────────────────
+// ─────────────────────────── 好友详情 ───────────────────────────
 
-Future<void> showFriendHistory(BuildContext context, Friend f) =>
-    showDialog<void>(context: context, builder: (_) => _FriendHistoryDialog(friendId: f.id));
+Future<void> showFriendHistory(BuildContext context, Friend f) => showDialog<void>(
+  context: context,
+  builder: (_) => Dialog(
+    child: SizedBox(
+      width: 520,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.lg),
+        child: FriendDetail(friendId: f.id, inDialog: true),
+      ),
+    ),
+  ),
+);
 
-class _FriendHistoryDialog extends StatelessWidget {
-  const _FriendHistoryDialog({required this.friendId});
+/// 好友按在线、名字排序
+List<Friend> sortedFriends(AppState state) => [...state.friends]
+  ..sort((a, b) {
+    if (a.online != b.online) return a.online ? -1 : 1;
+    return a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase());
+  });
+
+/// 一个好友的状态、发送按钮、自动接收开关和传输记录。在弹窗里时记录列表限高，在好友页里占满剩余高度
+class FriendDetail extends StatelessWidget {
+  const FriendDetail({super.key, required this.friendId, this.inDialog = false});
 
   final String friendId;
+  final bool inDialog;
 
   @override
   Widget build(BuildContext context) {
@@ -627,83 +663,88 @@ class _FriendHistoryDialog extends StatelessWidget {
     final p = context.palette;
     final f = state.friendById(friendId);
     if (f == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context.mounted) Navigator.pop(context);
-      });
+      if (inDialog) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (context.mounted) Navigator.pop(context);
+        });
+      }
       return const SizedBox.shrink();
     }
     final list = [
       ...state.transfers(TransferDirection.TRANSFER_DIRECTION_INCOMING),
       ...state.transfers(TransferDirection.TRANSFER_DIRECTION_OUTGOING),
-    ].where((t) => t.deviceId == friendId).toList()
-      ..sort((a, b) => b.createdAtUnix.compareTo(a.createdAtUnix));
-    return Dialog(
-      child: SizedBox(
-        width: 520,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.lg),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
+    ].where((t) => t.deviceId == friendId).toList()..sort((a, b) => b.createdAtUnix.compareTo(a.createdAtUnix));
+    final records = list.isEmpty
+        ? Padding(
+            padding: const EdgeInsets.all(Insets.xl),
+            child: Text(l.friendHistoryEmpty, textAlign: TextAlign.center, style: context.text.bodySmall),
+          )
+        : ListView.separated(
+            shrinkWrap: inDialog,
+            padding: const EdgeInsets.only(right: Insets.md),
+            itemCount: list.length,
+            separatorBuilder: (_, _) => Divider(height: 1, color: p.separator),
+            itemBuilder: (_, i) => _HistoryRow(transfer: list[i]),
+          );
+    return Column(
+      mainAxisSize: inDialog ? MainAxisSize.min : MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            PersonAvatar(deviceId: f.id, name: f.displayName, hash: f.avatarHash, size: inDialog ? 44 : 52),
+            const SizedBox(width: Insets.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PersonAvatar(deviceId: f.id, name: f.displayName, hash: f.avatarHash, size: 44),
-                  const SizedBox(width: Insets.md),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(friendTitle(f), style: context.text.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
-                        Text(friendStatus(l, state, f), style: context.text.bodySmall?.copyWith(color: p.textDim)),
-                      ],
-                    ),
-                  ),
-                  FilledButton(onPressed: () => openFriendSend(context, f), child: Text(l.friendSendAction)),
-                  const SizedBox(width: Insets.xs),
-                  IconAction(icon: AppIcons.xmark, tooltip: l.close, onTap: () => Navigator.pop(context)),
+                  Text(friendTitle(f), style: context.text.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(friendStatus(l, state, f), style: context.text.bodySmall?.copyWith(color: p.textDim)),
                 ],
               ),
-              const SizedBox(height: Insets.md),
-              Padding(
-                padding: const EdgeInsets.only(right: Insets.md),
-                child: Row(
-                  children: [
-                    Expanded(child: Text(l.friendAutoAccept, style: context.text.bodyMedium)),
-                    SmallSwitch(
-                      value: f.autoAccept,
-                      onChanged: (v) => state.setFriendAutoAccept(f.id, v).catchError((Object e) {
-                        if (context.mounted) showToast(context, AppState.describeError(e), error: true);
-                      }),
-                    ),
-                  ],
+            ),
+            FilledButton(onPressed: () => openFriendSend(context, f), child: Text(l.friendSendAction)),
+            const SizedBox(width: Insets.xs),
+            if (inDialog)
+              IconAction(icon: AppIcons.xmark, tooltip: l.close, onTap: () => Navigator.pop(context))
+            else
+              Builder(
+                builder: (bctx) => IconAction(
+                  icon: AppIcons.ellipsis,
+                  tooltip: l.moreActions,
+                  onTap: () {
+                    final box = bctx.findRenderObject() as RenderBox;
+                    showFriendMenu(context, f, box.localToGlobal(box.size.bottomLeft(Offset.zero)), detail: true);
+                  },
                 ),
               ),
-              const SizedBox(height: Insets.md),
-              Divider(height: 1, color: p.separator),
-              const SizedBox(height: Insets.md),
-              Text(l.friendHistory, style: context.text.titleSmall),
-              const SizedBox(height: Insets.xs),
-              if (list.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.all(Insets.xl),
-                  child: Text(l.friendHistoryEmpty, textAlign: TextAlign.center, style: context.text.bodySmall),
-                )
-              else
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxHeight: 440),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.only(right: Insets.md),
-                    itemCount: list.length,
-                    separatorBuilder: (_, _) => Divider(height: 1, color: p.separator),
-                    itemBuilder: (_, i) => _HistoryRow(transfer: list[i]),
-                  ),
-                ),
+          ],
+        ),
+        const SizedBox(height: Insets.md),
+        Padding(
+          padding: const EdgeInsets.only(right: Insets.md),
+          child: Row(
+            children: [
+              Expanded(child: Text(l.friendAutoAccept, style: context.text.bodyMedium)),
+              SmallSwitch(
+                value: f.autoAccept,
+                onChanged: (v) => state.setFriendAutoAccept(f.id, v).catchError((Object e) {
+                  if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+                }),
+              ),
             ],
           ),
         ),
-      ),
+        const SizedBox(height: Insets.md),
+        Divider(height: 1, color: p.separator),
+        const SizedBox(height: Insets.md),
+        Text(l.friendHistory, style: context.text.titleSmall),
+        const SizedBox(height: Insets.xs),
+        if (inDialog || list.isEmpty)
+          ConstrainedBox(constraints: const BoxConstraints(maxHeight: 440), child: records)
+        else
+          Expanded(child: records),
+      ],
     );
   }
 }

@@ -2110,6 +2110,23 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsAboutSummary => '版本、更新、反馈';
+
+  @override
+  String get friendsSubtitle => '给别人的电脑发文件，不用配对';
+
+  @override
+  String get friendsSearch => '搜索好友';
+
+  @override
+  String get friendsNoMatch => '没有找到这个好友';
+
+  @override
+  String get friendsPick => '选一个好友，查看传输记录或发文件';
+
+  @override
+  String friendDropHint(String name) {
+    return '松开即可发给 $name';
+  }
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -4218,6 +4235,23 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get settingsAboutSummary => '版本、更新、回報';
+
+  @override
+  String get friendsSubtitle => '傳檔案給別人的電腦，不用配對';
+
+  @override
+  String get friendsSearch => '搜尋好友';
+
+  @override
+  String get friendsNoMatch => '找不到這個好友';
+
+  @override
+  String get friendsPick => '選一個好友，查看傳輸記錄或傳檔案';
+
+  @override
+  String friendDropHint(String name) {
+    return '放開即可傳給 $name';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -6326,4 +6360,21 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get settingsAboutSummary => '版本、更新、回報';
+
+  @override
+  String get friendsSubtitle => '傳檔案給別人的電腦，不用配對';
+
+  @override
+  String get friendsSearch => '搜尋好友';
+
+  @override
+  String get friendsNoMatch => '沒有找到這個好友';
+
+  @override
+  String get friendsPick => '選一個好友，查看傳輸記錄或傳檔案';
+
+  @override
+  String friendDropHint(String name) {
+    return '放開即可傳給 $name';
+  }
 }

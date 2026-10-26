@@ -2304,4 +2304,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAboutSummary => 'Version, updates, feedback';
+
+  @override
+  String get friendsSubtitle =>
+      'Send files to other people\'s computers, no pairing needed';
+
+  @override
+  String get friendsSearch => 'Search contacts';
+
+  @override
+  String get friendsNoMatch => 'No matching contacts';
+
+  @override
+  String get friendsPick =>
+      'Pick a contact to see your transfers or send files';
+
+  @override
+  String friendDropHint(String name) {
+    return 'Drop files here to send them to $name';
+  }
 }

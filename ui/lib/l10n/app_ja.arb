@@ -610,5 +610,10 @@
   "settingsQuickPasteSummary": "ショートカット、選んだ後の動作",
   "settingsSendSummary": "ファイルの受信、保存先",
   "settingsStorageSummary": "履歴の保存期間と使用量",
-  "settingsAboutSummary": "バージョン、アップデート、フィードバック"
+  "settingsAboutSummary": "バージョン、アップデート、フィードバック",
+  "friendsSubtitle": "ほかの人のパソコンにファイルを送れます。ペアリングは不要です",
+  "friendsSearch": "連絡先を検索",
+  "friendsNoMatch": "一致する連絡先はありません",
+  "friendsPick": "連絡先を選ぶと、転送履歴の確認やファイル送信ができます",
+  "friendDropHint": "ここにドロップすると {name} に送ります"
 }

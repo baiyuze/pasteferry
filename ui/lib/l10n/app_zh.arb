@@ -610,5 +610,10 @@
   "settingsQuickPasteSummary": "快捷键、选中后的操作",
   "settingsSendSummary": "接收文件、保存位置",
   "settingsStorageSummary": "记录保留多久、占用空间",
-  "settingsAboutSummary": "版本、更新、反馈"
+  "settingsAboutSummary": "版本、更新、反馈",
+  "friendsSubtitle": "给别人的电脑发文件，不用配对",
+  "friendsSearch": "搜索好友",
+  "friendsNoMatch": "没有找到这个好友",
+  "friendsPick": "选一个好友，查看传输记录或发文件",
+  "friendDropHint": "松开即可发给 {name}"
 }

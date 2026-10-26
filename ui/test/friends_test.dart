@@ -114,7 +114,7 @@ void main() {
 
     await tester.tap(find.text(l.receiveFromFriends));
     await _settle(tester);
-    await tester.tap(find.widgetWithText(CheckedPopupMenuItem<String>, l.receiveFromEveryone));
+    await tester.tap(find.widgetWithText(PopupMenuItem<String>, l.receiveFromEveryone));
     await _settle(tester);
     expect(state.receiveFromCalls, ['everyone']);
   });
@@ -235,5 +235,45 @@ void main() {
     await tester.pump();
     expect(title, findsOneWidget);
   });
-}
 
+  testWidgets('侧边栏的好友页：列表、选中好友看记录、搜索、没有好友时的说明', (tester) async {
+    final out = Transfer(
+      id: 'o1',
+      direction: TransferDirection.TRANSFER_DIRECTION_OUTGOING,
+      deviceId: 'xm',
+      deviceName: '小明',
+      status: 'done',
+      peerRole: 'friend',
+      note: '合同第 3 页要签字',
+      items: [ClipItem(name: '合同扫描件.pdf', size: Int64(18 << 20))],
+      totalBytes: Int64(18 << 20),
+      createdAtUnix: _now(120),
+    );
+    final state = _demo(transfers: [out]);
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    await tester.pump();
+    final l = AppLocalizations.of(tester.element(find.byType(Shell)));
+    await tester.tap(find.text(l.friendsTitle).first);
+    await _settle(tester);
+    expect(find.text(l.friendsSubtitle), findsOneWidget);
+    // 在线的好友排在前面，默认选中第一个，右边是他的记录
+    expect(find.text(l.noteLine('合同第 3 页要签字')), findsOneWidget);
+    await tester.tap(find.text('阿杰').first);
+    await _settle(tester);
+    expect(find.text(l.noteLine('合同第 3 页要签字')), findsNothing);
+    expect(find.text(l.friendHistoryEmpty), findsOneWidget);
+    await tester.enterText(find.byType(TextField).first, '不存在');
+    await _settle(tester);
+    expect(find.text(l.friendsNoMatch), findsOneWidget);
+    // 「允许这些人给我发文件」也在这一页
+    expect(find.text(l.receiveFromFriends), findsOneWidget);
+
+    final empty = _FriendsState()..debugSeed(status: state.status!, config: state.config!, self: state.self!, profile: state.profile);
+    await tester.pumpWidget(PasteFerryApp(key: UniqueKey(), state: empty));
+    await tester.pump();
+    await tester.tap(find.text(l.friendsTitle).first);
+    await _settle(tester);
+    expect(find.text(l.friendsEmpty), findsOneWidget);
+    expect(find.text(l.addFriend), findsNWidgets(2));
+  });
+}

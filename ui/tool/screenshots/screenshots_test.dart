@@ -17,7 +17,9 @@ import 'package:pasteferry_ui/main.dart';
 import 'package:pasteferry_ui/picker/picker_host.dart';
 import 'package:pasteferry_ui/picker/picker_state.dart';
 import 'package:pasteferry_ui/picker/picker_view.dart';
+import 'package:pasteferry_ui/icons.dart';
 import 'package:pasteferry_ui/theme.dart';
+import 'package:pasteferry_ui/widgets/avatar.dart';
 import 'package:pasteferry_ui/widgets/friend_send_dialog.dart';
 import 'package:pasteferry_ui/widgets/friends_dialog.dart';
 import 'package:pasteferry_ui/widgets/nearby_dialog.dart';
@@ -559,6 +561,29 @@ void main() {
     await _shoot(tester, 'friend-page-dark', state: state, section: Section.send, settle: false,
         brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
       showFriendHistory(tester.element(find.byType(Shell)), state.friends.first);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    });
+  });
+
+  testWidgets('friends-page-dark', (tester) async {
+    await _shoot(tester, 'friends-page-dark', state: _friendsDemo(), section: Section.friends, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720));
+  });
+
+  testWidgets('receive-from-menu-dark', (tester) async {
+    await _shoot(tester, 'receive-from-menu-dark', state: _friendsDemo(), section: Section.send, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
+      await tester.tap(find.byIcon(AppIcons.chevronDown).last);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    });
+  });
+
+  testWidgets('avatar-menu-dark', (tester) async {
+    await _shoot(tester, 'avatar-menu-dark', state: _friendsDemo(), section: Section.send, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
+      await tester.tap(find.byType(SelfAvatarButton).first);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
     });

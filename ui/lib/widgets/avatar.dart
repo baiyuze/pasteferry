@@ -171,9 +171,12 @@ class _SelfAvatarButtonState extends State<SelfAvatarButton> {
           _ => _reset(context),
         },
         itemBuilder: (_) => [
-          PopupMenuItem(value: 'choose', child: Text(l.avatarChoose)),
-          PopupMenuItem(value: 'paste', child: Text(l.avatarPaste)),
-          if (profile?.hasAvatar ?? false) PopupMenuItem(value: 'reset', child: Text(l.avatarReset)),
+          PopupMenuItem(value: 'choose', height: 34, child: Text(l.avatarChoose)),
+          PopupMenuItem(value: 'paste', height: 34, child: Text(l.avatarPaste)),
+          if (profile?.hasAvatar ?? false) ...[
+            const PopupMenuDivider(height: 9),
+            PopupMenuItem(value: 'reset', height: 34, child: Text(l.avatarReset)),
+          ],
         ],
         child: DecoratedBox(
           decoration: BoxDecoration(

@@ -1563,5 +1563,17 @@
   "settingsQuickPasteSummary": "Shortcut and what happens after you pick",
   "settingsSendSummary": "Receiving files, save location",
   "settingsStorageSummary": "How long history is kept, space used",
-  "settingsAboutSummary": "Version, updates, feedback"
+  "settingsAboutSummary": "Version, updates, feedback",
+  "friendsSubtitle": "Send files to other people's computers, no pairing needed",
+  "friendsSearch": "Search contacts",
+  "friendsNoMatch": "No matching contacts",
+  "friendsPick": "Pick a contact to see your transfers or send files",
+  "friendDropHint": "Drop files here to send them to {name}",
+  "@friendDropHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

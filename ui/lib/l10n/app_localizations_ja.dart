@@ -2134,4 +2134,21 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsAboutSummary => 'バージョン、アップデート、フィードバック';
+
+  @override
+  String get friendsSubtitle => 'ほかの人のパソコンにファイルを送れます。ペアリングは不要です';
+
+  @override
+  String get friendsSearch => '連絡先を検索';
+
+  @override
+  String get friendsNoMatch => '一致する連絡先はありません';
+
+  @override
+  String get friendsPick => '連絡先を選ぶと、転送履歴の確認やファイル送信ができます';
+
+  @override
+  String friendDropHint(String name) {
+    return 'ここにドロップすると $name に送ります';
+  }
 }

@@ -629,3 +629,48 @@ abstract final class PaletteColors {
     return c;
   }
 }
+
+/// 菜单里带勾的一行：勾的位置固定在左边，没选中时留空，文字对齐
+Widget menuCheckRow(BuildContext context, String title, bool checked) => Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    SizedBox(
+      width: 20,
+      child: checked ? Icon(AppIcons.checkmark, size: 13, color: context.palette.accent) : null,
+    ),
+    Text(title),
+  ],
+);
+
+/// 菜单里带说明的选择项：左边是勾，标题下面一行小字说明
+Widget menuChoiceRow(BuildContext context, String title, String description, bool checked, {double width = 280}) =>
+    Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 20,
+            child: checked
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Icon(AppIcons.checkmark, size: 13, color: context.palette.accent),
+                  )
+                : null,
+          ),
+          SizedBox(
+            width: width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(title, style: context.text.labelLarge),
+                const SizedBox(height: 2),
+                Text(description, style: context.text.bodySmall?.copyWith(color: context.palette.textDim)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );

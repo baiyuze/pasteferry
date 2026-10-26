@@ -610,5 +610,10 @@
   "settingsQuickPasteSummary": "快速鍵、選取後的動作",
   "settingsSendSummary": "接收檔案、儲存位置",
   "settingsStorageSummary": "記錄保留多久、佔用空間",
-  "settingsAboutSummary": "版本、更新、回報"
+  "settingsAboutSummary": "版本、更新、回報",
+  "friendsSubtitle": "傳檔案給別人的電腦，不用配對",
+  "friendsSearch": "搜尋好友",
+  "friendsNoMatch": "找不到這個好友",
+  "friendsPick": "選一個好友，查看傳輸記錄或傳檔案",
+  "friendDropHint": "放開即可傳給 {name}"
 }

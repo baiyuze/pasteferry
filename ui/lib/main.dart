@@ -10,6 +10,7 @@ import 'i18n.dart';
 import 'pages/devices_page.dart';
 import 'pages/favorites_page.dart';
 import 'pages/history_page.dart';
+import 'pages/friends_page.dart';
 import 'pages/send_page.dart';
 import 'pages/service_page.dart';
 import 'pages/settings_page.dart';
@@ -126,7 +127,7 @@ class AppScope extends InheritedNotifier<AppState> {
       context.getInheritedWidgetOfExactType<AppScope>()!.notifier!;
 }
 
-enum Section { history, favorites, send, devices, official, settings }
+enum Section { history, favorites, send, friends, devices, official, settings }
 
 class Shell extends StatefulWidget {
   const Shell({super.key, this.initialSection = Section.history});
@@ -179,6 +180,7 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
     if (state.pageRequestSerial != _seenPageRequest) {
       _seenPageRequest = state.pageRequestSerial;
       if (state.pageRequest == 'send') _section = Section.send;
+      if (state.pageRequest == 'friends') _section = Section.friends;
       if (state.pageRequest == 'settings') _section = Section.settings;
     }
     if (!state.officialEnabled && _section == Section.official) {
@@ -330,6 +332,7 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
                     Section.history => const HistoryPage(),
                     Section.favorites => const FavoritesPage(),
                     Section.send => const SendPage(),
+                    Section.friends => const FriendsPage(),
                     Section.devices => const DevicesPage(),
                     Section.official => const OfficialServicePage(),
                     Section.settings => const SettingsPage(),
@@ -403,6 +406,17 @@ class _Sidebar extends StatelessWidget {
             // 有文件在收发时显示进度环，否则显示新收到、还没看过的批数
             trailingWidget: _SendBadge(state: state),
             onTap: () => onSelect(Section.send),
+          ),
+          _NavItem(
+            icon: AppIcons.people,
+            label: l.friendsTitle,
+            selected: current == Section.friends,
+            // 好友发来、等你接受的文件
+            trailing: () {
+              final n = state.askingIncoming.where((t) => t.peerRole == 'friend').length;
+              return n == 0 ? null : '$n';
+            }(),
+            onTap: () => onSelect(Section.friends),
           ),
           // 分两组：上面是用的（复制的内容、发文件），下面是管的（设备、服务、设置）
           const SizedBox(height: Insets.lg),
