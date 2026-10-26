@@ -11,6 +11,21 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.5.4',
+ 'date': '2026-10-26',
+ 'changes': [('The official service is now called Service in the app, on the website and in the guides.',
+              '「官方服务」改名为「服务」，App、官网和使用指南里的叫法都已更新。',
+              '「公式サービス」を「サービス」に改名しました。アプリ、Web サイト、ガイドの表記も更新しています。',
+              '「官方服務」改名為「服務」，App、官網和使用指南裡的名稱都已更新。',
+              '「官方服務」改名為「服務」，App、官網和使用指南裏的名稱都已更新。')],
+ 'fixes': [('In Send Files, a paired computer that was online but not yet connected could show as needing '
+            'an update, and kept doing so when no connection could be made. It now shows Connecting… until '
+            'its capabilities are known (click it to reconnect), is treated as outdated only when it stays '
+            'connected without announcing them, and its last known capabilities are kept across restarts.',
+            '修复隔空传送中在线但还没连上的电脑显示「需要更新」、连不上时一直不消失的问题。现在还不知道对方能否接收时显示「正在连接…」，点它会重新连接；只有连上后一直没有报告功能的旧版本才显示「需要更新」；对方上次报告的功能在重启后仍然保留。',
+            'ファイル送信で、オンラインだがまだ接続していないパソコンが「アップデートが必要」と表示され、接続できない間はそのままになる問題を修正しました。対応状況がわかるまでは「接続中…」と表示し（クリックで再接続）、接続後も機能を通知しない旧バージョンだけを「アップデートが必要」とします。最後に確認した対応状況は再起動後も保持します。',
+            '修正隔空傳送中在線但還沒連上的電腦顯示「需要更新」、連不上時一直不消失的問題。現在還不知道對方能否接收時顯示「正在連線…」，點它會重新連線；只有連上後一直沒有回報功能的舊版本才顯示「需要更新」；對方上次回報的功能在重新啟動後仍然保留。',
+            '修正隔空傳送中在線但還沒連上的電腦顯示「需要更新」、連不上時一直不消失的問題。現在還不知道對方能否接收時顯示「正在連線…」，按它會重新連線；只有連上後一直沒有回報功能的舊版本才顯示「需要更新」；對方上次回報的功能在重新啟動後仍然保留。')]},
 {'version': '2.5.3',
  'date': '2026-10-23',
  'changes': [('Real-time clipboard sharing can now be paused globally or for each paired computer. '

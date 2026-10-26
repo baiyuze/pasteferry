@@ -1,5 +1,27 @@
 # 更新记录 / Changelog
 
+## 2.5.4 — 2026-10-26
+
+Send Files no longer asks you to update a computer that is only still
+connecting, and the official service is now called Service.
+
+### Changes
+
+- The official service is now called Service in the app, on the website and in the guides.
+
+### Fixes
+
+- In Send Files, a paired computer that was online but not yet connected could show as needing an update, and kept doing so when no connection could be made. It now shows Connecting… until its capabilities are known (click it to reconnect), is treated as outdated only when it stays connected without announcing them, and its last known capabilities are kept across restarts.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional; update the computers where you
+  use Send Files. Pairings, history and settings are preserved.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and remains compatible with
+  earlier 2.5.x versions (devices now also announce their version, which
+  older versions ignore).
+
 ## 2.5.3 — 2026-10-23
 
 Control which computers share your clipboard, choose whether to catch up
