@@ -14,9 +14,12 @@ import '../widgets/send_dialog.dart' show revealLabel;
 
 /// 设置页里的「隔空传送」一组：接不接收、存到哪里、收到时通知。见 design/send-files.md 第 3 节。
 class SendSection extends StatefulWidget {
-  const SendSection({super.key, required this.config, required this.onUpdate});
+  const SendSection({super.key, required this.config, required this.onUpdate, this.titled = true});
 
   final Config config;
+
+  /// 单独占一页时不再重复标题
+  final bool titled;
   final Future<void> Function(Config next) onUpdate;
 
   @override
@@ -68,7 +71,7 @@ class _SendSectionState extends State<SendSection> {
     final custom = cfg.receiveDir.isNotEmpty;
     final p = context.palette;
     return GroupSection(
-      title: l.navSend,
+      title: widget.titled ? l.navSend : '',
       footnote: l.receiveFootnote(Wording.thisDeviceInText),
       child: GroupBox(
         children: [

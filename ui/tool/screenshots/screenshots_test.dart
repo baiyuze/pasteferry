@@ -705,7 +705,8 @@ void main() {
   }
 
   testWidgets('official-settings-dark', (tester) async {
-    await _shoot(tester, 'official-settings-dark', state: officialDemo(),
+    // 服务器设置在「连接」这一类里
+    await _shoot(tester, 'official-settings-dark', state: officialDemo()..requestPage('settings:connection'),
         section: Section.settings, brightness: Brightness.dark);
   });
 
@@ -716,15 +717,17 @@ void main() {
 
   // 网站「在局域网里部署服务器」：服务器地址填局域网 IP，已连接
   testWidgets('settings-lan-dark', (tester) async {
+    // 服务器设置在「连接」这一类里
     await _shoot(tester, 'settings-lan-dark',
-        state: _demo(server: 'ws://192.168.1.20:8787/signal'),
+        state: _demo(server: 'ws://192.168.1.20:8787/signal')..requestPage('settings:connection'),
         section: Section.settings, brightness: Brightness.dark);
   });
 
   // 网站「部署到公网服务器」：服务器地址填公网 IP（文档专用的示例地址段）
   testWidgets('settings-cloud-dark', (tester) async {
+    // 服务器设置在「连接」这一类里
     await _shoot(tester, 'settings-cloud-dark',
-        state: _demo(server: 'ws://203.0.113.10:8787/signal'),
+        state: _demo(server: 'ws://203.0.113.10:8787/signal')..requestPage('settings:connection'),
         section: Section.settings, brightness: Brightness.dark);
   });
 

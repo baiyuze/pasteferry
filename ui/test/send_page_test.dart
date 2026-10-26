@@ -145,6 +145,8 @@ void main() {
         final l = AppLocalizations.of(tester.element(find.byType(Shell)));
         await tester.tap(find.text(l.navSettings).first);
         await tester.pump();
+        await tester.tap(find.text(l.navSend).last);
+        await tester.pump();
         await tester.dragUntilVisible(find.text(l.receiveNotify), find.byType(ListView), const Offset(0, -100));
         expect(find.text(l.receiveFiles), findsOneWidget);
         expect(find.text(l.sendLayout), findsOneWidget);

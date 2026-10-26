@@ -603,5 +603,13 @@
   "receiveFromEveryoneDesc": "同じネットワークの誰でも 10 分間送れます。毎回あなたが受け入れます。",
   "everyoneEnded": "「すべての人」が終了し、「連絡先のみ」に戻りました。",
   "friendsCountTooltip": "連絡先",
-  "waitingAccept": "承認待ち"
+  "waitingAccept": "承認待ち",
+  "settingsConnection": "接続",
+  "settingsGeneralSummary": "ログイン時の起動、デバイス名、言語",
+  "settingsConnectionSummary": "サービス、自前のサーバー、ローカルネットワーク",
+  "settingsSyncSummary": "リアルタイム同期、自動同期の上限、同期する内容",
+  "settingsQuickPasteSummary": "ショートカット、選んだ後の動作",
+  "settingsSendSummary": "ファイルの受信、保存先",
+  "settingsStorageSummary": "履歴の保存期間と使用量",
+  "settingsAboutSummary": "バージョン、アップデート、フィードバック"
 }

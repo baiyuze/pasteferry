@@ -58,6 +58,11 @@ abstract final class AppIcons {
   static IconData get chevronUpDown =>
       _pick(CupertinoIcons.chevron_up_chevron_down, FluentIcons.chevron_up_down_24_regular);
   static IconData get link => _pick(CupertinoIcons.link, FluentIcons.link_24_regular);
+  // 设置首页各类别
+  static IconData get globe => _pick(CupertinoIcons.globe, FluentIcons.globe_24_regular);
+  static IconData get sync => _pick(CupertinoIcons.arrow_2_circlepath, FluentIcons.arrow_sync_24_regular);
+  static IconData get archive => _pick(CupertinoIcons.archivebox, FluentIcons.archive_24_regular);
+  static IconData get info => _pick(CupertinoIcons.info_circle, FluentIcons.info_24_regular);
   static IconData get star => _pick(CupertinoIcons.star, FluentIcons.star_24_regular);
   static IconData get starFill => _pick(CupertinoIcons.star_fill, FluentIcons.star_24_filled);
   static IconData get keyboard => _pick(CupertinoIcons.keyboard, FluentIcons.keyboard_24_regular);

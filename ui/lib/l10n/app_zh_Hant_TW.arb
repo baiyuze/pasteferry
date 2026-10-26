@@ -603,5 +603,13 @@
   "receiveFromEveryoneDesc": "同一區域網路裡的人都能傳，每次由你接受；10 分鐘後改回「僅限好友」。",
   "everyoneEnded": "「所有人」已結束，改回「僅限好友」。",
   "friendsCountTooltip": "好友",
-  "waitingAccept": "等待接受"
+  "waitingAccept": "等待接受",
+  "settingsConnection": "連線",
+  "settingsGeneralSummary": "開機啟動、裝置名稱、語言",
+  "settingsConnectionSummary": "服務、自架伺服器、區域網路",
+  "settingsSyncSummary": "即時同步、自動同步上限、同步哪些內容",
+  "settingsQuickPasteSummary": "快速鍵、選取後的動作",
+  "settingsSendSummary": "接收檔案、儲存位置",
+  "settingsStorageSummary": "記錄保留多久、佔用空間",
+  "settingsAboutSummary": "版本、更新、回報"
 }

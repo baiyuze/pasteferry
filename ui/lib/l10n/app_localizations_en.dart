@@ -2282,4 +2282,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get waitingAccept => 'Waiting…';
+
+  @override
+  String get settingsConnection => 'Connection';
+
+  @override
+  String get settingsGeneralSummary => 'Launch at login, device name, language';
+
+  @override
+  String get settingsConnectionSummary =>
+      'Service, your own server, local network';
+
+  @override
+  String get settingsSyncSummary => 'Real-time sync, size limit, what to sync';
+
+  @override
+  String get settingsQuickPasteSummary =>
+      'Shortcut and what happens after you pick';
+
+  @override
+  String get settingsSendSummary => 'Receiving files, save location';
+
+  @override
+  String get settingsStorageSummary => 'How long history is kept, space used';
+
+  @override
+  String get settingsAboutSummary => 'Version, updates, feedback';
 }

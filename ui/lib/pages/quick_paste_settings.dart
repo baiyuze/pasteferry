@@ -15,9 +15,12 @@ import '../widgets/common.dart';
 /// 设置页的「快捷粘贴」一节：开关、快捷键、选中后直接粘贴还是只复制，以及各平台要用户处理的事
 /// （Mac 的辅助功能权限、Linux Wayland 的系统快捷键）。见 design/quick-paste-and-favorites.md 第 9 节。
 class QuickPasteSection extends StatelessWidget {
-  const QuickPasteSection({super.key, required this.config, required this.onUpdate});
+  const QuickPasteSection({super.key, required this.config, required this.onUpdate, this.titled = true});
 
   final Config config;
+
+  /// 单独占一页时不再重复标题
+  final bool titled;
   final Future<void> Function(Config next) onUpdate;
 
   @override
@@ -34,7 +37,7 @@ class QuickPasteSection extends StatelessWidget {
     final systemShortcut = qp?.hotkeySource == 'system_shortcut';
 
     return GroupSection(
-      title: l.quickPaste,
+      title: titled ? l.quickPaste : '',
       child: GroupBox(
         children: [
           SettingRow(

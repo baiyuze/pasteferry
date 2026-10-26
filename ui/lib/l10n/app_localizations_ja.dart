@@ -2114,4 +2114,28 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get waitingAccept => '承認待ち';
+
+  @override
+  String get settingsConnection => '接続';
+
+  @override
+  String get settingsGeneralSummary => 'ログイン時の起動、デバイス名、言語';
+
+  @override
+  String get settingsConnectionSummary => 'サービス、自前のサーバー、ローカルネットワーク';
+
+  @override
+  String get settingsSyncSummary => 'リアルタイム同期、自動同期の上限、同期する内容';
+
+  @override
+  String get settingsQuickPasteSummary => 'ショートカット、選んだ後の動作';
+
+  @override
+  String get settingsSendSummary => 'ファイルの受信、保存先';
+
+  @override
+  String get settingsStorageSummary => '履歴の保存期間と使用量';
+
+  @override
+  String get settingsAboutSummary => 'バージョン、アップデート、フィードバック';
 }

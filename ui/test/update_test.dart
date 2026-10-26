@@ -178,6 +178,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('设置').first);
     await tester.pumpAndSettle();
+    await tester.tap(find.text('关于'));
+    await tester.pumpAndSettle();
     final page = find.byType(SettingsPage);
     await tester.scrollUntilVisible(find.text('自动检查更新'), 200,
         scrollable: find.descendant(of: page, matching: find.byType(Scrollable)).first);

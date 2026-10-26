@@ -188,13 +188,25 @@ void main() {
         expect(find.text(l.pairedDevices), findsOneWidget);
         await tester.tap(find.text(l.navSettings).first);
         await tester.pump();
-        await tester.dragUntilVisible(find.text(l.language), find.byType(ListView), const Offset(0, -100));
-        // 辅助功能授权只有 Mac 上有
-        if (Platform.isMacOS) {
-          await tester.dragUntilVisible(find.text(l.quickPasteAccessibility), find.byType(ListView), const Offset(0, -100));
+        // 设置首页列出各类，逐个点进去、拉到底，再回到首页
+        final pages = <String, String>{
+          l.general: l.language,
+          l.settingsConnection: l.lanDiscovery,
+          l.sync: l.syncImages,
+          // 辅助功能授权只有 Mac 上有
+          l.quickPaste: Platform.isMacOS ? l.quickPasteAccessibility : l.quickPasteWindow,
+          l.navSend: l.receiveNotify,
+          l.storage: l.favoritesUsage,
+          l.about: l.updateAuto,
+        };
+        for (final MapEntry(key: title, value: last) in pages.entries) {
+          await tester.dragUntilVisible(find.text(title).last, find.byType(ListView).last, const Offset(0, -100));
+          await tester.tap(find.text(title).last);
+          await tester.pump();
+          await tester.dragUntilVisible(find.text(last), find.byType(ListView).last, const Offset(0, -100));
+          await tester.tap(find.text(l.navSettings).last);
+          await tester.pump();
         }
-        await tester.dragUntilVisible(find.text(l.favoritesUsage), find.byType(ListView), const Offset(0, -100));
-        await tester.dragUntilVisible(find.text(l.about), find.byType(ListView), const Offset(0, -200));
       });
 
       testWidgets('配对对话框', (tester) async {

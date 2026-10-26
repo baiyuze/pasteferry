@@ -2089,6 +2089,30 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get waitingAccept => '等待接受';
+
+  @override
+  String get settingsConnection => '连接';
+
+  @override
+  String get settingsGeneralSummary => '开机启动、设备名称、语言';
+
+  @override
+  String get settingsConnectionSummary => '服务、自建服务器、局域网';
+
+  @override
+  String get settingsSyncSummary => '实时同步、自动同步上限、同步哪些内容';
+
+  @override
+  String get settingsQuickPasteSummary => '快捷键、选中后的操作';
+
+  @override
+  String get settingsSendSummary => '接收文件、保存位置';
+
+  @override
+  String get settingsStorageSummary => '记录保留多久、占用空间';
+
+  @override
+  String get settingsAboutSummary => '版本、更新、反馈';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -4176,6 +4200,30 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get waitingAccept => '等待接受';
+
+  @override
+  String get settingsConnection => '連接';
+
+  @override
+  String get settingsGeneralSummary => '開機啟動、裝置名稱、語言';
+
+  @override
+  String get settingsConnectionSummary => '服務、自建伺服器、區域網絡';
+
+  @override
+  String get settingsSyncSummary => '即時同步、自動同步上限、同步哪些內容';
+
+  @override
+  String get settingsQuickPasteSummary => '快速鍵、選取後的動作';
+
+  @override
+  String get settingsSendSummary => '接收檔案、儲存位置';
+
+  @override
+  String get settingsStorageSummary => '記錄保留多久、佔用空間';
+
+  @override
+  String get settingsAboutSummary => '版本、更新、回報';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -6263,4 +6311,28 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get waitingAccept => '等待接受';
+
+  @override
+  String get settingsConnection => '連線';
+
+  @override
+  String get settingsGeneralSummary => '開機啟動、裝置名稱、語言';
+
+  @override
+  String get settingsConnectionSummary => '服務、自架伺服器、區域網路';
+
+  @override
+  String get settingsSyncSummary => '即時同步、自動同步上限、同步哪些內容';
+
+  @override
+  String get settingsQuickPasteSummary => '快速鍵、選取後的動作';
+
+  @override
+  String get settingsSendSummary => '接收檔案、儲存位置';
+
+  @override
+  String get settingsStorageSummary => '記錄保留多久、佔用空間';
+
+  @override
+  String get settingsAboutSummary => '版本、更新、回報';
 }

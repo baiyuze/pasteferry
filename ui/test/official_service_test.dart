@@ -86,6 +86,8 @@ void main() {
       await tester.pumpWidget(PasteFerryApp(state: state));
       await tester.tap(find.text('设置').first);
       await tester.pumpAndSettle();
+      await tester.tap(find.text('连接'));
+      await tester.pumpAndSettle();
       final input = find.byType(TextField).first;
       await tester.enterText(input, 'wss://my.example/signal');
       expect(state.saves, 0);

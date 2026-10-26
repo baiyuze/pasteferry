@@ -12,17 +12,24 @@ class PageHeader extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.actions = const [],
+    this.backLabel,
+    this.onBack,
   });
 
   final String title;
   final String? subtitle;
   final List<Widget> actions;
 
+  /// 二级页：标题上方的「‹ 上一级」
+  final String? backLabel;
+  final VoidCallback? onBack;
+
   @override
   Widget build(BuildContext context) {
+    final back = onBack != null;
     return Padding(
-      // 顶部留出 macOS 红绿灯所在的标题栏高度
-      padding: const EdgeInsets.fromLTRB(Insets.xl, 44, Insets.xl, Insets.lg),
+      // 顶部留出 macOS 红绿灯所在的标题栏高度；二级页的返回链接占掉其中一部分
+      padding: EdgeInsets.fromLTRB(Insets.xl, back ? 18 : 44, Insets.xl, Insets.lg),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -30,6 +37,7 @@ class PageHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (back) _BackLink(label: backLabel ?? '', onTap: onBack!),
                 Text(title, style: context.text.headlineSmall),
                 if (subtitle != null) ...[
                   const SizedBox(height: 2),
@@ -40,6 +48,39 @@ class PageHeader extends StatelessWidget {
           ),
           for (final a in actions) ...[const SizedBox(width: Insets.sm), a],
         ],
+      ),
+    );
+  }
+}
+
+class _BackLink extends StatelessWidget {
+  const _BackLink({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = context.palette.accent;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: SizedBox(
+            height: 22,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(AppIcons.chevronLeft, size: 13, color: color),
+                const SizedBox(width: 2),
+                Text(label, style: context.text.bodyMedium?.copyWith(color: color)),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -90,10 +131,11 @@ class GroupSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 2, bottom: Insets.sm),
-            child: Text(title, style: context.text.titleSmall),
-          ),
+          if (title.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 2, bottom: Insets.sm),
+              child: Text(title, style: context.text.titleSmall),
+            ),
           child,
           if (footnote != null)
             Padding(

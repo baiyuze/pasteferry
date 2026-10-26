@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../app_state.dart';
 import '../application_lifecycle.dart';
@@ -35,6 +36,11 @@ class _SettingsPageState extends State<SettingsPage> {
   String? _lastLoadedServer;
   String? _lastLoadedName;
 
+  /// 打开的类别；为空时显示类别列表
+  _Category? _category;
+
+  void _open(_Category c) => setState(() => _category = c);
+
   @override
   void dispose() {
     _serverController.dispose();
@@ -67,6 +73,9 @@ class _SettingsPageState extends State<SettingsPage> {
       return const Center(child: CircularProgressIndicator(strokeWidth: 2.5));
     }
     _syncControllers(cfg);
+    // 好友连不上时点「打开服务…」等：直接进到某一类
+    final requested = _Category.byName(state.takeSettingsCategory());
+    if (requested != null) _category = requested;
 
     final p = context.palette;
     final l = context.l10n;
@@ -82,442 +91,428 @@ class _SettingsPageState extends State<SettingsPage> {
       (true, false) => (p.danger, l.notConnected, l.disconnectedDesc),
     };
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        PageHeader(title: l.navSettings),
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(
-              Insets.xl,
-              0,
-              Insets.xl,
-              Insets.xxl,
-            ),
+    final groups = <_Category, List<Widget>>{
+      _Category.general: [
+        GroupSection(
+          title: '',
+          child: GroupBox(
             children: [
-              GroupSection(
-                title: l.general,
-                child: GroupBox(
-                  children: [
-                    SettingRow(
-                      title: l.launchAtLogin,
-                      description: l.launchAtLoginDesc,
-                      child: SmallSwitch(
-                        value: cfg.launchAtLogin,
-                        onChanged: _startupSaving || !state.service.available
-                            ? null
-                            : (v) async {
-                                setState(() => _startupSaving = true);
-                                try {
-                                  await state.setLaunchAtLogin(v);
-                                } catch (e) {
-                                  if (context.mounted) {
-                                    showToast(
-                                      context,
-                                      AppState.describeError(e),
-                                      error: true,
-                                    );
-                                  }
-                                } finally {
-                                  if (mounted) {
-                                    setState(() => _startupSaving = false);
-                                  }
-                                }
-                              },
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.quitApp,
-                      description: l.quitAppDesc,
-                      child: OutlinedButton(
-                        onPressed: () => requestApplicationQuit(context, state),
-                        child: Text(l.quitApp),
-                      ),
-                    ),
-                  ],
+              SettingRow(
+                title: l.launchAtLogin,
+                description: l.launchAtLoginDesc,
+                child: SmallSwitch(
+                  value: cfg.launchAtLogin,
+                  onChanged: _startupSaving || !state.service.available
+                      ? null
+                      : (v) async {
+                          setState(() => _startupSaving = true);
+                          try {
+                            await state.setLaunchAtLogin(v);
+                          } catch (e) {
+                            if (context.mounted) {
+                              showToast(
+                                context,
+                                AppState.describeError(e),
+                                error: true,
+                              );
+                            }
+                          } finally {
+                            if (mounted) {
+                              setState(() => _startupSaving = false);
+                            }
+                          }
+                        },
                 ),
               ),
-              GroupSection(
-                title: l.server,
-                child: GroupBox(
-                  children: [
-                    SettingRow(
-                      title: l.useOfficialService,
-                      description: l.officialServiceDesc,
-                      child: SmallSwitch(
-                        value: state.officialEnabled,
-                        onChanged: _serverSaving
-                            ? null
-                            : (v) => _setOfficial(state, cfg, v),
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.customServer,
-                      description: l.signalingUrlDesc,
-                      child: SizedBox(
-                        width: 360,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _serverController,
-                                style: context.text.bodyMedium?.copyWith(
-                                  fontFamily: monoFamily,
-                                  fontSize: 12,
-                                ),
-                                decoration: InputDecoration(
-                                  hintText: l.signalingUrlPlaceholder,
-                                ),
-                                onChanged: (_) =>
-                                    setState(() => _serverDirty = true),
-                                onSubmitted: (_) => _saveServer(state, cfg),
+              SettingRow(
+                title: l.quitApp,
+                description: l.quitAppDesc,
+                child: OutlinedButton(
+                  onPressed: () => requestApplicationQuit(context, state),
+                  child: Text(l.quitApp),
+                ),
+              ),
+            ],
+          ),
+        ),
+        GroupSection(
+          title: Wording.thisDevice,
+          child: GroupBox(
+            children: [
+              SettingRow(
+                title: l.deviceName,
+                child: SizedBox(
+                  width: 220,
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      suffixIcon: _nameDirty
+                          ? IconButton(
+                              tooltip: l.save,
+                              icon: Icon(
+                                AppIcons.checkmark,
+                                size: 14,
+                                color: p.accent,
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            FilledButton(
-                              onPressed: _serverSaving
-                                  ? null
-                                  : () => _saveServer(state, cfg),
-                              child: Text(l.saveAndConnect),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.publicStun,
-                      description: l.publicStunDesc,
-                      child: SmallSwitch(
-                        value: !cfg.onlyOwnStun,
-                        onChanged: (v) => _update(state, cfg..onlyOwnStun = !v),
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.connectionStatus,
-                      description: statusDesc,
-                      child: StatusDot(color: statusColor, label: statusLabel),
-                    ),
-                  ],
-                ),
-              ),
-              GroupSection(
-                title: l.localNetwork,
-                child: GroupBox(
-                  children: [
-                    SettingRow(
-                      title: l.lanDiscovery,
-                      description: l.lanDiscoveryDesc,
-                      child: SmallSwitch(
-                        value: !cfg.lanDisabled,
-                        onChanged: (v) => _update(state, cfg..lanDisabled = !v),
-                      ),
-                    ),
-                    if (Platform.isMacOS)
-                      SettingRow(
-                        title: l.macLocalNetwork,
-                        description: l.macLocalNetworkDesc,
-                        child: OutlinedButton(
-                          onPressed: () => _allowLocalNetwork(state, null),
-                          child: Text(l.openSystemSettings),
-                        ),
-                      ),
-                    if (Platform.isWindows)
-                      SettingRow(
-                        title: l.allowLan,
-                        description: l.allowLanDesc,
-                        child: OutlinedButton(
-                          onPressed: () =>
-                              _allowLocalNetwork(state, l.allowLanDone),
-                          child: Text(l.allow),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              GroupSection(
-                title: Wording.thisDevice,
-                child: GroupBox(
-                  children: [
-                    SettingRow(
-                      title: l.deviceName,
-                      child: SizedBox(
-                        width: 220,
-                        child: TextField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            suffixIcon: _nameDirty
-                                ? IconButton(
-                                    tooltip: l.save,
-                                    icon: Icon(
-                                      AppIcons.checkmark,
-                                      size: 14,
-                                      color: p.accent,
-                                    ),
-                                    onPressed: () => _saveName(state, cfg),
-                                  )
-                                : null,
-                          ),
-                          onChanged: (_) => setState(() => _nameDirty = true),
-                          onSubmitted: (_) => _saveName(state, cfg),
-                        ),
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.language,
-                      child: _Dropdown<String>(
-                        value: cfg.language,
-                        // 语言名用各自的写法，选错了语言的人也认得出自己的
-                        items: [
-                          MapEntry('', l.languageSystem),
-                          const MapEntry('zh-Hans', '简体中文'),
-                          const MapEntry('zh-Hant-TW', '繁體中文（台灣）'),
-                          const MapEntry('zh-Hant-HK', '繁體中文（香港）'),
-                          const MapEntry('en', 'English'),
-                          const MapEntry('ja', '日本語'),
-                        ],
-                        onChanged: (v) => _update(state, cfg..language = v),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              QuickPasteSection(
-                config: cfg,
-                onUpdate: (next) => _update(state, next),
-              ),
-              GroupSection(
-                title: l.sync,
-                child: GroupBox(
-                  children: [
-                    SettingRow(
-                      title: l.realtimeSync,
-                      description: l.realtimeSyncDesc,
-                      child: SmallSwitch(
-                        value: !cfg.realtimeSyncDisabled,
-                        onChanged: (v) => _update(
-                          state,
-                          cfg.deepCopy()..realtimeSyncDisabled = !v,
-                        ),
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.syncBacklog,
-                      description: l.syncBacklogDesc,
-                      child: SmallSwitch(
-                        value: cfg.syncBacklog,
-                        onChanged: (v) =>
-                            _update(state, cfg.deepCopy()..syncBacklog = v),
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.autoSyncLimit,
-                      description: l.autoSyncLimitDesc,
-                      child: _ThresholdSelector(
-                        value: cfg.autoSyncThresholdBytes.toInt(),
-                        onChanged: (v) => _update(
-                          state,
-                          cfg..autoSyncThresholdBytes = Int64(v),
-                        ),
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.largeFileNotifications,
-                      description:
-                          switch (state.notificationStatus?.permission) {
-                            'allowed' => l.notificationsAllowed,
-                            'not_requested' => l.notificationsNotRequested,
-                            'denied' => l.notificationsDenied,
-                            'unknown' => l.notificationsUnknown,
-                            _ => l.notificationsUnavailable,
-                          },
-                      child:
-                          state.notificationStatus?.supported == true &&
-                              !(Platform.isLinux &&
-                                  state.notificationStatus?.permission ==
-                                      'unknown')
-                          ? TextButton(
-                              onPressed: () async {
-                                try {
-                                  await state.requestNotifications();
-                                } catch (e) {
-                                  if (context.mounted) {
-                                    showToast(
-                                      context,
-                                      AppState.describeError(e),
-                                      error: true,
-                                    );
-                                  }
-                                }
-                              },
-                              child: Text(
-                                state.notificationStatus?.permission ==
-                                        'not_requested'
-                                    ? l.enableNotifications
-                                    : l.notificationSettings,
-                              ),
+                              onPressed: () => _saveName(state, cfg),
                             )
-                          : TextButton(
-                              onPressed: state.refreshNotificationStatus,
-                              child: Text(l.retry),
-                            ),
+                          : null,
                     ),
-                    SettingRow(
-                      title: l.autoApply,
-                      child: SmallSwitch(
-                        value: cfg.autoApplyToClipboard,
-                        onChanged: (v) =>
-                            _update(state, cfg..autoApplyToClipboard = v),
-                      ),
-                    ),
-                  ],
+                    onChanged: (_) => setState(() => _nameDirty = true),
+                    onSubmitted: (_) => _saveName(state, cfg),
+                  ),
                 ),
               ),
-              SendSection(
-                config: cfg,
-                onUpdate: (next) => _update(state, next),
-              ),
-              GroupSection(
-                title: l.whatToSync,
-                child: GroupBox(
-                  children: [
-                    _ToggleRow(
-                      title: l.syncFiles,
-                      value: cfg.syncFile,
-                      onChanged: (v) => _update(state, cfg..syncFile = v),
-                    ),
-                    _ToggleRow(
-                      title: l.syncText,
-                      value: cfg.syncText,
-                      onChanged: (v) => _update(state, cfg..syncText = v),
-                    ),
-                    _ToggleRow(
-                      title: l.syncRich,
-                      value: cfg.syncHtml,
-                      onChanged: (v) => _update(state, cfg..syncHtml = v),
-                    ),
-                    _ToggleRow(
-                      title: l.syncImages,
-                      value: cfg.syncImage,
-                      onChanged: (v) => _update(state, cfg..syncImage = v),
-                    ),
+              SettingRow(
+                title: l.language,
+                child: _Dropdown<String>(
+                  value: cfg.language,
+                  // 语言名用各自的写法，选错了语言的人也认得出自己的
+                  items: [
+                    MapEntry('', l.languageSystem),
+                    const MapEntry('zh-Hans', '简体中文'),
+                    const MapEntry('zh-Hant-TW', '繁體中文（台灣）'),
+                    const MapEntry('zh-Hant-HK', '繁體中文（香港）'),
+                    const MapEntry('en', 'English'),
+                    const MapEntry('ja', '日本語'),
                   ],
+                  onChanged: (v) => _update(state, cfg..language = v),
                 ),
               ),
-              GroupSection(
-                title: l.storage,
-                footnote: l.storageFootnote,
-                child: GroupBox(
-                  children: [
-                    SettingRow(
-                      title: l.keepHistory,
-                      child: _DurationSelector(
-                        seconds: cfg.historyTtlSeconds.toInt(),
-                        onChanged: (v) =>
-                            _update(state, cfg..historyTtlSeconds = Int64(v)),
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.keepCache,
-                      description: l.keepCacheDesc,
-                      child: _DurationSelector(
-                        seconds: cfg.cacheTtlSeconds.toInt(),
-                        onChanged: (v) =>
-                            _update(state, cfg..cacheTtlSeconds = Int64(v)),
-                      ),
-                    ),
-                    SettingRow(
-                      title: l.cacheUsage,
-                      child: Text(
-                        humanBytes(state.status?.cacheBytesUsed.toInt() ?? 0),
-                        style: context.text.bodyMedium?.copyWith(
-                          color: p.textDim,
-                        ),
-                      ),
-                    ),
-                    // 硬链接、写时复制保存的副本实际占用更少，所以写「最多」
-                    SettingRow(
-                      title: l.favoritesUsage,
-                      description: l.favoritesUsageDesc,
-                      child: Text(
-                        l.upToSize(humanBytes(state.favoritesBytes)),
-                        style: context.text.bodyMedium?.copyWith(
-                          color: p.textDim,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (state.service.available)
-                GroupSection(
-                  title: l.backgroundSync,
-                  child: GroupBox(
+            ],
+          ),
+        ),
+        if (state.service.available)
+          GroupSection(
+            title: l.backgroundSync,
+            child: GroupBox(
+              children: [
+                SettingRow(
+                  title: l.backgroundService,
+                  description: l.backgroundServiceDesc,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      SettingRow(
-                        title: l.backgroundService,
-                        description: l.backgroundServiceDesc,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            OutlinedButton(
-                              onPressed: () => _serviceAction(
-                                state.restartService,
-                                l.restarted,
-                              ),
-                              child: Text(l.restart),
-                            ),
-                            const SizedBox(width: Insets.sm),
-                            OutlinedButton(
-                              onPressed: () => _confirmDisable(state),
-                              child: Text(l.disableEllipsis),
-                            ),
-                          ],
-                        ),
+                      OutlinedButton(
+                        onPressed: () =>
+                            _serviceAction(state.restartService, l.restarted),
+                        child: Text(l.restart),
+                      ),
+                      const SizedBox(width: Insets.sm),
+                      OutlinedButton(
+                        onPressed: () => _confirmDisable(state),
+                        child: Text(l.disableEllipsis),
                       ),
                     ],
                   ),
                 ),
-              GroupSection(
-                title: l.about,
-                child: GroupBox(
+              ],
+            ),
+          ),
+      ],
+      _Category.connection: [
+        GroupSection(
+          title: l.server,
+          child: GroupBox(
+            children: [
+              SettingRow(
+                title: l.useOfficialService,
+                description: l.officialServiceDesc,
+                child: SmallSwitch(
+                  value: state.officialEnabled,
+                  onChanged: _serverSaving
+                      ? null
+                      : (v) => _setOfficial(state, cfg, v),
+                ),
+              ),
+              SettingRow(
+                title: l.customServer,
+                description: l.signalingUrlDesc,
+                child: SizedBox(
+                  width: 360,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _serverController,
+                          style: context.text.bodyMedium?.copyWith(
+                            fontFamily: monoFamily,
+                            fontSize: 12,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: l.signalingUrlPlaceholder,
+                          ),
+                          onChanged: (_) => setState(() => _serverDirty = true),
+                          onSubmitted: (_) => _saveServer(state, cfg),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      FilledButton(
+                        onPressed: _serverSaving
+                            ? null
+                            : () => _saveServer(state, cfg),
+                        child: Text(l.saveAndConnect),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SettingRow(
+                title: l.publicStun,
+                description: l.publicStunDesc,
+                child: SmallSwitch(
+                  value: !cfg.onlyOwnStun,
+                  onChanged: (v) => _update(state, cfg..onlyOwnStun = !v),
+                ),
+              ),
+              SettingRow(
+                title: l.connectionStatus,
+                description: statusDesc,
+                child: StatusDot(color: statusColor, label: statusLabel),
+              ),
+            ],
+          ),
+        ),
+        GroupSection(
+          title: l.localNetwork,
+          child: GroupBox(
+            children: [
+              SettingRow(
+                title: l.lanDiscovery,
+                description: l.lanDiscoveryDesc,
+                child: SmallSwitch(
+                  value: !cfg.lanDisabled,
+                  onChanged: (v) => _update(state, cfg..lanDisabled = !v),
+                ),
+              ),
+              if (Platform.isMacOS)
+                SettingRow(
+                  title: l.macLocalNetwork,
+                  description: l.macLocalNetworkDesc,
+                  child: OutlinedButton(
+                    onPressed: () => _allowLocalNetwork(state, null),
+                    child: Text(l.openSystemSettings),
+                  ),
+                ),
+              if (Platform.isWindows)
+                SettingRow(
+                  title: l.allowLan,
+                  description: l.allowLanDesc,
+                  child: OutlinedButton(
+                    onPressed: () => _allowLocalNetwork(state, l.allowLanDone),
+                    child: Text(l.allow),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+      _Category.sync: [
+        GroupSection(
+          title: l.sync,
+          child: GroupBox(
+            children: [
+              SettingRow(
+                title: l.realtimeSync,
+                description: l.realtimeSyncDesc,
+                child: SmallSwitch(
+                  value: !cfg.realtimeSyncDisabled,
+                  onChanged: (v) =>
+                      _update(state, cfg.deepCopy()..realtimeSyncDisabled = !v),
+                ),
+              ),
+              SettingRow(
+                title: l.syncBacklog,
+                description: l.syncBacklogDesc,
+                child: SmallSwitch(
+                  value: cfg.syncBacklog,
+                  onChanged: (v) =>
+                      _update(state, cfg.deepCopy()..syncBacklog = v),
+                ),
+              ),
+              SettingRow(
+                title: l.autoSyncLimit,
+                description: l.autoSyncLimitDesc,
+                child: _ThresholdSelector(
+                  value: cfg.autoSyncThresholdBytes.toInt(),
+                  onChanged: (v) =>
+                      _update(state, cfg..autoSyncThresholdBytes = Int64(v)),
+                ),
+              ),
+              SettingRow(
+                title: l.largeFileNotifications,
+                description: switch (state.notificationStatus?.permission) {
+                  'allowed' => l.notificationsAllowed,
+                  'not_requested' => l.notificationsNotRequested,
+                  'denied' => l.notificationsDenied,
+                  'unknown' => l.notificationsUnknown,
+                  _ => l.notificationsUnavailable,
+                },
+                child:
+                    state.notificationStatus?.supported == true &&
+                        !(Platform.isLinux &&
+                            state.notificationStatus?.permission == 'unknown')
+                    ? TextButton(
+                        onPressed: () async {
+                          try {
+                            await state.requestNotifications();
+                          } catch (e) {
+                            if (context.mounted) {
+                              showToast(
+                                context,
+                                AppState.describeError(e),
+                                error: true,
+                              );
+                            }
+                          }
+                        },
+                        child: Text(
+                          state.notificationStatus?.permission ==
+                                  'not_requested'
+                              ? l.enableNotifications
+                              : l.notificationSettings,
+                        ),
+                      )
+                    : TextButton(
+                        onPressed: state.refreshNotificationStatus,
+                        child: Text(l.retry),
+                      ),
+              ),
+              SettingRow(
+                title: l.autoApply,
+                child: SmallSwitch(
+                  value: cfg.autoApplyToClipboard,
+                  onChanged: (v) =>
+                      _update(state, cfg..autoApplyToClipboard = v),
+                ),
+              ),
+            ],
+          ),
+        ),
+        GroupSection(
+          title: l.whatToSync,
+          child: GroupBox(
+            children: [
+              _ToggleRow(
+                title: l.syncFiles,
+                value: cfg.syncFile,
+                onChanged: (v) => _update(state, cfg..syncFile = v),
+              ),
+              _ToggleRow(
+                title: l.syncText,
+                value: cfg.syncText,
+                onChanged: (v) => _update(state, cfg..syncText = v),
+              ),
+              _ToggleRow(
+                title: l.syncRich,
+                value: cfg.syncHtml,
+                onChanged: (v) => _update(state, cfg..syncHtml = v),
+              ),
+              _ToggleRow(
+                title: l.syncImages,
+                value: cfg.syncImage,
+                onChanged: (v) => _update(state, cfg..syncImage = v),
+              ),
+            ],
+          ),
+        ),
+      ],
+      _Category.quickPaste: [
+        QuickPasteSection(
+          config: cfg,
+          onUpdate: (next) => _update(state, next),
+          titled: false,
+        ),
+      ],
+      _Category.send: [
+        SendSection(
+          config: cfg,
+          onUpdate: (next) => _update(state, next),
+          titled: false,
+        ),
+      ],
+      _Category.storage: [
+        GroupSection(
+          title: '',
+          footnote: l.storageFootnote,
+          child: GroupBox(
+            children: [
+              SettingRow(
+                title: l.keepHistory,
+                child: _DurationSelector(
+                  seconds: cfg.historyTtlSeconds.toInt(),
+                  onChanged: (v) =>
+                      _update(state, cfg..historyTtlSeconds = Int64(v)),
+                ),
+              ),
+              SettingRow(
+                title: l.keepCache,
+                description: l.keepCacheDesc,
+                child: _DurationSelector(
+                  seconds: cfg.cacheTtlSeconds.toInt(),
+                  onChanged: (v) =>
+                      _update(state, cfg..cacheTtlSeconds = Int64(v)),
+                ),
+              ),
+              SettingRow(
+                title: l.cacheUsage,
+                child: Text(
+                  humanBytes(state.status?.cacheBytesUsed.toInt() ?? 0),
+                  style: context.text.bodyMedium?.copyWith(color: p.textDim),
+                ),
+              ),
+              // 硬链接、写时复制保存的副本实际占用更少，所以写「最多」
+              SettingRow(
+                title: l.favoritesUsage,
+                description: l.favoritesUsageDesc,
+                child: Text(
+                  l.upToSize(humanBytes(state.favoritesBytes)),
+                  style: context.text.bodyMedium?.copyWith(color: p.textDim),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+      _Category.about: [
+        GroupSection(
+          title: '',
+          child: GroupBox(
+            children: [
+              SettingRow(
+                title: '${l.appName} ${state.status?.version ?? ''}',
+                description: appBuild.isEmpty
+                    ? l.aboutDesc
+                    : '${l.aboutDesc}\n${l.buildDetails(appVersion, state.status?.version ?? '…', appBuild)}',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    SettingRow(
-                      title: '${l.appName} ${state.status?.version ?? ''}',
-                      description: appBuild.isEmpty
-                          ? l.aboutDesc
-                          : '${l.aboutDesc}\n${l.buildDetails(appVersion, state.status?.version ?? '…', appBuild)}',
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextButton(
-                            onPressed: () => _open('https://pasteferry.cc/'),
-                            child: Text(l.homepage),
-                          ),
-                          TextButton(
-                            onPressed: () => showFeedbackDialog(context),
-                            child: Text(l.feedback),
-                          ),
-                        ],
-                      ),
+                    TextButton(
+                      onPressed: () => _openUrl('https://pasteferry.cc/'),
+                      child: Text(l.homepage),
                     ),
-                    SettingRow(
-                      title: l.updateAuto,
-                      description: l.updateAutoDesc,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextButton(
-                            onPressed: () => showUpdateDialog(context),
-                            child: Text(l.updateCheckEllipsis),
-                          ),
-                          const SizedBox(width: Insets.sm),
-                          SmallSwitch(
-                            value: !cfg.updateCheckDisabled,
-                            onChanged: (v) =>
-                                _update(state, cfg..updateCheckDisabled = !v),
-                          ),
-                        ],
-                      ),
+                    TextButton(
+                      onPressed: () => showFeedbackDialog(context),
+                      child: Text(l.feedback),
+                    ),
+                  ],
+                ),
+              ),
+              SettingRow(
+                title: l.updateAuto,
+                description: l.updateAutoDesc,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextButton(
+                      onPressed: () => showUpdateDialog(context),
+                      child: Text(l.updateCheckEllipsis),
+                    ),
+                    const SizedBox(width: Insets.sm),
+                    SmallSwitch(
+                      value: !cfg.updateCheckDisabled,
+                      onChanged: (v) =>
+                          _update(state, cfg..updateCheckDisabled = !v),
                     ),
                   ],
                 ),
@@ -526,10 +521,50 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ],
+    };
+
+    final category = _category;
+    if (category == null) {
+      return _CategoryList(
+        onOpen: _open,
+        connection: StatusDot(color: statusColor, label: statusLabel),
+        version: state.status?.version ?? '',
+      );
+    }
+    return CallbackShortcuts(
+      bindings: {
+        const SingleActivator(LogicalKeyboardKey.escape): () =>
+            setState(() => _category = null),
+      },
+      child: Focus(
+        autofocus: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            PageHeader(
+              title: category.title(l),
+              backLabel: l.navSettings,
+              onBack: () => setState(() => _category = null),
+            ),
+            Expanded(
+              child: ListView(
+                key: PageStorageKey(category),
+                padding: const EdgeInsets.fromLTRB(
+                  Insets.xl,
+                  0,
+                  Insets.xl,
+                  Insets.xxl,
+                ),
+                children: groups[category]!,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  static void _open(String url) => openUrl(url);
+  static void _openUrl(String url) => openUrl(url);
 
   Future<void> _serviceAction(
     Future<void> Function() action,
@@ -780,6 +815,174 @@ class _Dropdown<T> extends StatelessWidget {
             const SizedBox(width: 6),
             Icon(AppIcons.chevronUpDown, size: 12, color: p.textDim),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 设置的类别：首页列出来，点进去是各自的一页
+enum _Category {
+  general,
+  connection,
+  sync,
+  quickPaste,
+  send,
+  storage,
+  about;
+
+  static _Category? byName(String? name) =>
+      values.where((c) => c.name == name).firstOrNull;
+
+  String title(AppLocalizations l) => switch (this) {
+    general => l.general,
+    connection => l.settingsConnection,
+    sync => l.sync,
+    quickPaste => l.quickPaste,
+    send => l.navSend,
+    storage => l.storage,
+    about => l.about,
+  };
+
+  String summary(AppLocalizations l) => switch (this) {
+    general => l.settingsGeneralSummary,
+    connection => l.settingsConnectionSummary,
+    sync => l.settingsSyncSummary,
+    quickPaste => l.settingsQuickPasteSummary,
+    send => l.settingsSendSummary,
+    storage => l.settingsStorageSummary,
+    about => l.settingsAboutSummary,
+  };
+
+  IconData get icon => switch (this) {
+    general => AppIcons.gear,
+    connection => AppIcons.globe,
+    sync => AppIcons.sync,
+    quickPaste => AppIcons.keyboard,
+    send => AppIcons.send,
+    storage => AppIcons.archive,
+    about => AppIcons.info,
+  };
+}
+
+/// 设置首页：分组的类别列表，设置项再多也一屏看完
+class _CategoryList extends StatelessWidget {
+  const _CategoryList({
+    required this.onOpen,
+    required this.connection,
+    required this.version,
+  });
+
+  final ValueChanged<_Category> onOpen;
+  final Widget connection;
+  final String version;
+
+  static const _groups = [
+    [_Category.general, _Category.connection],
+    [_Category.sync, _Category.quickPaste, _Category.send],
+    [_Category.storage, _Category.about],
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        PageHeader(title: l.navSettings),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(
+              Insets.xl,
+              0,
+              Insets.xl,
+              Insets.xxl,
+            ),
+            children: [
+              for (final group in _groups)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Insets.xl),
+                  child: GroupBox(
+                    dividerIndent: Insets.lg + 30,
+                    children: [
+                      for (final c in group)
+                        _CategoryRow(
+                          category: c,
+                          trailing: switch (c) {
+                            _Category.connection => connection,
+                            _Category.about when version.isNotEmpty => Text(
+                              version,
+                              style: context.text.bodyMedium?.copyWith(
+                                color: context.palette.textDim,
+                              ),
+                            ),
+                            _ => null,
+                          },
+                          onTap: () => onOpen(c),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CategoryRow extends StatelessWidget {
+  const _CategoryRow({
+    required this.category,
+    required this.onTap,
+    this.trailing,
+  });
+
+  final _Category category;
+  final VoidCallback onTap;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final l = context.l10n;
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 52),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Insets.lg,
+              vertical: 10,
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 30,
+                  child: Icon(category.icon, size: 18, color: p.textDim),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(category.title(l), style: context.text.labelLarge),
+                      const SizedBox(height: 2),
+                      Text(category.summary(l), style: context.text.bodySmall),
+                    ],
+                  ),
+                ),
+                if (trailing != null) ...[
+                  const SizedBox(width: Insets.md),
+                  trailing!,
+                ],
+                const SizedBox(width: Insets.sm),
+                Icon(AppIcons.chevronRight, size: 13, color: p.textFaint),
+              ],
+            ),
+          ),
         ),
       ),
     );

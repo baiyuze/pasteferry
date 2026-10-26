@@ -1556,5 +1556,13 @@
   "receiveFromEveryoneDesc": "Anyone on the same network can send you files for 10 minutes. You accept each batch.",
   "everyoneEnded": "Everyone is off; back to Contacts Only.",
   "friendsCountTooltip": "Contacts",
-  "waitingAccept": "Waiting…"
+  "waitingAccept": "Waiting…",
+  "settingsConnection": "Connection",
+  "settingsGeneralSummary": "Launch at login, device name, language",
+  "settingsConnectionSummary": "Service, your own server, local network",
+  "settingsSyncSummary": "Real-time sync, size limit, what to sync",
+  "settingsQuickPasteSummary": "Shortcut and what happens after you pick",
+  "settingsSendSummary": "Receiving files, save location",
+  "settingsStorageSummary": "How long history is kept, space used",
+  "settingsAboutSummary": "Version, updates, feedback"
 }

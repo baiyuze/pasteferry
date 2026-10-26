@@ -603,5 +603,13 @@
   "receiveFromEveryoneDesc": "同一局域网里的人都能发，每次由你接受；10 分钟后改回「仅限好友」。",
   "everyoneEnded": "「所有人」已结束，改回「仅限好友」。",
   "friendsCountTooltip": "好友",
-  "waitingAccept": "等待接受"
+  "waitingAccept": "等待接受",
+  "settingsConnection": "连接",
+  "settingsGeneralSummary": "开机启动、设备名称、语言",
+  "settingsConnectionSummary": "服务、自建服务器、局域网",
+  "settingsSyncSummary": "实时同步、自动同步上限、同步哪些内容",
+  "settingsQuickPasteSummary": "快捷键、选中后的操作",
+  "settingsSendSummary": "接收文件、保存位置",
+  "settingsStorageSummary": "记录保留多久、占用空间",
+  "settingsAboutSummary": "版本、更新、反馈"
 }

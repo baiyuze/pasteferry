@@ -204,8 +204,13 @@ class AppState extends ChangeNotifier implements RecordDetails {
       )
       .lastOrNull;
 
-  /// 让主窗口切到某一页（"send"、"settings"），比如好友连不上时点了「打开服务…」
+  /// 让主窗口切到某一页（"send"、"settings"），比如好友连不上时点了「打开服务…」。
+  /// "settings:connection" 这样的写法直接进设置里的某一类
   void requestPage(String page) {
+    if (page.startsWith('settings:')) {
+      _settingsCategory = page.substring('settings:'.length);
+      page = 'settings';
+    }
     _pageRequest = page;
     _pageRequestSerial++;
     notifyListeners();
@@ -213,6 +218,15 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   String get pageRequest => _pageRequest;
   int get pageRequestSerial => _pageRequestSerial;
+
+  String? _settingsCategory;
+
+  /// 设置页取走要打开的类别（只取一次）
+  String? takeSettingsCategory() {
+    final c = _settingsCategory;
+    _settingsCategory = null;
+    return c;
+  }
 
   /// 正在搜索复制记录（搜索词不是空白）。
   bool get searching => _historySearch.active;

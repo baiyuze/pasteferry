@@ -25,6 +25,8 @@ void main() {
     await tester.pumpWidget(PasteFerryApp(state: state));
     await tester.tap(find.text('设置').first);
     await tester.pumpAndSettle();
+    await tester.tap(find.text('同步').last);
+    await tester.pumpAndSettle();
     Future<void> toggle(String title) async {
       await tester.scrollUntilVisible(
         find.text(title),

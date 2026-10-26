@@ -65,7 +65,7 @@ Future<void> showReachabilityHint(BuildContext context, Friend f) async {
       ],
     ),
   );
-  if (open == true && context.mounted) AppScope.read(context).requestPage('settings');
+  if (open == true && context.mounted) AppScope.read(context).requestPage('settings:connection');
 }
 
 // ─────────────────────────── 好友列表 ───────────────────────────

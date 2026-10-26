@@ -3733,6 +3733,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Waiting…'**
   String get waitingAccept;
+
+  /// No description provided for @settingsConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection'**
+  String get settingsConnection;
+
+  /// No description provided for @settingsGeneralSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch at login, device name, language'**
+  String get settingsGeneralSummary;
+
+  /// No description provided for @settingsConnectionSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Service, your own server, local network'**
+  String get settingsConnectionSummary;
+
+  /// No description provided for @settingsSyncSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-time sync, size limit, what to sync'**
+  String get settingsSyncSummary;
+
+  /// No description provided for @settingsQuickPasteSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcut and what happens after you pick'**
+  String get settingsQuickPasteSummary;
+
+  /// No description provided for @settingsSendSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiving files, save location'**
+  String get settingsSendSummary;
+
+  /// No description provided for @settingsStorageSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'How long history is kept, space used'**
+  String get settingsStorageSummary;
+
+  /// No description provided for @settingsAboutSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Version, updates, feedback'**
+  String get settingsAboutSummary;
 }
 
 class _AppLocalizationsDelegate
