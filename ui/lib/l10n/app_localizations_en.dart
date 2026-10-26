@@ -1149,10 +1149,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'You can turn background sync off anytime in Settings.';
 
   @override
-  String get officialService => 'Official service';
+  String get officialService => 'Service';
 
   @override
-  String get useOfficialService => 'Use official service';
+  String get useOfficialService => 'Use the service';
 
   @override
   String get officialServiceDesc =>
@@ -1160,10 +1160,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get officialPrivacy =>
-      'Connects to the official service only when enabled and records essential access statistics. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.';
+      'Connects to the service only when enabled and records essential access statistics. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.';
 
   @override
-  String get officialEnableTitle => 'Enable official Internet service?';
+  String get officialEnableTitle => 'Enable the service?';
 
   @override
   String get officialSwitchConfirm =>
@@ -1191,7 +1191,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get officialQuotaBody =>
-      'Official relay is paused until the daily reset at midnight Beijing time. LAN and direct Internet connections remain available. Failed transfers can be retried later.';
+      'The service relay is paused until the daily reset at midnight Beijing time. LAN and direct Internet connections remain available. Failed transfers can be retried later.';
 
   @override
   String get officialPeerQuota =>
@@ -1199,7 +1199,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get officialPaused =>
-      'Official relay is unavailable. Direct connections remain available.';
+      'The service relay is unavailable. Direct connections remain available.';
 
   @override
   String get officialViewUsage => 'View usage';
@@ -1236,7 +1236,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get officialRoutesFootnote =>
-      'Direct connections don\'t go through the official relay and don\'t use the allowance.';
+      'Direct connections don\'t go through the service relay and don\'t use the allowance.';
 
   @override
   String get officialDeviceID => 'Device ID';
@@ -1587,11 +1587,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sendErrMissing => 'Some of these files no longer exist.';
 
   @override
-  String get relayConfirmTitle => 'Send through the official relay?';
+  String get relayConfirmTitle => 'Send through the service relay?';
 
   @override
   String relayConfirmBody(String name, String left) {
-    return '$name has no direct connection to this computer right now, so the files go through the official relay at about 0.25 MB/s. $left of today’s relay allowance is left.';
+    return '$name has no direct connection to this computer right now, so the files go through the service relay at about 0.25 MB/s. $left of today’s relay allowance is left.';
   }
 
   @override

@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>私隱與必要資料 — PasteFerry</title>
-  <meta name="description" content="新安裝預設只使用區域網絡。啟用官方公網後才連接官方信令並記錄必要連線統計；自訂伺服器不向官方回報。先嘗試直連，失敗才申請中轉並讀取機器額度摘要。">
+  <meta name="description" content="新安裝預設只使用區域網絡。啟用服務後才連接官方信令並記錄必要連線統計；自訂伺服器不向官方回報。先嘗試直連，失敗才申請中轉並讀取機器額度摘要。">
   <link rel="canonical" href="https://pasteferry.cc/zh-hk/privacy/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/privacy/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/privacy/">
@@ -24,7 +24,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="隔空貼">
   <meta property="og:title" content="私隱與必要資料 — PasteFerry">
-  <meta property="og:description" content="新安裝預設只使用區域網絡。啟用官方公網後才連接官方信令並記錄必要連線統計；自訂伺服器不向官方回報。先嘗試直連，失敗才申請中轉並讀取機器額度摘要。">
+  <meta property="og:description" content="新安裝預設只使用區域網絡。啟用服務後才連接官方信令並記錄必要連線統計；自訂伺服器不向官方回報。先嘗試直連，失敗才申請中轉並讀取機器額度摘要。">
   <meta property="og:url" content="https://pasteferry.cc/zh-hk/privacy/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-zh-hant.png">
   <meta property="og:locale" content="zh_HK">
@@ -73,10 +73,10 @@
       </nav>
     </div>
   </header>
-<main id="main" class="wrap" style="max-width:850px;padding-top:5rem;padding-bottom:5rem;line-height:1.9"><h1>私隱與必要資料</h1><section><h2>由你決定使用官方服務</h2><p>新安裝預設只使用區域網絡。啟用官方公網後才連接官方信令並記錄必要連線統計；自訂伺服器不向官方回報。先嘗試直連，失敗才申請中轉並讀取機器額度摘要。</p></section>
-<section><h2>最少必要資料</h2><p>網關保留去識別化裝置編號、首次與最近連線時間、每日中轉用量、必要額度綁定和累計彙總。每日裝置明細保留 90 天。這是官方服務裝置數，不是人數或全部安裝量。</p></section>
+<main id="main" class="wrap" style="max-width:850px;padding-top:5rem;padding-bottom:5rem;line-height:1.9"><h1>私隱與必要資料</h1><section><h2>由你決定使用服務</h2><p>新安裝預設只使用區域網絡。啟用服務後才連接官方信令並記錄必要連線統計；自訂伺服器不向官方回報。先嘗試直連，失敗才申請中轉並讀取機器額度摘要。</p></section>
+<section><h2>最少必要資料</h2><p>網關保留去識別化裝置編號、首次與最近連線時間、每日中轉用量、必要額度綁定和累計彙總。每日裝置明細保留 90 天。這是「服務」裝置數，不是人數或全部安裝量。</p></section>
 <section><h2>內容與機器識別碼</h2><p>內容與真實裝置名稱透過裝置間加密通道傳送。不收集檔案名稱、路徑、用戶名稱、MAC、UA 或行為軌跡。原始系統識別碼不上傳；摘要只用於額度分組，並非不可偽造。</p></section>
-<section><h2>網絡資料與額度</h2><p>網絡端點暫時可見路由和網絡地址，官方統計庫及一般代理日誌不保存這些資料。每日 100 MB 中轉額度，含上下行，北京時間午夜重設；直連不計入。啟用後用戶端只憑裝置簽署查詢自己的額度，不申請中轉，也不讀取機器識別碼。關閉官方服務會停止其請求、輪詢及通道。</p></section>
+<section><h2>網絡資料與額度</h2><p>網絡端點暫時可見路由和網絡地址，官方統計庫及一般代理日誌不保存這些資料。每日 100 MB 中轉額度，含上下行，北京時間午夜重設；直連不計入。啟用後用戶端只憑裝置簽署查詢自己的額度，不申請中轉，也不讀取機器識別碼。關閉「服務」會停止其請求、輪詢及通道。</p></section>
 <section><h2>檢查更新</h2><p>2.3.0 起，App 啟動一分鐘後和之後每天檢查一次新版本：從 GitHub 和 Gitee 下載簽署過的更新清單，請求裏不帶裝置 ID、帳號或其他識別資料，這些服務只能看到一次普通的下載和網絡地址。可以在「設定 → 關於」關閉自動檢查。新版本只有在你確認後才會安裝，而且安裝檔必須與隔空貼發佈密鑰簽署的清單裏的校驗值一致。</p></section>
 <section><h2>網站與審計</h2><p>本站使用 Cloudflare Web Analytics，並自行彙總官網瀏覽及下載點擊：日期、頁面路徑（不含查詢參數）、頁面語言、下載版本、檔案及來源（Gitee 或 GitHub）。不使用統計 Cookie 或持久訪客識別碼，不保存 IP 或瀏覽器 UA。隨機事件編號最多保留三天以移除重複，匿名每日彙總長期保留。尊重 Do Not Track 及 Global Privacy Control。點擊不代表下載完成、安裝量或人數，亦無法統計直接在 Gitee 下載的次數。用戶端、信令及 TURN 持續開源，網關協定和欄位公開；私有正式環境的儲存行為仍需部署審計。</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
   <footer class="footer">

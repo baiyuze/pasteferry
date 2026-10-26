@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>隔空贴 PasteFerry：在 Mac、Windows 与 Linux 之间同步剪贴板与文件，跨账号跨网络</title>
-  <meta name="description" content="隔空贴让 Mac、Windows、Linux 之间复制粘贴文字、图片、文件和文件夹。开启官方服务即可跨网络同步，无需自建服务器；优先打洞直连，失败自动加密中转。免费开源。">
+  <meta name="description" content="隔空贴让 Mac、Windows、Linux 之间复制粘贴文字、图片、文件和文件夹。开启「服务」即可跨网络同步，无需自建服务器；优先打洞直连，失败自动加密中转。免费开源。">
   <link rel="canonical" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/">
@@ -25,7 +25,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="隔空贴">
   <meta property="og:title" content="隔空贴：在这台电脑复制，到那台电脑粘贴">
-  <meta property="og:description" content="隔空贴让 Mac、Windows、Linux 之间复制粘贴文字、图片、文件和文件夹。开启官方服务即可跨网络同步，无需自建服务器；优先打洞直连，失败自动加密中转。免费开源。">
+  <meta property="og:description" content="隔空贴让 Mac、Windows、Linux 之间复制粘贴文字、图片、文件和文件夹。开启「服务」即可跨网络同步，无需自建服务器；优先打洞直连，失败自动加密中转。免费开源。">
   <meta property="og:url" content="https://pasteferry.cc/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
   <meta property="og:image:width" content="1200">
@@ -166,7 +166,7 @@
       <div class="wrap">
         <a class="release-note" href="features/#send">2.5 新功能：隔空传送，文件直接发到另一台 →</a>
         <h1 class="display">在这台电脑复制，<br>到那台电脑粘贴。</h1>
-        <p class="lede">Mac、Windows、Linux 互通，文字、图片、文件、整个文件夹都可以，不要求同一个账号。现在开启官方服务就能跨网络同步，无需自己搭服务器。优先直连，始终端到端加密。</p>
+        <p class="lede">Mac、Windows、Linux 互通，文字、图片、文件、整个文件夹都可以，不要求同一个账号。现在开启「服务」就能跨网络同步，无需自己搭服务器。优先直连，始终端到端加密。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 看完整演示 <span class="tour-duration">1:25</span></a>
@@ -206,7 +206,7 @@
         <h2 id="send-title">拖过去，<br>就到了。</h2>
         <p class="intro">把文件或整个文件夹拖到雷达上的一台电脑，就直接发过去了。不限大小，断了接着传，也不占复制记录。</p>
         <figure class="spot wide" data-reveal>
-          <img src="assets/screenshots/send-dark.png?v=6e2d3b418e" width="2552" height="1632" loading="lazy" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度">
+          <img src="assets/screenshots/send-dark.png?v=5d4ada753d" width="2552" height="1632" loading="lazy" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度">
         </figure>
         <p class="more"><a href="features/#send">了解隔空传送 →</a></p>
       </div>
@@ -253,7 +253,7 @@
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
             <h3>跨网络</h3>
-            <p>开启官方服务，家里和公司之间也能同步。</p>
+            <p>开启「服务」，家里和公司之间也能同步。</p>
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
@@ -290,14 +290,14 @@
     <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
         <h2 id="deploy-title">两台电脑怎么连起来</h2>
-        <p class="intro">同一网络里装好就能配对；不同网络里，开启官方服务即可，无需自建。也保留自建服务器与 Tailscale，按你的需要选择。</p>
+        <p class="intro">同一网络里装好就能配对；不同网络里，开启「服务」即可，无需自建。也保留自建服务器与 Tailscale，按你的需要选择。</p>
         <div class="paths">
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
             <span class="path-when">跨网络，无需自建</span>
-            <h3>官方服务</h3>
+            <h3>服务</h3>
             <p>打开一个开关，让家里与公司的电脑找到彼此。优先打洞直连，失败后自动中转，无需购买云主机或填写地址。</p>
-            <span class="path-go">开启官方服务 →</span>
+            <span class="path-go">开启「服务」 →</span>
           </a>
           <a class="path" href="lan/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
@@ -321,7 +321,7 @@
             <span class="path-go">Tailscale 教程 →</span>
           </a>
         </div>
-        <p class="note">第一次用？跟着<a href="start/#server">快速开始</a>。官方服务可选，当前默认每日 100 MB 中转额度，直连不扣此额度。</p>
+        <p class="note">第一次用？跟着<a href="start/#server">快速开始</a>。「服务」可选，当前默认每日 100 MB 中转额度，直连不扣此额度。</p>
       </div>
     </section>
 

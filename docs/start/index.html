@@ -122,7 +122,7 @@
             </div>
           </div>
           <figure class="shot">
-            <img src="../assets/screenshots/welcome-dark.png?v=0a3d799cda" width="2112" height="1472" alt="第一次打开隔空贴：提示启用后台同步">
+            <img src="../assets/screenshots/welcome-dark.png?v=69e1866f08" width="2112" height="1472" alt="第一次打开隔空贴：提示启用后台同步">
           </figure>
         </div>
       </div>
@@ -132,31 +132,31 @@
       <div class="wrap">
         <p class="eyebrow">第 2 步</p>
         <h2 id="server-title">选一种连接方式</h2>
-        <p class="intro">同一网络里装好就能配对；不同网络里，开启官方服务即可，无需自建。也保留自建服务器与 Tailscale，按你的需要选择。</p>
+        <p class="intro">同一网络里装好就能配对；不同网络里，开启「服务」即可，无需自建。也保留自建服务器与 Tailscale，按你的需要选择。</p>
         <div class="os-tabs" data-tabs="plan">
           <div class="tablist" role="tablist" aria-label="连接方式" hidden>
-            <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">官方服务</button>
+            <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">服务</button>
             <button type="button" role="tab" id="tab-plan-lan" aria-controls="plan-lan">同一网络</button>
             <button type="button" role="tab" id="tab-plan-cloud" aria-controls="plan-cloud">自建公网服务器</button>
             <button type="button" role="tab" id="tab-plan-ts" aria-controls="plan-ts">Tailscale</button>
           </div>
 
           <section class="os" id="plan-official" role="tabpanel" aria-labelledby="tab-plan-official">
-            <h3 class="os-title">官方服务</h3>
+            <h3 class="os-title">服务</h3>
             <div class="plan-grid">
               <div>
                 <ol class="steps">
                   <li>在需要同步的每台电脑上安装最新版本，启用后台同步。</li>
-                  <li>在每台电脑的「设置」中开启「使用官方服务」，阅读并确认必要统计说明。不用填写官方域名或端口。</li>
+                  <li>在每台电脑的「设置」中开启「使用服务」，阅读并确认必要统计说明。不用填写官方域名或端口。</li>
                   <li>一台生成配对码，另一台输入；核对两边的安全指纹后确认。已有配对关系可以继续使用。</li>
                 </ol>
                 <p class="plan-address">新安装默认关闭。开启后记录必要接入统计；仅申请中转时派生项目专用机器摘要。真实设备名、原始系统标识和复制内容不会作为统计上传。完整字段与保留期限见隐私说明。</p>
-                <a class="button quiet" href="../official/">开启官方服务 →</a>
+                <a class="button quiet" href="../official/">开启「服务」 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
                 <dl>
-                  <div><dt>先直连，再中转</dt><dd>官方信令只帮助在线设备交换连接信息。客户端先用 STUN 探测和打洞；本轮直连失败后，才申请官方中转。传输内容始终端到端加密。</dd></div>
+                  <div><dt>先直连，再中转</dt><dd>官方信令只帮助在线设备交换连接信息。客户端先用 STUN 探测和打洞；本轮直连失败后，才申请服务中转。传输内容始终端到端加密。</dd></div>
                   <div><dt>直连不消耗中转额度</dt><dd>当前默认每机器额度组每日 100 MB 中转流量，上传与下载合计，北京时间零点重置。重新安装不会保证获得新额度。开启后用量页即显示今日额度、剩余量与更新时间，不必先用中转，并列出每台设备当前是直连还是中转；额度用尽仍可直连。额度与服务可用性可能调整，以客户端显示为准。</dd></div>
                 </dl>
               </div>
@@ -244,7 +244,7 @@
           <div>
             <ol class="steps">
               <li>在一台电脑上打开「设备」，点「添加设备」，会显示一个 6 位配对码，5 分钟内有效，下面是这台电脑的地址。</li>
-              <li>在另一台电脑上点「添加设备 → 输入配对码」。官方服务无需填 IP；仅局域网跨网段或 Tailscale 配对时，展开地址栏填写对方地址。</li>
+              <li>在另一台电脑上点「添加设备 → 输入配对码」。「服务」无需填 IP；仅局域网跨网段或 Tailscale 配对时，展开地址栏填写对方地址。</li>
               <li>两块屏幕会显示同样的两行安全指纹。逐字核对一致后，再点确认。<span class="aside">这一步防止有人在中间冒充你的设备，不要跳过。</span></li>
             </ol>
             <figure class="figure-card qs-verify">
@@ -252,7 +252,7 @@
             </figure>
           </div>
           <figure class="shot">
-            <img src="../assets/screenshots/pairing-dark.png?v=9b41b5b25f" width="2112" height="1472" loading="lazy" alt="添加设备：显示配对码 K7MP2X，下面是本机地址 192.168.1.20">
+            <img src="../assets/screenshots/pairing-dark.png?v=9a78e8631a" width="2112" height="1472" loading="lazy" alt="添加设备：显示配对码 K7MP2X，下面是本机地址 192.168.1.20">
           </figure>
         </div>
       </div>

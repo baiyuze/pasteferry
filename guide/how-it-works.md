@@ -6,7 +6,7 @@ Two computers connect directly and encrypt everything between them. On the same 
 
 ## Official service in 2.1
 
-Enable **Settings → Use official service** on every computer to connect across networks without hosting a server. The clients exchange candidates through signaling and try direct NAT traversal first. Only after a valid direct attempt fails do both peers request an authorized WSS relay tunnel. Default relay allowance is 100 MB/day per machine quota group, upload plus download; direct traffic is not charged. LAN and custom servers remain independent. See the [official guide](https://pasteferry.cc/en/official/), [privacy fields](../PRIVACY.md) and [gateway protocol](../design/official-gateway.md).
+Enable **Settings → Use the service** on every computer to connect across networks without hosting a server. The clients exchange candidates through signaling and try direct NAT traversal first. Only after a valid direct attempt fails do both peers request an authorized WSS relay tunnel. Default relay allowance is 100 MB/day per machine quota group, upload plus download; direct traffic is not charged. LAN and custom servers remain independent. See the [official guide](https://pasteferry.cc/en/official/), [privacy fields](../PRIVACY.md) and [gateway protocol](../design/official-gateway.md).
 
 ## Architecture
 

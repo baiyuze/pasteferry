@@ -47,7 +47,7 @@ void main() {
     (tester) async {
       final state = OfficialTestState();
       await tester.pumpWidget(PasteFerryApp(state: state));
-      expect(find.text('官方服务'), findsNothing);
+      expect(find.text('服务'), findsNothing);
       state.debugSeed(
         status: state.status!,
         config: state.config!.deepCopy()
@@ -56,7 +56,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.text('还没有记录'), findsOneWidget);
-      await tester.tap(find.text('官方服务').first);
+      await tester.tap(find.text('服务').first);
       await tester.pumpAndSettle();
       expect(find.byType(OfficialServicePage), findsOneWidget);
       expect(
@@ -170,7 +170,7 @@ void main() {
       );
       await tester.pumpWidget(PasteFerryApp(state: state));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('官方服务').first);
+      await tester.tap(find.text('服务').first);
       await tester.pumpAndSettle();
       final page = find.byType(OfficialServicePage);
       Finder inPage(String text) =>

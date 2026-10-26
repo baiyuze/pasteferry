@@ -1033,20 +1033,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get svcCanDisable => '随时可以在「设置」中停用后台同步。';
 
   @override
-  String get officialService => '官方服务';
+  String get officialService => '服务';
 
   @override
-  String get useOfficialService => '使用官方服务';
+  String get useOfficialService => '使用服务';
 
   @override
   String get officialServiceDesc => '跨网络同步，优先直连';
 
   @override
   String get officialPrivacy =>
-      '仅开启后连接官方服务并统计必要接入信息。先尝试直连，失败才申请中转；不上传内容、真实设备名或原始系统标识。';
+      '仅开启后连接服务并统计必要接入信息。先尝试直连，失败才申请中转；不上传内容、真实设备名或原始系统标识。';
 
   @override
-  String get officialEnableTitle => '启用官方公网服务？';
+  String get officialEnableTitle => '启用服务？';
 
   @override
   String get officialSwitchConfirm => '这会切换当前自定义服务器，已保存的地址仍会保留。';
@@ -1070,13 +1070,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get officialQuotaTitle => '今日中转额度已用完';
 
   @override
-  String get officialQuotaBody => '官方中转已暂停，北京时间零点重置。局域网和公网直连仍可使用；传输失败时可稍后重试。';
+  String get officialQuotaBody => '服务中转已暂停，北京时间零点重置。局域网和公网直连仍可使用；传输失败时可稍后重试。';
 
   @override
   String get officialPeerQuota => '对端中转额度不足，直连仍可使用';
 
   @override
-  String get officialPaused => '官方中转暂不可用，直连仍可使用';
+  String get officialPaused => '服务中转暂不可用，直连仍可使用';
 
   @override
   String get officialViewUsage => '查看用量';
@@ -1112,7 +1112,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get officialRoutes => '设备连接方式';
 
   @override
-  String get officialRoutesFootnote => '直连时不经过官方中转，也不消耗额度。';
+  String get officialRoutesFootnote => '直连时不经过服务中转，也不消耗额度。';
 
   @override
   String get officialDeviceID => '设备 ID';
@@ -1444,11 +1444,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sendErrMissing => '有文件已经不在了。';
 
   @override
-  String get relayConfirmTitle => '经官方服务中转发送？';
+  String get relayConfirmTitle => '经服务中转发送？';
 
   @override
   String relayConfirmBody(String name, String left) {
-    return '$name 现在和这台电脑没有直连，文件要经官方服务中转，速度约 0.25 MB/s。今天的中转额度还剩 $left。';
+    return '$name 现在和这台电脑没有直连，文件要经服务中转，速度约 0.25 MB/s。今天的中转额度还剩 $left。';
   }
 
   @override
@@ -2808,20 +2808,20 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get svcCanDisable => '隨時可以在「設定」中停用背景同步。';
 
   @override
-  String get officialService => '官方服務';
+  String get officialService => '服務';
 
   @override
-  String get useOfficialService => '使用官方服務';
+  String get useOfficialService => '使用服務';
 
   @override
   String get officialServiceDesc => '跨網絡同步，優先直連';
 
   @override
   String get officialPrivacy =>
-      '只在啟用後連接官方服務並統計必要連線資料。先嘗試直連，失敗才申請中轉；不傳送內容、真實裝置名稱或原始系統識別碼。';
+      '只在啟用後連接服務並統計必要連線資料。先嘗試直連，失敗才申請中轉；不傳送內容、真實裝置名稱或原始系統識別碼。';
 
   @override
-  String get officialEnableTitle => '啟用官方公網服務？';
+  String get officialEnableTitle => '啟用服務？';
 
   @override
   String get officialSwitchConfirm => '這會切換目前的自訂伺服器，已儲存的地址仍會保留。';
@@ -2845,13 +2845,13 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get officialQuotaTitle => '今日中轉額度已用完';
 
   @override
-  String get officialQuotaBody => '官方中轉已暫停，北京時間午夜重設。區域網絡和公網直連仍可使用；傳輸失敗時可稍後重試。';
+  String get officialQuotaBody => '服務中轉已暫停，北京時間午夜重設。區域網絡和公網直連仍可使用；傳輸失敗時可稍後重試。';
 
   @override
   String get officialPeerQuota => '對方中轉額度不足，直連仍可使用';
 
   @override
-  String get officialPaused => '官方中轉暫時無法使用，直連仍可使用';
+  String get officialPaused => '服務中轉暫時無法使用，直連仍可使用';
 
   @override
   String get officialViewUsage => '查看用量';
@@ -2887,7 +2887,7 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get officialRoutes => '裝置連線方式';
 
   @override
-  String get officialRoutesFootnote => '直連時不經過官方中轉，也不消耗額度。';
+  String get officialRoutesFootnote => '直連時不經過服務中轉，也不消耗額度。';
 
   @override
   String get officialDeviceID => '裝置 ID';
@@ -3219,11 +3219,11 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get sendErrMissing => '有檔案已經不在了。';
 
   @override
-  String get relayConfirmTitle => '經官方服務中轉傳送？';
+  String get relayConfirmTitle => '經服務中轉傳送？';
 
   @override
   String relayConfirmBody(String name, String left) {
-    return '$name 目前和這部電腦沒有直連，檔案要經官方服務中轉，速度約 0.25 MB/s。今天的中轉額度還剩 $left。';
+    return '$name 目前和這部電腦沒有直連，檔案要經服務中轉，速度約 0.25 MB/s。今天的中轉額度還剩 $left。';
   }
 
   @override
@@ -4583,20 +4583,20 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get svcCanDisable => '隨時可以在「設定」中停用背景同步。';
 
   @override
-  String get officialService => '官方服務';
+  String get officialService => '服務';
 
   @override
-  String get useOfficialService => '使用官方服務';
+  String get useOfficialService => '使用服務';
 
   @override
   String get officialServiceDesc => '跨網路同步，優先直連';
 
   @override
   String get officialPrivacy =>
-      '僅開啟後連線官方服務並統計必要連線資訊。先嘗試直連，失敗才申請中繼；不傳送內容、真實裝置名稱或原始系統識別碼。';
+      '僅開啟後連線服務並統計必要連線資訊。先嘗試直連，失敗才申請中繼；不傳送內容、真實裝置名稱或原始系統識別碼。';
 
   @override
-  String get officialEnableTitle => '啟用官方公網服務？';
+  String get officialEnableTitle => '啟用服務？';
 
   @override
   String get officialSwitchConfirm => '這會切換目前的自訂伺服器，已儲存的位址仍會保留。';
@@ -4620,13 +4620,13 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get officialQuotaTitle => '今日中繼額度已用完';
 
   @override
-  String get officialQuotaBody => '官方中繼已暫停，北京時間午夜重設。區域網路和公網直連仍可使用；傳輸失敗時可稍後重試。';
+  String get officialQuotaBody => '服務中繼已暫停，北京時間午夜重設。區域網路和公網直連仍可使用；傳輸失敗時可稍後重試。';
 
   @override
   String get officialPeerQuota => '對方中繼額度不足，直連仍可使用';
 
   @override
-  String get officialPaused => '官方中繼暫時無法使用，直連仍可使用';
+  String get officialPaused => '服務中繼暫時無法使用，直連仍可使用';
 
   @override
   String get officialViewUsage => '查看用量';
@@ -4662,7 +4662,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get officialRoutes => '裝置連線方式';
 
   @override
-  String get officialRoutesFootnote => '直連時不經過官方中繼，也不消耗額度。';
+  String get officialRoutesFootnote => '直連時不經過服務中繼，也不消耗額度。';
 
   @override
   String get officialDeviceID => '裝置 ID';
@@ -4994,11 +4994,11 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get sendErrMissing => '有檔案已經不在了。';
 
   @override
-  String get relayConfirmTitle => '經官方服務中繼傳送？';
+  String get relayConfirmTitle => '經服務中繼傳送？';
 
   @override
   String relayConfirmBody(String name, String left) {
-    return '$name 目前和這台電腦沒有直連，檔案要經官方服務中繼，速度約 0.25 MB/s。今天的中繼額度還剩 $left。';
+    return '$name 目前和這台電腦沒有直連，檔案要經服務中繼，速度約 0.25 MB/s。今天的中繼額度還剩 $left。';
   }
 
   @override

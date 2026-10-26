@@ -98,7 +98,7 @@
     <section class="section" id="diagram" aria-labelledby="how-title">
       <div class="wrap">
         <h2 id="how-title">隔空貼的連線方式</h2>
-        <p class="intro">同一網路裡，裝置不需伺服器就能找到彼此；跨網路時，官方服務或自建伺服器協助交換連線資訊。優先打洞直連，失敗後才使用加密中繼。下圖展示通用的信令與中繼結構。</p>
+        <p class="intro">同一網路裡，裝置不需伺服器就能找到彼此；跨網路時，「服務」或自建伺服器協助交換連線資訊。優先打洞直連，失敗後才使用加密中繼。下圖展示通用的信令與中繼結構。</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
             <title id="diagram-title">隔空貼的連線方式</title>
@@ -192,7 +192,7 @@
         <dl class="fallbacks">
           <div><dt>在同一個網路裡找不到對方</dt><dd>不同網段、訪客網路、開了 AP 隔離的 Wi‑Fi，都會擋住區域網路探索。配對時輸入對方配對碼下方顯示的位址就行；之後位址會被記住，兩邊都換了位址時，在裝置清單裡幫它重新輸入一次。</dd></div>
           <div><dt>系統擋住區域網路連線</dt><dd>從 macOS 15 起，背景服務要連線區域網路裡的裝置，需要你允許；Windows 第一次執行時，防火牆會跳出詢問。沒有允許時，App 會提示，並提供直達設定的按鈕。</dd></div>
-          <div><dt>兩台電腦打不通直連</dt><dd>官方模式在直連失敗後，依目前額度申請中繼；自建模式使用自己的 TURN 中繼。兩種方式的內容均保持端到端加密。</dd></div>
+          <div><dt>兩台電腦打不通直連</dt><dd>服务模式在直連失敗後，依目前額度申請中繼；自建模式使用自己的 TURN 中繼。兩種方式的內容均保持端到端加密。</dd></div>
           <div><dt>連不上公共 STUN 伺服器</dt><dd>在中國大陸連公共 STUN 時通時斷。伺服器內建 STUN，用戶端會優先使用它。</dd></div>
           <div><dt>從中繼切回直連</dt><dd>直連失敗且中繼可用時，先透過中繼保持同步。連線閒置時可重試打洞，成功後切回直連並釋放中繼。</dd></div>
           <div><dt>對方睡眠、斷線或重新開機</dt><dd>連線悄悄斷了也能察覺，會立即關閉並重新連線。這段期間複製的內容會先記下來，連上後補送到對方的複製記錄裡，但不會覆蓋對方當下剪貼簿裡的內容。</dd></div>
@@ -219,7 +219,7 @@
             <tr><th scope="row">Mac 用戶端</th><td>macOS 13 Ventura 以上；Apple 晶片與 Intel 晶片各有一個安裝檔，約 25 MB，不需要 Rosetta；也有兩種晶片通用的版本，約 47 MB</td></tr>
             <tr><th scope="row">Windows 用戶端</th><td>Windows 10 與 Windows 11，x64；只為目前使用者安裝，不需要系統管理員權限；安裝檔約 23 MB</td></tr>
             <tr><th scope="row">Linux 用戶端</th><td>x64 與 ARM64；.deb（Debian、Ubuntu 等）或 tar.gz（其他發行版），約 22 MB；需要 X11 桌面，或附有 XWayland 的 Wayland 桌面（GNOME、KDE 等預設都有）；GTK 3</td></tr>
-            <tr><th scope="row">伺服器</th><td>僅自建時需要部署；使用官方服務不需自備伺服器。自建支援 Linux x86_64/ARM64、macOS 與 Windows 10/11 x64。</td></tr>
+            <tr><th scope="row">伺服器</th><td>僅自建時需要部署；使用服務不需自備伺服器。自建支援 Linux x86_64/ARM64、macOS 與 Windows 10/11 x64。</td></tr>
             <tr><th scope="row">介面語言</th><td>簡體中文、繁體中文（台灣、香港）、English、日本語，預設跟隨系統，可在設定裡切換</td></tr>
             <tr><th scope="row">同步的內容</th><td>純文字、帶格式的文字、圖片與螢幕截圖、檔案、資料夾，可依類型個別關閉</td></tr>
             <tr><th scope="row">傳輸</th><td>WebRTC 資料通道，優先直連，打不通時經 TURN 中繼；同一個網路裡透過 mDNS 探索、UDP 8788 交換連線資訊；多出口網路逐一偵測每個出口；檔案以 tar + zstd 串流打包</td></tr>

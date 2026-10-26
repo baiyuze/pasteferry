@@ -94,14 +94,14 @@
 
 ```mermaid
 flowchart LR
-    A["电脑 A<br>在这里复制"] -- 信令：交换连接信息 --> S[("官方服务<br>或自建服务器")]
+    A["电脑 A<br>在这里复制"] -- 信令：交换连接信息 --> S[("服务<br>或自建服务器")]
     B["电脑 B<br>在这里粘贴"] -- 信令 --> S
     A <== "打洞直连 · DTLS 端到端加密" ==> B
     A -. "打不通时：加密中转" .-> S
 ```
 
 - **同一网络里不需要服务器**：靠 mDNS 互相发现，输入配对码就能直连。
-- **跨网络时服务器只牵线**：官方服务或自建服务器帮两台电脑交换连接信息，然后它们打洞直连（WebRTC，基于 [pion](https://github.com/pion/webrtc)）。
+- **跨网络时服务器只牵线**：「服务」或自建服务器帮两台电脑交换连接信息，然后它们打洞直连（WebRTC，基于 [pion](https://github.com/pion/webrtc)）。
 - **多出口网络也能直连**：公司双线这类网络按目标地址选出口。隔空贴在同一个 UDP 端口上同时询问多台 STUN 服务器，拿到每个出口的地址一并告诉对端；还会安排好哪一边先发包，避开会占住端口的路由器。实测公司 4 个出口与家里宽带之间可以直连。
 - **打不通才中转**：中转转发的是端到端加密的数据包，服务器解不开；空闲时会再试打洞，成功后切回直连。
 - **配对时核对安全指纹**：两块屏幕显示同样的两行指纹，之后的每条消息都带签名，服务器无法冒充你的设备。
@@ -127,7 +127,7 @@ Mac 版还没有经过 Apple 公证，Windows 版还没有代码签名：Mac 上
 
 | 方式 | 适合 | 要准备 |
 |---|---|---|
-| **[官方服务](https://pasteferry.cc/official/)** | 跨网络，不想自建服务器 | 每台电脑在「设置」里打开「使用官方服务」（默认关闭）。打不通直连时的中转当前默认每天 100 MB，直连不计 |
+| **[服务](https://pasteferry.cc/official/)** | 跨网络，不想自建服务器 | 每台电脑在「设置」里打开「使用服务」（默认关闭）。打不通直连时的中转当前默认每天 100 MB，直连不计 |
 | **[同一网络](https://pasteferry.cc/lan/)** | 电脑都连着同一个路由器 | 什么都不用 |
 | **[公网服务器](https://pasteferry.cc/cloud/)** | 想完全自己掌控 | 一台有公网 IP 的 Linux 云主机，最低配置就够 |
 | **[Tailscale](https://pasteferry.cc/tailscale/)** | 跨网络，但没有服务器 | 每台电脑都装 [Tailscale](https://tailscale.com)，配对时输入对方的 Tailscale 地址 |
@@ -146,10 +146,10 @@ Mac 版还没有经过 Apple 公证，Windows 版还没有代码签名：Mac 上
 
 - [工作原理](guide/how-it-works.zh-CN.md)：架构、NAT 打洞、安全模型、兜底、踩过的坑
 - [排障](guide/troubleshooting.zh-CN.md)与已知限制
-- 图文教程：[快速开始](https://pasteferry.cc/start/) · [官方服务](https://pasteferry.cc/official/) · [同一网络](https://pasteferry.cc/lan/) · [公网服务器](https://pasteferry.cc/cloud/) · [Tailscale](https://pasteferry.cc/tailscale/)
+- 图文教程：[快速开始](https://pasteferry.cc/start/) · [服务](https://pasteferry.cc/official/) · [同一网络](https://pasteferry.cc/lan/) · [公网服务器](https://pasteferry.cc/cloud/) · [Tailscale](https://pasteferry.cc/tailscale/)
 - [服务器部署说明](server/deploy/README.md)、[从源码构建](guide/building.zh-CN.md)
 - 技术方案：[多出口网络的 NAT 打洞](design/nat-traversal.md)、[局域网直连](design/lan-mode.md)、[快捷粘贴与收藏](design/quick-paste-and-favorites.md)、[隔空传送](design/send-files.md)、[Windows 客户端](design/windows-client.md)
-- [隐私说明](PRIVACY.md)、[安全说明](SECURITY.md)、[官方服务的公开协议](design/official-gateway.md)
+- [隐私说明](PRIVACY.md)、[安全说明](SECURITY.md)、[「服务」的公开协议](design/official-gateway.md)
 - [更新记录](CHANGELOG.md)
 
 ## 支持一下

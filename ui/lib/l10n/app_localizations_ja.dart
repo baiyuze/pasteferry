@@ -1043,20 +1043,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String get svcCanDisable => 'バックグラウンド同期は「設定」でいつでもオフにできます。';
 
   @override
-  String get officialService => '公式サービス';
+  String get officialService => 'サービス';
 
   @override
-  String get useOfficialService => '公式サービスを使う';
+  String get useOfficialService => 'サービスを使う';
 
   @override
   String get officialServiceDesc => '別のネットワーク間で同期。直接接続を優先';
 
   @override
   String get officialPrivacy =>
-      '有効にした場合のみ公式サービスに接続し、必要最小限の接続情報を記録します。まず直接接続を試み、失敗した場合のみ中継を申請します。内容、実際の端末名、元のシステム識別子は送信しません。';
+      '有効にした場合のみサービスに接続し、必要最小限の接続情報を記録します。まず直接接続を試み、失敗した場合のみ中継を申請します。内容、実際の端末名、元のシステム識別子は送信しません。';
 
   @override
-  String get officialEnableTitle => '公式インターネットサービスを有効にしますか？';
+  String get officialEnableTitle => 'サービスを有効にしますか？';
 
   @override
   String get officialSwitchConfirm => '現在のカスタムサーバーから切り替えます。保存済みのアドレスは保持されます。';
@@ -1081,13 +1081,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get officialQuotaBody =>
-      '公式中継は北京時間の午前0時にリセットされるまで停止します。LANと直接接続は引き続き利用できます。失敗した転送は後で再試行できます。';
+      'サービスの中継は北京時間の午前0時にリセットされるまで停止します。LANと直接接続は引き続き利用できます。失敗した転送は後で再試行できます。';
 
   @override
   String get officialPeerQuota => '相手の中継残量がありません。直接接続は引き続き利用できます';
 
   @override
-  String get officialPaused => '公式中継は現在利用できません。直接接続は引き続き利用できます';
+  String get officialPaused => 'サービスの中継は現在利用できません。直接接続は引き続き利用できます';
 
   @override
   String get officialViewUsage => '使用量を表示';
@@ -1123,7 +1123,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get officialRoutes => 'デバイスの接続方法';
 
   @override
-  String get officialRoutesFootnote => '直接接続は公式中継を経由せず、残量も消費しません。';
+  String get officialRoutesFootnote => '直接接続はサービスの中継を経由せず、残量も消費しません。';
 
   @override
   String get officialDeviceID => '端末 ID';
@@ -1463,11 +1463,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sendErrMissing => '一部のファイルが見つかりません。';
 
   @override
-  String get relayConfirmTitle => '公式サービスの中継で送信しますか？';
+  String get relayConfirmTitle => 'サービスの中継で送信しますか？';
 
   @override
   String relayConfirmBody(String name, String left) {
-    return '$name は現在このコンピューターと直接つながっていないため、公式サービスの中継（約 0.25 MB/s）で送ります。今日の中継の残りは $left です。';
+    return '$name は現在このコンピューターと直接つながっていないため、サービスの中継（約 0.25 MB/s）で送ります。今日の中継の残りは $left です。';
   }
 
   @override

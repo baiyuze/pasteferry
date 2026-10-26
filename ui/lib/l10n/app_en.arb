@@ -690,11 +690,11 @@
     }
   },
   "svcCanDisable": "You can turn background sync off anytime in Settings.",
-  "officialService": "Official service",
-  "useOfficialService": "Use official service",
+  "officialService": "Service",
+  "useOfficialService": "Use the service",
   "officialServiceDesc": "Sync across networks, direct connections first",
-  "officialPrivacy": "Connects to the official service only when enabled and records essential access statistics. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.",
-  "officialEnableTitle": "Enable official Internet service?",
+  "officialPrivacy": "Connects to the service only when enabled and records essential access statistics. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.",
+  "officialEnableTitle": "Enable the service?",
   "officialSwitchConfirm": "This switches away from your custom server. Its saved address will be retained.",
   "customServer": "Custom server",
   "saveAndConnect": "Save and connect",
@@ -702,9 +702,9 @@
   "officialFetchFailed": "Can't get the allowance right now. It will be retried automatically.",
   "officialUnavailable": "Usage is unavailable; existing data may be out of date",
   "officialQuotaTitle": "Daily relay allowance used up",
-  "officialQuotaBody": "Official relay is paused until the daily reset at midnight Beijing time. LAN and direct Internet connections remain available. Failed transfers can be retried later.",
+  "officialQuotaBody": "The service relay is paused until the daily reset at midnight Beijing time. LAN and direct Internet connections remain available. Failed transfers can be retried later.",
   "officialPeerQuota": "The peer has no relay allowance left. Direct connections remain available.",
-  "officialPaused": "Official relay is unavailable. Direct connections remain available.",
+  "officialPaused": "The service relay is unavailable. Direct connections remain available.",
   "officialViewUsage": "View usage",
   "officialAcknowledge": "Got it",
   "officialToday": "Today's relay allowance",
@@ -716,7 +716,7 @@
   "officialReset": "Reset time (Beijing)",
   "officialUpdated": "Last updated",
   "officialRoutes": "How devices connect",
-  "officialRoutesFootnote": "Direct connections don't go through the official relay and don't use the allowance.",
+  "officialRoutesFootnote": "Direct connections don't go through the service relay and don't use the allowance.",
   "officialDeviceID": "Device ID",
   "officialWarning": "90% of the daily relay allowance has been used. Direct connections do not consume it.",
   "updateCheck": "Check for updates",
@@ -1002,8 +1002,8 @@
     }
   },
   "sendErrMissing": "Some of these files no longer exist.",
-  "relayConfirmTitle": "Send through the official relay?",
-  "relayConfirmBody": "{name} has no direct connection to this computer right now, so the files go through the official relay at about 0.25 MB/s. {left} of today’s relay allowance is left.",
+  "relayConfirmTitle": "Send through the service relay?",
+  "relayConfirmBody": "{name} has no direct connection to this computer right now, so the files go through the service relay at about 0.25 MB/s. {left} of today’s relay allowance is left.",
   "@relayConfirmBody": {
     "placeholders": {
       "name": {

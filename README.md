@@ -127,7 +127,7 @@ The Mac app isn't notarized by Apple and the Windows app isn't code-signed yet: 
 
 | Way | Best for | You need |
 |---|---|---|
-| **[Official service](https://pasteferry.cc/en/official/)** | Different networks, no server of your own | Turn on **Use official service** in Settings on each computer (off by default). Relay, used only when a direct connection fails, currently allows 100 MB a day; direct traffic doesn't count |
+| **[Official service](https://pasteferry.cc/en/official/)** | Different networks, no server of your own | Turn on **Use the service** in Settings on each computer (off by default). Relay, used only when a direct connection fails, currently allows 100 MB a day; direct traffic doesn't count |
 | **[Same network](https://pasteferry.cc/en/lan/)** | Computers behind one router | Nothing |
 | **[Public server](https://pasteferry.cc/en/cloud/)** | Full control | A Linux VM with a public IP; the smallest is enough |
 | **[Tailscale](https://pasteferry.cc/en/tailscale/)** | Across networks without a server | [Tailscale](https://tailscale.com) on every computer; enter the other's Tailscale address when pairing |

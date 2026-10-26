@@ -1925,13 +1925,13 @@ abstract class AppLocalizations {
   /// No description provided for @officialService.
   ///
   /// In en, this message translates to:
-  /// **'Official service'**
+  /// **'Service'**
   String get officialService;
 
   /// No description provided for @useOfficialService.
   ///
   /// In en, this message translates to:
-  /// **'Use official service'**
+  /// **'Use the service'**
   String get useOfficialService;
 
   /// No description provided for @officialServiceDesc.
@@ -1943,13 +1943,13 @@ abstract class AppLocalizations {
   /// No description provided for @officialPrivacy.
   ///
   /// In en, this message translates to:
-  /// **'Connects to the official service only when enabled and records essential access statistics. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.'**
+  /// **'Connects to the service only when enabled and records essential access statistics. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.'**
   String get officialPrivacy;
 
   /// No description provided for @officialEnableTitle.
   ///
   /// In en, this message translates to:
-  /// **'Enable official Internet service?'**
+  /// **'Enable the service?'**
   String get officialEnableTitle;
 
   /// No description provided for @officialSwitchConfirm.
@@ -1997,7 +1997,7 @@ abstract class AppLocalizations {
   /// No description provided for @officialQuotaBody.
   ///
   /// In en, this message translates to:
-  /// **'Official relay is paused until the daily reset at midnight Beijing time. LAN and direct Internet connections remain available. Failed transfers can be retried later.'**
+  /// **'The service relay is paused until the daily reset at midnight Beijing time. LAN and direct Internet connections remain available. Failed transfers can be retried later.'**
   String get officialQuotaBody;
 
   /// No description provided for @officialPeerQuota.
@@ -2009,7 +2009,7 @@ abstract class AppLocalizations {
   /// No description provided for @officialPaused.
   ///
   /// In en, this message translates to:
-  /// **'Official relay is unavailable. Direct connections remain available.'**
+  /// **'The service relay is unavailable. Direct connections remain available.'**
   String get officialPaused;
 
   /// No description provided for @officialViewUsage.
@@ -2081,7 +2081,7 @@ abstract class AppLocalizations {
   /// No description provided for @officialRoutesFootnote.
   ///
   /// In en, this message translates to:
-  /// **'Direct connections don\'t go through the official relay and don\'t use the allowance.'**
+  /// **'Direct connections don\'t go through the service relay and don\'t use the allowance.'**
   String get officialRoutesFootnote;
 
   /// No description provided for @officialDeviceID.
@@ -2645,13 +2645,13 @@ abstract class AppLocalizations {
   /// No description provided for @relayConfirmTitle.
   ///
   /// In en, this message translates to:
-  /// **'Send through the official relay?'**
+  /// **'Send through the service relay?'**
   String get relayConfirmTitle;
 
   /// No description provided for @relayConfirmBody.
   ///
   /// In en, this message translates to:
-  /// **'{name} has no direct connection to this computer right now, so the files go through the official relay at about 0.25 MB/s. {left} of today’s relay allowance is left.'**
+  /// **'{name} has no direct connection to this computer right now, so the files go through the service relay at about 0.25 MB/s. {left} of today’s relay allowance is left.'**
   String relayConfirmBody(String name, String left);
 
   /// No description provided for @relayConfirmOver.

@@ -58,7 +58,7 @@ func sendFiles(ctx context.Context, c pb.DaemonServiceClient, args []string) err
 	t, err := c.SendFiles(ctx, &pb.SendFilesRequest{DeviceId: target.GetId(), Paths: paths, AllowRelay: allowRelay})
 	if err != nil {
 		if s, ok := status.FromError(err); ok && s.Code() == codes.FailedPrecondition && s.Message() == "relay" {
-			return errors.New("要经官方服务中转（有每日额度），确认要发的话加上 -relay")
+			return errors.New("要经服务中转（有每日额度），确认要发的话加上 -relay")
 		}
 		return err
 	}
