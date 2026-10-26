@@ -11,6 +11,26 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.6.1',
+ 'date': '2026-10-26',
+ 'changes': [('Contacts now have their own page in the sidebar: search your contacts and see who is online, open one to '
+              'send files, see your transfers or turn on automatic accepting, or drop files onto it. A badge shows '
+              'contact requests waiting for you. Send Files keeps its contacts as before.',
+              '左侧栏新增「好友」页：可以搜索好友、查看谁在线；点开一个好友可以发文件、看传输记录、开关自动接收，也可以直接把文件拖进来。有待处理的好友请求时，侧边栏会显示数字。隔空传送页里的好友入口保持不变。',
+              'サイドバーに「連絡先」ページを追加しました。連絡先の検索とオンライン状態の確認ができ、開くとファイル送信、転送履歴、自動受け入れの切り替えができます。ファイルを直接ドロップすることもできます。未処理の連絡先リクエストがあるとサイドバーに件数を表示します。ファイル送信ページの連絡先もこれまでどおり使えます。',
+              '左側欄新增「好友」頁：可以搜尋好友、查看誰在線；點開一個好友可以傳檔案、看傳輸記錄、開關自動接收，也可以直接把檔案拖進來。有待處理的好友請求時，側邊欄會顯示數字。隔空傳送頁裡的好友入口保持不變。',
+              '左側欄新增「好友」頁：可以搜尋好友、查看誰在線；按開一個好友可以傳檔案、看傳輸記錄、開關自動接收，也可以直接把檔案拖進來。有待處理的好友請求時，側邊欄會顯示數字。隔空傳送頁裏的好友入口保持不變。'),
+             ('The "Let these people send me files" and avatar menus now look like the other menus in the app.',
+              '「允许这些人给我发文件」和头像菜单改成与 App 其他菜单一致的样式。',
+              '「ファイルの送信を許可」とアイコンのメニューを、アプリのほかのメニューと同じ見た目にしました。',
+              '「允許這些人傳檔案給我」和頭像選單改成與 App 其他選單一致的樣式。',
+              '「允許這些人傳檔案給我」和頭像選單改成與 App 其他選單一致的樣式。')],
+ 'fixes': [('In-app updates on a Mac downloaded the universal package (about 50 MB) on every computer; from this '
+            'version on they download the package for the computer\'s chip, about half the size.',
+            'Mac 上的自动更新不论哪种芯片都下载通用版（约 50 MB）；从这一版起按本机芯片下载对应的安装包，大小约减半。',
+            'Mac のアプリ内アップデートは、どのチップでもユニバーサル版（約 50 MB）をダウンロードしていました。このバージョンからはそのパソコンのチップ用のパッケージをダウンロードし、サイズはおよそ半分になります。',
+            'Mac 上的自動更新不論哪種晶片都下載通用版（約 50 MB）；從這一版起按本機晶片下載對應的安裝檔，大小約減半。',
+            'Mac 上的自動更新不論哪種晶片都下載通用版（約 50 MB）；從這一版起按本機晶片下載對應的安裝檔，大小約減半。')]},
 {'version': '2.6.0',
  'date': '2026-10-26',
  'changes': [('Send files to contacts: add someone else\'s computer once with a contact code, no pairing needed, then drop files '

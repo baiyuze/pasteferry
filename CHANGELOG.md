@@ -1,5 +1,26 @@
 # 更新记录 / Changelog
 
+## 2.6.1 — 2026-10-26
+
+Contacts get their own page in the sidebar, and Mac updates download
+only the package for the computer's chip.
+
+### Changes
+
+- Contacts now have their own page in the sidebar: search your contacts and see who is online, open one to send files, see your transfers or turn on automatic accepting, or drop files onto it. A badge shows contact requests waiting for you. Send Files keeps its contacts as before.
+- The "Let these people send me files" and avatar menus now look like the other menus in the app.
+
+### Fixes
+
+- In-app updates on a Mac downloaded the universal package (about 50 MB) on every computer; from this version on they download the package for the computer's chip, about half the size.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional; contacts, pairings, history
+  and settings are preserved.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with 2.6.0.
+
 ## 2.6.0 — 2026-10-26
 
 Send files to other people's computers: add them as a contact once, then
