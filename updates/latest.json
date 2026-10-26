@@ -1,65 +1,96 @@
 {
   "schema": 1,
-  "latest": "2.6.1",
-  "date": "2026-10-26",
+  "latest": "2.6.2",
+  "date": "2026-10-27",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.6.1/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.6.2/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.6.1/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.6.2/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 26446610,
-      "sha256": "16ca754c629993aa2d842785756fe79b01c56126095ad19f39dfec0294ed3567"
+      "size": 26445920,
+      "sha256": "e15886f46ce747f4e7a5d5b605a7f01d02a4870ff759819ecbbc66ff296d4905"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 28568015,
-      "sha256": "91a3c4d2986e13ddee95d38349084447fb8608ad3942d15dc04b35f78fc980a4"
+      "size": 28567613,
+      "sha256": "5315d2b1dace8b8a161fed74f6100002ead755e92cbd95d938347d75401f03a5"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 53076800,
-      "sha256": "25783e363a7428bb21d87fe0700e8c5d44a510c653755a7df3b8ee347416d21b"
+      "size": 53075841,
+      "sha256": "0f8c1308e056b3f1ae4a4395f29f4b3b062ed91f25a51dbdf107d4fe51a24bb8"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 23657899,
-      "sha256": "0b83d71b4b43777288d67adc8928cf59f1b806d692d61303f7bae9e12623a249"
+      "size": 23655332,
+      "sha256": "217357f5cd19c29efc645fa625f3dd2f6df8582713e65d023e79d56a2a538314"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 29899943,
-      "sha256": "18c82c198cd0da0e1db09bdd4feaeda59b11239142cbc088fc5ccaf58dc9a30f"
+      "size": 29899426,
+      "sha256": "90a81b13f4569e5eb3b7843417d5c1f827a1a23370e075bf04e39f6d2793eec2"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22821852,
-      "sha256": "98b47e0e2e0cf986381b84e471173b3103f660af86c30d82143e9677b1e45b11"
+      "size": 22821456,
+      "sha256": "b3206c155413892f98c787a0bda3080bcf39c35eb5860e48662e021bb44694ed"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 21231120,
-      "sha256": "7e6194d99f3ebfca32a4334ab3abadd0a1a8ffa5faa09acbaa488736a49c9314"
+      "size": 21231066,
+      "sha256": "185f6bb69a813713113d786bbef11231d4fce49e09d885b8c4cd45f812100e61"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 27622175,
-      "sha256": "20e817b2ffd6dae03b189df3560223203de0ae97a0660927a742154ed423a5de"
+      "size": 27621433,
+      "sha256": "638d069be06a5cbf50ec1a84ff5b67f60aa8e0b36269e6d97c1e08d999730b8f"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25864730,
-      "sha256": "2006ca06d2390b494a9963020258697eb019afa1f24514db7bf01ec9bd1fe3b3"
+      "size": 25864143,
+      "sha256": "808197aaecd2c84a19c02d5cb0040a865a325a63cbeb138d3d3a2c61ec9b04ab"
     }
   },
   "releases": [
+    {
+      "version": "2.6.2",
+      "date": "2026-10-27",
+      "notes": {
+        "en": {
+          "fixes": [
+            "In quick paste, typing a number into the empty search box pasted that item, so numbers such as tracking or phone numbers could not be searched. Numbers now always go into the search box; press ⌘1–⌘9 on a Mac or Alt+1–Alt+9 on Windows and Linux to paste one of the first nine items."
+          ]
+        },
+        "zh-Hans": {
+          "fixes": [
+            "快捷粘贴里，搜索框为空时输入数字会直接粘贴对应的那一条，没法搜快递单号、电话这类数字。现在数字一律输入到搜索框；要粘贴前 9 条，Mac 上按 ⌘1–⌘9，Windows、Linux 上按 Alt+1–Alt+9。"
+          ]
+        },
+        "ja": {
+          "fixes": [
+            "クイックペーストで、検索欄が空のときに数字を入力するとその番号の項目が貼り付けられ、追跡番号や電話番号などの数字を検索できませんでした。数字は常に検索欄に入力されるようになりました。先頭 9 件を貼り付けるには、Mac では ⌘1〜⌘9、Windows と Linux では Alt+1〜Alt+9 を押します。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "fixes": [
+            "快速貼上裡，搜尋框是空的時候輸入數字會直接貼上對應的那一筆，沒辦法搜尋物流單號、電話這類數字。現在數字一律輸入到搜尋框；要貼上前 9 筆，Mac 上按 ⌘1–⌘9，Windows、Linux 上按 Alt+1–Alt+9。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "fixes": [
+            "快速貼上裏，搜尋框是空的時候輸入數字會直接貼上對應的那一項，沒法搜尋速遞單號、電話這類數字。現在數字一律輸入到搜尋框；要貼上前 9 項，Mac 上按 ⌘1–⌘9，Windows、Linux 上按 Alt+1–Alt+9。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.6.1",
       "date": "2026-10-26",
@@ -525,87 +556,6 @@
           "fixes": [
             "Mac 上，快速貼上裏的「去授權」現在每次都會把隔空貼重新加入「輔助使用」列表，即使你之前在那裏刪除過它。",
             "在快速貼上裏打字搜尋時，新結果出來之前列表保留上一次的結果，不再閃一下「沒有找到」。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.4.0",
-      "date": "2026-10-21",
-      "notes": {
-        "en": {
-          "changes": [
-            "Quick paste: press ⌥V on a Mac or Alt+V on Windows and Linux in any app to bring up your history. Type to search, then press a number or Return to paste the item where you were typing; Shift+Return pastes plain text and ⌘Return or Ctrl+Enter only copies. You can change or turn off the shortcut in Settings.",
-            "On a Mac, pasting for you needs the Accessibility permission; without it the item is copied and you press ⌘V. On Linux with Wayland, picked items are copied and you press Ctrl+V.",
-            "Favorites: star an item to keep a copy of it. Favorites never expire, stay when you clear your history and appear in quick paste too. They stay on the computer where you saved them.",
-            "History has a Links filter, and resting the pointer on an item shows its full text, a larger image or every file name.",
-            "The Mac app is now signed with a fixed PasteFerry certificate, so permissions you grant, such as Accessibility, are kept when the app updates."
-          ],
-          "fixes": [
-            "Apps that write the clipboard twice for one copy no longer leave two identical records.",
-            "Content PasteFerry put on the clipboard itself, such as an item received from another device, could occasionally be recorded again as a new copy, and in rare cases the background service crashed while doing so.",
-            "A background service that hangs while quitting is now stopped after 10 seconds, so it can no longer keep the new one from starting after an update or restart.",
-            "While you type with an input method, History search waits until you pick the characters instead of searching the romanization."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "快捷粘贴：在任何 App 里按 ⌥V（Windows、Linux 上是 Alt+V）呼出复制记录。打字搜索，按数字或回车，选中的内容直接粘贴到刚才的光标处；Shift+回车粘贴纯文本，⌘回车或 Ctrl+Enter 只复制。快捷键可以在设置里更换或关闭。",
-            "Mac 上直接粘贴需要授予「辅助功能」权限，没授权时选中的内容放进剪贴板，再由你按 ⌘V。Linux 的 Wayland 桌面上，选中后按 Ctrl+V 粘贴。",
-            "收藏：点一下星标就另存一份。收藏不会过期，清空复制记录也还在，快捷粘贴里也能用。收藏只保存在当前这台电脑上，不同步到其他设备。",
-            "复制记录可以单独筛选链接；鼠标在一条上停一下，就能看到全文、大图或全部文件名。",
-            "Mac 版改用固定的隔空贴证书签名，你授予的权限（比如辅助功能）在更新后会保留。"
-          ],
-          "fixes": [
-            "有的 App 复制一次会写两遍剪贴板，现在只记一条，不再出现两条一样的记录。",
-            "隔空贴自己放进剪贴板的内容（比如从其他设备收到的）偶尔会被当成一次新的复制再记一遍，极少数情况下后台服务还会因此崩溃。",
-            "后台服务退出时卡住的话，10 秒后会被强制结束，不会再挡住更新或重启后新的后台服务。",
-            "用输入法打字时，复制记录的搜索会等选字上屏后再搜，不再拿拼音去搜。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "クイックペースト：どのアプリでも ⌥V（Windows と Linux では Alt+V）で履歴を呼び出せます。入力して検索し、数字かリターンを押すと、選んだ内容がカーソルの位置にペーストされます。Shift+リターンでプレーンテキスト、⌘リターンまたは Ctrl+Enter はコピーのみ。ショートカットは設定で変更・オフにできます。",
-            "Mac で直接ペーストするにはアクセシビリティの許可が必要です。許可しない場合はコピーされるので ⌘V で貼り付けます。Linux の Wayland では、選んだ後に Ctrl+V で貼り付けます。",
-            "お気に入り：星をクリックするとコピーが保存されます。お気に入りは期限切れにならず、履歴を消しても残り、クイックペーストからも使えます。保存したパソコンにだけ残り、ほかのデバイスには同期されません。",
-            "履歴をリンクで絞り込めるようになりました。項目にポインタを置くと、全文、大きな画像、すべてのファイル名が表示されます。",
-            "Mac 版は固定の PasteFerry 証明書で署名されるようになり、許可した権限（アクセシビリティなど）はアップデート後も保持されます。"
-          ],
-          "fixes": [
-            "1 回のコピーでクリップボードに 2 回書き込むアプリでも、同じ記録が 2 件残らなくなりました。",
-            "PasteFerry 自身がクリップボードに入れた内容（ほかのデバイスから受け取ったものなど）が、まれに新しいコピーとしてもう一度記録されることがあり、ごくまれにバックグラウンドサービスが異常終了することがありました。",
-            "終了時に止まってしまったバックグラウンドサービスは 10 秒後に強制終了され、アップデートや再起動後の新しいサービスの起動を妨げなくなりました。",
-            "入力メソッドで入力しているときは、文字を確定してから履歴を検索するようになりました。ローマ字やかなのまま検索しません。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "快速貼上：在任何 App 裡按 ⌥V（Windows、Linux 上是 Alt+V）叫出複製記錄。打字搜尋，按數字或 Enter，選取的內容直接貼到剛才的游標處；Shift+Enter 貼上純文字，⌘Enter 或 Ctrl+Enter 只複製。快速鍵可以在設定裡更換或關閉。",
-            "Mac 上直接貼上需要授予「輔助使用」權限，沒授權時選取的內容放進剪貼簿，再由你按 ⌘V。Linux 的 Wayland 桌面上，選取後按 Ctrl+V 貼上。",
-            "收藏：點一下星號就另存一份。收藏不會過期，清空複製記錄也還在，快速貼上裡也能用。收藏只儲存在目前這台電腦上，不同步到其他裝置。",
-            "複製記錄可以單獨篩選連結；滑鼠在一筆上停一下，就能看到全文、大圖或全部檔名。",
-            "Mac 版改用固定的隔空貼憑證簽署，你授予的權限（例如輔助使用）在更新後會保留。"
-          ],
-          "fixes": [
-            "有的 App 複製一次會寫兩遍剪貼簿，現在只記一筆，不再出現兩筆一樣的記錄。",
-            "隔空貼自己放進剪貼簿的內容（例如從其他裝置收到的）偶爾會被當成一次新的複製再記一遍，極少數情況下背景服務還會因此當掉。",
-            "背景服務結束時卡住的話，10 秒後會被強制結束，不會再擋住更新或重新啟動後新的背景服務。",
-            "用輸入法打字時，複製記錄的搜尋會等選字完成後再搜，不再拿注音或拼音去搜。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "快速貼上：在任何程式裏按 ⌥V（Windows、Linux 上是 Alt+V）叫出複製記錄。打字搜尋，按數字或 Enter，選取的內容直接貼到剛才的游標處；Shift+Enter 貼上純文字，⌘Enter 或 Ctrl+Enter 只複製。快速鍵可以在設定裏更換或關閉。",
-            "Mac 上直接貼上需要授予「輔助使用」權限，未授權時選取的內容放入剪貼簿，再由你按 ⌘V。Linux 的 Wayland 桌面上，選取後按 Ctrl+V 貼上。",
-            "收藏：按一下星號就另存一份。收藏不會過期，清空複製記錄也還在，快速貼上裏也能用。收藏只儲存在目前這部電腦上，不同步到其他裝置。",
-            "複製記錄可以單獨篩選連結；滑鼠在一條上停一下，就能看到全文、大圖或全部檔案名稱。",
-            "Mac 版改用固定的隔空貼證書簽署，你授予的權限（例如輔助使用）在更新後會保留。"
-          ],
-          "fixes": [
-            "有的程式複製一次會寫兩遍剪貼簿，現在只記一條，不再出現兩條一樣的記錄。",
-            "隔空貼自己放入剪貼簿的內容（例如從其他裝置收到的）偶爾會被當成一次新的複製再記一遍，極少數情況下背景服務還會因此崩潰。",
-            "背景服務結束時卡住的話，10 秒後會被強制結束，不會再阻礙更新或重新啟動後新的背景服務。",
-            "用輸入法打字時，複製記錄的搜尋會等選字完成後再搜，不再拿拼音或倉頡碼去搜。"
           ]
         }
       }
