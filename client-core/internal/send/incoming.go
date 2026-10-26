@@ -26,6 +26,7 @@ import (
 // incoming 是一批正在收的文件。
 type incoming struct {
 	id, device string
+	role       string // 对方的角色：非自己的设备发来的文件去掉可执行权限
 	attempt    uint32
 	offer      *pb.SendOffer
 	dest       string // 保存位置
@@ -101,15 +102,62 @@ func (e *Engine) handleOffer(from string, offer *pb.SendOffer) {
 		a.TransferId, a.Attempt = id, offer.GetAttempt()
 		_ = e.opts.Send(from, &pb.PeerMessage{Payload: &pb.PeerMessage_SendAnswer{SendAnswer: a}})
 	}
-	if err := validOffer(offer); err != nil {
+	note, noteOK := CleanNote(offer.GetNote())
+	if err := validOffer(offer); err != nil || !noteOK {
 		e.log.Warn("收到无效的隔空传送请求", "from", from, "err", err)
 		answer(&pb.SendAnswer{Reason: "bad_offer"})
 		return
 	}
 	cfg := e.opts.LoadConfig()
-	if cfg.ReceiveDisabled {
+	role := p.Role
+	if role == "" {
+		role = store.RoleSelf
+	}
+	other := role != store.RoleSelf
+	ask := false
+	if other {
+		// 好友、陌生设备：看「允许这些人给我发文件」，每次问用户，除非对这个好友打开了自动接收
+		adm := Admission{}
+		if e.opts.Admit != nil {
+			adm = e.opts.Admit(from)
+		}
+		switch {
+		case !adm.Allowed:
+			answer(&pb.SendAnswer{Reason: "not_allowed"})
+			return
+		case e.isMuted(from):
+			answer(&pb.SendAnswer{Reason: "rate_limited"})
+			return
+		}
+		ask = !adm.AutoAccept && !offer.GetResume()
+	} else if cfg.ReceiveDisabled {
 		answer(&pb.SendAnswer{Reason: "disabled"})
 		return
+	}
+	if ask {
+		pending := store.Transfer{ID: id, Direction: store.Incoming, DeviceID: from, DeviceName: p.Name,
+			Status: store.TransferAsking, Items: itemsFromOffer(offer), TotalBytes: offer.GetTotalBytes(),
+			FileCount: offer.GetFileCount(), Relayed: p.Relayed, CreatedAt: e.opts.Now(), PeerRole: role, Note: note}
+		if old, err := e.opts.Store.GetTransfer(id); err == nil && (old.Direction != store.Incoming || old.DeviceID != from) {
+			answer(&pb.SendAnswer{Reason: "bad_offer"})
+			return
+		}
+		answer(&pb.SendAnswer{Reason: "pending"})
+		d := e.askUser(pending)
+		if d != askAccept {
+			a, status, code := askResult(d)
+			if a != nil {
+				answer(a)
+			}
+			e.finish(pending, status, code)
+			switch d {
+			case askDeclined:
+				e.declined(from)
+			case "timeout":
+				e.notice(NoticeIgnored, pending)
+			}
+			return
+		}
 	}
 
 	// 同一台设备一次只发一批：还挂着的旧接收一定是过时的（对方重启过或者重新发起了）
@@ -132,7 +180,7 @@ func (e *Engine) handleOffer(from string, offer *pb.SendOffer) {
 	now := e.opts.Now()
 	existing, getErr := e.opts.Store.GetTransfer(id)
 	var t store.Transfer
-	in := &incoming{id: id, device: from, attempt: offer.GetAttempt(), offer: offer,
+	in := &incoming{id: id, device: from, role: role, attempt: offer.GetAttempt(), offer: offer,
 		tops: map[string]bool{}, names: pack.NewNames(),
 		streamCh: make(chan io.ReadCloser, 1), done: make(chan struct{})}
 	for _, it := range offer.GetItems() {
@@ -182,6 +230,7 @@ func (e *Engine) handleOffer(from string, offer *pb.SendOffer) {
 		in.partial = filepath.Join(in.dest, partialDir, id)
 	}
 	t.DeviceName = p.Name
+	t.PeerRole, t.Note = role, note
 	t.Items = itemsFromOffer(offer)
 	t.TotalBytes, t.FileCount, t.DestDir = offer.GetTotalBytes(), offer.GetFileCount(), in.dest
 	t.Relayed = p.Relayed
@@ -617,6 +666,10 @@ func (e *Engine) receiveFile(in *incoming, fr *pack.FrameReader, fs *pb.SendFile
 		}
 	} else {
 		perm := os.FileMode(fs.GetMode()).Perm()&^0o022 | 0o600
+		if in.role != store.RoleSelf {
+			// 别人发来的文件不保留可执行权限
+			perm &^= 0o111
+		}
 		f, err = os.OpenFile(target, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, perm)
 	}
 	if err != nil {
@@ -760,7 +813,11 @@ func (e *Engine) finalize(in *incoming, t store.Transfer) error {
 
 	t = e.withProgress(t)
 	t.Items, t.Paths, t.DoneBytes, t.Renamed = items, finals, t.TotalBytes, renamed
+	t.Thumbs = e.thumbnails(items, finals)
 	e.finish(t, store.TransferDone, "")
+	if in.role == store.RoleFriend && e.opts.Delivered != nil {
+		e.opts.Delivered(in.device)
+	}
 	_ = e.opts.Send(in.device, &pb.PeerMessage{Payload: &pb.PeerMessage_SendResult{SendResult: &pb.SendResult{
 		TransferId: t.ID, Attempt: in.attempt, Ok: true}}})
 	e.log.Info("隔空传送已收到", "transfer", t.ID, "from", in.device, "字节", t.TotalBytes, "到", in.dest)

@@ -28,6 +28,7 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/notifications"
 	"github.com/baiyuze/pasteferry/client-core/internal/peers"
 	"github.com/baiyuze/pasteferry/client-core/internal/power"
+	"github.com/baiyuze/pasteferry/client-core/internal/profile"
 	"github.com/baiyuze/pasteferry/client-core/internal/rpc"
 	"github.com/baiyuze/pasteferry/client-core/internal/send"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
@@ -270,8 +271,18 @@ func run(dataDir string) error {
 			hub.Navigate(page)
 			return notifications.OpenUI()
 		},
+		Accept: func(id string) error {
+			if sender == nil {
+				return nil
+			}
+			_, _, err := sender.Answer(id, true)
+			return err
+		},
 	})
 	defer notifier.Close()
+
+	// 好友看到的名字和头像，好友发来的头像、收到的图片的缩略图
+	prof := profile.New(paths.Root, loadCfg, saveCfg)
 
 	// 状态快照要由 gRPC 服务组装，而它晚于 peerMgr 创建，这里先记下"状态变了"，
 	// 等服务就绪后统一推送。容量 1 让连续的变化合并成一次刷新。
@@ -291,6 +302,28 @@ func run(dataDir string) error {
 		AppVersion: version,
 		OnDeviceChanged: func(d *pb.Device) {
 			hub.Publish(rpc.EventDeviceChanged(d))
+		},
+		// 好友（2.6.0）
+		Card:       prof.Card,
+		Avatar:     prof.Avatar,
+		SaveAvatar: prof.SaveFriendAvatar,
+		OnFriendChanged: func(f *pb.Friend) {
+			hub.Publish(rpc.EventFriendChanged(f))
+		},
+		OnFriendRemoved: func(id string) {
+			hub.Publish(rpc.EventFriendRemoved(id))
+		},
+		OnFriendRequest: func(r *pb.FriendRequest) {
+			hub.Publish(rpc.EventFriendRequest(r))
+		},
+		OnOtherReady: func(deviceID string) {
+			if sender != nil {
+				go sender.PeerReady(deviceID)
+			}
+		},
+		ShareableStream: send.IsStream,
+		InUse: func(deviceID string) bool {
+			return sender != nil && sender.Busy(deviceID)
 		},
 		OnStatusChanged: func() {
 			select {
@@ -394,22 +427,13 @@ func run(dataDir string) error {
 		OpenStream: peerMgr.P2P().OpenStream,
 		ListenLAN:  listenLAN,
 		DialLAN:    dialLAN,
-		Peer: func(deviceID string) send.Peer {
-			_, list := peerMgr.Devices()
-			for _, d := range list {
-				if d.GetId() != deviceID {
-					continue
-				}
-				state := peerMgr.ConnState(deviceID)
-				return send.Peer{
-					Known: true, Name: d.GetName(), Online: d.GetOnline(),
-					Connected: state == p2p.StateDirect || state == p2p.StateRelay,
-					Relayed:   state == p2p.StateRelay,
-					Supported: d.GetReceivesFiles(), Disabled: d.GetReceiveDisabled(),
-				}
-			}
-			return send.Peer{}
+		Peer:       func(deviceID string) send.Peer { return sendPeer(peerMgr, deviceID) },
+		Admit:      func(deviceID string) send.Admission { return admit(peerMgr, db, deviceID) },
+		Connect: func(deviceID string) {
+			peerMgr.ConnectFriend(deviceID)
 		},
+		Thumbnail: prof.Thumbnail,
+		Delivered: peerMgr.TouchFriend,
 		RelayQuotaExhausted: func() bool {
 			u := peerMgr.OfficialUsage()
 			return u != nil && (u.GetReason() == "quota_exhausted" || u.GetReason() == "global_exhausted" ||
@@ -423,10 +447,12 @@ func run(dataDir string) error {
 			hub.Publish(rpc.EventTransferRemoved(id))
 		},
 		OnNotice: func(kind send.NoticeKind, t *pb.Transfer) {
-			if loadCfg().ReceiveNotifyDisabled {
+			// 别人发来、等用户接受的一定要通知：界面可能没开
+			if loadCfg().ReceiveNotifyDisabled && kind != send.NoticeAsk {
 				return
 			}
-			name := map[send.NoticeKind]string{send.NoticeIncoming: "incoming", send.NoticeReceived: "received", send.NoticeFailed: "failed"}[kind]
+			name := map[send.NoticeKind]string{send.NoticeIncoming: "incoming", send.NoticeReceived: "received",
+				send.NoticeFailed: "failed", send.NoticeAsk: "ask", send.NoticeIgnored: "ignored"}[kind]
 			notifier.Transfer(name, t, receivedFolder(t))
 		},
 	})
@@ -469,9 +495,18 @@ func run(dataDir string) error {
 		if c.LANDisabled != prev.LANDisabled {
 			peerMgr.SetLANEnabled(!c.LANDisabled)
 		}
-		// 关掉或打开接收文件后，让对方的雷达立即更新
-		if c.ReceiveDisabled != prev.ReceiveDisabled {
+		// 关掉或打开接收文件、改了谁可以给我发文件后，让对方的雷达立即更新
+		if c.ReceiveFrom != prev.ReceiveFrom || c.EveryoneUntil != prev.EveryoneUntil {
+			peerMgr.ApplyEveryone()
+		}
+		if c.ReceiveDisabled != prev.ReceiveDisabled || c.ReceiveFrom != prev.ReceiveFrom || c.EveryoneUntil != prev.EveryoneUntil {
 			peerMgr.BroadcastFeatures()
+		}
+		// 好友看到的名片变了
+		if c.DisplayName != prev.DisplayName || c.DeviceName != prev.DeviceName ||
+			c.EffectiveSignalingURL() != prev.EffectiveSignalingURL() || c.ServiceMode != prev.ServiceMode {
+			peerMgr.BroadcastCard()
+			hub.Publish(rpc.EventProfileChanged(prof.Proto(id.DeviceID)))
 		}
 		if c.EffectiveSignalingURL() != prev.EffectiveSignalingURL() || c.ServiceMode != prev.ServiceMode || c.LANDisabled != prev.LANDisabled ||
 			c.UpdateCheckDisabled != prev.UpdateCheckDisabled || c.UpdateSkipVersion != prev.UpdateSkipVersion {
@@ -485,6 +520,31 @@ func run(dataDir string) error {
 		quickPaste.SetEnabled(!c.QuickPasteDisabled)
 		return nil
 	}
+
+	// 「所有人」到时间自动回到「仅限好友」；顺便清理过期的缩略图
+	go func() {
+		t := time.NewTicker(15 * time.Second)
+		defer t.Stop()
+		lastClean := time.Time{}
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case now := <-t.C:
+				c := loadCfg()
+				if c.ReceiveFrom == config.ReceiveFromEveryone && c.EveryoneUntil > 0 && c.EveryoneUntil <= now.Unix() {
+					c.ReceiveFrom, c.EveryoneUntil = config.ReceiveFromFriends, 0
+					if err := saveCfgAndApply(c); err != nil {
+						slog.Warn("「所有人」到时间了，但没能改回「仅限好友」", "err", err)
+					}
+				}
+				if now.Sub(lastClean) > 6*time.Hour {
+					lastClean = now
+					prof.CleanThumbs()
+				}
+			}
+		}
+	}()
 
 	// ── gRPC 服务 ──
 	token, err := rpc.NewToken()
@@ -560,7 +620,12 @@ func run(dataDir string) error {
 		NotificationStatus:   notifier.Status,
 		RequestNotifications: notifier.Request,
 		ActivateNotification: notifier.Activate,
-		Transfers:            sender,
+		Transfers:            transfersAPI{Engine: sender, peers: peerMgr},
+		Friends: &friendsAPI{peers: peerMgr, profile: prof, db: db, deviceID: id.DeviceID, changed: func() {
+			peerMgr.BroadcastCard()
+			peerMgr.ApplyEveryone()
+			hub.Publish(rpc.EventProfileChanged(prof.Proto(id.DeviceID)))
+		}},
 	}
 	wireUpdater(&deps, updater)
 	srv := rpc.NewServer(deps, hub, token)

@@ -418,6 +418,41 @@ const Event$json = {
       '10': 'transferRemoved'
     },
     {'1': 'navigate', '3': 13, '4': 1, '5': 9, '9': 0, '10': 'navigate'},
+    {
+      '1': 'friend_changed',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.Friend',
+      '9': 0,
+      '10': 'friendChanged'
+    },
+    {
+      '1': 'friend_removed',
+      '3': 15,
+      '4': 1,
+      '5': 9,
+      '9': 0,
+      '10': 'friendRemoved'
+    },
+    {
+      '1': 'friend_request',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.FriendRequest',
+      '9': 0,
+      '10': 'friendRequest'
+    },
+    {
+      '1': 'profile_changed',
+      '3': 17,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.Profile',
+      '9': 0,
+      '10': 'profileChanged'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -440,7 +475,246 @@ final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
     'FuZ2VkGAogASgLMh8ucGFzdGVmZXJyeS52MS5RdWlja1Bhc3RlU3RhdHVzSABSEXF1aWNrUGFz'
     'dGVDaGFuZ2VkEkQKEHRyYW5zZmVyX2NoYW5nZWQYCyABKAsyFy5wYXN0ZWZlcnJ5LnYxLlRyYW'
     '5zZmVySABSD3RyYW5zZmVyQ2hhbmdlZBIrChB0cmFuc2Zlcl9yZW1vdmVkGAwgASgJSABSD3Ry'
-    'YW5zZmVyUmVtb3ZlZBIcCghuYXZpZ2F0ZRgNIAEoCUgAUghuYXZpZ2F0ZUIJCgdwYXlsb2Fk');
+    'YW5zZmVyUmVtb3ZlZBIcCghuYXZpZ2F0ZRgNIAEoCUgAUghuYXZpZ2F0ZRI+Cg5mcmllbmRfY2'
+    'hhbmdlZBgOIAEoCzIVLnBhc3RlZmVycnkudjEuRnJpZW5kSABSDWZyaWVuZENoYW5nZWQSJwoO'
+    'ZnJpZW5kX3JlbW92ZWQYDyABKAlIAFINZnJpZW5kUmVtb3ZlZBJFCg5mcmllbmRfcmVxdWVzdB'
+    'gQIAEoCzIcLnBhc3RlZmVycnkudjEuRnJpZW5kUmVxdWVzdEgAUg1mcmllbmRSZXF1ZXN0EkEK'
+    'D3Byb2ZpbGVfY2hhbmdlZBgRIAEoCzIWLnBhc3RlZmVycnkudjEuUHJvZmlsZUgAUg5wcm9maW'
+    'xlQ2hhbmdlZEIJCgdwYXlsb2Fk');
+
+@$core.Deprecated('Use profileDescriptor instead')
+const Profile$json = {
+  '1': 'Profile',
+  '2': [
+    {'1': 'display_name', '3': 1, '4': 1, '5': 9, '10': 'displayName'},
+    {'1': 'device_id', '3': 2, '4': 1, '5': 9, '10': 'deviceId'},
+    {'1': 'has_avatar', '3': 3, '4': 1, '5': 8, '10': 'hasAvatar'},
+    {'1': 'avatar_hash', '3': 4, '4': 1, '5': 12, '10': 'avatarHash'},
+  ],
+};
+
+/// Descriptor for `Profile`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List profileDescriptor = $convert.base64Decode(
+    'CgdQcm9maWxlEiEKDGRpc3BsYXlfbmFtZRgBIAEoCVILZGlzcGxheU5hbWUSGwoJZGV2aWNlX2'
+    'lkGAIgASgJUghkZXZpY2VJZBIdCgpoYXNfYXZhdGFyGAMgASgIUgloYXNBdmF0YXISHwoLYXZh'
+    'dGFyX2hhc2gYBCABKAxSCmF2YXRhckhhc2g=');
+
+@$core.Deprecated('Use setDisplayNameRequestDescriptor instead')
+const SetDisplayNameRequest$json = {
+  '1': 'SetDisplayNameRequest',
+  '2': [
+    {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `SetDisplayNameRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setDisplayNameRequestDescriptor =
+    $convert.base64Decode(
+        'ChVTZXREaXNwbGF5TmFtZVJlcXVlc3QSEgoEbmFtZRgBIAEoCVIEbmFtZQ==');
+
+@$core.Deprecated('Use setAvatarRequestDescriptor instead')
+const SetAvatarRequest$json = {
+  '1': 'SetAvatarRequest',
+  '2': [
+    {'1': 'path', '3': 1, '4': 1, '5': 9, '10': 'path'},
+    {'1': 'image', '3': 5, '4': 1, '5': 12, '10': 'image'},
+    {'1': 'crop_x', '3': 2, '4': 1, '5': 1, '10': 'cropX'},
+    {'1': 'crop_y', '3': 3, '4': 1, '5': 1, '10': 'cropY'},
+    {'1': 'crop_size', '3': 4, '4': 1, '5': 1, '10': 'cropSize'},
+  ],
+};
+
+/// Descriptor for `SetAvatarRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setAvatarRequestDescriptor = $convert.base64Decode(
+    'ChBTZXRBdmF0YXJSZXF1ZXN0EhIKBHBhdGgYASABKAlSBHBhdGgSFAoFaW1hZ2UYBSABKAxSBW'
+    'ltYWdlEhUKBmNyb3BfeBgCIAEoAVIFY3JvcFgSFQoGY3JvcF95GAMgASgBUgVjcm9wWRIbCglj'
+    'cm9wX3NpemUYBCABKAFSCGNyb3BTaXpl');
+
+@$core.Deprecated('Use getAvatarRequestDescriptor instead')
+const GetAvatarRequest$json = {
+  '1': 'GetAvatarRequest',
+  '2': [
+    {'1': 'device_id', '3': 1, '4': 1, '5': 9, '10': 'deviceId'},
+  ],
+};
+
+/// Descriptor for `GetAvatarRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getAvatarRequestDescriptor = $convert.base64Decode(
+    'ChBHZXRBdmF0YXJSZXF1ZXN0EhsKCWRldmljZV9pZBgBIAEoCVIIZGV2aWNlSWQ=');
+
+@$core.Deprecated('Use avatarDescriptor instead')
+const Avatar$json = {
+  '1': 'Avatar',
+  '2': [
+    {'1': 'jpeg', '3': 1, '4': 1, '5': 12, '10': 'jpeg'},
+    {'1': 'avatar_hash', '3': 2, '4': 1, '5': 12, '10': 'avatarHash'},
+  ],
+};
+
+/// Descriptor for `Avatar`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List avatarDescriptor = $convert.base64Decode(
+    'CgZBdmF0YXISEgoEanBlZxgBIAEoDFIEanBlZxIfCgthdmF0YXJfaGFzaBgCIAEoDFIKYXZhdG'
+    'FySGFzaA==');
+
+@$core.Deprecated('Use friendRefDescriptor instead')
+const FriendRef$json = {
+  '1': 'FriendRef',
+  '2': [
+    {'1': 'device_id', '3': 1, '4': 1, '5': 9, '10': 'deviceId'},
+  ],
+};
+
+/// Descriptor for `FriendRef`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List friendRefDescriptor = $convert
+    .base64Decode('CglGcmllbmRSZWYSGwoJZGV2aWNlX2lkGAEgASgJUghkZXZpY2VJZA==');
+
+@$core.Deprecated('Use setFriendAutoAcceptRequestDescriptor instead')
+const SetFriendAutoAcceptRequest$json = {
+  '1': 'SetFriendAutoAcceptRequest',
+  '2': [
+    {'1': 'device_id', '3': 1, '4': 1, '5': 9, '10': 'deviceId'},
+    {'1': 'auto_accept', '3': 2, '4': 1, '5': 8, '10': 'autoAccept'},
+  ],
+};
+
+/// Descriptor for `SetFriendAutoAcceptRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setFriendAutoAcceptRequestDescriptor =
+    $convert.base64Decode(
+        'ChpTZXRGcmllbmRBdXRvQWNjZXB0UmVxdWVzdBIbCglkZXZpY2VfaWQYASABKAlSCGRldmljZU'
+        'lkEh8KC2F1dG9fYWNjZXB0GAIgASgIUgphdXRvQWNjZXB0');
+
+@$core.Deprecated('Use friendDescriptor instead')
+const Friend$json = {
+  '1': 'Friend',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'display_name', '3': 2, '4': 1, '5': 9, '10': 'displayName'},
+    {'1': 'device_name', '3': 3, '4': 1, '5': 9, '10': 'deviceName'},
+    {'1': 'platform', '3': 4, '4': 1, '5': 9, '10': 'platform'},
+    {'1': 'online', '3': 5, '4': 1, '5': 8, '10': 'online'},
+    {
+      '1': 'connection',
+      '3': 6,
+      '4': 1,
+      '5': 14,
+      '6': '.pasteferry.v1.ConnectionKind',
+      '10': 'connection'
+    },
+    {'1': 'lan_reachable', '3': 7, '4': 1, '5': 8, '10': 'lanReachable'},
+    {'1': 'features_known', '3': 8, '4': 1, '5': 8, '10': 'featuresKnown'},
+    {'1': 'receives_files', '3': 9, '4': 1, '5': 8, '10': 'receivesFiles'},
+    {'1': 'receive_disabled', '3': 10, '4': 1, '5': 8, '10': 'receiveDisabled'},
+    {'1': 'app_version', '3': 11, '4': 1, '5': 9, '10': 'appVersion'},
+    {'1': 'auto_accept', '3': 12, '4': 1, '5': 8, '10': 'autoAccept'},
+    {'1': 'added_at_unix', '3': 13, '4': 1, '5': 3, '10': 'addedAtUnix'},
+    {
+      '1': 'last_activity_unix',
+      '3': 14,
+      '4': 1,
+      '5': 3,
+      '10': 'lastActivityUnix'
+    },
+    {'1': 'reachability', '3': 15, '4': 1, '5': 9, '10': 'reachability'},
+    {'1': 'has_avatar', '3': 16, '4': 1, '5': 8, '10': 'hasAvatar'},
+    {'1': 'avatar_hash', '3': 17, '4': 1, '5': 12, '10': 'avatarHash'},
+    {'1': 'fingerprint', '3': 18, '4': 1, '5': 9, '10': 'fingerprint'},
+  ],
+};
+
+/// Descriptor for `Friend`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List friendDescriptor = $convert.base64Decode(
+    'CgZGcmllbmQSDgoCaWQYASABKAlSAmlkEiEKDGRpc3BsYXlfbmFtZRgCIAEoCVILZGlzcGxheU'
+    '5hbWUSHwoLZGV2aWNlX25hbWUYAyABKAlSCmRldmljZU5hbWUSGgoIcGxhdGZvcm0YBCABKAlS'
+    'CHBsYXRmb3JtEhYKBm9ubGluZRgFIAEoCFIGb25saW5lEj0KCmNvbm5lY3Rpb24YBiABKA4yHS'
+    '5wYXN0ZWZlcnJ5LnYxLkNvbm5lY3Rpb25LaW5kUgpjb25uZWN0aW9uEiMKDWxhbl9yZWFjaGFi'
+    'bGUYByABKAhSDGxhblJlYWNoYWJsZRIlCg5mZWF0dXJlc19rbm93bhgIIAEoCFINZmVhdHVyZX'
+    'NLbm93bhIlCg5yZWNlaXZlc19maWxlcxgJIAEoCFINcmVjZWl2ZXNGaWxlcxIpChByZWNlaXZl'
+    'X2Rpc2FibGVkGAogASgIUg9yZWNlaXZlRGlzYWJsZWQSHwoLYXBwX3ZlcnNpb24YCyABKAlSCm'
+    'FwcFZlcnNpb24SHwoLYXV0b19hY2NlcHQYDCABKAhSCmF1dG9BY2NlcHQSIgoNYWRkZWRfYXRf'
+    'dW5peBgNIAEoA1ILYWRkZWRBdFVuaXgSLAoSbGFzdF9hY3Rpdml0eV91bml4GA4gASgDUhBsYX'
+    'N0QWN0aXZpdHlVbml4EiIKDHJlYWNoYWJpbGl0eRgPIAEoCVIMcmVhY2hhYmlsaXR5Eh0KCmhh'
+    'c19hdmF0YXIYECABKAhSCWhhc0F2YXRhchIfCgthdmF0YXJfaGFzaBgRIAEoDFIKYXZhdGFySG'
+    'FzaBIgCgtmaW5nZXJwcmludBgSIAEoCVILZmluZ2VycHJpbnQ=');
+
+@$core.Deprecated('Use listFriendsResponseDescriptor instead')
+const ListFriendsResponse$json = {
+  '1': 'ListFriendsResponse',
+  '2': [
+    {
+      '1': 'friends',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.Friend',
+      '10': 'friends'
+    },
+  ],
+};
+
+/// Descriptor for `ListFriendsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listFriendsResponseDescriptor = $convert.base64Decode(
+    'ChNMaXN0RnJpZW5kc1Jlc3BvbnNlEi8KB2ZyaWVuZHMYASADKAsyFS5wYXN0ZWZlcnJ5LnYxLk'
+    'ZyaWVuZFIHZnJpZW5kcw==');
+
+@$core.Deprecated('Use friendRequestDescriptor instead')
+const FriendRequest$json = {
+  '1': 'FriendRequest',
+  '2': [
+    {'1': 'session', '3': 1, '4': 1, '5': 9, '10': 'session'},
+    {'1': 'device_id', '3': 2, '4': 1, '5': 9, '10': 'deviceId'},
+    {'1': 'display_name', '3': 3, '4': 1, '5': 9, '10': 'displayName'},
+    {'1': 'device_name', '3': 4, '4': 1, '5': 9, '10': 'deviceName'},
+    {'1': 'platform', '3': 5, '4': 1, '5': 9, '10': 'platform'},
+    {'1': 'fingerprint', '3': 6, '4': 1, '5': 9, '10': 'fingerprint'},
+    {'1': 'self_fingerprint', '3': 7, '4': 1, '5': 9, '10': 'selfFingerprint'},
+  ],
+};
+
+/// Descriptor for `FriendRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List friendRequestDescriptor = $convert.base64Decode(
+    'Cg1GcmllbmRSZXF1ZXN0EhgKB3Nlc3Npb24YASABKAlSB3Nlc3Npb24SGwoJZGV2aWNlX2lkGA'
+    'IgASgJUghkZXZpY2VJZBIhCgxkaXNwbGF5X25hbWUYAyABKAlSC2Rpc3BsYXlOYW1lEh8KC2Rl'
+    'dmljZV9uYW1lGAQgASgJUgpkZXZpY2VOYW1lEhoKCHBsYXRmb3JtGAUgASgJUghwbGF0Zm9ybR'
+    'IgCgtmaW5nZXJwcmludBgGIAEoCVILZmluZ2VycHJpbnQSKQoQc2VsZl9maW5nZXJwcmludBgH'
+    'IAEoCVIPc2VsZkZpbmdlcnByaW50');
+
+@$core.Deprecated('Use strangerDescriptor instead')
+const Stranger$json = {
+  '1': 'Stranger',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'display_name', '3': 2, '4': 1, '5': 9, '10': 'displayName'},
+    {'1': 'device_name', '3': 3, '4': 1, '5': 9, '10': 'deviceName'},
+    {'1': 'platform', '3': 4, '4': 1, '5': 9, '10': 'platform'},
+    {'1': 'receives_files', '3': 5, '4': 1, '5': 8, '10': 'receivesFiles'},
+  ],
+};
+
+/// Descriptor for `Stranger`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List strangerDescriptor = $convert.base64Decode(
+    'CghTdHJhbmdlchIOCgJpZBgBIAEoCVICaWQSIQoMZGlzcGxheV9uYW1lGAIgASgJUgtkaXNwbG'
+    'F5TmFtZRIfCgtkZXZpY2VfbmFtZRgDIAEoCVIKZGV2aWNlTmFtZRIaCghwbGF0Zm9ybRgEIAEo'
+    'CVIIcGxhdGZvcm0SJQoOcmVjZWl2ZXNfZmlsZXMYBSABKAhSDXJlY2VpdmVzRmlsZXM=');
+
+@$core.Deprecated('Use strangersDescriptor instead')
+const Strangers$json = {
+  '1': 'Strangers',
+  '2': [
+    {
+      '1': 'strangers',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.Stranger',
+      '10': 'strangers'
+    },
+  ],
+};
+
+/// Descriptor for `Strangers`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List strangersDescriptor = $convert.base64Decode(
+    'CglTdHJhbmdlcnMSNQoJc3RyYW5nZXJzGAEgAygLMhcucGFzdGVmZXJyeS52MS5TdHJhbmdlcl'
+    'IJc3RyYW5nZXJz');
 
 @$core.Deprecated('Use notificationStatusDescriptor instead')
 const NotificationStatus$json = {
@@ -1019,6 +1293,15 @@ const Config$json = {
       '5': 9,
       '10': 'syncDisabledPeers'
     },
+    {'1': 'receive_from', '3': 30, '4': 1, '5': 9, '10': 'receiveFrom'},
+    {
+      '1': 'everyone_until_unix',
+      '3': 31,
+      '4': 1,
+      '5': 3,
+      '10': 'everyoneUntilUnix'
+    },
+    {'1': 'display_name', '3': 32, '4': 1, '5': 9, '10': 'displayName'},
   ],
 };
 
@@ -1046,7 +1329,9 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'ABKAhSFXJlY2VpdmVOb3RpZnlEaXNhYmxlZBIuChNzZW5kX2xheW91dF9zdGFja2VkGBogASgI'
     'UhFzZW5kTGF5b3V0U3RhY2tlZBI0ChZyZWFsdGltZV9zeW5jX2Rpc2FibGVkGBsgASgIUhRyZW'
     'FsdGltZVN5bmNEaXNhYmxlZBIhCgxzeW5jX2JhY2tsb2cYHCABKAhSC3N5bmNCYWNrbG9nEi4K'
-    'E3N5bmNfZGlzYWJsZWRfcGVlcnMYHSADKAlSEXN5bmNEaXNhYmxlZFBlZXJz');
+    'E3N5bmNfZGlzYWJsZWRfcGVlcnMYHSADKAlSEXN5bmNEaXNhYmxlZFBlZXJzEiEKDHJlY2Vpdm'
+    'VfZnJvbRgeIAEoCVILcmVjZWl2ZUZyb20SLgoTZXZlcnlvbmVfdW50aWxfdW5peBgfIAEoA1IR'
+    'ZXZlcnlvbmVVbnRpbFVuaXgSIQoMZGlzcGxheV9uYW1lGCAgASgJUgtkaXNwbGF5TmFtZQ==');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {
@@ -1449,13 +1734,15 @@ const SendFilesRequest$json = {
     {'1': 'device_id', '3': 1, '4': 1, '5': 9, '10': 'deviceId'},
     {'1': 'paths', '3': 2, '4': 3, '5': 9, '10': 'paths'},
     {'1': 'allow_relay', '3': 3, '4': 1, '5': 8, '10': 'allowRelay'},
+    {'1': 'note', '3': 4, '4': 1, '5': 9, '10': 'note'},
   ],
 };
 
 /// Descriptor for `SendFilesRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List sendFilesRequestDescriptor = $convert.base64Decode(
     'ChBTZW5kRmlsZXNSZXF1ZXN0EhsKCWRldmljZV9pZBgBIAEoCVIIZGV2aWNlSWQSFAoFcGF0aH'
-    'MYAiADKAlSBXBhdGhzEh8KC2FsbG93X3JlbGF5GAMgASgIUgphbGxvd1JlbGF5');
+    'MYAiADKAlSBXBhdGhzEh8KC2FsbG93X3JlbGF5GAMgASgIUgphbGxvd1JlbGF5EhIKBG5vdGUY'
+    'BCABKAlSBG5vdGU=');
 
 @$core.Deprecated('Use transferRefDescriptor instead')
 const TransferRef$json = {
@@ -1509,6 +1796,9 @@ const Transfer$json = {
     {'1': 'current_index', '3': 20, '4': 1, '5': 3, '10': 'currentIndex'},
     {'1': 'present', '3': 21, '4': 3, '5': 8, '10': 'present'},
     {'1': 'renamed_files', '3': 22, '4': 1, '5': 3, '10': 'renamedFiles'},
+    {'1': 'peer_role', '3': 23, '4': 1, '5': 9, '10': 'peerRole'},
+    {'1': 'note', '3': 24, '4': 1, '5': 9, '10': 'note'},
+    {'1': 'thumbs', '3': 25, '4': 3, '5': 9, '10': 'thumbs'},
   ],
 };
 
@@ -1527,7 +1817,23 @@ final $typed_data.Uint8List transferDescriptor = $convert.base64Decode(
     'KANSDmZpbmlzaGVkQXRVbml4EiMKDXNjYW5uZWRfZmlsZXMYEiABKANSDHNjYW5uZWRGaWxlcx'
     'IhCgxjdXJyZW50X2ZpbGUYEyABKAlSC2N1cnJlbnRGaWxlEiMKDWN1cnJlbnRfaW5kZXgYFCAB'
     'KANSDGN1cnJlbnRJbmRleBIYCgdwcmVzZW50GBUgAygIUgdwcmVzZW50EiMKDXJlbmFtZWRfZm'
-    'lsZXMYFiABKANSDHJlbmFtZWRGaWxlcw==');
+    'lsZXMYFiABKANSDHJlbmFtZWRGaWxlcxIbCglwZWVyX3JvbGUYFyABKAlSCHBlZXJSb2xlEhIK'
+    'BG5vdGUYGCABKAlSBG5vdGUSFgoGdGh1bWJzGBkgAygJUgZ0aHVtYnM=');
+
+@$core.Deprecated('Use answerIncomingRequestDescriptor instead')
+const AnswerIncomingRequest$json = {
+  '1': 'AnswerIncomingRequest',
+  '2': [
+    {'1': 'transfer_id', '3': 1, '4': 1, '5': 9, '10': 'transferId'},
+    {'1': 'accept', '3': 2, '4': 1, '5': 8, '10': 'accept'},
+    {'1': 'always', '3': 3, '4': 1, '5': 8, '10': 'always'},
+  ],
+};
+
+/// Descriptor for `AnswerIncomingRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List answerIncomingRequestDescriptor = $convert.base64Decode(
+    'ChVBbnN3ZXJJbmNvbWluZ1JlcXVlc3QSHwoLdHJhbnNmZXJfaWQYASABKAlSCnRyYW5zZmVySW'
+    'QSFgoGYWNjZXB0GAIgASgIUgZhY2NlcHQSFgoGYWx3YXlzGAMgASgIUgZhbHdheXM=');
 
 @$core.Deprecated('Use listTransfersRequestDescriptor instead')
 const ListTransfersRequest$json = {

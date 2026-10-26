@@ -66,6 +66,20 @@ const (
 	DaemonService_DeleteTransfers_FullMethodName               = "/pasteferry.v1.DaemonService/DeleteTransfers"
 	DaemonService_MarkTransfersSeen_FullMethodName             = "/pasteferry.v1.DaemonService/MarkTransfersSeen"
 	DaemonService_CheckReceiveDir_FullMethodName               = "/pasteferry.v1.DaemonService/CheckReceiveDir"
+	DaemonService_AnswerIncoming_FullMethodName                = "/pasteferry.v1.DaemonService/AnswerIncoming"
+	DaemonService_GetProfile_FullMethodName                    = "/pasteferry.v1.DaemonService/GetProfile"
+	DaemonService_SetDisplayName_FullMethodName                = "/pasteferry.v1.DaemonService/SetDisplayName"
+	DaemonService_SetAvatar_FullMethodName                     = "/pasteferry.v1.DaemonService/SetAvatar"
+	DaemonService_ResetAvatar_FullMethodName                   = "/pasteferry.v1.DaemonService/ResetAvatar"
+	DaemonService_GetAvatar_FullMethodName                     = "/pasteferry.v1.DaemonService/GetAvatar"
+	DaemonService_CreateFriendCode_FullMethodName              = "/pasteferry.v1.DaemonService/CreateFriendCode"
+	DaemonService_RedeemFriendCode_FullMethodName              = "/pasteferry.v1.DaemonService/RedeemFriendCode"
+	DaemonService_ConfirmFriend_FullMethodName                 = "/pasteferry.v1.DaemonService/ConfirmFriend"
+	DaemonService_ListFriends_FullMethodName                   = "/pasteferry.v1.DaemonService/ListFriends"
+	DaemonService_RemoveFriend_FullMethodName                  = "/pasteferry.v1.DaemonService/RemoveFriend"
+	DaemonService_SetFriendAutoAccept_FullMethodName           = "/pasteferry.v1.DaemonService/SetFriendAutoAccept"
+	DaemonService_BlockDevice_FullMethodName                   = "/pasteferry.v1.DaemonService/BlockDevice"
+	DaemonService_WatchStrangers_FullMethodName                = "/pasteferry.v1.DaemonService/WatchStrangers"
 )
 
 // DaemonServiceClient is the client API for DaemonService service.
@@ -155,6 +169,28 @@ type DaemonServiceClient interface {
 	// 检查保存位置能否写入。path 为空时检查当前设置的位置。
 	// 在 macOS 上会在这时触发系统的文件夹授权弹窗，所以要在用户看着界面时调用
 	CheckReceiveDir(ctx context.Context, in *CheckReceiveDirRequest, opts ...grpc.CallOption) (*CheckReceiveDirResponse, error)
+	// 别人发来的、在等用户接受的一批：接受或拒绝。always 表示以后自动接收这个好友的文件
+	AnswerIncoming(ctx context.Context, in *AnswerIncomingRequest, opts ...grpc.CallOption) (*Empty, error)
+	// ── 好友，见 design/friends-send.md ──
+	GetProfile(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Profile, error)
+	SetDisplayName(ctx context.Context, in *SetDisplayNameRequest, opts ...grpc.CallOption) (*Profile, error)
+	// 设置头像：图片文件或剪贴板里的图片，按裁剪区域裁成正方形，处理成 256×256 的 JPEG
+	SetAvatar(ctx context.Context, in *SetAvatarRequest, opts ...grpc.CallOption) (*Profile, error)
+	ResetAvatar(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Profile, error)
+	// 本机或某个好友的头像（JPEG）。没有自定义头像时为空
+	GetAvatar(ctx context.Context, in *GetAvatarRequest, opts ...grpc.CallOption) (*Avatar, error)
+	// 生成好友码（F 加 6 位），5 分钟有效。别人兑换后推送 friend_request 事件
+	CreateFriendCode(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CreatePairingCodeResponse, error)
+	// 输入好友码，返回对方的名片和会话；用户在确认框里点了以后调 ConfirmFriend
+	RedeemFriendCode(ctx context.Context, in *RedeemPairingCodeRequest, opts ...grpc.CallOption) (*FriendRequest, error)
+	ConfirmFriend(ctx context.Context, in *ConfirmPairingRequest, opts ...grpc.CallOption) (*Empty, error)
+	ListFriends(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListFriendsResponse, error)
+	RemoveFriend(ctx context.Context, in *FriendRef, opts ...grpc.CallOption) (*Empty, error)
+	SetFriendAutoAccept(ctx context.Context, in *SetFriendAutoAcceptRequest, opts ...grpc.CallOption) (*Friend, error)
+	// 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
+	BlockDevice(ctx context.Context, in *FriendRef, opts ...grpc.CallOption) (*Empty, error)
+	// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
+	WatchStrangers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Strangers], error)
 }
 
 type daemonServiceClient struct {
@@ -615,6 +651,155 @@ func (c *daemonServiceClient) CheckReceiveDir(ctx context.Context, in *CheckRece
 	return out, nil
 }
 
+func (c *daemonServiceClient) AnswerIncoming(ctx context.Context, in *AnswerIncomingRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_AnswerIncoming_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) GetProfile(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Profile, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Profile)
+	err := c.cc.Invoke(ctx, DaemonService_GetProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) SetDisplayName(ctx context.Context, in *SetDisplayNameRequest, opts ...grpc.CallOption) (*Profile, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Profile)
+	err := c.cc.Invoke(ctx, DaemonService_SetDisplayName_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) SetAvatar(ctx context.Context, in *SetAvatarRequest, opts ...grpc.CallOption) (*Profile, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Profile)
+	err := c.cc.Invoke(ctx, DaemonService_SetAvatar_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) ResetAvatar(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Profile, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Profile)
+	err := c.cc.Invoke(ctx, DaemonService_ResetAvatar_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) GetAvatar(ctx context.Context, in *GetAvatarRequest, opts ...grpc.CallOption) (*Avatar, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Avatar)
+	err := c.cc.Invoke(ctx, DaemonService_GetAvatar_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) CreateFriendCode(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CreatePairingCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreatePairingCodeResponse)
+	err := c.cc.Invoke(ctx, DaemonService_CreateFriendCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) RedeemFriendCode(ctx context.Context, in *RedeemPairingCodeRequest, opts ...grpc.CallOption) (*FriendRequest, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FriendRequest)
+	err := c.cc.Invoke(ctx, DaemonService_RedeemFriendCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) ConfirmFriend(ctx context.Context, in *ConfirmPairingRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_ConfirmFriend_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) ListFriends(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListFriendsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListFriendsResponse)
+	err := c.cc.Invoke(ctx, DaemonService_ListFriends_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) RemoveFriend(ctx context.Context, in *FriendRef, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_RemoveFriend_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) SetFriendAutoAccept(ctx context.Context, in *SetFriendAutoAcceptRequest, opts ...grpc.CallOption) (*Friend, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Friend)
+	err := c.cc.Invoke(ctx, DaemonService_SetFriendAutoAccept_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) BlockDevice(ctx context.Context, in *FriendRef, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_BlockDevice_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) WatchStrangers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Strangers], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &DaemonService_ServiceDesc.Streams[4], DaemonService_WatchStrangers_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[Empty, Strangers]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DaemonService_WatchStrangersClient = grpc.ServerStreamingClient[Strangers]
+
 // DaemonServiceServer is the server API for DaemonService service.
 // All implementations must embed UnimplementedDaemonServiceServer
 // for forward compatibility.
@@ -702,6 +887,28 @@ type DaemonServiceServer interface {
 	// 检查保存位置能否写入。path 为空时检查当前设置的位置。
 	// 在 macOS 上会在这时触发系统的文件夹授权弹窗，所以要在用户看着界面时调用
 	CheckReceiveDir(context.Context, *CheckReceiveDirRequest) (*CheckReceiveDirResponse, error)
+	// 别人发来的、在等用户接受的一批：接受或拒绝。always 表示以后自动接收这个好友的文件
+	AnswerIncoming(context.Context, *AnswerIncomingRequest) (*Empty, error)
+	// ── 好友，见 design/friends-send.md ──
+	GetProfile(context.Context, *Empty) (*Profile, error)
+	SetDisplayName(context.Context, *SetDisplayNameRequest) (*Profile, error)
+	// 设置头像：图片文件或剪贴板里的图片，按裁剪区域裁成正方形，处理成 256×256 的 JPEG
+	SetAvatar(context.Context, *SetAvatarRequest) (*Profile, error)
+	ResetAvatar(context.Context, *Empty) (*Profile, error)
+	// 本机或某个好友的头像（JPEG）。没有自定义头像时为空
+	GetAvatar(context.Context, *GetAvatarRequest) (*Avatar, error)
+	// 生成好友码（F 加 6 位），5 分钟有效。别人兑换后推送 friend_request 事件
+	CreateFriendCode(context.Context, *Empty) (*CreatePairingCodeResponse, error)
+	// 输入好友码，返回对方的名片和会话；用户在确认框里点了以后调 ConfirmFriend
+	RedeemFriendCode(context.Context, *RedeemPairingCodeRequest) (*FriendRequest, error)
+	ConfirmFriend(context.Context, *ConfirmPairingRequest) (*Empty, error)
+	ListFriends(context.Context, *Empty) (*ListFriendsResponse, error)
+	RemoveFriend(context.Context, *FriendRef) (*Empty, error)
+	SetFriendAutoAccept(context.Context, *SetFriendAutoAcceptRequest) (*Friend, error)
+	// 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
+	BlockDevice(context.Context, *FriendRef) (*Empty, error)
+	// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
+	WatchStrangers(*Empty, grpc.ServerStreamingServer[Strangers]) error
 	mustEmbedUnimplementedDaemonServiceServer()
 }
 
@@ -837,6 +1044,48 @@ func (UnimplementedDaemonServiceServer) MarkTransfersSeen(context.Context, *Empt
 }
 func (UnimplementedDaemonServiceServer) CheckReceiveDir(context.Context, *CheckReceiveDirRequest) (*CheckReceiveDirResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckReceiveDir not implemented")
+}
+func (UnimplementedDaemonServiceServer) AnswerIncoming(context.Context, *AnswerIncomingRequest) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method AnswerIncoming not implemented")
+}
+func (UnimplementedDaemonServiceServer) GetProfile(context.Context, *Empty) (*Profile, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetProfile not implemented")
+}
+func (UnimplementedDaemonServiceServer) SetDisplayName(context.Context, *SetDisplayNameRequest) (*Profile, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetDisplayName not implemented")
+}
+func (UnimplementedDaemonServiceServer) SetAvatar(context.Context, *SetAvatarRequest) (*Profile, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetAvatar not implemented")
+}
+func (UnimplementedDaemonServiceServer) ResetAvatar(context.Context, *Empty) (*Profile, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResetAvatar not implemented")
+}
+func (UnimplementedDaemonServiceServer) GetAvatar(context.Context, *GetAvatarRequest) (*Avatar, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetAvatar not implemented")
+}
+func (UnimplementedDaemonServiceServer) CreateFriendCode(context.Context, *Empty) (*CreatePairingCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateFriendCode not implemented")
+}
+func (UnimplementedDaemonServiceServer) RedeemFriendCode(context.Context, *RedeemPairingCodeRequest) (*FriendRequest, error) {
+	return nil, status.Error(codes.Unimplemented, "method RedeemFriendCode not implemented")
+}
+func (UnimplementedDaemonServiceServer) ConfirmFriend(context.Context, *ConfirmPairingRequest) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method ConfirmFriend not implemented")
+}
+func (UnimplementedDaemonServiceServer) ListFriends(context.Context, *Empty) (*ListFriendsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListFriends not implemented")
+}
+func (UnimplementedDaemonServiceServer) RemoveFriend(context.Context, *FriendRef) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method RemoveFriend not implemented")
+}
+func (UnimplementedDaemonServiceServer) SetFriendAutoAccept(context.Context, *SetFriendAutoAcceptRequest) (*Friend, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetFriendAutoAccept not implemented")
+}
+func (UnimplementedDaemonServiceServer) BlockDevice(context.Context, *FriendRef) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method BlockDevice not implemented")
+}
+func (UnimplementedDaemonServiceServer) WatchStrangers(*Empty, grpc.ServerStreamingServer[Strangers]) error {
+	return status.Error(codes.Unimplemented, "method WatchStrangers not implemented")
 }
 func (UnimplementedDaemonServiceServer) mustEmbedUnimplementedDaemonServiceServer() {}
 func (UnimplementedDaemonServiceServer) testEmbeddedByValue()                       {}
@@ -1583,6 +1832,251 @@ func _DaemonService_CheckReceiveDir_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_AnswerIncoming_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AnswerIncomingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).AnswerIncoming(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_AnswerIncoming_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).AnswerIncoming(ctx, req.(*AnswerIncomingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_GetProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).GetProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_GetProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).GetProfile(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_SetDisplayName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetDisplayNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SetDisplayName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SetDisplayName_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SetDisplayName(ctx, req.(*SetDisplayNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_SetAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAvatarRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SetAvatar(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SetAvatar_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SetAvatar(ctx, req.(*SetAvatarRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_ResetAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).ResetAvatar(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_ResetAvatar_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).ResetAvatar(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_GetAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAvatarRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).GetAvatar(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_GetAvatar_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).GetAvatar(ctx, req.(*GetAvatarRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_CreateFriendCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).CreateFriendCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_CreateFriendCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).CreateFriendCode(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_RedeemFriendCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RedeemPairingCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).RedeemFriendCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_RedeemFriendCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).RedeemFriendCode(ctx, req.(*RedeemPairingCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_ConfirmFriend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConfirmPairingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).ConfirmFriend(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_ConfirmFriend_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).ConfirmFriend(ctx, req.(*ConfirmPairingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_ListFriends_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).ListFriends(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_ListFriends_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).ListFriends(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_RemoveFriend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FriendRef)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).RemoveFriend(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_RemoveFriend_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).RemoveFriend(ctx, req.(*FriendRef))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_SetFriendAutoAccept_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetFriendAutoAcceptRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SetFriendAutoAccept(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SetFriendAutoAccept_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SetFriendAutoAccept(ctx, req.(*SetFriendAutoAcceptRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_BlockDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FriendRef)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).BlockDevice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_BlockDevice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).BlockDevice(ctx, req.(*FriendRef))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_WatchStrangers_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(DaemonServiceServer).WatchStrangers(m, &grpc.GenericServerStream[Empty, Strangers]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DaemonService_WatchStrangersServer = grpc.ServerStreamingServer[Strangers]
+
 // DaemonService_ServiceDesc is the grpc.ServiceDesc for DaemonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1742,6 +2236,58 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "CheckReceiveDir",
 			Handler:    _DaemonService_CheckReceiveDir_Handler,
 		},
+		{
+			MethodName: "AnswerIncoming",
+			Handler:    _DaemonService_AnswerIncoming_Handler,
+		},
+		{
+			MethodName: "GetProfile",
+			Handler:    _DaemonService_GetProfile_Handler,
+		},
+		{
+			MethodName: "SetDisplayName",
+			Handler:    _DaemonService_SetDisplayName_Handler,
+		},
+		{
+			MethodName: "SetAvatar",
+			Handler:    _DaemonService_SetAvatar_Handler,
+		},
+		{
+			MethodName: "ResetAvatar",
+			Handler:    _DaemonService_ResetAvatar_Handler,
+		},
+		{
+			MethodName: "GetAvatar",
+			Handler:    _DaemonService_GetAvatar_Handler,
+		},
+		{
+			MethodName: "CreateFriendCode",
+			Handler:    _DaemonService_CreateFriendCode_Handler,
+		},
+		{
+			MethodName: "RedeemFriendCode",
+			Handler:    _DaemonService_RedeemFriendCode_Handler,
+		},
+		{
+			MethodName: "ConfirmFriend",
+			Handler:    _DaemonService_ConfirmFriend_Handler,
+		},
+		{
+			MethodName: "ListFriends",
+			Handler:    _DaemonService_ListFriends_Handler,
+		},
+		{
+			MethodName: "RemoveFriend",
+			Handler:    _DaemonService_RemoveFriend_Handler,
+		},
+		{
+			MethodName: "SetFriendAutoAccept",
+			Handler:    _DaemonService_SetFriendAutoAccept_Handler,
+		},
+		{
+			MethodName: "BlockDevice",
+			Handler:    _DaemonService_BlockDevice_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
@@ -1764,6 +2310,11 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 			Handler:       _DaemonService_QuickPasteSession_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
+		},
+		{
+			StreamName:    "WatchStrangers",
+			Handler:       _DaemonService_WatchStrangers_Handler,
+			ServerStreams: true,
 		},
 	},
 	Metadata: "pasteferry/v1/daemon.proto",

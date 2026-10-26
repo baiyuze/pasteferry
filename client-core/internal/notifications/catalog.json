@@ -36,7 +36,16 @@
     "transferError_source_changed": "A file was changed on the sending computer while it was being sent.",
     "transferError_source_missing": "A file was removed from the sending computer.",
     "transferError_read_error": "The sending computer could not read a file.",
-    "transferErrorOther": "The transfer stopped."
+    "transferErrorOther": "The transfer stopped.",
+    "transferAskTitle": "{device} wants to send you files",
+    "transferAskBody": "{name} · {size}{note}",
+    "transferIgnoredTitle": "Ignored files from {device}",
+    "transferIgnoredBody": "{name}",
+    "transferNote": "Note: ",
+    "acceptFiles": "Accept",
+    "transferError_declined": "Declined.",
+    "transferError_timeout": "No response.",
+    "transferError_not_allowed": "The receiver doesn't accept files."
   },
   "zh-Hans": {
     "notifyPendingTitle": "接收后即可粘贴",
@@ -75,7 +84,16 @@
     "transferError_source_changed": "发送过程中，对方电脑上的文件被修改了。",
     "transferError_source_missing": "对方电脑上的文件已经不在了。",
     "transferError_read_error": "对方电脑读取文件失败。",
-    "transferErrorOther": "传输中断了。"
+    "transferErrorOther": "传输中断了。",
+    "transferAskTitle": "{device} 想发给你文件",
+    "transferAskBody": "{name} · {size}{note}",
+    "transferIgnoredTitle": "已忽略 {device} 发来的文件",
+    "transferIgnoredBody": "{name}",
+    "transferNote": "备注：",
+    "acceptFiles": "接受",
+    "transferError_declined": "已拒绝。",
+    "transferError_timeout": "没有回应。",
+    "transferError_not_allowed": "对方不接收文件。"
   },
   "ja": {
     "notifyPendingTitle": "受信するとペーストできます",
@@ -114,7 +132,16 @@
     "transferError_source_changed": "送信中に相手のコンピュータでファイルが変更されました。",
     "transferError_source_missing": "相手のコンピュータからファイルがなくなりました。",
     "transferError_read_error": "相手のコンピュータでファイルを読み取れませんでした。",
-    "transferErrorOther": "転送が中断しました。"
+    "transferErrorOther": "転送が中断しました。",
+    "transferAskTitle": "{device} からファイルが届いています",
+    "transferAskBody": "{name} · {size}{note}",
+    "transferIgnoredTitle": "{device} からのファイルを無視しました",
+    "transferIgnoredBody": "{name}",
+    "transferNote": "メモ：",
+    "acceptFiles": "受け入れる",
+    "transferError_declined": "拒否されました。",
+    "transferError_timeout": "応答がありませんでした。",
+    "transferError_not_allowed": "相手はファイルを受け付けていません。"
   },
   "zh-Hant-TW": {
     "notifyPendingTitle": "接收後即可貼上",
@@ -153,7 +180,16 @@
     "transferError_source_changed": "傳送過程中，對方電腦上的檔案被修改了。",
     "transferError_source_missing": "對方電腦上的檔案已經不在了。",
     "transferError_read_error": "對方電腦讀取檔案失敗。",
-    "transferErrorOther": "傳輸中斷了。"
+    "transferErrorOther": "傳輸中斷了。",
+    "transferAskTitle": "{device} 想傳檔案給你",
+    "transferAskBody": "{name} · {size}{note}",
+    "transferIgnoredTitle": "已忽略 {device} 傳來的檔案",
+    "transferIgnoredBody": "{name}",
+    "transferNote": "備註：",
+    "acceptFiles": "接受",
+    "transferError_declined": "已拒絕。",
+    "transferError_timeout": "沒有回應。",
+    "transferError_not_allowed": "對方不接收檔案。"
   },
   "zh-Hant-HK": {
     "notifyPendingTitle": "接收後即可貼上",
@@ -192,6 +228,15 @@
     "transferError_source_changed": "傳送期間，對方電腦上的檔案被修改了。",
     "transferError_source_missing": "對方電腦上的檔案已經不在了。",
     "transferError_read_error": "對方電腦讀取檔案失敗。",
-    "transferErrorOther": "傳輸中斷了。"
+    "transferErrorOther": "傳輸中斷了。",
+    "transferAskTitle": "{device} 想傳檔案給你",
+    "transferAskBody": "{name} · {size}{note}",
+    "transferIgnoredTitle": "已忽略 {device} 傳來的檔案",
+    "transferIgnoredBody": "{name}",
+    "transferNote": "備註：",
+    "acceptFiles": "接受",
+    "transferError_declined": "已拒絕。",
+    "transferError_timeout": "沒有回應。",
+    "transferError_not_allowed": "對方不接收檔案。"
   }
 }

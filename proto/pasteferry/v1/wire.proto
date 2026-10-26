@@ -44,7 +44,33 @@ message SignalMessage {
     Ping ping = 13;
     LanHello lan_hello = 14;        // 只走局域网，见下文
     RetryDirect retry_direct = 15;
+    // 配对码兑换后、用户确认前，两边告诉对方这次是配对还是加好友（2.6.0）。
+    // 旧版本不发：没收到就当作配对
+    PairIntent pair_intent = 16;
+    // 加好友：本端的用户点了「添加」或「取消」。两边都添加了才算好友
+    FriendConfirm friend_confirm = 17;
+    // 「所有人」模式下陌生设备之间交换的名片，见 design/friends-send.md 第 9.1 节
+    StrangerHello stranger_hello = 18;
+    FriendRemove friend_remove = 19;
   }
+}
+
+// 配对码兑换后各自发一次，直到收到对方的。intent 是 "device"（配对）或 "friend"（加好友）
+message PairIntent {
+  string intent = 1;
+  // 加好友时带上名片，确认框里显示对方的名字
+  FriendCard card = 2;
+}
+
+message FriendConfirm {
+  bool accepted = 1;
+}
+
+// 「所有人」模式：发送方先发，接收方开着「所有人」时回一条（reply = true）。
+// 公钥随签名的局域网配对信息交换（见 LanPacket.stranger），这里只带显示用的名片
+message StrangerHello {
+  FriendCard card = 1;
+  bool reply = 2;
 }
 
 // 用户在应答方点了「重新连接」：只有发起方能做 ICE 重启，请它马上再试一次直连。
@@ -200,6 +226,9 @@ message LanPacket {
     LanPairReject pair_reject = 4;
     LanPairSigned nearby_request = 5;
     LanNearbyPing nearby_ping = 6;
+    // 「所有人」模式（2.6.0）：向开着「所有人」的陌生设备要它的公钥，以便给它发文件。
+    // 请求与回复都带名片（LanPairInfo.card），不带配对码
+    LanPairSigned stranger_request = 7;
   }
 }
 
@@ -230,6 +259,11 @@ message LanPairInfo {
   int64 timestamp_unix = 7;
   bytes nonce = 8;
   bytes request_nonce = 9;          // 回复里回显请求的 nonce，把回复绑定到这次请求
+  // 这次是配对（"device"，旧版本不带）还是加好友（"friend"，2.6.0）。
+  // 显示码的一方发现与自己开放的不一致时回绝（intent_device / intent_friend），不用掉这个码
+  string intent = 10;
+  // 加好友时带上名片
+  FriendCard card = 11;
 }
 
 message LanPairReject {
@@ -264,7 +298,40 @@ message PeerMessage {
     SendAnswer send_answer = 10;
     SendCancel send_cancel = 11;
     SendResult send_result = 12;
+    // 好友（2.6.0）：连上后各自发一次名片；名片里的头像哈希变了才要头像
+    FriendCard friend_card = 13;
+    AvatarRequest avatar_request = 14;
+    AvatarData avatar_data = 15;
   }
+}
+
+// 好友看到的本机信息。只在加密通道里、发给好友或陌生设备
+message FriendCard {
+  string display_name = 1;
+  string device_name = 2;
+  string platform = 3;
+  // 本机用的是哪种服务：official / custom / lan，判断两边能不能跨网络找到对方
+  string service = 4;
+  // 自建服务器地址的哈希（SHA-256 的前 16 字节），判断是不是同一台；不带地址本身
+  bytes custom_server_hash = 5;
+  // 头像的哈希，空表示用默认头像
+  bytes avatar_hash = 6;
+}
+
+// 删除好友。走签名的信令（不用先建 P2P 连接）；收到的一方删掉后回一条 ack = true，
+// 发出的一方收到回执才不再补发
+message FriendRemove {
+  int64 at_unix = 1;
+  bool ack = 2;
+}
+
+message AvatarRequest {
+  bytes avatar_hash = 1;
+}
+
+message AvatarData {
+  bytes avatar_hash = 1;
+  bytes jpeg = 2;   // 最大 64 KB
 }
 
 // 连接就绪后各自发一次，与 LinkInfo 一起；功能开关变了再发一次。
@@ -366,6 +433,8 @@ message SendOffer {
   int64 created_at_unix = 7;
   // 续传：同一个 transfer_id 再次发起
   bool resume = 8;
+  // 备注（2.6.0）：最多 200 个字符、单行，必须附在文件上
+  string note = 9;
 }
 
 message SendAnswer {

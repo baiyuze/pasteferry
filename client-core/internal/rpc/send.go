@@ -14,7 +14,9 @@ import (
 
 // Transfers 是隔空传送，见 internal/send。
 type Transfers interface {
-	SendFiles(deviceID string, paths []string, allowRelay bool) (*pb.Transfer, error)
+	SendFiles(deviceID string, paths []string, allowRelay bool, note string) (*pb.Transfer, error)
+	// Answer 是本机用户接受或拒绝别人发来的一批，返回发来的设备与它的角色
+	Answer(id string, accept bool) (deviceID, role string, err error)
 	Cancel(id string) error
 	Resume(id string) error
 	List(dir pb.TransferDirection, limit int, before time.Time) ([]*pb.Transfer, error)
@@ -34,8 +36,8 @@ func EventTransferRemoved(id string) *pb.Event {
 // transferError 把隔空传送的错误转成状态码；消息是固定代码，界面按它显示文案。
 func transferError(err error) error {
 	switch {
-	case errors.Is(err, send.ErrNoPaths):
-		return status.Error(codes.InvalidArgument, send.ErrNoPaths.Error())
+	case errors.Is(err, send.ErrNoPaths), errors.Is(err, send.ErrBadNote):
+		return status.Error(codes.InvalidArgument, err.Error())
 	case errors.Is(err, send.ErrNotFound), errors.Is(err, send.ErrUnknownDevice):
 		return status.Error(codes.NotFound, err.Error())
 	case errors.Is(err, send.ErrOffline), errors.Is(err, send.ErrUnsupported), errors.Is(err, send.ErrPeerDisabled),
@@ -57,7 +59,7 @@ func (s *Server) SendFiles(_ context.Context, req *pb.SendFilesRequest) (*pb.Tra
 	if err != nil {
 		return nil, err
 	}
-	out, err := t.SendFiles(req.GetDeviceId(), req.GetPaths(), req.GetAllowRelay())
+	out, err := t.SendFiles(req.GetDeviceId(), req.GetPaths(), req.GetAllowRelay(), req.GetNote())
 	if err != nil {
 		return nil, transferError(err)
 	}

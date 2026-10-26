@@ -80,6 +80,37 @@ type Config struct {
 	ReceiveNotifyDisabled bool `json:"receive_notify_disabled,omitempty"`
 	// SendLayoutStacked 让隔空传送页上下排：传输列表放在雷达下面。默认左右排，只有界面用
 	SendLayoutStacked bool `json:"send_layout_stacked,omitempty"`
+
+	// ReceiveFrom 是谁可以给我发文件（只管别人，自己的设备看 ReceiveDisabled），见 design/friends-send.md：
+	// "off"（均不允许）、"friends"（仅限好友）、"everyone"（所有人，只在局域网）。空字符串表示默认的仅限好友
+	ReceiveFrom string `json:"receive_from,omitempty"`
+	// EveryoneUntil 是「所有人」自动回到「仅限好友」的时间（Unix 秒），打开「所有人」时设为 10 分钟后
+	EveryoneUntil int64 `json:"everyone_until,omitempty"`
+	// DisplayName 是好友看到的名字，空字符串表示系统的用户全名
+	DisplayName string `json:"display_name,omitempty"`
+}
+
+// 谁可以给我发文件
+const (
+	ReceiveFromOff      = "off"
+	ReceiveFromFriends  = "friends"
+	ReceiveFromEveryone = "everyone"
+)
+
+// EveryoneWindow 是「所有人」打开多久后自动关掉
+const EveryoneWindow = 10 * time.Minute
+
+// EffectiveReceiveFrom 返回此刻实际的接收范围：「所有人」过了时间就算「仅限好友」。
+func (c Config) EffectiveReceiveFrom(now time.Time) string {
+	switch c.ReceiveFrom {
+	case ReceiveFromOff:
+		return ReceiveFromOff
+	case ReceiveFromEveryone:
+		if c.EveryoneUntil > now.Unix() {
+			return ReceiveFromEveryone
+		}
+	}
+	return ReceiveFromFriends
 }
 
 // EffectiveReceiveDir 返回隔空传送实际的保存位置。
@@ -178,6 +209,17 @@ func (c *Config) Validate() {
 	}
 	// 写不对的快捷键当作默认的
 	c.QuickPasteHotkey = NormalizeHotkey(c.QuickPasteHotkey)
+	switch c.ReceiveFrom {
+	case ReceiveFromOff, ReceiveFromFriends, ReceiveFromEveryone:
+	default:
+		c.ReceiveFrom = ""
+	}
+	if c.ReceiveFrom != ReceiveFromEveryone {
+		c.EveryoneUntil = 0
+	}
+	if len(c.DisplayName) > 64 {
+		c.DisplayName = c.DisplayName[:64]
+	}
 }
 
 // ─────────────────────────── 目录布局 ───────────────────────────

@@ -376,6 +376,114 @@ class DaemonServiceClient extends $grpc.Client {
     return $createUnaryCall(_$checkReceiveDir, request, options: options);
   }
 
+  /// 别人发来的、在等用户接受的一批：接受或拒绝。always 表示以后自动接收这个好友的文件
+  $grpc.ResponseFuture<$0.Empty> answerIncoming(
+    $0.AnswerIncomingRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$answerIncoming, request, options: options);
+  }
+
+  /// ── 好友，见 design/friends-send.md ──
+  $grpc.ResponseFuture<$0.Profile> getProfile(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getProfile, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Profile> setDisplayName(
+    $0.SetDisplayNameRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setDisplayName, request, options: options);
+  }
+
+  /// 设置头像：图片文件或剪贴板里的图片，按裁剪区域裁成正方形，处理成 256×256 的 JPEG
+  $grpc.ResponseFuture<$0.Profile> setAvatar(
+    $0.SetAvatarRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setAvatar, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Profile> resetAvatar(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$resetAvatar, request, options: options);
+  }
+
+  /// 本机或某个好友的头像（JPEG）。没有自定义头像时为空
+  $grpc.ResponseFuture<$0.Avatar> getAvatar(
+    $0.GetAvatarRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getAvatar, request, options: options);
+  }
+
+  /// 生成好友码（F 加 6 位），5 分钟有效。别人兑换后推送 friend_request 事件
+  $grpc.ResponseFuture<$0.CreatePairingCodeResponse> createFriendCode(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$createFriendCode, request, options: options);
+  }
+
+  /// 输入好友码，返回对方的名片和会话；用户在确认框里点了以后调 ConfirmFriend
+  $grpc.ResponseFuture<$0.FriendRequest> redeemFriendCode(
+    $0.RedeemPairingCodeRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$redeemFriendCode, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> confirmFriend(
+    $0.ConfirmPairingRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$confirmFriend, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ListFriendsResponse> listFriends(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listFriends, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> removeFriend(
+    $0.FriendRef request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$removeFriend, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Friend> setFriendAutoAccept(
+    $0.SetFriendAutoAcceptRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setFriendAutoAccept, request, options: options);
+  }
+
+  /// 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
+  $grpc.ResponseFuture<$0.Empty> blockDevice(
+    $0.FriendRef request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$blockDevice, request, options: options);
+  }
+
+  /// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
+  $grpc.ResponseStream<$0.Strangers> watchStrangers(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createStreamingCall(
+        _$watchStrangers, $async.Stream.fromIterable([request]),
+        options: options);
+  }
+
   // method descriptors
 
   static final _$subscribe = $grpc.ClientMethod<$0.SubscribeRequest, $0.Event>(
@@ -577,6 +685,70 @@ class DaemonServiceClient extends $grpc.Client {
           '/pasteferry.v1.DaemonService/CheckReceiveDir',
           ($0.CheckReceiveDirRequest value) => value.writeToBuffer(),
           $0.CheckReceiveDirResponse.fromBuffer);
+  static final _$answerIncoming =
+      $grpc.ClientMethod<$0.AnswerIncomingRequest, $0.Empty>(
+          '/pasteferry.v1.DaemonService/AnswerIncoming',
+          ($0.AnswerIncomingRequest value) => value.writeToBuffer(),
+          $0.Empty.fromBuffer);
+  static final _$getProfile = $grpc.ClientMethod<$0.Empty, $0.Profile>(
+      '/pasteferry.v1.DaemonService/GetProfile',
+      ($0.Empty value) => value.writeToBuffer(),
+      $0.Profile.fromBuffer);
+  static final _$setDisplayName =
+      $grpc.ClientMethod<$0.SetDisplayNameRequest, $0.Profile>(
+          '/pasteferry.v1.DaemonService/SetDisplayName',
+          ($0.SetDisplayNameRequest value) => value.writeToBuffer(),
+          $0.Profile.fromBuffer);
+  static final _$setAvatar =
+      $grpc.ClientMethod<$0.SetAvatarRequest, $0.Profile>(
+          '/pasteferry.v1.DaemonService/SetAvatar',
+          ($0.SetAvatarRequest value) => value.writeToBuffer(),
+          $0.Profile.fromBuffer);
+  static final _$resetAvatar = $grpc.ClientMethod<$0.Empty, $0.Profile>(
+      '/pasteferry.v1.DaemonService/ResetAvatar',
+      ($0.Empty value) => value.writeToBuffer(),
+      $0.Profile.fromBuffer);
+  static final _$getAvatar = $grpc.ClientMethod<$0.GetAvatarRequest, $0.Avatar>(
+      '/pasteferry.v1.DaemonService/GetAvatar',
+      ($0.GetAvatarRequest value) => value.writeToBuffer(),
+      $0.Avatar.fromBuffer);
+  static final _$createFriendCode =
+      $grpc.ClientMethod<$0.Empty, $0.CreatePairingCodeResponse>(
+          '/pasteferry.v1.DaemonService/CreateFriendCode',
+          ($0.Empty value) => value.writeToBuffer(),
+          $0.CreatePairingCodeResponse.fromBuffer);
+  static final _$redeemFriendCode =
+      $grpc.ClientMethod<$0.RedeemPairingCodeRequest, $0.FriendRequest>(
+          '/pasteferry.v1.DaemonService/RedeemFriendCode',
+          ($0.RedeemPairingCodeRequest value) => value.writeToBuffer(),
+          $0.FriendRequest.fromBuffer);
+  static final _$confirmFriend =
+      $grpc.ClientMethod<$0.ConfirmPairingRequest, $0.Empty>(
+          '/pasteferry.v1.DaemonService/ConfirmFriend',
+          ($0.ConfirmPairingRequest value) => value.writeToBuffer(),
+          $0.Empty.fromBuffer);
+  static final _$listFriends =
+      $grpc.ClientMethod<$0.Empty, $0.ListFriendsResponse>(
+          '/pasteferry.v1.DaemonService/ListFriends',
+          ($0.Empty value) => value.writeToBuffer(),
+          $0.ListFriendsResponse.fromBuffer);
+  static final _$removeFriend = $grpc.ClientMethod<$0.FriendRef, $0.Empty>(
+      '/pasteferry.v1.DaemonService/RemoveFriend',
+      ($0.FriendRef value) => value.writeToBuffer(),
+      $0.Empty.fromBuffer);
+  static final _$setFriendAutoAccept =
+      $grpc.ClientMethod<$0.SetFriendAutoAcceptRequest, $0.Friend>(
+          '/pasteferry.v1.DaemonService/SetFriendAutoAccept',
+          ($0.SetFriendAutoAcceptRequest value) => value.writeToBuffer(),
+          $0.Friend.fromBuffer);
+  static final _$blockDevice = $grpc.ClientMethod<$0.FriendRef, $0.Empty>(
+      '/pasteferry.v1.DaemonService/BlockDevice',
+      ($0.FriendRef value) => value.writeToBuffer(),
+      $0.Empty.fromBuffer);
+  static final _$watchStrangers = $grpc.ClientMethod<$0.Empty, $0.Strangers>(
+      '/pasteferry.v1.DaemonService/WatchStrangers',
+      ($0.Empty value) => value.writeToBuffer(),
+      $0.Strangers.fromBuffer);
 }
 
 @$pb.GrpcServiceName('pasteferry.v1.DaemonService')
@@ -903,6 +1075,110 @@ abstract class DaemonServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.CheckReceiveDirRequest.fromBuffer(value),
         ($0.CheckReceiveDirResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.AnswerIncomingRequest, $0.Empty>(
+        'AnswerIncoming',
+        answerIncoming_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.AnswerIncomingRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Profile>(
+        'GetProfile',
+        getProfile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Profile value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SetDisplayNameRequest, $0.Profile>(
+        'SetDisplayName',
+        setDisplayName_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.SetDisplayNameRequest.fromBuffer(value),
+        ($0.Profile value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SetAvatarRequest, $0.Profile>(
+        'SetAvatar',
+        setAvatar_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.SetAvatarRequest.fromBuffer(value),
+        ($0.Profile value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Profile>(
+        'ResetAvatar',
+        resetAvatar_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Profile value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetAvatarRequest, $0.Avatar>(
+        'GetAvatar',
+        getAvatar_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetAvatarRequest.fromBuffer(value),
+        ($0.Avatar value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.CreatePairingCodeResponse>(
+        'CreateFriendCode',
+        createFriendCode_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.CreatePairingCodeResponse value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.RedeemPairingCodeRequest, $0.FriendRequest>(
+            'RedeemFriendCode',
+            redeemFriendCode_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.RedeemPairingCodeRequest.fromBuffer(value),
+            ($0.FriendRequest value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ConfirmPairingRequest, $0.Empty>(
+        'ConfirmFriend',
+        confirmFriend_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.ConfirmPairingRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.ListFriendsResponse>(
+        'ListFriends',
+        listFriends_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.ListFriendsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.FriendRef, $0.Empty>(
+        'RemoveFriend',
+        removeFriend_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.FriendRef.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SetFriendAutoAcceptRequest, $0.Friend>(
+        'SetFriendAutoAccept',
+        setFriendAutoAccept_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.SetFriendAutoAcceptRequest.fromBuffer(value),
+        ($0.Friend value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.FriendRef, $0.Empty>(
+        'BlockDevice',
+        blockDevice_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.FriendRef.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Strangers>(
+        'WatchStrangers',
+        watchStrangers_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Strangers value) => value.writeToBuffer()));
   }
 
   $async.Stream<$0.Event> subscribe_Pre($grpc.ServiceCall $call,
@@ -1238,4 +1514,116 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.CheckReceiveDirResponse> checkReceiveDir(
       $grpc.ServiceCall call, $0.CheckReceiveDirRequest request);
+
+  $async.Future<$0.Empty> answerIncoming_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.AnswerIncomingRequest> $request) async {
+    return answerIncoming($call, await $request);
+  }
+
+  $async.Future<$0.Empty> answerIncoming(
+      $grpc.ServiceCall call, $0.AnswerIncomingRequest request);
+
+  $async.Future<$0.Profile> getProfile_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return getProfile($call, await $request);
+  }
+
+  $async.Future<$0.Profile> getProfile(
+      $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.Profile> setDisplayName_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SetDisplayNameRequest> $request) async {
+    return setDisplayName($call, await $request);
+  }
+
+  $async.Future<$0.Profile> setDisplayName(
+      $grpc.ServiceCall call, $0.SetDisplayNameRequest request);
+
+  $async.Future<$0.Profile> setAvatar_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SetAvatarRequest> $request) async {
+    return setAvatar($call, await $request);
+  }
+
+  $async.Future<$0.Profile> setAvatar(
+      $grpc.ServiceCall call, $0.SetAvatarRequest request);
+
+  $async.Future<$0.Profile> resetAvatar_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return resetAvatar($call, await $request);
+  }
+
+  $async.Future<$0.Profile> resetAvatar(
+      $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.Avatar> getAvatar_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.GetAvatarRequest> $request) async {
+    return getAvatar($call, await $request);
+  }
+
+  $async.Future<$0.Avatar> getAvatar(
+      $grpc.ServiceCall call, $0.GetAvatarRequest request);
+
+  $async.Future<$0.CreatePairingCodeResponse> createFriendCode_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return createFriendCode($call, await $request);
+  }
+
+  $async.Future<$0.CreatePairingCodeResponse> createFriendCode(
+      $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.FriendRequest> redeemFriendCode_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.RedeemPairingCodeRequest> $request) async {
+    return redeemFriendCode($call, await $request);
+  }
+
+  $async.Future<$0.FriendRequest> redeemFriendCode(
+      $grpc.ServiceCall call, $0.RedeemPairingCodeRequest request);
+
+  $async.Future<$0.Empty> confirmFriend_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.ConfirmPairingRequest> $request) async {
+    return confirmFriend($call, await $request);
+  }
+
+  $async.Future<$0.Empty> confirmFriend(
+      $grpc.ServiceCall call, $0.ConfirmPairingRequest request);
+
+  $async.Future<$0.ListFriendsResponse> listFriends_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return listFriends($call, await $request);
+  }
+
+  $async.Future<$0.ListFriendsResponse> listFriends(
+      $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.Empty> removeFriend_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.FriendRef> $request) async {
+    return removeFriend($call, await $request);
+  }
+
+  $async.Future<$0.Empty> removeFriend(
+      $grpc.ServiceCall call, $0.FriendRef request);
+
+  $async.Future<$0.Friend> setFriendAutoAccept_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SetFriendAutoAcceptRequest> $request) async {
+    return setFriendAutoAccept($call, await $request);
+  }
+
+  $async.Future<$0.Friend> setFriendAutoAccept(
+      $grpc.ServiceCall call, $0.SetFriendAutoAcceptRequest request);
+
+  $async.Future<$0.Empty> blockDevice_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.FriendRef> $request) async {
+    return blockDevice($call, await $request);
+  }
+
+  $async.Future<$0.Empty> blockDevice(
+      $grpc.ServiceCall call, $0.FriendRef request);
+
+  $async.Stream<$0.Strangers> watchStrangers_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async* {
+    yield* watchStrangers($call, await $request);
+  }
+
+  $async.Stream<$0.Strangers> watchStrangers(
+      $grpc.ServiceCall call, $0.Empty request);
 }

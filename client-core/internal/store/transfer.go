@@ -31,6 +31,15 @@ const (
 	TransferCancelled   = "cancelled"
 	TransferDeclined    = "declined"
 	TransferExpired     = "expired"
+	// TransferAsking：别人发来的、在等本机用户接受；发出的、在等对方用户接受（2.6.0，好友与陌生设备）
+	TransferAsking = "asking"
+)
+
+// 对方是谁，见 daemon.proto 的 Transfer.peer_role
+const (
+	RoleSelf     = "self"
+	RoleFriend   = "friend"
+	RoleStranger = "stranger"
 )
 
 // TransferFinished 表示这个状态不会再变。
@@ -61,6 +70,11 @@ type Transfer struct {
 	AllowRelay bool // 发出的：用户已同意经官方服务中转
 	Attempt    int  // 发出的：已经发起过几次
 	Renamed    int64 // 收到的：名字在本机改过的文件数
+	// PeerRole 是对方的角色，旧记录为空（都是自己的设备）
+	PeerRole string
+	Note     string
+	// Thumbs 是收到的图片在本机生成的缩略图，与 Items 一一对应
+	Thumbs     []string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	FinishedAt time.Time
@@ -125,8 +139,18 @@ CREATE TABLE IF NOT EXISTS transfer_entries (
 	if err != nil {
 		return fmt.Errorf("建隔空传送表: %w", err)
 	}
-	// 测试版建的表没有这一列
-	return s.addColumnIfMissing("transfers", "renamed", "INTEGER NOT NULL DEFAULT 0")
+	// 测试版建的表没有 renamed；peer_role、note、thumbs 是 2.6.0 加的
+	for _, col := range []struct{ name, decl string }{
+		{"renamed", "INTEGER NOT NULL DEFAULT 0"},
+		{"peer_role", "TEXT NOT NULL DEFAULT ''"},
+		{"note", "TEXT NOT NULL DEFAULT ''"},
+		{"thumbs", "TEXT NOT NULL DEFAULT '[]'"},
+	} {
+		if err := s.addColumnIfMissing("transfers", col.name, col.decl); err != nil {
+			return err
+		}
+	}
+	return s.migrateContacts()
 }
 
 // PutTransfer 新建或整体更新一条传输记录。
@@ -142,6 +166,13 @@ func (s *Store) PutTransfer(t Transfer) error {
 	if err != nil {
 		return err
 	}
+	if t.Thumbs == nil {
+		t.Thumbs = []string{}
+	}
+	thumbs, err := json.Marshal(t.Thumbs)
+	if err != nil {
+		return err
+	}
 	var finished int64
 	if !t.FinishedAt.IsZero() {
 		finished = t.FinishedAt.Unix()
@@ -152,18 +183,21 @@ func (s *Store) PutTransfer(t Transfer) error {
 	_, err = s.db.Exec(`
 INSERT INTO transfers (id, direction, device_id, device_name, status, items, paths,
                        total_bytes, done_bytes, file_count, dest_dir, error, shortfall,
-                       seen, relayed, allow_relay, attempt, created_at, updated_at, finished_at, renamed)
-VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                       seen, relayed, allow_relay, attempt, created_at, updated_at, finished_at, renamed,
+                       peer_role, note, thumbs)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 ON CONFLICT(id) DO UPDATE SET
     device_name=excluded.device_name, status=excluded.status, items=excluded.items,
     paths=excluded.paths, total_bytes=excluded.total_bytes, done_bytes=excluded.done_bytes,
     file_count=excluded.file_count, dest_dir=excluded.dest_dir, error=excluded.error,
     shortfall=excluded.shortfall, seen=excluded.seen, relayed=excluded.relayed,
     allow_relay=excluded.allow_relay, attempt=excluded.attempt,
-    updated_at=excluded.updated_at, finished_at=excluded.finished_at, renamed=excluded.renamed`,
+    updated_at=excluded.updated_at, finished_at=excluded.finished_at, renamed=excluded.renamed,
+    peer_role=excluded.peer_role, note=excluded.note, thumbs=excluded.thumbs`,
 		t.ID, t.Direction, t.DeviceID, t.DeviceName, t.Status, string(items), string(paths),
 		t.TotalBytes, t.DoneBytes, t.FileCount, t.DestDir, t.Error, t.Shortfall,
-		t.Seen, t.Relayed, t.AllowRelay, t.Attempt, t.CreatedAt.Unix(), t.UpdatedAt.Unix(), finished, t.Renamed)
+		t.Seen, t.Relayed, t.AllowRelay, t.Attempt, t.CreatedAt.Unix(), t.UpdatedAt.Unix(), finished, t.Renamed,
+		t.PeerRole, t.Note, string(thumbs))
 	if err != nil {
 		return fmt.Errorf("写入传输记录: %w", err)
 	}
@@ -179,7 +213,8 @@ func nonNilItems(items []Item) []Item {
 
 const transferColumns = `id, direction, device_id, device_name, status, items, paths,
        total_bytes, done_bytes, file_count, dest_dir, error, shortfall,
-       seen, relayed, allow_relay, attempt, created_at, updated_at, finished_at, renamed`
+       seen, relayed, allow_relay, attempt, created_at, updated_at, finished_at, renamed,
+       peer_role, note, thumbs`
 
 func (s *Store) GetTransfer(id string) (Transfer, error) {
 	list, err := s.queryTransfers(`SELECT `+transferColumns+` FROM transfers WHERE id=?`, id)
@@ -227,15 +262,17 @@ func (s *Store) queryTransfers(q string, args ...any) ([]Transfer, error) {
 	var out []Transfer
 	for rows.Next() {
 		var t Transfer
-		var items, paths string
+		var items, paths, thumbs string
 		var created, updated, finished int64
 		if err := rows.Scan(&t.ID, &t.Direction, &t.DeviceID, &t.DeviceName, &t.Status, &items, &paths,
 			&t.TotalBytes, &t.DoneBytes, &t.FileCount, &t.DestDir, &t.Error, &t.Shortfall,
-			&t.Seen, &t.Relayed, &t.AllowRelay, &t.Attempt, &created, &updated, &finished, &t.Renamed); err != nil {
+			&t.Seen, &t.Relayed, &t.AllowRelay, &t.Attempt, &created, &updated, &finished, &t.Renamed,
+			&t.PeerRole, &t.Note, &thumbs); err != nil {
 			return nil, err
 		}
 		_ = json.Unmarshal([]byte(items), &t.Items)
 		_ = json.Unmarshal([]byte(paths), &t.Paths)
+		_ = json.Unmarshal([]byte(thumbs), &t.Thumbs)
 		t.CreatedAt = time.Unix(created, 0)
 		t.UpdatedAt = time.Unix(updated, 0)
 		if finished > 0 {

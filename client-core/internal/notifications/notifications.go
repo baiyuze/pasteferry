@@ -41,6 +41,8 @@ type Options struct {
 	// OpenPage 打开主窗口并切到某一页（"send"）
 	Reveal   func(transferID string) error
 	OpenPage func(page string) error
+	// Accept 是好友、陌生设备发来文件时通知上的「接受」（2.6.0）
+	Accept func(transferID string) error
 }
 
 type Manager struct {
@@ -189,8 +191,12 @@ func (m *Manager) Transfer(kind string, t *pb.Transfer, folder string) {
 	if errText == "" {
 		errText = translate(lang, "transferErrorOther")
 	}
+	note := ""
+	if n := t.GetNote(); n != "" {
+		note = "\n" + translate(lang, "transferNote") + n
+	}
 	replace := strings.NewReplacer("{name}", name, "{device}", t.GetDeviceName(),
-		"{size}", humanSize(t.GetTotalBytes()), "{folder}", folder, "{error}", errText)
+		"{size}", humanSize(t.GetTotalBytes()), "{folder}", folder, "{error}", errText, "{note}", note)
 	reveal := map[string]string{"darwin": "showInFinder", "windows": "showInFolder"}[runtime.GOOS]
 	if reveal == "" {
 		reveal = "openFolder"
@@ -199,6 +205,11 @@ func (m *Manager) Transfer(kind string, t *pb.Transfer, folder string) {
 	switch kind {
 	case "incoming":
 		title, body, action, label = "transferIncomingTitle", "transferIncomingBody", "open", "viewProgress"
+	case "ask":
+		// 点通知本身打开隔空传送页，界面里有「接受」「拒绝」
+		title, body, action, label = "transferAskTitle", "transferAskBody", "accept", "acceptFiles"
+	case "ignored":
+		title, body, action, label = "transferIgnoredTitle", "transferIgnoredBody", "open", "viewProgress"
 	case "received":
 		title, body, action, label = "transferReceivedTitle", "transferReceivedBody", "reveal", reveal
 	default:
@@ -220,6 +231,9 @@ func (m *Manager) Activate(ctx context.Context, id, action string) error {
 	if transferID, ok := strings.CutPrefix(id, transferPrefix); ok {
 		if action == "reveal" && m.opts.Reveal != nil {
 			return m.opts.Reveal(transferID)
+		}
+		if action == "accept" && m.opts.Accept != nil {
+			return m.opts.Accept(transferID)
 		}
 		if m.opts.OpenPage != nil {
 			return m.opts.OpenPage("send")

@@ -148,6 +148,10 @@ func (e *Engine) toProto(t store.Transfer) *pb.Transfer {
 		Status: t.Status, Paths: t.Paths, TotalBytes: t.TotalBytes, DoneBytes: t.DoneBytes,
 		FileCount: t.FileCount, Error: t.Error, ShortfallBytes: t.Shortfall, Relayed: t.Relayed,
 		Seen: t.Seen, CreatedAtUnix: t.CreatedAt.Unix(), RenamedFiles: t.Renamed,
+		PeerRole: t.PeerRole, Note: t.Note, Thumbs: t.Thumbs,
+	}
+	if p.PeerRole == "" {
+		p.PeerRole = store.RoleSelf
 	}
 	if !t.FinishedAt.IsZero() {
 		p.FinishedAtUnix = t.FinishedAt.Unix()

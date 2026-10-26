@@ -38,6 +38,10 @@ var (
 	ErrNoPaths          = errors.New("no_paths")
 	ErrNotFound         = errors.New("not_found")
 	ErrNotResumable     = errors.New("not_resumable")
+	// ErrBadNote：备注太长、有换行或控制字符
+	ErrBadNote = errors.New("bad_note")
+	// ErrNotAsking：这一批不在等本机的用户接受
+	ErrNotAsking = errors.New("not_asking")
 )
 
 const (
@@ -66,12 +70,26 @@ const (
 
 	streamPrefix = "send:"
 	partialDir   = ".pasteferry-partial"
+
+	// 好友、陌生设备发来的，等本机用户接受多久（发送方多等几秒，留出消息往返）
+	defaultAskTimeout = 60 * time.Second
+	askSlack          = 10 * time.Second
+	// 防打扰：一分钟内拒绝同一台电脑 3 次，之后 10 分钟它的请求直接拒绝
+	declineWindow = time.Minute
+	declineLimit  = 3
+	declineMute   = 10 * time.Minute
+	// MaxNote 是备注最多多少个字符
+	MaxNote = 200
 )
 
 // Peer 是某台设备此刻的状态，由 peers.Manager 提供。
 type Peer struct {
-	Known     bool // 已配对
-	Name      string
+	Known bool // 已配对，或者是好友、「所有人」模式下认识的陌生设备
+	Name  string
+	// Role 是对方的角色：store.RoleSelf / RoleFriend / RoleStranger
+	Role string
+	// Ask 表示对方能等它的用户接受（声明了 send_files_ask_v1）。发给好友、陌生设备时必须有
+	Ask       bool
 	Online    bool
 	Connected bool // P2P 连接已建立
 	Relayed   bool // 连接经中转
@@ -86,7 +104,17 @@ const (
 	NoticeIncoming NoticeKind = iota // 较大的传输开始了
 	NoticeReceived                   // 收完了
 	NoticeFailed                     // 没收完
+	NoticeAsk                        // 好友或陌生设备想发来文件，等用户接受
+	NoticeIgnored                    // 没有接受也没有拒绝，过时了
 )
+
+// Admission 是本机此刻收不收某台电脑发来的文件，由 peers.Manager 按角色和设置给出。
+type Admission struct {
+	// Allowed 为 false 时直接回绝（not_allowed）
+	Allowed bool
+	// AutoAccept 表示不用问用户（自己的设备，或者打开了自动接收的好友）
+	AutoAccept bool
+}
 
 type Options struct {
 	Logger     *slog.Logger
@@ -112,9 +140,18 @@ type Options struct {
 	OnRemoved func(id string)
 	OnNotice  func(NoticeKind, *pb.Transfer)
 
+	// 好友（2.6.0）。Admit 决定收不收别人发来的（为空时只收自己的设备）；
+	// Connect 在发给好友、陌生设备前建立连接（它们不常连）；Thumbnail 为收到的图片生成缩略图，
+	// 返回缩略图的路径，不是图片或生成失败时为空；Delivered 在发给或收到好友的一批完成时调用
+	Admit     func(deviceID string) Admission
+	Connect   func(deviceID string)
+	Thumbnail func(path string) string
+	Delivered func(deviceID string)
+
 	// 测试用
 	AnswerTimeout time.Duration
 	ResultTimeout time.Duration
+	AskTimeout    time.Duration
 	Now           func() time.Time
 }
 
@@ -136,6 +173,11 @@ type Engine struct {
 	release func()
 	// 进度事件的节流
 	progress map[string]*meter
+	// 等本机用户接受的：传输 ID → 用户的决定
+	asks map[string]chan string
+	// 防打扰：每台电脑最近被拒绝的时间、被静音到什么时候
+	declines map[string][]time.Time
+	muted    map[string]time.Time
 }
 
 func New(opts Options) *Engine {
@@ -152,11 +194,15 @@ func New(opts Options) *Engine {
 	if opts.Now == nil {
 		opts.Now = time.Now
 	}
+	if opts.AskTimeout <= 0 {
+		opts.AskTimeout = defaultAskTimeout
+	}
 	ctx, stop := context.WithCancel(context.Background())
 	return &Engine{
 		opts: opts, log: log.With("模块", "隔空传送"), ctx: ctx, stop: stop,
 		out: map[string]*outgoing{}, in: map[string]*incoming{},
 		workers: map[string]bool{}, busy: map[string]bool{}, progress: map[string]*meter{},
+		asks: map[string]chan string{}, declines: map[string][]time.Time{}, muted: map[string]time.Time{},
 	}
 }
 
@@ -224,6 +270,9 @@ func (e *Engine) recover() {
 			t.Status = store.TransferInterrupted
 			t.UpdatedAt = now
 			e.save(t)
+		case t.Status == store.TransferAsking:
+			// 等用户接受时后台服务退出了：对方早就超时了
+			e.finish(t, store.TransferDeclined, "timeout")
 		}
 	}
 }
@@ -344,8 +393,16 @@ func (e *Engine) Cancel(id string) error {
 		return nil
 	}
 	e.mu.Lock()
-	o, in := e.out[id], e.in[id]
+	o, in, ask := e.out[id], e.in[id], e.asks[id]
 	e.mu.Unlock()
+	if ask != nil {
+		// 还在等本机用户接受：当作拒绝
+		select {
+		case ask <- askDeclined:
+		default:
+		}
+		return nil
+	}
 	if o != nil {
 		o.abort(errCancelled)
 		return nil

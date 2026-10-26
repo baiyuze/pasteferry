@@ -73,6 +73,9 @@ type PeerInfo struct {
 	PublicKey []byte
 	// Addrs 是对方自报的地址加上实际收到回复的地址，确认配对后写进地址簿
 	Addrs []string
+	// Intent 是对方这次要配对还是加好友（IntentDevice / IntentFriend），Card 是加好友时对方的名片
+	Intent string
+	Card   *pb.FriendCard
 }
 
 // AddrBook 持久化已配对设备的地址，由 store.Store 实现。
@@ -108,6 +111,9 @@ type Options struct {
 	// AcceptNearby 在有人从「搜索附近设备」里点了本机时调用（只在本机也开着这个窗口时）。
 	// 返回 false 会拒绝请求
 	AcceptNearby func(peer PeerInfo) bool
+	// AcceptStranger 在「所有人」模式下有陌生设备要本机的公钥（想发文件）时调用，返回本机的名片；
+	// 返回 nil 会拒绝请求。见 stranger.go
+	AcceptStranger func(peer PeerInfo) *pb.FriendCard
 	// OnChange 在开关、系统拦截状态变化时调用，用来刷新界面上的状态
 	OnChange func()
 }
@@ -176,6 +182,8 @@ type Transport struct {
 	visibleName     string
 	visiblePlatform string
 	nearby          map[string]*nearbyState // mDNS 实例名 → 附近设备
+	// everyone 非空时本机开着「所有人」：广播里带 e=1 和名字，见 stranger.go
+	everyone *everyoneState
 	// nextProbe 是下一次探测本地网络权限的时间，probeAddr 是探测的地址，见 probeTarget
 	nextProbe time.Time
 	probeAddr netip.Addr
@@ -558,6 +566,8 @@ func (t *Transport) handle(pkt *pb.LanPacket, src netip.AddrPort) {
 		t.handlePairResponse(p.PairResponse, src)
 	case *pb.LanPacket_PairReject:
 		t.handlePairReject(p.PairReject)
+	case *pb.LanPacket_StrangerRequest:
+		t.handleStrangerRequest(p.StrangerRequest, src)
 	case *pb.LanPacket_NearbyRequest:
 		t.handleNearbyRequest(p.NearbyRequest, src)
 	case *pb.LanPacket_NearbyPing:
@@ -906,6 +916,7 @@ func (t *Transport) advertTextLocked() map[string]string {
 		text["s"] = "1"
 	}
 	t.nearbyAdvertLocked(text)
+	t.everyoneAdvertLocked(text)
 	return text
 }
 

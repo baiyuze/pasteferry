@@ -45,6 +45,18 @@ type pendingPair struct {
 	initiated bool
 	// addrs 是在局域网里配对时对方的地址，确认后写进地址簿
 	addrs []string
+
+	// 这次是配对还是加好友（lan.IntentDevice / lan.IntentFriend），对方的用途（不知道时为空）
+	// 和名片。两边的用途一致才继续，见 friends.go
+	intent      string
+	peerIntent  string
+	peerCard    *pb.FriendCard
+	intentKnown chan struct{} // 知道对方的用途后关闭
+	intentDone  bool
+	mismatch    error
+	// 加好友：两边的用户各自点了「添加」（1）或「取消」（-1）
+	localDecision int
+	peerDecision  int
 }
 
 const pendingTTL = 5 * time.Minute
@@ -55,6 +67,7 @@ type activeCode struct {
 	code    string
 	expires time.Time
 	used    bool
+	intent  string // 配对码还是好友码
 }
 
 type redeemResult struct {
@@ -102,7 +115,28 @@ type Manager struct {
 	appVersion string
 	// noFeatures 让测试模拟不发功能声明的旧版本
 	noFeatures bool
-	pending    map[string]*pendingPair // session -> 待确认配对
+
+	// 好友（对方的一台电脑），见 friends.go
+	contacts map[string]store.Contact
+	// 「所有人」模式下认识的陌生设备，只在内存里
+	strangers map[string]store.Contact
+	// 删除了好友、还没告诉对方的：设备 ID → 对方公钥（验对方回执的签名）
+	notices map[string][]byte
+	// 和好友、陌生设备最近一次收发的时间，空闲的断开
+	lastUse map[string]time.Time
+	// 用途不一致而作废的配对会话，ConfirmPairing 据此给出原因
+	mismatched map[string]error
+
+	card            func() *pb.FriendCard
+	avatar          func() []byte
+	saveAvatar      func(deviceID string, jpeg []byte) (string, error)
+	onFriendChanged func(*pb.Friend)
+	onFriendRemoved func(deviceID string)
+	onFriendRequest func(*pb.FriendRequest)
+	onOtherReady    func(deviceID string)
+	shareableStream func(label string) bool
+	inUse           func(deviceID string) bool
+	pending         map[string]*pendingPair // session -> 待确认配对
 	// stashed 暂存配对确认前到达的信令，按对端 device_id 归集
 	stashed map[string][]*pb.SignalMessage
 	active  *activeCode
@@ -137,6 +171,23 @@ type Options struct {
 	LANDiscovery lan.Discovery
 	// AppVersion 是本机的版本号，随功能声明发给对端，对端用它提示「需要更新到哪个版本」
 	AppVersion string
+
+	// 好友（2.6.0）。Card 是发给好友的本机名片；Avatar 是本机头像（JPEG，没有时为空）；
+	// SaveAvatar 把好友发来的头像重新编码后存下，返回存放的路径
+	Card       func() *pb.FriendCard
+	Avatar     func() []byte
+	SaveAvatar func(deviceID string, jpeg []byte) (string, error)
+	// OnFriendChanged 好友加上或状态变化；OnFriendRemoved 好友被删除（任一方）或加好友时对方取消了；
+	// OnFriendRequest 有人兑换了本机的好友码，界面弹出确认框
+	OnFriendChanged func(*pb.Friend)
+	OnFriendRemoved func(deviceID string)
+	OnFriendRequest func(*pb.FriendRequest)
+	// OnOtherReady 与好友或陌生设备的连接建立时调用（隔空传送据此开始发）；OnPeerReady 只给自己的设备
+	OnOtherReady func(deviceID string)
+	// ShareableStream 判断好友、陌生设备开来的数据流能不能收（隔空传送的），其余一律关掉
+	ShareableStream func(label string) bool
+	// InUse 报告与某台电脑之间是否还有传输在进行，空闲断开好友连接时据此跳过
+	InUse func(deviceID string) bool
 }
 
 // legacyWait 是连上以后等对端功能声明的时间。旧版本（2.5.0 之前）从不发声明，
@@ -166,6 +217,20 @@ func NewManager(opts Options) (*Manager, error) {
 		declared:        make(map[string]bool),
 		legacy:          make(map[string]bool),
 		appVersion:      opts.AppVersion,
+		contacts:        make(map[string]store.Contact),
+		strangers:       make(map[string]store.Contact),
+		notices:         make(map[string][]byte),
+		lastUse:         make(map[string]time.Time),
+		mismatched:      make(map[string]error),
+		card:            opts.Card,
+		avatar:          opts.Avatar,
+		saveAvatar:      opts.SaveAvatar,
+		onFriendChanged: opts.OnFriendChanged,
+		onFriendRemoved: opts.OnFriendRemoved,
+		onFriendRequest: opts.OnFriendRequest,
+		onOtherReady:    opts.OnOtherReady,
+		shareableStream: opts.ShareableStream,
+		inUse:           opts.InUse,
 		pending:         make(map[string]*pendingPair),
 		stashed:         make(map[string][]*pb.SignalMessage),
 	}
@@ -180,6 +245,9 @@ func NewManager(opts Options) (*Manager, error) {
 			m.features[d.ID] = featureSet(d.Features)
 			m.peerVersion[d.ID] = d.AppVersion
 		}
+	}
+	if err := m.loadContacts(); err != nil {
+		return nil, err
 	}
 
 	m.gateway, err = gateway.NewClient(opts.Identity, gateway.OfficialBaseURL, func(u gateway.Usage) {
@@ -201,6 +269,15 @@ func NewManager(opts Options) (*Manager, error) {
 		SendSignal:     m.sendSignal,
 		OnState:        m.handleP2PState,
 		OnMessage: func(id string, msg *pb.PeerMessage) {
+			if role := m.Role(id); role != RoleSelf {
+				if role == "" || m.handleOtherMessage(id, role, msg) {
+					return
+				}
+				if opts.OnPeerMessage != nil {
+					opts.OnPeerMessage(id, msg)
+				}
+				return
+			}
 			if display := msg.GetDisplay(); display != nil {
 				m.updatePeerDisplay(id, display)
 				return
@@ -213,7 +290,22 @@ func NewManager(opts Options) (*Manager, error) {
 				opts.OnPeerMessage(id, msg)
 			}
 		},
-		OnStream:  opts.OnPeerStream,
+		OnStream: func(id, label string, stream *p2p.Stream) {
+			if role := m.Role(id); role != RoleSelf {
+				// 好友、陌生设备只能开隔空传送的数据流
+				if role == "" || m.shareableStream == nil || !m.shareableStream(label) {
+					m.log.Warn("关掉非自己设备开来的数据流", "device", id, "role", role, "label", label)
+					stream.Close()
+					return
+				}
+				m.touch(id)
+			}
+			if opts.OnPeerStream != nil {
+				opts.OnPeerStream(id, label, stream)
+			} else {
+				stream.Close()
+			}
+		},
 		StatePath: opts.StatePath,
 		// 公共 STUN 服务器 IP 分散，能探测到更多出口；用户可以在设置里关掉。
 		// 没有服务器时只在局域网里连，探测出口没有用，还会把公网 IP 暴露给公共服务器
@@ -234,17 +326,18 @@ func NewManager(opts Options) (*Manager, error) {
 		Discovery: opts.LANDiscovery,
 		Verifier:  m.verifier,
 		Book:      opts.Store,
-		Peers:     m.pairedIDs,
+		Peers:     m.lanPeerIDs,
 		Connected: func(id string) bool { return connected(m.p2p.State(id)) },
 		DeviceInfo: func() (string, string) {
 			return m.loadConfig().DeviceName, runtime.GOOS
 		},
-		OnSignal:     m.handleSignal,
-		OnReachable:  m.handleLANReachable,
-		OnRestarted:  m.handlePeerRestarted,
-		AcceptPair:   m.acceptLANPair,
-		AcceptNearby: m.acceptNearby,
-		OnChange:     m.notifyStatus,
+		OnSignal:       m.handleSignal,
+		OnReachable:    m.handleLANReachable,
+		OnRestarted:    m.handlePeerRestarted,
+		AcceptPair:     m.acceptLANPair,
+		AcceptNearby:   m.acceptNearby,
+		AcceptStranger: m.acceptStranger,
+		OnChange:       m.notifyStatus,
 	})
 
 	m.client = signaling.New(signaling.Options{
@@ -283,6 +376,7 @@ func (m *Manager) Run(ctx context.Context) {
 			m.log.Warn("局域网直连启动失败", "err", err)
 		}
 	}
+	m.ApplyEveryone()
 	go m.gcPending(ctx)
 	go m.gateway.Run(ctx)
 	go m.reconnectLoop(ctx)
@@ -312,11 +406,17 @@ func (m *Manager) reconnectLoop(ctx context.Context) {
 	defer t.Stop()
 	features := time.NewTicker(time.Minute)
 	defer features.Stop()
+	idle := time.NewTicker(30 * time.Second)
+	defer idle.Stop()
 
 	for {
 		select {
 		case <-ctx.Done():
 			return
+		case <-idle.C:
+			m.dropIdleOthers()
+			m.forgetIdleStrangers()
+			m.sendNotices()
 		case <-t.C:
 			m.connectPending(ctx)
 		case <-features.C:
@@ -383,14 +483,7 @@ const (
 	FeatureSendFilesTCP = "send_files_tcp_v1"
 )
 
-func (m *Manager) featuresMessage() *pb.PeerMessage {
-	f := []string{FeatureSendFiles}
-	if m.loadConfig().ReceiveDisabled {
-		f = []string{FeatureSendFilesOff}
-	}
-	f = append(f, FeatureSendFilesTCP)
-	return &pb.PeerMessage{Payload: &pb.PeerMessage_Features{Features: &pb.PeerFeatures{Features: f, AppVersion: m.appVersion}}}
-}
+func (m *Manager) featuresMessage() *pb.PeerMessage { return m.featuresFor(RoleSelf) }
 
 func featureSet(names []string) map[string]bool {
 	set := make(map[string]bool, len(names))
@@ -405,10 +498,11 @@ func featureSet(names []string) map[string]bool {
 
 // BroadcastFeatures 在本机的功能开关变了以后（比如关掉了接收文件）告诉所有连着的设备。
 func (m *Manager) BroadcastFeatures() {
-	msg := m.featuresMessage()
-	for _, id := range m.pairedIDs() {
+	for _, id := range m.lanPeerIDs() {
 		if connected(m.p2p.State(id)) {
-			_ = m.p2p.Send(id, msg)
+			if role := m.Role(id); role != "" {
+				_ = m.p2p.Send(id, m.featuresFor(role))
+			}
 		}
 	}
 }
@@ -419,36 +513,48 @@ func (m *Manager) updatePeerFeatures(id string, f *pb.PeerFeatures) {
 	if len(version) > 32 {
 		version = version[:32]
 	}
-	m.mu.Lock()
-	_, ok := m.known[id]
-	if ok {
-		m.features[id] = set
-		m.peerVersion[id] = version
-		m.declared[id] = true
-		delete(m.legacy, id)
-	}
-	m.mu.Unlock()
-	if !ok {
-		return
-	}
 	names := make([]string, 0, len(set))
 	for name := range set {
 		names = append(names, name)
 	}
 	sort.Strings(names)
-	if err := m.store.SetDeviceFeatures(id, names, version); err != nil {
-		m.log.Warn("保存对端功能声明失败", "device", id, "err", err)
+	m.mu.Lock()
+	role := m.roleLocked(id)
+	if role != "" {
+		m.features[id] = set
+		m.peerVersion[id] = version
+		m.declared[id] = true
+		delete(m.legacy, id)
+	}
+	c, isFriend := m.contacts[id]
+	if isFriend {
+		c.Features, c.AppVersion = names, version
+		m.contacts[id] = c
+	}
+	m.mu.Unlock()
+	switch role {
+	case "":
+		return
+	case RoleSelf:
+		if err := m.store.SetDeviceFeatures(id, names, version); err != nil {
+			m.log.Warn("保存对端功能声明失败", "device", id, "err", err)
+		}
+	case RoleFriend:
+		if err := m.store.PutContact(c); err != nil {
+			m.log.Warn("保存好友的功能声明失败", "device", id, "err", err)
+		}
 	}
 	if d, ok := m.device(id); ok {
 		m.notify(d)
 	}
+	m.notifyFriend(id)
 }
 
 // checkLegacy 在连上 legacyWait 之后检查对端发过功能声明没有：
 // 还连着却一直没发，说明是不认识声明的旧版本。
 func (m *Manager) checkLegacy(id string) {
 	m.mu.Lock()
-	_, ok := m.known[id]
+	ok := m.roleLocked(id) != ""
 	isLegacy := ok && connected(m.conn[id]) && !m.declared[id]
 	if isLegacy {
 		m.legacy[id] = true
@@ -466,6 +572,7 @@ func (m *Manager) checkLegacy(id string) {
 	if d, ok := m.device(id); ok {
 		m.notify(d)
 	}
+	m.notifyFriend(id)
 }
 
 // SendFilesSupport 返回对端能不能接收隔空传送：supported 为 false 说明是旧版本（或者还没收到它的声明），
@@ -528,6 +635,15 @@ func (m *Manager) publicKeyOf(deviceID string) ed25519.PublicKey {
 	if d, ok := m.known[deviceID]; ok {
 		return ed25519.PublicKey(d.PublicKey)
 	}
+	if c, ok := m.contacts[deviceID]; ok {
+		return ed25519.PublicKey(c.PublicKey)
+	}
+	if c, ok := m.strangers[deviceID]; ok {
+		return ed25519.PublicKey(c.PublicKey)
+	}
+	if key, ok := m.notices[deviceID]; ok {
+		return ed25519.PublicKey(key)
+	}
 	for _, p := range m.pending {
 		if p.peer.ID == deviceID {
 			return ed25519.PublicKey(p.peer.PublicKey)
@@ -539,10 +655,8 @@ func (m *Manager) publicKeyOf(deviceID string) ed25519.PublicKey {
 func (m *Manager) deviceInfo() (name, platform string, paired []string) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	ids := make([]string, 0, len(m.known))
-	for id := range m.known {
-		ids = append(ids, id)
-	}
+	// 好友的在线状态也要服务器推送
+	ids := m.watchIDsLocked()
 	if m.loadConfig().UsesOfficialEndpoint() {
 		return "PasteFerry " + m.identity.DeviceID[:8], "", ids
 	}
@@ -575,6 +689,12 @@ func (m *Manager) handlePresence(deviceID string, online bool) {
 
 	if online {
 		m.connectIfOffline(deviceID)
+		m.mu.RLock()
+		_, notice := m.notices[deviceID]
+		m.mu.RUnlock()
+		if notice {
+			go m.sendNotices()
+		}
 	} else if !m.lan.Reachable(deviceID) {
 		// 服务器说对方下线了，局域网里也找不到：连接多半已经失效
 		m.p2p.Disconnect(deviceID)
@@ -586,6 +706,7 @@ func (m *Manager) handlePresence(deviceID string, online bool) {
 	if d, ok := m.device(deviceID); ok {
 		m.notify(d)
 	}
+	m.notifyFriend(deviceID)
 	m.notifyStatus() // 在线对端数随之变化
 }
 
@@ -594,10 +715,17 @@ func (m *Manager) handlePresence(deviceID string, online bool) {
 func (m *Manager) handleLANReachable(deviceID string, reachable bool) {
 	if reachable {
 		m.connectIfOffline(deviceID)
+		m.mu.RLock()
+		_, notice := m.notices[deviceID]
+		m.mu.RUnlock()
+		if notice {
+			go m.sendNotices()
+		}
 	}
 	if d, ok := m.device(deviceID); ok {
 		m.notify(d)
 	}
+	m.notifyFriend(deviceID)
 	m.notifyStatus()
 }
 
@@ -636,8 +764,24 @@ func (m *Manager) connectIfOffline(deviceID string) {
 }
 
 func (m *Manager) handleSignal(from string, msg *pb.SignalMessage) {
+	// 加好友与删除好友的信令，不建立 P2P 连接
+	switch p := msg.GetPayload().(type) {
+	case *pb.SignalMessage_PairIntent:
+		m.handlePairIntent(from, p.PairIntent)
+		return
+	case *pb.SignalMessage_FriendConfirm:
+		m.handleFriendConfirm(from, p.FriendConfirm)
+		return
+	case *pb.SignalMessage_FriendRemove:
+		m.handleFriendRemove(from, p.FriendRemove)
+		return
+	case *pb.SignalMessage_StrangerHello:
+		return
+	}
+
 	m.mu.RLock()
-	_, paired := m.known[from]
+	role := m.roleLocked(from)
+	paired := role != ""
 	pendingPair := !paired && m.hasPendingLocked(from)
 	m.mu.RUnlock()
 
@@ -717,15 +861,21 @@ func (m *Manager) handleP2PState(deviceID string, state p2p.ConnState) {
 	m.mu.Lock()
 	prev := m.conn[deviceID]
 	m.conn[deviceID] = state
+	role := m.roleLocked(deviceID)
 	if connected(state) && !connected(prev) {
 		m.declared[deviceID] = false
+		m.lastUse[deviceID] = time.Now()
 	}
 	m.mu.Unlock()
 	if connected(state) && !connected(prev) {
-		cfg := m.loadConfig()
-		_ = m.p2p.Send(deviceID, &pb.PeerMessage{Payload: &pb.PeerMessage_Display{Display: &pb.PeerDisplay{Name: cfg.DeviceName, Platform: runtime.GOOS}}})
+		if role == RoleSelf {
+			cfg := m.loadConfig()
+			_ = m.p2p.Send(deviceID, &pb.PeerMessage{Payload: &pb.PeerMessage_Display{Display: &pb.PeerDisplay{Name: cfg.DeviceName, Platform: runtime.GOOS}}})
+		} else {
+			_ = m.p2p.Send(deviceID, &pb.PeerMessage{Payload: &pb.PeerMessage_FriendCard{FriendCard: m.selfCard()}})
+		}
 		if !m.noFeatures {
-			_ = m.p2p.Send(deviceID, m.featuresMessage())
+			_ = m.p2p.Send(deviceID, m.featuresFor(role))
 		}
 		time.AfterFunc(legacyWait, func() { m.checkLegacy(deviceID) })
 	}
@@ -734,9 +884,14 @@ func (m *Manager) handleP2PState(deviceID string, state p2p.ConnState) {
 	if d, ok := m.device(deviceID); ok {
 		m.notify(d)
 	}
+	m.notifyFriend(deviceID)
 	// 直连与中转之间切换不算重新连上
-	if connected(state) && !connected(prev) && m.onPeerReady != nil {
-		m.onPeerReady(deviceID)
+	if connected(state) && !connected(prev) {
+		if role == RoleSelf && m.onPeerReady != nil {
+			m.onPeerReady(deviceID)
+		} else if role != RoleSelf && m.onOtherReady != nil {
+			m.onOtherReady(deviceID)
+		}
 	}
 }
 
@@ -831,15 +986,19 @@ func (m *Manager) handlePairingRedeemed(ev *pb.PairingRedeemed) {
 	if a != nil {
 		a.used = true
 	}
+	intent := lan.IntentDevice
+	if a != nil && a.intent == lan.IntentFriend {
+		intent = lan.IntentFriend
+	}
 	m.mu.Unlock()
 	m.lan.ClosePairing()
 
-	_, _ = m.addPending(store.Device{
+	_, _ = m.addPendingFor(store.Device{
 		ID:        ev.GetPeerDeviceId(),
 		Name:      ev.GetPeerDeviceName(),
 		Platform:  ev.GetPeerPlatform(),
 		PublicKey: ev.GetPeerPublicKey(),
-	}, true, nil)
+	}, true, nil, intent, "", nil)
 }
 
 // handlePairingResult：本机是兑换方，服务器回传了发起方信息。
@@ -867,14 +1026,16 @@ func (m *Manager) acceptLANPair(peer lan.PeerInfo) bool {
 		return false
 	}
 	a.used = true
+	intent := a.intent
 	m.mu.Unlock()
 
-	_, err := m.addPending(store.Device{
+	// 局域网里用途不一致的请求已经在 lan 里回绝了，这里两边一致
+	_, err := m.addPendingFor(store.Device{
 		ID:        peer.ID,
 		Name:      peer.Name,
 		Platform:  peer.Platform,
 		PublicKey: peer.PublicKey,
-	}, true, peer.Addrs)
+	}, true, peer.Addrs, intent, peer.Intent, peer.Card)
 	return err == nil
 }
 
@@ -903,29 +1064,56 @@ func (m *Manager) acceptNearby(peer lan.PeerInfo) bool {
 var ErrBadPeerID = errors.New("对方的设备 ID 与公钥不匹配")
 
 func (m *Manager) addPending(peer store.Device, initiated bool, addrs []string) (string, error) {
+	// 局域网里「搜索附近设备」的配对：两边都是配对
+	return m.addPendingFor(peer, initiated, addrs, lan.IntentDevice, lan.IntentDevice, nil)
+}
+
+// addPendingFor 记下一个待用户确认的配对或加好友。peerIntent 为空表示还不知道对方的用途
+// （经服务器兑换的），之后用 PairIntent 信令交换。
+func (m *Manager) addPendingFor(peer store.Device, initiated bool, addrs []string, intent, peerIntent string, peerCard *pb.FriendCard) (string, error) {
 	// 校验对端 ID 确由其公钥派生，挡住服务器伪造的 device_id
 	if !deviceid.Valid(peer.ID, peer.PublicKey) {
 		m.log.Warn("拒绝配对：device_id 与公钥不匹配", "device", peer.ID)
 		return "", ErrBadPeerID
 	}
+	if peer.ID == m.identity.DeviceID {
+		return "", ErrBadPeerID
+	}
+	m.mu.RLock()
+	role := m.roleLocked(peer.ID)
+	m.mu.RUnlock()
+	if intent == lan.IntentFriend && role == RoleSelf {
+		return "", ErrAlreadyPaired
+	}
 
 	session := randomToken()
-	m.mu.Lock()
-	m.pending[session] = &pendingPair{
-		session:   session,
-		peer:      peer,
-		expiresAt: time.Now().Add(pendingTTL),
-		initiated: initiated,
-		addrs:     addrs,
+	p := &pendingPair{
+		session:     session,
+		peer:        peer,
+		expiresAt:   time.Now().Add(pendingTTL),
+		initiated:   initiated,
+		addrs:       addrs,
+		intent:      intent,
+		peerIntent:  peerIntent,
+		peerCard:    peerCard,
+		intentKnown: make(chan struct{}),
 	}
+	m.mu.Lock()
+	m.pending[session] = p
 	m.mu.Unlock()
 
 	m.log.Info("等待用户核对配对指纹",
-		"peer", peer.Name, "device", peer.ID,
+		"peer", peer.Name, "device", peer.ID, "intent", intent,
 		"fingerprint", deviceid.Fingerprint(peer.PublicKey))
+	m.lan.PeersChanged()
 
-	// 发起方侧是被动收到的，主动推给 UI 让它弹出确认
-	if initiated {
+	if peerIntent == "" {
+		go m.exchangeIntent(session)
+	} else {
+		m.evaluateIntent(p)
+	}
+	// 配对的发起方侧是被动收到的，主动推给 UI 让它弹出确认；加好友等两边用途一致后再推（evaluateIntent）
+	if initiated && intent == lan.IntentDevice {
 		m.notify(m.toProto(peer, false, session))
 	}
 	return session, nil
@@ -947,6 +1135,10 @@ var (
 // 连着服务器时用服务器签发的码，同一个码也在局域网里开放，两边谁先用掉算谁的；
 // 没连服务器时在本机生成，只在局域网里开放。
 func (m *Manager) CreatePairingCode(ctx context.Context) (string, time.Time, []string, error) {
+	return m.createCode(ctx, lan.IntentDevice)
+}
+
+func (m *Manager) createCode(ctx context.Context, intent string) (string, time.Time, []string, error) {
 	lanOn := m.lan.Running()
 	var code string
 	var expires time.Time
@@ -972,10 +1164,14 @@ func (m *Manager) CreatePairingCode(ctx context.Context) (string, time.Time, []s
 	}
 
 	m.mu.Lock()
-	m.active = &activeCode{code: code, expires: expires}
+	m.active = &activeCode{code: code, expires: expires, intent: intent}
 	m.mu.Unlock()
 	if lanOn {
-		m.lan.OpenPairing(code, expires)
+		var card *pb.FriendCard
+		if intent == lan.IntentFriend {
+			card = m.selfCard()
+		}
+		m.lan.OpenPairingFor(code, expires, intent, card)
 	}
 	return code, expires, m.lan.DisplayAddrs(), nil
 }
@@ -1007,7 +1203,10 @@ func (m *Manager) serverPairingCode(ctx context.Context) (string, time.Time, err
 // 先在局域网里找（address 是用户输入的对方地址，不在同一网段时用），
 // 找不到且连着服务器时再去服务器上兑换。
 func (m *Manager) RedeemPairingCode(ctx context.Context, code, address string) (*pb.Device, string, error) {
-	code = pairingcode.Normalize(code)
+	code, friend := splitCode(code)
+	if friend {
+		return nil, "", ErrIsFriendCode
+	}
 	var extra []netip.AddrPort
 	if address != "" {
 		aps, err := lan.ResolveAddress(ctx, address)
@@ -1034,6 +1233,9 @@ func (m *Manager) RedeemPairingCode(ctx context.Context, code, address string) (
 			}
 			return m.toProto(dev, false, session), session, nil
 		}
+		if errors.Is(err, lan.ErrIsFriendCode) {
+			return nil, "", ErrIsFriendCode
+		}
 		lanErr = err
 	}
 
@@ -1053,6 +1255,22 @@ func (m *Manager) RedeemPairingCode(ctx context.Context, code, address string) (
 }
 
 func (m *Manager) redeemViaServer(ctx context.Context, code string) (*pb.Device, string, error) {
+	session, err := m.redeemViaServerFor(ctx, code, lan.IntentDevice)
+	if err != nil {
+		return nil, "", err
+	}
+	m.mu.RLock()
+	p := m.pending[session]
+	m.mu.RUnlock()
+	if p == nil {
+		return nil, "", ErrSessionUnknown
+	}
+	return m.toProto(p.peer, false, session), session, nil
+}
+
+// redeemViaServerFor 经服务器兑换配对码或好友码，返回待确认的会话。
+// 服务器不知道用途，之后两边用签名的 PairIntent 信令互相说明（见 exchangeIntent）
+func (m *Manager) redeemViaServerFor(ctx context.Context, code, intent string) (string, error) {
 	ch := make(chan redeemResult, 1)
 	m.mu.Lock()
 	m.redeemWaiters = append(m.redeemWaiters, ch)
@@ -1070,12 +1288,12 @@ func (m *Manager) redeemViaServer(ctx context.Context, code string) (*pb.Device,
 
 	if err := m.client.RedeemPairingCode(ctx, code); err != nil {
 		drop()
-		return nil, "", err
+		return "", err
 	}
 	select {
 	case r := <-ch:
 		if r.err != nil {
-			return nil, "", r.err
+			return "", r.err
 		}
 		dev := store.Device{
 			ID:        r.ev.GetPeerDeviceId(),
@@ -1083,17 +1301,13 @@ func (m *Manager) redeemViaServer(ctx context.Context, code string) (*pb.Device,
 			Platform:  r.ev.GetPeerPlatform(),
 			PublicKey: r.ev.GetPeerPublicKey(),
 		}
-		session, err := m.addPending(dev, false, nil)
-		if err != nil {
-			return nil, "", err
-		}
-		return m.toProto(dev, false, session), session, nil
+		return m.addPendingFor(dev, false, nil, intent, "", nil)
 	case <-ctx.Done():
 		drop()
-		return nil, "", ctx.Err()
+		return "", ctx.Err()
 	case <-time.After(10 * time.Second):
 		drop()
-		return nil, "", ErrCodeRejected
+		return "", ErrCodeRejected
 	}
 }
 
@@ -1140,14 +1354,35 @@ func (m *Manager) PairNearby(ctx context.Context, id string) (*pb.Device, string
 
 // ConfirmPairing 在用户核对指纹后落库，正式建立互信。
 func (m *Manager) ConfirmPairing(ctx context.Context, session string, accept bool) error {
-	m.mu.Lock()
+	// 经服务器兑换的还不知道对方的用途时，等它一会儿：对方开放的若是好友码，不能配成自己的设备。
+	// 旧版本从不说明用途，等不到就当作配对
+	m.mu.RLock()
 	p, ok := m.pending[session]
+	m.mu.RUnlock()
+	if ok && accept && p.intent == lan.IntentDevice {
+		select {
+		case <-p.intentKnown:
+		case <-time.After(intentConfirmWait):
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+	}
+
+	m.mu.Lock()
+	p, ok = m.pending[session]
+	if ok && p.intent == lan.IntentFriend {
+		ok = false
+	}
 	if ok {
 		delete(m.pending, session)
 	}
+	mismatch := m.mismatched[session]
 	m.mu.Unlock()
 
 	if !ok {
+		if mismatch != nil {
+			return mismatch
+		}
 		return ErrSessionUnknown
 	}
 	if !accept {
@@ -1440,6 +1675,9 @@ func (m *Manager) gcPending(ctx context.Context) {
 				if now.After(p.expiresAt) {
 					delete(m.pending, k)
 				}
+			}
+			if len(m.mismatched) > 64 {
+				m.mismatched = make(map[string]error)
 			}
 			m.mu.Unlock()
 		}

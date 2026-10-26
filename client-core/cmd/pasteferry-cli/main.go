@@ -46,7 +46,7 @@ func main() {
 	cmd := flag.Arg(0)
 	if cmd == "" {
 		fmt.Fprintln(os.Stderr,
-			"用法: pasteferry-cli [-data-dir DIR] <status|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] DEVICE PATH...|transfers [-v]|cancel ID>")
+			"用法: pasteferry-cli [-data-dir DIR] <status|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]>")
 		os.Exit(2)
 	}
 
@@ -108,6 +108,20 @@ func run(cmd, dataDir string) error {
 		return showTransfers(ctx, client, flag.Arg(1) == "-v")
 	case "cancel":
 		return cancelTransfer(ctx, client, flag.Arg(1))
+	case "friends":
+		return showFriends(ctx, client)
+	case "friend":
+		return friendCommand(ctx, client, flag.Args()[1:])
+	case "accept":
+		return answerIncoming(ctx, client, flag.Arg(1), true, flag.Arg(2) == "always")
+	case "decline":
+		return answerIncoming(ctx, client, flag.Arg(1), false, false)
+	case "name":
+		return setName(ctx, client, flag.Arg(1))
+	case "avatar":
+		return setAvatar(ctx, client, flag.Arg(1))
+	case "receive-from":
+		return setReceiveFrom(ctx, client, flag.Arg(1))
 	default:
 		return fmt.Errorf("未知命令 %q", cmd)
 	}

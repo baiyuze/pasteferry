@@ -112,6 +112,10 @@ enum SignalMessage_Payload {
   ping,
   lanHello,
   retryDirect,
+  pairIntent,
+  friendConfirm,
+  strangerHello,
+  friendRemove,
   notSet
 }
 
@@ -130,6 +134,10 @@ class SignalMessage extends $pb.GeneratedMessage {
     Ping? ping,
     LanHello? lanHello,
     RetryDirect? retryDirect,
+    PairIntent? pairIntent,
+    FriendConfirm? friendConfirm,
+    StrangerHello? strangerHello,
+    FriendRemove? friendRemove,
   }) {
     final result = SignalMessage._();
     if (timestampUnix != null) result.timestampUnix = timestampUnix;
@@ -146,6 +154,10 @@ class SignalMessage extends $pb.GeneratedMessage {
     if (ping != null) result.ping = ping;
     if (lanHello != null) result.lanHello = lanHello;
     if (retryDirect != null) result.retryDirect = retryDirect;
+    if (pairIntent != null) result.pairIntent = pairIntent;
+    if (friendConfirm != null) result.friendConfirm = friendConfirm;
+    if (strangerHello != null) result.strangerHello = strangerHello;
+    if (friendRemove != null) result.friendRemove = friendRemove;
     return result;
   }
 
@@ -166,13 +178,17 @@ class SignalMessage extends $pb.GeneratedMessage {
     13: SignalMessage_Payload.ping,
     14: SignalMessage_Payload.lanHello,
     15: SignalMessage_Payload.retryDirect,
+    16: SignalMessage_Payload.pairIntent,
+    17: SignalMessage_Payload.friendConfirm,
+    18: SignalMessage_Payload.strangerHello,
+    19: SignalMessage_Payload.friendRemove,
     0: SignalMessage_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SignalMessage',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: SignalMessage.$_createMessage)
-    ..oo(0, [10, 11, 12, 13, 14, 15])
+    ..oo(0, [10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
     ..aInt64(1, _omitFieldNames ? '' : 'timestampUnix')
     ..a<$core.List<$core.int>>(
         2, _omitFieldNames ? '' : 'nonce', $pb.PbFieldType.OY)
@@ -193,6 +209,14 @@ class SignalMessage extends $pb.GeneratedMessage {
         subBuilder: LanHello.$_createMessage)
     ..aOM<RetryDirect>(15, _omitFieldNames ? '' : 'retryDirect',
         subBuilder: RetryDirect.$_createMessage)
+    ..aOM<PairIntent>(16, _omitFieldNames ? '' : 'pairIntent',
+        subBuilder: PairIntent.$_createMessage)
+    ..aOM<FriendConfirm>(17, _omitFieldNames ? '' : 'friendConfirm',
+        subBuilder: FriendConfirm.$_createMessage)
+    ..aOM<StrangerHello>(18, _omitFieldNames ? '' : 'strangerHello',
+        subBuilder: StrangerHello.$_createMessage)
+    ..aOM<FriendRemove>(19, _omitFieldNames ? '' : 'friendRemove',
+        subBuilder: FriendRemove.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -223,6 +247,10 @@ class SignalMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(13)
   @$pb.TagNumber(14)
   @$pb.TagNumber(15)
+  @$pb.TagNumber(16)
+  @$pb.TagNumber(17)
+  @$pb.TagNumber(18)
+  @$pb.TagNumber(19)
   SignalMessage_Payload whichPayload() =>
       _SignalMessage_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(10)
@@ -231,6 +259,10 @@ class SignalMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(13)
   @$pb.TagNumber(14)
   @$pb.TagNumber(15)
+  @$pb.TagNumber(16)
+  @$pb.TagNumber(17)
+  @$pb.TagNumber(18)
+  @$pb.TagNumber(19)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   /// 防重放：接收方拒绝时间戳过旧或 nonce 重复的消息
@@ -365,6 +397,257 @@ class SignalMessage extends $pb.GeneratedMessage {
   void clearRetryDirect() => $_clearField(15);
   @$pb.TagNumber(15)
   RetryDirect ensureRetryDirect() => $_ensure(12);
+
+  /// 配对码兑换后、用户确认前，两边告诉对方这次是配对还是加好友（2.6.0）。
+  /// 旧版本不发：没收到就当作配对
+  @$pb.TagNumber(16)
+  PairIntent get pairIntent => $_getN(13);
+  @$pb.TagNumber(16)
+  set pairIntent(PairIntent value) => $_setField(16, value);
+  @$pb.TagNumber(16)
+  $core.bool hasPairIntent() => $_has(13);
+  @$pb.TagNumber(16)
+  void clearPairIntent() => $_clearField(16);
+  @$pb.TagNumber(16)
+  PairIntent ensurePairIntent() => $_ensure(13);
+
+  /// 加好友：本端的用户点了「添加」或「取消」。两边都添加了才算好友
+  @$pb.TagNumber(17)
+  FriendConfirm get friendConfirm => $_getN(14);
+  @$pb.TagNumber(17)
+  set friendConfirm(FriendConfirm value) => $_setField(17, value);
+  @$pb.TagNumber(17)
+  $core.bool hasFriendConfirm() => $_has(14);
+  @$pb.TagNumber(17)
+  void clearFriendConfirm() => $_clearField(17);
+  @$pb.TagNumber(17)
+  FriendConfirm ensureFriendConfirm() => $_ensure(14);
+
+  /// 「所有人」模式下陌生设备之间交换的名片，见 design/friends-send.md 第 9.1 节
+  @$pb.TagNumber(18)
+  StrangerHello get strangerHello => $_getN(15);
+  @$pb.TagNumber(18)
+  set strangerHello(StrangerHello value) => $_setField(18, value);
+  @$pb.TagNumber(18)
+  $core.bool hasStrangerHello() => $_has(15);
+  @$pb.TagNumber(18)
+  void clearStrangerHello() => $_clearField(18);
+  @$pb.TagNumber(18)
+  StrangerHello ensureStrangerHello() => $_ensure(15);
+
+  @$pb.TagNumber(19)
+  FriendRemove get friendRemove => $_getN(16);
+  @$pb.TagNumber(19)
+  set friendRemove(FriendRemove value) => $_setField(19, value);
+  @$pb.TagNumber(19)
+  $core.bool hasFriendRemove() => $_has(16);
+  @$pb.TagNumber(19)
+  void clearFriendRemove() => $_clearField(19);
+  @$pb.TagNumber(19)
+  FriendRemove ensureFriendRemove() => $_ensure(16);
+}
+
+/// 配对码兑换后各自发一次，直到收到对方的。intent 是 "device"（配对）或 "friend"（加好友）
+class PairIntent extends $pb.GeneratedMessage {
+  factory PairIntent({
+    $core.String? intent,
+    FriendCard? card,
+  }) {
+    final result = PairIntent._();
+    if (intent != null) result.intent = intent;
+    if (card != null) result.card = card;
+    return result;
+  }
+
+  PairIntent._();
+
+  factory PairIntent.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PairIntent()..mergeFromBuffer(data, registry);
+  factory PairIntent.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PairIntent()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PairIntent',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: PairIntent.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'intent')
+    ..aOM<FriendCard>(2, _omitFieldNames ? '' : 'card',
+        subBuilder: FriendCard.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PairIntent clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PairIntent copyWith(void Function(PairIntent) updates) =>
+      super.copyWith((message) => updates(message as PairIntent)) as PairIntent;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use PairIntent() / PairIntent.new instead')
+  static PairIntent create() => PairIntent._();
+  static $pb.GeneratedMessage $_createMessage() => PairIntent._();
+  @$core.override
+  PairIntent createEmptyInstance() => PairIntent._();
+  @$core.pragma('dart2js:noInline')
+  static PairIntent getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PairIntent>(PairIntent.$_createMessage);
+  static PairIntent? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get intent => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set intent($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasIntent() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIntent() => $_clearField(1);
+
+  /// 加好友时带上名片，确认框里显示对方的名字
+  @$pb.TagNumber(2)
+  FriendCard get card => $_getN(1);
+  @$pb.TagNumber(2)
+  set card(FriendCard value) => $_setField(2, value);
+  @$pb.TagNumber(2)
+  $core.bool hasCard() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCard() => $_clearField(2);
+  @$pb.TagNumber(2)
+  FriendCard ensureCard() => $_ensure(1);
+}
+
+class FriendConfirm extends $pb.GeneratedMessage {
+  factory FriendConfirm({
+    $core.bool? accepted,
+  }) {
+    final result = FriendConfirm._();
+    if (accepted != null) result.accepted = accepted;
+    return result;
+  }
+
+  FriendConfirm._();
+
+  factory FriendConfirm.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FriendConfirm()..mergeFromBuffer(data, registry);
+  factory FriendConfirm.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FriendConfirm()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FriendConfirm',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: FriendConfirm.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'accepted')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FriendConfirm clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FriendConfirm copyWith(void Function(FriendConfirm) updates) =>
+      super.copyWith((message) => updates(message as FriendConfirm))
+          as FriendConfirm;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use FriendConfirm() / FriendConfirm.new instead')
+  static FriendConfirm create() => FriendConfirm._();
+  static $pb.GeneratedMessage $_createMessage() => FriendConfirm._();
+  @$core.override
+  FriendConfirm createEmptyInstance() => FriendConfirm._();
+  @$core.pragma('dart2js:noInline')
+  static FriendConfirm getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FriendConfirm>(
+          FriendConfirm.$_createMessage);
+  static FriendConfirm? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get accepted => $_getBF(0);
+  @$pb.TagNumber(1)
+  set accepted($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAccepted() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccepted() => $_clearField(1);
+}
+
+/// 「所有人」模式：发送方先发，接收方开着「所有人」时回一条（reply = true）。
+/// 公钥随签名的局域网配对信息交换（见 LanPacket.stranger），这里只带显示用的名片
+class StrangerHello extends $pb.GeneratedMessage {
+  factory StrangerHello({
+    FriendCard? card,
+    $core.bool? reply,
+  }) {
+    final result = StrangerHello._();
+    if (card != null) result.card = card;
+    if (reply != null) result.reply = reply;
+    return result;
+  }
+
+  StrangerHello._();
+
+  factory StrangerHello.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      StrangerHello()..mergeFromBuffer(data, registry);
+  factory StrangerHello.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      StrangerHello()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'StrangerHello',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: StrangerHello.$_createMessage)
+    ..aOM<FriendCard>(1, _omitFieldNames ? '' : 'card',
+        subBuilder: FriendCard.$_createMessage)
+    ..aOB(2, _omitFieldNames ? '' : 'reply')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  StrangerHello clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  StrangerHello copyWith(void Function(StrangerHello) updates) =>
+      super.copyWith((message) => updates(message as StrangerHello))
+          as StrangerHello;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use StrangerHello() / StrangerHello.new instead')
+  static StrangerHello create() => StrangerHello._();
+  static $pb.GeneratedMessage $_createMessage() => StrangerHello._();
+  @$core.override
+  StrangerHello createEmptyInstance() => StrangerHello._();
+  @$core.pragma('dart2js:noInline')
+  static StrangerHello getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StrangerHello>(
+          StrangerHello.$_createMessage);
+  static StrangerHello? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  FriendCard get card => $_getN(0);
+  @$pb.TagNumber(1)
+  set card(FriendCard value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasCard() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCard() => $_clearField(1);
+  @$pb.TagNumber(1)
+  FriendCard ensureCard() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.bool get reply => $_getBF(1);
+  @$pb.TagNumber(2)
+  set reply($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasReply() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearReply() => $_clearField(2);
 }
 
 /// 用户在应答方点了「重新连接」：只有发起方能做 ICE 重启，请它马上再试一次直连。
@@ -1946,6 +2229,7 @@ enum LanPacket_Payload {
   pairReject,
   nearbyRequest,
   nearbyPing,
+  strangerRequest,
   notSet
 }
 
@@ -1957,6 +2241,7 @@ class LanPacket extends $pb.GeneratedMessage {
     LanPairReject? pairReject,
     LanPairSigned? nearbyRequest,
     LanNearbyPing? nearbyPing,
+    LanPairSigned? strangerRequest,
   }) {
     final result = LanPacket._();
     if (signal != null) result.signal = signal;
@@ -1965,6 +2250,7 @@ class LanPacket extends $pb.GeneratedMessage {
     if (pairReject != null) result.pairReject = pairReject;
     if (nearbyRequest != null) result.nearbyRequest = nearbyRequest;
     if (nearbyPing != null) result.nearbyPing = nearbyPing;
+    if (strangerRequest != null) result.strangerRequest = strangerRequest;
     return result;
   }
 
@@ -1985,13 +2271,14 @@ class LanPacket extends $pb.GeneratedMessage {
     4: LanPacket_Payload.pairReject,
     5: LanPacket_Payload.nearbyRequest,
     6: LanPacket_Payload.nearbyPing,
+    7: LanPacket_Payload.strangerRequest,
     0: LanPacket_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LanPacket',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: LanPacket.$_createMessage)
-    ..oo(0, [1, 2, 3, 4, 5, 6])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7])
     ..aOM<Signed>(1, _omitFieldNames ? '' : 'signal',
         subBuilder: Signed.$_createMessage)
     ..aOM<LanPairSigned>(2, _omitFieldNames ? '' : 'pairRequest',
@@ -2004,6 +2291,8 @@ class LanPacket extends $pb.GeneratedMessage {
         subBuilder: LanPairSigned.$_createMessage)
     ..aOM<LanNearbyPing>(6, _omitFieldNames ? '' : 'nearbyPing',
         subBuilder: LanNearbyPing.$_createMessage)
+    ..aOM<LanPairSigned>(7, _omitFieldNames ? '' : 'strangerRequest',
+        subBuilder: LanPairSigned.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2032,6 +2321,7 @@ class LanPacket extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   @$pb.TagNumber(5)
   @$pb.TagNumber(6)
+  @$pb.TagNumber(7)
   LanPacket_Payload whichPayload() => _LanPacket_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(1)
   @$pb.TagNumber(2)
@@ -2039,6 +2329,7 @@ class LanPacket extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   @$pb.TagNumber(5)
   @$pb.TagNumber(6)
+  @$pb.TagNumber(7)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -2106,6 +2397,19 @@ class LanPacket extends $pb.GeneratedMessage {
   void clearNearbyPing() => $_clearField(6);
   @$pb.TagNumber(6)
   LanNearbyPing ensureNearbyPing() => $_ensure(5);
+
+  /// 「所有人」模式（2.6.0）：向开着「所有人」的陌生设备要它的公钥，以便给它发文件。
+  /// 请求与回复都带名片（LanPairInfo.card），不带配对码
+  @$pb.TagNumber(7)
+  LanPairSigned get strangerRequest => $_getN(6);
+  @$pb.TagNumber(7)
+  set strangerRequest(LanPairSigned value) => $_setField(7, value);
+  @$pb.TagNumber(7)
+  $core.bool hasStrangerRequest() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearStrangerRequest() => $_clearField(7);
+  @$pb.TagNumber(7)
+  LanPairSigned ensureStrangerRequest() => $_ensure(6);
 }
 
 /// 已配对设备之间的上线通知。还没连通时定期发，连通后低频保活。
@@ -2282,6 +2586,8 @@ class LanPairInfo extends $pb.GeneratedMessage {
     $fixnum.Int64? timestampUnix,
     $core.List<$core.int>? nonce,
     $core.List<$core.int>? requestNonce,
+    $core.String? intent,
+    FriendCard? card,
   }) {
     final result = LanPairInfo._();
     if (code != null) result.code = code;
@@ -2293,6 +2599,8 @@ class LanPairInfo extends $pb.GeneratedMessage {
     if (timestampUnix != null) result.timestampUnix = timestampUnix;
     if (nonce != null) result.nonce = nonce;
     if (requestNonce != null) result.requestNonce = requestNonce;
+    if (intent != null) result.intent = intent;
+    if (card != null) result.card = card;
     return result;
   }
 
@@ -2321,6 +2629,9 @@ class LanPairInfo extends $pb.GeneratedMessage {
         8, _omitFieldNames ? '' : 'nonce', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(
         9, _omitFieldNames ? '' : 'requestNonce', $pb.PbFieldType.OY)
+    ..aOS(10, _omitFieldNames ? '' : 'intent')
+    ..aOM<FriendCard>(11, _omitFieldNames ? '' : 'card',
+        subBuilder: FriendCard.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2419,6 +2730,29 @@ class LanPairInfo extends $pb.GeneratedMessage {
   $core.bool hasRequestNonce() => $_has(8);
   @$pb.TagNumber(9)
   void clearRequestNonce() => $_clearField(9);
+
+  /// 这次是配对（"device"，旧版本不带）还是加好友（"friend"，2.6.0）。
+  /// 显示码的一方发现与自己开放的不一致时回绝（intent_device / intent_friend），不用掉这个码
+  @$pb.TagNumber(10)
+  $core.String get intent => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set intent($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasIntent() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearIntent() => $_clearField(10);
+
+  /// 加好友时带上名片
+  @$pb.TagNumber(11)
+  FriendCard get card => $_getN(10);
+  @$pb.TagNumber(11)
+  set card(FriendCard value) => $_setField(11, value);
+  @$pb.TagNumber(11)
+  $core.bool hasCard() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearCard() => $_clearField(11);
+  @$pb.TagNumber(11)
+  FriendCard ensureCard() => $_ensure(10);
 }
 
 class LanPairReject extends $pb.GeneratedMessage {
@@ -2597,6 +2931,9 @@ enum PeerMessage_Payload {
   sendAnswer,
   sendCancel,
   sendResult,
+  friendCard,
+  avatarRequest,
+  avatarData,
   notSet
 }
 
@@ -2615,6 +2952,9 @@ class PeerMessage extends $pb.GeneratedMessage {
     SendAnswer? sendAnswer,
     SendCancel? sendCancel,
     SendResult? sendResult,
+    FriendCard? friendCard,
+    AvatarRequest? avatarRequest,
+    AvatarData? avatarData,
   }) {
     final result = PeerMessage._();
     if (offer != null) result.offer = offer;
@@ -2629,6 +2969,9 @@ class PeerMessage extends $pb.GeneratedMessage {
     if (sendAnswer != null) result.sendAnswer = sendAnswer;
     if (sendCancel != null) result.sendCancel = sendCancel;
     if (sendResult != null) result.sendResult = sendResult;
+    if (friendCard != null) result.friendCard = friendCard;
+    if (avatarRequest != null) result.avatarRequest = avatarRequest;
+    if (avatarData != null) result.avatarData = avatarData;
     return result;
   }
 
@@ -2655,13 +2998,16 @@ class PeerMessage extends $pb.GeneratedMessage {
     10: PeerMessage_Payload.sendAnswer,
     11: PeerMessage_Payload.sendCancel,
     12: PeerMessage_Payload.sendResult,
+    13: PeerMessage_Payload.friendCard,
+    14: PeerMessage_Payload.avatarRequest,
+    15: PeerMessage_Payload.avatarData,
     0: PeerMessage_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PeerMessage',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: PeerMessage.$_createMessage)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
     ..aOM<ClipOffer>(1, _omitFieldNames ? '' : 'offer',
         subBuilder: ClipOffer.$_createMessage)
     ..aOM<PeerFetch>(2, _omitFieldNames ? '' : 'fetch',
@@ -2686,6 +3032,12 @@ class PeerMessage extends $pb.GeneratedMessage {
         subBuilder: SendCancel.$_createMessage)
     ..aOM<SendResult>(12, _omitFieldNames ? '' : 'sendResult',
         subBuilder: SendResult.$_createMessage)
+    ..aOM<FriendCard>(13, _omitFieldNames ? '' : 'friendCard',
+        subBuilder: FriendCard.$_createMessage)
+    ..aOM<AvatarRequest>(14, _omitFieldNames ? '' : 'avatarRequest',
+        subBuilder: AvatarRequest.$_createMessage)
+    ..aOM<AvatarData>(15, _omitFieldNames ? '' : 'avatarData',
+        subBuilder: AvatarData.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2722,6 +3074,9 @@ class PeerMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   @$pb.TagNumber(11)
   @$pb.TagNumber(12)
+  @$pb.TagNumber(13)
+  @$pb.TagNumber(14)
+  @$pb.TagNumber(15)
   PeerMessage_Payload whichPayload() =>
       _PeerMessage_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(1)
@@ -2736,6 +3091,9 @@ class PeerMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   @$pb.TagNumber(11)
   @$pb.TagNumber(12)
+  @$pb.TagNumber(13)
+  @$pb.TagNumber(14)
+  @$pb.TagNumber(15)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -2870,6 +3228,359 @@ class PeerMessage extends $pb.GeneratedMessage {
   void clearSendResult() => $_clearField(12);
   @$pb.TagNumber(12)
   SendResult ensureSendResult() => $_ensure(11);
+
+  /// 好友（2.6.0）：连上后各自发一次名片；名片里的头像哈希变了才要头像
+  @$pb.TagNumber(13)
+  FriendCard get friendCard => $_getN(12);
+  @$pb.TagNumber(13)
+  set friendCard(FriendCard value) => $_setField(13, value);
+  @$pb.TagNumber(13)
+  $core.bool hasFriendCard() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearFriendCard() => $_clearField(13);
+  @$pb.TagNumber(13)
+  FriendCard ensureFriendCard() => $_ensure(12);
+
+  @$pb.TagNumber(14)
+  AvatarRequest get avatarRequest => $_getN(13);
+  @$pb.TagNumber(14)
+  set avatarRequest(AvatarRequest value) => $_setField(14, value);
+  @$pb.TagNumber(14)
+  $core.bool hasAvatarRequest() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearAvatarRequest() => $_clearField(14);
+  @$pb.TagNumber(14)
+  AvatarRequest ensureAvatarRequest() => $_ensure(13);
+
+  @$pb.TagNumber(15)
+  AvatarData get avatarData => $_getN(14);
+  @$pb.TagNumber(15)
+  set avatarData(AvatarData value) => $_setField(15, value);
+  @$pb.TagNumber(15)
+  $core.bool hasAvatarData() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearAvatarData() => $_clearField(15);
+  @$pb.TagNumber(15)
+  AvatarData ensureAvatarData() => $_ensure(14);
+}
+
+/// 好友看到的本机信息。只在加密通道里、发给好友或陌生设备
+class FriendCard extends $pb.GeneratedMessage {
+  factory FriendCard({
+    $core.String? displayName,
+    $core.String? deviceName,
+    $core.String? platform,
+    $core.String? service,
+    $core.List<$core.int>? customServerHash,
+    $core.List<$core.int>? avatarHash,
+  }) {
+    final result = FriendCard._();
+    if (displayName != null) result.displayName = displayName;
+    if (deviceName != null) result.deviceName = deviceName;
+    if (platform != null) result.platform = platform;
+    if (service != null) result.service = service;
+    if (customServerHash != null) result.customServerHash = customServerHash;
+    if (avatarHash != null) result.avatarHash = avatarHash;
+    return result;
+  }
+
+  FriendCard._();
+
+  factory FriendCard.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FriendCard()..mergeFromBuffer(data, registry);
+  factory FriendCard.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FriendCard()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FriendCard',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: FriendCard.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'displayName')
+    ..aOS(2, _omitFieldNames ? '' : 'deviceName')
+    ..aOS(3, _omitFieldNames ? '' : 'platform')
+    ..aOS(4, _omitFieldNames ? '' : 'service')
+    ..a<$core.List<$core.int>>(
+        5, _omitFieldNames ? '' : 'customServerHash', $pb.PbFieldType.OY)
+    ..a<$core.List<$core.int>>(
+        6, _omitFieldNames ? '' : 'avatarHash', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FriendCard clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FriendCard copyWith(void Function(FriendCard) updates) =>
+      super.copyWith((message) => updates(message as FriendCard)) as FriendCard;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use FriendCard() / FriendCard.new instead')
+  static FriendCard create() => FriendCard._();
+  static $pb.GeneratedMessage $_createMessage() => FriendCard._();
+  @$core.override
+  FriendCard createEmptyInstance() => FriendCard._();
+  @$core.pragma('dart2js:noInline')
+  static FriendCard getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<FriendCard>(FriendCard.$_createMessage);
+  static FriendCard? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get displayName => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set displayName($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasDisplayName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDisplayName() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get deviceName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set deviceName($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasDeviceName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDeviceName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get platform => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set platform($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasPlatform() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPlatform() => $_clearField(3);
+
+  /// 本机用的是哪种服务：official / custom / lan，判断两边能不能跨网络找到对方
+  @$pb.TagNumber(4)
+  $core.String get service => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set service($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasService() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearService() => $_clearField(4);
+
+  /// 自建服务器地址的哈希（SHA-256 的前 16 字节），判断是不是同一台；不带地址本身
+  @$pb.TagNumber(5)
+  $core.List<$core.int> get customServerHash => $_getN(4);
+  @$pb.TagNumber(5)
+  set customServerHash($core.List<$core.int> value) => $_setBytes(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasCustomServerHash() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCustomServerHash() => $_clearField(5);
+
+  /// 头像的哈希，空表示用默认头像
+  @$pb.TagNumber(6)
+  $core.List<$core.int> get avatarHash => $_getN(5);
+  @$pb.TagNumber(6)
+  set avatarHash($core.List<$core.int> value) => $_setBytes(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasAvatarHash() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearAvatarHash() => $_clearField(6);
+}
+
+/// 删除好友。走签名的信令（不用先建 P2P 连接）；收到的一方删掉后回一条 ack = true，
+/// 发出的一方收到回执才不再补发
+class FriendRemove extends $pb.GeneratedMessage {
+  factory FriendRemove({
+    $fixnum.Int64? atUnix,
+    $core.bool? ack,
+  }) {
+    final result = FriendRemove._();
+    if (atUnix != null) result.atUnix = atUnix;
+    if (ack != null) result.ack = ack;
+    return result;
+  }
+
+  FriendRemove._();
+
+  factory FriendRemove.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FriendRemove()..mergeFromBuffer(data, registry);
+  factory FriendRemove.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FriendRemove()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FriendRemove',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: FriendRemove.$_createMessage)
+    ..aInt64(1, _omitFieldNames ? '' : 'atUnix')
+    ..aOB(2, _omitFieldNames ? '' : 'ack')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FriendRemove clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FriendRemove copyWith(void Function(FriendRemove) updates) =>
+      super.copyWith((message) => updates(message as FriendRemove))
+          as FriendRemove;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use FriendRemove() / FriendRemove.new instead')
+  static FriendRemove create() => FriendRemove._();
+  static $pb.GeneratedMessage $_createMessage() => FriendRemove._();
+  @$core.override
+  FriendRemove createEmptyInstance() => FriendRemove._();
+  @$core.pragma('dart2js:noInline')
+  static FriendRemove getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FriendRemove>(
+          FriendRemove.$_createMessage);
+  static FriendRemove? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get atUnix => $_getI64(0);
+  @$pb.TagNumber(1)
+  set atUnix($fixnum.Int64 value) => $_setInt64(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAtUnix() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAtUnix() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get ack => $_getBF(1);
+  @$pb.TagNumber(2)
+  set ack($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAck() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAck() => $_clearField(2);
+}
+
+class AvatarRequest extends $pb.GeneratedMessage {
+  factory AvatarRequest({
+    $core.List<$core.int>? avatarHash,
+  }) {
+    final result = AvatarRequest._();
+    if (avatarHash != null) result.avatarHash = avatarHash;
+    return result;
+  }
+
+  AvatarRequest._();
+
+  factory AvatarRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AvatarRequest()..mergeFromBuffer(data, registry);
+  factory AvatarRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AvatarRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AvatarRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: AvatarRequest.$_createMessage)
+    ..a<$core.List<$core.int>>(
+        1, _omitFieldNames ? '' : 'avatarHash', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AvatarRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AvatarRequest copyWith(void Function(AvatarRequest) updates) =>
+      super.copyWith((message) => updates(message as AvatarRequest))
+          as AvatarRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use AvatarRequest() / AvatarRequest.new instead')
+  static AvatarRequest create() => AvatarRequest._();
+  static $pb.GeneratedMessage $_createMessage() => AvatarRequest._();
+  @$core.override
+  AvatarRequest createEmptyInstance() => AvatarRequest._();
+  @$core.pragma('dart2js:noInline')
+  static AvatarRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AvatarRequest>(
+          AvatarRequest.$_createMessage);
+  static AvatarRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get avatarHash => $_getN(0);
+  @$pb.TagNumber(1)
+  set avatarHash($core.List<$core.int> value) => $_setBytes(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAvatarHash() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAvatarHash() => $_clearField(1);
+}
+
+class AvatarData extends $pb.GeneratedMessage {
+  factory AvatarData({
+    $core.List<$core.int>? avatarHash,
+    $core.List<$core.int>? jpeg,
+  }) {
+    final result = AvatarData._();
+    if (avatarHash != null) result.avatarHash = avatarHash;
+    if (jpeg != null) result.jpeg = jpeg;
+    return result;
+  }
+
+  AvatarData._();
+
+  factory AvatarData.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AvatarData()..mergeFromBuffer(data, registry);
+  factory AvatarData.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AvatarData()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AvatarData',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: AvatarData.$_createMessage)
+    ..a<$core.List<$core.int>>(
+        1, _omitFieldNames ? '' : 'avatarHash', $pb.PbFieldType.OY)
+    ..a<$core.List<$core.int>>(
+        2, _omitFieldNames ? '' : 'jpeg', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AvatarData clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AvatarData copyWith(void Function(AvatarData) updates) =>
+      super.copyWith((message) => updates(message as AvatarData)) as AvatarData;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use AvatarData() / AvatarData.new instead')
+  static AvatarData create() => AvatarData._();
+  static $pb.GeneratedMessage $_createMessage() => AvatarData._();
+  @$core.override
+  AvatarData createEmptyInstance() => AvatarData._();
+  @$core.pragma('dart2js:noInline')
+  static AvatarData getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<AvatarData>(AvatarData.$_createMessage);
+  static AvatarData? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get avatarHash => $_getN(0);
+  @$pb.TagNumber(1)
+  set avatarHash($core.List<$core.int> value) => $_setBytes(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAvatarHash() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAvatarHash() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.int> get jpeg => $_getN(1);
+  @$pb.TagNumber(2)
+  set jpeg($core.List<$core.int> value) => $_setBytes(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasJpeg() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearJpeg() => $_clearField(2);
 }
 
 /// 连接就绪后各自发一次，与 LinkInfo 一起；功能开关变了再发一次。
@@ -3569,6 +4280,7 @@ class SendOffer extends $pb.GeneratedMessage {
     $fixnum.Int64? largestFile,
     $fixnum.Int64? createdAtUnix,
     $core.bool? resume,
+    $core.String? note,
   }) {
     final result = SendOffer._();
     if (transferId != null) result.transferId = transferId;
@@ -3579,6 +4291,7 @@ class SendOffer extends $pb.GeneratedMessage {
     if (largestFile != null) result.largestFile = largestFile;
     if (createdAtUnix != null) result.createdAtUnix = createdAtUnix;
     if (resume != null) result.resume = resume;
+    if (note != null) result.note = note;
     return result;
   }
 
@@ -3604,6 +4317,7 @@ class SendOffer extends $pb.GeneratedMessage {
     ..aInt64(6, _omitFieldNames ? '' : 'largestFile')
     ..aInt64(7, _omitFieldNames ? '' : 'createdAtUnix')
     ..aOB(8, _omitFieldNames ? '' : 'resume')
+    ..aOS(9, _omitFieldNames ? '' : 'note')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3695,6 +4409,16 @@ class SendOffer extends $pb.GeneratedMessage {
   $core.bool hasResume() => $_has(7);
   @$pb.TagNumber(8)
   void clearResume() => $_clearField(8);
+
+  /// 备注（2.6.0）：最多 200 个字符、单行，必须附在文件上
+  @$pb.TagNumber(9)
+  $core.String get note => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set note($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasNote() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearNote() => $_clearField(9);
 }
 
 class SendAnswer extends $pb.GeneratedMessage {

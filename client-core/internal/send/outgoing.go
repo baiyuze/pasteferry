@@ -44,19 +44,25 @@ type peerCancel struct{ reason string }
 func (p *peerCancel) Error() string { return "对方取消了：" + p.reason }
 
 // SendFiles 把 paths 发给一台设备。立即返回这一批的记录：先统计，统计完排队，轮到了就发。
-func (e *Engine) SendFiles(deviceID string, paths []string, allowRelay bool) (*pb.Transfer, error) {
+func (e *Engine) SendFiles(deviceID string, paths []string, allowRelay bool, note string) (*pb.Transfer, error) {
 	p := e.opts.Peer(deviceID)
+	other := p.Role != "" && p.Role != store.RoleSelf
 	switch {
 	case !p.Known:
 		return nil, ErrUnknownDevice
 	case !p.Online:
 		return nil, ErrOffline
-	case !p.Supported:
+	case !p.Supported, other && !p.Ask:
+		// 旧版本收到会直接接收，绕过对方用户的确认，所以不发
 		return nil, ErrUnsupported
 	case p.Disabled:
 		return nil, ErrPeerDisabled
 	case len(paths) == 0:
 		return nil, ErrNoPaths
+	}
+	note, ok := CleanNote(note)
+	if !ok {
+		return nil, ErrBadNote
 	}
 	clean := make([]string, 0, len(paths))
 	items := make([]store.Item, 0, len(paths))
@@ -79,9 +85,13 @@ func (e *Engine) SendFiles(deviceID string, paths []string, allowRelay bool) (*p
 	t := store.Transfer{
 		ID: newID(), Direction: store.Outgoing, DeviceID: deviceID, DeviceName: p.Name,
 		Status: store.TransferScanning, Items: items, Paths: clean, AllowRelay: allowRelay,
-		Relayed: p.Relayed, CreatedAt: now,
+		Relayed: p.Relayed, CreatedAt: now, PeerRole: p.Role, Note: note,
 	}
 	e.save(t)
+	if other && !p.Connected && e.opts.Connect != nil {
+		// 好友不常连：现在连上，连上后（PeerReady）开始发
+		go e.opts.Connect(deviceID)
+	}
 	e.wg.Add(1)
 	go func() {
 		defer e.wg.Done()
@@ -232,7 +242,7 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 	ctx, cancel := context.WithCancelCause(e.ctx)
 	defer cancel(nil)
 	o := &outgoing{id: t.ID, device: t.DeviceID, ctx: ctx, cancel: cancel,
-		answer: make(chan *pb.SendAnswer, 1), result: make(chan *pb.SendResult, 1), done: make(chan struct{})}
+		answer: make(chan *pb.SendAnswer, 2), result: make(chan *pb.SendResult, 1), done: make(chan struct{})}
 	e.mu.Lock()
 	e.out[t.ID] = o
 	e.mu.Unlock()
@@ -261,23 +271,44 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 		}
 		offer := &pb.SendOffer{TransferId: t.ID, Attempt: uint32(t.Attempt), Items: items,
 			TotalBytes: t.TotalBytes, FileCount: t.FileCount, LargestFile: largest,
-			CreatedAtUnix: t.CreatedAt.Unix(), Resume: !fresh}
+			CreatedAtUnix: t.CreatedAt.Unix(), Resume: !fresh, Note: t.Note}
 		if err := e.opts.Send(t.DeviceID, &pb.PeerMessage{Payload: &pb.PeerMessage_SendOffer{SendOffer: offer}}); err != nil {
 			e.interrupt(t)
 			return
 		}
 
 		var answer *pb.SendAnswer
-		select {
-		case answer = <-o.answer:
-		case <-ctx.Done():
-			e.stopped(t, context.Cause(ctx))
-			return
-		case <-time.After(e.opts.AnswerTimeout):
-			e.log.Info("对方没有应答", "transfer", t.ID)
-			e.interrupt(t)
-			return
+		wait := time.NewTimer(e.opts.AnswerTimeout)
+	waitAnswer:
+		for {
+			select {
+			case answer = <-o.answer:
+				if !answer.GetAccepted() && answer.GetReason() == "pending" {
+					// 对方在等它的用户接受：多等一会儿
+					t.Status = store.TransferAsking
+					e.save(t)
+					wait.Reset(e.opts.AskTimeout + askSlack)
+					continue
+				}
+				break waitAnswer
+			case <-ctx.Done():
+				wait.Stop()
+				e.stopped(t, context.Cause(ctx))
+				return
+			case <-wait.C:
+				if t.Status == store.TransferAsking {
+					e.log.Info("对方的用户没有回应", "transfer", t.ID)
+					_ = e.opts.Send(t.DeviceID, &pb.PeerMessage{Payload: &pb.PeerMessage_SendCancel{
+						SendCancel: &pb.SendCancel{TransferId: t.ID, Reason: "timeout"}}})
+					e.finish(t, store.TransferDeclined, "timeout")
+					return
+				}
+				e.log.Info("对方没有应答", "transfer", t.ID)
+				e.interrupt(t)
+				return
+			}
 		}
+		wait.Stop()
 		if !answer.GetAccepted() {
 			if answer.GetReason() == "already_done" {
 				// 上次其实已经收完了，只是结果没传回来（比如走局域网快速通道时控制通道恰好断了）
@@ -339,6 +370,9 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 		if result.GetOk() {
 			t.DoneBytes = t.TotalBytes
 			e.finish(t, store.TransferDone, "")
+			if t.PeerRole == store.RoleFriend && e.opts.Delivered != nil {
+				e.opts.Delivered(t.DeviceID)
+			}
 			e.log.Info("隔空传送已送达", "transfer", t.ID, "to", t.DeviceID, "字节", t.TotalBytes)
 			return
 		}
@@ -511,6 +545,9 @@ func (e *Engine) handleResult(from string, r *pb.SendResult) {
 // 所以停下它以后等它退出，再按记录补做一次；它自己已经处理过取消的话，记录已经结束，不会重复。
 func (e *Engine) handleCancel(from string, c *pb.SendCancel) {
 	id := c.GetTransferId()
+	if e.cancelAsk(id, from) {
+		return
+	}
 	cause := &peerCancel{reason: c.GetReason()}
 	e.mu.Lock()
 	o, in := e.out[id], e.in[id]

@@ -96,6 +96,8 @@ type Deps struct {
 
 	// Transfers 是隔空传送；为 nil 时相应的方法返回 Unimplemented
 	Transfers Transfers
+	// Friends 是好友（2.6.0）；为 nil 时相应的方法返回 Unimplemented
+	Friends Friends
 }
 
 func (s *Server) GetNotificationStatus(ctx context.Context, _ *pb.Empty) (*pb.NotificationStatus, error) {
@@ -554,6 +556,15 @@ func pairingStatus(err error) error {
 		reason, code = "bad_address", codes.InvalidArgument
 	case errors.Is(err, peers.ErrNoChannel), errors.Is(err, lan.ErrDisabled):
 		reason, code = "no_channel", codes.FailedPrecondition
+	// 好友（2.6.0）：码的用途不对、对方版本太旧、已经是自己的设备
+	case errors.Is(err, peers.ErrIsFriendCode):
+		reason, code = "friend_code", codes.FailedPrecondition
+	case errors.Is(err, peers.ErrIsDeviceCode):
+		reason, code = "device_code", codes.FailedPrecondition
+	case errors.Is(err, peers.ErrPeerOutdated):
+		reason, code = "peer_outdated", codes.FailedPrecondition
+	case errors.Is(err, peers.ErrAlreadyPaired):
+		reason, code = "already_paired", codes.FailedPrecondition
 	}
 	if reason == "" {
 		return status.Error(code, err.Error())
@@ -598,6 +609,9 @@ func (s *Server) ConfirmPairing(ctx context.Context, req *pb.ConfirmPairingReque
 		return nil, status.Error(codes.Unimplemented, "配对尚未接入（M1）")
 	}
 	if err := s.deps.ConfirmPairing(ctx, req.GetPairingSession(), req.GetAccept()); err != nil {
+		if errors.Is(err, peers.ErrIsFriendCode) {
+			return nil, pairingStatus(err)
+		}
 		return nil, status.Errorf(codes.Internal, "确认配对: %v", err)
 	}
 	return &pb.Empty{}, nil

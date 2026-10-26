@@ -96,7 +96,7 @@ func TestSendOverLAN(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "报告.pdf"), filepath.Join(src, "照片")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "报告.pdf"), filepath.Join(src, "照片")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -122,7 +122,7 @@ func TestResumeOverLAN(t *testing.T) {
 	writeFile(t, filepath.Join(src, "a", "1.bin"), first)
 	writeFile(t, filepath.Join(src, "a", "2.bin"), big)
 
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -155,7 +155,7 @@ func TestCancelOverLAN(t *testing.T) {
 	st := useLAN(t, p, false)
 	src := t.TempDir()
 	writeFile(t, filepath.Join(src, "big.bin"), randomBytes(t, 200<<20))
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "big.bin")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "big.bin")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -183,7 +183,7 @@ func TestFallsBackWhenLANRefused(t *testing.T) {
 	src := t.TempDir()
 	data := randomBytes(t, 5<<20)
 	writeFile(t, filepath.Join(src, "a.bin"), data)
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a.bin")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a.bin")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -205,7 +205,7 @@ func TestNoLANAddrUsesDataChannel(t *testing.T) {
 	src := t.TempDir()
 	data := randomBytes(t, 2<<20)
 	writeFile(t, filepath.Join(src, "a.bin"), data)
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a.bin")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a.bin")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -235,7 +235,7 @@ func TestResultLostAfterLANTransfer(t *testing.T) {
 	src := t.TempDir()
 	data := randomBytes(t, 3<<20)
 	writeFile(t, filepath.Join(src, "a.bin"), data)
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a.bin")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a.bin")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}

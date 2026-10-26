@@ -131,6 +131,42 @@ const SignalMessage$json = {
       '9': 0,
       '10': 'retryDirect'
     },
+    {
+      '1': 'pair_intent',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.PairIntent',
+      '9': 0,
+      '10': 'pairIntent'
+    },
+    {
+      '1': 'friend_confirm',
+      '3': 17,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.FriendConfirm',
+      '9': 0,
+      '10': 'friendConfirm'
+    },
+    {
+      '1': 'stranger_hello',
+      '3': 18,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.StrangerHello',
+      '9': 0,
+      '10': 'strangerHello'
+    },
+    {
+      '1': 'friend_remove',
+      '3': 19,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.FriendRemove',
+      '9': 0,
+      '10': 'friendRemove'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -150,7 +186,66 @@ final $typed_data.Uint8List signalMessageDescriptor = $convert.base64Decode(
     'ZGF0ZRIpCgRwaW5nGA0gASgLMhMucGFzdGVmZXJyeS52MS5QaW5nSABSBHBpbmcSNgoJbGFuX2'
     'hlbGxvGA4gASgLMhcucGFzdGVmZXJyeS52MS5MYW5IZWxsb0gAUghsYW5IZWxsbxI/CgxyZXRy'
     'eV9kaXJlY3QYDyABKAsyGi5wYXN0ZWZlcnJ5LnYxLlJldHJ5RGlyZWN0SABSC3JldHJ5RGlyZW'
-    'N0QgkKB3BheWxvYWQ=');
+    'N0EjwKC3BhaXJfaW50ZW50GBAgASgLMhkucGFzdGVmZXJyeS52MS5QYWlySW50ZW50SABSCnBh'
+    'aXJJbnRlbnQSRQoOZnJpZW5kX2NvbmZpcm0YESABKAsyHC5wYXN0ZWZlcnJ5LnYxLkZyaWVuZE'
+    'NvbmZpcm1IAFINZnJpZW5kQ29uZmlybRJFCg5zdHJhbmdlcl9oZWxsbxgSIAEoCzIcLnBhc3Rl'
+    'ZmVycnkudjEuU3RyYW5nZXJIZWxsb0gAUg1zdHJhbmdlckhlbGxvEkIKDWZyaWVuZF9yZW1vdm'
+    'UYEyABKAsyGy5wYXN0ZWZlcnJ5LnYxLkZyaWVuZFJlbW92ZUgAUgxmcmllbmRSZW1vdmVCCQoH'
+    'cGF5bG9hZA==');
+
+@$core.Deprecated('Use pairIntentDescriptor instead')
+const PairIntent$json = {
+  '1': 'PairIntent',
+  '2': [
+    {'1': 'intent', '3': 1, '4': 1, '5': 9, '10': 'intent'},
+    {
+      '1': 'card',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.FriendCard',
+      '10': 'card'
+    },
+  ],
+};
+
+/// Descriptor for `PairIntent`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List pairIntentDescriptor = $convert.base64Decode(
+    'CgpQYWlySW50ZW50EhYKBmludGVudBgBIAEoCVIGaW50ZW50Ei0KBGNhcmQYAiABKAsyGS5wYX'
+    'N0ZWZlcnJ5LnYxLkZyaWVuZENhcmRSBGNhcmQ=');
+
+@$core.Deprecated('Use friendConfirmDescriptor instead')
+const FriendConfirm$json = {
+  '1': 'FriendConfirm',
+  '2': [
+    {'1': 'accepted', '3': 1, '4': 1, '5': 8, '10': 'accepted'},
+  ],
+};
+
+/// Descriptor for `FriendConfirm`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List friendConfirmDescriptor = $convert.base64Decode(
+    'Cg1GcmllbmRDb25maXJtEhoKCGFjY2VwdGVkGAEgASgIUghhY2NlcHRlZA==');
+
+@$core.Deprecated('Use strangerHelloDescriptor instead')
+const StrangerHello$json = {
+  '1': 'StrangerHello',
+  '2': [
+    {
+      '1': 'card',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.FriendCard',
+      '10': 'card'
+    },
+    {'1': 'reply', '3': 2, '4': 1, '5': 8, '10': 'reply'},
+  ],
+};
+
+/// Descriptor for `StrangerHello`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List strangerHelloDescriptor = $convert.base64Decode(
+    'Cg1TdHJhbmdlckhlbGxvEi0KBGNhcmQYASABKAsyGS5wYXN0ZWZlcnJ5LnYxLkZyaWVuZENhcm'
+    'RSBGNhcmQSFAoFcmVwbHkYAiABKAhSBXJlcGx5');
 
 @$core.Deprecated('Use retryDirectDescriptor instead')
 const RetryDirect$json = {
@@ -615,6 +710,15 @@ const LanPacket$json = {
       '9': 0,
       '10': 'nearbyPing'
     },
+    {
+      '1': 'stranger_request',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.LanPairSigned',
+      '9': 0,
+      '10': 'strangerRequest'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -630,7 +734,8 @@ final $typed_data.Uint8List lanPacketDescriptor = $convert.base64Decode(
     'c3RlZmVycnkudjEuTGFuUGFpclJlamVjdEgAUgpwYWlyUmVqZWN0EkUKDm5lYXJieV9yZXF1ZX'
     'N0GAUgASgLMhwucGFzdGVmZXJyeS52MS5MYW5QYWlyU2lnbmVkSABSDW5lYXJieVJlcXVlc3QS'
     'PwoLbmVhcmJ5X3BpbmcYBiABKAsyHC5wYXN0ZWZlcnJ5LnYxLkxhbk5lYXJieVBpbmdIAFIKbm'
-    'VhcmJ5UGluZ0IJCgdwYXlsb2Fk');
+    'VhcmJ5UGluZxJJChBzdHJhbmdlcl9yZXF1ZXN0GAcgASgLMhwucGFzdGVmZXJyeS52MS5MYW5Q'
+    'YWlyU2lnbmVkSABSD3N0cmFuZ2VyUmVxdWVzdEIJCgdwYXlsb2Fk');
 
 @$core.Deprecated('Use lanHelloDescriptor instead')
 const LanHello$json = {
@@ -676,6 +781,15 @@ const LanPairInfo$json = {
     {'1': 'timestamp_unix', '3': 7, '4': 1, '5': 3, '10': 'timestampUnix'},
     {'1': 'nonce', '3': 8, '4': 1, '5': 12, '10': 'nonce'},
     {'1': 'request_nonce', '3': 9, '4': 1, '5': 12, '10': 'requestNonce'},
+    {'1': 'intent', '3': 10, '4': 1, '5': 9, '10': 'intent'},
+    {
+      '1': 'card',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.FriendCard',
+      '10': 'card'
+    },
   ],
 };
 
@@ -686,7 +800,8 @@ final $typed_data.Uint8List lanPairInfoDescriptor = $convert.base64Decode(
     'KAlSCHBsYXRmb3JtEh0KCnB1YmxpY19rZXkYBSABKAxSCXB1YmxpY0tleRIcCglhZGRyZXNzZX'
     'MYBiADKAlSCWFkZHJlc3NlcxIlCg50aW1lc3RhbXBfdW5peBgHIAEoA1INdGltZXN0YW1wVW5p'
     'eBIUCgVub25jZRgIIAEoDFIFbm9uY2USIwoNcmVxdWVzdF9ub25jZRgJIAEoDFIMcmVxdWVzdE'
-    '5vbmNl');
+    '5vbmNlEhYKBmludGVudBgKIAEoCVIGaW50ZW50Ei0KBGNhcmQYCyABKAsyGS5wYXN0ZWZlcnJ5'
+    'LnYxLkZyaWVuZENhcmRSBGNhcmQ=');
 
 @$core.Deprecated('Use lanPairRejectDescriptor instead')
 const LanPairReject$json = {
@@ -831,6 +946,33 @@ const PeerMessage$json = {
       '9': 0,
       '10': 'sendResult'
     },
+    {
+      '1': 'friend_card',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.FriendCard',
+      '9': 0,
+      '10': 'friendCard'
+    },
+    {
+      '1': 'avatar_request',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.AvatarRequest',
+      '9': 0,
+      '10': 'avatarRequest'
+    },
+    {
+      '1': 'avatar_data',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.AvatarData',
+      '9': 0,
+      '10': 'avatarData'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -851,7 +993,76 @@ final $typed_data.Uint8List peerMessageDescriptor = $convert.base64Decode(
     'tzZW5kX2Fuc3dlchgKIAEoCzIZLnBhc3RlZmVycnkudjEuU2VuZEFuc3dlckgAUgpzZW5kQW5z'
     'd2VyEjwKC3NlbmRfY2FuY2VsGAsgASgLMhkucGFzdGVmZXJyeS52MS5TZW5kQ2FuY2VsSABSCn'
     'NlbmRDYW5jZWwSPAoLc2VuZF9yZXN1bHQYDCABKAsyGS5wYXN0ZWZlcnJ5LnYxLlNlbmRSZXN1'
-    'bHRIAFIKc2VuZFJlc3VsdEIJCgdwYXlsb2Fk');
+    'bHRIAFIKc2VuZFJlc3VsdBI8CgtmcmllbmRfY2FyZBgNIAEoCzIZLnBhc3RlZmVycnkudjEuRn'
+    'JpZW5kQ2FyZEgAUgpmcmllbmRDYXJkEkUKDmF2YXRhcl9yZXF1ZXN0GA4gASgLMhwucGFzdGVm'
+    'ZXJyeS52MS5BdmF0YXJSZXF1ZXN0SABSDWF2YXRhclJlcXVlc3QSPAoLYXZhdGFyX2RhdGEYDy'
+    'ABKAsyGS5wYXN0ZWZlcnJ5LnYxLkF2YXRhckRhdGFIAFIKYXZhdGFyRGF0YUIJCgdwYXlsb2Fk');
+
+@$core.Deprecated('Use friendCardDescriptor instead')
+const FriendCard$json = {
+  '1': 'FriendCard',
+  '2': [
+    {'1': 'display_name', '3': 1, '4': 1, '5': 9, '10': 'displayName'},
+    {'1': 'device_name', '3': 2, '4': 1, '5': 9, '10': 'deviceName'},
+    {'1': 'platform', '3': 3, '4': 1, '5': 9, '10': 'platform'},
+    {'1': 'service', '3': 4, '4': 1, '5': 9, '10': 'service'},
+    {
+      '1': 'custom_server_hash',
+      '3': 5,
+      '4': 1,
+      '5': 12,
+      '10': 'customServerHash'
+    },
+    {'1': 'avatar_hash', '3': 6, '4': 1, '5': 12, '10': 'avatarHash'},
+  ],
+};
+
+/// Descriptor for `FriendCard`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List friendCardDescriptor = $convert.base64Decode(
+    'CgpGcmllbmRDYXJkEiEKDGRpc3BsYXlfbmFtZRgBIAEoCVILZGlzcGxheU5hbWUSHwoLZGV2aW'
+    'NlX25hbWUYAiABKAlSCmRldmljZU5hbWUSGgoIcGxhdGZvcm0YAyABKAlSCHBsYXRmb3JtEhgK'
+    'B3NlcnZpY2UYBCABKAlSB3NlcnZpY2USLAoSY3VzdG9tX3NlcnZlcl9oYXNoGAUgASgMUhBjdX'
+    'N0b21TZXJ2ZXJIYXNoEh8KC2F2YXRhcl9oYXNoGAYgASgMUgphdmF0YXJIYXNo');
+
+@$core.Deprecated('Use friendRemoveDescriptor instead')
+const FriendRemove$json = {
+  '1': 'FriendRemove',
+  '2': [
+    {'1': 'at_unix', '3': 1, '4': 1, '5': 3, '10': 'atUnix'},
+    {'1': 'ack', '3': 2, '4': 1, '5': 8, '10': 'ack'},
+  ],
+};
+
+/// Descriptor for `FriendRemove`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List friendRemoveDescriptor = $convert.base64Decode(
+    'CgxGcmllbmRSZW1vdmUSFwoHYXRfdW5peBgBIAEoA1IGYXRVbml4EhAKA2FjaxgCIAEoCFIDYW'
+    'Nr');
+
+@$core.Deprecated('Use avatarRequestDescriptor instead')
+const AvatarRequest$json = {
+  '1': 'AvatarRequest',
+  '2': [
+    {'1': 'avatar_hash', '3': 1, '4': 1, '5': 12, '10': 'avatarHash'},
+  ],
+};
+
+/// Descriptor for `AvatarRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List avatarRequestDescriptor = $convert.base64Decode(
+    'Cg1BdmF0YXJSZXF1ZXN0Eh8KC2F2YXRhcl9oYXNoGAEgASgMUgphdmF0YXJIYXNo');
+
+@$core.Deprecated('Use avatarDataDescriptor instead')
+const AvatarData$json = {
+  '1': 'AvatarData',
+  '2': [
+    {'1': 'avatar_hash', '3': 1, '4': 1, '5': 12, '10': 'avatarHash'},
+    {'1': 'jpeg', '3': 2, '4': 1, '5': 12, '10': 'jpeg'},
+  ],
+};
+
+/// Descriptor for `AvatarData`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List avatarDataDescriptor = $convert.base64Decode(
+    'CgpBdmF0YXJEYXRhEh8KC2F2YXRhcl9oYXNoGAEgASgMUgphdmF0YXJIYXNoEhIKBGpwZWcYAi'
+    'ABKAxSBGpwZWc=');
 
 @$core.Deprecated('Use peerFeaturesDescriptor instead')
 const PeerFeatures$json = {
@@ -1028,6 +1239,7 @@ const SendOffer$json = {
     {'1': 'largest_file', '3': 6, '4': 1, '5': 3, '10': 'largestFile'},
     {'1': 'created_at_unix', '3': 7, '4': 1, '5': 3, '10': 'createdAtUnix'},
     {'1': 'resume', '3': 8, '4': 1, '5': 8, '10': 'resume'},
+    {'1': 'note', '3': 9, '4': 1, '5': 9, '10': 'note'},
   ],
 };
 
@@ -1038,7 +1250,7 @@ final $typed_data.Uint8List sendOfferDescriptor = $convert.base64Decode(
     'BWl0ZW1zEh8KC3RvdGFsX2J5dGVzGAQgASgDUgp0b3RhbEJ5dGVzEh0KCmZpbGVfY291bnQYBS'
     'ABKANSCWZpbGVDb3VudBIhCgxsYXJnZXN0X2ZpbGUYBiABKANSC2xhcmdlc3RGaWxlEiYKD2Ny'
     'ZWF0ZWRfYXRfdW5peBgHIAEoA1INY3JlYXRlZEF0VW5peBIWCgZyZXN1bWUYCCABKAhSBnJlc3'
-    'VtZQ==');
+    'VtZRISCgRub3RlGAkgASgJUgRub3Rl');
 
 @$core.Deprecated('Use sendAnswerDescriptor instead')
 const SendAnswer$json = {

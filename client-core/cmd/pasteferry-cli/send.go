@@ -18,16 +18,23 @@ import (
 // 要经官方服务中转时，带上 -relay 才发。
 func sendFiles(ctx context.Context, c pb.DaemonServiceClient, args []string) error {
 	allowRelay := false
+	note := ""
 	var rest []string
-	for _, a := range args {
+	for i := 0; i < len(args); i++ {
+		a := args[i]
 		if a == "-relay" || a == "--relay" {
 			allowRelay = true
+			continue
+		}
+		if (a == "-note" || a == "--note") && i+1 < len(args) {
+			note = args[i+1]
+			i++
 			continue
 		}
 		rest = append(rest, a)
 	}
 	if len(rest) < 2 {
-		return errors.New("用法: send [-relay] DEVICE PATH...")
+		return errors.New("用法: send [-relay] [-note TEXT] DEVICE PATH...")
 	}
 	devices, err := c.ListDevices(ctx, &pb.Empty{})
 	if err != nil {
@@ -40,7 +47,15 @@ func sendFiles(ctx context.Context, c pb.DaemonServiceClient, args []string) err
 		}
 	}
 	if target == nil {
-		return fmt.Errorf("没有叫 %q 的已配对设备", rest[0])
+		// 好友，或者「所有人」模式下附近的陌生设备（lan:实例名）
+		if f, ferr := findFriend(ctx, c, rest[0]); ferr == nil {
+			target = &pb.Device{Id: f.GetId(), Name: f.GetDisplayName() + " · " + f.GetDeviceName()}
+		} else if strings.HasPrefix(rest[0], "lan:") {
+			target = &pb.Device{Id: rest[0], Name: rest[0]}
+		}
+	}
+	if target == nil {
+		return fmt.Errorf("没有叫 %q 的已配对设备或好友", rest[0])
 	}
 	var paths []string
 	for _, p := range rest[1:] {
@@ -55,7 +70,7 @@ func sendFiles(ctx context.Context, c pb.DaemonServiceClient, args []string) err
 	if err != nil {
 		return err
 	}
-	t, err := c.SendFiles(ctx, &pb.SendFilesRequest{DeviceId: target.GetId(), Paths: paths, AllowRelay: allowRelay})
+	t, err := c.SendFiles(ctx, &pb.SendFilesRequest{DeviceId: target.GetId(), Paths: paths, AllowRelay: allowRelay, Note: note})
 	if err != nil {
 		if s, ok := status.FromError(err); ok && s.Code() == codes.FailedPrecondition && s.Message() == "relay" {
 			return errors.New("要经服务中转（有每日额度），确认要发的话加上 -relay")
@@ -98,6 +113,10 @@ func transferLine(t *pb.Transfer) string {
 	switch t.GetStatus() {
 	case "scanning":
 		return fmt.Sprintf("统计中… %d 个文件", t.GetScannedFiles())
+	case "asking":
+		return "等待对方接受…"
+	case "declined":
+		return "declined " + t.GetError()
 	case "active":
 		pct := 0.0
 		if t.GetTotalBytes() > 0 {
@@ -140,6 +159,9 @@ func showTransfers(ctx context.Context, c pb.DaemonServiceClient, verbose bool) 
 		}
 		fmt.Printf("%s %s%s  %s %s  %s  %s  %s\n", dir, id, when, who, t.GetDeviceName(),
 			strings.Join(names, ", "), humanBytes(t.GetTotalBytes()), state)
+		if t.GetNote() != "" {
+			fmt.Printf("      备注：%s\n", t.GetNote())
+		}
 		for _, p := range t.GetPaths() {
 			if t.GetDirection() == pb.TransferDirection_TRANSFER_DIRECTION_INCOMING {
 				fmt.Printf("      %s\n", p)

@@ -33,6 +33,11 @@ type side struct {
 	blockOut   bool // 模拟连接断了：控制消息发不出去
 	dropResult bool // 模拟「已收到」的结果在路上丢了
 	dropOffers int  // 模拟请求落在对方重启前的旧连接里
+
+	// 好友（2.6.0）：本端眼里对方的角色、对方能不能等用户接受、本端收不收对方的
+	role  string
+	noAsk bool
+	admit Admission
 }
 
 func (s *side) config() config.Config {
@@ -147,10 +152,24 @@ func (p *pair) newSide(t *testing.T, id, peer string) *side {
 				return Peer{}
 			}
 			st := s.mgr.State(deviceID)
+			s.mu.Lock()
+			defer s.mu.Unlock()
 			return Peer{Known: true, Name: deviceID, Online: true, Connected: connected(st),
-				Relayed: st == p2p.StateRelay, Supported: true}
+				Relayed: st == p2p.StateRelay, Supported: true, Role: s.role, Ask: !s.noAsk}
+		},
+		Admit: func(string) Admission {
+			s.mu.Lock()
+			defer s.mu.Unlock()
+			return s.admit
+		},
+		Thumbnail: func(path string) string {
+			if filepath.Ext(path) == ".png" {
+				return "thumb:" + filepath.Base(path)
+			}
+			return ""
 		},
 		AnswerTimeout: 10 * time.Second,
+		AskTimeout:    2 * time.Second,
 	})
 	s.eng.Start()
 	t.Cleanup(s.eng.Close)
@@ -234,7 +253,7 @@ func TestSendFilesAndFolder(t *testing.T) {
 	// 对方的保存位置里已经有一个同名文件：收到的要改名，不能覆盖
 	writeFile(t, filepath.Join(p.b.recvDir, "报告.pdf"), []byte("old"))
 
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "报告.pdf"), filepath.Join(src, "照片")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "报告.pdf"), filepath.Join(src, "照片")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -285,7 +304,7 @@ func TestResumeWhenReconnectPrecedesAnswerTimeout(t *testing.T) {
 			path := filepath.Join(t.TempDir(), "restart.bin")
 			data := randomBytes(t, 1<<20)
 			writeFile(t, path, data)
-			tr, err := p.a.eng.SendFiles("bob", []string{path}, false)
+			tr, err := p.a.eng.SendFiles("bob", []string{path}, false, "")
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -314,7 +333,7 @@ func TestConnectedRetryStopsAfterOneAttempt(t *testing.T) {
 	p.a.mu.Unlock()
 	path := filepath.Join(t.TempDir(), "retry.txt")
 	writeFile(t, path, []byte("retry"))
-	tr, err := p.a.eng.SendFiles("bob", []string{path}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{path}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -337,7 +356,7 @@ func TestCancelDuringConnectedRetry(t *testing.T) {
 	p.a.mu.Unlock()
 	path := filepath.Join(t.TempDir(), "cancel.txt")
 	writeFile(t, path, []byte("cancel"))
-	tr, err := p.a.eng.SendFiles("bob", []string{path}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{path}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -360,7 +379,7 @@ func TestResumeAfterInterruption(t *testing.T) {
 	writeFile(t, filepath.Join(src, "a", "1.bin"), first)
 	writeFile(t, filepath.Join(src, "a", "2.bin"), big)
 
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "a")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -403,7 +422,7 @@ func TestCancelBySender(t *testing.T) {
 	p := newPair(t)
 	src := t.TempDir()
 	writeFile(t, filepath.Join(src, "big.bin"), randomBytes(t, 60<<20))
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "big.bin")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "big.bin")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -428,7 +447,7 @@ func TestReceiveDisabled(t *testing.T) {
 	p.b.mu.Unlock()
 	src := t.TempDir()
 	writeFile(t, filepath.Join(src, "x.txt"), []byte("hi"))
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "x.txt")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "x.txt")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -451,7 +470,7 @@ func TestSourceChangedBeforeSending(t *testing.T) {
 	p.a.mu.Lock()
 	p.a.blockOut = true
 	p.a.mu.Unlock()
-	tr, err := p.a.eng.SendFiles("bob", []string{path}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{path}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -507,7 +526,7 @@ func TestDeclinesWhenSaveLocationIsGone(t *testing.T) {
 	p.b.mu.Unlock()
 	src := t.TempDir()
 	writeFile(t, filepath.Join(src, "x.txt"), []byte("hi"))
-	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "x.txt")}, false)
+	tr, err := p.a.eng.SendFiles("bob", []string{filepath.Join(src, "x.txt")}, false, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -544,12 +563,12 @@ func TestRefusesPeersThatCannotReceive(t *testing.T) {
 	}
 	for _, c := range cases {
 		c.set()
-		if _, err := e.SendFiles("x", []string{src}, false); err != c.want {
+		if _, err := e.SendFiles("x", []string{src}, false, ""); err != c.want {
 			t.Errorf("%s：应返回 %v，实际 %v", c.name, c.want, err)
 		}
 	}
 	peer = Peer{Known: true, Online: true, Connected: true, Supported: true}
-	if _, err := e.SendFiles("x", []string{filepath.Join(t.TempDir(), "不存在")}, false); err == nil {
+	if _, err := e.SendFiles("x", []string{filepath.Join(t.TempDir(), "不存在")}, false, ""); err == nil {
 		t.Error("路径不存在时应当报错")
 	}
 }
@@ -570,10 +589,10 @@ func TestOfficialRelayNeedsConsent(t *testing.T) {
 		},
 		Send: func(string, *pb.PeerMessage) error { return p2p.ErrNotConnected }})
 	defer e.Close()
-	if _, err := e.SendFiles("x", []string{src}, false); err != ErrNeedRelayConsent {
+	if _, err := e.SendFiles("x", []string{src}, false, ""); err != ErrNeedRelayConsent {
 		t.Fatalf("经官方中转时应先征得同意，实际 %v", err)
 	}
-	if _, err := e.SendFiles("x", []string{src}, true); err != nil {
+	if _, err := e.SendFiles("x", []string{src}, true, ""); err != nil {
 		t.Fatalf("同意后应当能发：%v", err)
 	}
 }

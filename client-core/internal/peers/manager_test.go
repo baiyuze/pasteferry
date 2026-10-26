@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"net"
 	"net/http/httptest"
+	"os"
 	"path/filepath"
 	"slices"
 	"strconv"
@@ -63,7 +64,7 @@ func newDevice(t *testing.T, name string, net *lan.MemoryNetwork, cfg config.Con
 	d.m, err = NewManager(Options{
 		Identity:   id,
 		Store:      db,
-		Logger:     slog.New(slog.NewTextHandler(io.Discard, nil)),
+		Logger:     testLogger(name),
 		LoadConfig: d.config,
 		StatePath:  filepath.Join(dir, "egress.json"),
 		OnDeviceChanged: func(dev *pb.Device) {
@@ -510,4 +511,12 @@ func TestLegacyPeerAfterWait(t *testing.T) {
 	if dev := peerDevice(t, a, b.id()); dev.GetReceivesFiles() || dev.GetAppVersion() != "" {
 		t.Fatalf("旧版本不该能收文件: %v", dev)
 	}
+}
+
+// testLogger 平时丢掉日志；设了 PF_TEST_LOG 时打到标准错误，排查用
+func testLogger(name string) *slog.Logger {
+	if os.Getenv("PF_TEST_LOG") == "" {
+		return slog.New(slog.NewTextHandler(io.Discard, nil))
+	}
+	return slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})).With("dev", name)
 }

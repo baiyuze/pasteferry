@@ -33,12 +33,30 @@ var (
 	ErrWrongCode       = errors.New("配对码不对")
 	ErrCodeClosed      = errors.New("配对码已失效")
 	ErrTooManyAttempts = errors.New("配对码输错次数太多，已失效")
+	// 码是对的，但对方开放的是好友码（这边在配对）或配对码（这边在加好友）
+	ErrIsFriendCode = errors.New("这是好友码")
+	ErrIsDeviceCode = errors.New("这是配对码")
 )
+
+// 配对码的用途，见 LanPairInfo.intent。旧版本不带，当作配对
+const (
+	IntentDevice = "device"
+	IntentFriend = "friend"
+)
+
+func normIntent(s string) string {
+	if s == IntentFriend {
+		return IntentFriend
+	}
+	return IntentDevice
+}
 
 type pairingState struct {
 	code     string
 	expires  time.Time
 	attempts int
+	intent   string
+	card     *pb.FriendCard
 }
 
 // cachedResponse 是发出去的配对回复：对方没收到而重发请求时原样再发一次。
@@ -60,8 +78,13 @@ type pairResult struct {
 
 // OpenPairing 在局域网里开放一个配对码，有效期到 expires。
 func (t *Transport) OpenPairing(code string, expires time.Time) {
+	t.OpenPairingFor(code, expires, IntentDevice, nil)
+}
+
+// OpenPairingFor 开放一个配对码或好友码（intent），加好友时回复里带上 card。
+func (t *Transport) OpenPairingFor(code string, expires time.Time, intent string, card *pb.FriendCard) {
 	t.mu.Lock()
-	t.pairing = &pairingState{code: pairingcode.Normalize(code), expires: expires}
+	t.pairing = &pairingState{code: pairingcode.Normalize(code), expires: expires, intent: normIntent(intent), card: card}
 	t.mu.Unlock()
 	t.updateAdvert()
 }
@@ -80,11 +103,19 @@ func (t *Transport) ClosePairing() {
 // Pair 用配对码在局域网里找到对方并交换公钥，直到 ctx 结束。extra 是用户输入的地址，
 // 不在同一网段（mDNS 过不去）时靠它。
 func (t *Transport) Pair(ctx context.Context, code string, extra []netip.AddrPort) (PeerInfo, error) {
+	return t.PairFor(ctx, code, extra, IntentDevice, nil)
+}
+
+// PairFor 与 Pair 相同，intent 说明这次是配对还是加好友，加好友时请求里带上 card。
+func (t *Transport) PairFor(ctx context.Context, code string, extra []netip.AddrPort, intent string, card *pb.FriendCard) (PeerInfo, error) {
 	if !t.Running() {
 		return PeerInfo{}, ErrDisabled
 	}
 	req := t.selfPairInfo()
 	req.Code = pairingcode.Normalize(code)
+	if normIntent(intent) == IntentFriend {
+		req.Intent, req.Card = IntentFriend, card
+	}
 	return t.exchange(ctx, req, pairRequest, func() []netip.AddrPort { return t.pairTargets(extra) }, true)
 }
 
@@ -166,6 +197,10 @@ func (t *Transport) rejectError(w *pairWaiter, final bool) error {
 		return ErrWrongCode
 	case w.rejects["too_many_attempts"]:
 		return ErrTooManyAttempts
+	case w.rejects["intent_friend"]:
+		return ErrIsFriendCode
+	case w.rejects["intent_device"]:
+		return ErrIsDeviceCode
 	}
 	return ErrCodeClosed
 }
@@ -198,6 +233,8 @@ func (t *Transport) handlePairRequest(ps *pb.LanPairSigned, src netip.AddrPort) 
 	p := t.pairing
 	reason := ""
 	closeAdvert := false
+	var intent string
+	var card *pb.FriendCard
 	switch {
 	case p == nil || now.After(p.expires):
 		reason = "closed"
@@ -208,7 +245,11 @@ func (t *Transport) handlePairRequest(ps *pb.LanPairSigned, src netip.AddrPort) 
 			t.log.Warn("配对码输错次数太多，已作废", "src", src)
 			t.pairing, reason, closeAdvert = nil, "too_many_attempts", true
 		}
+	case normIntent(info.GetIntent()) != p.intent:
+		// 码对了但用途不一致：告诉对方这是什么码，不用掉它，对方换个入口还能再输
+		reason = "intent_" + p.intent
 	default:
+		intent, card = p.intent, p.card
 		// 码对了：先撤下，同一个码不会再被第二个人用到
 		t.pairing, closeAdvert = nil, true
 	}
@@ -227,7 +268,7 @@ func (t *Transport) handlePairRequest(ps *pb.LanPairSigned, src netip.AddrPort) 
 		return
 	}
 	t.log.Info("局域网配对请求已接受，等待用户核对指纹", "peer", peer.Name, "src", src)
-	t.respondPair(info, peer, src)
+	t.respondPairFor(info, peer, src, intent, card)
 }
 
 // resendResponse：对方没收到回复而重发了同一个请求时，把那份回复原样再发一次。
@@ -243,7 +284,15 @@ func (t *Transport) resendResponse(nonce []byte, src netip.AddrPort) bool {
 
 // respondPair 回复一个已接受的配对请求：本机的信息，回显请求的 nonce。
 func (t *Transport) respondPair(info *pb.LanPairInfo, peer PeerInfo, src netip.AddrPort) {
+	t.respondPairFor(info, peer, src, IntentDevice, nil)
+}
+
+func (t *Transport) respondPairFor(info *pb.LanPairInfo, peer PeerInfo, src netip.AddrPort, intent string, card *pb.FriendCard) {
 	resp := t.selfPairInfo()
+	if intent == IntentFriend {
+		resp.Intent = IntentFriend
+	}
+	resp.Card = card
 	resp.Nonce = make([]byte, 16)
 	_, _ = cryptorand.Read(resp.Nonce)
 	resp.RequestNonce = info.GetNonce()
@@ -266,6 +315,8 @@ func peerFromInfo(info *pb.LanPairInfo, src netip.AddrPort) PeerInfo {
 		Platform:  info.GetPlatform(),
 		PublicKey: info.GetPublicKey(),
 		Addrs:     mergeAddrs(info.GetAddresses(), src),
+		Intent:    normIntent(info.GetIntent()),
+		Card:      info.GetCard(),
 	}
 }
 
@@ -332,7 +383,8 @@ type pairKind int
 const (
 	pairRequest pairKind = iota
 	pairResponse
-	nearbyRequest // 在「搜索附近设备」里点了对方，不带配对码
+	nearbyRequest   // 在「搜索附近设备」里点了对方，不带配对码
+	strangerRequest // 「所有人」模式：要对方的公钥以便发文件
 )
 
 func (t *Transport) encodePairInfo(info *pb.LanPairInfo, kind pairKind) ([]byte, error) {
@@ -346,6 +398,8 @@ func (t *Transport) encodePairInfo(info *pb.LanPairInfo, kind pairKind) ([]byte,
 		return encode(&pb.LanPacket{Payload: &pb.LanPacket_PairRequest{PairRequest: ps}})
 	case nearbyRequest:
 		return encode(&pb.LanPacket{Payload: &pb.LanPacket_NearbyRequest{NearbyRequest: ps}})
+	case strangerRequest:
+		return encode(&pb.LanPacket{Payload: &pb.LanPacket_StrangerRequest{StrangerRequest: ps}})
 	}
 	return encode(&pb.LanPacket{Payload: &pb.LanPacket_PairResponse{PairResponse: ps}})
 }

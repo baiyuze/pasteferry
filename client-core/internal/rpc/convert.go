@@ -92,7 +92,15 @@ func configToProto(c config.Config) *pb.Config {
 		RealtimeSyncDisabled:  c.RealtimeSyncDisabled,
 		SyncBacklog:           c.SyncBacklog,
 		SyncDisabledPeers:     append([]string(nil), c.SyncDisabledPeers...),
+		ReceiveFrom:           receiveFromToProto(c),
+		EveryoneUntilUnix:     c.EveryoneUntil,
+		DisplayName:           c.DisplayName,
 	}
+}
+
+// receiveFromToProto 报告此刻实际的接收范围：「所有人」到时间了就是「仅限好友」
+func receiveFromToProto(c config.Config) string {
+	return c.EffectiveReceiveFrom(time.Now())
 }
 
 // configFromProto 以 base 打底再覆盖，这样 UI 只改动部分字段时
@@ -170,6 +178,17 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	c.ReceiveDisabled = in.GetReceiveDisabled()
 	c.ReceiveNotifyDisabled = in.GetReceiveNotifyDisabled()
 	c.SendLayoutStacked = in.GetSendLayoutStacked()
+	// 旧界面不带这一项，不改。打开「所有人」时从现在起算 10 分钟；显示名由 SetDisplayName 改，这里不动
+	if from := in.GetReceiveFrom(); from != "" {
+		wasEveryone := base.EffectiveReceiveFrom(time.Now()) == config.ReceiveFromEveryone
+		c.ReceiveFrom = from
+		switch {
+		case from != config.ReceiveFromEveryone:
+			c.EveryoneUntil = 0
+		case !wasEveryone:
+			c.EveryoneUntil = time.Now().Add(config.EveryoneWindow).Unix()
+		}
+	}
 	return c
 }
 

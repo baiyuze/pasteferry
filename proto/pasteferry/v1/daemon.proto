@@ -105,6 +105,29 @@ service DaemonService {
   // 检查保存位置能否写入。path 为空时检查当前设置的位置。
   // 在 macOS 上会在这时触发系统的文件夹授权弹窗，所以要在用户看着界面时调用
   rpc CheckReceiveDir(CheckReceiveDirRequest) returns (CheckReceiveDirResponse);
+  // 别人发来的、在等用户接受的一批：接受或拒绝。always 表示以后自动接收这个好友的文件
+  rpc AnswerIncoming(AnswerIncomingRequest) returns (Empty);
+
+  // ── 好友，见 design/friends-send.md ──
+  rpc GetProfile(Empty) returns (Profile);
+  rpc SetDisplayName(SetDisplayNameRequest) returns (Profile);
+  // 设置头像：图片文件或剪贴板里的图片，按裁剪区域裁成正方形，处理成 256×256 的 JPEG
+  rpc SetAvatar(SetAvatarRequest) returns (Profile);
+  rpc ResetAvatar(Empty) returns (Profile);
+  // 本机或某个好友的头像（JPEG）。没有自定义头像时为空
+  rpc GetAvatar(GetAvatarRequest) returns (Avatar);
+  // 生成好友码（F 加 6 位），5 分钟有效。别人兑换后推送 friend_request 事件
+  rpc CreateFriendCode(Empty) returns (CreatePairingCodeResponse);
+  // 输入好友码，返回对方的名片和会话；用户在确认框里点了以后调 ConfirmFriend
+  rpc RedeemFriendCode(RedeemPairingCodeRequest) returns (FriendRequest);
+  rpc ConfirmFriend(ConfirmPairingRequest) returns (Empty);
+  rpc ListFriends(Empty) returns (ListFriendsResponse);
+  rpc RemoveFriend(FriendRef) returns (Empty);
+  rpc SetFriendAutoAccept(SetFriendAutoAcceptRequest) returns (Friend);
+  // 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
+  rpc BlockDevice(FriendRef) returns (Empty);
+  // 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
+  rpc WatchStrangers(Empty) returns (stream Strangers);
 }
 
 message Empty {}
@@ -244,7 +267,110 @@ message Event {
     // 让界面切到某一页："send" 是隔空传送页（用户点了隔空传送的通知）。
     // 界面是被这次点击拉起来的话还没订阅，后台服务在它订阅时补发最近 15 秒内的这一条
     string navigate = 13;
+    // 好友（2.6.0）
+    Friend friend_changed = 14;
+    string friend_removed = 15;           // device id
+    // 有人兑换了本机的好友码，界面弹出确认框
+    FriendRequest friend_request = 16;
+    Profile profile_changed = 17;
   }
+}
+
+// ─────────────────────────── 好友 ───────────────────────────
+
+message Profile {
+  string display_name = 1;          // 实际用的名字（没设置时是系统的用户全名）
+  string device_id = 2;
+  bool has_avatar = 3;
+  bytes avatar_hash = 4;
+}
+
+message SetDisplayNameRequest {
+  string name = 1;                  // 空字符串表示恢复成系统的用户全名
+}
+
+message SetAvatarRequest {
+  string path = 1;                  // 图片文件；为空时用剪贴板里的图片
+  bytes image = 5;                  // 直接给图片数据（界面里粘贴、拖入时）
+  // 裁剪区域，按原图的比例（0 到 1）；都为 0 时取中间最大的正方形
+  double crop_x = 2;
+  double crop_y = 3;
+  double crop_size = 4;
+}
+
+message GetAvatarRequest {
+  string device_id = 1;             // 空表示本机
+}
+
+message Avatar {
+  bytes jpeg = 1;
+  bytes avatar_hash = 2;
+}
+
+message FriendRef {
+  string device_id = 1;
+}
+
+message SetFriendAutoAcceptRequest {
+  string device_id = 1;
+  bool auto_accept = 2;
+}
+
+// 好友就是对方的一台电脑
+message Friend {
+  string id = 1;
+  string display_name = 2;
+  string device_name = 3;
+  string platform = 4;
+  bool online = 5;
+  ConnectionKind connection = 6;
+  bool lan_reachable = 7;
+  // 与 Device 相同：已经知道对方支持哪些功能
+  bool features_known = 8;
+  // 对方能接收好友发来的文件（声明了 send_files_ask_v1 且没有选「均不允许」）
+  bool receives_files = 9;
+  // 对方选了「均不允许」
+  bool receive_disabled = 10;
+  string app_version = 11;
+  bool auto_accept = 12;
+  int64 added_at_unix = 13;
+  int64 last_activity_unix = 14;
+  // 连不上的原因，见 design/friends-send.md 第 9.2 节：
+  // ""（不用提示）、"self_no_service"（本机没开服务）、"peer_no_service"（对方没开服务）、
+  // "different_server"（两边用的不是同一台服务器）
+  string reachability = 15;
+  bool has_avatar = 16;
+  bytes avatar_hash = 17;
+  string fingerprint = 18;
+}
+
+message ListFriendsResponse {
+  repeated Friend friends = 1;
+}
+
+// 加好友时等待用户确认的对方信息
+message FriendRequest {
+  string session = 1;
+  string device_id = 2;
+  string display_name = 3;
+  string device_name = 4;
+  string platform = 5;
+  // 两边的安全指纹，面对面时可以核对
+  string fingerprint = 6;
+  string self_fingerprint = 7;
+}
+
+// 附近开着「所有人」的陌生设备
+message Stranger {
+  string id = 1;
+  string display_name = 2;
+  string device_name = 3;
+  string platform = 4;
+  bool receives_files = 5;
+}
+
+message Strangers {
+  repeated Stranger strangers = 1;
 }
 
 message NotificationStatus {
@@ -493,6 +619,13 @@ message Config {
   bool realtime_sync_disabled = 27;
   bool sync_backlog = 28;
   repeated string sync_disabled_peers = 29;
+  // 谁可以给我发文件（2.6.0）："off"（均不允许）、"friends"（仅限好友，默认）、"everyone"（所有人）。
+  // 只管别人；自己设备之间的发送看 receive_disabled
+  string receive_from = 30;
+  // 「所有人」在这个时间自动回到「仅限好友」，Unix 秒。打开「所有人」时由后台服务填上
+  int64 everyone_until_unix = 31;
+  // 好友看到的名字，空表示系统的用户全名
+  string display_name = 32;
 }
 
 enum ServiceMode {
@@ -661,6 +794,8 @@ message SendFilesRequest {
   repeated string paths = 2;
   // 用户已确认可以经官方服务中转
   bool allow_relay = 3;
+  // 备注，见 Transfer.note
+  string note = 4;
 }
 
 message TransferRef {
@@ -689,6 +824,7 @@ message Transfer {
   int64 file_count = 10;
   double bytes_per_second = 11;
   // 失败、回绝、取消的原因，固定代码，界面翻译：no_space、dest_unavailable、
+  // declined（对方拒绝）、timeout（对方没有回应）、not_allowed（对方不接收）、
   // file_too_large、disabled、unsupported、offline、source_changed、source_missing、
   // read_error、write_failed、hash_mismatch、cancelled、peer_cancelled、relay_quota 等
   string error = 12;
@@ -705,6 +841,19 @@ message Transfer {
   // 收到的：文件名里有本机文件系统不允许的字符、改过名的文件数。只有 Windows 上会有：
   // : * ? " < > | \ 换成相近的全角字符，见 pack/names.go。文件内容不受影响
   int64 renamed_files = 22;
+  // 对方是谁（2.6.0）："self"（自己的设备）、"friend"、"stranger"（「所有人」模式下的陌生设备）
+  string peer_role = 23;
+  // 备注
+  string note = 24;
+  // 收到的图片的缩略图（本机重新编码过的 PNG），与 items 一一对应，不是图片的为空
+  repeated string thumbs = 25;
+}
+
+message AnswerIncomingRequest {
+  string transfer_id = 1;
+  bool accept = 2;
+  // 以后自动接收这个好友的文件（陌生设备忽略）
+  bool always = 3;
 }
 
 message ListTransfersRequest {
