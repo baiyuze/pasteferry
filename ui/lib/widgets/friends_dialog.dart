@@ -156,7 +156,10 @@ class _FriendRow extends StatelessWidget {
           : l.friendNoActivity,
       if (f.autoAccept) l.friendAutoAccept,
     ].join(' · ');
+    // 点一行打开这个好友的页面：状态、自动接收、和对方的传输记录
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => showFriendHistory(context, f),
       onSecondaryTapUp: (d) => _menu(context, d.globalPosition),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: Insets.sm),
@@ -645,14 +648,42 @@ class _FriendHistoryDialog extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  PersonAvatar(deviceId: f.id, name: f.displayName, hash: f.avatarHash, size: 32),
+                  PersonAvatar(deviceId: f.id, name: f.displayName, hash: f.avatarHash, size: 44),
                   const SizedBox(width: Insets.md),
-                  Expanded(child: Text(l.friendHistoryTitle(friendTitle(f)), style: context.text.titleMedium)),
-                  TextButton(onPressed: () => openFriendSend(context, f), child: Text(l.friendSendAction)),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(friendTitle(f), style: context.text.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
+                        Text(friendStatus(l, state, f), style: context.text.bodySmall?.copyWith(color: p.textDim)),
+                      ],
+                    ),
+                  ),
+                  FilledButton(onPressed: () => openFriendSend(context, f), child: Text(l.friendSendAction)),
+                  const SizedBox(width: Insets.xs),
                   IconAction(icon: AppIcons.xmark, tooltip: l.close, onTap: () => Navigator.pop(context)),
                 ],
               ),
               const SizedBox(height: Insets.md),
+              Padding(
+                padding: const EdgeInsets.only(right: Insets.md),
+                child: Row(
+                  children: [
+                    Expanded(child: Text(l.friendAutoAccept, style: context.text.bodyMedium)),
+                    SmallSwitch(
+                      value: f.autoAccept,
+                      onChanged: (v) => state.setFriendAutoAccept(f.id, v).catchError((Object e) {
+                        if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: Insets.md),
+              Divider(height: 1, color: p.separator),
+              const SizedBox(height: Insets.md),
+              Text(l.friendHistory, style: context.text.titleSmall),
+              const SizedBox(height: Insets.xs),
               if (list.isEmpty)
                 Padding(
                   padding: const EdgeInsets.all(Insets.xl),

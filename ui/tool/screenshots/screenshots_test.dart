@@ -554,6 +554,16 @@ void main() {
     });
   });
 
+  testWidgets('friend-page-dark', (tester) async {
+    final state = _friendsDemo();
+    await _shoot(tester, 'friend-page-dark', state: state, section: Section.send, settle: false,
+        brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {
+      showFriendHistory(tester.element(find.byType(Shell)), state.friends.first);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    });
+  });
+
   testWidgets('add-friend-dark', (tester) async {
     await _shoot(tester, 'add-friend-dark', state: _friendsDemo(), section: Section.send, settle: false,
         brightness: Brightness.dark, window: const Size(1180, 720), arrange: () async {

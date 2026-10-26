@@ -1303,6 +1303,8 @@ class _PersonNodeState extends State<_PersonNode> {
             onTap: () => f != null
                 ? openFriendSend(context, f)
                 : showFriendSendDialog(context, SendTarget.stranger(st!)),
+            // 右键好友：打开好友页（状态、传输记录）
+            onSecondaryTap: f != null ? () => showFriendHistory(context, f) : null,
             child: SizedBox(
               width: 84,
               child: Opacity(

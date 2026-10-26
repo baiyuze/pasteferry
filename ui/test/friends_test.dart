@@ -7,12 +7,17 @@ import 'package:pasteferry_ui/gen/pasteferry/v1/daemon.pb.dart';
 import 'package:pasteferry_ui/i18n.dart';
 import 'package:pasteferry_ui/main.dart';
 import 'package:pasteferry_ui/widgets/friend_send_dialog.dart';
+import 'package:pasteferry_ui/widgets/common.dart';
 import 'package:pasteferry_ui/widgets/friends_dialog.dart';
 
 /// 记下界面调了哪些好友相关的操作，不连后台服务
 class _FriendsState extends AppState {
   final answers = <(String, bool, bool)>[];
   final receiveFromCalls = <String>[];
+  final autoCalls = <(String, bool)>[];
+
+  @override
+  Future<void> setFriendAutoAccept(String id, bool auto) async => autoCalls.add((id, auto));
 
   @override
   Future<void> answerIncoming(String transferId, bool accept, {bool always = false}) async {
@@ -177,5 +182,23 @@ void main() {
     expect(friendStatus(l, state, _ajie), l.friendNeedService);
     expect(friendCanSend(_xiaoming), isTrue);
     expect(friendCanSend(_ajie), isFalse);
+  });
+
+  testWidgets('好友列表里点一个好友：打开好友页，能开自动接收、看传输记录', (tester) async {
+    final state = _demo();
+    await openSend(tester, state);
+    final ctx = tester.element(find.byType(Shell));
+    final l = AppLocalizations.of(ctx);
+    showFriendsDialog(ctx);
+    await _settle(tester);
+    await tester.tap(find.text('小明 · MacBook Air'));
+    await _settle(tester);
+    expect(find.text(l.friendHistory), findsOneWidget);
+    expect(find.text(l.friendAutoAccept), findsOneWidget);
+    await tester.tap(find.descendant(
+        of: find.ancestor(of: find.text(l.friendAutoAccept), matching: find.byType(Row)).first,
+        matching: find.byType(SmallSwitch)));
+    await _settle(tester);
+    expect(state.autoCalls, [('xm', true)]);
   });
 }
