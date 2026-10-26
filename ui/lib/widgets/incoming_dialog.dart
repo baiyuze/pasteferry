@@ -34,6 +34,7 @@ class IncomingDialog extends StatefulWidget {
 class _IncomingDialogState extends State<IncomingDialog> {
   bool _always = false;
   bool _busy = false;
+  bool _closed = false;
   late final Timer _tick;
 
   @override
@@ -58,7 +59,22 @@ class _IncomingDialogState extends State<IncomingDialog> {
     } catch (e) {
       if (mounted) showToast(context, AppState.describeError(e), error: true);
     }
-    if (mounted) Navigator.pop(context);
+    _close();
+  }
+
+  /// 只关一次，而且只关这个对话框：倒计时每秒重建，请求结束后的几次重建和点按钮都会走到这里，
+  /// 多 pop 一次会把主界面弹掉（窗口变黑）
+  void _close() {
+    if (_closed || !mounted) return;
+    final route = ModalRoute.of(context);
+    if (route == null || !route.isActive) return;
+    _closed = true;
+    _tick.cancel();
+    if (route.isCurrent) {
+      Navigator.of(context).pop();
+    } else {
+      Navigator.of(context).removeRoute(route);
+    }
   }
 
   @override
@@ -70,7 +86,7 @@ class _IncomingDialogState extends State<IncomingDialog> {
     if (t == null || t.status != 'asking') {
       // 对方取消了、超时了，或者在别处处理过了
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && !_busy) Navigator.pop(context);
+        if (!_busy) _close();
       });
       return const SizedBox.shrink();
     }

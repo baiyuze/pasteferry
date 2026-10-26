@@ -201,4 +201,39 @@ void main() {
     await _settle(tester);
     expect(state.autoCalls, [('xm', true)]);
   });
+
+  testWidgets('在通知里接受后接收框只关自己，主界面还在，下一个请求照常弹出', (tester) async {
+    Transfer ask(String id, String status) => Transfer(
+          id: id,
+          direction: TransferDirection.TRANSFER_DIRECTION_INCOMING,
+          deviceId: 'xm',
+          deviceName: '小明 · MacBook Air',
+          status: status,
+          peerRole: 'friend',
+          items: [ClipItem(name: '说明.txt', size: Int64(5))],
+          totalBytes: Int64(5),
+          createdAtUnix: _now(2),
+        );
+    final state = _demo(transfers: [ask('t1', 'asking')]);
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    await tester.pump();
+    await tester.pump();
+    final l = AppLocalizations.of(tester.element(find.byType(Shell)));
+    final title = find.text(l.incomingTitle('小明 · MacBook Air'));
+    expect(title, findsOneWidget);
+    // 在别处（通知）接受了：后台服务把状态改掉，倒计时还在跳
+    state.debugEvent(Event(transferChanged: ask('t1', 'active')));
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 1));
+    }
+    expect(tester.takeException(), isNull);
+    expect(title, findsNothing);
+    expect(find.byType(Shell), findsOneWidget);
+    // 下一个请求照常弹出
+    state.debugEvent(Event(transferChanged: ask('t2', 'asking')));
+    await tester.pump();
+    await tester.pump();
+    expect(title, findsOneWidget);
+  });
 }
+
