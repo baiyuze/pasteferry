@@ -6,6 +6,7 @@ import (
 	"log/slog"
 
 	"github.com/baiyuze/pasteferry/client-core/internal/config"
+	"github.com/baiyuze/pasteferry/client-core/internal/notifications"
 	"github.com/baiyuze/pasteferry/client-core/internal/rpc"
 	"github.com/baiyuze/pasteferry/client-core/internal/update"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
@@ -21,6 +22,12 @@ func newUpdater(root string, loadCfg func() config.Config, changed func()) *upda
 	svc.AutoCheck = func() bool { return !loadCfg().UpdateCheckDisabled }
 	svc.Skipped = func() string { return loadCfg().UpdateSkipVersion }
 	svc.Changed = changed
+	svc.Checker.Stamp.Lang = func() string {
+		if l := loadCfg().Language; l != "" {
+			return l
+		}
+		return notifications.SystemLanguage()
+	}
 	if r := svc.LastResult(); r != nil {
 		slog.Info("上一次自动更新", "from", r.From, "to", r.To, "ok", r.OK, "err", r.Error)
 	}

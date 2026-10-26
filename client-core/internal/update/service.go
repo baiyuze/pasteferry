@@ -51,9 +51,11 @@ func NewService(current, root string, log *slog.Logger) (*Service, error) {
 		return nil, err
 	}
 	client := NewHTTPClient()
+	target := DetectTarget()
+	stamp := &Stamp{Path: filepath.Join(root, "update-state.json"), Identity: filepath.Join(root, "identity.json"), Version: v.String(), Target: target}
 	s := &Service{
-		Current: v, Root: root, Target: DetectTarget(), HTTP: client, Log: log,
-		Checker: &Checker{HTTP: client, Sources: LoadSources(root), Keys: PublicKeys()},
+		Current: v, Root: root, Target: target, HTTP: client, Log: log,
+		Checker: &Checker{HTTP: client, Sources: LoadSources(root), Keys: PublicKeys(), Stamp: stamp},
 		files:   map[string]string{},
 	}
 	s.result = ReadResult(root)

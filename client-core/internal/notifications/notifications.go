@@ -333,6 +333,9 @@ var catalog = func() map[string]map[string]string {
 	return c
 }()
 
+// SystemLanguage 是系统界面语言，如 zh-Hans、en。
+func SystemLanguage() string { return systemLanguage() }
+
 func translate(lang, key string) string {
 	switch {
 	case strings.HasPrefix(lang, "zh-Hant-HK") || strings.HasPrefix(lang, "zh-HK"):

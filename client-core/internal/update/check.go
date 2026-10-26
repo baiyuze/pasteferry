@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"time"
@@ -17,11 +18,13 @@ import (
 type Source struct {
 	Name     string `json:"name"`
 	Manifest string `json:"manifest"`
+	// Params 为真时清单地址附带版本与平台参数（签名地址不带）
+	Params bool `json:"params,omitempty"`
 }
 
-// DefaultSources 同时请求，谁先返回有效清单用谁：国内用户通常是 Gitee 先到，
-// 之后也先从 Gitee 下载安装包。
+// DefaultSources 同时请求，谁先返回有效清单用谁。
 var DefaultSources = []Source{
+	{Name: "pasteferry", Manifest: "https://pasteferry.cc/updates/latest.json", Params: true},
 	{Name: "github", Manifest: "https://raw.githubusercontent.com/baiyuze/pasteferry/main/updates/latest.json"},
 	{Name: "gitee", Manifest: "https://gitee.com/baiyuze/pasteferry/raw/main/updates/latest.json"},
 }
@@ -58,8 +61,9 @@ type Checker struct {
 	HTTP    *http.Client
 	Sources []Source
 	Keys    []ed25519.PublicKey
-	// Settle 是第一份有效清单到了之后，再等其他地址多久：两边版本不同时用新的那份
+	// Settle 是第一份有效清单到了之后，再等其他地址多久：几处版本不同时用新的那份
 	Settle time.Duration
+	Stamp  *Stamp
 }
 
 func NewHTTPClient() *http.Client {
@@ -128,7 +132,17 @@ func (c *Checker) Check(ctx context.Context) (*Found, error) {
 }
 
 func (c *Checker) fetch(ctx context.Context, s Source) (*Manifest, error) {
-	raw, err := c.get(ctx, s.Manifest)
+	u := s.Manifest
+	var commit func(bool)
+	if s.Params && c.Stamp != nil {
+		var q url.Values
+		q, commit = c.Stamp.Query()
+		u += "?" + q.Encode()
+	}
+	raw, err := c.get(ctx, u)
+	if commit != nil {
+		commit(err == nil)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +161,6 @@ func (c *Checker) get(ctx context.Context, url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	// 只是一次普通的下载：不带设备 ID、版本号之类的任何标识
 	req.Header.Set("User-Agent", "PasteFerry")
 	resp, err := c.HTTP.Do(req)
 	if err != nil {
