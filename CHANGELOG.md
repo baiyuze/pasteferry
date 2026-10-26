@@ -1,5 +1,20 @@
 # 更新记录 / Changelog
 
+## 2.6.2 — 2026-10-27
+
+Numbers can be searched in quick paste.
+
+### Fixes
+
+- In quick paste, typing a number into the empty search box pasted that item, so numbers such as tracking or phone numbers could not be searched. Numbers now always go into the search box; press ⌘1–⌘9 on a Mac or Alt+1–Alt+9 on Windows and Linux to paste one of the first nine items.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended if you use quick paste;
+  contacts, pairings, history and settings are preserved.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with 2.6.0.
+
 ## 2.6.1 — 2026-10-26
 
 Contacts get their own page in the sidebar, and Mac updates download

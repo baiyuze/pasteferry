@@ -28,8 +28,8 @@ REPO = "https://github.com/baiyuze/pasteferry"
 # 网站部署在独立域名的根目录，404 页面用绝对路径引用资源。
 BASE = "/"
 DL = REPO + "/releases/latest/download/"
-VERSION = "2.6.1"
-DATE = "2026-10-26"
+VERSION = "2.6.2"
+DATE = "2026-10-27"
 # Gitee 国内镜像，由 scripts/gitee-mirror.sh 每次发版同步代码与安装包。Gitee 没有 latest 跳转，
 # 直链带版本号，所以发版后要重新生成网站
 GITEE = "https://gitee.com/baiyuze/pasteferry"

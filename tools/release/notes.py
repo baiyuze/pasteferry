@@ -11,6 +11,16 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.6.2',
+ 'date': '2026-10-27',
+ 'changes': [],
+ 'fixes': [('In quick paste, typing a number into the empty search box pasted that item, so numbers such as tracking or '
+            'phone numbers could not be searched. Numbers now always go into the search box; press ⌘1–⌘9 on a Mac or '
+            'Alt+1–Alt+9 on Windows and Linux to paste one of the first nine items.',
+            '快捷粘贴里，搜索框为空时输入数字会直接粘贴对应的那一条，没法搜快递单号、电话这类数字。现在数字一律输入到搜索框；要粘贴前 9 条，Mac 上按 ⌘1–⌘9，Windows、Linux 上按 Alt+1–Alt+9。',
+            'クイックペーストで、検索欄が空のときに数字を入力するとその番号の項目が貼り付けられ、追跡番号や電話番号などの数字を検索できませんでした。数字は常に検索欄に入力されるようになりました。先頭 9 件を貼り付けるには、Mac では ⌘1〜⌘9、Windows と Linux では Alt+1〜Alt+9 を押します。',
+            '快速貼上裡，搜尋框是空的時候輸入數字會直接貼上對應的那一筆，沒辦法搜尋物流單號、電話這類數字。現在數字一律輸入到搜尋框；要貼上前 9 筆，Mac 上按 ⌘1–⌘9，Windows、Linux 上按 Alt+1–Alt+9。',
+            '快速貼上裏，搜尋框是空的時候輸入數字會直接貼上對應的那一項，沒法搜尋速遞單號、電話這類數字。現在數字一律輸入到搜尋框；要貼上前 9 項，Mac 上按 ⌘1–⌘9，Windows、Linux 上按 Alt+1–Alt+9。')]},
 {'version': '2.6.1',
  'date': '2026-10-26',
  'changes': [('Contacts now have their own page in the sidebar: search your contacts and see who is online, open one to '
