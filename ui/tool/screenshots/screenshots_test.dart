@@ -185,7 +185,7 @@ AppState _demo({LinkState link = LinkState.online,
     serviceState: service,
     pendingPairing: pending,
     status: Status(
-      version: '2.5.3',
+      version: '2.5.4',
       deviceName: 'MacBook Pro',
       signalingConnected: link == LinkState.online && server.isNotEmpty,
       serverConfigured: server.isNotEmpty,
