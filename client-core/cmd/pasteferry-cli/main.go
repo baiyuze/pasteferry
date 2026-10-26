@@ -120,6 +120,8 @@ func run(cmd, dataDir string) error {
 		return setName(ctx, client, flag.Arg(1))
 	case "avatar":
 		return setAvatar(ctx, client, flag.Arg(1))
+	case "strangers":
+		return showStrangers(ctx, client)
 	case "receive-from":
 		return setReceiveFrom(ctx, client, flag.Arg(1))
 	default:

@@ -50,6 +50,9 @@ func showFriends(ctx context.Context, c pb.DaemonServiceClient) error {
 		if f.GetAutoAccept() {
 			extra += " 自动接收"
 		}
+		if f.GetHasAvatar() {
+			extra += fmt.Sprintf(" 头像 %x", f.GetAvatarHash()[:min(4, len(f.GetAvatarHash()))])
+		}
 		if f.GetReachability() != "" {
 			extra += " " + f.GetReachability()
 		}
@@ -256,5 +259,26 @@ func setReceiveFrom(ctx context.Context, c pb.DaemonServiceClient, v string) err
 		return err
 	}
 	fmt.Println(out.GetReceiveFrom())
+	return nil
+}
+
+// showStrangers 列出附近开着「所有人」的陌生设备（发文件时用它的 ID：lan:实例名）
+func showStrangers(ctx context.Context, c pb.DaemonServiceClient) error {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	stream, err := c.WatchStrangers(ctx, &pb.Empty{})
+	if err != nil {
+		return err
+	}
+	list, err := stream.Recv()
+	if err != nil {
+		return err
+	}
+	if len(list.GetStrangers()) == 0 {
+		fmt.Println("（附近没有开着「所有人」的设备）")
+	}
+	for _, s := range list.GetStrangers() {
+		fmt.Printf("%-16s %-8s %s\n", s.GetDisplayName(), s.GetPlatform(), s.GetId())
+	}
 	return nil
 }

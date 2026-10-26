@@ -101,7 +101,7 @@ func sendFiles(ctx context.Context, c pb.DaemonServiceClient, args []string) err
 			return nil
 		case "failed", "declined", "cancelled", "expired":
 			fmt.Println()
-			return fmt.Errorf("没有发出：%s", u.GetError())
+			return fmt.Errorf("没有发出：%s", declineText(u.GetError()))
 		case "interrupted", "paused":
 			fmt.Println("\n已中断，重新连上后会自动继续（pasteferry-cli transfers 查看）")
 			return nil
@@ -116,7 +116,7 @@ func transferLine(t *pb.Transfer) string {
 	case "asking":
 		return "等待对方接受…"
 	case "declined":
-		return "declined " + t.GetError()
+		return declineText(t.GetError())
 	case "active":
 		pct := 0.0
 		if t.GetTotalBytes() > 0 {
@@ -198,4 +198,19 @@ func cancelTransfer(ctx context.Context, c pb.DaemonServiceClient, prefix string
 	}
 	fmt.Println("已取消")
 	return nil
+}
+
+// declineText 把对方不收的原因说成人话；其他错误原样返回
+func declineText(reason string) string {
+	switch reason {
+	case "declined":
+		return "对方拒绝了"
+	case "timeout":
+		return "对方没有回应"
+	case "not_allowed":
+		return "对方没有允许你发文件"
+	case "rate_limited":
+		return "被拒绝太多次，稍后再试"
+	}
+	return reason
 }
