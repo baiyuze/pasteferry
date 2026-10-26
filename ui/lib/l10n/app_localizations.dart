@@ -1943,7 +1943,7 @@ abstract class AppLocalizations {
   /// No description provided for @officialPrivacy.
   ///
   /// In en, this message translates to:
-  /// **'Connects to the service only when enabled and records essential access statistics. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.'**
+  /// **'Connects to the service only when enabled and records the essential connection information. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.'**
   String get officialPrivacy;
 
   /// No description provided for @officialEnableTitle.
@@ -2113,12 +2113,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check for updates automatically'**
   String get updateAuto;
-
-  /// No description provided for @updateAutoDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Once a day. Only reads the update list on GitHub and Gitee; nothing that identifies you is sent.'**
-  String get updateAutoDesc;
 
   /// No description provided for @updateChecking.
   ///

@@ -1141,10 +1141,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get updateAuto => 'アップデートを自動で確認';
 
   @override
-  String get updateAutoDesc =>
-      '1 日 1 回、GitHub と Gitee のアップデート一覧を読むだけで、あなたを識別できる情報は送信しません。';
-
-  @override
   String get updateChecking => 'アップデートを確認しています…';
 
   @override

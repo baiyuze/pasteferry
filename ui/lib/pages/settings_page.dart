@@ -500,7 +500,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingRow(
                 title: l.updateAuto,
-                description: l.updateAutoDesc,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

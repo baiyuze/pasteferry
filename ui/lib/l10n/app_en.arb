@@ -693,7 +693,7 @@
   "officialService": "Service",
   "useOfficialService": "Use the service",
   "officialServiceDesc": "Sync across networks, direct connections first",
-  "officialPrivacy": "Connects to the service only when enabled and records essential access statistics. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.",
+  "officialPrivacy": "Connects to the service only when enabled and records the essential connection information. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.",
   "officialEnableTitle": "Enable the service?",
   "officialSwitchConfirm": "This switches away from your custom server. Its saved address will be retained.",
   "customServer": "Custom server",
@@ -722,7 +722,6 @@
   "updateCheck": "Check for updates",
   "updateCheckEllipsis": "Check for updates…",
   "updateAuto": "Check for updates automatically",
-  "updateAutoDesc": "Once a day. Only reads the update list on GitHub and Gitee; nothing that identifies you is sent.",
   "updateChecking": "Checking for updates…",
   "updateUpToDate": "PasteFerry {version} is the latest version.",
   "@updateUpToDate": {

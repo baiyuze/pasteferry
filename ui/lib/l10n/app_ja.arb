@@ -334,7 +334,6 @@
   "updateCheck": "アップデートを確認",
   "updateCheckEllipsis": "アップデートを確認…",
   "updateAuto": "アップデートを自動で確認",
-  "updateAutoDesc": "1 日 1 回、GitHub と Gitee のアップデート一覧を読むだけで、あなたを識別できる情報は送信しません。",
   "updateChecking": "アップデートを確認しています…",
   "updateUpToDate": "PasteFerry {version} は最新バージョンです。",
   "updateAvailableTitle": "PasteFerry {version} があります",

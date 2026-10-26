@@ -1160,7 +1160,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get officialPrivacy =>
-      'Connects to the service only when enabled and records essential access statistics. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.';
+      'Connects to the service only when enabled and records the essential connection information. Direct connections are tried first; relay access is requested only if they fail. Content, real device names and raw system identifiers are not uploaded.';
 
   @override
   String get officialEnableTitle => 'Enable the service?';
@@ -1253,10 +1253,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateAuto => 'Check for updates automatically';
-
-  @override
-  String get updateAutoDesc =>
-      'Once a day. Only reads the update list on GitHub and Gitee; nothing that identifies you is sent.';
 
   @override
   String get updateChecking => 'Checking for updates…';

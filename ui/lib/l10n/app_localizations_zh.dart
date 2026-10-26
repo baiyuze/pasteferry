@@ -1043,7 +1043,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get officialPrivacy =>
-      '仅开启后连接服务并统计必要接入信息。先尝试直连，失败才申请中转；不上传内容、真实设备名或原始系统标识。';
+      '仅开启后连接服务并记录必要的接入信息。先尝试直连，失败才申请中转；不上传内容、真实设备名或原始系统标识。';
 
   @override
   String get officialEnableTitle => '启用服务？';
@@ -1128,9 +1128,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updateAuto => '自动检查更新';
-
-  @override
-  String get updateAutoDesc => '每天一次，只读取 GitHub 和 Gitee 上的更新清单，不发送任何能识别你的信息。';
 
   @override
   String get updateChecking => '正在检查更新…';
@@ -3154,7 +3151,7 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get officialPrivacy =>
-      '只在啟用後連接服務並統計必要連線資料。先嘗試直連，失敗才申請中轉；不傳送內容、真實裝置名稱或原始系統識別碼。';
+      '只在啟用後連接服務並記錄必要的連線資料。先嘗試直連，失敗才申請中轉；不傳送內容、真實裝置名稱或原始系統識別碼。';
 
   @override
   String get officialEnableTitle => '啟用服務？';
@@ -3239,9 +3236,6 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get updateAuto => '自動檢查更新';
-
-  @override
-  String get updateAutoDesc => '每天一次，只讀取 GitHub 和 Gitee 上的更新清單，不傳送任何能識別你的資料。';
 
   @override
   String get updateChecking => '正在檢查更新…';
@@ -5265,7 +5259,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get officialPrivacy =>
-      '僅開啟後連線服務並統計必要連線資訊。先嘗試直連，失敗才申請中繼；不傳送內容、真實裝置名稱或原始系統識別碼。';
+      '僅開啟後連線服務並記錄必要的連線資訊。先嘗試直連，失敗才申請中繼；不傳送內容、真實裝置名稱或原始系統識別碼。';
 
   @override
   String get officialEnableTitle => '啟用服務？';
@@ -5350,9 +5344,6 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get updateAuto => '自動檢查更新';
-
-  @override
-  String get updateAutoDesc => '每天一次，只讀取 GitHub 和 Gitee 上的更新清單，不傳送任何能識別你的資訊。';
 
   @override
   String get updateChecking => '正在檢查更新…';
