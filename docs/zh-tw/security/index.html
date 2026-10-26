@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>安全與隱私：端對端加密與配對核對 — 隔空貼</title>
-  <meta name="description" content="裝置身分是一把金鑰，配對時由你核對指紋，之後的每則訊息都帶簽章，內容只有你的裝置能解密。">
+  <meta name="description" content="內容只有你的裝置能解密，伺服器看不到。">
   <link rel="canonical" href="https://pasteferry.cc/zh-tw/security/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/security/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/security/">
@@ -24,7 +24,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="隔空貼">
   <meta property="og:title" content="安全與隱私：端對端加密與配對核對 — 隔空貼">
-  <meta property="og:description" content="裝置身分是一把金鑰，配對時由你核對指紋，之後的每則訊息都帶簽章，內容只有你的裝置能解密。">
+  <meta property="og:description" content="內容只有你的裝置能解密，伺服器看不到。">
   <meta property="og:url" content="https://pasteferry.cc/zh-tw/security/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-zh-hant.png">
   <meta property="og:locale" content="zh_TW">
@@ -79,7 +79,7 @@
       <div class="wrap">
         <p class="crumb"><a href="../../zh-tw/">隔空貼</a></p>
         <h1 class="display">伺服器看不到你複製了什麼</h1>
-        <p class="lede">裝置身分是一把金鑰，配對時由你核對指紋，之後的每則訊息都帶簽章，內容只有你的裝置能解密。</p>
+        <p class="lede">內容只有你的裝置能解密，伺服器看不到。</p>
       </div>
     </section>
 
@@ -87,11 +87,11 @@
       <div class="wrap">
         <div class="cols">
           <ul class="points">
-            <li><strong>沒有帳號，不存內容。</strong>每台裝置的身分是一把 Ed25519 金鑰，伺服器不需要使用者資料表就能驗證。</li>
-            <li><strong>配對時由你核對指紋。</strong>兩邊螢幕顯示同樣的兩行指紋。伺服器就算替換了公鑰，兩邊也會對不上。</li>
-            <li><strong>每則訊息都帶簽章。</strong>伺服器冒充不了你的裝置。直連建立後還會再核對一次憑證，不一致立刻中斷。</li>
-            <li><strong>中繼也只是轉送密文。</strong>中繼憑證按裝置個別簽發，12 小時後過期。</li>
-            <li><strong>區域網路裡也一樣。</strong>廣播的只是每天都會變的匿名識別碼，看不出是誰的電腦；只有開啟「搜尋附近裝置」時才帶上裝置名稱。</li>
+            <li><strong>沒有帳號，不存內容。</strong>裝置身分是一把金鑰，伺服器不需要使用者資料表。</li>
+            <li><strong>配對時核對指紋。</strong>兩邊顯示同樣的指紋，有人從中替換就會對不上。</li>
+            <li><strong>每則訊息都帶簽章。</strong>伺服器冒充不了你的裝置。</li>
+            <li><strong>中繼只轉送密文。</strong>中繼憑證 12 小時後過期。</li>
+            <li><strong>區域網路裡也不暴露。</strong>廣播的是每天都會變的匿名識別碼，看不出是誰的電腦。</li>
           </ul>
           <figure class="figure-card">
             <img src="../../assets/screenshots/zh-tw/card-verify-dark.png?v=b2240a2bd1" width="1120" height="800" alt="配對時的「核對安全指紋」對話框，顯示 R8NF-2WTC-QL5J，要求與另一台電腦上顯示的完全一致">

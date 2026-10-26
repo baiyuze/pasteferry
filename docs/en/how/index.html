@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>How PasteFerry works: direct connections, multi-uplink probing and failure handling</title>
-  <meta name="description" content="What happens after you copy, how two computers find each other and connect directly, and what happens when they can’t.">
+  <meta name="description" content="What happens when you copy, how computers connect, and what happens when they can’t.">
   <link rel="canonical" href="https://pasteferry.cc/en/how/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/how/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/how/">
@@ -24,7 +24,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PasteFerry">
   <meta property="og:title" content="How PasteFerry works: direct connections, multi-uplink probing and failure handling">
-  <meta property="og:description" content="What happens after you copy, how two computers find each other and connect directly, and what happens when they can’t.">
+  <meta property="og:description" content="What happens when you copy, how computers connect, and what happens when they can’t.">
   <meta property="og:url" content="https://pasteferry.cc/en/how/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:locale" content="en_US">
@@ -79,18 +79,18 @@
       <div class="wrap">
         <p class="crumb"><a href="../../en/">PasteFerry</a></p>
         <h1 class="display">How it works</h1>
-        <p class="lede">What happens after you copy, how two computers find each other and connect directly, and what happens when they can’t.</p>
+        <p class="lede">What happens when you copy, how computers connect, and what happens when they can’t.</p>
       </div>
     </section>
 
     <section class="section" aria-labelledby="flow-title">
       <div class="wrap">
         <h2 id="flow-title">What happens when you copy</h2>
-        <p class="intro">Text, images, files and folders all take the same path.</p>
+        <p class="intro">Text, images and files all take the same path.</p>
         <ol class="flow">
-          <li><h3>Notice</h3><p>On Mac, the background service checks every so often whether the clipboard has changed. It only looks for a change, not at the content, so no permission prompt appears. On Windows, the system tells it when you copy.</p></li>
-          <li><h3>Send</h3><p>Text goes over right away, and so do images and files up to 50 MB. Anything larger is sent as a record and transferred when you need it.</p></li>
-          <li><h3>Paste</h3><p>The other computer saves the content locally, then puts it on the clipboard. What you paste with ⌘V or Ctrl+V is a real file.</p></li>
+          <li><h3>Notice</h3><p>The background service sees that the clipboard changed.</p></li>
+          <li><h3>Send</h3><p>Text and files up to 50 MB go over right away. Larger ones are sent as a record first.</p></li>
+          <li><h3>Paste</h3><p>The other computer saves it locally and puts it on the clipboard. You paste a real file.</p></li>
         </ol>
       </div>
     </section>
@@ -98,7 +98,7 @@
     <section class="section" id="diagram" aria-labelledby="how-title">
       <div class="wrap">
         <h2 id="how-title">How PasteFerry connects</h2>
-        <p class="intro">On the same network, two computers find each other without a server. On different networks, Service or your own server helps them exchange connection details so they can connect directly. Only if that fails is the data relayed through the server, still encrypted.</p>
+        <p class="intro">On the same network, the computers find each other directly. On different networks, a server introduces them so they can try to connect directly, and relays only if that fails. Content is always encrypted.</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
             <title id="diagram-title">How PasteFerry connects</title>
@@ -139,47 +139,37 @@
     <section class="section" id="multi-uplink" aria-labelledby="multi-title">
       <div class="wrap">
         <h2 id="multi-title">Direct on office networks too</h2>
-        <p class="intro">Office networks with two lines or several uplinks pick an uplink by destination. A single probe finds only one of them, so these connections used to go through the relay. PasteFerry finds every uplink and gives them all to the other side to try.</p>
+        <p class="intro">Office networks with several uplinks used to go through the relay. PasteFerry finds every uplink and lets the other side try each one.</p>
         <div class="cols">
           <div>
             <h3>What it does</h3>
             <ul class="points">
-              <li><strong>One shared port.</strong> All connections send and receive on the same UDP port, so the addresses it learns line up.</li>
-              <li><strong>Every uplink probed.</strong> It asks seven servers in different places at once and gets one address per uplink.</li>
-              <li><strong>All of them sent to the other side.</strong> The other computer tries each one; the one that matches the real uplink gets through.</li>
-              <li><strong>Uplinks remembered.</strong> If a round misses an uplink, an address seen earlier fills the gap.</li>
-              <li><strong>A set order for who sends first.</strong> Some routers lock a port when the other side's packet arrives first, so the two sides take turns, and swap the order on retry.</li>
-              <li><strong>Retry direct while idle.</strong> The relay keeps things syncing; when nothing is being sent, it tries a direct connection again and stops using the relay once that works.</li>
+              <li><strong>One shared port.</strong> All connections use the same UDP port.</li>
+              <li><strong>Every uplink probed.</strong> It asks seven servers at once and gets one address per uplink.</li>
+              <li><strong>All of them sent to the other side.</strong> The other computer tries each one until one gets through.</li>
+              <li><strong>Retry direct while idle.</strong> The relay keeps things working, and it switches to direct when idle.</li>
             </ul>
           </div>
           <div>
             <h3>Tested on real network setups</h3>
-            <p class="small">The NAT lab builds these networks with Linux network namespaces and iptables and runs PasteFerry's actual connection code through each, on every commit.</p>
+            <p class="small">Every commit is tested automatically on simulated networks.</p>
             <div class="table-scroll">
               <table>
                 <thead><tr><th scope="col">Scenario</th><th scope="col">Result</th></tr></thead>
                 <tbody>
                 <tr><td>Single uplink ↔ home router</td><td>Direct</td></tr>
                 <tr><td>Two uplinks, previous version (control)</td><td>Relay</td></tr>
-                <tr><td>Two uplinks ↔ home router</td><td>Direct</td></tr>
                 <tr><td>Four uplinks ↔ home router</td><td>Direct</td></tr>
-                <tr><td>Two uplinks, second not probed, no history</td><td>Relay</td></tr>
-                <tr><td>Two uplinks, second not probed, with history</td><td>Direct</td></tr>
                 <tr><td>Two uplinks ↔ two uplinks</td><td>Direct</td></tr>
                 <tr><td>Two uplinks ↔ NAT that randomizes ports</td><td>Relay</td></tr>
                 <tr><td>Blocked at first, network recovers later</td><td>Relay, then direct</td></tr>
-                <tr><td>Office router locks a port for unsolicited packets</td><td>Direct</td></tr>
-                <tr><td>Home router locks a port for unsolicited packets</td><td>Relay, then direct after one retry</td></tr>
-                <tr><td>No server, same subnet, found over mDNS</td><td>Direct</td></tr>
-                <tr><td>No server, two subnets, one side remembers the address</td><td>Direct</td></tr>
-                <tr><td>No server, both block inbound, both remember</td><td>Direct</td></tr>
-                <tr><td>No server, both block inbound, only one remembers</td><td>No connection (known limit)</td></tr>
+                <tr><td>No server, same subnet</td><td>Direct</td></tr>
                 <tr><td>No server, subnets isolated from each other</td><td>No connection</td></tr>
                 </tbody>
               </table>
             </div>
-            <p class="small">Measured: a Mac on a 4-uplink office network and one at home could only relay before, capped at 0.6 MB/s by the server's bandwidth. Now they connect directly in about 3 seconds.</p>
-            <p class="small">Measurements and design trade-offs are in the <a href="../../design/nat-traversal.html">design document</a> (in Chinese).</p>
+            <p class="small">Measured: a Mac on a 4-uplink office network and one at home relayed at 0.6 MB/s before. Now they connect directly.</p>
+            <p class="small">Details are in the <a href="../../design/nat-traversal.html">design document</a> (in Chinese).</p>
           </div>
         </div>
       </div>
@@ -188,19 +178,14 @@
     <section class="section" id="fallbacks" aria-labelledby="fallback-title">
       <div class="wrap">
         <h2 id="fallback-title">When things go wrong</h2>
-        <p class="intro">We planned for these cases, and each one has a test.</p>
+        <p class="intro">The common cases are handled.</p>
         <dl class="fallbacks">
-          <div><dt>Can't find the other computer on the network</dt><dd>Different subnets, guest networks and Wi‑Fi with client isolation block discovery. Enter the other computer's address when pairing; it's remembered afterwards.</dd></div>
-          <div><dt>The system blocks the local network</dt><dd>From macOS 15 you need to allow Local Network access, and Windows asks about the firewall on first run. If either is blocked, the app tells you and links straight to the fix.</dd></div>
-          <div><dt>No direct connection</dt><dd>With Service, traffic is relayed through the server, up to 100 MB a day; with your own server there's no limit. Either way, content is end-to-end encrypted.</dd></div>
-          <div><dt>The other computer sleeps, drops off or restarts</dt><dd>A dropped connection is noticed right away and reconnected. What you copy in the meantime can be added to the other computer's history once it's back (off by default), without replacing what's on its clipboard.</dd></div>
-          <div><dt>Server connection drops</dt><dd>It reconnects on its own, waiting from 1 second up to 30 between tries. Devices on the same network keep syncing.</dd></div>
-          <div><dt>File too large</dt><dd>Above the limit, only a record is synced and the file is sent when you need it. If the source file is gone by then, you're told so.</dd></div>
-          <div><dt>Disconnected while sending files</dt><dd>Send Files picks up where it stopped if the computers reconnect within 30 minutes; after that, click Continue. Every file is checked, and incomplete ones never show up in the save folder.</dd></div>
-          <div><dt>Pasting into plain-text fields</dt><dd>Rich text is written as both HTML and plain text, so no markup shows up wherever you paste.</dd></div>
-          <div><dt>A file name Windows doesn't allow</dt><dd>Colons, question marks and similar characters become their full-width versions, so the name still reads the same. Two names that differ only in case don't overwrite each other.</dd></div>
-          <div><dt>Copying a password</dt><dd>On Windows, PasteFerry skips anything a password manager marks as "don't record": it isn't synced or kept in the history.</dd></div>
-          <div><dt>Background service crashes or the app updates</dt><dd>The system restarts it automatically. After an update or a move, opening the app restarts it on the new version.</dd></div>
+          <div><dt>Can't find the other computer on the network</dt><dd>Enter its address when pairing; it's remembered afterwards.</dd></div>
+          <div><dt>No direct connection</dt><dd>Data is relayed through the server, still encrypted.</dd></div>
+          <div><dt>The other computer sleeps or drops off</dt><dd>It reconnects on its own when it's back.</dd></div>
+          <div><dt>Disconnected while sending files</dt><dd>The transfer resumes where it stopped.</dd></div>
+          <div><dt>A file name Windows doesn't allow</dt><dd>Bad characters become full-width ones, so the name still reads the same.</dd></div>
+          <div><dt>Copying a password</dt><dd>On Windows, anything copied from a password manager is skipped.</dd></div>
         </dl>
       </div>
     </section>

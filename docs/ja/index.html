@@ -139,9 +139,9 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="features/#friends">2.6 の新機能：連絡先を追加して、ファイルを直接送る →</a>
+        <a class="release-note" href="features/#friends">2.6 の新機能：連絡先にファイルを送る →</a>
         <h1 class="display">こっちでコピーして、<br>あっちで貼り付け。</h1>
-        <p class="lede">Mac・Windows・Linux で使え、同じアカウントでなくてもかまいません。テキスト、スクリーンショット、ファイル、フォルダまるごと、こちらでコピーしてあちらで貼り付けるだけです。</p>
+        <p class="lede">Mac・Windows・Linux で使え、同じアカウントは不要。テキスト、スクリーンショット、ファイル、フォルダに対応し、連絡先へのファイル送信もできます。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry をダウンロード</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 紹介ムービーを見る <span class="tour-duration">1:25</span></a>
@@ -178,8 +178,8 @@
     <section class="section spotlight" id="friends" aria-labelledby="friends-title">
       <div class="wrap">
         <p class="kicker"><span class="new">2.6 の新機能</span></p>
-        <h2 id="friends-title">同僚のパソコンにも、<br>ドラッグで。</h2>
-        <p class="intro">ほかの人のパソコンはペアリング不要。連絡先に追加するだけです。相手が表示した連絡先コードを入力し、双方で確認。あとは「ファイル送信」で相手にドラッグすれば、ひとことメモも添えられます。連絡先とはファイルだけをやり取りし、クリップボードは同期されず、お互いの履歴も見えません。</p>
+        <h2 id="friends-title">連絡先のパソコンにも、<br>ドラッグで。</h2>
+        <p class="intro">連絡先に追加するだけで、ペアリングは不要。相手が受け入れると届き、メモも添えられます。</p>
         <figure class="spot wide" data-reveal>
           <img src="../assets/screenshots/ja/incoming-dark.png?v=4246b6377a" width="2552" height="1632" loading="lazy" alt="ファイル送信ページ：レーダーの下に連絡先のアイコン、中央に MacBook Air の連絡先からファイルを送りたいという依頼とメモ。拒否か受け入れを選べる">
         </figure>
@@ -190,7 +190,7 @@
     <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <h2 id="send-title">ドラッグすれば、<br>もう届いている。</h2>
-        <p class="intro">ファイルやフォルダをレーダー上のパソコンにドロップすれば、そのまま届きます。サイズ無制限、切断されても続きから。履歴も散らかりません。</p>
+        <p class="intro">別のパソコンにドロップすれば送信。サイズ無制限、途中で切れても続きから。</p>
         <figure class="spot wide" data-reveal>
           <img src="../assets/screenshots/ja/send-dark.png?v=fd7cf47212" width="2552" height="1632" loading="lazy" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示">
         </figure>
@@ -201,7 +201,7 @@
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
         <h2 id="qp-title"><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> を押せば、<br>コピーした内容がすぐそこに。</h2>
-        <p class="intro">どのアプリでも押すだけで、画面の中央に履歴が出ます。数字かリターンを押せば、選んだ内容がそのままペーストされます。よく使うものはお気に入りに。</p>
+        <p class="intro">どのアプリでも、押して選ぶだけで貼り付け。</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
             <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
@@ -229,12 +229,12 @@
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
             <h3>ファイルとフォルダ</h3>
-            <p>50 MB まではコピーした時点で転送済み。大きいものは必要なときに。</p>
+            <p>小さなファイルはコピー時に、大きなものは必要なときに。</p>
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
             <h3>履歴とお気に入り</h3>
-            <p>すべてのデバイスでコピーした内容を検索でき、よく使うものはお気に入りに。</p>
+            <p>全デバイスのコピー履歴。検索もお気に入りも。</p>
           </li>
           <li class="tile">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
@@ -254,7 +254,7 @@
     <section class="section" id="why" aria-labelledby="why-title">
       <div class="wrap">
         <h2 id="why-title">いまある方法では足りない理由</h2>
-        <p class="intro">ユニバーサルクリップボードは同じ Apple ID で、しかも近くにいる必要があります。AirDrop は毎回受け取りの操作が要ります。チャットアプリで自分に送ると、もう一度ダウンロードする手間がかかります。Mac と Windows の組み合わせでは、OS 標準の方法はどれも使えません。</p>
+        <p class="intro">ユニバーサルクリップボードは同じ Apple ID だけ、AirDrop は毎回受け取りの操作が必要で、Mac と Windows の組み合わせではどちらも使えません。</p>
         <div class="block table-scroll">
           <table class="compare">
             <caption class="skip">PasteFerry とほかの方法の比較</caption>
@@ -282,7 +282,7 @@
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
             <span class="path-when">自宅と職場の間でも使える</span>
             <h3>サービス</h3>
-            <p>スイッチをひとつオンにするだけで、自宅と会社のパソコンがお互いを見つけます。直接つながればそのまま、つながらなければ私たちのサーバーが中継します。クラウドサーバーの契約もアドレスの入力も要りません。</p>
+            <p>スイッチをひとつオンにするだけで、自宅と会社のパソコンが同期できます。サーバーの契約は要りません。</p>
             <span class="path-go">「サービス」をオンにする →</span>
           </a>
           <a class="path" href="lan/">
@@ -320,7 +320,7 @@
         <p class="note">バージョン 2.6.1、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。</p>
         <a class="start-link" href="start/">はじめての方は、3 ステップで設定 →</a>
         <div class="star-ask">
-          <p>気に入ったら GitHub でスターを。もっと多くの人に届きます。</p>
+          <p>気に入ったら GitHub でスターを。</p>
           <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub で PasteFerry にスターを付ける"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">GitHub でスター</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
         </div>
       </div>

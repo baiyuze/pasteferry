@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>安全与隐私：端到端加密与配对核对 — 隔空贴</title>
-  <meta name="description" content="设备身份是一把密钥，配对时由你核对指纹，之后的每条消息都带签名，内容只有你的设备能解密。">
+  <meta name="description" content="内容只有你的设备能解密，服务器看不到。">
   <link rel="canonical" href="https://pasteferry.cc/security/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/security/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/security/">
@@ -24,7 +24,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="隔空贴">
   <meta property="og:title" content="安全与隐私：端到端加密与配对核对 — 隔空贴">
-  <meta property="og:description" content="设备身份是一把密钥，配对时由你核对指纹，之后的每条消息都带签名，内容只有你的设备能解密。">
+  <meta property="og:description" content="内容只有你的设备能解密，服务器看不到。">
   <meta property="og:url" content="https://pasteferry.cc/security/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
   <meta property="og:locale" content="zh_CN">
@@ -79,7 +79,7 @@
       <div class="wrap">
         <p class="crumb"><a href=".././">隔空贴</a></p>
         <h1 class="display">服务器看不到你复制了什么</h1>
-        <p class="lede">设备身份是一把密钥，配对时由你核对指纹，之后的每条消息都带签名，内容只有你的设备能解密。</p>
+        <p class="lede">内容只有你的设备能解密，服务器看不到。</p>
       </div>
     </section>
 
@@ -87,11 +87,11 @@
       <div class="wrap">
         <div class="cols">
           <ul class="points">
-            <li><strong>没有账号，不存内容。</strong>每台设备的身份是一把 Ed25519 密钥，服务器不需要用户表就能验证。</li>
-            <li><strong>配对时你来核对指纹。</strong>两边屏幕显示同样的两行指纹。服务器就算替换了公钥，两边也会对不上。</li>
-            <li><strong>每条消息都带签名。</strong>服务器冒充不了你的设备。直连建立后还会再核对一次证书，不一致立刻断开。</li>
-            <li><strong>中转也只是转发密文。</strong>中转凭证按设备单独签发，12 小时过期。</li>
-            <li><strong>局域网里也一样。</strong>广播的只是每天都变的匿名标识，看不出是谁的电脑；只有打开「搜索附近设备」时才带上设备名。</li>
+            <li><strong>没有账号，不存内容。</strong>设备身份是一把密钥，服务器不需要用户表。</li>
+            <li><strong>配对时核对指纹。</strong>两边显示同样的指纹，有人从中替换就会对不上。</li>
+            <li><strong>每条消息都带签名。</strong>服务器冒充不了你的设备。</li>
+            <li><strong>中转只转发密文。</strong>中转凭证 12 小时过期。</li>
+            <li><strong>局域网里也不暴露。</strong>广播的是每天都变的匿名标识，看不出是谁的电脑。</li>
           </ul>
           <figure class="figure-card">
             <img src="../assets/screenshots/card-verify-dark.png?v=5ab309bc9a" width="1120" height="800" alt="配对时的「核对安全指纹」对话框，显示 R8NF-2WTC-QL5J，要求与另一台电脑上显示的完全一致">

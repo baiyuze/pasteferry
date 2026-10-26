@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>運作原理：直連、多出口探測與出問題時的處理 — 隔空貼</title>
-  <meta name="description" content="按下複製之後發生了什麼，兩台電腦怎樣找到彼此、怎樣直連，打不通時怎麼辦。">
+  <meta name="description" content="複製之後發生了什麼，兩台電腦怎麼連上，連不上怎麼辦。">
   <link rel="canonical" href="https://pasteferry.cc/zh-tw/how/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/how/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/how/">
@@ -24,7 +24,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="隔空貼">
   <meta property="og:title" content="運作原理：直連、多出口探測與出問題時的處理 — 隔空貼">
-  <meta property="og:description" content="按下複製之後發生了什麼，兩台電腦怎樣找到彼此、怎樣直連，打不通時怎麼辦。">
+  <meta property="og:description" content="複製之後發生了什麼，兩台電腦怎麼連上，連不上怎麼辦。">
   <meta property="og:url" content="https://pasteferry.cc/zh-tw/how/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-zh-hant.png">
   <meta property="og:locale" content="zh_TW">
@@ -79,18 +79,18 @@
       <div class="wrap">
         <p class="crumb"><a href="../../zh-tw/">隔空貼</a></p>
         <h1 class="display">運作原理</h1>
-        <p class="lede">按下複製之後發生了什麼，兩台電腦怎樣找到彼此、怎樣直連，打不通時怎麼辦。</p>
+        <p class="lede">複製之後發生了什麼，兩台電腦怎麼連上，連不上怎麼辦。</p>
       </div>
     </section>
 
     <section class="section" aria-labelledby="flow-title">
       <div class="wrap">
         <h2 id="flow-title">按下複製之後</h2>
-        <p class="intro">文字、圖片、檔案、資料夾，走的是同一條路。</p>
+        <p class="intro">文字、圖片、檔案都走同一條路。</p>
         <ol class="flow">
-          <li><h3>偵測</h3><p>Mac 上，背景服務定時看一下剪貼簿有沒有變，只看變化不讀內容，所以不會跳出授權提示；Windows 上，複製時系統會通知它。</p></li>
-          <li><h3>傳輸</h3><p>文字直接送過去；50 MB 以內的圖片和檔案馬上傳；更大的只送一筆記錄，要用時再傳。</p></li>
-          <li><h3>貼上</h3><p>另一台先把內容存到本機，再放進剪貼簿。按 ⌘V 或 Ctrl+V 貼上的，就是真正的檔案。</p></li>
+          <li><h3>偵測</h3><p>背景服務察覺剪貼簿變了。</p></li>
+          <li><h3>傳輸</h3><p>文字和 50 MB 以內的檔案馬上送過去，更大的先送一筆記錄。</p></li>
+          <li><h3>貼上</h3><p>另一台存到本機再放進剪貼簿，貼上的就是真正的檔案。</p></li>
         </ol>
       </div>
     </section>
@@ -98,7 +98,7 @@
     <section class="section" id="diagram" aria-labelledby="how-title">
       <div class="wrap">
         <h2 id="how-title">隔空貼的連線方式</h2>
-        <p class="intro">同一個網路裡，兩台電腦不用伺服器就能互相找到。不在同一個網路時，由「服務」或你自己的伺服器幫忙交換連線資訊，然後盡量直連；連不上才經伺服器轉送，內容一樣加密。</p>
+        <p class="intro">同一個網路裡直接找到對方；不在同一個網路時，由伺服器牽線後盡量直連，連不上才中繼。內容始終加密。</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
             <title id="diagram-title">隔空貼的連線方式</title>
@@ -139,47 +139,37 @@
     <section class="section" id="multi-uplink" aria-labelledby="multi-title">
       <div class="wrap">
         <h2 id="multi-title">公司網路也能直連</h2>
-        <p class="intro">雙線路、多出口的公司網路，會依目的位址決定走哪個出口。只偵測一次只能知道其中一個，所以以前只能中繼。隔空貼會把每個出口都偵測出來，交給對方逐一嘗試。</p>
+        <p class="intro">多出口的公司網路以前只能中繼。隔空貼會偵測出每個出口，讓對方逐一嘗試。</p>
         <div class="cols">
           <div>
             <h3>做了什麼</h3>
             <ul class="points">
-              <li><strong>共用一個連接埠。</strong>所有連線從同一個 UDP 連接埠收發，查到的位址才對得上。</li>
-              <li><strong>偵測每個出口。</strong>同時詢問 7 台分散各地的伺服器，有幾個出口就拿到幾個位址。</li>
-              <li><strong>全部告訴對方。</strong>對方逐一嘗試，和實際出口對上的那個就能連通。</li>
-              <li><strong>記住見過的出口。</strong>某次漏掉的出口，用以前見過的位址補上。</li>
-              <li><strong>講好誰先送封包。</strong>有些路由器會被對方先到的封包佔住連接埠，所以雙方按順序送，重試時換個順序。</li>
-              <li><strong>閒置時再試直連。</strong>先用中繼確保能同步，沒在傳東西時再試直連，連上就不再佔用中繼。</li>
+              <li><strong>共用一個連接埠。</strong>所有連線走同一個 UDP 連接埠。</li>
+              <li><strong>偵測每個出口。</strong>同時詢問 7 台伺服器，有幾個出口就拿到幾個位址。</li>
+              <li><strong>全部告訴對方。</strong>對方逐一嘗試，對上的那個就能連通。</li>
+              <li><strong>閒置時再試直連。</strong>先用中繼確保能用，閒置時再換成直連。</li>
             </ul>
           </div>
           <div>
             <h3>用真實的網路拓撲測試</h3>
-            <p class="small">打洞實驗室用 Linux 網路命名空間和 iptables 搭出這些網路，跑隔空貼真正的連線程式碼，每次提交都會自動執行。</p>
+            <p class="small">每次提交程式碼都會在模擬的網路裡自動跑一遍。</p>
             <div class="table-scroll">
               <table>
                 <thead><tr><th scope="col">情境</th><th scope="col">結果</th></tr></thead>
                 <tbody>
                 <tr><td>單一出口 ↔ 家用路由器</td><td>直連</td></tr>
                 <tr><td>兩個出口，舊版本（對照）</td><td>中繼</td></tr>
-                <tr><td>兩個出口 ↔ 家用路由器</td><td>直連</td></tr>
                 <tr><td>四個出口 ↔ 家用路由器</td><td>直連</td></tr>
-                <tr><td>兩個出口，第二條沒偵測到，沒有歷史</td><td>中繼</td></tr>
-                <tr><td>兩個出口，第二條沒偵測到，有歷史</td><td>直連</td></tr>
                 <tr><td>兩個出口 ↔ 兩個出口</td><td>直連</td></tr>
                 <tr><td>兩個出口 ↔ 連接埠隨機分配的 NAT</td><td>中繼</td></tr>
                 <tr><td>一開始打不通，之後網路恢復</td><td>先中繼，隨後直連</td></tr>
-                <tr><td>公司路由器會為外來的封包佔住連接埠</td><td>直連</td></tr>
-                <tr><td>家用路由器會為外來的封包佔住連接埠</td><td>先中繼，重試一次後直連</td></tr>
-                <tr><td>沒有伺服器，同一個網段，靠 mDNS 探索</td><td>直連</td></tr>
-                <tr><td>沒有伺服器，兩個網段，一邊記得對方位址</td><td>直連</td></tr>
-                <tr><td>沒有伺服器，兩台都擋外來連線，都記得位址</td><td>直連</td></tr>
-                <tr><td>沒有伺服器，兩台都擋外來連線，只有一邊記得</td><td>連不上（已知限制）</td></tr>
+                <tr><td>沒有伺服器，同一個網段</td><td>直連</td></tr>
                 <tr><td>沒有伺服器，兩個網段之間被隔離</td><td>連不上</td></tr>
                 </tbody>
               </table>
             </div>
-            <p class="small">實測：公司 4 個出口的 Mac 和家裡的 Mac，改良前只能中繼，速度被伺服器頻寬卡在 0.6 MB/s；改良後直連，約 3 秒連上。</p>
-            <p class="small">量測過程和設計取捨見<a href="../../design/nat-traversal.html">技術說明</a>。</p>
+            <p class="small">實測：公司 4 個出口的 Mac 和家裡的 Mac，以前中繼 0.6 MB/s，現在直連。</p>
+            <p class="small">細節見<a href="../../design/nat-traversal.html">技術說明</a>。</p>
           </div>
         </div>
       </div>
@@ -188,19 +178,14 @@
     <section class="section" id="fallbacks" aria-labelledby="fallback-title">
       <div class="wrap">
         <h2 id="fallback-title">出問題的時候</h2>
-        <p class="intro">這些情況都考慮過，也都有測試。</p>
+        <p class="intro">常見的情況，都有處理。</p>
         <dl class="fallbacks">
-          <div><dt>在同一個網路裡找不到對方</dt><dd>不同網段、訪客網路、開了 AP 隔離的 Wi‑Fi 會擋住探索。配對時填上對方的位址就行，之後會記住。</dd></div>
-          <div><dt>系統擋住區域網路</dt><dd>macOS 15 起要允許「本機網路」，Windows 第一次執行會詢問防火牆。沒有允許時 App 會提示，並提供直達按鈕。</dd></div>
-          <div><dt>打不通直連</dt><dd>用「服務」時經伺服器中繼，每天 100 MB；用自己的伺服器時不限量。內容都是端對端加密的。</dd></div>
-          <div><dt>對方睡眠、斷線或重新開機</dt><dd>連線斷了能馬上發現並重新連線。這段期間複製的內容可以在連上後補送到對方的複製記錄（預設關閉），不會覆蓋對方目前的剪貼簿。</dd></div>
-          <div><dt>伺服器斷線</dt><dd>自動重新連線，間隔從 1 秒逐步加到 30 秒。同一個網路裡的裝置不受影響。</dd></div>
-          <div><dt>檔案太大</dt><dd>超過上限的只同步一筆記錄，要用時再傳。原始檔案已經刪掉的話，會直接告訴你。</dd></div>
-          <div><dt>傳檔案時中斷</dt><dd>隔空傳送在 30 分鐘內連上會自動接著傳，更晚就點「繼續」。每個檔案都會校驗，不完整的不會出現在儲存位置。</dd></div>
-          <div><dt>貼到只接受純文字的地方</dt><dd>帶格式的文字同時寫入 HTML 和純文字兩份，貼到哪裡都不會冒出標籤。</dd></div>
-          <div><dt>檔名在 Windows 上不合法</dt><dd>冒號、問號這類字元換成全形，檔名照樣看得懂；只差在大小寫的兩個檔案不會互相覆蓋。</dd></div>
-          <div><dt>複製的是密碼</dt><dd>Windows 上密碼管理工具標了「不要記錄」的內容，隔空貼直接跳過，不同步也不進記錄。</dd></div>
-          <div><dt>背景服務當掉或 App 更新</dt><dd>系統會自動把它重新啟動；更新或搬了位置後，打開 App 時會自動換成新版本執行。</dd></div>
+          <div><dt>在同一個網路裡找不到對方</dt><dd>配對時填上對方的位址，之後會記住。</dd></div>
+          <div><dt>打不通直連</dt><dd>經伺服器中繼，內容一樣加密。</dd></div>
+          <div><dt>對方睡眠或斷線</dt><dd>醒來後自動重新連線。</dd></div>
+          <div><dt>傳檔案時中斷</dt><dd>連上後從中斷處接著傳。</dd></div>
+          <div><dt>檔名在 Windows 上不合法</dt><dd>換成全形字元，檔名照樣看得懂。</dd></div>
+          <div><dt>複製的是密碼</dt><dd>Windows 上密碼管理工具複製的內容會被跳過。</dd></div>
         </dl>
       </div>
     </section>

@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PasteFerry のしくみ：直接接続、複数回線の探索、障害時の動作</title>
-  <meta name="description" content="コピーした後に何が起きるのか。2 台のパソコンがどう互いを見つけて直接つながり、つながらないときはどうなるのか。">
+  <meta name="description" content="コピーしたあとに何が起きるか、どうつながるか、つながらないときはどうなるか。">
   <link rel="canonical" href="https://pasteferry.cc/ja/how/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/how/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/how/">
@@ -24,7 +24,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PasteFerry">
   <meta property="og:title" content="PasteFerry のしくみ：直接接続、複数回線の探索、障害時の動作">
-  <meta property="og:description" content="コピーした後に何が起きるのか。2 台のパソコンがどう互いを見つけて直接つながり、つながらないときはどうなるのか。">
+  <meta property="og:description" content="コピーしたあとに何が起きるか、どうつながるか、つながらないときはどうなるか。">
   <meta property="og:url" content="https://pasteferry.cc/ja/how/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:locale" content="ja_JP">
@@ -79,18 +79,18 @@
       <div class="wrap">
         <p class="crumb"><a href="../../ja/">PasteFerry</a></p>
         <h1 class="display">しくみ</h1>
-        <p class="lede">コピーした後に何が起きるのか。2 台のパソコンがどう互いを見つけて直接つながり、つながらないときはどうなるのか。</p>
+        <p class="lede">コピーしたあとに何が起きるか、どうつながるか、つながらないときはどうなるか。</p>
       </div>
     </section>
 
     <section class="section" aria-labelledby="flow-title">
       <div class="wrap">
         <h2 id="flow-title">コピーしたあと、何が起きるか</h2>
-        <p class="intro">テキストも画像も、ファイルもフォルダも、同じ道を通ります。</p>
+        <p class="intro">テキストも画像もファイルも、同じ道を通ります。</p>
         <ol class="flow">
-          <li><h3>気づく</h3><p>Mac ではバックグラウンドサービスが定期的にクリップボードが変わったかを確認します。変化を見るだけで中身は読まないので、許可を求めるダイアログは出ません。Windows ではコピーするとシステムが知らせます。</p></li>
-          <li><h3>送る</h3><p>テキストはそのまま送ります。50 MB までの画像とファイルはすぐに転送し、それより大きいものは記録だけを送って、使うときに転送します。</p></li>
-          <li><h3>貼り付ける</h3><p>受け取った側はまず内容をローカルに保存してから、クリップボードに入れます。⌘V や Ctrl+V で貼り付けられるのは本物のファイルです。</p></li>
+          <li><h3>気づく</h3><p>バックグラウンドサービスがクリップボードの変化に気づきます。</p></li>
+          <li><h3>送る</h3><p>テキストと 50 MB までのファイルはすぐに送り、それより大きいものは先に記録だけを送ります。</p></li>
+          <li><h3>貼り付ける</h3><p>受け取った側はローカルに保存してからクリップボードに入れるので、貼り付けると本物のファイルになります。</p></li>
         </ol>
       </div>
     </section>
@@ -98,7 +98,7 @@
     <section class="section" id="diagram" aria-labelledby="how-title">
       <div class="wrap">
         <h2 id="how-title">PasteFerry の接続のしかた</h2>
-        <p class="intro">同じネットワークなら、2 台はサーバーなしでお互いを見つけます。別のネットワークでは「サービス」か自分のサーバーが接続情報の交換を手伝い、できるだけ直接つなぎます。つながらないときだけサーバーが中継し、その場合も内容は暗号化されたままです。</p>
+        <p class="intro">同じネットワークなら直接相手を見つけます。別のネットワークではサーバーが橋渡しをしてできるだけ直接つなぎ、無理なときだけ中継します。内容は常に暗号化されます。</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
             <title id="diagram-title">PasteFerry の接続のしかた</title>
@@ -139,47 +139,37 @@
     <section class="section" id="multi-uplink" aria-labelledby="multi-title">
       <div class="wrap">
         <h2 id="multi-title">会社のネットワークでも直接つながる</h2>
-        <p class="intro">回線が 2 本ある会社など、出口が複数あるネットワークでは、宛先ごとに使う出口が変わります。一度調べただけでは出口のひとつしか分からないため、以前は中継しかできませんでした。PasteFerry はすべての出口を調べ、相手に順に試してもらいます。</p>
+        <p class="intro">出口が複数ある会社のネットワークは、以前は中継しかできませんでした。PasteFerry はすべての出口を調べ、相手に順に試してもらいます。</p>
         <div class="cols">
           <div>
             <h3>やっていること</h3>
             <ul class="points">
-              <li><strong>ポートはひとつ。</strong>すべての接続をひとつの UDP ポートで送受信するので、調べたアドレスがかみ合います。</li>
-              <li><strong>出口をすべて調べる。</strong>各地に散らばった 7 台のサーバーに同時に問い合わせ、出口の数だけアドレスを得ます。</li>
-              <li><strong>すべて相手に伝える。</strong>相手はひとつずつ試し、実際の出口と合ったものでつながります。</li>
-              <li><strong>見た出口を覚えておく。</strong>取りこぼした出口は、以前に見たアドレスで補います。</li>
-              <li><strong>どちらが先に送るかを決める。</strong>相手のパケットが先に届くとポートをふさいでしまうルーターがあるため、順番を決めて送ります。再試行では順番を入れ替えます。</li>
-              <li><strong>空いているときに直接接続を再試行。</strong>まず中継で同期できるようにし、何も転送していないときに直接接続を試します。つながれば中継は使わなくなります。</li>
+              <li><strong>ポートはひとつ。</strong>すべての接続でひとつの UDP ポートを使います。</li>
+              <li><strong>出口をすべて調べる。</strong>7 台のサーバーに同時に問い合わせ、出口の数だけアドレスを得ます。</li>
+              <li><strong>すべて相手に伝える。</strong>相手がひとつずつ試し、合ったものでつながります。</li>
+              <li><strong>空いているときに直接接続を再試行。</strong>まず中継で使えるようにし、空いているときに直接接続へ切り替えます。</li>
             </ul>
           </div>
           <div>
             <h3>実際のネットワーク構成でテスト</h3>
-            <p class="small">穴あけ実験室では、Linux のネットワーク名前空間と iptables でこれらのネットワークを組み、PasteFerry の本物の接続コードを動かします。コミットのたびに自動で実行されます。</p>
+            <p class="small">コミットのたびに、模擬ネットワークで自動テストしています。</p>
             <div class="table-scroll">
               <table>
                 <thead><tr><th scope="col">構成</th><th scope="col">結果</th></tr></thead>
                 <tbody>
                 <tr><td>出口ひとつ ↔ 家庭用ルーター</td><td>直接</td></tr>
                 <tr><td>出口ふたつ、旧バージョン（対照）</td><td>中継</td></tr>
-                <tr><td>出口ふたつ ↔ 家庭用ルーター</td><td>直接</td></tr>
                 <tr><td>出口よっつ ↔ 家庭用ルーター</td><td>直接</td></tr>
-                <tr><td>出口ふたつ、2 本目を取りこぼし、履歴なし</td><td>中継</td></tr>
-                <tr><td>出口ふたつ、2 本目を取りこぼし、履歴あり</td><td>直接</td></tr>
                 <tr><td>出口ふたつ ↔ 出口ふたつ</td><td>直接</td></tr>
                 <tr><td>出口ふたつ ↔ ポートをランダムに割り当てる NAT</td><td>中継</td></tr>
                 <tr><td>最初はつながらず、あとでネットワークが回復</td><td>中継のあと直接</td></tr>
-                <tr><td>会社のルーターが外からのパケットでポートをふさぐ</td><td>直接</td></tr>
-                <tr><td>家庭用ルーターが外からのパケットでポートをふさぐ</td><td>中継のあと、1 回の再試行で直接</td></tr>
-                <tr><td>サーバーなし、同じサブネット、mDNS で発見</td><td>直接</td></tr>
-                <tr><td>サーバーなし、別のサブネット、片方が相手のアドレスを覚えている</td><td>直接</td></tr>
-                <tr><td>サーバーなし、両方が受信をブロック、両方がアドレスを覚えている</td><td>直接</td></tr>
-                <tr><td>サーバーなし、両方が受信をブロック、片方だけが覚えている</td><td>つながらない（既知の制限）</td></tr>
+                <tr><td>サーバーなし、同じサブネット</td><td>直接</td></tr>
                 <tr><td>サーバーなし、サブネット同士が遮断されている</td><td>つながらない</td></tr>
                 </tbody>
               </table>
             </div>
-            <p class="small">実測：出口が 4 つある会社の Mac と自宅の Mac は、以前は中継しかできず、サーバーの帯域で 0.6 MB/s に抑えられていました。いまは直接つながり、約 3 秒で接続します。</p>
-            <p class="small">測定の過程と設計の判断は<a href="../../design/nat-traversal.html">技術資料</a>（中国語）にまとめています。</p>
+            <p class="small">実測：出口が 4 つある会社の Mac と自宅の Mac は、以前は中継で 0.6 MB/s、いまは直接つながります。</p>
+            <p class="small">詳しくは<a href="../../design/nat-traversal.html">技術資料</a>（中国語）をご覧ください。</p>
           </div>
         </div>
       </div>
@@ -188,19 +178,14 @@
     <section class="section" id="fallbacks" aria-labelledby="fallback-title">
       <div class="wrap">
         <h2 id="fallback-title">うまくいかないとき</h2>
-        <p class="intro">どのケースも想定済みで、テストがあります。</p>
+        <p class="intro">よくあるケースには、どれも対処しています。</p>
         <dl class="fallbacks">
-          <div><dt>同じネットワークなのに相手が見つからない</dt><dd>サブネットが違う、ゲストネットワーク、AP アイソレーションが有効な Wi‑Fi では検出が届きません。ペアリング時に相手のアドレスを入力すれば使え、その後は記憶されます。</dd></div>
-          <div><dt>システムがローカルネットワークを止めている</dt><dd>macOS 15 以降は「ローカルネットワーク」の許可が必要で、Windows は初回起動時にファイアウォールについて聞いてきます。許可されていないときはアプリが知らせ、設定へ直接飛べるボタンを出します。</dd></div>
-          <div><dt>直接つながらない</dt><dd>「サービス」ではサーバーが中継し、1 日 100 MB まで使えます。自分のサーバーなら無制限です。どちらも内容はエンドツーエンド暗号化されます。</dd></div>
-          <div><dt>相手がスリープ、切断、再起動した</dt><dd>切れた接続にすぐ気づき、再接続します。そのあいだにコピーしたものは、つながったあと相手の履歴に追加できます（初期設定はオフ）。相手のいまのクリップボードは上書きしません。</dd></div>
-          <div><dt>サーバーとの接続が切れた</dt><dd>自動で再接続します。間隔は 1 秒から少しずつ延ばし、最大 30 秒です。同じネットワークのデバイスは影響を受けません。</dd></div>
-          <div><dt>ファイルが大きすぎる</dt><dd>上限を超えるものは記録だけを同期し、使うときに転送します。元のファイルが消えていれば、そうはっきり伝えます。</dd></div>
-          <div><dt>ファイル送信中に切断された</dt><dd>30 分以内につながれば自動で続きから送ります。それより後なら「続ける」をクリックします。ファイルはすべて検証し、不完全なものが保存先に現れることはありません。</dd></div>
-          <div><dt>プレーンテキストしか受け付けない場所に貼り付ける</dt><dd>書式付きテキストは HTML とプレーンテキストの両方で書き込むので、どこに貼り付けてもタグが混ざりません。</dd></div>
-          <div><dt>Windows では使えないファイル名</dt><dd>コロンや疑問符などは全角文字に置き換えるので、名前はそのまま読めます。大文字と小文字だけが違う 2 つのファイルが上書きし合うこともありません。</dd></div>
-          <div><dt>パスワードをコピーした</dt><dd>Windows でパスワードマネージャーが「記録しない」印を付けた内容は、同期も履歴への保存もせずに飛ばします。</dd></div>
-          <div><dt>バックグラウンドサービスが落ちた、アプリを更新した</dt><dd>サービスはシステムが自動で起動し直します。アプリを更新したり移動したりしたあとは、アプリを開くと新しいバージョンで起動し直します。</dd></div>
+          <div><dt>同じネットワークなのに相手が見つからない</dt><dd>ペアリング時に相手のアドレスを入力すれば、その後は記憶されます。</dd></div>
+          <div><dt>直接つながらない</dt><dd>サーバーが中継します。内容は同じく暗号化されます。</dd></div>
+          <div><dt>相手がスリープした、切断された</dt><dd>復帰すると自動で再接続します。</dd></div>
+          <div><dt>ファイル送信中に切断された</dt><dd>つながったら続きから送ります。</dd></div>
+          <div><dt>Windows では使えないファイル名</dt><dd>全角文字に置き換えるので、名前はそのまま読めます。</dd></div>
+          <div><dt>パスワードをコピーした</dt><dd>Windows ではパスワードマネージャーからコピーした内容を飛ばします。</dd></div>
         </dl>
       </div>
     </section>

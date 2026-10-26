@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FAQ — PasteFerry</title>
-  <meta name="description" content="Installing, connecting, syncing and pricing. If your question isn’t here, let us know.">
+  <meta name="description" content="Can’t find an answer? Let us know.">
   <link rel="canonical" href="https://pasteferry.cc/en/faq/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/faq/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/faq/">
@@ -24,7 +24,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PasteFerry">
   <meta property="og:title" content="FAQ — PasteFerry">
-  <meta property="og:description" content="Installing, connecting, syncing and pricing. If your question isn’t here, let us know.">
+  <meta property="og:description" content="Can’t find an answer? Let us know.">
   <meta property="og:url" content="https://pasteferry.cc/en/faq/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:locale" content="en_US">
@@ -44,7 +44,7 @@
       "name": "How is this different from Universal Clipboard?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Universal Clipboard only works between Apple devices on the same Apple ID, close to each other. PasteFerry doesn't care about accounts, works across Mac, Windows and Linux, syncs between home and the office, and keeps what you copied in the history. If you have two Macs on the same Apple ID and mostly copy text, the built-in feature is enough."
+        "text": "Universal Clipboard only works between nearby Apple devices on the same Apple ID. PasteFerry doesn't care about accounts, works on Mac, Windows and Linux, and between home and the office."
       }
     },
     {
@@ -52,7 +52,7 @@
       "name": "How is this different from AirDrop?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "AirDrop only works between nearby Apple devices, and the other side has to accept every time. PasteFerry's Send Files works between Mac, Windows and Linux, across networks too, and resumes large files after a disconnect. Between your own computers there's nothing to accept; a contact accepts with one click."
+        "text": "AirDrop only works between nearby Apple devices. PasteFerry's Send Files works between Mac, Windows and Linux, across networks too. It doesn't talk to AirDrop; both sides need PasteFerry."
       }
     },
     {
@@ -60,7 +60,7 @@
       "name": "Do I need my own server?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. On the same network, install and pair. On different networks, turn on Service on both computers: no cloud VM, no address to enter. If you want full control, you can use your own server or Tailscale."
+        "text": "No. On the same network, install and pair; on different networks, turn on Service. You can also use your own server or Tailscale."
       }
     },
     {
@@ -68,7 +68,7 @@
       "name": "No public IP at home. Can I sync between home and the office?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Turn on Service. The two computers first try to connect directly, which works on most home and office networks; if that fails, the server relays the data, up to 100 MB a day."
+        "text": "Yes, turn on Service."
       }
     },
     {
@@ -76,15 +76,15 @@
       "name": "Can the server see what I copy?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. Only your devices can decrypt the content: direct connections don't go through the server, and the relay only forwards encrypted data. With Service, the server records what it needs to connect devices and count the allowance; see the privacy notice. The client and server code is public."
+        "text": "No, content is end-to-end encrypted. See the privacy notice."
       }
     },
     {
       "@type": "Question",
-      "name": "How much relay do I get, and what happens when it runs out?",
+      "name": "How much relay do I get?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "100 MB per computer per day, upload and download combined, reset at midnight Beijing time. Direct connections don't count, and they keep working when the allowance runs out. The allowance may change; the app shows the current one. If you relay a lot, run your own server with no limit."
+        "text": "100 MB per computer per day; direct connections don't count. When it runs out, direct still works. For no limit, run your own server."
       }
     },
     {
@@ -92,7 +92,7 @@
       "name": "Both computers are on the same network. Why can't they find each other?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "First check that they're really on the same subnet: wired and Wi‑Fi in many offices, guest networks, and Wi‑Fi with client isolation often can't see each other. In that case, on the computer entering the code, click On a different subnet? and enter the address shown under the other computer's code. On Windows, allow PasteFerry when the firewall asks on first run; if you clicked Cancel, click Allow under Settings → Connection. On a Mac, turn on PasteFerry Daemon in System Settings → Privacy & Security → Local Network. More in the same network guide."
+        "text": "Usually they're on different subnets, or a firewall is blocking them. When pairing, click On a different subnet? and enter the other address. More in the same network guide."
       }
     },
     {
@@ -100,7 +100,7 @@
       "name": "Can I send files to someone else's computer?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. From 2.6 you can add contacts: they open Contacts and click Add Contact to get a contact code, you enter it, you both confirm, and that's it, no pairing. Then drop files on their avatar; the transfer starts once they accept, and you can add a short note. Contacts only exchange files and images; they never see each other's clipboard, history or devices. Choose who can send you files at the bottom of Send Files: No One, Contacts Only, or Everyone (local network only, turns off after 10 minutes)."
+        "text": "Yes. From 2.6, add them as a contact, no pairing needed; the transfer starts once they accept. Contacts can't see your clipboard or history."
       }
     },
     {
@@ -108,15 +108,7 @@
       "name": "What about large files?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Anything up to 50 MB reaches the other computer as you copy it, so you can paste right away. Larger files sync as a record first; click Receive in the history when you need them. You can change the limit in Settings. To send a large file straight to one computer, use Send Files: any size, and it resumes after a disconnect."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does it connect directly on office networks with several uplinks?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. These networks have several uplinks. PasteFerry finds the address on each one and gives them all to the other side to try. In our tests, an office network with 4 uplinks connects directly to a home connection. If the other side's router picks a random port every time, it still has to relay."
+        "text": "Up to 50 MB is sent as you copy. Larger files are fetched when you need them, or use Send Files, which has no size limit."
       }
     },
     {
@@ -124,7 +116,7 @@
       "name": "Windows? Linux? iPhone?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Windows 10 and 11 (x64), and Linux on x64 and ARM64 (X11, or Wayland with XWayland, which GNOME and KDE include by default). Copied files paste as real files into Explorer, your file manager, chat apps or Office. iPhone and iPad aren't supported: iOS doesn't let apps read the clipboard in the background, so copied content can't sync on its own."
+        "text": "Windows 10 and 11, and Linux on x64 and ARM64. iPhone and iPad aren't supported: iOS doesn't let apps read the clipboard in the background."
       }
     },
     {
@@ -132,7 +124,7 @@
       "name": "Why does the system warn me the first time?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "PasteFerry isn't notarized by Apple or code-signed for Windows yet; both need certificates paid for every year. On Mac, open System Settings → Privacy & Security and click Open Anyway near the bottom. On Windows, click More info and then Run anyway in the \"Windows protected your PC\" prompt. You only do this once."
+        "text": "PasteFerry isn't notarized by Apple or code-signed for Windows yet. On Mac, click Open Anyway in System Settings → Privacy & Security; on Windows, click More info → Run anyway. You only do this once."
       }
     },
     {
@@ -140,7 +132,15 @@
       "name": "Is it free? Can my company use it?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. PasteFerry is open source under the GNU AGPL-3.0, so individuals and companies can use and modify it for free. If you distribute it, or offer a modified version over a network, you have to publish your source under the same license."
+        "text": "Yes, free for individuals and companies. PasteFerry is open source under the GNU AGPL-3.0."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it connect directly on office networks with several uplinks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. PasteFerry tries every uplink."
       }
     },
     {
@@ -148,7 +148,7 @@
       "name": "Why do .uuremote_ files keep appearing while UU Remote is running?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "UU Remote writes temporary placeholder files to the clipboard, and PasteFerry before 1.3.2 synced them as ordinary files. Update to the latest version; ordinary empty and hidden files are unaffected."
+        "text": "That was a bug in older versions. Update to the latest one."
       }
     }
   ]
@@ -199,7 +199,7 @@
       <div class="wrap">
         <p class="crumb"><a href="../../en/">PasteFerry</a></p>
         <h1 class="display">Questions</h1>
-        <p class="lede">Installing, connecting, syncing and pricing. If your question isn’t here, let us know.</p>
+        <p class="lede">Can’t find an answer? Let us know.</p>
       </div>
     </section>
 
@@ -208,59 +208,59 @@
         <div class="faq">
           <details>
             <summary>How is this different from Universal Clipboard?</summary>
-            <div class="answer"><p>Universal Clipboard only works between Apple devices on the same Apple ID, close to each other. PasteFerry doesn't care about accounts, works across Mac, Windows and Linux, syncs between home and the office, and keeps what you copied in the history.</p><p>If you have two Macs on the same Apple ID and mostly copy text, the built-in feature is enough.</p></div>
+            <div class="answer"><p>Universal Clipboard only works between nearby Apple devices on the same Apple ID. PasteFerry doesn't care about accounts, works on Mac, Windows and Linux, and between home and the office.</p></div>
           </details>
           <details>
             <summary>How is this different from AirDrop?</summary>
-            <div class="answer"><p>AirDrop only works between nearby Apple devices, and the other side has to accept every time. PasteFerry's Send Files works between Mac, Windows and Linux, across networks too, and resumes large files after a disconnect. Between your own computers there's nothing to accept; a contact accepts with one click.</p></div>
+            <div class="answer"><p>AirDrop only works between nearby Apple devices. PasteFerry's Send Files works between Mac, Windows and Linux, across networks too. It doesn't talk to AirDrop; both sides need PasteFerry.</p></div>
           </details>
           <details>
             <summary>Do I need my own server?</summary>
-            <div class="answer"><p>No. On the same network, install and pair. On different networks, turn on <a href="../../en/official/">Service</a> on both computers: no cloud VM, no address to enter.</p><p>If you want full control, you can use <a href="../../en/cloud/">your own server</a> or <a href="../../en/tailscale/">Tailscale</a>.</p></div>
+            <div class="answer"><p>No. On the same network, install and pair; on different networks, turn on <a href="../../en/official/">Service</a>. You can also use <a href="../../en/cloud/">your own server</a> or <a href="../../en/tailscale/">Tailscale</a>.</p></div>
           </details>
           <details>
             <summary>No public IP at home. Can I sync between home and the office?</summary>
-            <div class="answer"><p>Yes. Turn on <a href="../../en/official/">Service</a>. The two computers first try to connect directly, which works on most home and office networks; if that fails, the server relays the data, up to 100 MB a day.</p></div>
+            <div class="answer"><p>Yes, turn on <a href="../../en/official/">Service</a>.</p></div>
           </details>
           <details>
             <summary>Can the server see what I copy?</summary>
-            <div class="answer"><p>No. Only your devices can decrypt the content: direct connections don't go through the server, and the relay only forwards encrypted data.</p><p>With Service, the server records what it needs to connect devices and count the allowance; see the <a href="../../en/privacy/">privacy notice</a>. The client and server code is public.</p></div>
+            <div class="answer"><p>No, content is end-to-end encrypted. See the <a href="../../en/privacy/">privacy notice</a>.</p></div>
           </details>
           <details>
-            <summary>How much relay do I get, and what happens when it runs out?</summary>
-            <div class="answer"><p>100 MB per computer per day, upload and download combined, reset at midnight Beijing time. Direct connections don't count, and they keep working when the allowance runs out. The allowance may change; the app shows the current one.</p><p>If you relay a lot, <a href="../../en/cloud/">run your own server</a> with no limit.</p></div>
+            <summary>How much relay do I get?</summary>
+            <div class="answer"><p>100 MB per computer per day; direct connections don't count. When it runs out, direct still works. For no limit, <a href="../../en/cloud/">run your own server</a>.</p></div>
           </details>
           <details>
             <summary>Both computers are on the same network. Why can't they find each other?</summary>
-            <div class="answer"><p>First check that they're really on the same subnet: wired and Wi‑Fi in many offices, guest networks, and Wi‑Fi with client isolation often can't see each other. In that case, on the computer entering the code, click On a different subnet? and enter the address shown under the other computer's code.</p><p>On Windows, allow PasteFerry when the firewall asks on first run; if you clicked Cancel, click Allow under Settings → Connection. On a Mac, turn on PasteFerry Daemon in System Settings → Privacy &amp; Security → Local Network. More in the <a href="../../en/lan/#faq">same network guide</a>.</p></div>
+            <div class="answer"><p>Usually they're on different subnets, or a firewall is blocking them. When pairing, click On a different subnet? and enter the other address. More in the <a href="../../en/lan/#faq">same network guide</a>.</p></div>
           </details>
           <details>
             <summary>Can I send files to someone else's computer?</summary>
-            <div class="answer"><p>Yes. From 2.6 you can add contacts: they open Contacts and click Add Contact to get a contact code, you enter it, you both confirm, and that's it, no pairing. Then drop files on their avatar; the transfer starts once they accept, and you can add a short note.</p><p>Contacts only exchange files and images; they never see each other's clipboard, history or devices. Choose who can send you files at the bottom of Send Files: No One, Contacts Only, or Everyone (local network only, turns off after 10 minutes).</p></div>
+            <div class="answer"><p>Yes. From 2.6, add them as a contact, no pairing needed; the transfer starts once they accept. Contacts can't see your clipboard or history.</p></div>
           </details>
           <details>
             <summary>What about large files?</summary>
-            <div class="answer"><p>Anything up to 50 MB reaches the other computer as you copy it, so you can paste right away. Larger files sync as a record first; click Receive in the history when you need them. You can change the limit in Settings.</p><p>To send a large file straight to one computer, use Send Files: any size, and it resumes after a disconnect.</p></div>
-          </details>
-          <details>
-            <summary>Does it connect directly on office networks with several uplinks?</summary>
-            <div class="answer"><p>Yes. These networks have several uplinks. PasteFerry finds the address on each one and gives them all to the other side to try. In our tests, an office network with 4 uplinks connects directly to a home connection. If the other side's router picks a random port every time, it still has to relay.</p></div>
+            <div class="answer"><p>Up to 50 MB is sent as you copy. Larger files are fetched when you need them, or use Send Files, which has no size limit.</p></div>
           </details>
           <details>
             <summary>Windows? Linux? iPhone?</summary>
-            <div class="answer"><p>Windows 10 and 11 (x64), and Linux on x64 and ARM64 (X11, or Wayland with XWayland, which GNOME and KDE include by default). Copied files paste as real files into Explorer, your file manager, chat apps or Office.</p><p>iPhone and iPad aren't supported: iOS doesn't let apps read the clipboard in the background, so copied content can't sync on its own.</p></div>
+            <div class="answer"><p>Windows 10 and 11, and Linux on x64 and ARM64. iPhone and iPad aren't supported: iOS doesn't let apps read the clipboard in the background.</p></div>
           </details>
           <details>
             <summary>Why does the system warn me the first time?</summary>
-            <div class="answer"><p>PasteFerry isn't notarized by Apple or code-signed for Windows yet; both need certificates paid for every year.</p><p>On Mac, open System Settings → Privacy &amp; Security and click Open Anyway near the bottom. On Windows, click More info and then Run anyway in the "Windows protected your PC" prompt. You only do this once.</p></div>
+            <div class="answer"><p>PasteFerry isn't notarized by Apple or code-signed for Windows yet. On Mac, click Open Anyway in System Settings → Privacy &amp; Security; on Windows, click More info → Run anyway. You only do this once.</p></div>
           </details>
           <details>
             <summary>Is it free? Can my company use it?</summary>
-            <div class="answer"><p>Yes. PasteFerry is open source under the GNU AGPL-3.0, so individuals and companies can use and modify it for free. If you distribute it, or offer a modified version over a network, you have to publish your source under the same license.</p></div>
+            <div class="answer"><p>Yes, free for individuals and companies. PasteFerry is open source under the GNU AGPL-3.0.</p></div>
+          </details>
+          <details>
+            <summary>Does it connect directly on office networks with several uplinks?</summary>
+            <div class="answer"><p>Yes. PasteFerry tries every uplink.</p></div>
           </details>
           <details>
             <summary>Why do .uuremote_ files keep appearing while UU Remote is running?</summary>
-            <div class="answer"><p>UU Remote writes temporary placeholder files to the clipboard, and PasteFerry before 1.3.2 synced them as ordinary files. Update to the latest version; ordinary empty and hidden files are unaffected.</p></div>
+            <div class="answer"><p>That was a bug in older versions. Update to the latest one.</p></div>
           </details>
         </div>
         <p class="more"><a href="https://github.com/baiyuze/pasteferry/issues">Report an issue →</a></p>

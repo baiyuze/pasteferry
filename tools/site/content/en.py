@@ -22,7 +22,7 @@ C = {
     "lang_label": "Language",
 
     "h1": "Copy on this computer.<br>Paste on that one.",
-    "lede": 'Mac, Windows or Linux, no shared account needed. Copy text, a screenshot, a file or a whole folder here, and paste it over there.',
+    "lede": 'Mac, Windows or Linux, no shared account needed. Text, screenshots, files and folders, plus sending files to friends.',
     "dl_button": "Download PasteFerry",
     "dl_mac": "Download for Mac",
     "dl_win": "Download for Windows",
@@ -103,20 +103,16 @@ C = {
     },
 
     "flow_h2": "What happens when you copy",
-    "flow_intro": "Text, images, files and folders all take the same path.",
+    "flow_intro": "Text, images and files all take the same path.",
     "flow": [
-        ("Notice", "On Mac, the background service checks every so often whether the clipboard has changed. It only looks for a "
-                   "change, not at the content, so no permission prompt appears. On Windows, the system tells it when you copy."),
-        ("Send", "Text goes over right away, and so do images and files up to 50 MB. Anything larger is sent as a record and "
-                 "transferred when you need it."),
-        ("Paste", "The other computer saves the content locally, then puts it on the clipboard. What you paste with ⌘V or "
-                  "Ctrl+V is a real file."),
+        ("Notice", "The background service sees that the clipboard changed."),
+        ("Send", "Text and files up to 50 MB go over right away. Larger ones are sent as a record first."),
+        ("Paste", "The other computer saves it locally and puts it on the clipboard. You paste a real file."),
     ],
 
     "why_h2": "Why not use what you already have",
-    "why_intro": "Universal Clipboard needs the same Apple ID and devices close together. AirDrop makes you accept every time. "
-                 "Messaging yourself means downloading everything again. Between a Mac and a Windows PC, none of the built-in "
-                 "options work.",
+    "why_intro": "Universal Clipboard needs the same Apple ID, AirDrop makes you accept every time, and neither works "
+                 "between a Mac and a Windows PC.",
     "compare_caption": "PasteFerry compared with other options",
     "compare_cols": ["PasteFerry", "Universal Clipboard", "AirDrop", "Chat apps"],
     "compare_rows": [
@@ -130,77 +126,59 @@ C = {
     ],
 
     "how_h2": "How it works",
-    "how_intro": 'On the same network, two computers find each other without a server. On different networks, Service or your own server helps them exchange connection details so they can connect directly. Only if that fails is the data relayed through the server, still encrypted.',
+    "how_intro": 'On the same network, the computers find each other directly. On different networks, a server introduces them so they can try to connect directly, and relays only if that fails. Content is always encrypted.',
     "diagram": {'title': 'How PasteFerry connects', 'desc': "Computer A and computer B connect directly over WebRTC. Both connect to the server for signaling. If the direct connection fails, data is relayed through the server's TURN service.", 'server': 'Signaling and relay service', 'server_sub': 'Signaling, STUN, TURN relay', 'sig_note': 'Signaling: connection details', 'relay_note': 'Relay: only if direct fails', 'copy_here': 'You copy here', 'other': 'Mac, Windows or Linux', 'paste_here': 'You paste here', 'direct': 'Direct WebRTC, DTLS encrypted', 'direct_note': 'Data moves only between your computers', 'legend_direct': 'Data (direct)', 'legend_relay': 'Data (relay, fallback)', 'legend_sig': 'Signaling'},
 
     "uplink_h2": "Direct on office networks too",
-    "uplink_intro": "Office networks with two lines or several uplinks pick an uplink by destination. A single probe finds only "
-                    "one of them, so these connections used to go through the relay. PasteFerry finds every uplink and gives "
-                    "them all to the other side to try.",
+    "uplink_intro": "Office networks with several uplinks used to go through the relay. PasteFerry finds every uplink and "
+                    "lets the other side try each one.",
     "uplink_changed": "What it does",
     "uplink_points": [
-        ("One shared port.", " All connections send and receive on the same UDP port, so the addresses it learns line up."),
-        ("Every uplink probed.", " It asks seven servers in different places at once and gets one address per uplink."),
-        ("All of them sent to the other side.", " The other computer tries each one; the one that matches the real uplink gets through."),
-        ("Uplinks remembered.", " If a round misses an uplink, an address seen earlier fills the gap."),
-        ("A set order for who sends first.", " Some routers lock a port when the other side's packet arrives first, so the two sides take turns, and swap the order on retry."),
-        ('Retry direct while idle.', ' The relay keeps things syncing; when nothing is being sent, it tries a direct connection again and stops using the relay once that works.'),
+        ("One shared port.", " All connections use the same UDP port."),
+        ("Every uplink probed.", " It asks seven servers at once and gets one address per uplink."),
+        ("All of them sent to the other side.", " The other computer tries each one until one gets through."),
+        ('Retry direct while idle.', ' The relay keeps things working, and it switches to direct when idle.'),
     ],
     "lab_h3": "Tested on real network setups",
-    "lab_intro": "The NAT lab builds these networks with Linux network namespaces and iptables and runs PasteFerry's actual "
-                 "connection code through each, on every commit.",
+    "lab_intro": "Every commit is tested automatically on simulated networks.",
     "lab_cols": ["Scenario", "Result"],
     "lab_rows": [
         ("Single uplink ↔ home router", "Direct"),
         ("Two uplinks, previous version (control)", "Relay"),
-        ("Two uplinks ↔ home router", "Direct"),
         ("Four uplinks ↔ home router", "Direct"),
-        ("Two uplinks, second not probed, no history", "Relay"),
-        ("Two uplinks, second not probed, with history", "Direct"),
         ("Two uplinks ↔ two uplinks", "Direct"),
         ("Two uplinks ↔ NAT that randomizes ports", "Relay"),
         ("Blocked at first, network recovers later", "Relay, then direct"),
-        ("Office router locks a port for unsolicited packets", "Direct"),
-        ("Home router locks a port for unsolicited packets", "Relay, then direct after one retry"),
-        ("No server, same subnet, found over mDNS", "Direct"),
-        ("No server, two subnets, one side remembers the address", "Direct"),
-        ("No server, both block inbound, both remember", "Direct"),
-        ("No server, both block inbound, only one remembers", "No connection (known limit)"),
+        ("No server, same subnet", "Direct"),
         ("No server, subnets isolated from each other", "No connection"),
     ],
-    "uplink_measured": "Measured: a Mac on a 4-uplink office network and one at home could only relay before, capped at "
-                       "0.6 MB/s by the server's bandwidth. Now they connect directly in about 3 seconds.",
-    "uplink_doc": 'Measurements and design trade-offs are in the <a href="{doc}">design document</a> (in Chinese).',
+    "uplink_measured": "Measured: a Mac on a 4-uplink office network and one at home relayed at 0.6 MB/s before. Now they "
+                       "connect directly.",
+    "uplink_doc": 'Details are in the <a href="{doc}">design document</a> (in Chinese).',
 
     "security_h2": "The server can't see what you copy",
     "security_points": [
-        ("No accounts, no stored content.", " Each device's identity is an Ed25519 key, so the server can verify it without a user table."),
-        ("You check fingerprints when pairing.", " Both screens show the same two lines. If the server swapped a key, they wouldn't match."),
-        ("Every message is signed,", " so the server can't pose as your device. Once the direct connection is up, its certificate is checked again; a mismatch drops it."),
-        ("The relay only forwards ciphertext.", " Relay credentials are issued per device and expire after 12 hours."),
-        ("Same on the local network.", " A device broadcasts only an anonymous token that changes daily, so nobody can tell whose computer it is. The name is added only while Search nearby is open."),
+        ("No accounts, no stored content.", " A device's identity is a key, so the server needs no user table."),
+        ("Check fingerprints when pairing.", " Both screens show the same fingerprint; if anyone swaps a key, they won't match."),
+        ("Every message is signed,", " so the server can't pose as your device."),
+        ("The relay only forwards ciphertext.", " Relay credentials expire after 12 hours."),
+        ("Private on the local network too.", " A device broadcasts an anonymous token that changes daily, so nobody can tell whose computer it is."),
     ],
     "verify_alt": "The fingerprint check during pairing shows R8NF-2WTC-QL5J and asks you to confirm it matches the other computer exactly",
 
     "fallback_h2": "When things go wrong",
-    "fallback_intro": "We planned for these cases, and each one has a test.",
+    "fallback_intro": "The common cases are handled.",
     "fallbacks": [
-        ("Can't find the other computer on the network", "Different subnets, guest networks and Wi‑Fi with client isolation block discovery. Enter the other computer's address when pairing; it's remembered afterwards."),
-        ("The system blocks the local network", "From macOS 15 you need to allow Local Network access, and Windows asks about the firewall on first run. If either is blocked, the app tells you and links straight to the fix."),
-        ("No direct connection", "With Service, traffic is relayed through the server, up to 100 MB a day; with your own server there's no limit. Either way, content is end-to-end encrypted."),
-        ("The other computer sleeps, drops off or restarts", "A dropped connection is noticed right away and reconnected. What you copy in the meantime can be added to the other computer's history once it's back (off by default), without replacing what's on its clipboard."),
-        ("Server connection drops", "It reconnects on its own, waiting from 1 second up to 30 between tries. Devices on the same network keep syncing."),
-        ("File too large", "Above the limit, only a record is synced and the file is sent when you need it. If the source file is gone by then, you're told so."),
-        ("Disconnected while sending files", "Send Files picks up where it stopped if the computers reconnect within 30 minutes; after that, click Continue. Every file is checked, and incomplete ones never show up in the save folder."),
-        ("Pasting into plain-text fields", "Rich text is written as both HTML and plain text, so no markup shows up wherever you paste."),
-        ("A file name Windows doesn't allow", "Colons, question marks and similar characters become their full-width versions, so the name still reads the same. Two names that differ only in case don't overwrite each other."),
-        ("Copying a password", "On Windows, PasteFerry skips anything a password manager marks as \"don't record\": it isn't synced or kept in the history."),
-        ("Background service crashes or the app updates", "The system restarts it automatically. After an update or a move, opening the app restarts it on the new version."),
+        ("Can't find the other computer on the network", "Enter its address when pairing; it's remembered afterwards."),
+        ("No direct connection", "Data is relayed through the server, still encrypted."),
+        ("The other computer sleeps or drops off", "It reconnects on its own when it's back."),
+        ("Disconnected while sending files", "The transfer resumes where it stopped."),
+        ("A file name Windows doesn't allow", "Bad characters become full-width ones, so the name still reads the same."),
+        ("Copying a password", "On Windows, anything copied from a password manager is skipped."),
     ],
 
     "install_h2": "Install",
-    "install_intro": "Install the app on each computer. On the same network you can pair right away; on different networks, pick "
-                     "a way to connect. First time? Follow the <a href=\"{start}\">quick start</a>.",
+    "install_intro": "Install the app on each computer. First time? Follow the <a href=\"{start}\">quick start</a>.",
     "server_intro": 'On the same network, install and pair. On different networks, turn on Service. If you want full control, run your own server or use Tailscale.',
     "copy": "Copy",
     "copied": "Copied",
@@ -232,69 +210,42 @@ C = {
     "faq_h2": "Questions",
     "faq": [
      ('How is this different from Universal Clipboard?',
-      ['Universal Clipboard only works between Apple devices on the same Apple ID, close to each other. PasteFerry doesn\'t '
-       'care about accounts, works across Mac, Windows and Linux, syncs between home and the office, and keeps what you '
-       'copied in the history.',
-       'If you have two Macs on the same Apple ID and mostly copy text, the built-in feature is enough.']),
+      ['Universal Clipboard only works between nearby Apple devices on the same Apple ID. PasteFerry doesn\'t care about '
+       'accounts, works on Mac, Windows and Linux, and between home and the office.']),
      ('How is this different from AirDrop?',
-      ['AirDrop only works between nearby Apple devices, and the other side has to accept every time. PasteFerry\'s Send '
-       'Files works between Mac, Windows and Linux, across networks too, and resumes large files after a disconnect. '
-       'Between your own computers there\'s nothing to accept; a contact accepts with one click.']),
+      ['AirDrop only works between nearby Apple devices. PasteFerry\'s Send Files works between Mac, Windows and Linux, '
+       'across networks too. It doesn\'t talk to AirDrop; both sides need PasteFerry.']),
      ('Do I need my own server?',
-      ['No. On the same network, install and pair. On different networks, turn on <a href="{official}">Service</a> on both '
-       'computers: no cloud VM, no address to enter.',
-       'If you want full control, you can use <a href="{cloud}">your own server</a> or <a href="{ts}">Tailscale</a>.']),
+      ['No. On the same network, install and pair; on different networks, turn on <a href="{official}">Service</a>. You '
+       'can also use <a href="{cloud}">your own server</a> or <a href="{ts}">Tailscale</a>.']),
      ('No public IP at home. Can I sync between home and the office?',
-      ['Yes. Turn on <a href="{official}">Service</a>. The two computers first try to connect directly, which works on most '
-       'home and office networks; if that fails, the server relays the data, up to 100 MB a day.']),
+      ['Yes, turn on <a href="{official}">Service</a>.']),
      ('Can the server see what I copy?',
-      ['No. Only your devices can decrypt the content: direct connections don\'t go through the server, and the relay only '
-       'forwards encrypted data.',
-       'With Service, the server records what it needs to connect devices and count the allowance; see the '
-       '<a href="{privacy}">privacy notice</a>. The client and server code is public.']),
-     ('How much relay do I get, and what happens when it runs out?',
-      ['100 MB per computer per day, upload and download combined, reset at midnight Beijing time. Direct connections '
-       'don\'t count, and they keep working when the allowance runs out. The allowance may change; the app shows the '
-       'current one.',
-       'If you relay a lot, <a href="{cloud}">run your own server</a> with no limit.']),
+      ['No, content is end-to-end encrypted. See the <a href="{privacy}">privacy notice</a>.']),
+     ('How much relay do I get?',
+      ['100 MB per computer per day; direct connections don\'t count. When it runs out, direct still works. For no limit, '
+       '<a href="{cloud}">run your own server</a>.']),
      ("Both computers are on the same network. Why can't they find each other?",
-      ["First check that they're really on the same subnet: wired and Wi‑Fi in many offices, guest networks, and Wi‑Fi "
-       "with client isolation often can't see each other. In that case, on the computer entering the code, click "
-       "On a different subnet? and enter the address shown under the other computer's code.",
-       'On Windows, allow PasteFerry when the firewall asks on first run; if you clicked Cancel, click Allow under '
-       'Settings → Connection. On a Mac, turn on PasteFerry Daemon in System Settings → Privacy &amp; Security → Local '
-       'Network. More in the <a href="{lan}#faq">same network guide</a>.']),
+      ['Usually they\'re on different subnets, or a firewall is blocking them. When pairing, click On a different subnet? '
+       'and enter the other address. More in the <a href="{lan}#faq">same network guide</a>.']),
      ('Can I send files to someone else\'s computer?',
-      ['Yes. From 2.6 you can add contacts: they open Contacts and click Add Contact to get a contact code, you enter it, '
-       'you both confirm, and that\'s it, no pairing. Then drop files on their avatar; the transfer starts once they '
-       'accept, and you can add a short note.',
-       'Contacts only exchange files and images; they never see each other\'s clipboard, history or devices. Choose who '
-       'can send you files at the bottom of Send Files: No One, Contacts Only, or Everyone (local network only, turns off '
-       'after 10 minutes).']),
+      ['Yes. From 2.6, add them as a contact, no pairing needed; the transfer starts once they accept. Contacts can\'t '
+       'see your clipboard or history.']),
      ('What about large files?',
-      ['Anything up to 50 MB reaches the other computer as you copy it, so you can paste right away. Larger files sync as '
-       'a record first; click Receive in the history when you need them. You can change the limit in Settings.',
-       'To send a large file straight to one computer, use Send Files: any size, and it resumes after a disconnect.']),
-     ('Does it connect directly on office networks with several uplinks?',
-      ['Yes. These networks have several uplinks. PasteFerry finds the address on each one and gives them all to the '
-       'other side to try. In our tests, an office network with 4 uplinks connects directly to a home connection. If the '
-       'other side\'s router picks a random port every time, it still has to relay.']),
+      ['Up to 50 MB is sent as you copy. Larger files are fetched when you need them, or use Send Files, which has no '
+       'size limit.']),
      ('Windows? Linux? iPhone?',
-      ['Windows 10 and 11 (x64), and Linux on x64 and ARM64 (X11, or Wayland with XWayland, which GNOME and KDE include '
-       'by default). Copied files paste as real files into Explorer, your file manager, chat apps or Office.',
-       "iPhone and iPad aren't supported: iOS doesn't let apps read the clipboard in the background, so copied content "
-       "can't sync on its own."]),
+      ['Windows 10 and 11, and Linux on x64 and ARM64. iPhone and iPad aren\'t supported: iOS doesn\'t let apps read '
+       'the clipboard in the background.']),
      ('Why does the system warn me the first time?',
-      ["PasteFerry isn't notarized by Apple or code-signed for Windows yet; both need certificates paid for every year.",
-       'On Mac, open System Settings → Privacy &amp; Security and click Open Anyway near the bottom. On Windows, click '
-       'More info and then Run anyway in the "Windows protected your PC" prompt. You only do this once.']),
+      ['PasteFerry isn\'t notarized by Apple or code-signed for Windows yet. On Mac, click Open Anyway in System '
+       'Settings → Privacy &amp; Security; on Windows, click More info → Run anyway. You only do this once.']),
      ('Is it free? Can my company use it?',
-      ['Yes. PasteFerry is open source under the GNU AGPL-3.0, so individuals and companies can use and modify it for '
-       'free. If you distribute it, or offer a modified version over a network, you have to publish your source under '
-       'the same license.']),
+      ['Yes, free for individuals and companies. PasteFerry is open source under the GNU AGPL-3.0.']),
+     ('Does it connect directly on office networks with several uplinks?',
+      ['Yes. PasteFerry tries every uplink.']),
      ('Why do .uuremote_ files keep appearing while UU Remote is running?',
-      ['UU Remote writes temporary placeholder files to the clipboard, and PasteFerry before 1.3.2 synced them as '
-       'ordinary files. Update to the latest version; ordinary empty and hidden files are unaffected.'])],
+      ['That was a bug in older versions. Update to the latest one.'])],
 
     "closing": "Two computers, one clipboard.",
     "footer_license": "PasteFerry is open source under the GNU AGPL-3.0.",
