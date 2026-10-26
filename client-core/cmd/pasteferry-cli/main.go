@@ -130,11 +130,29 @@ func showDevices(ctx context.Context, c pb.DaemonServiceClient) error {
 		return nil
 	}
 	for _, p := range resp.GetPeers() {
-		fmt.Printf("%-16s %-10s %-8s %s\n",
+		fmt.Printf("%-16s %-10s %-8s %-10s %s\n",
 			p.GetName(), p.GetPlatform(),
-			connectionLabel(p), p.GetPublicKeyFingerprint())
+			connectionLabel(p), receiveLabel(p), p.GetPublicKeyFingerprint())
 	}
 	return nil
+}
+
+// receiveLabel 是对方能不能收隔空传送，后面带上它声明的版本号。
+// 还没收到它的功能声明时只能说「未知」，不能当成旧版本
+func receiveLabel(d *pb.Device) string {
+	label := "收文件"
+	switch {
+	case !d.GetFeaturesKnown() && !d.GetReceivesFiles():
+		return "未知"
+	case !d.GetReceivesFiles():
+		return "需要更新"
+	case d.GetReceiveDisabled():
+		label = "不收文件"
+	}
+	if v := d.GetAppVersion(); v != "" {
+		label += " " + v
+	}
+	return label
 }
 
 // connectionLabel 区分直连与中转，便于排查网络问题：
