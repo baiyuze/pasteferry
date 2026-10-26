@@ -77,6 +77,7 @@
 <section><h2>仅保留服务所需数据</h2><p>官方网关保留脱敏设备编号、首次及最近接入时间、每日中转用量、必要额度绑定和累计汇总。每日设备明细保留 90 天。统计表示「服务」设备数，不能代表真实人数或全部安装量。</p></section>
 <section><h2>内容与机器标识</h2><p>剪贴板、文件内容与真实设备名通过设备间加密通道传输。网关不收集文件名、路径、用户名、MAC、UA 或行为轨迹；原始系统标识不上传，机器摘要仅用于中转额度归组，不能保证不可伪造。</p></section>
 <section><h2>网络可见性和额度</h2><p>联网端点必然能看到临时网络地址和路由信息，但官方统计库及普通代理日志不保存这些信息。默认每日 100 MB 中转额度，上下行合计，北京时间零点重置；直连不消耗额度。开启后客户端只凭设备签名查询自己的额度，不申请中转，也不读取机器标识。关闭「服务」会停止其请求、轮询与中转通道。</p></section>
+<section><h2>好友能看到什么</h2><p>2.6 起可以加好友互发文件。好友能看到你设置的显示名和头像、发文件那台电脑的名称和系统，以及你用的是局域网、服务还是自建服务器（自建服务器只给出地址的摘要，不给地址本身）。你复制的内容、复制记录、你的其他设备都不会给好友；好友发来的文件要你点接受才会传。删除好友时两边一起删除，对方的头像也从这台电脑上删掉。</p></section>
 <section><h2>检查更新</h2><p>2.3.0 起，App 启动一分钟后和之后每天检查一次新版本：从 GitHub 和 Gitee 下载签过名的更新清单，请求里不带设备 ID、账号或其他标识，这些服务只能看到一次普通的下载和网络地址。可以在「设置 → 关于」关掉自动检查。新版本只有在你确认后才会安装，而且安装包必须与隔空贴发布密钥签名的清单里的校验值一致。</p></section>
 <section><h2>网站与可审计边界</h2><p>本站使用 Cloudflare Web Analytics，并自行汇总官网浏览量与下载点击，字段为日期、页面路径（不含查询参数）、页面语言，以及下载的版本、文件和来源（Gitee 或 GitHub）。不使用统计 Cookie 或持久访客标识，不保存 IP 或浏览器 UA；随机事件编号仅保留最多三天去重，匿名每日汇总长期保留。尊重浏览器 Do Not Track 和 Global Privacy Control。下载点击不代表下载完成、安装量或人数，也无法统计直接在 Gitee 下载的次数。客户端、信令和 TURN 保持开源，公开所有官方网关协议与字段；私有生产后台的实际存储行为仍需要部署审计。</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
   <footer class="footer">

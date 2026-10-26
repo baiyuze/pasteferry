@@ -228,6 +228,7 @@ C = {
         ("Pairing", "6-character code valid for 5 minutes, using an alphabet without look-alikes such as 0/O and 1/I; fingerprints compared by you"),
         ("Auto-sync limit", "50 MB by default, adjustable from 1 MB to 1 GB"),
         ('Send Files', 'To one device, any size, single files or whole folders; encrypted TCP fast link on the local network (both devices need 2.5.1), automatic data-channel fallback; internet and relay use WebRTC; resumes after a disconnect; SHA-256 per file. Measured Mac to Linux VM: 144.3 MB/s for 1 GB, up from 18.7 MB/s; speed depends on the network and disks.'),
+        ('Contacts', 'Added with a 7-character contact code starting with F, exchanged over the local network or the service, with an optional safety code; contacts can only send each other files and images, with a note of up to 200 characters, and every batch must be accepted; clipboard, history and device list are never shared; received files lose the executable bit and are quarantined on a Mac; both sides need 2.6'),
         ("History", "3 days by default, adjustable from 1 hour to 30 days; expired items removed automatically"),
         ("Measured speed", "A 20 MB file transfers in about 330 ms over a direct LAN connection, checksums matching"),
         ("Built with", "Go for the background service and server (pure Go calling Win32 on Windows and speaking the X11 protocol on Linux), Flutter for the app (one codebase for all three systems), Protocol Buffers for messages"),
@@ -291,6 +292,9 @@ C = {
        'away. Larger files sync as a record; pull them from the history when you need them. The limit is '
        'adjustable in Settings.',
        'To send files straight to one computer, use Send Files: any size, kept out of your history, and resumed if the connection drops.']),
+     ('Can I send files to someone else’s computer?',
+      ['Yes. From 2.6 you can add contacts: they click Add Contact at the top of Send Files to show a contact code, you enter it, you both confirm, and that’s it — no pairing. Then drop files on their avatar; the transfer starts once they accept, and you can add a short note.',
+       'Contacts only exchange files and images: no shared clipboard, and they never see your history or devices. Choose who can send to you at the bottom of Send Files: no one, contacts only, or everyone (local network only, switches off after 10 minutes).']),
      ('Is it free? Can my company use it?',
       ['Yes. PasteFerry is open source under the GNU AGPL-3.0, so individuals and companies can use and modify '
        'it for free. If you distribute it, or offer a modified version over a network, you publish your source '

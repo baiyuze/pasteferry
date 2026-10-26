@@ -563,7 +563,7 @@ def home(code: str) -> str:
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="{FEATURES}#send">{keys(f["badge"])}</a>
+        <a class="release-note" href="{FEATURES}#friends">{keys(f["badge"])}</a>
         <h1 class="display">{c["h1"]}</h1>
         <p class="lede">{c["lede"]}</p>{cta(c, "", START, tour_ui["watch"])}
         <div class="stage" data-play role="img" aria-label="{esc(c["stage_label"])}">
@@ -593,9 +593,20 @@ def home(code: str) -> str:
       </div>
     </section>
 
-    <section class="section spotlight" id="send" aria-labelledby="send-title">
+    <section class="section spotlight" id="friends" aria-labelledby="friends-title">
       <div class="wrap">
         <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
+        <h2 id="friends-title">{f["friends_h2"]}</h2>
+        <p class="intro">{f["friends_intro"]}</p>
+        <figure class="spot wide" data-reveal>
+          <img src="{up}{shots}incoming-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["friends_alt"])}">
+        </figure>
+        <p class="more"><a href="{FEATURES}#friends">{f["home_friends_link"]}</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
+      <div class="wrap">
         <h2 id="send-title">{f["home_send_h2"]}</h2>
         <p class="intro">{f["home_send_intro"]}</p>
         <figure class="spot wide" data-reveal>
@@ -835,7 +846,6 @@ def features_page(code: str) -> str:
 
     <section class="f-section" id="send" aria-labelledby="send-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
         <h2 class="f-h2" id="send-title">{f["send_h2"]}</h2>
         <p class="f-intro">{f["send_intro"]}</p>
         <figure class="f-shot" data-reveal>
@@ -845,6 +855,21 @@ def features_page(code: str) -> str:
 {facts(f["send_points"])}
         </ul>
         <p class="f-note">{f["send_note"]}</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="friends" aria-labelledby="friends-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
+        <h2 class="f-h2" id="friends-title">{f["friends_h2"]}</h2>
+        <p class="f-intro">{f["friends_intro"]}</p>
+        <figure class="f-shot" data-reveal>
+          <img src="{shots}incoming-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["friends_alt"])}">
+        </figure>
+        <ul class="facts">
+{facts(f["friends_points"])}
+        </ul>
+        <p class="f-note">{f["friends_note"]}</p>
       </div>
     </section>
 

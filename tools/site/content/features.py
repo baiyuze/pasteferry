@@ -26,9 +26,9 @@ COPY = {
     "star_button": ("在 GitHub 上点 Star", "在 GitHub 上點 Star", "在 GitHub 上按 Star", "Star on GitHub", "GitHub でスター"),
 
     # ── 首页 ──
-    "badge": ("2.5 新功能：隔空传送，文件直接发到另一台 →", "2.5 新功能：隔空傳送，檔案直接傳到另一台 →",
-              "2.5 新功能：隔空傳送，檔案直接傳到另一部電腦 →",
-              "New in 2.5: Send Files, straight to your other computer →", "2.5 の新機能：ファイル送信。別のパソコンへ直接 →"),
+    "badge": ("2.6 新功能：加个好友，文件直接发给对方 →", "2.6 新功能：加個好友，檔案直接傳給對方 →",
+              "2.6 新功能：加個好友，檔案直接傳給對方 →",
+              "New in 2.6: add a contact and send them files →", "2.6 の新機能：連絡先を追加して、ファイルを直接送る →"),
     "home_send_h2": ("拖过去，<br>就到了。", "拖過去，<br>就到了。", "拖過去，<br>就到了。",
                      "Drag it over.<br>It’s there.", "ドラッグすれば、<br>もう届いている。"),
     "home_send_intro": (
@@ -61,7 +61,7 @@ COPY = {
     "grid_more": ("查看全部功能 →", "查看全部功能 →", "查看全部功能 →", "See all features →", "すべての機能を見る →"),
     "grid": (
         [
-            ("send", "隔空传送", "把文件、文件夹拖到另一台电脑上，多大都行。", True),
+            ("send", "隔空传送", "把文件、文件夹拖到另一台电脑或好友那里，多大都行。", True),
             ("keys", "快捷粘贴", "按 {key} 呼出复制记录，选中就粘贴。", False),
             ("folder", "文件与文件夹", "50 MB 以内复制时就已传好，更大的需要时再取。", False),
             ("clock", "复制记录与收藏", "所有设备复制过的都在这里，能搜索（打拼音也行），常用的收藏起来。", False),
@@ -69,7 +69,7 @@ COPY = {
             ("lock", "端到端加密", "优先直连，服务器看不到你复制了什么。", False),
         ],
         [
-            ("send", "隔空傳送", "把檔案、資料夾拖到另一台電腦上，多大都可以。", True),
+            ("send", "隔空傳送", "把檔案、資料夾拖到另一台電腦或好友那裡，多大都可以。", True),
             ("keys", "快速貼上", "按 {key} 叫出複製記錄，選取就貼上。", False),
             ("folder", "檔案與資料夾", "50 MB 以內複製時就已傳好，更大的需要時再取。", False),
             ("clock", "複製記錄與收藏", "所有裝置複製過的都在這裡，能搜尋（打拼音也行），常用的收藏起來。", False),
@@ -77,7 +77,7 @@ COPY = {
             ("lock", "端對端加密", "優先直連，伺服器看不到你複製了什麼。", False),
         ],
         [
-            ("send", "隔空傳送", "把檔案、資料夾拖到另一部電腦上，多大都可以。", True),
+            ("send", "隔空傳送", "把檔案、資料夾拖到另一部電腦或好友那裏，多大都可以。", True),
             ("keys", "快速貼上", "按 {key} 叫出複製記錄，選取就貼上。", False),
             ("folder", "檔案與資料夾", "50 MB 以內複製時就已傳好，更大的需要時再取。", False),
             ("clock", "複製記錄與收藏", "所有裝置複製過的都在這裏，能搜尋（打拼音也可以），常用的收藏起來。", False),
@@ -85,7 +85,7 @@ COPY = {
             ("lock", "端對端加密", "優先直連，伺服器看不到你複製了甚麼。", False),
         ],
         [
-            ("send", "Send Files", "Drop files or folders onto another computer. Any size.", True),
+            ("send", "Send Files", "Drop files or folders onto another computer or a contact. Any size.", True),
             ("keys", "Quick paste", "Press {key} for your history; pick an item and it’s pasted.", False),
             ("folder", "Files and folders", "Up to 50 MB is sent as you copy; larger files on demand.", False),
             ("clock", "History and favorites", "Everything copied on every device, searchable, with favorites kept for good.", False),
@@ -93,7 +93,7 @@ COPY = {
             ("lock", "End-to-end encrypted", "Direct first. The server can’t see what you copy.", False),
         ],
         [
-            ("send", "ファイル送信", "ファイルやフォルダを別のパソコンへドロップ。サイズ無制限。", True),
+            ("send", "ファイル送信", "ファイルやフォルダを別のパソコンや連絡先へドロップ。サイズ無制限。", True),
             ("keys", "クイックペースト", "{key} で履歴を呼び出し、選ぶだけでペースト。", False),
             ("folder", "ファイルとフォルダ", "50 MB まではコピーした時点で転送済み。大きいものは必要なときに。", False),
             ("clock", "履歴とお気に入り", "すべてのデバイスでコピーした内容を検索でき、よく使うものはお気に入りに。", False),
@@ -102,7 +102,7 @@ COPY = {
         ],
     ),
     "new_tag": ("新", "新", "新", "New", "新機能"),
-    "kicker_new": ("2.5 新功能", "2.5 新功能", "2.5 新功能", "New in 2.5", "2.5 の新機能"),
+    "kicker_new": ("2.6 新功能", "2.6 新功能", "2.6 新功能", "New in 2.6", "2.6 の新機能"),
 
     # ── 功能页：页面信息与开头 ──
     "title": ("功能：隔空传送、快捷粘贴、收藏、跨设备复制记录 — 隔空贴", "功能：隔空傳送、快速貼上、收藏、跨裝置複製記錄 — 隔空貼",
@@ -208,6 +208,49 @@ COPY = {
         "The Send Files page: a radar with this Mac in the middle and devices on the same network and elsewhere around it; on the right, received files, with a folder arriving and its progress and speed",
         "ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示",
     ),
+
+    # ── 给好友发文件（2.6） ──
+    "friends_h2": ("同事的电脑，<br>也能拖过去。", "同事的電腦，<br>也能拖過去。", "同事的電腦，<br>也能拖過去。",
+                   "Your colleague’s computer,<br>just as easy.", "同僚のパソコンにも、<br>ドラッグで。"),
+    "friends_intro": (
+        "别人的电脑不用配对，加个好友就行：对方给出好友码，你输入，两边各点一下确认。之后在隔空传送里把文件拖给对方，还能附一句备注。好友之间只传文件，不同步剪贴板，也看不到彼此的复制记录。",
+        "別人的電腦不用配對，加個好友就行：對方給出好友碼，你輸入，兩邊各點一下確認。之後在隔空傳送裡把檔案拖給對方，還能附一句備註。好友之間只傳檔案，不同步剪貼簿，也看不到彼此的複製記錄。",
+        "別人的電腦不用配對，加個好友就可以：對方給出好友碼，你輸入，兩邊各按一下確認。之後在隔空傳送裏把檔案拖給對方，還能附一句備註。好友之間只傳檔案，不同步剪貼簿，也看不到彼此的複製記錄。",
+        "Someone else’s computer doesn’t need pairing — add them as a contact: they show a contact code, you enter it, and you both confirm. Then drag files onto them in Send Files, with a short note if you like. Contacts only exchange files: no shared clipboard, and neither of you sees the other’s history.",
+        "ほかの人のパソコンはペアリング不要。連絡先に追加するだけです。相手が表示した連絡先コードを入力し、双方で確認。あとは「ファイル送信」で相手にドラッグすれば、ひとことメモも添えられます。連絡先とはファイルだけをやり取りし、クリップボードは同期されず、お互いの履歴も見えません。",
+    ),
+    "friends_points": (
+        [("收不收，对方说了算", "文件到之前先弹出请求：谁发的、什么文件、备注写了什么，看清再接受。常来往的好友可以设成自动接收。"),
+         ("谁能发给你，你来定", "均不允许、仅限好友（默认）或所有人。「所有人」只在局域网里有效，10 分钟后自动回到仅限好友。"),
+         ("只传文件，不是聊天", "备注最多 200 字，只能跟着文件一起发。剪贴板、复制记录和你的设备列表都不会给好友。")],
+        [("收不收，對方說了算", "檔案到之前先跳出請求：誰傳的、什麼檔案、備註寫了什麼，看清楚再接受。常往來的好友可以設成自動接收。"),
+         ("誰能傳給你，你來決定", "均不允許、僅限好友（預設）或所有人。「所有人」只在區域網路裡有效，10 分鐘後自動回到僅限好友。"),
+         ("只傳檔案，不是聊天", "備註最多 200 字，只能跟著檔案一起傳。剪貼簿、複製記錄和你的裝置列表都不會給好友。")],
+        [("收不收，對方話事", "檔案到之前先彈出請求：誰傳的、甚麼檔案、備註寫了甚麼，看清楚再接受。常來往的好友可以設成自動接收。"),
+         ("誰能傳給你，你來決定", "均不允許、僅限好友（預設）或所有人。「所有人」只在區域網絡裏有效，10 分鐘後自動回到僅限好友。"),
+         ("只傳檔案，不是聊天", "備註最多 200 字，只能跟着檔案一起傳。剪貼簿、複製記錄和你的裝置列表都不會給好友。")],
+        [("They decide what comes in", "Before anything arrives they see a request — who it’s from, which files, and your note — and accept it. Contacts they trust can be set to accept automatically."),
+         ("You decide who can send", "No one, contacts only (the default), or everyone. Everyone works on the local network only and switches back to contacts after 10 minutes."),
+         ("Files, not chat", "A note is up to 200 characters and only travels with files. Your clipboard, history and devices are never shared with contacts.")],
+        [("受け取るかは相手が決める", "届く前に、誰から・どのファイル・メモの内容が表示され、確認してから受け取ります。よくやり取りする相手は自動で受け取る設定にもできます。"),
+         ("誰から受け取るかは自分で", "受け取らない、連絡先のみ（初期設定）、すべての人。「すべての人」はローカルネットワーク内だけで、10 分後に連絡先のみに戻ります。"),
+         ("ファイルだけ、チャットではない", "メモは 200 文字までで、ファイルと一緒にしか送れません。クリップボード、履歴、デバイスの一覧が連絡先に渡ることはありません。")],
+    ),
+    "friends_note": (
+        "不在同一个局域网时，两边都打开「服务」（或者连同一台自建服务器）就能发，同样能直连就直连。好友能看到你的显示名、头像、电脑名和系统。两边都要是 2.6 或更新的版本。",
+        "不在同一個區域網路時，兩邊都打開「服務」（或者連同一台自架伺服器）就能傳，同樣能直連就直連。好友看得到你的顯示名稱、頭像、電腦名稱和系統。兩邊都要是 2.6 或更新的版本。",
+        "不在同一個區域網絡時，兩邊都開啟「服務」（或者連接同一部自建伺服器）就能傳，同樣能直連就直連。好友看得到你的顯示名稱、頭像、電腦名稱和系統。兩邊都要是 2.6 或更新的版本。",
+        "On different networks, turn on the service on both sides (or use the same server of your own) and it still works, directly whenever possible. Contacts see your display name, avatar, computer name and system. Both sides need version 2.6 or later.",
+        "別のネットワークにいるときは、双方でサービスをオンにすれば（または同じ自前のサーバーを使えば）送れます。できる限り直接接続します。連絡先に見えるのは表示名、アイコン、パソコン名、OS です。双方にバージョン 2.6 以降が必要です。",
+    ),
+    "friends_alt": (
+        "隔空传送页：雷达下方是好友小明、王姐、阿杰的头像；中间弹出「小明 · MacBook Air 想发给你文件」，附有备注「合同第 3 页要签字」，可以拒绝或接受",
+        "隔空傳送頁：雷達下方是好友小明、王姐、阿杰的頭像；中間跳出「小明 · MacBook Air 想傳給你檔案」，附有備註，可以拒絕或接受",
+        "隔空傳送頁：雷達下方是好友小明、王姐、阿杰的頭像；中間彈出「小明 · MacBook Air 想傳給你檔案」，附有備註，可以拒絕或接受",
+        "The Send Files page: contacts’ avatars below the radar, and a request in the middle — a contact on a MacBook Air wants to send you files, with a note — that you can decline or accept",
+        "ファイル送信ページ：レーダーの下に連絡先のアイコン、中央に MacBook Air の連絡先からファイルを送りたいという依頼とメモ。拒否か受け入れを選べる",
+    ),
+    "home_friends_link": ("了解给好友发文件 →", "了解給好友傳檔案 →", "了解給好友傳檔案 →", "More about sending to contacts →", "連絡先への送信について →"),
 
     # ── 快捷粘贴 ──
     "qp_h2": ("按 {key}，<br>最近复制的都在手边。", "按 {key}，<br>最近複製的都在手邊。", "按 {key}，<br>最近複製的都在手邊。",

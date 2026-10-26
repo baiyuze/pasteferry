@@ -77,6 +77,7 @@
 <section><h2>最少必要資料</h2><p>網關保留去識別化裝置編號、首次與最近連線時間、每日中轉用量、必要額度綁定和累計彙總。每日裝置明細保留 90 天。這是「服務」裝置數，不是人數或全部安裝量。</p></section>
 <section><h2>內容與機器識別碼</h2><p>內容與真實裝置名稱透過裝置間加密通道傳送。不收集檔案名稱、路徑、用戶名稱、MAC、UA 或行為軌跡。原始系統識別碼不上傳；摘要只用於額度分組，並非不可偽造。</p></section>
 <section><h2>網絡資料與額度</h2><p>網絡端點暫時可見路由和網絡地址，官方統計庫及一般代理日誌不保存這些資料。每日 100 MB 中轉額度，含上下行，北京時間午夜重設；直連不計入。啟用後用戶端只憑裝置簽署查詢自己的額度，不申請中轉，也不讀取機器識別碼。關閉「服務」會停止其請求、輪詢及通道。</p></section>
+<section><h2>好友看得到甚麼</h2><p>2.6 起可以加好友互傳檔案。好友看得到你設定的顯示名稱和頭像、傳檔案那部電腦的名稱和系統，以及你用的是區域網絡、服務還是自建伺服器（自建伺服器只給出地址的摘要，不給地址本身）。你複製的內容、複製記錄、你的其他裝置都不會給好友；好友傳來的檔案要你按接受才會傳。刪除好友時兩邊一起刪除，對方的頭像也從這部電腦上刪除。</p></section>
 <section><h2>檢查更新</h2><p>2.3.0 起，App 啟動一分鐘後和之後每天檢查一次新版本：從 GitHub 和 Gitee 下載簽署過的更新清單，請求裏不帶裝置 ID、帳號或其他識別資料，這些服務只能看到一次普通的下載和網絡地址。可以在「設定 → 關於」關閉自動檢查。新版本只有在你確認後才會安裝，而且安裝檔必須與隔空貼發佈密鑰簽署的清單裏的校驗值一致。</p></section>
 <section><h2>網站與審計</h2><p>本站使用 Cloudflare Web Analytics，並自行彙總官網瀏覽及下載點擊：日期、頁面路徑（不含查詢參數）、頁面語言、下載版本、檔案及來源（Gitee 或 GitHub）。不使用統計 Cookie 或持久訪客識別碼，不保存 IP 或瀏覽器 UA。隨機事件編號最多保留三天以移除重複，匿名每日彙總長期保留。尊重 Do Not Track 及 Global Privacy Control。點擊不代表下載完成、安裝量或人數，亦無法統計直接在 Gitee 下載的次數。用戶端、信令及 TURN 持續開源，網關協定和欄位公開；私有正式環境的儲存行為仍需部署審計。</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
   <footer class="footer">
