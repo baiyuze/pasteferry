@@ -1,10 +1,11 @@
 package update
 
 import (
-	"debug/macho"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"golang.org/x/sys/unix"
 )
 
 // detectTarget：后台服务在 PasteFerry.app/Contents/Helpers/PasteFerryDaemon.app/Contents/MacOS/ 里。
@@ -21,14 +22,17 @@ func detectTarget(exe string) Target {
 	case !writable(filepath.Dir(app)) || !writable(app):
 		t.Blocker = BlockerReadOnly
 	}
-	// 装的是通用版就继续用通用版；单芯片版按本机芯片
-	if f, err := macho.OpenFat(filepath.Join(app, "Contents", "MacOS", "PasteFerry")); err == nil {
-		f.Close()
-		t.Asset = "mac-universal"
-	} else if runtime.GOARCH == "arm64" {
+	// 按本机芯片下载单芯片版，装的是通用版也换成单芯片版（下载量约为一半）；
+	// 在 Apple 芯片上经 Rosetta 运行的 Intel 版换成 Apple 芯片版
+	t.Asset = "mac-x64"
+	if runtime.GOARCH == "arm64" || translated() {
 		t.Asset = "mac-arm64"
-	} else {
-		t.Asset = "mac-x64"
 	}
 	return t
+}
+
+// translated 报告本进程是否在 Rosetta 下运行。
+func translated() bool {
+	v, err := unix.SysctlUint32("sysctl.proc_translated")
+	return err == nil && v == 1
 }
