@@ -1,5 +1,28 @@
 # 更新记录 / Changelog
 
+## 2.6.3 — 2026-10-27
+
+Quick paste picks items with Option+1–9 on a Mac and lets you choose the
+key; failed updates now say why.
+
+### Changes
+
+- **Quick paste**: on a Mac, Option+1–9 now pastes one of the first nine items, the same place as Alt+1–9 on Windows and Linux. Settings › Quick paste lets you pick the key: Option, Command or Control on a Mac; Alt or Ctrl on Windows and Linux.
+
+### Fixes
+
+- Messages such as "Report copied" were hidden behind an open dialog. They now appear on top.
+- When an automatic update failed, the app only said it didn't finish. It now says why, and the reason is also in the log and the diagnostics report.
+- On Linux, when the system showed no password prompt for the update (for example because PasteFerry was started over SSH), the app said the update was cancelled. It now says that no prompt appeared and how to restart PasteFerry from the desktop.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended; contacts, pairings,
+  history and settings are preserved. If you got used to ⌘1–9 in 2.6.2,
+  choose Command in Settings › Quick paste.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with 2.6.0.
+
 ## 2.6.2 — 2026-10-27
 
 Numbers can be searched in quick paste.

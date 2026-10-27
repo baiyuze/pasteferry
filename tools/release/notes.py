@@ -11,6 +11,33 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.6.3',
+ 'date': '2026-10-27',
+ 'changes': [('Quick paste: on a Mac, Option+1–9 now pastes one of the first nine items, the same place as Alt+1–9 on '
+              'Windows and Linux. Settings › Quick paste lets you pick the key: Option, Command or Control on a Mac; '
+              'Alt or Ctrl on Windows and Linux.',
+              '快捷粘贴：Mac 上改用 ⌥1–⌥9 粘贴前 9 条，和 Windows、Linux 的 Alt+1–Alt+9 在同一个位置。可以在「设置 › 快捷粘贴」里换成别的键：Mac 上 ⌥、⌘ 或 ⌃，Windows、Linux 上 Alt 或 Ctrl。',
+              'クイックペースト：Mac では ⌥1〜⌥9 で先頭 9 件を貼り付けるようになりました。Windows と Linux の Alt+1〜Alt+9 と同じ位置です。「設定 › クイックペースト」でキーを変更できます（Mac は ⌥、⌘、⌃、Windows と Linux は Alt、Ctrl）。',
+              '快速貼上：Mac 上改用 ⌥1–⌥9 貼上前 9 筆，和 Windows、Linux 的 Alt+1–Alt+9 在同一個位置。可以在「設定 › 快速貼上」裡換成別的鍵：Mac 上 ⌥、⌘ 或 ⌃，Windows、Linux 上 Alt 或 Ctrl。',
+              '快速貼上：Mac 上改用 ⌥1–⌥9 貼上前 9 項，和 Windows、Linux 的 Alt+1–Alt+9 在同一個位置。可以在「設定 › 快速貼上」裏換成別的鍵：Mac 上 ⌥、⌘ 或 ⌃，Windows、Linux 上 Alt 或 Ctrl。')],
+ 'fixes': [('Messages such as "Report copied" were hidden behind an open dialog. They now appear on top.',
+            '「报告已拷贝」这类提示会被打开着的对话框挡住，现在显示在最上面。',
+            '「レポートをコピーしました」などのメッセージが、開いているダイアログの後ろに隠れていました。最前面に表示されるようになりました。',
+            '「報告已拷貝」這類提示會被開著的對話框擋住，現在顯示在最上面。',
+            '「報告已拷貝」這類提示會被開着的對話框擋住，現在顯示在最上面。'),
+           ('When an automatic update failed, the app only said it didn\'t finish. It now says why, and the reason is also '
+            'in the log and the diagnostics report.',
+            '自动更新失败时只说「更新没有完成」。现在会说明原因，日志和诊断报告里也有。',
+            '自動アップデートに失敗したとき、完了しなかったとしか表示されませんでした。理由を表示するようになり、ログと診断レポートにも記録されます。',
+            '自動更新失敗時只說「更新沒有完成」。現在會說明原因，記錄檔和診斷報告裡也有。',
+            '自動更新失敗時只說「更新沒有完成」。現在會說明原因，記錄檔和診斷報告裏也有。'),
+           ('On Linux, when the system showed no password prompt for the update (for example because PasteFerry was '
+            'started over SSH), the app said the update was cancelled. It now says that no prompt appeared and how to '
+            'restart PasteFerry from the desktop.',
+            'Linux 上更新时系统没有弹出密码框（比如 PasteFerry 是从 SSH 启动的），之前提示「已取消安装」。现在会说明没有弹出密码框，以及怎样从桌面重新启动。',
+            'Linux でアップデート時にパスワード入力が表示されなかった場合（SSH から PasteFerry を起動したときなど）、キャンセルされたと表示されていました。入力が表示されなかったことと、デスクトップから再起動する方法を表示するようになりました。',
+            'Linux 上更新時系統沒有跳出密碼框（例如 PasteFerry 是從 SSH 啟動的），之前提示「已取消安裝」。現在會說明沒有跳出密碼框，以及怎樣從桌面重新啟動。',
+            'Linux 上更新時系統沒有彈出密碼框（例如 PasteFerry 是從 SSH 啟動的），之前提示「已取消安裝」。現在會說明沒有彈出密碼框，以及怎樣從桌面重新啟動。')]},
 {'version': '2.6.2',
  'date': '2026-10-27',
  'changes': [],
