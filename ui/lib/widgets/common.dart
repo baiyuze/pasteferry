@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -596,29 +598,152 @@ String relativeTime(DateTime t, {DateTime? now}) {
 }
 
 /// 底部的提示条。给了 [actionLabel] 时右边多一个按钮，比如取消收藏后的「撤销」。
-void showToast(BuildContext context, String message,
-    {bool error = false, String? actionLabel, VoidCallback? onAction}) {
+///
+/// 放在根 Overlay 的最上层，不用 ScaffoldMessenger 的 SnackBar：SnackBar 画在页面里，
+/// 开着对话框时（比如在「反馈问题」里拷贝报告）会被对话框和它的遮罩盖住。
+void showToast(
+  BuildContext context,
+  String message, {
+  bool error = false,
+  String? actionLabel,
+  VoidCallback? onAction,
+}) {
+  final overlay = Overlay.maybeOf(context, rootOverlay: true);
+  if (overlay == null) return;
+  _toast?.remove();
   final p = context.palette;
-  ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(
-      content: Row(
-        children: [
-          Icon(
-            error ? AppIcons.exclamationmarkCircle : AppIcons.checkmarkCircle,
-            size: 16,
-            color: error ? PaletteColors.onDark(p.danger) : PaletteColors.onDark(p.online),
-          ),
-          const SizedBox(width: Insets.sm),
-          Expanded(child: Text(message)),
-        ],
+  final hasAction = actionLabel != null && onAction != null;
+  late final OverlayEntry entry;
+  void dismiss() {
+    if (_toast != entry) return;
+    _toast = null;
+    entry.remove();
+  }
+
+  entry = OverlayEntry(
+    builder: (_) => _Toast(
+      icon: Icon(
+        error ? AppIcons.exclamationmarkCircle : AppIcons.checkmarkCircle,
+        size: 16,
+        color: error
+            ? PaletteColors.onDark(p.danger)
+            : PaletteColors.onDark(p.online),
       ),
-      action: actionLabel == null || onAction == null
-          ? null
-          : SnackBarAction(label: actionLabel, onPressed: onAction),
-      duration: Duration(seconds: actionLabel == null ? 3 : 5),
-      width: 360,
-    ));
+      message: message,
+      actionLabel: hasAction ? actionLabel : null,
+      onAction: hasAction
+          ? () {
+              dismiss();
+              onAction();
+            }
+          : null,
+      duration: Duration(seconds: hasAction ? 5 : 3),
+      onDone: dismiss,
+    ),
+  );
+  _toast = entry;
+  overlay.insert(entry);
+}
+
+OverlayEntry? _toast;
+
+class _Toast extends StatefulWidget {
+  const _Toast({
+    required this.icon,
+    required this.message,
+    required this.actionLabel,
+    required this.onAction,
+    required this.duration,
+    required this.onDone,
+  });
+
+  final Widget icon;
+  final String message;
+  final String? actionLabel;
+  final VoidCallback? onAction;
+  final Duration duration;
+  final VoidCallback onDone;
+
+  @override
+  State<_Toast> createState() => _ToastState();
+}
+
+class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
+  late final _fade = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 150),
+  )..forward();
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(widget.duration, () async {
+      await _fade.reverse();
+      widget.onDone();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _fade.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).snackBarTheme;
+    final style =
+        theme.contentTextStyle ??
+        const TextStyle(fontSize: 13, color: Colors.white);
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 16,
+      child: Center(
+        child: FadeTransition(
+          opacity: _fade,
+          child: Material(
+            color: theme.backgroundColor,
+            elevation: theme.elevation ?? 6,
+            shape: theme.shape,
+            child: SizedBox(
+              width: 360,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  14,
+                  widget.actionLabel == null ? 16 : 8,
+                  14,
+                ),
+                child: DefaultTextStyle(
+                  style: style,
+                  child: Row(
+                    children: [
+                      widget.icon,
+                      const SizedBox(width: Insets.sm),
+                      Expanded(child: Text(widget.message)),
+                      if (widget.actionLabel != null)
+                        TextButton(
+                          onPressed: widget.onAction,
+                          style: TextButton.styleFrom(
+                            foregroundColor:
+                                theme.actionTextColor ??
+                                Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                          child: Text(widget.actionLabel!),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// 提示条是深色底，浅色模式下的深绿、深红在上面看不清，换成亮色版本。

@@ -64,6 +64,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(copied, contains('Background service     1.7.0'));
     expect(find.text('Report copied'), findsOneWidget);
+    // 提示条在对话框上面，没有被对话框和它的遮罩盖住：在它上面点到的就是它自己
+    final toast = tester.renderObject(find.text('Report copied'));
+    final hit = tester.hitTestOnBinding(tester.getCenter(find.text('Report copied')));
+    expect(hit.path.any((e) => e.target == toast), isTrue);
+    await tester.pump(const Duration(seconds: 4));
+    await tester.pumpAndSettle();
+    expect(find.text('Report copied'), findsNothing);
   });
 
   testWidgets('打开详细日志后显示到几点，并重新生成报告；可以提前关掉', (tester) async {
