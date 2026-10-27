@@ -359,6 +359,7 @@
   "updateSidebar": "新版本 {version} 可用",
   "updatedTo": "已更新到 {version}",
   "updateNotFinished": "更新沒有完成，仍是 {version}。",
+  "updateNotFinishedWhy": "更新沒有完成，仍是 {version}。{detail}",
   "buildDetails": "介面 {uiVersion} · 背景服務 {serviceVersion} · 版本識別 {build}",
   "notReceived": "尚未接收，暫不可貼上",
   "receivedPreserved": "已接收，按放入剪貼簿後即可貼上",

@@ -809,6 +809,17 @@
       }
     }
   },
+  "updateNotFinishedWhy": "The update didn't finish. You're still on {version}. {detail}",
+  "@updateNotFinishedWhy": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
   "buildDetails": "UI {uiVersion} · Service {serviceVersion} · Build {build}",
   "@buildDetails": {
     "placeholders": {

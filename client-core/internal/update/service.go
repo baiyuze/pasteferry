@@ -138,11 +138,28 @@ func (s *Service) LastResult() *Result {
 	defer s.mu.Unlock()
 	if st, err := os.Stat(filepath.Join(s.Root, "updates", "result.json")); err == nil && !st.ModTime().Equal(s.resultMod) {
 		s.result, s.resultMod = ReadResult(s.Root), st.ModTime()
+		// 安装失败时后台服务没被重启，启动时的那条日志不会有：在这里记下来，诊断报告里才看得到
+		if r := s.result; r != nil && s.Log != nil {
+			s.Log.Info("更新助手的结果", "from", r.From, "to", r.To, "ok", r.OK, "err", r.Error)
+		}
 	}
 	if s.result == nil || time.Since(time.Unix(s.result.At, 0)) > resultFresh {
 		return nil
 	}
 	return s.result
+}
+
+// HelperLog 是最近一次更新助手的日志（<data>/updates/<版本>/updater.log），没有就返回空字符串。
+func (s *Service) HelperLog() string {
+	logs, _ := filepath.Glob(filepath.Join(s.Root, "updates", "*", "updater.log"))
+	var newest string
+	var at time.Time
+	for _, l := range logs {
+		if st, err := os.Stat(l); err == nil && st.ModTime().After(at) {
+			newest, at = l, st.ModTime()
+		}
+	}
+	return newest
 }
 
 // Asset 是这台电脑要下载的安装包。

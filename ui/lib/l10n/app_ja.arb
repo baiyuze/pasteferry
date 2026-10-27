@@ -359,6 +359,7 @@
   "updateSidebar": "バージョン {version} があります",
   "updatedTo": "{version} にアップデートしました",
   "updateNotFinished": "アップデートが完了しませんでした。{version} のままです。",
+  "updateNotFinishedWhy": "アップデートが完了しませんでした。{version} のままです。{detail}",
   "buildDetails": "UI {uiVersion} · サービス {serviceVersion} · ビルド {build}",
   "notReceived": "未受信 — ペーストする前に受信してください",
   "receivedPreserved": "受信済み。クリップボードに入れるとペーストできます",

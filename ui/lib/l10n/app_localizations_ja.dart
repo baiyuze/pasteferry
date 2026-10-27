@@ -1238,6 +1238,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String updateNotFinishedWhy(String version, String detail) {
+    return 'アップデートが完了しませんでした。$version のままです。$detail';
+  }
+
+  @override
   String buildDetails(String uiVersion, String serviceVersion, String build) {
     return 'UI $uiVersion · サービス $serviceVersion · ビルド $build';
   }

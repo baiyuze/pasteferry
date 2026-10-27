@@ -30,7 +30,9 @@ type Input struct {
 
 	LogFiles []string // 按时间先后，轮转出去的旧文件在前
 	CrashLog string   // 未处理的 panic 写在这里；Mac 上没有，panic 直接进日志
-	LogLines int
+	// 最近一次更新助手的日志：更新失败时助手在这里写原因，后台服务的日志里没有
+	UpdaterLog string
+	LogLines   int
 
 	Home      string   // 用户目录，换成 ~
 	FileNames []string // 复制过的文件名，换成 <file>
@@ -78,6 +80,14 @@ func Build(in Input) string {
 		row("LAN", lanState(st))
 		row("Clipboard access", strings.ToLower(strings.TrimPrefix(st.GetClipboardPermission().String(), "CLIPBOARD_PERMISSION_")))
 		row("Cache", fmt.Sprintf("%d MB", st.GetCacheBytesUsed()>>20))
+	}
+	if u := in.Status.GetLastUpdate(); u != nil {
+		res := "ok"
+		if !u.GetOk() {
+			res = "failed: " + or(u.GetError(), "no reason given")
+		}
+		row("Last update", fmt.Sprintf("%s -> %s at %s, %s", u.GetFromVersion(), u.GetToVersion(),
+			time.Unix(u.GetAtUnix(), 0).In(in.Now.Location()).Format("15:04"), res))
 	}
 	if in.VerboseUntil.IsZero() {
 		row("Detailed logging", "off")
@@ -137,6 +147,15 @@ func Build(in Input) string {
 	line("Log (%s)", lastLines(len(logs)))
 	for _, l := range logs {
 		line("%s", l)
+	}
+	if u := in.Status.GetLastUpdate(); u != nil && !u.GetOk() && in.UpdaterLog != "" {
+		if lines := tailLines([]string{in.UpdaterLog}, 40); len(lines) > 0 {
+			line("")
+			line("Updater log (%s)", lastLines(len(lines)))
+			for _, l := range lines {
+				line("%s", l)
+			}
+		}
 	}
 	if crash := tailLines([]string{in.CrashLog}, 100); in.CrashLog != "" && len(crash) > 0 {
 		line("")

@@ -54,6 +54,7 @@ func wireUpdater(deps *rpc.Deps, svc *update.Service) {
 		return svc.Install(version, uiPID)
 	}
 	deps.UpdateNotice = svc.Notice
+	deps.UpdaterLog = svc.HelperLog
 	deps.LastUpdate = func() *pb.UpdateResult {
 		r := svc.LastResult()
 		if r == nil {

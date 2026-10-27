@@ -1223,6 +1223,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String updateNotFinishedWhy(String version, String detail) {
+    return '更新没有完成，仍是 $version。$detail';
+  }
+
+  @override
   String buildDetails(String uiVersion, String serviceVersion, String build) {
     return '界面 $uiVersion · 后台 $serviceVersion · 构建 $build';
   }
@@ -3348,6 +3353,11 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   }
 
   @override
+  String updateNotFinishedWhy(String version, String detail) {
+    return '更新沒有完成，仍是 $version。$detail';
+  }
+
+  @override
   String buildDetails(String uiVersion, String serviceVersion, String build) {
     return '介面 $uiVersion · 背景服務 $serviceVersion · 版本識別 $build';
   }
@@ -5470,6 +5480,11 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   @override
   String updateNotFinished(String version) {
     return '更新沒有完成，仍是 $version。';
+  }
+
+  @override
+  String updateNotFinishedWhy(String version, String detail) {
+    return '更新沒有完成，仍是 $version。$detail';
   }
 
   @override

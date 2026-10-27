@@ -1354,6 +1354,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String updateNotFinishedWhy(String version, String detail) {
+    return 'The update didn\'t finish. You\'re still on $version. $detail';
+  }
+
+  @override
   String buildDetails(String uiVersion, String serviceVersion, String build) {
     return 'UI $uiVersion · Service $serviceVersion · Build $build';
   }

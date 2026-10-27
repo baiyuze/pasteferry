@@ -304,7 +304,9 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
             context,
             updated.ok
                 ? l.updatedTo(updated.toVersion)
-                : l.updateNotFinished(updated.fromVersion),
+                : updated.error.isEmpty
+                    ? l.updateNotFinished(updated.fromVersion)
+                    : l.updateNotFinishedWhy(updated.fromVersion, updated.error),
             error: !updated.ok,
           );
         });

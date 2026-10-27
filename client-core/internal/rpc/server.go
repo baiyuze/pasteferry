@@ -93,6 +93,8 @@ type Deps struct {
 	InstallUpdate  func(version string, uiPID int) error
 	UpdateNotice   func() string
 	LastUpdate     func() *pb.UpdateResult
+	// UpdaterLog 是最近一次更新助手的日志文件，诊断报告在更新失败时带上它
+	UpdaterLog func() string
 
 	// Transfers 是隔空传送；为 nil 时相应的方法返回 Unimplemented
 	Transfers Transfers
@@ -491,6 +493,9 @@ func (s *Server) ExportDiagnostics(ctx context.Context, req *pb.ExportDiagnostic
 	}
 	if s.deps.LogFiles != nil {
 		in.LogFiles, in.CrashLog = s.deps.LogFiles()
+	}
+	if s.deps.UpdaterLog != nil {
+		in.UpdaterLog = s.deps.UpdaterLog()
 	}
 	in.Home, _ = os.UserHomeDir()
 	if s.deps.Store != nil {

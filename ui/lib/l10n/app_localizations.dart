@@ -2264,6 +2264,12 @@ abstract class AppLocalizations {
   /// **'The update didn\'t finish. You\'re still on {version}.'**
   String updateNotFinished(String version);
 
+  /// No description provided for @updateNotFinishedWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'The update didn\'t finish. You\'re still on {version}. {detail}'**
+  String updateNotFinishedWhy(String version, String detail);
+
   /// No description provided for @buildDetails.
   ///
   /// In en, this message translates to:
