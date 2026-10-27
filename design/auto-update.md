@@ -135,6 +135,14 @@ Problems found and fixed during the validation:
   restarting it with the window open left the old process holding the
   single-instance lock (seen on Linux). It now waits at most two seconds.
 
+- 2.6.3: on the Ubuntu VM, an update from 2.5.4 failed within a second each
+  time with "not authorized". The background service had been started over
+  SSH during an earlier test, so it and the windows it opened ran in that
+  SSH session; GNOME's polkit agent only serves the desktop session, and
+  `pkexec` exited 127 without a prompt. The updater now tells 126 (dialog
+  dismissed) from 127 and says to restart the service from the desktop, and
+  the reason reaches the toast, the service log and the diagnostics report.
+
 Notes for repeating the test: `pkexec` only shows a password prompt for a
 process in the graphical session, so on Linux start the service with
 `systemd-run --user --scope`, not from an SSH shell. On Windows, start test

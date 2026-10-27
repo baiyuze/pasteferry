@@ -637,7 +637,8 @@ void showToast(
               onAction();
             }
           : null,
-      duration: Duration(seconds: hasAction ? 5 : 3),
+      // 出错的提示常带着原因，要多看一会儿
+      duration: Duration(seconds: hasAction || error ? 6 : 3),
       onDone: dismiss,
     ),
   );
