@@ -13,17 +13,18 @@ import 'package:pasteferry_ui/picker/picker_view.dart';
 
 const _channel = MethodChannel('pasteferry/picker');
 
-// 快捷窗口的按键跟着平台走：Mac 上是 ⌘，Windows 与 Linux 上是 Ctrl（序号是 Alt+数字）
+// 快捷窗口的按键跟着平台走：Mac 上是 ⌘，Windows 与 Linux 上是 Ctrl（序号默认是 ⌥ / Alt 加数字）
 final _mac = Platform.isMacOS;
 final _cmdKey = _mac ? LogicalKeyboardKey.metaLeft : LogicalKeyboardKey.controlLeft;
-final _indexKey = _mac ? LogicalKeyboardKey.metaLeft : LogicalKeyboardKey.altLeft;
+final _n1 = _mac ? '⌥1' : 'Alt+1';
 
-/// 按住 ⌘（Mac）或 Alt 再按数字：选那一行
-Future<void> _pressIndex(WidgetTester tester, LogicalKeyboardKey digit, {PhysicalKeyboardKey? physicalKey}) async {
-  await tester.sendKeyDownEvent(_indexKey);
+/// 按住 [modifier]（默认 ⌥ / Alt）再按数字：选那一行
+Future<void> _pressIndex(WidgetTester tester, LogicalKeyboardKey digit,
+    {PhysicalKeyboardKey? physicalKey, LogicalKeyboardKey modifier = LogicalKeyboardKey.altLeft}) async {
+  await tester.sendKeyDownEvent(modifier);
   await tester.sendKeyDownEvent(digit, physicalKey: physicalKey);
   await tester.sendKeyUpEvent(digit, physicalKey: physicalKey);
-  await tester.sendKeyUpEvent(_indexKey);
+  await tester.sendKeyUpEvent(modifier);
 }
 
 /// 不连后台服务：放进剪贴板、下载、收藏都记下来。
@@ -126,10 +127,10 @@ void main() {
 
   List<MethodCall> commits() => calls.where((c) => c.method == 'commit').toList();
 
-  testWidgets('前 9 条标序号，按 ⌘ 或 Alt 加数字粘贴那一条', (tester) async {
+  testWidgets('前 9 条标序号，按 ⌥ 或 Alt 加数字粘贴那一条', (tester) async {
     final s = await open(tester);
-    expect(find.text(_mac ? '⌘1' : 'Alt+1'), findsOneWidget);
-    expect(find.text(_mac ? '⌘4' : 'Alt+4'), findsOneWidget);
+    expect(find.text(_n1), findsOneWidget);
+    expect(find.text(_mac ? '⌥4' : 'Alt+4'), findsOneWidget);
     // 「收藏」既是页签，也是底栏 ⌘D 的说明
     for (final t in ['全部', '文本', '链接', '图片', '文件', '收藏']) {
       expect(find.text(t), findsWidgets, reason: t);
@@ -139,6 +140,19 @@ void main() {
     await tester.pump();
     expect(s.applied, [('b', false)]);
     expect(commits().single.arguments, {'paste': true});
+  });
+
+  testWidgets('设置里换成别的修饰键：序号跟着变，原来的 ⌥ / Alt 不再选行', (tester) async {
+    final m = _mac ? 'meta' : 'ctrl';
+    final key = _mac ? LogicalKeyboardKey.metaLeft : LogicalKeyboardKey.controlLeft;
+    final s = await open(tester, config: Config(language: 'zh-Hans', quickPasteIndexModifier: m));
+    expect(find.text(_mac ? '⌘1' : 'Ctrl+1'), findsOneWidget);
+    await _pressIndex(tester, LogicalKeyboardKey.digit2);
+    await tester.pump();
+    expect(s.applied, isEmpty);
+    await _pressIndex(tester, LogicalKeyboardKey.digit2, modifier: key);
+    await tester.pump();
+    expect(s.applied, [('b', false)]);
   });
 
   testWidgets('模拟输入没有扫描码、认不出物理按键时，按逻辑按键认数字', (tester) async {
@@ -163,14 +177,14 @@ void main() {
     await tester.pump(const Duration(milliseconds: 200)); // 等搜索的计时器走完
   });
 
-  testWidgets('搜索时数字是打字，序号照样是 ⌘1……', (tester) async {
+  testWidgets('搜索时数字是打字，序号照样是 ⌥1……', (tester) async {
     final s = await open(tester);
     await tester.enterText(find.byType(TextField), 'docker 2');
     await tester.pump();
     expect(s.applied, isEmpty);
     await tester.enterText(find.byType(TextField), 'docker');
     await tester.pump();
-    expect(find.text(_mac ? '⌘1' : 'Alt+1'), findsOneWidget);
+    expect(find.text(_n1), findsOneWidget);
     expect(find.textContaining('docker compose'), findsOneWidget);
     expect(find.textContaining('会议'), findsNothing);
     // 停顿后在当前页签里搜全部历史

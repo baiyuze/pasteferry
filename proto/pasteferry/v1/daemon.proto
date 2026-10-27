@@ -633,6 +633,9 @@ message Config {
   int64 everyone_until_unix = 31;
   // 好友看到的名字，空表示系统的用户全名
   string display_name = 32;
+  // 快捷粘贴窗口里按住哪个修饰键再按 1–9 粘贴对应的那一条（2.6.3）："alt"、"meta"、"ctrl"。
+  // 空字符串表示默认：各平台都是 alt（Mac 上是 ⌥）
+  string quick_paste_index_modifier = 33;
 }
 
 enum ServiceMode {

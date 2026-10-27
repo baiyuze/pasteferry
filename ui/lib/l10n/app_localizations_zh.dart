@@ -414,6 +414,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get quickPasteCopyIt => '只放进剪贴板';
 
   @override
+  String get quickPasteIndexKey => '粘贴前 9 条';
+
+  @override
+  String get quickPasteIndexKeyDesc => '在快捷窗口里按住它再按 1–9';
+
+  @override
   String get quickPasteAccessibility => '辅助功能权限';
 
   @override
@@ -2544,6 +2550,12 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get quickPasteCopyIt => '只放入剪貼簿';
 
   @override
+  String get quickPasteIndexKey => '貼上前 9 項';
+
+  @override
+  String get quickPasteIndexKeyDesc => '在快速貼上視窗裏按住它再按 1–9';
+
+  @override
   String get quickPasteAccessibility => '輔助使用權限';
 
   @override
@@ -4672,6 +4684,12 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get quickPasteCopyIt => '只放進剪貼簿';
+
+  @override
+  String get quickPasteIndexKey => '貼上前 9 筆';
+
+  @override
+  String get quickPasteIndexKeyDesc => '在快速貼上視窗裡按住它再按 1–9';
 
   @override
   String get quickPasteAccessibility => '輔助使用權限';

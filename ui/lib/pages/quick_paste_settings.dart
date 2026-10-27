@@ -71,6 +71,16 @@ class QuickPasteSection extends StatelessWidget {
                 onChanged: (paste) => onUpdate(config.deepCopy()..quickPasteCopyOnly = !paste),
               ),
             ),
+          if (enabled)
+            SettingRow(
+              title: l.quickPasteIndexKey,
+              description: l.quickPasteIndexKeyDesc,
+              child: Segmented<String>(
+                value: IndexModifier.of(config.quickPasteIndexModifier),
+                segments: [for (final m in IndexModifier.choices) (m, '${IndexModifier.label(m)}1–9')],
+                onChanged: (m) => onUpdate(config.deepCopy()..quickPasteIndexModifier = m),
+              ),
+            ),
           if (enabled && Platform.isMacOS && qp != null && qp.running && !config.quickPasteCopyOnly)
             SettingRow(
               title: l.quickPasteAccessibility,

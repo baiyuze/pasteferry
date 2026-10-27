@@ -147,3 +147,16 @@ class Hotkey {
   @override
   String toString() => canonical;
 }
+
+/// 快捷窗口里按住它再按 1–9 粘贴对应那一条的修饰键（Config.quick_paste_index_modifier）。
+/// 默认 alt：Mac 上是 ⌥。Windows、Linux 上不能选 meta：Win 键加数字是系统切换任务栏程序用的。
+abstract final class IndexModifier {
+  static List<String> get choices => Platform.isMacOS ? const ['alt', 'meta', 'ctrl'] : const ['alt', 'ctrl'];
+
+  static String of(String setting) => choices.contains(setting) ? setting : 'alt';
+
+  /// 写在序号前面：⌥1、Alt+1
+  static String label(String modifier) => Platform.isMacOS
+      ? const {'alt': '⌥', 'meta': '⌘', 'ctrl': '⌃'}[modifier]!
+      : const {'alt': 'Alt+', 'ctrl': 'Ctrl+'}[modifier]!;
+}

@@ -115,6 +115,8 @@
   "quickPasteAfterPick": "選取後",
   "quickPastePasteIt": "直接貼上",
   "quickPasteCopyIt": "只放入剪貼簿",
+  "quickPasteIndexKey": "貼上前 9 項",
+  "quickPasteIndexKeyDesc": "在快速貼上視窗裏按住它再按 1–9",
   "quickPasteAccessibility": "輔助使用權限",
   "quickPasteAccessibilityDesc": "直接貼上需要它；沒有授權時只放入剪貼簿，再由你按 ⌘V",
   "quickPasteAllowed": "已授權",

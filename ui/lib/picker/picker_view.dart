@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../gen/pasteferry/v1/daemon.pb.dart';
+import '../hotkey.dart';
 import '../i18n.dart';
 import '../icons.dart';
 import '../records.dart';
@@ -135,6 +136,12 @@ class _PickerViewState extends State<PickerView> {
   bool get _shift => HardwareKeyboard.instance.isShiftPressed || _WindowsKeys.pressed(_WindowsKeys.shift);
   bool get _alt => HardwareKeyboard.instance.isAltPressed || _WindowsKeys.pressed(_WindowsKeys.menu);
 
+  bool get _indexModifierPressed => switch (s.indexModifier) {
+        'meta' => HardwareKeyboard.instance.isMetaPressed,
+        'ctrl' => _ctrl,
+        _ => _alt,
+      };
+
   KeyEventResult _onKey(FocusNode _, KeyEvent e) {
     if (e is! KeyDownEvent && e is! KeyRepeatEvent) return KeyEventResult.ignored;
     // 正在用输入法打字：数字选候选、回车上屏，都交给输入法
@@ -179,9 +186,9 @@ class _PickerViewState extends State<PickerView> {
       s.delete(current);
       return KeyEventResult.handled;
     }
-    // 序号：按住 ⌘（Mac）或 Alt（Windows、Linux）再按数字。直接按数字是在搜索框里打字，好搜数字
+    // 序号：按住设置里选的修饰键（默认 ⌥ / Alt）再按数字。直接按数字是在搜索框里打字，好搜数字
     final digit = _digit(e);
-    if (digit != null && e is KeyDownEvent && (_mac ? kb.isMetaPressed : _alt)) {
+    if (digit != null && e is KeyDownEvent && _indexModifierPressed) {
       s.chooseIndex(digit - 1);
       return KeyEventResult.handled;
     }
@@ -340,7 +347,7 @@ class _PickerViewState extends State<PickerView> {
         record: list[i],
         index: i,
         selected: i == s.selected,
-        number: i < 9 ? (_mac ? '⌘${i + 1}' : 'Alt+${i + 1}') : null,
+        number: i < 9 ? '${IndexModifier.label(s.indexModifier)}${i + 1}' : null,
         favoritesTab: s.tab == PickerTab.favorites,
         dim: p.textFaint,
       ),

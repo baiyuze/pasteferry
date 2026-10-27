@@ -509,6 +509,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quickPasteCopyIt => 'Just copy it';
 
   @override
+  String get quickPasteIndexKey => 'Pick one of the first 9';
+
+  @override
+  String get quickPasteIndexKeyDesc =>
+      'In the quick paste window, hold this key and press 1–9';
+
+  @override
   String get quickPasteAccessibility => 'Accessibility';
 
   @override

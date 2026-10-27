@@ -4278,6 +4278,7 @@ class Config extends $pb.GeneratedMessage {
     $core.String? receiveFrom,
     $fixnum.Int64? everyoneUntilUnix,
     $core.String? displayName,
+    $core.String? quickPasteIndexModifier,
   }) {
     final result = Config._();
     if (autoSyncThresholdBytes != null)
@@ -4321,6 +4322,8 @@ class Config extends $pb.GeneratedMessage {
     if (receiveFrom != null) result.receiveFrom = receiveFrom;
     if (everyoneUntilUnix != null) result.everyoneUntilUnix = everyoneUntilUnix;
     if (displayName != null) result.displayName = displayName;
+    if (quickPasteIndexModifier != null)
+      result.quickPasteIndexModifier = quickPasteIndexModifier;
     return result;
   }
 
@@ -4370,6 +4373,7 @@ class Config extends $pb.GeneratedMessage {
     ..aOS(30, _omitFieldNames ? '' : 'receiveFrom')
     ..aInt64(31, _omitFieldNames ? '' : 'everyoneUntilUnix')
     ..aOS(32, _omitFieldNames ? '' : 'displayName')
+    ..aOS(33, _omitFieldNames ? '' : 'quickPasteIndexModifier')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4696,6 +4700,17 @@ class Config extends $pb.GeneratedMessage {
   $core.bool hasDisplayName() => $_has(31);
   @$pb.TagNumber(32)
   void clearDisplayName() => $_clearField(32);
+
+  /// 快捷粘贴窗口里按住哪个修饰键再按 1–9 粘贴对应的那一条（2.6.3）："alt"、"meta"、"ctrl"。
+  /// 空字符串表示默认：各平台都是 alt（Mac 上是 ⌥）
+  @$pb.TagNumber(33)
+  $core.String get quickPasteIndexModifier => $_getSZ(32);
+  @$pb.TagNumber(33)
+  set quickPasteIndexModifier($core.String value) => $_setString(32, value);
+  @$pb.TagNumber(33)
+  $core.bool hasQuickPasteIndexModifier() => $_has(32);
+  @$pb.TagNumber(33)
+  void clearQuickPasteIndexModifier() => $_clearField(33);
 }
 
 class OfficialUsage extends $pb.GeneratedMessage {

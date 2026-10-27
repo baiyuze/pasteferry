@@ -2,7 +2,7 @@
 
 按键写成占位符，生成页面时换成 Mac 与 Windows、Linux 两种写法，由 site.js 按访问者的系统显示其中一种：
 {key} ⌥V / Alt+V，{enter} ↩ / Enter，{plain} ⇧↩ / Shift+Enter，{copyonly} ⌘↩ / Ctrl+Enter，
-{fav} ⌘D / Ctrl+D，{paste} ⌘V / Ctrl+V，{copy} ⌘C / Ctrl+C，{index} ⌘1–9 / Alt+1–9。
+{fav} ⌘D / Ctrl+D，{paste} ⌘V / Ctrl+V，{copy} ⌘C / Ctrl+C，{index} ⌥1–9 / Alt+1–9。
 
 快捷窗口演示里的页签、底栏等界面文字直接取自 App 的文案（ui/tool/l10n/strings.py），和 App 里一模一样。
 """

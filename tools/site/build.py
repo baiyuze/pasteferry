@@ -129,7 +129,7 @@ KEYS = {
     "fav": ("⌘D", "Ctrl+D"),
     "paste": ("⌘V", "Ctrl+V"),
     "copy": ("⌘C", "Ctrl+C"),
-    "index": ("⌘1–9", "Alt+1–9"),
+    "index": ("⌥1–9", "Alt+1–9"),
 }
 PLATFORM = ('  <script>document.documentElement.classList.add("js");'
             'if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) '
@@ -727,9 +727,9 @@ def qp_demo(f: dict, app: dict) -> str:
     for i, (kind, text, meta, starred, match) in enumerate(f["qp_rows"]):
         if match:
             hit += 1
-        num = (f'<span class="n n-all"><span class="k-mac">⌘{i + 1}</span><span class="k-pc">Alt+{i + 1}</span></span>'
+        num = (f'<span class="n n-all"><span class="k-mac">⌥{i + 1}</span><span class="k-pc">Alt+{i + 1}</span></span>'
                if i < 9 else '<span class="n n-all"></span>')
-        search_num = (f'<span class="n n-hit"><span class="k-mac">⌘{hit}</span><span class="k-pc">Alt+{hit}</span></span>'
+        search_num = (f'<span class="n n-hit"><span class="k-mac">⌥{hit}</span><span class="k-pc">Alt+{hit}</span></span>'
                       if match else "")
         rows.append(
             f'<li class="qp-row{" hit" if match else ""}{" first" if match and hit == 1 else ""}{" top" if i == 0 else ""}">'

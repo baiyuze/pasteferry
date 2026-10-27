@@ -336,6 +336,8 @@
   "quickPasteAfterPick": "After you pick an item",
   "quickPastePasteIt": "Paste it",
   "quickPasteCopyIt": "Just copy it",
+  "quickPasteIndexKey": "Pick one of the first 9",
+  "quickPasteIndexKeyDesc": "In the quick paste window, hold this key and press 1–9",
   "quickPasteAccessibility": "Accessibility",
   "quickPasteAccessibilityDesc": "Needed to paste for you. Without it, items are copied and you press ⌘V.",
   "quickPasteAllowed": "Allowed",

@@ -80,21 +80,22 @@ func configToProto(c config.Config) *pb.Config {
 		Language:               c.Language,
 		LanDisabled:            c.LANDisabled,
 		ServiceMode:            serviceModeToProto(c), CustomSignalingUrl: c.CustomSignalingURL, OfficialNoticeAck: c.OfficialNoticeAck,
-		UpdateCheckDisabled:   c.UpdateCheckDisabled,
-		UpdateSkipVersion:     c.UpdateSkipVersion,
-		QuickPasteDisabled:    c.QuickPasteDisabled,
-		QuickPasteHotkey:      c.QuickPasteHotkey,
-		QuickPasteCopyOnly:    c.QuickPasteCopyOnly,
-		ReceiveDir:            c.ReceiveDir,
-		ReceiveDisabled:       c.ReceiveDisabled,
-		ReceiveNotifyDisabled: c.ReceiveNotifyDisabled,
-		SendLayoutStacked:     c.SendLayoutStacked,
-		RealtimeSyncDisabled:  c.RealtimeSyncDisabled,
-		SyncBacklog:           c.SyncBacklog,
-		SyncDisabledPeers:     append([]string(nil), c.SyncDisabledPeers...),
-		ReceiveFrom:           receiveFromToProto(c),
-		EveryoneUntilUnix:     c.EveryoneUntil,
-		DisplayName:           c.DisplayName,
+		UpdateCheckDisabled:     c.UpdateCheckDisabled,
+		UpdateSkipVersion:       c.UpdateSkipVersion,
+		QuickPasteDisabled:      c.QuickPasteDisabled,
+		QuickPasteHotkey:        c.QuickPasteHotkey,
+		QuickPasteCopyOnly:      c.QuickPasteCopyOnly,
+		QuickPasteIndexModifier: c.QuickPasteIndexModifier,
+		ReceiveDir:              c.ReceiveDir,
+		ReceiveDisabled:         c.ReceiveDisabled,
+		ReceiveNotifyDisabled:   c.ReceiveNotifyDisabled,
+		SendLayoutStacked:       c.SendLayoutStacked,
+		RealtimeSyncDisabled:    c.RealtimeSyncDisabled,
+		SyncBacklog:             c.SyncBacklog,
+		SyncDisabledPeers:       append([]string(nil), c.SyncDisabledPeers...),
+		ReceiveFrom:             receiveFromToProto(c),
+		EveryoneUntilUnix:       c.EveryoneUntil,
+		DisplayName:             c.DisplayName,
 	}
 }
 
@@ -173,6 +174,10 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	// 空字符串就是默认快捷键
 	c.QuickPasteHotkey = in.GetQuickPasteHotkey()
 	c.QuickPasteCopyOnly = in.GetQuickPasteCopyOnly()
+	// 旧界面不带这一项，不改
+	if m := in.GetQuickPasteIndexModifier(); m != "" {
+		c.QuickPasteIndexModifier = m
+	}
 	// 空字符串就是系统的「下载」文件夹
 	c.ReceiveDir = in.GetReceiveDir()
 	c.ReceiveDisabled = in.GetReceiveDisabled()

@@ -94,6 +94,9 @@ class PickerState extends ChangeNotifier implements RecordDetails {
 
   bool get copyOnly => _config?.quickPasteCopyOnly ?? false;
 
+  /// 按住它再按 1–9 选行："alt"、"meta"、"ctrl"，见 [IndexModifier]
+  String get indexModifier => IndexModifier.of(_config?.quickPasteIndexModifier ?? '');
+
   /// 选中后能不能自动粘贴；不能的原因见 [pasteBlockedReason]
   bool get canPaste => !copyOnly && _paste.available;
 

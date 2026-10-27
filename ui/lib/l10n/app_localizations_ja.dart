@@ -416,6 +416,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get quickPasteCopyIt => 'コピーのみ';
 
   @override
+  String get quickPasteIndexKey => '最初の 9 件を選ぶ';
+
+  @override
+  String get quickPasteIndexKeyDesc => 'クイックペーストウィンドウでこのキーを押しながら 1〜9 を押します';
+
+  @override
   String get quickPasteAccessibility => 'アクセシビリティ';
 
   @override

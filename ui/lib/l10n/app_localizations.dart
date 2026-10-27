@@ -800,6 +800,18 @@ abstract class AppLocalizations {
   /// **'Just copy it'**
   String get quickPasteCopyIt;
 
+  /// No description provided for @quickPasteIndexKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick one of the first 9'**
+  String get quickPasteIndexKey;
+
+  /// No description provided for @quickPasteIndexKeyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'In the quick paste window, hold this key and press 1–9'**
+  String get quickPasteIndexKeyDesc;
+
   /// No description provided for @quickPasteAccessibility.
   ///
   /// In en, this message translates to:

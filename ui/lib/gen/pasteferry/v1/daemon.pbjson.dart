@@ -1316,6 +1316,13 @@ const Config$json = {
       '10': 'everyoneUntilUnix'
     },
     {'1': 'display_name', '3': 32, '4': 1, '5': 9, '10': 'displayName'},
+    {
+      '1': 'quick_paste_index_modifier',
+      '3': 33,
+      '4': 1,
+      '5': 9,
+      '10': 'quickPasteIndexModifier'
+    },
   ],
 };
 
@@ -1345,7 +1352,9 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'FsdGltZVN5bmNEaXNhYmxlZBIhCgxzeW5jX2JhY2tsb2cYHCABKAhSC3N5bmNCYWNrbG9nEi4K'
     'E3N5bmNfZGlzYWJsZWRfcGVlcnMYHSADKAlSEXN5bmNEaXNhYmxlZFBlZXJzEiEKDHJlY2Vpdm'
     'VfZnJvbRgeIAEoCVILcmVjZWl2ZUZyb20SLgoTZXZlcnlvbmVfdW50aWxfdW5peBgfIAEoA1IR'
-    'ZXZlcnlvbmVVbnRpbFVuaXgSIQoMZGlzcGxheV9uYW1lGCAgASgJUgtkaXNwbGF5TmFtZQ==');
+    'ZXZlcnlvbmVVbnRpbFVuaXgSIQoMZGlzcGxheV9uYW1lGCAgASgJUgtkaXNwbGF5TmFtZRI7Ch'
+    'pxdWlja19wYXN0ZV9pbmRleF9tb2RpZmllchghIAEoCVIXcXVpY2tQYXN0ZUluZGV4TW9kaWZp'
+    'ZXI=');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {

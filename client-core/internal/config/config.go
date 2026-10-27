@@ -71,6 +71,9 @@ type Config struct {
 	QuickPasteHotkey string `json:"quick_paste_hotkey,omitempty"`
 	// QuickPasteCopyOnly 选中后只放进剪贴板，不模拟粘贴
 	QuickPasteCopyOnly bool `json:"quick_paste_copy_only,omitempty"`
+	// QuickPasteIndexModifier 是快捷窗口里按住它再按 1–9 粘贴对应那一条的修饰键："alt"、"meta"、"ctrl"。
+	// 空字符串表示默认的 alt（Mac 上是 ⌥）
+	QuickPasteIndexModifier string `json:"quick_paste_index_modifier,omitempty"`
 
 	// ReceiveDir 是隔空传送收到的文件存放的位置，空字符串表示系统的「下载」文件夹（见 DownloadsDir）
 	ReceiveDir string `json:"receive_dir,omitempty"`
@@ -209,6 +212,11 @@ func (c *Config) Validate() {
 	}
 	// 写不对的快捷键当作默认的
 	c.QuickPasteHotkey = NormalizeHotkey(c.QuickPasteHotkey)
+	switch c.QuickPasteIndexModifier {
+	case "", "alt", "meta", "ctrl":
+	default:
+		c.QuickPasteIndexModifier = ""
+	}
 	switch c.ReceiveFrom {
 	case ReceiveFromOff, ReceiveFromFriends, ReceiveFromEveryone:
 	default:

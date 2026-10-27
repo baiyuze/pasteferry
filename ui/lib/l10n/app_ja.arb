@@ -115,6 +115,8 @@
   "quickPasteAfterPick": "選んだ後",
   "quickPastePasteIt": "ペーストする",
   "quickPasteCopyIt": "コピーのみ",
+  "quickPasteIndexKey": "最初の 9 件を選ぶ",
+  "quickPasteIndexKeyDesc": "クイックペーストウィンドウでこのキーを押しながら 1〜9 を押します",
   "quickPasteAccessibility": "アクセシビリティ",
   "quickPasteAccessibilityDesc": "ペーストするのに必要です。許可しない場合はコピーだけされ、⌘V で貼り付けます。",
   "quickPasteAllowed": "許可済み",

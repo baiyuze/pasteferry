@@ -3667,9 +3667,12 @@ type Config struct {
 	// 「所有人」在这个时间自动回到「仅限好友」，Unix 秒。打开「所有人」时由后台服务填上
 	EveryoneUntilUnix int64 `protobuf:"varint,31,opt,name=everyone_until_unix,json=everyoneUntilUnix,proto3" json:"everyone_until_unix,omitempty"`
 	// 好友看到的名字，空表示系统的用户全名
-	DisplayName   string `protobuf:"bytes,32,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	DisplayName string `protobuf:"bytes,32,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
+	// 快捷粘贴窗口里按住哪个修饰键再按 1–9 粘贴对应的那一条（2.6.3）："alt"、"meta"、"ctrl"。
+	// 空字符串表示默认：各平台都是 alt（Mac 上是 ⌥）
+	QuickPasteIndexModifier string `protobuf:"bytes,33,opt,name=quick_paste_index_modifier,json=quickPasteIndexModifier,proto3" json:"quick_paste_index_modifier,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
 }
 
 func (x *Config) Reset() {
@@ -3922,6 +3925,13 @@ func (x *Config) GetEveryoneUntilUnix() int64 {
 func (x *Config) GetDisplayName() string {
 	if x != nil {
 		return x.DisplayName
+	}
+	return ""
+}
+
+func (x *Config) GetQuickPasteIndexModifier() string {
+	if x != nil {
+		return x.QuickPasteIndexModifier
 	}
 	return ""
 }
@@ -6185,8 +6195,7 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x04kind\x18\x01 \x01(\x0e2\x1d.pasteferry.v1.ConnectionKindR\x04kind\"P\n" +
 	"\x17SetDeviceAddressRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x18\n" +
-	"\aaddress\x18\x02 \x01(\tR\aaddress\"\xe8\n" +
-	"\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddress\"\xa5\v\n" +
 	"\x06Config\x129\n" +
 	"\x19auto_sync_threshold_bytes\x18\x01 \x01(\x03R\x16autoSyncThresholdBytes\x12.\n" +
 	"\x13history_ttl_seconds\x18\x02 \x01(\x03R\x11historyTtlSeconds\x12*\n" +
@@ -6223,7 +6232,8 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x13sync_disabled_peers\x18\x1d \x03(\tR\x11syncDisabledPeers\x12!\n" +
 	"\freceive_from\x18\x1e \x01(\tR\vreceiveFrom\x12.\n" +
 	"\x13everyone_until_unix\x18\x1f \x01(\x03R\x11everyoneUntilUnix\x12!\n" +
-	"\fdisplay_name\x18  \x01(\tR\vdisplayName\"\xd8\x02\n" +
+	"\fdisplay_name\x18  \x01(\tR\vdisplayName\x12;\n" +
+	"\x1aquick_paste_index_modifier\x18! \x01(\tR\x17quickPasteIndexModifier\"\xd8\x02\n" +
 	"\rOfficialUsage\x12\x1c\n" +
 	"\tavailable\x18\x01 \x01(\bR\tavailable\x12\x10\n" +
 	"\x03day\x18\x02 \x01(\tR\x03day\x12\x1f\n" +
