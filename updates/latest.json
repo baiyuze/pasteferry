@@ -1,65 +1,121 @@
 {
   "schema": 1,
-  "latest": "2.6.2",
+  "latest": "2.6.3",
   "date": "2026-10-27",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.6.2/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.6.3/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.6.2/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.6.3/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 26445920,
-      "sha256": "e15886f46ce747f4e7a5d5b605a7f01d02a4870ff759819ecbbc66ff296d4905"
+      "size": 26418476,
+      "sha256": "6edb425f776c948ea8bd16c5915cb9ad39d34d1050240bca0ea549580e10712d"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 28567613,
-      "sha256": "5315d2b1dace8b8a161fed74f6100002ead755e92cbd95d938347d75401f03a5"
+      "size": 28544547,
+      "sha256": "b5953474f18ff96ea74446bc70cf9f81ddfd98b79298d1baa350427a6fcfefd3"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 53075841,
-      "sha256": "0f8c1308e056b3f1ae4a4395f29f4b3b062ed91f25a51dbdf107d4fe51a24bb8"
+      "size": 53003245,
+      "sha256": "d1598ea31ce1bec88ed987a63006c11f4240471c189a98d6324219daf4e42640"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 23655332,
-      "sha256": "217357f5cd19c29efc645fa625f3dd2f6df8582713e65d023e79d56a2a538314"
+      "size": 23637255,
+      "sha256": "8e51edcc26c81f2462b2aa0ca77332a729ce93e6f1f326ce191f7b5c54e00b2f"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 29899426,
-      "sha256": "90a81b13f4569e5eb3b7843417d5c1f827a1a23370e075bf04e39f6d2793eec2"
+      "size": 29874463,
+      "sha256": "1cc5498ee599808ef18330d86a37ae20a0efa0504f01ca84aebe054f1a7c41da"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22821456,
-      "sha256": "b3206c155413892f98c787a0bda3080bcf39c35eb5860e48662e021bb44694ed"
+      "size": 22790068,
+      "sha256": "3c7f3bfcd6b823e1e71cd52dd24b32d404a467ba16c039eedb3298ac9bcfdcc3"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 21231066,
-      "sha256": "185f6bb69a813713113d786bbef11231d4fce49e09d885b8c4cd45f812100e61"
+      "size": 21199662,
+      "sha256": "b2d97866232fccd08c8772beb5ad5d68c68f4b612fe16b3b4ed8434f12745d87"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 27621433,
-      "sha256": "638d069be06a5cbf50ec1a84ff5b67f60aa8e0b36269e6d97c1e08d999730b8f"
+      "size": 27594740,
+      "sha256": "2f0ddb6f8d4d0fadbf4e44561774261a6a15a60ac1b1bd40b07df034cf691bdf"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25864143,
-      "sha256": "808197aaecd2c84a19c02d5cb0040a865a325a63cbeb138d3d3a2c61ec9b04ab"
+      "size": 25836406,
+      "sha256": "1a5b0362ec104d7e25042b8df833a273307cd3f739c7f2f31170f2e18fcb895c"
     }
   },
   "releases": [
+    {
+      "version": "2.6.3",
+      "date": "2026-10-27",
+      "notes": {
+        "en": {
+          "changes": [
+            "Quick paste: on a Mac, Option+1–9 now pastes one of the first nine items, the same place as Alt+1–9 on Windows and Linux. Settings › Quick paste lets you pick the key: Option, Command or Control on a Mac; Alt or Ctrl on Windows and Linux."
+          ],
+          "fixes": [
+            "Messages such as \"Report copied\" were hidden behind an open dialog. They now appear on top.",
+            "When an automatic update failed, the app only said it didn't finish. It now says why, and the reason is also in the log and the diagnostics report.",
+            "On Linux, when the system showed no password prompt for the update (for example because PasteFerry was started over SSH), the app said the update was cancelled. It now says that no prompt appeared and how to restart PasteFerry from the desktop."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "快捷粘贴：Mac 上改用 ⌥1–⌥9 粘贴前 9 条，和 Windows、Linux 的 Alt+1–Alt+9 在同一个位置。可以在「设置 › 快捷粘贴」里换成别的键：Mac 上 ⌥、⌘ 或 ⌃，Windows、Linux 上 Alt 或 Ctrl。"
+          ],
+          "fixes": [
+            "「报告已拷贝」这类提示会被打开着的对话框挡住，现在显示在最上面。",
+            "自动更新失败时只说「更新没有完成」。现在会说明原因，日志和诊断报告里也有。",
+            "Linux 上更新时系统没有弹出密码框（比如 PasteFerry 是从 SSH 启动的），之前提示「已取消安装」。现在会说明没有弹出密码框，以及怎样从桌面重新启动。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "クイックペースト：Mac では ⌥1〜⌥9 で先頭 9 件を貼り付けるようになりました。Windows と Linux の Alt+1〜Alt+9 と同じ位置です。「設定 › クイックペースト」でキーを変更できます（Mac は ⌥、⌘、⌃、Windows と Linux は Alt、Ctrl）。"
+          ],
+          "fixes": [
+            "「レポートをコピーしました」などのメッセージが、開いているダイアログの後ろに隠れていました。最前面に表示されるようになりました。",
+            "自動アップデートに失敗したとき、完了しなかったとしか表示されませんでした。理由を表示するようになり、ログと診断レポートにも記録されます。",
+            "Linux でアップデート時にパスワード入力が表示されなかった場合（SSH から PasteFerry を起動したときなど）、キャンセルされたと表示されていました。入力が表示されなかったことと、デスクトップから再起動する方法を表示するようになりました。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "快速貼上：Mac 上改用 ⌥1–⌥9 貼上前 9 筆，和 Windows、Linux 的 Alt+1–Alt+9 在同一個位置。可以在「設定 › 快速貼上」裡換成別的鍵：Mac 上 ⌥、⌘ 或 ⌃，Windows、Linux 上 Alt 或 Ctrl。"
+          ],
+          "fixes": [
+            "「報告已拷貝」這類提示會被開著的對話框擋住，現在顯示在最上面。",
+            "自動更新失敗時只說「更新沒有完成」。現在會說明原因，記錄檔和診斷報告裡也有。",
+            "Linux 上更新時系統沒有跳出密碼框（例如 PasteFerry 是從 SSH 啟動的），之前提示「已取消安裝」。現在會說明沒有跳出密碼框，以及怎樣從桌面重新啟動。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "快速貼上：Mac 上改用 ⌥1–⌥9 貼上前 9 項，和 Windows、Linux 的 Alt+1–Alt+9 在同一個位置。可以在「設定 › 快速貼上」裏換成別的鍵：Mac 上 ⌥、⌘ 或 ⌃，Windows、Linux 上 Alt 或 Ctrl。"
+          ],
+          "fixes": [
+            "「報告已拷貝」這類提示會被開着的對話框擋住，現在顯示在最上面。",
+            "自動更新失敗時只說「更新沒有完成」。現在會說明原因，記錄檔和診斷報告裏也有。",
+            "Linux 上更新時系統沒有彈出密碼框（例如 PasteFerry 是從 SSH 啟動的），之前提示「已取消安裝」。現在會說明沒有彈出密碼框，以及怎樣從桌面重新啟動。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.6.2",
       "date": "2026-10-27",
@@ -505,57 +561,6 @@
           ],
           "fixes": [
             "在收藏頁按收藏的圖片，會提示「這條圖片記錄已被刪除」，看不到圖片。現在能正常開啟預覽。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.4.1",
-      "date": "2026-10-21",
-      "notes": {
-        "en": {
-          "changes": [
-            "Search Chinese text by pinyin, in quick paste and in History: full pinyin (huiyi), initials (hy) or a mix (huiy) all find 会议. Polyphones match every reading."
-          ],
-          "fixes": [
-            "On a Mac, Allow… in quick paste now always puts PasteFerry back in the Accessibility list, even after you removed it there.",
-            "While you type a search in quick paste, the list keeps the previous results until the new ones arrive instead of flashing “No results”."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "中文可以按拼音搜索，快捷粘贴和复制记录里都行：全拼（huiyi）、首字母（hy）或混着打（huiy）都能找到「会议」，多音字的每个读音都算。"
-          ],
-          "fixes": [
-            "Mac 上，快捷粘贴里的「去授权」现在每次都会把隔空贴重新加进「辅助功能」列表，即使你之前在那里删掉过它。",
-            "在快捷粘贴里打字搜索时，新结果出来之前列表保留上一次的结果，不再闪一下「没有找到」。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "中国語をピンインで検索できるようになりました（クイックペーストと履歴）。全ピンイン（huiyi）、頭文字（hy）、混在（huiy）のいずれでも「会议」が見つかります。多音字はすべての読みで一致します。"
-          ],
-          "fixes": [
-            "Mac で、クイックペーストの「許可する…」がいつでも PasteFerry をアクセシビリティの一覧に戻すようになりました。一覧から削除した後でも使えます。",
-            "クイックペーストで検索を入力している間、新しい結果が出るまで前の結果を表示し続け、「見つかりません」が一瞬表示されなくなりました。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "中文可以按拼音搜尋，快速貼上和複製記錄裡都行：全拼（huiyi）、首字母（hy）或混著打（huiy）都能找到「會議」，多音字的每個讀音都算。"
-          ],
-          "fixes": [
-            "Mac 上，快速貼上裡的「去授權」現在每次都會把隔空貼重新加進「輔助使用」列表，即使你之前在那裡刪除過它。",
-            "在快速貼上裡打字搜尋時，新結果出來之前列表保留上一次的結果，不再閃一下「沒有找到」。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "中文可以按拼音搜尋，快速貼上和複製記錄裏都可以：全拼（huiyi）、首字母（hy）或混着打（huiy）都能找到「會議」，多音字的每個讀音都算。"
-          ],
-          "fixes": [
-            "Mac 上，快速貼上裏的「去授權」現在每次都會把隔空貼重新加入「輔助使用」列表，即使你之前在那裏刪除過它。",
-            "在快速貼上裏打字搜尋時，新結果出來之前列表保留上一次的結果，不再閃一下「沒有找到」。"
           ]
         }
       }
