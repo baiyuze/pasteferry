@@ -11,6 +11,18 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.7.1',
+ 'date': '2026-10-28',
+ 'changes': [('Android: picking photos or files first shows every file with its size, and nothing is sent until Send is tapped; multi-select works. The send page lists what this phone sent in the last three days, with View all and Clear. Settings has Check for updates, which opens the APK link when a newer version exists.',
+              '安卓：选完照片或文件先列出每个文件和大小，点「发送」才真的发；支持多选。发送页底部列出这台手机最近三天发出去的内容，可以「查看全部」和清除。设置里有「检查更新」，有新版本时打开 APK 下载链接。',
+              'Android：写真やファイルを選ぶと、まず各ファイルとサイズの一覧が出て、「送信」を押すまで送られません。複数選択にも対応。送信ページの下部に、このスマホが過去 3 日に送った内容が並び、「すべて見る」と消去ができます。設定に「アップデートを確認」があり、新しい版があれば APK のリンクを開きます。',
+              '安卓：選完照片或檔案先列出每個檔案和大小，點「傳送」才真的送出；支援多選。傳送頁底部列出這台手機最近三天送出的內容，可以「查看全部」和清除。設定裡有「檢查更新」，有新版本時開啟 APK 下載連結。',
+              '安卓：選完照片或檔案先列出每個檔案和大小，按「傳送」才真的送出；支援多選。傳送頁底部列出這部手機最近三日送出的內容，可以「查看全部」和清除。設定裏有「檢查更新」，有新版本時開啟 APK 下載連結。')],
+ 'fixes': [('Tapping Copy in the phone page wrote the text into the clipboard of the computer running it, and the app then kept it as another record. The same text is now ignored for a minute, so copying the same record again only updates the clipboard.',
+            '在手机网页上点「复制」会把文字写进那台电脑的剪贴板，于是又被记成一条新记录。现在同一段文字一分钟内重复复制不再记录，只更新剪贴板。',
+            'スマホのページで「コピー」を押すと、そのパソコンのクリップボードに書き込まれ、もう 1 件の履歴として残っていました。同じテキストは 1 分間は記録せず、クリップボードだけ更新します。',
+            '在手機網頁上點「複製」會把文字寫進那台電腦的剪貼簿，於是又被記成一筆新記錄。現在同一段文字一分鐘內重複複製不再記錄，只更新剪貼簿。',
+            '在手機網頁上按「複製」會把文字寫進那部電腦的剪貼簿，於是又被記成一項新記錄。現在同一段文字一分鐘內重複複製不再記錄，只更新剪貼簿。')]},
 {'version': '2.7.0',
  'date': '2026-10-28',
  'changes': [('Phone web transfer: Devices › Phone web transfer turns it on and shows a QR code. Scanning it opens a '

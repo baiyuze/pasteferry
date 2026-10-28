@@ -1,5 +1,27 @@
 # 更新记录 / Changelog
 
+## 2.7.1 — 2026-10-28
+
+The phone page no longer records its own copies, the Android app asks before
+sending and can check for updates.
+
+### Changes
+
+- **Android**: picking photos or files now opens a sheet that lists every file with its size, and nothing is sent until Send is tapped. Multi-select works.
+- **Android**: the send page ends with the records this phone sent in the last three days, three rows high so the composer stays in place. Tapping one opens the usual preview; View all shows the whole list and can clear it.
+- **Android**: Settings has Check for updates. It reads the version list, and when a newer version exists it opens the APK download link in the browser.
+
+### Fixes
+
+- Tapping Copy in the phone page wrote the text into the clipboard of the computer running it, which the app then stored as another record. The same text is now ignored for a minute (images and files keep the short window), so copying the same record again only updates the clipboard.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended; the duplicate-record fix is in the background service. Pairings, contacts, history and settings are preserved.
+- **Server**: no update needed.
+- **Android**: install the APK by hand; Settings › Check for updates opens the download link.
+- The device-to-device protocol is unchanged and compatible with 2.6.0.
+
 ## 2.7.0 — 2026-10-28
 
 Scan a code with your phone to read the records on the computer, copy one,
