@@ -47,6 +47,11 @@ flutter {
     source = "../.."
 }
 
+// AGP 9 packages Flutter assets for JVM tests as well as APKs.
+tasks.matching { it.name == "packageDebugUnitTestForUnitTest" }.configureEach {
+    dependsOn("copyFlutterAssetsDebug")
+}
+
 dependencies {
     // Go 核心，由 scripts/build-android.sh 用 gomobile bind 生成，不进版本库
     implementation(files("libs/pasteferry-core.aar"))
