@@ -1,65 +1,106 @@
 {
   "schema": 1,
-  "latest": "2.6.3",
-  "date": "2026-10-27",
+  "latest": "2.7.0",
+  "date": "2026-10-28",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.6.3/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.7.0/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.6.3/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.7.0/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 26418476,
-      "sha256": "6edb425f776c948ea8bd16c5915cb9ad39d34d1050240bca0ea549580e10712d"
+      "size": 26947851,
+      "sha256": "5f4ad6313edfda55c257bc79f2209bc4e20161f0aa08a897d9aa4bdbd718c20d"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 28544547,
-      "sha256": "b5953474f18ff96ea74446bc70cf9f81ddfd98b79298d1baa350427a6fcfefd3"
+      "size": 29102834,
+      "sha256": "3b439afd3220773bf0ea0474a00b26dd99eafab6642a410c942d368866a66ea2"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 53003245,
-      "sha256": "d1598ea31ce1bec88ed987a63006c11f4240471c189a98d6324219daf4e42640"
+      "size": 54117522,
+      "sha256": "8ec0e7399a38c09b2bc7e98e83d7602271f22cdd537a70c71eb211fddcab9504"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 23637255,
-      "sha256": "8e51edcc26c81f2462b2aa0ca77332a729ce93e6f1f326ce191f7b5c54e00b2f"
+      "size": 24067716,
+      "sha256": "7f214dfa90e96a5366689f8638c053c2237450ebc041f6698fb73dda4fda5928"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 29874463,
-      "sha256": "1cc5498ee599808ef18330d86a37ae20a0efa0504f01ca84aebe054f1a7c41da"
+      "size": 30430479,
+      "sha256": "b39ddefbe60cdbdf90c1d661c97f915d4c95dc7105fccba43e2983e19c569711"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 22790068,
-      "sha256": "3c7f3bfcd6b823e1e71cd52dd24b32d404a467ba16c039eedb3298ac9bcfdcc3"
+      "size": 23259278,
+      "sha256": "1442e19afcb71240689b068abe61cf6735a1eb5df6845510d79a1079c8f56137"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 21199662,
-      "sha256": "b2d97866232fccd08c8772beb5ad5d68c68f4b612fe16b3b4ed8434f12745d87"
+      "size": 21637268,
+      "sha256": "0b7185bafe355a7220287b2281d9c655650149952c38e52cac87aec6ef68c82e"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 27594740,
-      "sha256": "2f0ddb6f8d4d0fadbf4e44561774261a6a15a60ac1b1bd40b07df034cf691bdf"
+      "size": 28143816,
+      "sha256": "f4038541d7619ef8048cf74711d4a517dc872444212c719cdfb1ae710475213f"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 25836406,
-      "sha256": "1a5b0362ec104d7e25042b8df833a273307cd3f739c7f2f31170f2e18fcb895c"
+      "size": 26366903,
+      "sha256": "ab2f52a80af14f23db27f66c5b7b9161a9e8c87ba4a30a3c69973307edc3ae1e"
     }
   },
   "releases": [
+    {
+      "version": "2.7.0",
+      "date": "2026-10-28",
+      "notes": {
+        "en": {
+          "changes": [
+            "Phone web transfer: Devices › Phone web transfer turns it on and shows a QR code. Scanning it opens a page in the phone browser, on the same local network, that lists the records from the computer: copy a text, look at a picture, download a file. Text, photos and files sent from the page arrive on the computer as a normal record and go into its clipboard. Contents are encrypted between the phone and the computer, a code registers one phone and expires after ten minutes, and the switch is off by default.",
+            "Records that came from the phone say so in the history, with the phone's name.",
+            "On the phone page, copying and sending report in place instead of over the list, and pressing and holding a record no longer opens the browser's own copy bar."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "手机网页传输：「设备 › 手机网页传输」打开后显示二维码，用手机扫一下就在手机浏览器里打开一个页面，列出电脑上的复制记录：复制文字、看图片、下载文件。手机上发出的文字、照片和文件会作为一条普通记录到电脑上，并放进电脑的剪贴板。手机和电脑之间的内容是加密的；一张码只登记一台手机，十分钟内有效；开关默认关闭。",
+            "手机发来的记录在记录列表里标明来自哪一台手机。",
+            "手机网页上，复制和发送的结果就地显示，不再浮在列表上面；长按记录也不会再弹出浏览器自带的选择工具条。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "スマホのウェブ転送：「デバイス › スマホのウェブ転送」をオンにすると QR コードが表示されます。スマホで読み取ると、同じ LAN 上のスマホのブラウザでページが開き、パソコンのコピー履歴が一覧できます。テキストのコピー、画像の表示、ファイルのダウンロードができ、スマホから送ったテキスト・写真・ファイルは通常の履歴としてパソコンに届き、クリップボードにも入ります。スマホとパソコンの間は暗号化され、コード 1 つにつき 1 台、有効期限は 10 分です。スイッチは初期状態でオフです。",
+            "スマホから届いた履歴には、どのスマホから来たかが表示されます。",
+            "スマホのページでは、コピーや送信の結果がその場に表示され、一覧の上に重なりません。履歴を長押ししてもブラウザ標準の選択バーは出ません。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "手機網頁傳輸：「裝置 › 手機網頁傳輸」打開後顯示 QR 碼，用手機掃一下就在手機瀏覽器裡打開一個頁面，列出電腦上的複製記錄：複製文字、看圖片、下載檔案。手機上送出的文字、照片和檔案會變成一筆普通記錄到電腦上，並放進電腦的剪貼簿。手機和電腦之間的內容是加密的；一個碼只登記一台手機，十分鐘內有效；開關預設關閉。",
+            "手機送來的記錄在記錄列表裡標明來自哪一台手機。",
+            "手機網頁上，複製和傳送的結果就地在原處顯示，不再浮在列表上面；長按記錄也不會再跳出瀏覽器自帶的選取工具列。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "手機網頁傳輸：「裝置 › 手機網頁傳輸」打開後顯示 QR 碼，用手機掃一下就在手機瀏覽器裏打開一個頁面，列出電腦上的複製記錄：複製文字、看圖片、下載檔案。手機上送出的文字、照片和檔案會變成一項普通記錄到電腦上，並放進電腦的剪貼簿。手機和電腦之間的內容是加密的；一個碼只登記一台手機，十分鐘內有效；開關預設關閉。",
+            "手機送來的記錄在記錄列表裏標明來自哪一部手機。",
+            "手機網頁上，複製和傳送的結果就地在原處顯示，不再浮在列表上面；長按記錄也不會再彈出瀏覽器自帶的選取工具列。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.6.3",
       "date": "2026-10-27",
@@ -510,57 +551,6 @@
             "只能經官方中轉時，傳送前會先問你。當天額度用完時傳輸暫停，兩部電腦連上直連或額度恢復後自動繼續。",
             "設定裏新增「隔空傳送」一組：接收開關、儲存位置、通知，以及傳輸列表放在雷達右邊還是下面。",
             "側邊欄分成兩組：複製記錄、收藏、隔空傳送在上，裝置、官方服務、設定在下。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.4.2",
-      "date": "2026-10-22",
-      "notes": {
-        "en": {
-          "changes": [
-            "A paired device on a relay or offline now has Reconnect in its menu. It tries a direct connection right away instead of waiting for the next automatic retry, and stays on the relay without dropping the connection if a direct one still isn't possible. Devices that are already connected directly don't show it.",
-            "Favorites can be renamed: hover over a favorite and click the pencil to give it a name, such as “Expense receipt” for a screenshot. Favorites and quick paste show the name, and search finds it, by pinyin too. Clear the name to show the content again."
-          ],
-          "fixes": [
-            "Clicking a favorited image in Favorites said “This image has been deleted from the history” instead of showing it. It opens the preview now."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "设备菜单里新增「重新连接」：经中转或离线的设备，点一下马上再试一次直连，不用等下一次自动重试；仍然打不通就继续经中转，连接不断。已经直连的设备不显示这一项。",
-            "收藏可以重命名：鼠标停在收藏上，点铅笔给它起个名字，比如把一张截图叫「报销单」。收藏页和快捷粘贴里显示这个名字，搜索也能找到它，拼音也行。清空名字就恢复显示内容。"
-          ],
-          "fixes": [
-            "在收藏页点收藏的图片，会提示「这条图片记录已被删除」，看不到图片。现在能正常打开预览。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "デバイスのメニューに「再接続」を追加しました。中継経由やオフラインのデバイスで選ぶと、次の自動再試行を待たずにすぐ直接接続を試します。つながらない場合は接続を切らずに中継のまま使い続けます。直接接続済みのデバイスには表示されません。",
-            "お気に入りの名前を変更できるようになりました。お気に入りにポインタを置いて鉛筆をクリックすると、スクリーンショットに「経費の領収書」のような名前を付けられます。お気に入りとクイックペーストに名前が表示され、検索（ピンインも可）でも見つかります。名前を消すと内容の表示に戻ります。"
-          ],
-          "fixes": [
-            "お気に入りで画像をクリックすると、画像の代わりに「この画像は履歴から削除されました」と表示されていました。現在はプレビューが開きます。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "裝置選單新增「重新連線」：經中繼或離線的裝置，點一下馬上再試一次直連，不用等下一次自動重試；仍然打不通就繼續經中繼，連線不中斷。已經直連的裝置不顯示這一項。",
-            "收藏可以重新命名：滑鼠停在收藏上，點鉛筆幫它取個名稱，例如把一張截圖叫「報帳單」。收藏頁和快速貼上裡顯示這個名稱，搜尋也找得到，拼音也可以。清除名稱就恢復顯示內容。"
-          ],
-          "fixes": [
-            "在收藏頁點收藏的圖片，會提示「這筆圖片記錄已被刪除」，看不到圖片。現在能正常開啟預覽。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "裝置選單新增「重新連線」：經中轉或離線的裝置，按一下馬上再試一次直連，不用等下一次自動重試；仍然打不通就繼續經中轉，連線不中斷。已經直連的裝置不顯示這一項。",
-            "收藏可以重新命名：滑鼠停在收藏上，按鉛筆為它改個名稱，例如把一張截圖叫「報銷單」。收藏頁和快速貼上裏顯示這個名稱，搜尋也找得到，拼音也可以。清除名稱就恢復顯示內容。"
-          ],
-          "fixes": [
-            "在收藏頁按收藏的圖片，會提示「這條圖片記錄已被刪除」，看不到圖片。現在能正常開啟預覽。"
           ]
         }
       }
