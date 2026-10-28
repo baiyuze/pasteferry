@@ -1,5 +1,20 @@
 # 更新记录 / Changelog
 
+## 2.7.2 — 2026-10-28
+
+The Sent list on the phone can cover more or fewer days.
+
+### Changes
+
+- **Android**: Settings › Keep sent records sets how many days the Sent list on the send page covers: 1, 3, 7 or 30 days, three when unset.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended; pairings, contacts, history and settings are preserved.
+- **Server**: no update needed.
+- **Android**: install the APK by hand, or use Settings › Check for updates to open the download link.
+- The device-to-device protocol is unchanged and compatible with 2.6.0.
+
 ## 2.7.1 — 2026-10-28
 
 The phone page no longer records its own copies, the Android app asks before

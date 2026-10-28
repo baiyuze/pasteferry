@@ -11,6 +11,14 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.7.2',
+ 'date': '2026-10-28',
+ 'changes': [('Android: Settings › Keep sent records sets how many days the Sent list on the send page covers: 1, 3, 7 or 30 days, three when unset.',
+              '安卓：设置里的「发送记录保留」可以选发送页的「发送记录」显示最近几天：1、3、7 或 30 天，不设时是 3 天。',
+              'Android：設定の「送信履歴の保持」で、送信ページの「送信履歴」が直近何日分を表示するか選べます（1、3、7、30 日。未設定は 3 日）。',
+              '安卓：設定裡的「傳送記錄保留」可以選傳送頁的「傳送記錄」顯示最近幾天：1、3、7 或 30 天，不設時是 3 天。',
+              '安卓：設定裏的「傳送記錄保留」可以選傳送頁的「傳送記錄」顯示最近幾天：1、3、7 或 30 天，不設時是 3 天。')],
+ 'fixes': []},
 {'version': '2.7.1',
  'date': '2026-10-28',
  'changes': [('Android: picking photos or files first shows every file with its size, and nothing is sent until Send is tapped; multi-select works. The send page lists what this phone sent in the last three days, with View all and Clear. Settings has Check for updates, which opens the APK link when a newer version exists.',
