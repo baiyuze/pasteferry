@@ -609,6 +609,17 @@ def home(code: str) -> str:
       </div>
     </section>
 
+    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
+      <div class="wrap">
+        <h2 id="phone-title">{f["home_phone_h2"]}</h2>
+        <p class="intro">{f["home_phone_intro"]}</p>
+        <ul class="points">
+{items(f["home_phone_points"], "          ")}
+        </ul>
+        <p class="more"><a href="{FEATURES}#phone">{f["home_phone_link"]}</a></p>
+      </div>
+    </section>
+
     <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <h2 id="send-title">{f["home_send_h2"]}</h2>
@@ -875,6 +886,18 @@ def features_page(code: str) -> str:
 {facts(f["friends_points"])}
         </ul>
         <p class="f-note">{f["friends_note"]}</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="phone" aria-labelledby="phone-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
+        <h2 class="f-h2" id="phone-title">{f["phone_h2"]}</h2>
+        <p class="f-intro">{f["phone_intro"]}</p>
+        <ul class="facts">
+{facts(f["phone_points"])}
+        </ul>
+        <p class="f-note">{f["phone_note"]}</p>
       </div>
     </section>
 
@@ -1878,7 +1901,7 @@ def start_page(code: str) -> str:
     home_href = up + (path or "./")
     base = up + path
     shots = up + shots_dir(code)
-    links = {"home": home_href, "official": base + OFFICIAL, "lan": base + LAN, "cloud": base + CLOUD, "server": base + GUIDE,
+    links = {"home": home_href, "official": base + OFFICIAL, "lan": base + LAN, "cloud": base + CLOUD, "server": base + GUIDE, "android": DL + "PasteFerry-android-arm64.apk",
              "ts": base + TAILSCALE, "issues": REPO + "/issues"}
 
     def step(n: int) -> str:
@@ -1959,6 +1982,25 @@ def start_page(code: str) -> str:
           <figure class="shot">
             <img src="{shots}pairing-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(s["pair_alt"])}">
           </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="phone" aria-labelledby="phone-title">
+      <div class="wrap">
+        <h2 id="phone-title">{s["phone_h2"]}</h2>
+        <p class="intro">{s["phone_intro"]}</p>
+        <div class="os-grid qs-grid">
+          <div>
+            <h3>{s["web_h"]}</h3>
+            <ol class="steps">
+{items([fill(x, links) for x in s["web_steps"]], "              ")}
+            </ol>
+            <h3>{s["apk_h"]}</h3>
+            <ol class="steps">
+{items([fill(x, links) for x in s["apk_steps"]], "              ")}
+            </ol>
+          </div>
         </div>
       </div>
     </section>

@@ -30,12 +30,29 @@ COPY = {
 
     # ── 首页 ──
     "badge": (
-        '2.6 新功能：给好友发文件 →',
-        '2.6 新功能：傳檔案給好友 →',
-        '2.6 新功能：傳檔案給好友 →',
-        'New in 2.6: send files to contacts →',
-        '2.6 の新機能：連絡先にファイルを送る →',
+        '2.7 新功能：手机扫码同步，安卓版上线 →',
+        '2.7 新功能：手機掃碼同步，安卓版上線 →',
+        '2.7 新功能：手機掃碼同步，安卓版上線 →',
+        'New in 2.7: sync with your phone, and an Android app →',
+        '2.7 の新機能：スマホと同期、Android 版登場 →',
     ),
+    # 首页手机区块（2.7）
+    "home_phone_h2": ("手机也能用了。", "手機也能用了。", "手機也能用了。", "Your phone joins in.", "スマホでも使える。"),
+    "home_phone_intro": (
+        '电脑上开一个二维码，手机扫码就在浏览器里看到全部复制记录：复制一条到手机、把照片和文件发回电脑。装 App 也行，不装也行。',
+        '電腦上開一個 QR 碼，手機掃碼就在瀏覽器裡看到全部複製記錄：複製一條到手機、把照片和檔案傳回電腦。裝 App 也行，不裝也行。',
+        '電腦上開一個 QR 碼，手機掃碼就在瀏覽器裏看到全部複製記錄：複製一條到手機、把照片和檔案傳回電腦。裝 App 也行，不裝也行。',
+        'The computer shows a code; scan it and the phone’s browser lists everything you copied: copy one to the phone, send photos and files back. An app is there if you want it, but you don’t need one.',
+        'パソコンに QR コードを出し、スマホで読み取るとブラウザにコピー履歴が全て出ます。テキストをスマホへコピー、写真やファイルをパソコンへ送り返せます。アプリはあってもなくてもOK。',
+    ),
+    "home_phone_points": (
+        ['<b>手机浏览器直接用</b>，不用装任何东西。', '<b>安卓 App 已上线</b>，配对方式与电脑相同。', '<b>端到端加密</b>，只在同一局域网工作。'],
+        ['<b>手機瀏覽器直接用</b>，不用裝任何東西。', '<b>安卓 App 已上線</b>，配對方式與電腦相同。', '<b>端到端加密</b>，只在同一區域網路工作。'],
+        ['<b>手機瀏覽器直接用</b>，不用裝任何東西。', '<b>安卓 App 已上線</b>，配對方式與電腦相同。', '<b>端到端加密</b>，只在同一局域網絡工作。'],
+        ['<b>Works in the phone’s browser</b>, nothing to install.', '<b>An Android app is out</b>, pairing like another computer.', '<b>Encrypted end to end</b>, same network only.'],
+        ['<b>スマホのブラウザでそのまま使え</b>、インストール不要。', '<b>Android アプリも登場</b>、ペアリングはパソコンと同じ。', '<b>エンドツーエンドで暗号化</b>、同じネットワーク限定。'],
+    ),
+    "home_phone_link": ("了解手机端怎么用 →", "了解手機端怎麼用 →", "了解手機端怎麼用 →", "How to use the phone →", "スマホの使い方 →"),
     "home_send_h2": ("拖过去，<br>就到了。", "拖過去，<br>就到了。", "拖過去，<br>就到了。",
                      "Drag it over.<br>It’s there.", "ドラッグすれば、<br>もう届いている。"),
     "home_send_intro": (
@@ -197,6 +214,36 @@ COPY = {
         "ファイル送信ページ：レーダーの下に連絡先のアイコン、中央に MacBook Air の連絡先からファイルを送りたいという依頼とメモ。拒否か受け入れを選べる",
     ),
     "home_friends_link": ("了解给好友发文件 →", "了解給好友傳檔案 →", "了解給好友傳檔案 →", "More about sending to contacts →", "連絡先への送信について →"),
+
+    # ── 手机：网页传输与安卓 App（2.7） ──
+    "phone_h2": (
+        '手机也能用了。',
+        '手機也能用了。',
+        '手機也能用了。',
+        'Your phone joins in.',
+        'スマホでも使える。',
+    ),
+    "phone_intro": (
+        '电脑上开一个二维码，手机扫码就在浏览器里看到全部复制记录：复制一条到手机，把照片和文件发回电脑。安卓 App 也上线了，配对方式和电脑一样。',
+        '電腦上開一個 QR 碼，手機掃碼就在瀏覽器裡看到全部複製記錄：複製一條到手機，把照片和檔案傳回電腦。安卓 App 也上線了，配對方式和電腦一樣。',
+        '電腦上開一個 QR 碼，手機掃碼就在瀏覽器裏看到全部複製記錄：複製一條到手機，把照片和檔案傳回電腦。安卓 App 也上線了，配對方式和電腦一樣。',
+        'The computer shows a code. Scan it and the phone’s browser lists everything you copied: copy a text to the phone, send photos and files back. There is an Android app too, pairing like another computer.',
+        'パソコンに QR コードを出し、スマホで読み取るとブラウザにコピー履歴がすべて出ます。テキストをスマホへコピー、写真やファイルを送り返せます。Android アプリも登場し、ペアリングはパソコンと同じです。',
+    ),
+    "phone_points": (
+        [('网页版，不用装', '手机浏览器直接打开，记录、复制、发送都在。'), ('安卓 App 已上线', '和电脑一样配对；收到内容自动进手机剪贴板。'), ('加密，仅限同一局域网', '手机和电脑之间端到端加密，离开网络自动断开。')],
+        [('網頁版，不用裝', '手機瀏覽器直接打開，記錄、複製、傳送都在。'), ('安卓 App 已上線', '和電腦一樣配對；收到內容自動進手機剪貼簿。'), ('加密，僅限同一區域網路', '手機和電腦之間端到端加密，離開網路自動斷開。')],
+        [('網頁版，不用裝', '手機瀏覽器直接打開，記錄、複製、傳送都在。'), ('安卓 App 已上線', '和電腦一樣配對；收到內容自動進手機剪貼簿。'), ('加密，僅限同一局域網絡', '手機和電腦之間端到端加密，離開網絡自動斷開。')],
+        [('The web page, nothing to install', 'Opens in the phone’s browser: records, copy, send.'), ('An Android app', 'Pairs like another computer; what the computer copies lands in the phone’s clipboard.'), ('Encrypted, same network only', 'End-to-end encrypted between the phone and the computer.')],
+        [('ウェブ版、インストール不要', 'スマホのブラウザで開くだけ。履歴、コピー、送信。'), ('Android アプリ', 'パソコンと同じようにペアリング。受信した内容はスマホのクリップボードに。'), ('暗号化、同じネットワークのみ', 'スマホとパソコンの間はエンドツーエンドで暗号化。')],
+    ),
+    "phone_note": (
+        'iPhone、iPad 没有 App：iOS 不允许后台读剪贴板，分发也需要证书。这些设备用网页版。',
+        'iPhone、iPad 沒有 App：iOS 不允許背景讀剪貼簿，分發也需要憑證。這些設備用網頁版。',
+        'iPhone、iPad 沒有 App：iOS 不允許背景讀取剪貼簿，分發也需要憑證。這些裝置用網頁版。',
+        'There is no iPhone or iPad app: iOS does not let apps read the clipboard in the background, and distributing one needs a certificate. Those devices use the web page.',
+        'iPhone・iPad のアプリはありません。iOS はバックグラウンドでのクリップボード読み取りを許可せず、配布にも証明書が要ります。これらはウェブ版をご利用ください。',
+    ),
 
     # ── 快捷粘贴 ──
     "qp_h2": ("按 {key}，<br>最近复制的都在手边。", "按 {key}，<br>最近複製的都在手邊。", "按 {key}，<br>最近複製的都在手邊。",

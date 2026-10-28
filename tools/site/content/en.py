@@ -22,7 +22,7 @@ C = {
     "lang_label": "Language",
 
     "h1": "Copy on this computer.<br>Paste on that one.",
-    "lede": 'Mac, Windows or Linux, no shared account needed. Text, screenshots, files and folders, plus sending files to friends.',
+    "lede": 'Mac, Windows, Linux and Android, no shared account needed. Text, screenshots and files; a phone joins in by scanning a code — nothing to install.',
     "dl_button": "Download PasteFerry",
     "dl_mac": "Download for Mac",
     "dl_win": "Download for Windows",
@@ -269,7 +269,8 @@ C = {
         "notice": "<strong>On the same network you no longer need a server:</strong> install the app and pair; see the "
                   "<a href=\"{lan}\">same network guide</a>. This guide still helps when two subnets can't reach each other and "
                   "traffic has to go through a computer both can reach.",
-        "toc": [("prepare", "Before you start"), ("install", "Install"), ("check", "Check"), ("clients", "Set up the apps"), ("faq", "Questions")],
+        "toc": [("prepare", "Before you start"), ("install", "Install"), ("check", "Check"), ("clients", "Set up the apps"), ("faq", "Questions")
+           ],
 
         "overview_h2": "The server only introduces devices",
         "overview_intro": "Each computer stays connected to the server, which is how they find each other and exchange connection details. "
@@ -555,7 +556,7 @@ C = {
                        "networks, turn on Service. Then copy on one computer and paste on the other.",
         "h1": "Quick start",
         "lede": "Install the app, pick a way to connect, and pair your computers. On the same network it takes a few minutes.",
-        "toc": [("app", "Install the app"), ("server", "Pick a way to connect"), ("pair", "Pair")],
+        "toc": [("app", "Install the app"), ("server", "Pick a way to connect"), ("pair", "Pair"), ("phone", "Using a phone")],
         "step": "Step {n}",
 
         "app_h2": "Install the app on each computer",
@@ -600,6 +601,22 @@ C = {
                      "either side is in the history.",
         "help": "Need help? <a href=\"{lan}#faq\">Same network questions</a> · <a href=\"{ts}#faq\">Tailscale questions</a> · "
                 "<a href=\"{cloud}#faq\">Public server questions</a> · <a href=\"{issues}\">Report an issue</a>",
+            "phone_h2": "Using a phone",
+        "phone_intro": "Once the computers are paired above, a phone can join any time: scan a code for the web page, or install the Android app.",
+        "phone_toc": "Using a phone",
+        "web_h": "The web page: nothing to install",
+        "web_steps": [
+            "Computer: open Devices › Phone web transfer, turn the switch on, and a code appears.",
+            "Phone: scan the code with the camera or a browser and give the phone a name.",
+            "The phone’s browser then shows the computer’s records: tap Copy to take a text to the phone, or use Send to push text, photos and files to the computer.",
+        ],
+        "apk_h": "The Android app: pairs like another computer",
+        "apk_steps": [
+            'Phone: <a href="{android}">download the APK</a> and install it (allow installing from unknown sources when asked).',
+            "Computer: Devices → Add device → Show a code.",
+            "Phone: enter the code and confirm when the two fingerprints match.",
+            "What you copy on the computer then appears in the phone’s records and clipboard.",
+        ],
     },
 
     # ── Same network (lan/ page), no server ──
