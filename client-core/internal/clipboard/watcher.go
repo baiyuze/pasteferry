@@ -203,19 +203,6 @@ func (w *Watcher) Write(ctx context.Context, content Content) error {
 	return err
 }
 
-// MarkCurrentAsOwn 把当前这次剪贴板变化记为「我们自己写进去的」，下一轮轮询不再当成用户的新复制。
-// 网页在自己的浏览器里复制记录后调用它，否则会把自己的复制又记成一条新记录。
-func (w *Watcher) MarkCurrentAsOwn(ctx context.Context) error {
-	_, err := CallResult(ctx, w.loop, func() (bool, error) {
-		if snap, err := w.cb.Peek(); err == nil {
-			w.selfWrites[snap.ChangeCount] = struct{}{}
-			w.lastChange = snap.ChangeCount
-		}
-		return true, nil
-	})
-	return err
-}
-
 // Revision reads metadata only. A failed read must never authorize a later write.
 func (w *Watcher) Revision(ctx context.Context) (int64, error) {
 	snap, err := CallResult(ctx, w.loop, w.cb.Peek)

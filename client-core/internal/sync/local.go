@@ -70,10 +70,3 @@ func (e *Engine) LocalPaths(clipID string) ([]string, error) {
 	return e.localPaths(clip)
 }
 
-// NoteOwnCopy 让网页复制记录后把这次剪贴板变化忽略掉，避免自己复制自己又生成一条记录。
-func (e *Engine) NoteOwnCopy(ctx context.Context) error {
-	if e.watcher == nil {
-		return nil
-	}
-	return e.watcher.MarkCurrentAsOwn(ctx)
-}
