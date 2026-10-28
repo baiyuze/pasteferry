@@ -11,6 +11,27 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.7.3',
+ 'date': '2026-10-28',
+ 'changes': [('Android: the same arm64 APK now supports Android 9 (API 28) and later. Saving photos and files '
+              'asks for storage access only on Android 9; Android 10 and later keep using MediaStore without that '
+              'permission.',
+              '安卓：同一个 arm64 APK 现支持 Android 9（API 28）及以上。仅在 Android 9 点击保存图片或文件时申请存储权限；Android 10 及以上继续使用 '
+              'MediaStore，无需这项权限。',
+              'Android：同じ arm64 APK で Android 9（API 28）以降に対応しました。写真やファイルの保存時にストレージの許可を求めるのは Android 9 のみで、Android '
+              '10 以降は引き続き許可不要の MediaStore を使います。',
+              '安卓：同一個 arm64 APK 現支援 Android 9（API 28）以上。僅在 Android 9 點選儲存圖片或檔案時要求儲存空間權限；Android 10 以上繼續使用 '
+              'MediaStore，無需這項權限。',
+              '安卓：同一個 arm64 APK 現支援 Android 9（API 28）或以上。只在 Android 9 按儲存圖片或檔案時要求儲存空間權限；Android 10 或以上繼續使用 '
+              'MediaStore，無需這項權限。')],
+ 'fixes': [('On Windows, opening the phone QR code now checks firewall access and requests administrator approval '
+            'when needed. Cancelled or failed setup stays visible with a retry button, and success is shown only '
+            'after the rules are verified. Existing access does not prompt again.',
+            'Windows 上打开手机二维码时会自动检查防火墙，需要时弹出管理员授权。取消或失败会显示原因和重试按钮，核对放行规则后才提示成功；已放行时不重复弹窗。',
+            'Windows でスマホ用 QR '
+            'コードを開くとファイアウォールを確認し、必要な場合だけ管理者の承認を求めます。キャンセルや失敗は理由と再試行ボタンを表示し、ルールの確認後にだけ成功と表示します。許可済みなら再度確認しません。',
+            'Windows 上開啟手機 QR 碼時會自動檢查防火牆，需要時要求系統管理員授權。取消或失敗會顯示原因和重試按鈕，確認允許連入規則後才提示成功；已允許時不重複彈出視窗。',
+            'Windows 上開啟手機二維碼時會自動檢查防火牆，需要時要求管理員授權。取消或失敗會顯示原因和重試按鈕，確認允許連線規則後才提示成功；已允許時不重複彈出視窗。')]},
 {'version': '2.7.2',
  'date': '2026-10-28',
  'changes': [('Android: Settings › Keep sent records sets how many days the Sent list on the send page covers: 1, 3, 7 or 30 days, three when unset.',

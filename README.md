@@ -28,7 +28,7 @@
   <img src="https://img.shields.io/badge/macOS-13%2B-1D1D1F" alt="macOS 13+">
   <img src="https://img.shields.io/badge/Windows-10%20%2F%2011-1D1D1F" alt="Windows 10 / 11">
   <img src="https://img.shields.io/badge/Linux-x64%20%2F%20ARM64-1D1D1F" alt="Linux x64 / ARM64">
-  <img src="https://img.shields.io/badge/Android-10%2B%20arm64-1D1D1F" alt="Android 10+ arm64">
+  <img src="https://img.shields.io/badge/Android-9%2B%20arm64-1D1D1F" alt="Android 9+ arm64">
   <img src="https://img.shields.io/badge/Web-any%20browser-1D1D1F" alt="Web, any browser">
   <img src="https://img.shields.io/badge/license-AGPL--3.0-6E6E73" alt="AGPL-3.0 License">
 </p>

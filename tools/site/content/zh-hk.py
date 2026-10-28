@@ -27,7 +27,7 @@ C = {
     "dl_mac": "下載 Mac 版",
     "dl_win": "下載 Windows 版",
     "dl_linux": "下載 Linux 版",
-    "dl_note": "版本 2.7.2，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）。",
+    "dl_note": "版本 2.7.3，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）。",
     "start_link": "第一次用？三步設定好 →",
     "stage_label": "示範：在 MacBook 上按下 Command C，檔案化成一張紙，經直連飛到 Windows 手提電腦，在那裏按下 Ctrl V 貼上",
     "stage_file": "季度報告-最終版.pptx",
@@ -177,7 +177,7 @@ C = {
 
     "specs_h2": "技術規格",
     "specs": [
-        ("版本", '2.7.2，<time datetime="2026-10-28">2026 年 10 月 28 日</time>發佈'),
+        ("版本", '2.7.3，<time datetime="2026-10-28">2026 年 10 月 28 日</time>發佈'),
         ("Mac 用戶端", "macOS 13 Ventura 或以上；Apple 晶片與 Intel 處理器各有一個安裝檔，約 25 MB，不需要 Rosetta；也有兩種晶片通用的版本，約 47 MB"),
         ("Windows 用戶端", "Windows 10 與 Windows 11，x64；按用戶安裝，不需要管理員權限；安裝檔約 23 MB"),
         ("Linux 用戶端", "x64 與 ARM64；.deb（Debian、Ubuntu 等）或 tar.gz（其他發行版），約 22 MB；"
@@ -784,7 +784,7 @@ C = {
         "phone": {
             "title": "手機（安卓 App 或網頁版）",
             "apk": "下載安卓版（APK）",
-            "apk_note": "安卓 10 或以上、arm64 的手機。安裝前系統會讓你確認一次。",
+            "apk_note": "安卓 9 或以上、arm64 的手機。安裝前系統會讓你確認一次。",
             "web_h": "網頁版（不用安裝）",
             "web_note": "在電腦上打開「裝置 › 手機網頁傳輸」，用手機掃 QR 碼，瀏覽器裏就能用。",
             "steps": [

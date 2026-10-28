@@ -27,7 +27,7 @@ C = {
     "dl_mac": "Download for Mac",
     "dl_win": "Download for Windows",
     "dl_linux": "Download for Linux",
-    "dl_note": "Version 2.7.2, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64).",
+    "dl_note": "Version 2.7.3, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64).",
     "start_link": "New here? Set it up in three steps →",
     "stage_label": "Demo: Command C on a MacBook turns a file into a sheet that flies over a direct connection to a Windows "
                    "laptop, where Ctrl V pastes it",
@@ -186,7 +186,7 @@ C = {
 
     "specs_h2": "Specifications",
     "specs": [
-        ("Version", '2.7.2, released <time datetime="2026-10-28">October 28, 2026</time>'),
+        ("Version", '2.7.3, released <time datetime="2026-10-28">October 28, 2026</time>'),
         ("Mac app", "macOS 13 Ventura or later; separate downloads for Apple silicon and Intel, about 25 MB each, no Rosetta; "
                     "a universal version for both is about 47 MB"),
         ("Windows app", "Windows 10 and Windows 11, x64; installs per user, no administrator rights; about 23 MB download"),
@@ -856,7 +856,7 @@ C = {
         "phone": {
             "title": "Phone (Android app or the web page)",
             "apk": "Download for Android (APK)",
-            "apk_note": "Android 10 or later, arm64 phones. Android asks once before installing it.",
+            "apk_note": "Android 9 or later, arm64 phones. Android asks once before installing it.",
             "web_h": "The web page (nothing to install)",
             "web_note": "Turn on Devices › Phone web transfer on the computer and scan the code with your phone.",
             "steps": [

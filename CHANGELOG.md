@@ -1,5 +1,24 @@
 # 更新记录 / Changelog
 
+## 2.7.3 — 2026-10-28
+
+One APK now supports Android 9 and later, and Windows guides phone connections through firewall setup.
+
+### Changes
+
+- Android: the same arm64 APK now supports Android 9 (API 28) and later. Saving photos and files asks for storage access only on Android 9; Android 10 and later keep using MediaStore without that permission.
+
+### Fixes
+
+- On Windows, opening the phone QR code now checks firewall access and requests administrator approval when needed. Cancelled or failed setup stays visible with a retry button, and success is shown only after the rules are verified. Existing access does not prompt again.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended on Windows for phone web transfer; optional on Mac and Linux. Pairings, contacts, history and settings are preserved.
+- **Server**: no update needed.
+- **Android**: install the same arm64 APK on Android 9 or later. Existing installations can update in place with the fixed signing key. Android 9 asks for storage access only when saving photos or files.
+- The device-to-device protocol is unchanged and compatible with 2.6.0.
+
 ## 2.7.2 — 2026-10-28
 
 The Sent list on the phone can cover more or fewer days.
