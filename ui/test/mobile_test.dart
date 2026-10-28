@@ -1,11 +1,14 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:pasteferry_ui/app_state.dart';
 import 'package:pasteferry_ui/gen/pasteferry/v1/daemon.pb.dart';
 import 'package:pasteferry_ui/mobile/mobile_app.dart';
 import 'package:pasteferry_ui/mobile/ui.dart';
+import 'package:pasteferry_ui/mobile/record_actions.dart';
+import 'package:pasteferry_ui/widgets/common.dart';
 
 Int64 _ago(int seconds) => Int64(DateTime.now().millisecondsSinceEpoch ~/ 1000 - seconds);
 
@@ -13,6 +16,7 @@ Int64 _ago(int seconds) => Int64(DateTime.now().millisecondsSinceEpoch ~/ 1000 -
 class _PhoneState extends AppState {
   final submitted = <String>[];
   final applied = <String>[];
+  Object? copyError;
 
   @override
   Future<ClipRecord> submitText(String text) async {
@@ -21,7 +25,13 @@ class _PhoneState extends AppState {
   }
 
   @override
-  Future<void> applyToClipboard(String clipId) async => applied.add(clipId);
+  Future<void> applyToClipboard(String clipId) async {
+    if (copyError != null) throw copyError!;
+    applied.add(clipId);
+  }
+
+  @override
+  Future<List<String>> localPaths(String clipId) async => ['/cache/photo.jpg'];
 }
 
 _PhoneState _demo({bool online = true, List<ClipRecord> records = const []}) {
@@ -64,6 +74,62 @@ Future<void> _pump(WidgetTester tester, AppState state) async {
 }
 
 void main() {
+  testWidgets('图片复制和分享失败只显示简短提示，不泄漏原始路径和堆栈', (tester) async {
+    final state = _demo()..copyError = StateError('Failed to find configured root /data/data/private/photo.jpg');
+    await _pump(tester, state);
+    final context = tester.element(find.byType(MobileShell));
+    final media = ClipRecord(id: 'image', kind: ClipKind.CLIP_KIND_IMAGE, status: ClipStatus.CLIP_STATUS_READY);
+    await runRecordAction(context, media, RecordAction.copy);
+    await tester.pumpAndSettle();
+    expect(find.text('无法复制这张图片或文件，请尝试先保存。'), findsOneWidget);
+    expect(find.textContaining('configured root'), findsNothing);
+    const channel = MethodChannel('pasteferry/host');
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, (call) async {
+      throw PlatformException(code: 'error', message: 'Failed to find configured root', details: 'java.lang.IllegalArgumentException');
+    });
+    addTearDown(() => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, null));
+    await runRecordAction(context, media, RecordAction.share);
+    await tester.pumpAndSettle();
+    expect(find.text('无法分享这张图片或文件，请尝试先保存。'), findsOneWidget);
+    expect(find.textContaining('PlatformException'), findsNothing);
+    expect(find.textContaining('java.lang'), findsNothing);
+    await tester.pump(const Duration(seconds: 7));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('手机的所有 toast 都在安全区顶部，键盘和对话框不改变位置', (tester) async {
+    await _pump(tester, _demo());
+    tester.view.viewPadding = const FakeViewPadding(top: 72);
+    tester.view.viewInsets = const FakeViewPadding(bottom: 900);
+    await tester.pump();
+    final context = tester.element(find.byType(MobileShell));
+    for (final message in ['已复制', '已保存', '已删除', '连接失败']) {
+      showToast(context, message, error: message == '连接失败');
+      await tester.pumpAndSettle();
+      final toast = find.text(message);
+      expect(toast, findsOneWidget);
+      expect(tester.getTopLeft(toast).dy, greaterThanOrEqualTo(36));
+      expect(tester.getBottomLeft(toast).dy, lessThan(150));
+      final hit = tester.hitTestOnBinding(tester.getCenter(toast));
+      final render = tester.renderObject(toast);
+      expect(hit.path.any((entry) => entry.target == render), isFalse,
+          reason: '普通 toast 不拦截页面的点击');
+    }
+    showDialog<void>(context: context, builder: (dialogContext) => AlertDialog(
+      content: TextButton(
+        onPressed: () => showToast(dialogContext, '保存失败', error: true),
+        child: const Text('测试错误提示'),
+      ),
+    ));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('测试错误提示'));
+    await tester.pumpAndSettle();
+    expect(tester.getBottomLeft(find.text('保存失败')).dy, lessThan(150));
+    await tester.pump(const Duration(seconds: 7));
+    await tester.pumpAndSettle();
+    expect(find.text('保存失败'), findsNothing);
+  });
+
   testWidgets('底部四个标签，默认是记录', (tester) async {
     await _pump(tester, _demo(records: [_text]));
     expect(find.byType(MobileTabBar), findsOneWidget);
@@ -104,6 +170,8 @@ void main() {
     await _pump(tester, state);
     await tester.tap(find.descendant(of: find.byType(MobileTabBar), matching: find.text('发送')));
     await tester.pumpAndSettle();
+    tester.view.viewPadding = const FakeViewPadding(top: 72);
+    await tester.pump();
 
     FilledButton send() => tester.widget<FilledButton>(find.widgetWithText(FilledButton, '发送'));
     expect(send().onPressed, isNull);
@@ -116,6 +184,17 @@ void main() {
     await tester.pump();
     expect(state.submitted, ['手机上写的一段话']);
     expect(find.text('手机上写的一段话'), findsNothing);
+    final toast = find.text('已发送');
+    expect(toast, findsOneWidget);
+    expect(tester.getTopLeft(toast).dy, greaterThanOrEqualTo(24 + 12));
+    expect(tester.getBottomLeft(toast).dy, lessThan(150));
+    expect(tester.getBottomLeft(toast).dy,
+        lessThan(tester.getTopLeft(find.widgetWithText(FilledButton, '发送')).dy));
+    // 提示显示期间仍然可以输入下一条，底部按钮不被遮挡。
+    await tester.enterText(find.byType(TextField), '接着发下一条');
+    await tester.pump();
+    expect(find.text('接着发下一条'), findsOneWidget);
+    expect(toast, findsOneWidget);
     await tester.pump(const Duration(seconds: 4));
   });
 

@@ -2452,4 +2452,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get webShareFirewallAllow => 'スマートフォンの接続を確認・許可';
+
+  @override
+  String get mCopyMediaFailed => '画像やファイルをコピーできませんでした。先に保存してみてください。';
+
+  @override
+  String get mShareMediaFailed => '画像やファイルの共有を開けませんでした。先に保存してみてください。';
+
+  @override
+  String get mSaveMediaFailed =>
+      '画像やファイルを保存できませんでした。ストレージの許可と空き容量を確認し、再試行してください。';
 }

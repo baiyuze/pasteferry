@@ -2425,6 +2425,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get webShareFirewallAllow => '检查并允许手机连接';
+
+  @override
+  String get mCopyMediaFailed => '无法复制这张图片或文件，请尝试先保存。';
+
+  @override
+  String get mShareMediaFailed => '无法分享这张图片或文件，请尝试先保存。';
+
+  @override
+  String get mSaveMediaFailed => '无法保存这张图片或文件，请检查存储权限和剩余空间后重试。';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -4848,6 +4857,15 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get webShareFirewallAllow => '檢查並允許手機連線';
+
+  @override
+  String get mCopyMediaFailed => '無法複製這張圖片或檔案，請嘗試先儲存。';
+
+  @override
+  String get mShareMediaFailed => '無法分享這張圖片或檔案，請嘗試先儲存。';
+
+  @override
+  String get mSaveMediaFailed => '無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -7271,4 +7289,13 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get webShareFirewallAllow => '檢查並允許手機連線';
+
+  @override
+  String get mCopyMediaFailed => '無法複製這張圖片或檔案，請嘗試先儲存。';
+
+  @override
+  String get mShareMediaFailed => '無法分享這張圖片或檔案，請嘗試先儲存。';
+
+  @override
+  String get mSaveMediaFailed => '無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。';
 }

@@ -445,6 +445,10 @@ S = [
     ('webShareFirewallFailed', 'Firewall setup did not finish. Your phone may be unable to open the page. Try again and approve the Windows administrator prompt.', '防火墙授权尚未完成，手机可能无法打开网页。请点击下方按钮重试，并在 Windows 管理员授权窗口中选择“是”。', 'ファイアウォールの設定が完了していません。スマートフォンでページを開けない場合があります。再試行し、Windows の管理者確認で「はい」を選んでください。', '防火牆授權尚未完成，手機可能無法開啟網頁。請點選下方按鈕重試，並在 Windows 系統管理員授權視窗中選擇「是」。', '防火牆授權尚未完成，手機可能無法開啟網頁。請按下方按鈕重試，並在 Windows 管理員授權視窗中選擇「是」。'),
     ('webShareFirewallAllow', 'Check and allow phone connections', '检查并允许手机连接', 'スマートフォンの接続を確認・許可', '檢查並允許手機連線', '檢查並允許手機連線'),
 
+    ('mCopyMediaFailed', 'Could not copy this image or file. Try saving it first.', '无法复制这张图片或文件，请尝试先保存。', '画像やファイルをコピーできませんでした。先に保存してみてください。', '無法複製這張圖片或檔案，請嘗試先儲存。', '無法複製這張圖片或檔案，請嘗試先儲存。'),
+    ('mShareMediaFailed', 'Could not open sharing for this image or file. Try saving it first.', '无法分享这张图片或文件，请尝试先保存。', '画像やファイルの共有を開けませんでした。先に保存してみてください。', '無法分享這張圖片或檔案，請嘗試先儲存。', '無法分享這張圖片或檔案，請嘗試先儲存。'),
+    ('mSaveMediaFailed', 'Could not save this image or file. Check storage access and free space, then try again.', '无法保存这张图片或文件，请检查存储权限和剩余空间后重试。', '画像やファイルを保存できませんでした。ストレージの許可と空き容量を確認し、再試行してください。', '無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。', '無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。'),
+
 ]
 
 # 数字类占位符的类型；其余都是字符串

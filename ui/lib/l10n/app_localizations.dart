@@ -4309,6 +4309,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check and allow phone connections'**
   String get webShareFirewallAllow;
+
+  /// No description provided for @mCopyMediaFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not copy this image or file. Try saving it first.'**
+  String get mCopyMediaFailed;
+
+  /// No description provided for @mShareMediaFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open sharing for this image or file. Try saving it first.'**
+  String get mShareMediaFailed;
+
+  /// No description provided for @mSaveMediaFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save this image or file. Check storage access and free space, then try again.'**
+  String get mSaveMediaFailed;
 }
 
 class _AppLocalizationsDelegate

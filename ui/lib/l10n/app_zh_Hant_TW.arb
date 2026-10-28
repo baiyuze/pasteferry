@@ -699,5 +699,8 @@
   "webShareFirewallPreparing": "正在檢查 Windows 防火牆。若出現系統管理員授權視窗，請選擇「是」，讓手機可以連線到這台電腦。",
   "webShareFirewallReady": "Windows 防火牆已允許連入。請讓手機和電腦連上同一網路後掃碼；若仍無法連線，可點選下方按鈕重新檢查。",
   "webShareFirewallFailed": "防火牆授權尚未完成，手機可能無法開啟網頁。請點選下方按鈕重試，並在 Windows 系統管理員授權視窗中選擇「是」。",
-  "webShareFirewallAllow": "檢查並允許手機連線"
+  "webShareFirewallAllow": "檢查並允許手機連線",
+  "mCopyMediaFailed": "無法複製這張圖片或檔案，請嘗試先儲存。",
+  "mShareMediaFailed": "無法分享這張圖片或檔案，請嘗試先儲存。",
+  "mSaveMediaFailed": "無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。"
 }

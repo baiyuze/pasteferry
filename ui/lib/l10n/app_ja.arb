@@ -699,5 +699,8 @@
   "webShareFirewallPreparing": "Windows ファイアウォールを確認しています。管理者の承認を求められたら「はい」を選び、スマートフォンからの接続を許可してください。",
   "webShareFirewallReady": "Windows ファイアウォールの設定が完了しました。同じネットワークに接続してスキャンしてください。接続できない場合は、下のボタンで再確認できます。",
   "webShareFirewallFailed": "ファイアウォールの設定が完了していません。スマートフォンでページを開けない場合があります。再試行し、Windows の管理者確認で「はい」を選んでください。",
-  "webShareFirewallAllow": "スマートフォンの接続を確認・許可"
+  "webShareFirewallAllow": "スマートフォンの接続を確認・許可",
+  "mCopyMediaFailed": "画像やファイルをコピーできませんでした。先に保存してみてください。",
+  "mShareMediaFailed": "画像やファイルの共有を開けませんでした。先に保存してみてください。",
+  "mSaveMediaFailed": "画像やファイルを保存できませんでした。ストレージの許可と空き容量を確認し、再試行してください。"
 }

@@ -10,12 +10,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import java.io.File
 import java.util.concurrent.Executors
 
 /**
@@ -70,8 +70,14 @@ class MainActivity : FlutterActivity() {
             }
             "save" -> save(call.argument<List<String>>("paths")!!, result)
             "share" -> {
-                share(call.argument<List<String>>("paths")!!)
-                result.success(null)
+                try {
+                    val send = MediaSharing(this).intent(call.argument<List<String>>("paths")!!)
+                    startActivity(Intent.createChooser(send, getString(R.string.share_title)))
+                    result.success(null)
+                } catch (e: Exception) {
+                    Log.w("PasteFerry", "Cannot share selected files", e)
+                    result.error("share_failed", getString(R.string.media_share_failed), null)
+                }
             }
             "notifications" -> result.success(notificationState())
             "requestNotifications" -> requestNotifications(result)
@@ -123,21 +129,6 @@ class MainActivity : FlutterActivity() {
         } else {
             background(result) { FileSaver(this).save(paths) }
         }
-    }
-
-    private fun share(paths: List<String>) {
-        val files = paths.map(::File).flatMap { if (it.isDirectory) it.walkTopDown().filter(File::isFile).toList() else listOf(it) }
-        if (files.isEmpty()) return
-        val uris = ArrayList<Uri>(files.map { Core.uriFor(it.path) })
-        val mimes = files.map { FileSaver.mimeOf(it) }.distinct()
-        val type = mimes.singleOrNull() ?: if (mimes.all { it.startsWith("image/") }) "image/*" else "*/*"
-        val send = if (uris.size == 1) {
-            Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_STREAM, uris.first())
-        } else {
-            Intent(Intent.ACTION_SEND_MULTIPLE).putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
-        }
-        send.setType(type).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        startActivity(Intent.createChooser(send, getString(R.string.share_title)))
     }
 
     // ─────────────── 权限与系统设置 ───────────────

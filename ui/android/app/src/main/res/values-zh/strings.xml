@@ -11,4 +11,5 @@
     <string name="share_title">分享</string>
     <string name="save_storage_permission">保存图片和文件需要允许存储访问。请再次点击“保存”重试。</string>
     <string name="save_permission_pending">请先完成当前的存储授权。</string>
+    <string name="media_share_failed">无法分享这张图片或文件，请尝试先保存。</string>
 </resources>

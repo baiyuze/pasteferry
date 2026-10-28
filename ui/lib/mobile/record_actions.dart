@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../app_state.dart';
 import '../gen/pasteferry/v1/daemon.pb.dart';
@@ -41,7 +42,22 @@ Future<void> runRecordAction(BuildContext context, ClipRecord r, RecordAction ac
         await Host.share(await _localPaths(state, r.id));
     }
   } catch (e) {
-    if (context.mounted) showToast(context, l.mActionFailed(AppState.describeError(e)), error: true);
+    debugPrint('Record action $action failed: $e');
+    if (!context.mounted) return;
+    final String message;
+    if (e is PlatformException &&
+        (e.code == 'permission_denied' || e.code == 'busy')) {
+      message = e.message ?? l.mSaveMediaFailed;
+    } else if (isMedia(r)) {
+      message = switch (action) {
+        RecordAction.copy => l.mCopyMediaFailed,
+        RecordAction.share => l.mShareMediaFailed,
+        RecordAction.save => l.mSaveMediaFailed,
+      };
+    } else {
+      message = l.mActionFailed(AppState.describeError(e));
+    }
+    showToast(context, message, error: true);
   }
 }
 

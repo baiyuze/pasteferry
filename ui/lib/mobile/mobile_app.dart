@@ -97,7 +97,7 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
             localeListResolutionCallback: (preferred, _) => resolveLocale(preferred),
             builder: (context, child) {
               appL10n = context.l10n;
-              return child!;
+              return ToastScope(top: true, child: child!);
             },
             home: MobileShell(startError: _startError, onRetry: _start),
           );

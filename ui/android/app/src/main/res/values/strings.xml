@@ -11,4 +11,5 @@
     <string name="share_title">Share</string>
     <string name="save_storage_permission">Allow storage access to save photos and files. Tap Save again to try again.</string>
     <string name="save_permission_pending">Please finish the current storage permission request first.</string>
+    <string name="media_share_failed">Could not open sharing for this image or file. Try saving it first.</string>
 </resources>

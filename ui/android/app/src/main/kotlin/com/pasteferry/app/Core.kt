@@ -3,14 +3,12 @@ package com.pasteferry.app
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
-import androidx.core.content.FileProvider
 import com.pasteferry.core.mobile.Host
 import com.pasteferry.core.mobile.Mobile
 import java.io.File
@@ -42,7 +40,7 @@ object Core : Host {
         app = context.applicationContext
     }
 
-    /** Go 核心的数据目录：App 私有目录，别的 App 读不到；FileProvider 也只开放这里（res/xml/file_paths.xml） */
+    /** Go 核心的数据目录：App 私有目录，别的 App 只能读取单独授权的 URI。 */
     fun dataDir(context: Context = app): File = File(context.filesDir, "pasteferry")
 
     val running: Boolean get() = Mobile.running()
@@ -78,9 +76,6 @@ object Core : Host {
     private fun versionName(): String =
         app.packageManager.getPackageInfo(app.packageName, 0).versionName ?: "dev"
 
-    fun uriFor(path: String): Uri =
-        FileProvider.getUriForFile(app, "${app.packageName}.files", File(path))
-
     // ─────────────── Host：Go 核心回调 ───────────────
 
     /** Android 写剪贴板不需要焦点，App 在后台也能写；但要在主线程调用，这里等它写完再返回结果给 Go */
@@ -89,12 +84,7 @@ object Core : Host {
             "text" -> ClipData.newPlainText(label(), text)
             "html" -> ClipData.newHtmlText(label(), text, html)
             "image", "files" -> {
-                val uris = paths.split('\n').filter { it.isNotEmpty() }.map(::uriFor)
-                require(uris.isNotEmpty()) { "没有文件" }
-                val cr = app.contentResolver
-                ClipData.newUri(cr, label(), uris.first()).apply {
-                    for (u in uris.drop(1)) addItem(cr, ClipData.Item(u))
-                }
+                MediaSharing(app).clip(paths.split('\n').filter { it.isNotEmpty() })
             }
             else -> throw IllegalArgumentException("不支持的类型 $kind")
         }

@@ -699,5 +699,8 @@
   "webShareFirewallPreparing": "正在检查 Windows 防火墙。如弹出管理员授权窗口，请选择“是”，让手机可以连接这台电脑。",
   "webShareFirewallReady": "Windows 防火墙已放行。请让手机和电脑连接同一网络后扫码；如果仍无法连接，可点击下方按钮重新检查。",
   "webShareFirewallFailed": "防火墙授权尚未完成，手机可能无法打开网页。请点击下方按钮重试，并在 Windows 管理员授权窗口中选择“是”。",
-  "webShareFirewallAllow": "检查并允许手机连接"
+  "webShareFirewallAllow": "检查并允许手机连接",
+  "mCopyMediaFailed": "无法复制这张图片或文件，请尝试先保存。",
+  "mShareMediaFailed": "无法分享这张图片或文件，请尝试先保存。",
+  "mSaveMediaFailed": "无法保存这张图片或文件，请检查存储权限和剩余空间后重试。"
 }

@@ -1756,5 +1756,8 @@
   "webShareFirewallPreparing": "Checking Windows Firewall. If Windows asks for administrator approval, choose Yes so your phone can connect.",
   "webShareFirewallReady": "Windows Firewall rules are ready. Connect your phone to the same network and scan the QR code. If it still cannot connect, check the firewall again below.",
   "webShareFirewallFailed": "Firewall setup did not finish. Your phone may be unable to open the page. Try again and approve the Windows administrator prompt.",
-  "webShareFirewallAllow": "Check and allow phone connections"
+  "webShareFirewallAllow": "Check and allow phone connections",
+  "mCopyMediaFailed": "Could not copy this image or file. Try saving it first.",
+  "mShareMediaFailed": "Could not open sharing for this image or file. Try saving it first.",
+  "mSaveMediaFailed": "Could not save this image or file. Check storage access and free space, then try again."
 }

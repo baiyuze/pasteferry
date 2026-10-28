@@ -597,7 +597,17 @@ String relativeTime(DateTime t, {DateTime? now}) {
   return l.monthDay(t.month, t.day);
 }
 
-/// 底部的提示条。给了 [actionLabel] 时右边多一个按钮，比如取消收藏后的「撤销」。
+/// 手机界面使用顶部提示，避开底部输入框、键盘和发送按钮。
+class ToastScope extends InheritedWidget {
+  const ToastScope({super.key, required this.top, required super.child});
+
+  final bool top;
+
+  @override
+  bool updateShouldNotify(ToastScope oldWidget) => top != oldWidget.top;
+}
+
+/// 提示条。给了 [actionLabel] 时右边多一个按钮，比如取消收藏后的「撤销」。
 ///
 /// 放在根 Overlay 的最上层，不用 ScaffoldMessenger 的 SnackBar：SnackBar 画在页面里，
 /// 开着对话框时（比如在「反馈问题」里拷贝报告）会被对话框和它的遮罩盖住。
@@ -612,6 +622,7 @@ void showToast(
   if (overlay == null) return;
   _toast?.remove();
   final p = context.palette;
+  final top = context.getInheritedWidgetOfExactType<ToastScope>()?.top ?? false;
   final hasAction = actionLabel != null && onAction != null;
   late final OverlayEntry entry;
   void dismiss() {
@@ -622,6 +633,7 @@ void showToast(
 
   entry = OverlayEntry(
     builder: (_) => _Toast(
+      top: top,
       icon: Icon(
         error ? AppIcons.exclamationmarkCircle : AppIcons.checkmarkCircle,
         size: 16,
@@ -650,6 +662,7 @@ OverlayEntry? _toast;
 
 class _Toast extends StatefulWidget {
   const _Toast({
+    required this.top,
     required this.icon,
     required this.message,
     required this.actionLabel,
@@ -659,6 +672,7 @@ class _Toast extends StatefulWidget {
   });
 
   final Widget icon;
+  final bool top;
   final String message;
   final String? actionLabel;
   final VoidCallback? onAction;
@@ -699,43 +713,51 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
         theme.contentTextStyle ??
         const TextStyle(fontSize: 13, color: Colors.white);
     return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 16,
-      child: Center(
-        child: FadeTransition(
-          opacity: _fade,
-          child: Material(
-            color: theme.backgroundColor,
-            elevation: theme.elevation ?? 6,
-            shape: theme.shape,
-            child: SizedBox(
-              width: 360,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  16,
-                  14,
-                  widget.actionLabel == null ? 16 : 8,
-                  14,
-                ),
-                child: DefaultTextStyle(
-                  style: style,
-                  child: Row(
-                    children: [
-                      widget.icon,
-                      const SizedBox(width: Insets.sm),
-                      Expanded(child: Text(widget.message)),
-                      if (widget.actionLabel != null)
-                        TextButton(
-                          onPressed: widget.onAction,
-                          style: TextButton.styleFrom(
-                            foregroundColor:
-                                theme.actionTextColor ??
-                                Theme.of(context).colorScheme.inversePrimary,
+      left: widget.top ? 16 : 0,
+      right: widget.top ? 16 : 0,
+      top: widget.top ? MediaQuery.viewPaddingOf(context).top + 12 : null,
+      bottom: widget.top ? null : 16,
+      child: IgnorePointer(
+        ignoring: widget.top && widget.onAction == null,
+        child: Center(
+          child: FadeTransition(
+            opacity: _fade,
+            child: Material(
+              color: theme.backgroundColor,
+              elevation: theme.elevation ?? 6,
+              shape: theme.shape,
+              child: SizedBox(
+                width: 360,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    16,
+                    14,
+                    widget.actionLabel == null ? 16 : 8,
+                    14,
+                  ),
+                  child: DefaultTextStyle(
+                    style: style,
+                    child: Row(
+                      children: [
+                        widget.icon,
+                        const SizedBox(width: Insets.sm),
+                        Expanded(child: Text(
+                          widget.message,
+                          maxLines: widget.top ? 3 : null,
+                          overflow: widget.top ? TextOverflow.ellipsis : null,
+                        )),
+                        if (widget.actionLabel != null)
+                          TextButton(
+                            onPressed: widget.onAction,
+                            style: TextButton.styleFrom(
+                              foregroundColor:
+                                  theme.actionTextColor ??
+                                  Theme.of(context).colorScheme.inversePrimary,
+                            ),
+                            child: Text(widget.actionLabel!),
                           ),
-                          child: Text(widget.actionLabel!),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

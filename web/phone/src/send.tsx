@@ -1,5 +1,5 @@
 // 发送：输入或粘贴文字发到电脑，或者选照片和文件分块加密上传。
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { ApiError, rpc, sendChunk, type WebRecord } from './api'
 import { useConn } from './context'
 import { t } from './i18n'
@@ -44,19 +44,7 @@ export function SendView({ onSent }: { onSent: (r: WebRecord) => void }) {
   const [text, setText] = useState('')
   const [sending, setSending] = useState(false)
   const [jobs, setJobs] = useState<Job[]>([])
-  const [note, setNote] = useState('')
-  const noteTimer = useRef(0)
   const fileInput = useRef<HTMLInputElement>(null)
-
-  useEffect(() => () => window.clearTimeout(noteTimer.current), [])
-
-  // 发送成功的反馈写在输入区下面，不弹浮在内容上的提示条：这个页面主要给手机用，
-  // 提示条会挡住正在填的内容，和 App 里的做法也不一致。
-  const showNote = (msg: string) => {
-    setNote(msg)
-    window.clearTimeout(noteTimer.current)
-    noteTimer.current = window.setTimeout(() => setNote(''), 2400)
-  }
 
   const update = (key: string, patch: Partial<Job>) => setJobs((js) => js.map((j) => (j.key === key ? { ...j, ...patch } : j)))
 
@@ -67,7 +55,7 @@ export function SendView({ onSent }: { onSent: (r: WebRecord) => void }) {
       const r = await rpc<WebRecord>(conn.session, 'text', { text })
       setText('')
       onSent(r)
-      showNote(t('sent'))
+      toast(t('sent'))
       conn.succeeded()
     } catch (e) {
       toast(t('sendFailed', { msg: errorText(e) }))
@@ -110,7 +98,7 @@ export function SendView({ onSent }: { onSent: (r: WebRecord) => void }) {
       const r = await rpc<WebRecord>(conn.session, 'upload_done', { uploads: done.map((d) => d.id) })
       done.forEach((d) => update(d.key, { state: 'done' }))
       onSent(r)
-      showNote(t('uploadsDone', { n: done.length }))
+      toast(t('uploadsDone', { n: done.length }))
       conn.succeeded()
       setTimeout(() => setJobs((js) => js.filter((j) => !done.some((d) => d.key === j.key))), 4000)
     } catch (e) {
@@ -150,10 +138,7 @@ export function SendView({ onSent }: { onSent: (r: WebRecord) => void }) {
           }}
         />
       </div>
-      <p className={cx('mt-3 flex items-center gap-1.5 px-1 text-[13px] leading-normal', note ? 'text-online' : 'text-dim')}>
-        {note && <Checkmark size={16} className="shrink-0" />}
-        {note || t('sendHint')}
-      </p>
+      <p className="mt-3 px-1 text-[13px] leading-normal text-dim">{t('sendHint')}</p>
 
       {jobs.length > 0 && (
         <>

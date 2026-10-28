@@ -2635,4 +2635,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webShareFirewallAllow => 'Check and allow phone connections';
+
+  @override
+  String get mCopyMediaFailed =>
+      'Could not copy this image or file. Try saving it first.';
+
+  @override
+  String get mShareMediaFailed =>
+      'Could not open sharing for this image or file. Try saving it first.';
+
+  @override
+  String get mSaveMediaFailed =>
+      'Could not save this image or file. Check storage access and free space, then try again.';
 }

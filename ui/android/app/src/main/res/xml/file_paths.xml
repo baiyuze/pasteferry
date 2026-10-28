@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Go 核心的数据目录（缓存、收藏、剪贴板图片都在里面），见 Core.dataDir -->
+<!-- Go 核心数据，以及系统文件选择器复制到 App 私有缓存里的文件。
+     Provider 不导出，只通过具体 URI 的临时读取授权供复制和分享使用。 -->
 <paths>
     <files-path name="data" path="pasteferry/" />
+    <cache-path name="picked" path="." />
 </paths>
