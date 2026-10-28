@@ -3823,6 +3823,384 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Drop files here to send them to {name}'**
   String friendDropHint(String name);
+
+  /// No description provided for @webShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone web transfer'**
+  String get webShareTitle;
+
+  /// No description provided for @webShareFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan a QR code with a phone to send text, photos and files to and from this computer in the browser, no app needed. The phone and computer need to be on the same network.'**
+  String get webShareFootnote;
+
+  /// No description provided for @webShareSwitch.
+  ///
+  /// In en, this message translates to:
+  /// **'Let phones connect in the browser'**
+  String get webShareSwitch;
+
+  /// No description provided for @webShareOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On, {count} phone(s)'**
+  String webShareOn(int count);
+
+  /// No description provided for @webShareOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get webShareOff;
+
+  /// No description provided for @webShareShowQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Show QR code'**
+  String get webShareShowQr;
+
+  /// No description provided for @webShareDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan with your phone'**
+  String get webShareDialogTitle;
+
+  /// No description provided for @webShareDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan with the phone’s camera or browser and open it in the browser. Each QR code registers one phone and is replaced after use.'**
+  String get webShareDialogBody;
+
+  /// No description provided for @webShareAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get webShareAddress;
+
+  /// No description provided for @webShareSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Content is encrypted in the page, so others on the network can’t read it. But the page itself is http and can’t stop someone who deliberately tampers with it. Use it at home or on a trusted office network, not on public Wi-Fi.'**
+  String get webShareSecurity;
+
+  /// No description provided for @webSharePhones.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered phones'**
+  String get webSharePhones;
+
+  /// No description provided for @webShareNoPhones.
+  ///
+  /// In en, this message translates to:
+  /// **'No phones yet'**
+  String get webShareNoPhones;
+
+  /// No description provided for @webShareLastUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Last used {time}'**
+  String webShareLastUsed(String time);
+
+  /// No description provided for @webShareRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get webShareRemove;
+
+  /// No description provided for @webShareRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed “{name}”'**
+  String webShareRemoved(String name);
+
+  /// No description provided for @webShareNewPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” registered'**
+  String webShareNewPhone(String name);
+
+  /// No description provided for @webShareNotListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t start listening: {error}'**
+  String webShareNotListening(String error);
+
+  /// No description provided for @webSharePortFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'The usual port is taken, so a temporary one is in use. Saved addresses won’t open until phones scan again.'**
+  String get webSharePortFallback;
+
+  /// No description provided for @webShareNoAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'No local network address. Connect to Wi-Fi or a wired network first.'**
+  String get webShareNoAddress;
+
+  /// No description provided for @webShareCantOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'If the page won’t open on the phone, make sure both are on the same network (guest networks usually don’t work). On Windows, PasteFerry also needs to be allowed through the firewall.'**
+  String get webShareCantOpen;
+
+  /// No description provided for @mTabRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get mTabRecords;
+
+  /// No description provided for @mTabSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get mTabSend;
+
+  /// No description provided for @mThisPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone'**
+  String get mThisPhone;
+
+  /// No description provided for @mThisPhoneName.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone: {name}'**
+  String mThisPhoneName(String name);
+
+  /// No description provided for @mSendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to your computer'**
+  String get mSendTitle;
+
+  /// No description provided for @mSendHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type or paste text'**
+  String get mSendHint;
+
+  /// No description provided for @mPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste'**
+  String get mPaste;
+
+  /// No description provided for @mClipboardNoText.
+  ///
+  /// In en, this message translates to:
+  /// **'The clipboard has no text'**
+  String get mClipboardNoText;
+
+  /// No description provided for @mSendAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get mSendAction;
+
+  /// No description provided for @mSendTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Goes to {names}'**
+  String mSendTo(String names);
+
+  /// No description provided for @mNoOnlineDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No devices online nearby'**
+  String get mNoOnlineDevices;
+
+  /// No description provided for @mNoPairedDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair with a computer first'**
+  String get mNoPairedDevices;
+
+  /// No description provided for @mSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get mSent;
+
+  /// No description provided for @mSendFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'The text goes into the computer’s history and onto its clipboard, as if you had copied it there. Text you copy on this phone isn’t sent automatically: paste it here and tap Send.'**
+  String get mSendFootnote;
+
+  /// No description provided for @mSendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t send: {detail}'**
+  String mSendFailed(String detail);
+
+  /// No description provided for @mCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get mCopy;
+
+  /// No description provided for @mCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to this phone’s clipboard'**
+  String get mCopied;
+
+  /// No description provided for @mShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get mShare;
+
+  /// No description provided for @mSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to Photos or Download/PasteFerry'**
+  String get mSaved;
+
+  /// No description provided for @mActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn’t work: {detail}'**
+  String mActionFailed(String detail);
+
+  /// No description provided for @mDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading…'**
+  String get mDownloading;
+
+  /// No description provided for @mNotDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Not downloaded yet'**
+  String get mNotDownloaded;
+
+  /// No description provided for @mDownloadHint.
+  ///
+  /// In en, this message translates to:
+  /// **'It downloads first when you tap Copy, Save or Share.'**
+  String get mDownloadHint;
+
+  /// No description provided for @mFullTextLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get mFullTextLoading;
+
+  /// No description provided for @mTextTruncated.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing the first {shown} of {total} characters. Copy gets all of it.'**
+  String mTextTruncated(int shown, int total);
+
+  /// No description provided for @mNotOnLanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not on Wi-Fi'**
+  String get mNotOnLanTitle;
+
+  /// No description provided for @mNotOnLanBody.
+  ///
+  /// In en, this message translates to:
+  /// **'For now PasteFerry syncs only on the local network. Join the same Wi-Fi as your computer.'**
+  String get mNotOnLanBody;
+
+  /// No description provided for @mStartFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'PasteFerry couldn’t start: {detail}'**
+  String mStartFailed(String detail);
+
+  /// No description provided for @mNoDevicesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'On your computer, open PasteFerry → Devices → Add device, then enter the code it shows here. On the same Wi-Fi you can also open “Search nearby” on both.'**
+  String get mNoDevicesBody;
+
+  /// No description provided for @mSectionSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync'**
+  String get mSectionSync;
+
+  /// No description provided for @mSectionBackground.
+  ///
+  /// In en, this message translates to:
+  /// **'Background'**
+  String get mSectionBackground;
+
+  /// No description provided for @mAutoApplyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Text copied on your computer goes straight onto this phone’s clipboard. Images and files wait until you tap Copy.'**
+  String get mAutoApplyDesc;
+
+  /// No description provided for @mKeepAlive.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay connected in the background'**
+  String get mKeepAlive;
+
+  /// No description provided for @mKeepAliveDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive text even when PasteFerry isn’t open. Shows an ongoing notification.'**
+  String get mKeepAliveDesc;
+
+  /// No description provided for @mNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get mNotifications;
+
+  /// No description provided for @mNotificationsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Needed for the ongoing notification. PasteFerry works without it.'**
+  String get mNotificationsDesc;
+
+  /// No description provided for @mBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Run in the background'**
+  String get mBattery;
+
+  /// No description provided for @mBatteryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off battery optimization so the system doesn’t stop PasteFerry when the screen is locked. Some phones also need PasteFerry added to their auto-start or background list in Settings.'**
+  String get mBatteryDesc;
+
+  /// No description provided for @mAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed'**
+  String get mAllowed;
+
+  /// No description provided for @mAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get mAllow;
+
+  /// No description provided for @mVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String mVersion(String version);
+
+  /// No description provided for @mDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this record?'**
+  String get mDeleteConfirm;
+
+  /// No description provided for @mDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get mDelete;
 }
 
 class _AppLocalizationsDelegate

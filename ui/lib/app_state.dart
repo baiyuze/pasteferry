@@ -115,6 +115,10 @@ class AppState extends ChangeNotifier implements RecordDetails {
   List<Friend> _friends = const [];
   Profile? _profile;
 
+  // 手机网页传输（design/phone-sync.md 第 2 节）；旧版后台服务没有时为 null
+  WebShareStatus? _webShare;
+  final _webShareInviteUsed = StreamController<String>.broadcast();
+
   /// 有人兑换了本机的好友码，等用户确认；非空时界面弹出确认框
   FriendRequest? _pendingFriend;
   final Set<String> _handledFriendSessions = {};
@@ -248,6 +252,11 @@ class AppState extends ChangeNotifier implements RecordDetails {
   List<Friend> get friends => List.unmodifiable(_friends);
   Friend? friendById(String id) => _friends.where((f) => f.id == id).firstOrNull;
   Profile? get profile => _profile;
+
+  WebShareStatus? get webShare => _webShare;
+
+  /// 二维码刚被手机扫码用掉：二维码窗口据此换一张新的
+  Stream<String> get webShareInviteUsed => _webShareInviteUsed.stream;
   FriendRequest? get pendingFriendRequest => _pendingFriend;
   bool friendCancelled(String deviceId) => _friendCancelled.contains(deviceId);
 
@@ -346,6 +355,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
   @override
   void dispose() {
     _retry?.cancel();
+    _webShareInviteUsed.close();
     _historySearch.dispose();
     _favoriteSearch.dispose();
     _events?.cancel();
@@ -396,6 +406,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
       await _loadDevices();
       await _loadFriends();
+      await _loadWebShare();
       await _loadTransfers();
       await refreshNotificationStatus();
 
@@ -539,7 +550,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
     List<Friend> friends = const [],
     Profile? profile,
     FriendRequest? pendingFriend,
+    WebShareStatus? webShare,
   }) {
+    _webShare = webShare;
     _friends = friends;
     _profile = profile;
     _pendingFriend = pendingFriend;
@@ -600,6 +613,41 @@ class AppState extends ChangeNotifier implements RecordDetails {
       // 配对能力尚未接入时返回 Unimplemented，属预期情况
       if (e.code != StatusCode.unimplemented) rethrow;
     }
+  }
+
+  Future<void> _loadWebShare() async {
+    final conn = _conn;
+    if (conn == null) return;
+    try {
+      _webShare = await conn.client.getWebShare(Empty());
+    } on GrpcError {
+      _webShare = null; // 旧版后台服务没有手机网页传输
+    }
+  }
+
+  // ─────────────────────────── 手机网页传输 ───────────────────────────
+
+  Future<void> setWebShare(bool enabled) async {
+    _webShare = await _client.setWebShare(SetWebShareRequest(enabled: enabled));
+    notifyListeners();
+  }
+
+  /// 生成一张新的二维码；[address] 为空时用默认地址
+  Future<WebShareInvite> newWebShareInvite(String address) =>
+      _client.newWebShareInvite(NewWebShareInviteRequest(address: address));
+
+  /// 二维码窗口关闭：作废还没被用过的二维码
+  Future<void> closeWebShareInvite(String id) async {
+    try {
+      await _client.closeWebShareInvite(WebShareInviteRef(id: id));
+    } catch (_) {
+      // 后台服务已经退出时它本来就作废了
+    }
+  }
+
+  Future<void> removeWebSession(String id) async {
+    _webShare = await _client.removeWebSession(WebSessionRef(id: id));
+    notifyListeners();
   }
 
   Future<void> _loadFriends() async {
@@ -720,6 +768,12 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
       case Event_Payload.profileChanged:
         _profile = ev.profileChanged;
+
+      case Event_Payload.webShareChanged:
+        _webShare = ev.webShareChanged;
+        if (ev.webShareChanged.inviteUsed.isNotEmpty) {
+          _webShareInviteUsed.add(ev.webShareChanged.inviteUsed);
+        }
 
       default:
         break;
@@ -1219,6 +1273,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
     return d;
   }
 
+  /// 图片和文件在本机的路径（Android 的「保存」「分享」用）；不在本机时为空。下载后会变，不缓存
+  Future<List<String>> localPaths(String clipId) async => (await requestClipDetail(clipId)).localPaths;
+
   @protected
   Future<ClipDetail> requestClipDetail(String clipId) =>
       _client.getClipDetail(GetClipDetailRequest(clipId: clipId));
@@ -1295,6 +1352,14 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   Future<void> applyToClipboard(String clipId) =>
       _client.applyToClipboard(ApplyToClipboardRequest(clipId: clipId));
+
+  /// 手机发送页：把文字当成本机复制，进记录并发给在线的设备，不写手机自己的剪贴板（design/phone-sync.md 3.2.3 节）
+  Future<ClipRecord> submitText(String text) async {
+    final r = await _client.submitText(SubmitTextRequest(text: text));
+    _upsert(r);
+    notifyListeners();
+    return r;
+  }
 
   /// 一条记录里第 [index] 张图片：本机路径、文件名，以及能预览的图片总数。
   /// HEIC 这类格式由后台服务先转换，大图可能要一两秒，超时放宽一些。

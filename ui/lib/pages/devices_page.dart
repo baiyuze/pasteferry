@@ -9,6 +9,7 @@ import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/nearby_dialog.dart';
 import '../widgets/pairing_dialog.dart';
+import '../widgets/web_share.dart';
 import '../icons.dart';
 import '../platform.dart';
 
@@ -102,6 +103,7 @@ class DevicesPage extends StatelessWidget {
                     ],
                   ),
                 ),
+              const WebShareSection(),
             ],
           ),
         ),
@@ -223,6 +225,7 @@ String connectionLabel(Device d) => switch (d.connection) {
 
 IconData platformIcon(String platform) => switch (platform) {
   'windows' || 'linux' => AppIcons.desktopComputer,
+  'android' => AppIcons.phone,
   _ => AppIcons.deviceLaptop,
 };
 

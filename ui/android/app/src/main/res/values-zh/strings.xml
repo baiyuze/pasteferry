@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">隔空贴</string>
+    <string name="channel_sync">后台保持连接</string>
+    <string name="channel_sync_desc">让隔空贴保持连接，电脑上复制的文字能随时到这台手机。</string>
+    <string name="notif_online">已连接 %1$s</string>
+    <string name="notif_none">没有在线的设备</string>
+    <string name="notif_last_text">最近：来自 %1$s 的文字</string>
+    <string name="notif_last_image">最近：来自 %1$s 的图片</string>
+    <string name="notif_last_file">最近：来自 %1$s 的文件</string>
+    <string name="share_title">分享</string>
+</resources>

@@ -8,6 +8,7 @@ import 'gen/pasteferry/v1/daemon.pb.dart' show TransferDirection;
 import 'background_service.dart';
 import 'i18n.dart';
 import 'pages/devices_page.dart';
+import 'widgets/web_share.dart';
 import 'pages/favorites_page.dart';
 import 'pages/history_page.dart';
 import 'pages/friends_page.dart';
@@ -15,6 +16,7 @@ import 'pages/send_page.dart';
 import 'pages/service_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/official_service_page.dart';
+import 'mobile/mobile_app.dart';
 import 'picker/picker_main.dart';
 import 'theme.dart';
 import 'widgets/common.dart';
@@ -26,6 +28,11 @@ import 'icons.dart';
 
 /// 带 --picker 启动的是快捷粘贴窗口进程，见 picker/picker_main.dart。
 void main(List<String> args) {
+  // Android 是另一套外壳：底部标签、触控尺寸，Go 核心跑在 App 进程里（design/phone-sync.md 3.3.4 节）
+  if (Platform.isAndroid) {
+    runMobile();
+    return;
+  }
   if (args.contains('--picker')) {
     runPicker();
     return;
@@ -182,6 +189,13 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
       if (state.pageRequest == 'send') _section = Section.send;
       if (state.pageRequest == 'friends') _section = Section.friends;
       if (state.pageRequest == 'settings') _section = Section.settings;
+      // Windows 托盘的「手机扫码连接」：切到设备页并打开二维码窗口
+      if (state.pageRequest == 'webshare' && (state.webShare?.listening ?? false)) {
+        _section = Section.devices;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) showWebShareDialog(context);
+        });
+      }
     }
     if (!state.officialEnabled && _section == Section.official) {
       _section = Section.settings;

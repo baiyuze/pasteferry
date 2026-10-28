@@ -171,6 +171,7 @@ class ClipRecord extends $pb.GeneratedMessage {
     $fixnum.Int64? favoritedAtUnix,
     $core.bool? isLink,
     $core.String? alias,
+    $core.String? viaName,
   }) {
     final result = ClipRecord._();
     if (id != null) result.id = id;
@@ -191,6 +192,7 @@ class ClipRecord extends $pb.GeneratedMessage {
     if (favoritedAtUnix != null) result.favoritedAtUnix = favoritedAtUnix;
     if (isLink != null) result.isLink = isLink;
     if (alias != null) result.alias = alias;
+    if (viaName != null) result.viaName = viaName;
     return result;
   }
 
@@ -228,6 +230,7 @@ class ClipRecord extends $pb.GeneratedMessage {
     ..aInt64(16, _omitFieldNames ? '' : 'favoritedAtUnix')
     ..aOB(17, _omitFieldNames ? '' : 'isLink')
     ..aOS(18, _omitFieldNames ? '' : 'alias')
+    ..aOS(19, _omitFieldNames ? '' : 'viaName')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -411,6 +414,17 @@ class ClipRecord extends $pb.GeneratedMessage {
   $core.bool hasAlias() => $_has(17);
   @$pb.TagNumber(18)
   void clearAlias() => $_clearField(18);
+
+  /// 经由哪台没配对的设备送进本机：手机网页传输里登记的手机名。只有 outgoing 的记录会有，
+  /// 界面上显示「来自 via_name」而不是「本机」
+  @$pb.TagNumber(19)
+  $core.String get viaName => $_getSZ(18);
+  @$pb.TagNumber(19)
+  set viaName($core.String value) => $_setString(18, value);
+  @$pb.TagNumber(19)
+  $core.bool hasViaName() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearViaName() => $_clearField(19);
 }
 
 class SubscribeRequest extends $pb.GeneratedMessage {
@@ -792,6 +806,7 @@ enum Event_Payload {
   friendRemoved,
   friendRequest,
   profileChanged,
+  webShareChanged,
   notSet
 }
 
@@ -814,6 +829,7 @@ class Event extends $pb.GeneratedMessage {
     $core.String? friendRemoved,
     FriendRequest? friendRequest,
     Profile? profileChanged,
+    WebShareStatus? webShareChanged,
   }) {
     final result = Event._();
     if (clipAdded != null) result.clipAdded = clipAdded;
@@ -833,6 +849,7 @@ class Event extends $pb.GeneratedMessage {
     if (friendRemoved != null) result.friendRemoved = friendRemoved;
     if (friendRequest != null) result.friendRequest = friendRequest;
     if (profileChanged != null) result.profileChanged = profileChanged;
+    if (webShareChanged != null) result.webShareChanged = webShareChanged;
     return result;
   }
 
@@ -863,13 +880,14 @@ class Event extends $pb.GeneratedMessage {
     15: Event_Payload.friendRemoved,
     16: Event_Payload.friendRequest,
     17: Event_Payload.profileChanged,
+    18: Event_Payload.webShareChanged,
     0: Event_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Event',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: Event.$_createMessage)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18])
     ..aOM<ClipRecord>(1, _omitFieldNames ? '' : 'clipAdded',
         subBuilder: ClipRecord.$_createMessage)
     ..aOM<ClipRecord>(2, _omitFieldNames ? '' : 'clipUpdated',
@@ -900,6 +918,8 @@ class Event extends $pb.GeneratedMessage {
         subBuilder: FriendRequest.$_createMessage)
     ..aOM<Profile>(17, _omitFieldNames ? '' : 'profileChanged',
         subBuilder: Profile.$_createMessage)
+    ..aOM<WebShareStatus>(18, _omitFieldNames ? '' : 'webShareChanged',
+        subBuilder: WebShareStatus.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -939,6 +959,7 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(15)
   @$pb.TagNumber(16)
   @$pb.TagNumber(17)
+  @$pb.TagNumber(18)
   Event_Payload whichPayload() => _Event_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(1)
   @$pb.TagNumber(2)
@@ -957,6 +978,7 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(15)
   @$pb.TagNumber(16)
   @$pb.TagNumber(17)
+  @$pb.TagNumber(18)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -1141,6 +1163,18 @@ class Event extends $pb.GeneratedMessage {
   void clearProfileChanged() => $_clearField(17);
   @$pb.TagNumber(17)
   Profile ensureProfileChanged() => $_ensure(16);
+
+  /// 手机网页传输的开关、监听状态或登记的手机变了；invite_used 是刚被扫码用掉的二维码
+  @$pb.TagNumber(18)
+  WebShareStatus get webShareChanged => $_getN(17);
+  @$pb.TagNumber(18)
+  set webShareChanged(WebShareStatus value) => $_setField(18, value);
+  @$pb.TagNumber(18)
+  $core.bool hasWebShareChanged() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearWebShareChanged() => $_clearField(18);
+  @$pb.TagNumber(18)
+  WebShareStatus ensureWebShareChanged() => $_ensure(17);
 }
 
 class Profile extends $pb.GeneratedMessage {
@@ -3156,11 +3190,13 @@ class ClipDetail extends $pb.GeneratedMessage {
     $core.String? text,
     $core.int? textLength,
     $core.Iterable<$core.String>? sourcePaths,
+    $core.Iterable<$core.String>? localPaths,
   }) {
     final result = ClipDetail._();
     if (text != null) result.text = text;
     if (textLength != null) result.textLength = textLength;
     if (sourcePaths != null) result.sourcePaths.addAll(sourcePaths);
+    if (localPaths != null) result.localPaths.addAll(localPaths);
     return result;
   }
 
@@ -3180,6 +3216,7 @@ class ClipDetail extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'text')
     ..aI(2, _omitFieldNames ? '' : 'textLength')
     ..pPS(3, _omitFieldNames ? '' : 'sourcePaths')
+    ..pPS(4, _omitFieldNames ? '' : 'localPaths')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3225,6 +3262,11 @@ class ClipDetail extends $pb.GeneratedMessage {
   /// 本机复制的文件在本机的完整路径
   @$pb.TagNumber(3)
   $pb.PbList<$core.String> get sourcePaths => $_getList(2);
+
+  /// 图片和文件已在本机时，内容在本机的路径（缓存或收藏目录里，或者本机复制的原文件）。
+  /// Android 的「保存」「分享」用它；还没下载或已过期时为空
+  @$pb.TagNumber(4)
+  $pb.PbList<$core.String> get localPaths => $_getList(3);
 }
 
 class QuickPasteStatus extends $pb.GeneratedMessage {
@@ -7407,6 +7449,627 @@ class CheckReceiveDirResponse extends $pb.GeneratedMessage {
   $core.bool hasPath() => $_has(3);
   @$pb.TagNumber(4)
   void clearPath() => $_clearField(4);
+}
+
+class SubmitTextRequest extends $pb.GeneratedMessage {
+  factory SubmitTextRequest({
+    $core.String? text,
+  }) {
+    final result = SubmitTextRequest._();
+    if (text != null) result.text = text;
+    return result;
+  }
+
+  SubmitTextRequest._();
+
+  factory SubmitTextRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SubmitTextRequest()..mergeFromBuffer(data, registry);
+  factory SubmitTextRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SubmitTextRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SubmitTextRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SubmitTextRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'text')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SubmitTextRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SubmitTextRequest copyWith(void Function(SubmitTextRequest) updates) =>
+      super.copyWith((message) => updates(message as SubmitTextRequest))
+          as SubmitTextRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SubmitTextRequest() / SubmitTextRequest.new instead')
+  static SubmitTextRequest create() => SubmitTextRequest._();
+  static $pb.GeneratedMessage $_createMessage() => SubmitTextRequest._();
+  @$core.override
+  SubmitTextRequest createEmptyInstance() => SubmitTextRequest._();
+  @$core.pragma('dart2js:noInline')
+  static SubmitTextRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SubmitTextRequest>(
+          SubmitTextRequest.$_createMessage);
+  static SubmitTextRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get text => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set text($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasText() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearText() => $_clearField(1);
+}
+
+class WebShareStatus extends $pb.GeneratedMessage {
+  factory WebShareStatus({
+    $core.bool? enabled,
+    $core.bool? listening,
+    $core.int? port,
+    $core.bool? portFallback,
+    $core.String? error,
+    $core.Iterable<$core.String>? addresses,
+    $core.Iterable<WebSession>? sessions,
+    $core.String? inviteUsed,
+  }) {
+    final result = WebShareStatus._();
+    if (enabled != null) result.enabled = enabled;
+    if (listening != null) result.listening = listening;
+    if (port != null) result.port = port;
+    if (portFallback != null) result.portFallback = portFallback;
+    if (error != null) result.error = error;
+    if (addresses != null) result.addresses.addAll(addresses);
+    if (sessions != null) result.sessions.addAll(sessions);
+    if (inviteUsed != null) result.inviteUsed = inviteUsed;
+    return result;
+  }
+
+  WebShareStatus._();
+
+  factory WebShareStatus.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebShareStatus()..mergeFromBuffer(data, registry);
+  factory WebShareStatus.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebShareStatus()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'WebShareStatus',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: WebShareStatus.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'enabled')
+    ..aOB(2, _omitFieldNames ? '' : 'listening')
+    ..aI(3, _omitFieldNames ? '' : 'port')
+    ..aOB(4, _omitFieldNames ? '' : 'portFallback')
+    ..aOS(5, _omitFieldNames ? '' : 'error')
+    ..pPS(6, _omitFieldNames ? '' : 'addresses')
+    ..pPM<WebSession>(7, _omitFieldNames ? '' : 'sessions',
+        subBuilder: WebSession.$_createMessage)
+    ..aOS(8, _omitFieldNames ? '' : 'inviteUsed')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebShareStatus clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebShareStatus copyWith(void Function(WebShareStatus) updates) =>
+      super.copyWith((message) => updates(message as WebShareStatus))
+          as WebShareStatus;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use WebShareStatus() / WebShareStatus.new instead')
+  static WebShareStatus create() => WebShareStatus._();
+  static $pb.GeneratedMessage $_createMessage() => WebShareStatus._();
+  @$core.override
+  WebShareStatus createEmptyInstance() => WebShareStatus._();
+  @$core.pragma('dart2js:noInline')
+  static WebShareStatus getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WebShareStatus>(
+          WebShareStatus.$_createMessage);
+  static WebShareStatus? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get enabled => $_getBF(0);
+  @$pb.TagNumber(1)
+  set enabled($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasEnabled() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearEnabled() => $_clearField(1);
+
+  /// 开关打开且端口已在监听
+  @$pb.TagNumber(2)
+  $core.bool get listening => $_getBF(1);
+  @$pb.TagNumber(2)
+  set listening($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasListening() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearListening() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get port => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set port($core.int value) => $_setSignedInt32(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasPort() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPort() => $_clearField(3);
+
+  /// 固定端口被占用，改用了随机端口：以前收藏的网址打不开，要重新扫码
+  @$pb.TagNumber(4)
+  $core.bool get portFallback => $_getBF(3);
+  @$pb.TagNumber(4)
+  set portFallback($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasPortFallback() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPortFallback() => $_clearField(4);
+
+  /// 监听失败的原因（开关开着但没在监听时）
+  @$pb.TagNumber(5)
+  $core.String get error => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set error($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasError() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearError() => $_clearField(5);
+
+  /// 本机的局域网地址（不带端口），默认路由所在的网卡排第一
+  @$pb.TagNumber(6)
+  $pb.PbList<$core.String> get addresses => $_getList(5);
+
+  @$pb.TagNumber(7)
+  $pb.PbList<WebSession> get sessions => $_getList(6);
+
+  /// 刚被扫码用掉的二维码（只在 web_share_changed 事件里有），二维码窗口据此换一张新的
+  @$pb.TagNumber(8)
+  $core.String get inviteUsed => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set inviteUsed($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasInviteUsed() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearInviteUsed() => $_clearField(8);
+}
+
+class WebSession extends $pb.GeneratedMessage {
+  factory WebSession({
+    $core.String? id,
+    $core.String? name,
+    $fixnum.Int64? createdAtUnix,
+    $fixnum.Int64? lastSeenUnix,
+  }) {
+    final result = WebSession._();
+    if (id != null) result.id = id;
+    if (name != null) result.name = name;
+    if (createdAtUnix != null) result.createdAtUnix = createdAtUnix;
+    if (lastSeenUnix != null) result.lastSeenUnix = lastSeenUnix;
+    return result;
+  }
+
+  WebSession._();
+
+  factory WebSession.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebSession()..mergeFromBuffer(data, registry);
+  factory WebSession.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebSession()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'WebSession',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: WebSession.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aInt64(3, _omitFieldNames ? '' : 'createdAtUnix')
+    ..aInt64(4, _omitFieldNames ? '' : 'lastSeenUnix')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebSession clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebSession copyWith(void Function(WebSession) updates) =>
+      super.copyWith((message) => updates(message as WebSession)) as WebSession;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use WebSession() / WebSession.new instead')
+  static WebSession create() => WebSession._();
+  static $pb.GeneratedMessage $_createMessage() => WebSession._();
+  @$core.override
+  WebSession createEmptyInstance() => WebSession._();
+  @$core.pragma('dart2js:noInline')
+  static WebSession getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<WebSession>(WebSession.$_createMessage);
+  static WebSession? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get createdAtUnix => $_getI64(2);
+  @$pb.TagNumber(3)
+  set createdAtUnix($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasCreatedAtUnix() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCreatedAtUnix() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get lastSeenUnix => $_getI64(3);
+  @$pb.TagNumber(4)
+  set lastSeenUnix($fixnum.Int64 value) => $_setInt64(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasLastSeenUnix() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearLastSeenUnix() => $_clearField(4);
+}
+
+class SetWebShareRequest extends $pb.GeneratedMessage {
+  factory SetWebShareRequest({
+    $core.bool? enabled,
+  }) {
+    final result = SetWebShareRequest._();
+    if (enabled != null) result.enabled = enabled;
+    return result;
+  }
+
+  SetWebShareRequest._();
+
+  factory SetWebShareRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetWebShareRequest()..mergeFromBuffer(data, registry);
+  factory SetWebShareRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetWebShareRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SetWebShareRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SetWebShareRequest.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'enabled')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetWebShareRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetWebShareRequest copyWith(void Function(SetWebShareRequest) updates) =>
+      super.copyWith((message) => updates(message as SetWebShareRequest))
+          as SetWebShareRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SetWebShareRequest() / SetWebShareRequest.new instead')
+  static SetWebShareRequest create() => SetWebShareRequest._();
+  static $pb.GeneratedMessage $_createMessage() => SetWebShareRequest._();
+  @$core.override
+  SetWebShareRequest createEmptyInstance() => SetWebShareRequest._();
+  @$core.pragma('dart2js:noInline')
+  static SetWebShareRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SetWebShareRequest>(
+          SetWebShareRequest.$_createMessage);
+  static SetWebShareRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get enabled => $_getBF(0);
+  @$pb.TagNumber(1)
+  set enabled($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasEnabled() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearEnabled() => $_clearField(1);
+}
+
+class NewWebShareInviteRequest extends $pb.GeneratedMessage {
+  factory NewWebShareInviteRequest({
+    $core.String? address,
+  }) {
+    final result = NewWebShareInviteRequest._();
+    if (address != null) result.address = address;
+    return result;
+  }
+
+  NewWebShareInviteRequest._();
+
+  factory NewWebShareInviteRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      NewWebShareInviteRequest()..mergeFromBuffer(data, registry);
+  factory NewWebShareInviteRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      NewWebShareInviteRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'NewWebShareInviteRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: NewWebShareInviteRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'address')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  NewWebShareInviteRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  NewWebShareInviteRequest copyWith(
+          void Function(NewWebShareInviteRequest) updates) =>
+      super.copyWith((message) => updates(message as NewWebShareInviteRequest))
+          as NewWebShareInviteRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use NewWebShareInviteRequest() / NewWebShareInviteRequest.new instead')
+  static NewWebShareInviteRequest create() => NewWebShareInviteRequest._();
+  static $pb.GeneratedMessage $_createMessage() => NewWebShareInviteRequest._();
+  @$core.override
+  NewWebShareInviteRequest createEmptyInstance() =>
+      NewWebShareInviteRequest._();
+  @$core.pragma('dart2js:noInline')
+  static NewWebShareInviteRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<NewWebShareInviteRequest>(
+          NewWebShareInviteRequest.$_createMessage);
+  static NewWebShareInviteRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get address => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set address($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAddress() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAddress() => $_clearField(1);
+}
+
+class WebShareInvite extends $pb.GeneratedMessage {
+  factory WebShareInvite({
+    $core.String? id,
+    $core.String? url,
+    $fixnum.Int64? expiresAtUnix,
+    $core.int? qrSize,
+    $core.List<$core.int>? qrModules,
+  }) {
+    final result = WebShareInvite._();
+    if (id != null) result.id = id;
+    if (url != null) result.url = url;
+    if (expiresAtUnix != null) result.expiresAtUnix = expiresAtUnix;
+    if (qrSize != null) result.qrSize = qrSize;
+    if (qrModules != null) result.qrModules = qrModules;
+    return result;
+  }
+
+  WebShareInvite._();
+
+  factory WebShareInvite.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebShareInvite()..mergeFromBuffer(data, registry);
+  factory WebShareInvite.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebShareInvite()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'WebShareInvite',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: WebShareInvite.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'url')
+    ..aInt64(3, _omitFieldNames ? '' : 'expiresAtUnix')
+    ..aI(4, _omitFieldNames ? '' : 'qrSize')
+    ..a<$core.List<$core.int>>(
+        5, _omitFieldNames ? '' : 'qrModules', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebShareInvite clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebShareInvite copyWith(void Function(WebShareInvite) updates) =>
+      super.copyWith((message) => updates(message as WebShareInvite))
+          as WebShareInvite;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use WebShareInvite() / WebShareInvite.new instead')
+  static WebShareInvite create() => WebShareInvite._();
+  static $pb.GeneratedMessage $_createMessage() => WebShareInvite._();
+  @$core.override
+  WebShareInvite createEmptyInstance() => WebShareInvite._();
+  @$core.pragma('dart2js:noInline')
+  static WebShareInvite getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WebShareInvite>(
+          WebShareInvite.$_createMessage);
+  static WebShareInvite? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get url => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set url($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasUrl() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUrl() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get expiresAtUnix => $_getI64(2);
+  @$pb.TagNumber(3)
+  set expiresAtUnix($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasExpiresAtUnix() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearExpiresAtUnix() => $_clearField(3);
+
+  /// 二维码点阵，界面按它画方块：边长（模块数）与按行排列的模块，每个字节一个，1 为深色
+  @$pb.TagNumber(4)
+  $core.int get qrSize => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set qrSize($core.int value) => $_setSignedInt32(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasQrSize() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearQrSize() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.List<$core.int> get qrModules => $_getN(4);
+  @$pb.TagNumber(5)
+  set qrModules($core.List<$core.int> value) => $_setBytes(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasQrModules() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearQrModules() => $_clearField(5);
+}
+
+class WebShareInviteRef extends $pb.GeneratedMessage {
+  factory WebShareInviteRef({
+    $core.String? id,
+  }) {
+    final result = WebShareInviteRef._();
+    if (id != null) result.id = id;
+    return result;
+  }
+
+  WebShareInviteRef._();
+
+  factory WebShareInviteRef.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebShareInviteRef()..mergeFromBuffer(data, registry);
+  factory WebShareInviteRef.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebShareInviteRef()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'WebShareInviteRef',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: WebShareInviteRef.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebShareInviteRef clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebShareInviteRef copyWith(void Function(WebShareInviteRef) updates) =>
+      super.copyWith((message) => updates(message as WebShareInviteRef))
+          as WebShareInviteRef;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use WebShareInviteRef() / WebShareInviteRef.new instead')
+  static WebShareInviteRef create() => WebShareInviteRef._();
+  static $pb.GeneratedMessage $_createMessage() => WebShareInviteRef._();
+  @$core.override
+  WebShareInviteRef createEmptyInstance() => WebShareInviteRef._();
+  @$core.pragma('dart2js:noInline')
+  static WebShareInviteRef getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WebShareInviteRef>(
+          WebShareInviteRef.$_createMessage);
+  static WebShareInviteRef? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+}
+
+class WebSessionRef extends $pb.GeneratedMessage {
+  factory WebSessionRef({
+    $core.String? id,
+  }) {
+    final result = WebSessionRef._();
+    if (id != null) result.id = id;
+    return result;
+  }
+
+  WebSessionRef._();
+
+  factory WebSessionRef.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebSessionRef()..mergeFromBuffer(data, registry);
+  factory WebSessionRef.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      WebSessionRef()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'WebSessionRef',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: WebSessionRef.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebSessionRef clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  WebSessionRef copyWith(void Function(WebSessionRef) updates) =>
+      super.copyWith((message) => updates(message as WebSessionRef))
+          as WebSessionRef;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use WebSessionRef() / WebSessionRef.new instead')
+  static WebSessionRef create() => WebSessionRef._();
+  static $pb.GeneratedMessage $_createMessage() => WebSessionRef._();
+  @$core.override
+  WebSessionRef createEmptyInstance() => WebSessionRef._();
+  @$core.pragma('dart2js:noInline')
+  static WebSessionRef getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WebSessionRef>(
+          WebSessionRef.$_createMessage);
+  static WebSessionRef? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
 }
 
 const $core.bool _omitFieldNames =

@@ -222,6 +222,7 @@ const ClipRecord$json = {
     },
     {'1': 'is_link', '3': 17, '4': 1, '5': 8, '10': 'isLink'},
     {'1': 'alias', '3': 18, '4': 1, '5': 9, '10': 'alias'},
+    {'1': 'via_name', '3': 19, '4': 1, '5': 9, '10': 'viaName'},
   ],
 };
 
@@ -238,7 +239,7 @@ final $typed_data.Uint8List clipRecordDescriptor = $convert.base64Decode(
     'IAEoCVIFZXJyb3ISHwoLaW1hZ2VfY291bnQYDSABKAVSCmltYWdlQ291bnQSGgoIZmF2b3JpdG'
     'UYDiABKAhSCGZhdm9yaXRlEhwKCWZhdm9yaXRlZBgPIAEoCFIJZmF2b3JpdGVkEioKEWZhdm9y'
     'aXRlZF9hdF91bml4GBAgASgDUg9mYXZvcml0ZWRBdFVuaXgSFwoHaXNfbGluaxgRIAEoCFIGaX'
-    'NMaW5rEhQKBWFsaWFzGBIgASgJUgVhbGlhcw==');
+    'NMaW5rEhQKBWFsaWFzGBIgASgJUgVhbGlhcxIZCgh2aWFfbmFtZRgTIAEoCVIHdmlhTmFtZQ==');
 
 @$core.Deprecated('Use subscribeRequestDescriptor instead')
 const SubscribeRequest$json = {
@@ -453,6 +454,15 @@ const Event$json = {
       '9': 0,
       '10': 'profileChanged'
     },
+    {
+      '1': 'web_share_changed',
+      '3': 18,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.WebShareStatus',
+      '9': 0,
+      '10': 'webShareChanged'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -480,7 +490,8 @@ final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
     'ZnJpZW5kX3JlbW92ZWQYDyABKAlIAFINZnJpZW5kUmVtb3ZlZBJFCg5mcmllbmRfcmVxdWVzdB'
     'gQIAEoCzIcLnBhc3RlZmVycnkudjEuRnJpZW5kUmVxdWVzdEgAUg1mcmllbmRSZXF1ZXN0EkEK'
     'D3Byb2ZpbGVfY2hhbmdlZBgRIAEoCzIWLnBhc3RlZmVycnkudjEuUHJvZmlsZUgAUg5wcm9maW'
-    'xlQ2hhbmdlZEIJCgdwYXlsb2Fk');
+    'xlQ2hhbmdlZBJLChF3ZWJfc2hhcmVfY2hhbmdlZBgSIAEoCzIdLnBhc3RlZmVycnkudjEuV2Vi'
+    'U2hhcmVTdGF0dXNIAFIPd2ViU2hhcmVDaGFuZ2VkQgkKB3BheWxvYWQ=');
 
 @$core.Deprecated('Use profileDescriptor instead')
 const Profile$json = {
@@ -934,13 +945,15 @@ const ClipDetail$json = {
     {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
     {'1': 'text_length', '3': 2, '4': 1, '5': 5, '10': 'textLength'},
     {'1': 'source_paths', '3': 3, '4': 3, '5': 9, '10': 'sourcePaths'},
+    {'1': 'local_paths', '3': 4, '4': 3, '5': 9, '10': 'localPaths'},
   ],
 };
 
 /// Descriptor for `ClipDetail`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List clipDetailDescriptor = $convert.base64Decode(
     'CgpDbGlwRGV0YWlsEhIKBHRleHQYASABKAlSBHRleHQSHwoLdGV4dF9sZW5ndGgYAiABKAVSCn'
-    'RleHRMZW5ndGgSIQoMc291cmNlX3BhdGhzGAMgAygJUgtzb3VyY2VQYXRocw==');
+    'RleHRMZW5ndGgSIQoMc291cmNlX3BhdGhzGAMgAygJUgtzb3VyY2VQYXRocxIfCgtsb2NhbF9w'
+    'YXRocxgEIAMoCVIKbG9jYWxQYXRocw==');
 
 @$core.Deprecated('Use quickPasteStatusDescriptor instead')
 const QuickPasteStatus$json = {
@@ -1953,3 +1966,130 @@ final $typed_data.Uint8List checkReceiveDirResponseDescriptor = $convert.base64D
     'ChdDaGVja1JlY2VpdmVEaXJSZXNwb25zZRIOCgJvaxgBIAEoCFICb2sSFAoFZXJyb3IYAiABKA'
     'lSBWVycm9yEh0KCmZyZWVfYnl0ZXMYAyABKANSCWZyZWVCeXRlcxISCgRwYXRoGAQgASgJUgRw'
     'YXRo');
+
+@$core.Deprecated('Use submitTextRequestDescriptor instead')
+const SubmitTextRequest$json = {
+  '1': 'SubmitTextRequest',
+  '2': [
+    {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
+  ],
+};
+
+/// Descriptor for `SubmitTextRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List submitTextRequestDescriptor = $convert
+    .base64Decode('ChFTdWJtaXRUZXh0UmVxdWVzdBISCgR0ZXh0GAEgASgJUgR0ZXh0');
+
+@$core.Deprecated('Use webShareStatusDescriptor instead')
+const WebShareStatus$json = {
+  '1': 'WebShareStatus',
+  '2': [
+    {'1': 'enabled', '3': 1, '4': 1, '5': 8, '10': 'enabled'},
+    {'1': 'listening', '3': 2, '4': 1, '5': 8, '10': 'listening'},
+    {'1': 'port', '3': 3, '4': 1, '5': 5, '10': 'port'},
+    {'1': 'port_fallback', '3': 4, '4': 1, '5': 8, '10': 'portFallback'},
+    {'1': 'error', '3': 5, '4': 1, '5': 9, '10': 'error'},
+    {'1': 'addresses', '3': 6, '4': 3, '5': 9, '10': 'addresses'},
+    {
+      '1': 'sessions',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.WebSession',
+      '10': 'sessions'
+    },
+    {'1': 'invite_used', '3': 8, '4': 1, '5': 9, '10': 'inviteUsed'},
+  ],
+};
+
+/// Descriptor for `WebShareStatus`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List webShareStatusDescriptor = $convert.base64Decode(
+    'Cg5XZWJTaGFyZVN0YXR1cxIYCgdlbmFibGVkGAEgASgIUgdlbmFibGVkEhwKCWxpc3RlbmluZx'
+    'gCIAEoCFIJbGlzdGVuaW5nEhIKBHBvcnQYAyABKAVSBHBvcnQSIwoNcG9ydF9mYWxsYmFjaxgE'
+    'IAEoCFIMcG9ydEZhbGxiYWNrEhQKBWVycm9yGAUgASgJUgVlcnJvchIcCglhZGRyZXNzZXMYBi'
+    'ADKAlSCWFkZHJlc3NlcxI1CghzZXNzaW9ucxgHIAMoCzIZLnBhc3RlZmVycnkudjEuV2ViU2Vz'
+    'c2lvblIIc2Vzc2lvbnMSHwoLaW52aXRlX3VzZWQYCCABKAlSCmludml0ZVVzZWQ=');
+
+@$core.Deprecated('Use webSessionDescriptor instead')
+const WebSession$json = {
+  '1': 'WebSession',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'created_at_unix', '3': 3, '4': 1, '5': 3, '10': 'createdAtUnix'},
+    {'1': 'last_seen_unix', '3': 4, '4': 1, '5': 3, '10': 'lastSeenUnix'},
+  ],
+};
+
+/// Descriptor for `WebSession`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List webSessionDescriptor = $convert.base64Decode(
+    'CgpXZWJTZXNzaW9uEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiYKD2NyZW'
+    'F0ZWRfYXRfdW5peBgDIAEoA1INY3JlYXRlZEF0VW5peBIkCg5sYXN0X3NlZW5fdW5peBgEIAEo'
+    'A1IMbGFzdFNlZW5Vbml4');
+
+@$core.Deprecated('Use setWebShareRequestDescriptor instead')
+const SetWebShareRequest$json = {
+  '1': 'SetWebShareRequest',
+  '2': [
+    {'1': 'enabled', '3': 1, '4': 1, '5': 8, '10': 'enabled'},
+  ],
+};
+
+/// Descriptor for `SetWebShareRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setWebShareRequestDescriptor =
+    $convert.base64Decode(
+        'ChJTZXRXZWJTaGFyZVJlcXVlc3QSGAoHZW5hYmxlZBgBIAEoCFIHZW5hYmxlZA==');
+
+@$core.Deprecated('Use newWebShareInviteRequestDescriptor instead')
+const NewWebShareInviteRequest$json = {
+  '1': 'NewWebShareInviteRequest',
+  '2': [
+    {'1': 'address', '3': 1, '4': 1, '5': 9, '10': 'address'},
+  ],
+};
+
+/// Descriptor for `NewWebShareInviteRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List newWebShareInviteRequestDescriptor =
+    $convert.base64Decode(
+        'ChhOZXdXZWJTaGFyZUludml0ZVJlcXVlc3QSGAoHYWRkcmVzcxgBIAEoCVIHYWRkcmVzcw==');
+
+@$core.Deprecated('Use webShareInviteDescriptor instead')
+const WebShareInvite$json = {
+  '1': 'WebShareInvite',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'url', '3': 2, '4': 1, '5': 9, '10': 'url'},
+    {'1': 'expires_at_unix', '3': 3, '4': 1, '5': 3, '10': 'expiresAtUnix'},
+    {'1': 'qr_size', '3': 4, '4': 1, '5': 5, '10': 'qrSize'},
+    {'1': 'qr_modules', '3': 5, '4': 1, '5': 12, '10': 'qrModules'},
+  ],
+};
+
+/// Descriptor for `WebShareInvite`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List webShareInviteDescriptor = $convert.base64Decode(
+    'Cg5XZWJTaGFyZUludml0ZRIOCgJpZBgBIAEoCVICaWQSEAoDdXJsGAIgASgJUgN1cmwSJgoPZX'
+    'hwaXJlc19hdF91bml4GAMgASgDUg1leHBpcmVzQXRVbml4EhcKB3FyX3NpemUYBCABKAVSBnFy'
+    'U2l6ZRIdCgpxcl9tb2R1bGVzGAUgASgMUglxck1vZHVsZXM=');
+
+@$core.Deprecated('Use webShareInviteRefDescriptor instead')
+const WebShareInviteRef$json = {
+  '1': 'WebShareInviteRef',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `WebShareInviteRef`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List webShareInviteRefDescriptor =
+    $convert.base64Decode('ChFXZWJTaGFyZUludml0ZVJlZhIOCgJpZBgBIAEoCVICaWQ=');
+
+@$core.Deprecated('Use webSessionRefDescriptor instead')
+const WebSessionRef$json = {
+  '1': 'WebSessionRef',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `WebSessionRef`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List webSessionRefDescriptor =
+    $convert.base64Decode('Cg1XZWJTZXNzaW9uUmVmEg4KAmlkGAEgASgJUgJpZA==');

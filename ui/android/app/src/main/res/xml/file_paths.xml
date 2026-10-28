@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Go 核心的数据目录（缓存、收藏、剪贴板图片都在里面），见 Core.dataDir -->
+<paths>
+    <files-path name="data" path="pasteferry/" />
+</paths>

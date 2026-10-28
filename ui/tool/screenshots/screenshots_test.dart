@@ -25,6 +25,7 @@ import 'package:pasteferry_ui/widgets/friends_dialog.dart';
 import 'package:pasteferry_ui/widgets/nearby_dialog.dart';
 import 'package:pasteferry_ui/widgets/pairing_dialog.dart';
 import 'package:pasteferry_ui/widgets/send_dialog.dart';
+import 'package:pasteferry_ui/widgets/web_share.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -48,7 +49,22 @@ final _cjk = switch (_lang) {
 };
 
 /// 生成配对码、搜索附近设备、搜索复制记录都不走后台服务，直接给固定的演示数据。
+/// 手机网页传输二维码的演示点阵（41×41），由 client-core/internal/qrcode 对一个演示网址生成
+const _demoQr = '1111111001111110001101110101011100111111110000010100110110101001100110011001000001101110100001100100010110101110011010111011011101000000001010101100111111100101110110111010110000101001101001000100001011101100000100000011111011101110101010010000011111111010101010101010101010101010111111100000000011001001101010011000110000000000101010100000101101100110011101100000100101101000110111111110000100100001000110110001100010000010010100001011001100001010111101110001000111001010100011011010001100011110111010001011110111000100111010110101100111001101101100101110100001010101000111010001111000001101111110011001100001011111001010100100000010011110101111001111000000000010010110110001100010010001001101001001010011001001100011101110111000111001011100111111101111010000100010110010101110110111101000011001001011011010101100101000101111110001010100011010010101101010110001000010001000111000110100010111010100001110100010001001100100111011001110100111111000101000101010101111101010111001000010100101011011111001011001100110011001111100101101000011001110000011000100100001000011111011100000100101100110100000000110001111010100011001000011011101111011010000001110000011101111010110000110001101111011011001000001000111111110011100110111010010001000011000111010100001111100000011001001101101100100011000101010011010101101111000100001100001101101100111011101001111110100000000011100001111010101110011010001101111111110000111010010010011101010101011011100000100111110011101001111101001000100011011101010010111101010000010010011111100110111010001011110110100011011000110011011101110101111111100000010101011001001111111000001001100101010101011111010001010001011111110111101100111011111110111100110011';
+
 class _DemoState extends AppState {
+  @override
+  Future<WebShareInvite> newWebShareInvite(String address) async => WebShareInvite(
+        id: 'demo',
+        url: 'http://192.168.1.20:8790/#i=demo',
+        expiresAtUnix: Int64(DateTime.now().add(const Duration(minutes: 10)).millisecondsSinceEpoch ~/ 1000),
+        qrSize: 41,
+        qrModules: [for (final c in _demoQr.codeUnits) c - 48],
+      );
+
+  @override
+  Future<void> closeWebShareInvite(String id) async {}
+
   @override
   Future<PairingCode> createPairingCode() async => (code: 'K7MP2X', addresses: ['192.168.1.20']);
 
@@ -665,6 +681,32 @@ void main() {
   testWidgets('devices', (tester) async {
     await _shoot(tester, 'devices', state: _demo(), section: Section.devices);
   });
+
+  // 手机网页传输：设备页里的开关与已登记的手机，加上二维码窗口
+  for (final dark in [false, true]) {
+    testWidgets(dark ? 'web-share-dark' : 'web-share', (tester) async {
+      // 在演示数据上加手机网页传输的状态：已配对的设备照常显示
+      final state = _demo();
+      state.debugSeed(
+        status: state.status!,
+        config: state.config!,
+        self: state.self!,
+        peers: state.peers,
+        webShare: WebShareStatus(enabled: true, listening: true, port: 8790, addresses: [
+          '192.168.1.20'
+        ], sessions: [
+          WebSession(id: 's1', name: 'iPhone', createdAtUnix: _ago(const Duration(days: 2)), lastSeenUnix: _ago(const Duration(minutes: 3))),
+        ]),
+      );
+      await _shoot(tester, dark ? 'web-share-dark' : 'web-share',
+          state: state,
+          section: Section.devices,
+          brightness: dark ? Brightness.dark : Brightness.light,
+          window: const Size(960, 720), arrange: () async {
+        showWebShareDialog(tester.element(find.byType(Shell)));
+      });
+    });
+  }
 
   testWidgets('pairing', (tester) async {
     await _shoot(tester, 'pairing', state: _demo(), section: Section.devices, arrange: () async {

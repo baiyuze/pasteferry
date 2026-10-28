@@ -2335,4 +2335,231 @@ class AppLocalizationsEn extends AppLocalizations {
   String friendDropHint(String name) {
     return 'Drop files here to send them to $name';
   }
+
+  @override
+  String get webShareTitle => 'Phone web transfer';
+
+  @override
+  String get webShareFootnote =>
+      'Scan a QR code with a phone to send text, photos and files to and from this computer in the browser, no app needed. The phone and computer need to be on the same network.';
+
+  @override
+  String get webShareSwitch => 'Let phones connect in the browser';
+
+  @override
+  String webShareOn(int count) {
+    return 'On, $count phone(s)';
+  }
+
+  @override
+  String get webShareOff => 'Off';
+
+  @override
+  String get webShareShowQr => 'Show QR code';
+
+  @override
+  String get webShareDialogTitle => 'Scan with your phone';
+
+  @override
+  String get webShareDialogBody =>
+      'Scan with the phone’s camera or browser and open it in the browser. Each QR code registers one phone and is replaced after use.';
+
+  @override
+  String get webShareAddress => 'Address';
+
+  @override
+  String get webShareSecurity =>
+      'Content is encrypted in the page, so others on the network can’t read it. But the page itself is http and can’t stop someone who deliberately tampers with it. Use it at home or on a trusted office network, not on public Wi-Fi.';
+
+  @override
+  String get webSharePhones => 'Registered phones';
+
+  @override
+  String get webShareNoPhones => 'No phones yet';
+
+  @override
+  String webShareLastUsed(String time) {
+    return 'Last used $time';
+  }
+
+  @override
+  String get webShareRemove => 'Remove';
+
+  @override
+  String webShareRemoved(String name) {
+    return 'Removed “$name”';
+  }
+
+  @override
+  String webShareNewPhone(String name) {
+    return '“$name” registered';
+  }
+
+  @override
+  String webShareNotListening(String error) {
+    return 'Couldn’t start listening: $error';
+  }
+
+  @override
+  String get webSharePortFallback =>
+      'The usual port is taken, so a temporary one is in use. Saved addresses won’t open until phones scan again.';
+
+  @override
+  String get webShareNoAddress =>
+      'No local network address. Connect to Wi-Fi or a wired network first.';
+
+  @override
+  String get webShareCantOpen =>
+      'If the page won’t open on the phone, make sure both are on the same network (guest networks usually don’t work). On Windows, PasteFerry also needs to be allowed through the firewall.';
+
+  @override
+  String get mTabRecords => 'History';
+
+  @override
+  String get mTabSend => 'Send';
+
+  @override
+  String get mThisPhone => 'This phone';
+
+  @override
+  String mThisPhoneName(String name) {
+    return 'This phone: $name';
+  }
+
+  @override
+  String get mSendTitle => 'Send to your computer';
+
+  @override
+  String get mSendHint => 'Type or paste text';
+
+  @override
+  String get mPaste => 'Paste';
+
+  @override
+  String get mClipboardNoText => 'The clipboard has no text';
+
+  @override
+  String get mSendAction => 'Send';
+
+  @override
+  String mSendTo(String names) {
+    return 'Goes to $names';
+  }
+
+  @override
+  String get mNoOnlineDevices => 'No devices online nearby';
+
+  @override
+  String get mNoPairedDevices => 'Pair with a computer first';
+
+  @override
+  String get mSent => 'Sent';
+
+  @override
+  String get mSendFootnote =>
+      'The text goes into the computer’s history and onto its clipboard, as if you had copied it there. Text you copy on this phone isn’t sent automatically: paste it here and tap Send.';
+
+  @override
+  String mSendFailed(String detail) {
+    return 'Couldn’t send: $detail';
+  }
+
+  @override
+  String get mCopy => 'Copy';
+
+  @override
+  String get mCopied => 'Copied to this phone’s clipboard';
+
+  @override
+  String get mShare => 'Share';
+
+  @override
+  String get mSaved => 'Saved to Photos or Download/PasteFerry';
+
+  @override
+  String mActionFailed(String detail) {
+    return 'Didn’t work: $detail';
+  }
+
+  @override
+  String get mDownloading => 'Downloading…';
+
+  @override
+  String get mNotDownloaded => 'Not downloaded yet';
+
+  @override
+  String get mDownloadHint =>
+      'It downloads first when you tap Copy, Save or Share.';
+
+  @override
+  String get mFullTextLoading => 'Loading…';
+
+  @override
+  String mTextTruncated(int shown, int total) {
+    return 'Showing the first $shown of $total characters. Copy gets all of it.';
+  }
+
+  @override
+  String get mNotOnLanTitle => 'Not on Wi-Fi';
+
+  @override
+  String get mNotOnLanBody =>
+      'For now PasteFerry syncs only on the local network. Join the same Wi-Fi as your computer.';
+
+  @override
+  String mStartFailed(String detail) {
+    return 'PasteFerry couldn’t start: $detail';
+  }
+
+  @override
+  String get mNoDevicesBody =>
+      'On your computer, open PasteFerry → Devices → Add device, then enter the code it shows here. On the same Wi-Fi you can also open “Search nearby” on both.';
+
+  @override
+  String get mSectionSync => 'Sync';
+
+  @override
+  String get mSectionBackground => 'Background';
+
+  @override
+  String get mAutoApplyDesc =>
+      'Text copied on your computer goes straight onto this phone’s clipboard. Images and files wait until you tap Copy.';
+
+  @override
+  String get mKeepAlive => 'Stay connected in the background';
+
+  @override
+  String get mKeepAliveDesc =>
+      'Receive text even when PasteFerry isn’t open. Shows an ongoing notification.';
+
+  @override
+  String get mNotifications => 'Notifications';
+
+  @override
+  String get mNotificationsDesc =>
+      'Needed for the ongoing notification. PasteFerry works without it.';
+
+  @override
+  String get mBattery => 'Run in the background';
+
+  @override
+  String get mBatteryDesc =>
+      'Turn off battery optimization so the system doesn’t stop PasteFerry when the screen is locked. Some phones also need PasteFerry added to their auto-start or background list in Settings.';
+
+  @override
+  String get mAllowed => 'Allowed';
+
+  @override
+  String get mAllow => 'Allow';
+
+  @override
+  String mVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get mDeleteConfirm => 'Delete this record?';
+
+  @override
+  String get mDelete => 'Delete';
 }

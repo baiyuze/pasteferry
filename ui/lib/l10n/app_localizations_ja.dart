@@ -2162,4 +2162,227 @@ class AppLocalizationsJa extends AppLocalizations {
   String friendDropHint(String name) {
     return 'ここにドロップすると $name に送ります';
   }
+
+  @override
+  String get webShareTitle => 'スマートフォンの Web 転送';
+
+  @override
+  String get webShareFootnote =>
+      'スマートフォンで QR コードを読み取ると、アプリなしでブラウザからこのコンピュータとテキスト、写真、ファイルをやり取りできます。同じネットワークにつながっている必要があります。';
+
+  @override
+  String get webShareSwitch => 'ブラウザからの接続を許可';
+
+  @override
+  String webShareOn(int count) {
+    return 'オン、スマートフォン $count 台';
+  }
+
+  @override
+  String get webShareOff => 'オフ';
+
+  @override
+  String get webShareShowQr => 'QR コードを表示';
+
+  @override
+  String get webShareDialogTitle => 'スマートフォンで読み取る';
+
+  @override
+  String get webShareDialogBody =>
+      'スマートフォンのカメラやブラウザで読み取り、ブラウザで開きます。1 つの QR コードで登録できるのは 1 台で、使うと新しいものに替わります。';
+
+  @override
+  String get webShareAddress => 'アドレス';
+
+  @override
+  String get webShareSecurity =>
+      '内容はページ内で暗号化され、同じネットワークの他の人には読めません。ただしページ自体は http のため、意図的な改ざんは防げません。自宅や信頼できる職場のネットワークで使い、公衆 Wi-Fi では使わないでください。';
+
+  @override
+  String get webSharePhones => '登録済みのスマートフォン';
+
+  @override
+  String get webShareNoPhones => 'まだありません';
+
+  @override
+  String webShareLastUsed(String time) {
+    return '最終使用 $time';
+  }
+
+  @override
+  String get webShareRemove => '削除';
+
+  @override
+  String webShareRemoved(String name) {
+    return '「$name」を削除しました';
+  }
+
+  @override
+  String webShareNewPhone(String name) {
+    return '「$name」を登録しました';
+  }
+
+  @override
+  String webShareNotListening(String error) {
+    return '待ち受けを開始できませんでした：$error';
+  }
+
+  @override
+  String get webSharePortFallback =>
+      '通常のポートが使用中のため、一時的なポートを使っています。保存したアドレスは開けないため、読み取り直してください。';
+
+  @override
+  String get webShareNoAddress =>
+      'ローカルネットワークのアドレスがありません。先に Wi-Fi か有線ネットワークにつないでください。';
+
+  @override
+  String get webShareCantOpen =>
+      'スマートフォンでページが開けないときは、同じネットワークにいるか確認してください（ゲストネットワークでは通常つながりません）。Windows ではファイアウォールで PasteFerry を許可する必要もあります。';
+
+  @override
+  String get mTabRecords => '履歴';
+
+  @override
+  String get mTabSend => '送信';
+
+  @override
+  String get mThisPhone => 'このスマホ';
+
+  @override
+  String mThisPhoneName(String name) {
+    return 'このスマホ：$name';
+  }
+
+  @override
+  String get mSendTitle => 'パソコンへ送る';
+
+  @override
+  String get mSendHint => 'テキストを入力または貼り付け';
+
+  @override
+  String get mPaste => '貼り付け';
+
+  @override
+  String get mClipboardNoText => 'クリップボードにテキストがありません';
+
+  @override
+  String get mSendAction => '送信';
+
+  @override
+  String mSendTo(String names) {
+    return '$names に送信します';
+  }
+
+  @override
+  String get mNoOnlineDevices => '近くにオンラインのデバイスがありません';
+
+  @override
+  String get mNoPairedDevices => '先にパソコンとペアリングしてください';
+
+  @override
+  String get mSent => '送信しました';
+
+  @override
+  String get mSendFootnote =>
+      'テキストはパソコンの履歴に入り、パソコンの設定どおりクリップボードにも入ります。パソコンでコピーしたのと同じです。スマホでコピーした内容は自動では送られないので、ここに貼り付けて送信してください。';
+
+  @override
+  String mSendFailed(String detail) {
+    return '送信できませんでした：$detail';
+  }
+
+  @override
+  String get mCopy => 'コピー';
+
+  @override
+  String get mCopied => 'スマホのクリップボードにコピーしました';
+
+  @override
+  String get mShare => '共有';
+
+  @override
+  String get mSaved => '写真または「Download/PasteFerry」に保存しました';
+
+  @override
+  String mActionFailed(String detail) {
+    return 'できませんでした：$detail';
+  }
+
+  @override
+  String get mDownloading => 'ダウンロード中…';
+
+  @override
+  String get mNotDownloaded => '未ダウンロード';
+
+  @override
+  String get mDownloadHint => '「コピー」「保存」「共有」をタップすると先にダウンロードします。';
+
+  @override
+  String get mFullTextLoading => '読み込み中…';
+
+  @override
+  String mTextTruncated(int shown, int total) {
+    return '全 $total 文字のうち最初の $shown 文字を表示しています。コピーされるのは全文です。';
+  }
+
+  @override
+  String get mNotOnLanTitle => 'Wi-Fi に接続していません';
+
+  @override
+  String get mNotOnLanBody => '現在はローカルネットワーク内でのみ同期します。パソコンと同じ Wi-Fi に接続してください。';
+
+  @override
+  String mStartFailed(String detail) {
+    return 'PasteFerry を起動できませんでした：$detail';
+  }
+
+  @override
+  String get mNoDevicesBody =>
+      'パソコンで PasteFerry の「デバイス → デバイスを追加」を開き、表示されたコードをここに入力します。同じ Wi-Fi なら、両方で「近くのデバイスを探す」を開いても構いません。';
+
+  @override
+  String get mSectionSync => '同期';
+
+  @override
+  String get mSectionBackground => 'バックグラウンド';
+
+  @override
+  String get mAutoApplyDesc =>
+      'パソコンでコピーしたテキストをそのままスマホのクリップボードに入れます。画像とファイルは「コピー」をタップしたときだけです。';
+
+  @override
+  String get mKeepAlive => 'バックグラウンドで接続を保つ';
+
+  @override
+  String get mKeepAliveDesc => 'PasteFerry を開いていなくてもテキストを受け取れます。常駐通知が表示されます。';
+
+  @override
+  String get mNotifications => '通知';
+
+  @override
+  String get mNotificationsDesc => '常駐通知に必要です。許可しなくても使えます。';
+
+  @override
+  String get mBattery => 'バックグラウンドでの実行';
+
+  @override
+  String get mBatteryDesc =>
+      '電池の最適化をオフにすると、画面ロック中にシステムに停止されにくくなります。機種によっては設定で自動起動やバックグラウンド実行の許可も必要です。';
+
+  @override
+  String get mAllowed => '許可済み';
+
+  @override
+  String get mAllow => '許可';
+
+  @override
+  String mVersion(String version) {
+    return 'バージョン $version';
+  }
+
+  @override
+  String get mDeleteConfirm => 'この履歴を削除しますか？';
+
+  @override
+  String get mDelete => '削除';
 }

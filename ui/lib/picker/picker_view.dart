@@ -511,7 +511,7 @@ class _PickerRow extends StatelessWidget {
     final thumb = isImage ? state.thumbnailOf(r.id) : null;
     final meta = [
       if (r.status == ClipStatus.CLIP_STATUS_REMOTE_ONLY) humanBytes(r.totalSize.toInt()),
-      if (!r.outgoing) r.originDeviceName,
+      if (!r.outgoing) r.originDeviceName else if (r.viaName.isNotEmpty) r.viaName,
       if (r.favorite) appL10n.favoritedAt(shortDate(favoritedTime(r))) else relativeTime(recordTime(r)),
     ].join(' · ');
 

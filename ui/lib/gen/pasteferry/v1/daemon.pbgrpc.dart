@@ -474,6 +474,54 @@ class DaemonServiceClient extends $grpc.Client {
     return $createUnaryCall(_$blockDevice, request, options: options);
   }
 
+  /// 发送页里输入的文字：当成本机复制，落库并发给其他设备，不写本机剪贴板（Android App，design/phone-sync.md 3.3.2 节）
+  $grpc.ResponseFuture<$0.ClipRecord> submitText(
+    $0.SubmitTextRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$submitText, request, options: options);
+  }
+
+  /// 手机网页传输（design/phone-sync.md 第 2 节）：手机扫码后用浏览器和本机互传
+  $grpc.ResponseFuture<$0.WebShareStatus> getWebShare(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getWebShare, request, options: options);
+  }
+
+  /// 打开或关闭总开关。关闭时停止监听端口，已登记的手机保留
+  $grpc.ResponseFuture<$0.WebShareStatus> setWebShare(
+    $0.SetWebShareRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setWebShare, request, options: options);
+  }
+
+  /// 二维码窗口打开、或上一个二维码被用掉 / 过期时调用：生成一个待用的会话，返回二维码里的网址
+  $grpc.ResponseFuture<$0.WebShareInvite> newWebShareInvite(
+    $0.NewWebShareInviteRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$newWebShareInvite, request, options: options);
+  }
+
+  /// 二维码窗口关闭：作废还没被用过的二维码
+  $grpc.ResponseFuture<$0.Empty> closeWebShareInvite(
+    $0.WebShareInviteRef request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$closeWebShareInvite, request, options: options);
+  }
+
+  /// 移除一台登记过的手机，它的网页立即失效
+  $grpc.ResponseFuture<$0.WebShareStatus> removeWebSession(
+    $0.WebSessionRef request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$removeWebSession, request, options: options);
+  }
+
   /// 发送窗口、头像里的「粘贴」：剪贴板里是文件时返回它们的路径；是图片时存成 PNG，返回这个文件的路径
   $grpc.ResponseFuture<$0.PasteFilesResponse> pasteFiles(
     $0.Empty request, {
@@ -753,6 +801,35 @@ class DaemonServiceClient extends $grpc.Client {
       '/pasteferry.v1.DaemonService/BlockDevice',
       ($0.FriendRef value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
+  static final _$submitText =
+      $grpc.ClientMethod<$0.SubmitTextRequest, $0.ClipRecord>(
+          '/pasteferry.v1.DaemonService/SubmitText',
+          ($0.SubmitTextRequest value) => value.writeToBuffer(),
+          $0.ClipRecord.fromBuffer);
+  static final _$getWebShare = $grpc.ClientMethod<$0.Empty, $0.WebShareStatus>(
+      '/pasteferry.v1.DaemonService/GetWebShare',
+      ($0.Empty value) => value.writeToBuffer(),
+      $0.WebShareStatus.fromBuffer);
+  static final _$setWebShare =
+      $grpc.ClientMethod<$0.SetWebShareRequest, $0.WebShareStatus>(
+          '/pasteferry.v1.DaemonService/SetWebShare',
+          ($0.SetWebShareRequest value) => value.writeToBuffer(),
+          $0.WebShareStatus.fromBuffer);
+  static final _$newWebShareInvite =
+      $grpc.ClientMethod<$0.NewWebShareInviteRequest, $0.WebShareInvite>(
+          '/pasteferry.v1.DaemonService/NewWebShareInvite',
+          ($0.NewWebShareInviteRequest value) => value.writeToBuffer(),
+          $0.WebShareInvite.fromBuffer);
+  static final _$closeWebShareInvite =
+      $grpc.ClientMethod<$0.WebShareInviteRef, $0.Empty>(
+          '/pasteferry.v1.DaemonService/CloseWebShareInvite',
+          ($0.WebShareInviteRef value) => value.writeToBuffer(),
+          $0.Empty.fromBuffer);
+  static final _$removeWebSession =
+      $grpc.ClientMethod<$0.WebSessionRef, $0.WebShareStatus>(
+          '/pasteferry.v1.DaemonService/RemoveWebSession',
+          ($0.WebSessionRef value) => value.writeToBuffer(),
+          $0.WebShareStatus.fromBuffer);
   static final _$pasteFiles =
       $grpc.ClientMethod<$0.Empty, $0.PasteFilesResponse>(
           '/pasteferry.v1.DaemonService/PasteFiles',
@@ -1185,6 +1262,51 @@ abstract class DaemonServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.FriendRef.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SubmitTextRequest, $0.ClipRecord>(
+        'SubmitText',
+        submitText_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.SubmitTextRequest.fromBuffer(value),
+        ($0.ClipRecord value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.WebShareStatus>(
+        'GetWebShare',
+        getWebShare_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.WebShareStatus value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SetWebShareRequest, $0.WebShareStatus>(
+        'SetWebShare',
+        setWebShare_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.SetWebShareRequest.fromBuffer(value),
+        ($0.WebShareStatus value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.NewWebShareInviteRequest, $0.WebShareInvite>(
+            'NewWebShareInvite',
+            newWebShareInvite_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.NewWebShareInviteRequest.fromBuffer(value),
+            ($0.WebShareInvite value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.WebShareInviteRef, $0.Empty>(
+        'CloseWebShareInvite',
+        closeWebShareInvite_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.WebShareInviteRef.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.WebSessionRef, $0.WebShareStatus>(
+        'RemoveWebSession',
+        removeWebSession_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.WebSessionRef.fromBuffer(value),
+        ($0.WebShareStatus value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.PasteFilesResponse>(
         'PasteFiles',
         pasteFiles_Pre,
@@ -1638,6 +1760,55 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.Empty> blockDevice(
       $grpc.ServiceCall call, $0.FriendRef request);
+
+  $async.Future<$0.ClipRecord> submitText_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SubmitTextRequest> $request) async {
+    return submitText($call, await $request);
+  }
+
+  $async.Future<$0.ClipRecord> submitText(
+      $grpc.ServiceCall call, $0.SubmitTextRequest request);
+
+  $async.Future<$0.WebShareStatus> getWebShare_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return getWebShare($call, await $request);
+  }
+
+  $async.Future<$0.WebShareStatus> getWebShare(
+      $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.WebShareStatus> setWebShare_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SetWebShareRequest> $request) async {
+    return setWebShare($call, await $request);
+  }
+
+  $async.Future<$0.WebShareStatus> setWebShare(
+      $grpc.ServiceCall call, $0.SetWebShareRequest request);
+
+  $async.Future<$0.WebShareInvite> newWebShareInvite_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.NewWebShareInviteRequest> $request) async {
+    return newWebShareInvite($call, await $request);
+  }
+
+  $async.Future<$0.WebShareInvite> newWebShareInvite(
+      $grpc.ServiceCall call, $0.NewWebShareInviteRequest request);
+
+  $async.Future<$0.Empty> closeWebShareInvite_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.WebShareInviteRef> $request) async {
+    return closeWebShareInvite($call, await $request);
+  }
+
+  $async.Future<$0.Empty> closeWebShareInvite(
+      $grpc.ServiceCall call, $0.WebShareInviteRef request);
+
+  $async.Future<$0.WebShareStatus> removeWebSession_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.WebSessionRef> $request) async {
+    return removeWebSession($call, await $request);
+  }
+
+  $async.Future<$0.WebShareStatus> removeWebSession(
+      $grpc.ServiceCall call, $0.WebSessionRef request);
 
   $async.Future<$0.PasteFilesResponse> pasteFiles_Pre(
       $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {

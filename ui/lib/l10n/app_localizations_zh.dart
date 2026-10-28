@@ -2138,6 +2138,226 @@ class AppLocalizationsZh extends AppLocalizations {
   String friendDropHint(String name) {
     return '松开即可发给 $name';
   }
+
+  @override
+  String get webShareTitle => '手机网页传输';
+
+  @override
+  String get webShareFootnote =>
+      '手机扫码后用浏览器和这台电脑互传文字、照片和文件，不用装 App。手机和电脑要在同一个网络里。';
+
+  @override
+  String get webShareSwitch => '允许手机用网页连接';
+
+  @override
+  String webShareOn(int count) {
+    return '已打开，$count 台手机';
+  }
+
+  @override
+  String get webShareOff => '关闭';
+
+  @override
+  String get webShareShowQr => '显示二维码';
+
+  @override
+  String get webShareDialogTitle => '用手机扫码';
+
+  @override
+  String get webShareDialogBody =>
+      '用手机的相机或浏览器扫码，在浏览器里打开。一个二维码只能登记一台手机，用过会自动换新。';
+
+  @override
+  String get webShareAddress => '地址';
+
+  @override
+  String get webShareSecurity =>
+      '内容在网页里加密传输，同一网络里的其他人看不到内容；但网页本身是 http，防不住有人存心篡改。请在家里或可信的办公网络里用，公共 Wi-Fi 下不要打开。';
+
+  @override
+  String get webSharePhones => '已登记的手机';
+
+  @override
+  String get webShareNoPhones => '还没有手机登记';
+
+  @override
+  String webShareLastUsed(String time) {
+    return '最后使用 $time';
+  }
+
+  @override
+  String get webShareRemove => '移除';
+
+  @override
+  String webShareRemoved(String name) {
+    return '已移除「$name」';
+  }
+
+  @override
+  String webShareNewPhone(String name) {
+    return '「$name」已登记';
+  }
+
+  @override
+  String webShareNotListening(String error) {
+    return '没能开始监听：$error';
+  }
+
+  @override
+  String get webSharePortFallback => '固定端口被占用，用了临时端口：以前收藏的网址打不开，要重新扫码。';
+
+  @override
+  String get webShareNoAddress => '没有可用的局域网地址：请先连上 Wi-Fi 或有线网络。';
+
+  @override
+  String get webShareCantOpen =>
+      '手机打不开网页时，确认两边在同一个网络里，访客网络通常不行；Windows 上还要允许隔空贴通过防火墙。';
+
+  @override
+  String get mTabRecords => '记录';
+
+  @override
+  String get mTabSend => '发送';
+
+  @override
+  String get mThisPhone => '这台手机';
+
+  @override
+  String mThisPhoneName(String name) {
+    return '这台手机：$name';
+  }
+
+  @override
+  String get mSendTitle => '发给电脑';
+
+  @override
+  String get mSendHint => '输入或粘贴文字';
+
+  @override
+  String get mPaste => '粘贴';
+
+  @override
+  String get mClipboardNoText => '剪贴板里没有文字';
+
+  @override
+  String get mSendAction => '发送';
+
+  @override
+  String mSendTo(String names) {
+    return '将发给 $names';
+  }
+
+  @override
+  String get mNoOnlineDevices => '附近没有在线的设备';
+
+  @override
+  String get mNoPairedDevices => '先和电脑配对';
+
+  @override
+  String get mSent => '已发送';
+
+  @override
+  String get mSendFootnote =>
+      '文字会进入电脑的复制记录，并按电脑的设置写入剪贴板，就像在电脑上复制了一样。手机上复制的内容不会自动发出，要粘贴到这里再发送。';
+
+  @override
+  String mSendFailed(String detail) {
+    return '发送失败：$detail';
+  }
+
+  @override
+  String get mCopy => '复制';
+
+  @override
+  String get mCopied => '已复制到手机剪贴板';
+
+  @override
+  String get mShare => '分享';
+
+  @override
+  String get mSaved => '已保存到相册或「下载/PasteFerry」';
+
+  @override
+  String mActionFailed(String detail) {
+    return '没有成功：$detail';
+  }
+
+  @override
+  String get mDownloading => '正在下载…';
+
+  @override
+  String get mNotDownloaded => '还没下载';
+
+  @override
+  String get mDownloadHint => '点「复制」「保存」「分享」时会先下载。';
+
+  @override
+  String get mFullTextLoading => '正在加载…';
+
+  @override
+  String mTextTruncated(int shown, int total) {
+    return '只显示前 $shown 个字，共 $total 个。复制的是全文。';
+  }
+
+  @override
+  String get mNotOnLanTitle => '没有连接 Wi-Fi';
+
+  @override
+  String get mNotOnLanBody => '目前只在局域网里同步，请连上和电脑同一个 Wi-Fi。';
+
+  @override
+  String mStartFailed(String detail) {
+    return '隔空贴没能启动：$detail';
+  }
+
+  @override
+  String get mNoDevicesBody =>
+      '在电脑上打开隔空贴「设备 → 添加设备」，在这里输入它显示的配对码。在同一个 Wi-Fi 里时，也可以两边都打开「搜索附近设备」。';
+
+  @override
+  String get mSectionSync => '同步';
+
+  @override
+  String get mSectionBackground => '后台';
+
+  @override
+  String get mAutoApplyDesc => '电脑上复制的文字直接写入手机剪贴板。图片和文件要点「复制」。';
+
+  @override
+  String get mKeepAlive => '后台保持连接';
+
+  @override
+  String get mKeepAliveDesc => '不打开隔空贴也能收到文字，会有一条常驻通知。';
+
+  @override
+  String get mNotifications => '通知';
+
+  @override
+  String get mNotificationsDesc => '常驻通知要用。不允许也能用。';
+
+  @override
+  String get mBattery => '允许后台运行';
+
+  @override
+  String get mBatteryDesc =>
+      '关闭电池优化，锁屏后不容易被系统停掉。有的手机还要在系统设置里把隔空贴加入「自启动」或「后台运行」名单。';
+
+  @override
+  String get mAllowed => '已允许';
+
+  @override
+  String get mAllow => '允许';
+
+  @override
+  String mVersion(String version) {
+    return '版本 $version';
+  }
+
+  @override
+  String get mDeleteConfirm => '删除这条记录？';
+
+  @override
+  String get mDelete => '删除';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -4274,6 +4494,226 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String friendDropHint(String name) {
     return '放開即可傳給 $name';
   }
+
+  @override
+  String get webShareTitle => '手機網頁傳輸';
+
+  @override
+  String get webShareFootnote =>
+      '手機掃碼後用瀏覽器和這部電腦互傳文字、相片和檔案，不用安裝 App。手機和電腦要在同一個網絡裡。';
+
+  @override
+  String get webShareSwitch => '允許手機用網頁連接';
+
+  @override
+  String webShareOn(int count) {
+    return '已開啟，$count 部手機';
+  }
+
+  @override
+  String get webShareOff => '關閉';
+
+  @override
+  String get webShareShowQr => '顯示二維碼';
+
+  @override
+  String get webShareDialogTitle => '用手機掃碼';
+
+  @override
+  String get webShareDialogBody =>
+      '用手機的相機或瀏覽器掃碼，在瀏覽器裡開啟。一個二維碼只能登記一部手機，用過會自動換新。';
+
+  @override
+  String get webShareAddress => '地址';
+
+  @override
+  String get webShareSecurity =>
+      '內容在網頁裡加密傳輸，同一網絡裡的其他人看不到內容；但網頁本身是 http，防不住有人存心竄改。請在家裡或可信任的辦公網絡裡用，公共 Wi-Fi 下不要開啟。';
+
+  @override
+  String get webSharePhones => '已登記的手機';
+
+  @override
+  String get webShareNoPhones => '還沒有手機登記';
+
+  @override
+  String webShareLastUsed(String time) {
+    return '最後使用 $time';
+  }
+
+  @override
+  String get webShareRemove => '移除';
+
+  @override
+  String webShareRemoved(String name) {
+    return '已移除「$name」';
+  }
+
+  @override
+  String webShareNewPhone(String name) {
+    return '「$name」已登記';
+  }
+
+  @override
+  String webShareNotListening(String error) {
+    return '沒能開始監聽：$error';
+  }
+
+  @override
+  String get webSharePortFallback => '固定端口被佔用，用了臨時端口：以前收藏的網址打不開，要重新掃碼。';
+
+  @override
+  String get webShareNoAddress => '沒有可用的區域網絡地址：請先連上 Wi-Fi 或有線網絡。';
+
+  @override
+  String get webShareCantOpen =>
+      '手機打不開網頁時，確認兩邊在同一個網絡裡，訪客網絡通常不行；Windows 上還要允許隔空貼通過防火牆。';
+
+  @override
+  String get mTabRecords => '記錄';
+
+  @override
+  String get mTabSend => '傳送';
+
+  @override
+  String get mThisPhone => '這部手機';
+
+  @override
+  String mThisPhoneName(String name) {
+    return '這部手機：$name';
+  }
+
+  @override
+  String get mSendTitle => '傳給電腦';
+
+  @override
+  String get mSendHint => '輸入或貼上文字';
+
+  @override
+  String get mPaste => '貼上';
+
+  @override
+  String get mClipboardNoText => '剪貼簿裡沒有文字';
+
+  @override
+  String get mSendAction => '傳送';
+
+  @override
+  String mSendTo(String names) {
+    return '將傳給 $names';
+  }
+
+  @override
+  String get mNoOnlineDevices => '附近沒有在線的裝置';
+
+  @override
+  String get mNoPairedDevices => '先和電腦配對';
+
+  @override
+  String get mSent => '已傳送';
+
+  @override
+  String get mSendFootnote =>
+      '文字會進入電腦的複製記錄，並按電腦的設定寫入剪貼簿，就像在電腦上複製了一樣。手機上複製的內容不會自動送出，要貼到這裡再傳送。';
+
+  @override
+  String mSendFailed(String detail) {
+    return '傳送失敗：$detail';
+  }
+
+  @override
+  String get mCopy => '複製';
+
+  @override
+  String get mCopied => '已複製到手機剪貼簿';
+
+  @override
+  String get mShare => '分享';
+
+  @override
+  String get mSaved => '已儲存到相簿或「下載/PasteFerry」';
+
+  @override
+  String mActionFailed(String detail) {
+    return '沒有成功：$detail';
+  }
+
+  @override
+  String get mDownloading => '正在下載…';
+
+  @override
+  String get mNotDownloaded => '尚未下載';
+
+  @override
+  String get mDownloadHint => '點「複製」「儲存」「分享」時會先下載。';
+
+  @override
+  String get mFullTextLoading => '正在載入…';
+
+  @override
+  String mTextTruncated(int shown, int total) {
+    return '只顯示前 $shown 個字，共 $total 個。複製的是全文。';
+  }
+
+  @override
+  String get mNotOnLanTitle => '沒有連接 Wi-Fi';
+
+  @override
+  String get mNotOnLanBody => '目前只在區域網絡裡同步，請連上和電腦同一個 Wi-Fi。';
+
+  @override
+  String mStartFailed(String detail) {
+    return '隔空貼沒能啟動：$detail';
+  }
+
+  @override
+  String get mNoDevicesBody =>
+      '在電腦上開啟隔空貼「裝置 → 新增裝置」，在這裡輸入它顯示的配對碼。在同一個 Wi-Fi 裡時，也可以兩邊都開啟「搜尋附近裝置」。';
+
+  @override
+  String get mSectionSync => '同步';
+
+  @override
+  String get mSectionBackground => '背景';
+
+  @override
+  String get mAutoApplyDesc => '電腦上複製的文字直接寫入手機剪貼簿。圖片和檔案要點「複製」。';
+
+  @override
+  String get mKeepAlive => '背景保持連線';
+
+  @override
+  String get mKeepAliveDesc => '不開啟隔空貼也能收到文字，會有一則常駐通知。';
+
+  @override
+  String get mNotifications => '通知';
+
+  @override
+  String get mNotificationsDesc => '常駐通知要用。不允許也能用。';
+
+  @override
+  String get mBattery => '允許背景執行';
+
+  @override
+  String get mBatteryDesc =>
+      '關閉電池優化，鎖定螢幕後不容易被系統停掉。有的手機還要在系統設定裡把隔空貼加入「自動啟動」或「背景執行」名單。';
+
+  @override
+  String get mAllowed => '已允許';
+
+  @override
+  String get mAllow => '允許';
+
+  @override
+  String mVersion(String version) {
+    return '版本 $version';
+  }
+
+  @override
+  String get mDeleteConfirm => '刪除這條記錄？';
+
+  @override
+  String get mDelete => '刪除';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -6410,4 +6850,224 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String friendDropHint(String name) {
     return '放開即可傳給 $name';
   }
+
+  @override
+  String get webShareTitle => '手機網頁傳輸';
+
+  @override
+  String get webShareFootnote =>
+      '手機掃碼後用瀏覽器和這台電腦互傳文字、照片和檔案，不用安裝 App。手機和電腦要在同一個網路裡。';
+
+  @override
+  String get webShareSwitch => '允許手機用網頁連線';
+
+  @override
+  String webShareOn(int count) {
+    return '已開啟，$count 支手機';
+  }
+
+  @override
+  String get webShareOff => '關閉';
+
+  @override
+  String get webShareShowQr => '顯示 QR 碼';
+
+  @override
+  String get webShareDialogTitle => '用手機掃碼';
+
+  @override
+  String get webShareDialogBody =>
+      '用手機的相機或瀏覽器掃碼，在瀏覽器裡開啟。一張 QR 碼只能登記一支手機，用過會自動換新。';
+
+  @override
+  String get webShareAddress => '位址';
+
+  @override
+  String get webShareSecurity =>
+      '內容在網頁裡加密傳輸，同一網路裡的其他人看不到內容；但網頁本身是 http，防不住有人存心竄改。請在家裡或可信任的辦公網路裡用，公共 Wi-Fi 下不要開啟。';
+
+  @override
+  String get webSharePhones => '已登記的手機';
+
+  @override
+  String get webShareNoPhones => '還沒有手機登記';
+
+  @override
+  String webShareLastUsed(String time) {
+    return '最後使用 $time';
+  }
+
+  @override
+  String get webShareRemove => '移除';
+
+  @override
+  String webShareRemoved(String name) {
+    return '已移除「$name」';
+  }
+
+  @override
+  String webShareNewPhone(String name) {
+    return '「$name」已登記';
+  }
+
+  @override
+  String webShareNotListening(String error) {
+    return '沒能開始監聽：$error';
+  }
+
+  @override
+  String get webSharePortFallback => '固定連接埠被佔用，用了臨時連接埠：以前收藏的網址打不開，要重新掃碼。';
+
+  @override
+  String get webShareNoAddress => '沒有可用的區域網路位址：請先連上 Wi-Fi 或有線網路。';
+
+  @override
+  String get webShareCantOpen =>
+      '手機打不開網頁時，確認兩邊在同一個網路裡，訪客網路通常不行；Windows 上還要允許隔空貼通過防火牆。';
+
+  @override
+  String get mTabRecords => '記錄';
+
+  @override
+  String get mTabSend => '傳送';
+
+  @override
+  String get mThisPhone => '這支手機';
+
+  @override
+  String mThisPhoneName(String name) {
+    return '這支手機：$name';
+  }
+
+  @override
+  String get mSendTitle => '傳給電腦';
+
+  @override
+  String get mSendHint => '輸入或貼上文字';
+
+  @override
+  String get mPaste => '貼上';
+
+  @override
+  String get mClipboardNoText => '剪貼簿裡沒有文字';
+
+  @override
+  String get mSendAction => '傳送';
+
+  @override
+  String mSendTo(String names) {
+    return '將傳給 $names';
+  }
+
+  @override
+  String get mNoOnlineDevices => '附近沒有在線的裝置';
+
+  @override
+  String get mNoPairedDevices => '先和電腦配對';
+
+  @override
+  String get mSent => '已傳送';
+
+  @override
+  String get mSendFootnote =>
+      '文字會進入電腦的複製記錄，並依電腦的設定寫入剪貼簿，就像在電腦上複製了一樣。手機上複製的內容不會自動送出，要貼到這裡再傳送。';
+
+  @override
+  String mSendFailed(String detail) {
+    return '傳送失敗：$detail';
+  }
+
+  @override
+  String get mCopy => '複製';
+
+  @override
+  String get mCopied => '已複製到手機剪貼簿';
+
+  @override
+  String get mShare => '分享';
+
+  @override
+  String get mSaved => '已儲存到相簿或「下載/PasteFerry」';
+
+  @override
+  String mActionFailed(String detail) {
+    return '沒有成功：$detail';
+  }
+
+  @override
+  String get mDownloading => '正在下載…';
+
+  @override
+  String get mNotDownloaded => '尚未下載';
+
+  @override
+  String get mDownloadHint => '點「複製」「儲存」「分享」時會先下載。';
+
+  @override
+  String get mFullTextLoading => '正在載入…';
+
+  @override
+  String mTextTruncated(int shown, int total) {
+    return '只顯示前 $shown 個字，共 $total 個。複製的是全文。';
+  }
+
+  @override
+  String get mNotOnLanTitle => '沒有連接 Wi-Fi';
+
+  @override
+  String get mNotOnLanBody => '目前只在區域網路裡同步，請連上和電腦同一個 Wi-Fi。';
+
+  @override
+  String mStartFailed(String detail) {
+    return '隔空貼沒能啟動：$detail';
+  }
+
+  @override
+  String get mNoDevicesBody =>
+      '在電腦上開啟隔空貼「裝置 → 新增裝置」，在這裡輸入它顯示的配對碼。在同一個 Wi-Fi 裡時，也可以兩邊都開啟「搜尋附近裝置」。';
+
+  @override
+  String get mSectionSync => '同步';
+
+  @override
+  String get mSectionBackground => '背景';
+
+  @override
+  String get mAutoApplyDesc => '電腦上複製的文字直接寫入手機剪貼簿。圖片和檔案要點「複製」。';
+
+  @override
+  String get mKeepAlive => '背景保持連線';
+
+  @override
+  String get mKeepAliveDesc => '不開啟隔空貼也能收到文字，會有一則常駐通知。';
+
+  @override
+  String get mNotifications => '通知';
+
+  @override
+  String get mNotificationsDesc => '常駐通知要用。不允許也能用。';
+
+  @override
+  String get mBattery => '允許背景執行';
+
+  @override
+  String get mBatteryDesc =>
+      '關閉電池最佳化，鎖定螢幕後不容易被系統停掉。有的手機還要在系統設定裡把隔空貼加入「自動啟動」或「背景執行」名單。';
+
+  @override
+  String get mAllowed => '已允許';
+
+  @override
+  String get mAllow => '允許';
+
+  @override
+  String mVersion(String version) {
+    return '版本 $version';
+  }
+
+  @override
+  String get mDeleteConfirm => '刪除這筆記錄？';
+
+  @override
+  String get mDelete => '刪除';
 }

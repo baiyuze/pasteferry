@@ -72,4 +72,12 @@ abstract final class AppIcons {
   static IconData get arrowDown => _pick(CupertinoIcons.arrow_down, FluentIcons.arrow_down_24_regular);
   static IconData get arrowUp => _pick(CupertinoIcons.arrow_up, FluentIcons.arrow_up_24_regular);
   static IconData get returnKey => _pick(CupertinoIcons.return_icon, FluentIcons.arrow_enter_left_20_regular);
+  // 手机网页传输
+  static IconData get phone => _pick(CupertinoIcons.device_phone_portrait, FluentIcons.phone_24_regular);
+  static IconData get qrCode => _pick(CupertinoIcons.qrcode, FluentIcons.qr_code_24_regular);
+  // Android App
+  static IconData get copy => _pick(CupertinoIcons.doc_on_doc, FluentIcons.copy_24_regular);
+  static IconData get share => _pick(CupertinoIcons.share, FluentIcons.share_android_24_regular);
+  static IconData get download => _pick(CupertinoIcons.arrow_down_to_line, FluentIcons.arrow_download_24_regular);
+  static IconData get wifiOff => _pick(CupertinoIcons.wifi_slash, FluentIcons.wifi_off_24_regular);
 }

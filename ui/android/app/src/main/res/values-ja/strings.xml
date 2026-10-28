@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">バックグラウンド接続</string>
+    <string name="channel_sync_desc">PasteFerry の接続を保ち、パソコンでコピーしたテキストをこのスマホで受け取れるようにします。</string>
+    <string name="notif_online">%1$s に接続中</string>
+    <string name="notif_none">オンラインのデバイスはありません</string>
+    <string name="notif_last_text">最新：%1$s からのテキスト</string>
+    <string name="notif_last_image">最新：%1$s からの画像</string>
+    <string name="notif_last_file">最新：%1$s からのファイル</string>
+    <string name="share_title">共有</string>
+</resources>

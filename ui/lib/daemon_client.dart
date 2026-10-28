@@ -37,6 +37,9 @@ class DaemonEndpoint {
   /// `~/Library/Application Support/<bundle_id>`，与 daemon 用的
   /// `~/Library/Application Support/PasteFerry` 并不是同一个位置。
   static String defaultDataDir() {
+    // Android：Go 核心跑在 App 进程里，数据目录由 Kotlin 宿主给出（mobile/host.dart）
+    final android = androidDataDir;
+    if (android != null) return android;
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'] ?? '';
       return '$home/Library/Application Support/PasteFerry';
@@ -53,6 +56,9 @@ class DaemonEndpoint {
     final base = data.startsWith('/') ? data : '${env['HOME'] ?? ''}/.local/share';
     return '$base/pasteferry';
   }
+
+  /// Android 上 App 私有目录里的数据目录，启动时由宿主设置。
+  static String? androidDataDir;
 
   static File endpointFile([String? dataDir]) =>
       File('${dataDir ?? defaultDataDir()}${Platform.pathSeparator}daemon.json');

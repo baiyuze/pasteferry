@@ -1588,5 +1588,155 @@
         "type": "String"
       }
     }
-  }
+  },
+  "webShareTitle": "Phone web transfer",
+  "webShareFootnote": "Scan a QR code with a phone to send text, photos and files to and from this computer in the browser, no app needed. The phone and computer need to be on the same network.",
+  "webShareSwitch": "Let phones connect in the browser",
+  "webShareOn": "On, {count} phone(s)",
+  "@webShareOn": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "webShareOff": "Off",
+  "webShareShowQr": "Show QR code",
+  "webShareDialogTitle": "Scan with your phone",
+  "webShareDialogBody": "Scan with the phone’s camera or browser and open it in the browser. Each QR code registers one phone and is replaced after use.",
+  "webShareAddress": "Address",
+  "webShareSecurity": "Content is encrypted in the page, so others on the network can’t read it. But the page itself is http and can’t stop someone who deliberately tampers with it. Use it at home or on a trusted office network, not on public Wi-Fi.",
+  "webSharePhones": "Registered phones",
+  "webShareNoPhones": "No phones yet",
+  "webShareLastUsed": "Last used {time}",
+  "@webShareLastUsed": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "webShareRemove": "Remove",
+  "webShareRemoved": "Removed “{name}”",
+  "@webShareRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "webShareNewPhone": "“{name}” registered",
+  "@webShareNewPhone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "webShareNotListening": "Couldn’t start listening: {error}",
+  "@webShareNotListening": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "webSharePortFallback": "The usual port is taken, so a temporary one is in use. Saved addresses won’t open until phones scan again.",
+  "webShareNoAddress": "No local network address. Connect to Wi-Fi or a wired network first.",
+  "webShareCantOpen": "If the page won’t open on the phone, make sure both are on the same network (guest networks usually don’t work). On Windows, PasteFerry also needs to be allowed through the firewall.",
+  "mTabRecords": "History",
+  "mTabSend": "Send",
+  "mThisPhone": "This phone",
+  "mThisPhoneName": "This phone: {name}",
+  "@mThisPhoneName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mSendTitle": "Send to your computer",
+  "mSendHint": "Type or paste text",
+  "mPaste": "Paste",
+  "mClipboardNoText": "The clipboard has no text",
+  "mSendAction": "Send",
+  "mSendTo": "Goes to {names}",
+  "@mSendTo": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "mNoOnlineDevices": "No devices online nearby",
+  "mNoPairedDevices": "Pair with a computer first",
+  "mSent": "Sent",
+  "mSendFootnote": "The text goes into the computer’s history and onto its clipboard, as if you had copied it there. Text you copy on this phone isn’t sent automatically: paste it here and tap Send.",
+  "mSendFailed": "Couldn’t send: {detail}",
+  "@mSendFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "mCopy": "Copy",
+  "mCopied": "Copied to this phone’s clipboard",
+  "mShare": "Share",
+  "mSaved": "Saved to Photos or Download/PasteFerry",
+  "mActionFailed": "Didn’t work: {detail}",
+  "@mActionFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "mDownloading": "Downloading…",
+  "mNotDownloaded": "Not downloaded yet",
+  "mDownloadHint": "It downloads first when you tap Copy, Save or Share.",
+  "mFullTextLoading": "Loading…",
+  "mTextTruncated": "Showing the first {shown} of {total} characters. Copy gets all of it.",
+  "@mTextTruncated": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mNotOnLanTitle": "Not on Wi-Fi",
+  "mNotOnLanBody": "For now PasteFerry syncs only on the local network. Join the same Wi-Fi as your computer.",
+  "mStartFailed": "PasteFerry couldn’t start: {detail}",
+  "@mStartFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "mNoDevicesBody": "On your computer, open PasteFerry → Devices → Add device, then enter the code it shows here. On the same Wi-Fi you can also open “Search nearby” on both.",
+  "mSectionSync": "Sync",
+  "mSectionBackground": "Background",
+  "mAutoApplyDesc": "Text copied on your computer goes straight onto this phone’s clipboard. Images and files wait until you tap Copy.",
+  "mKeepAlive": "Stay connected in the background",
+  "mKeepAliveDesc": "Receive text even when PasteFerry isn’t open. Shows an ongoing notification.",
+  "mNotifications": "Notifications",
+  "mNotificationsDesc": "Needed for the ongoing notification. PasteFerry works without it.",
+  "mBattery": "Run in the background",
+  "mBatteryDesc": "Turn off battery optimization so the system doesn’t stop PasteFerry when the screen is locked. Some phones also need PasteFerry added to their auto-start or background list in Settings.",
+  "mAllowed": "Allowed",
+  "mAllow": "Allow",
+  "mVersion": "Version {version}",
+  "@mVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "mDeleteConfirm": "Delete this record?",
+  "mDelete": "Delete"
 }

@@ -67,7 +67,10 @@ String contentTitle(ClipRecord r, {String? query}) {
 }
 
 /// 记录的来源：本机，或者「来自」哪台设备。
-String recordSource(ClipRecord r) => r.outgoing ? appL10n.thisDeviceShort : appL10n.fromDevice(r.originDeviceName);
+// 手机网页传输发来的内容也是本机发出的（会同步给其他设备），来源写手机的名字
+String recordSource(ClipRecord r) => r.outgoing
+    ? (r.viaName.isNotEmpty ? appL10n.fromDevice(r.viaName) : appL10n.thisDeviceShort)
+    : appL10n.fromDevice(r.originDeviceName);
 
 DateTime recordTime(ClipRecord r) => DateTime.fromMillisecondsSinceEpoch(r.createdAtUnix.toInt() * 1000);
 

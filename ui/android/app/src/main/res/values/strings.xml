@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">Background connection</string>
+    <string name="channel_sync_desc">Keeps PasteFerry connected so text copied on your computer reaches this phone.</string>
+    <string name="notif_online">Connected to %1$s</string>
+    <string name="notif_none">No devices online</string>
+    <string name="notif_last_text">Latest: text from %1$s</string>
+    <string name="notif_last_image">Latest: image from %1$s</string>
+    <string name="notif_last_file">Latest: file from %1$s</string>
+    <string name="share_title">Share</string>
+</resources>
