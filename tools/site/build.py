@@ -613,6 +613,9 @@ def home(code: str) -> str:
       <div class="wrap">
         <h2 id="phone-title">{f["home_phone_h2"]}</h2>
         <p class="intro">{f["home_phone_intro"]}</p>
+        <figure class="spot wide" data-reveal>
+          <img src="{up}{shots}web-share-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["phone_alt"])}">
+        </figure>
         <ul class="points">
 {items(f["home_phone_points"], "          ")}
         </ul>
@@ -894,6 +897,9 @@ def features_page(code: str) -> str:
         <p class="kicker"><span class="new">{f["phone_kicker"]}</span></p>
         <h2 class="f-h2" id="phone-title">{f["phone_h2"]}</h2>
         <p class="f-intro">{f["phone_intro"]}</p>
+        <figure class="f-shot" data-reveal>
+          <img src="{shots}web-share-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["phone_alt"])}">
+        </figure>
         <ul class="facts">
 {facts(f["phone_points"])}
         </ul>
