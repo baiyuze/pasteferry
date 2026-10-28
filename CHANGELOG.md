@@ -9,6 +9,7 @@ or send text, photos and files back. Nothing to install.
 
 - **Phone web transfer**: Devices › Phone web transfer turns it on and shows a QR code. Scanning it opens a page in the phone browser, on the same local network, that lists the records from the computer: search them, filter by type, copy a text, look at a picture, download a file. Text, photos and files sent from the page arrive on the computer as a normal record and go into its clipboard. Contents are encrypted between the phone and the computer. A code registers one phone and expires after ten minutes; registered phones can be removed in the same panel. The switch is off by default.
 - Records that came from the phone say so in the history, with the phone's name.
+- **Android app (beta)**: a first build for phones, in `PasteFerry-android-arm64.apk`. It pairs with the computer the same way, keeps the records and puts what the computer copies into the Android clipboard, and sends text, photos and files back. It is signed with a debug key for now, so Android asks before installing it; a release key comes later.
 - On the phone page, copying and sending report in place instead of over the list, and pressing and holding a record no longer opens the browser's own copy bar.
 
 ### Upgrade notes
