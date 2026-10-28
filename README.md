@@ -6,7 +6,9 @@
 
 <p align="center">
   Copy on one computer, paste on the other — and press <kbd>⌥V</kbd> to bring back anything you copied.<br>
-  Mac, Windows and Linux, across accounts, connected directly even across networks.
+  Mac, Windows, Linux and Android, across accounts, connected directly even across
+  networks. A phone can also use the records from a computer in its browser, with
+  nothing to install.
 </p>
 
 <p align="center">
@@ -26,6 +28,8 @@
   <img src="https://img.shields.io/badge/macOS-13%2B-1D1D1F" alt="macOS 13+">
   <img src="https://img.shields.io/badge/Windows-10%20%2F%2011-1D1D1F" alt="Windows 10 / 11">
   <img src="https://img.shields.io/badge/Linux-x64%20%2F%20ARM64-1D1D1F" alt="Linux x64 / ARM64">
+  <img src="https://img.shields.io/badge/Android-10%2B%20arm64-1D1D1F" alt="Android 10+ arm64">
+  <img src="https://img.shields.io/badge/Web-any%20browser-1D1D1F" alt="Web, any browser">
   <img src="https://img.shields.io/badge/license-AGPL--3.0-6E6E73" alt="AGPL-3.0 License">
 </p>
 
@@ -124,6 +128,9 @@ New here? The **[quick start](https://pasteferry.cc/en/start/)** walks through i
 
 - **Mac** (macOS 13+): [Apple silicon](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-mac-apple-silicon.dmg) or [Intel](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-mac-intel.dmg); a [universal](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry.dmg) build runs on both.
 - **Windows** 10/11: [installer](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-Setup.exe) or [portable zip](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-windows-x64.zip).
+- **Android** 10 or later, arm64: **[APK](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-android-arm64.apk)** (beta; Android asks before installing it). Turn on **Devices → Phone web transfer** on the computer, then scan the code with your phone, or install the APK and pair it like another computer.
+- **Any phone or tablet, nothing to install**: turn on **Devices → Phone web transfer** on the computer and scan the code shown there. The page in the phone's browser lists the records from the computer, copies a text to the phone, and sends text, photos and files back. It works on the same local network and the contents are encrypted.
+- **iPhone and iPad**: there is no app yet, because distributing one needs an Apple developer certificate. Use the web page above instead; it does the same things in Safari.
 - **Linux** (X11, or Wayland with XWayland): `.deb` for Ubuntu and Debian ([x64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-amd64.deb), [ARM64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-arm64.deb)), or `tar.gz` for other distributions ([x64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-amd64.tar.gz), [ARM64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-arm64.tar.gz)) — extract it and run `./PasteFerry/install.sh` to add it to the app menu.
 
 The Mac app isn't notarized by Apple and the Windows app isn't code-signed yet: on Mac, allow it once under **System Settings → Privacy & Security → Open Anyway**; on Windows, click **More info → Run anyway**. Then click **Turn on background sync**, and allow PasteFerry when Windows Firewall asks, or when macOS asks to find devices on your local network. To let quick paste paste for you on a Mac, press <kbd>⌥V</kbd>, click **Allow…** and turn PasteFerry on under Accessibility.
@@ -147,7 +154,9 @@ Self-hosting takes one install command; see the [server deployment guide](server
 | **Windows app** | Windows 10 and 11, x64 |
 | **Linux app** | x64 or ARM64; an X11 desktop, or Wayland with XWayland (GNOME and KDE have it by default); GTK 3 |
 | **Server** | Optional: Linux (x86_64, ARM64; systemd or Docker), macOS, or Windows 10/11 x64 |
-| **iPhone / iPad** | Not supported: iOS doesn't let apps watch the clipboard in the background |
+| **Android app** | 10 or later, arm64; beta, so Android asks before installing it |
+| **Phone web page** | Any phone or tablet on the same network; nothing to install |
+| **iPhone / iPad** | No app: distributing one needs an Apple developer certificate, and iOS doesn't let apps watch the clipboard in the background. Use the web page instead |
 
 ## Documentation
 
