@@ -80,6 +80,8 @@ type Config struct {
 	// QuickPasteIndexModifier 是快捷窗口里按住它再按 1–9 粘贴对应那一条的修饰键："alt"、"meta"、"ctrl"。
 	// 空字符串表示默认的 alt（Mac 上是 ⌥）
 	QuickPasteIndexModifier string `json:"quick_paste_index_modifier,omitempty"`
+	// SentRetentionDays 是手机上「发送记录」显示最近几天的发出内容；0 或负表示默认 3 天
+	SentRetentionDays int `json:"sent_retention_days,omitempty"`
 
 	// ReceiveDir 是隔空传送收到的文件存放的位置，空字符串表示系统的「下载」文件夹（见 DownloadsDir）
 	ReceiveDir string `json:"receive_dir,omitempty"`

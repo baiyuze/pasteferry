@@ -2277,6 +2277,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mSentRecords => '发送记录';
 
   @override
+  String get mSentRetention => '发送记录保留';
+
+  @override
+  String mSentRetentionDesc(Object d) {
+    return '「发送记录」显示最近 $d 天发出去的内容';
+  }
+
+  @override
+  String mSentRetentionDays(Object d) {
+    return '$d 天';
+  }
+
+  @override
   String get mViewAll => '查看全部';
 
   @override
@@ -4672,6 +4685,19 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get mSentRecords => '傳送記錄';
 
   @override
+  String get mSentRetention => '傳送記錄保留';
+
+  @override
+  String mSentRetentionDesc(Object d) {
+    return '「傳送記錄」顯示最近 $d 天送出的內容';
+  }
+
+  @override
+  String mSentRetentionDays(Object d) {
+    return '$d 天';
+  }
+
+  @override
   String get mViewAll => '查看全部';
 
   @override
@@ -7065,6 +7091,19 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get mSentRecords => '傳送記錄';
+
+  @override
+  String get mSentRetention => '傳送記錄保留';
+
+  @override
+  String mSentRetentionDesc(Object d) {
+    return '「傳送記錄」顯示最近 $d 天送出的內容';
+  }
+
+  @override
+  String mSentRetentionDays(Object d) {
+    return '$d 天';
+  }
 
   @override
   String get mViewAll => '查看全部';

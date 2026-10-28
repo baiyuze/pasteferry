@@ -4052,6 +4052,24 @@ abstract class AppLocalizations {
   /// **'Sent'**
   String get mSentRecords;
 
+  /// No description provided for @mSentRetention.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep sent records'**
+  String get mSentRetention;
+
+  /// No description provided for @mSentRetentionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent shows what this phone sent in the last {d} days'**
+  String mSentRetentionDesc(Object d);
+
+  /// No description provided for @mSentRetentionDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{d} days'**
+  String mSentRetentionDays(Object d);
+
   /// No description provided for @mViewAll.
   ///
   /// In en, this message translates to:

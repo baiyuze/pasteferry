@@ -1336,6 +1336,13 @@ const Config$json = {
       '5': 9,
       '10': 'quickPasteIndexModifier'
     },
+    {
+      '1': 'sent_retention_days',
+      '3': 34,
+      '4': 1,
+      '5': 5,
+      '10': 'sentRetentionDays'
+    },
   ],
 };
 
@@ -1367,7 +1374,7 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'VfZnJvbRgeIAEoCVILcmVjZWl2ZUZyb20SLgoTZXZlcnlvbmVfdW50aWxfdW5peBgfIAEoA1IR'
     'ZXZlcnlvbmVVbnRpbFVuaXgSIQoMZGlzcGxheV9uYW1lGCAgASgJUgtkaXNwbGF5TmFtZRI7Ch'
     'pxdWlja19wYXN0ZV9pbmRleF9tb2RpZmllchghIAEoCVIXcXVpY2tQYXN0ZUluZGV4TW9kaWZp'
-    'ZXI=');
+    'ZXISLgoTc2VudF9yZXRlbnRpb25fZGF5cxgiIAEoBVIRc2VudFJldGVudGlvbkRheXM=');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {

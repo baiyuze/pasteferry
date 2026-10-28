@@ -3708,8 +3708,10 @@ type Config struct {
 	// 快捷粘贴窗口里按住哪个修饰键再按 1–9 粘贴对应的那一条（2.6.3）："alt"、"meta"、"ctrl"。
 	// 空字符串表示默认：各平台都是 alt（Mac 上是 ⌥）
 	QuickPasteIndexModifier string `protobuf:"bytes,33,opt,name=quick_paste_index_modifier,json=quickPasteIndexModifier,proto3" json:"quick_paste_index_modifier,omitempty"`
-	unknownFields           protoimpl.UnknownFields
-	sizeCache               protoimpl.SizeCache
+	// 手机上「发送记录」显示最近几天的发出内容（2.7.2）：0 或空表示默认 3 天
+	SentRetentionDays int32 `protobuf:"varint,34,opt,name=sent_retention_days,json=sentRetentionDays,proto3" json:"sent_retention_days,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *Config) Reset() {
@@ -3971,6 +3973,13 @@ func (x *Config) GetQuickPasteIndexModifier() string {
 		return x.QuickPasteIndexModifier
 	}
 	return ""
+}
+
+func (x *Config) GetSentRetentionDays() int32 {
+	if x != nil {
+		return x.SentRetentionDays
+	}
+	return 0
 }
 
 type OfficialUsage struct {
@@ -6750,7 +6759,7 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x04kind\x18\x01 \x01(\x0e2\x1d.pasteferry.v1.ConnectionKindR\x04kind\"P\n" +
 	"\x17SetDeviceAddressRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x18\n" +
-	"\aaddress\x18\x02 \x01(\tR\aaddress\"\xa5\v\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddress\"\xd5\v\n" +
 	"\x06Config\x129\n" +
 	"\x19auto_sync_threshold_bytes\x18\x01 \x01(\x03R\x16autoSyncThresholdBytes\x12.\n" +
 	"\x13history_ttl_seconds\x18\x02 \x01(\x03R\x11historyTtlSeconds\x12*\n" +
@@ -6788,7 +6797,8 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\freceive_from\x18\x1e \x01(\tR\vreceiveFrom\x12.\n" +
 	"\x13everyone_until_unix\x18\x1f \x01(\x03R\x11everyoneUntilUnix\x12!\n" +
 	"\fdisplay_name\x18  \x01(\tR\vdisplayName\x12;\n" +
-	"\x1aquick_paste_index_modifier\x18! \x01(\tR\x17quickPasteIndexModifier\"\xd8\x02\n" +
+	"\x1aquick_paste_index_modifier\x18! \x01(\tR\x17quickPasteIndexModifier\x12.\n" +
+	"\x13sent_retention_days\x18\" \x01(\x05R\x11sentRetentionDays\"\xd8\x02\n" +
 	"\rOfficialUsage\x12\x1c\n" +
 	"\tavailable\x18\x01 \x01(\bR\tavailable\x12\x10\n" +
 	"\x03day\x18\x02 \x01(\tR\x03day\x12\x1f\n" +

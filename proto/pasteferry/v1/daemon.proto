@@ -661,6 +661,8 @@ message Config {
   // 快捷粘贴窗口里按住哪个修饰键再按 1–9 粘贴对应的那一条（2.6.3）："alt"、"meta"、"ctrl"。
   // 空字符串表示默认：各平台都是 alt（Mac 上是 ⌥）
   string quick_paste_index_modifier = 33;
+  // 手机上「发送记录」显示最近几天的发出内容（2.7.2）：0 或空表示默认 3 天
+  int32 sent_retention_days = 34;
 }
 
 enum ServiceMode {

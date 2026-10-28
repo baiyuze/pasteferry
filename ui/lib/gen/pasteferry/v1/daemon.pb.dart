@@ -4321,6 +4321,7 @@ class Config extends $pb.GeneratedMessage {
     $fixnum.Int64? everyoneUntilUnix,
     $core.String? displayName,
     $core.String? quickPasteIndexModifier,
+    $core.int? sentRetentionDays,
   }) {
     final result = Config._();
     if (autoSyncThresholdBytes != null)
@@ -4366,6 +4367,7 @@ class Config extends $pb.GeneratedMessage {
     if (displayName != null) result.displayName = displayName;
     if (quickPasteIndexModifier != null)
       result.quickPasteIndexModifier = quickPasteIndexModifier;
+    if (sentRetentionDays != null) result.sentRetentionDays = sentRetentionDays;
     return result;
   }
 
@@ -4416,6 +4418,7 @@ class Config extends $pb.GeneratedMessage {
     ..aInt64(31, _omitFieldNames ? '' : 'everyoneUntilUnix')
     ..aOS(32, _omitFieldNames ? '' : 'displayName')
     ..aOS(33, _omitFieldNames ? '' : 'quickPasteIndexModifier')
+    ..aI(34, _omitFieldNames ? '' : 'sentRetentionDays')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4753,6 +4756,16 @@ class Config extends $pb.GeneratedMessage {
   $core.bool hasQuickPasteIndexModifier() => $_has(32);
   @$pb.TagNumber(33)
   void clearQuickPasteIndexModifier() => $_clearField(33);
+
+  /// 手机上「发送记录」显示最近几天的发出内容（2.7.2）：0 或空表示默认 3 天
+  @$pb.TagNumber(34)
+  $core.int get sentRetentionDays => $_getIZ(33);
+  @$pb.TagNumber(34)
+  set sentRetentionDays($core.int value) => $_setSignedInt32(33, value);
+  @$pb.TagNumber(34)
+  $core.bool hasSentRetentionDays() => $_has(33);
+  @$pb.TagNumber(34)
+  void clearSentRetentionDays() => $_clearField(34);
 }
 
 class OfficialUsage extends $pb.GeneratedMessage {

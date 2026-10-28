@@ -87,6 +87,7 @@ func configToProto(c config.Config) *pb.Config {
 		QuickPasteHotkey:        c.QuickPasteHotkey,
 		QuickPasteCopyOnly:      c.QuickPasteCopyOnly,
 		QuickPasteIndexModifier: c.QuickPasteIndexModifier,
+		SentRetentionDays:       int32(c.SentRetentionDays),
 		ReceiveDir:              c.ReceiveDir,
 		ReceiveDisabled:         c.ReceiveDisabled,
 		ReceiveNotifyDisabled:   c.ReceiveNotifyDisabled,
@@ -178,6 +179,9 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	// 旧界面不带这一项，不改
 	if m := in.GetQuickPasteIndexModifier(); m != "" {
 		c.QuickPasteIndexModifier = m
+	}
+	if d := in.GetSentRetentionDays(); d > 0 {
+		c.SentRetentionDays = int(d)
 	}
 	// 空字符串就是系统的「下载」文件夹
 	c.ReceiveDir = in.GetReceiveDir()

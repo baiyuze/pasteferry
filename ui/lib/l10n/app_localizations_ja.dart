@@ -2303,6 +2303,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mSentRecords => '送信履歴';
 
   @override
+  String get mSentRetention => '送信履歴の保持';
+
+  @override
+  String mSentRetentionDesc(Object d) {
+    return '「送信履歴」には直近 $d 日に送った内容を表示します';
+  }
+
+  @override
+  String mSentRetentionDays(Object d) {
+    return '$d 日';
+  }
+
+  @override
   String get mViewAll => 'すべて見る';
 
   @override

@@ -9,6 +9,7 @@ import '../theme.dart';
 import '../widgets/common.dart';
 import 'host.dart';
 import 'update_check.dart';
+import 'send_tab.dart' show sentRetentionDays;
 import 'ui.dart';
 
 /// 设置页：本机名称、收到文字后写不写剪贴板、后台保持连接与相关的系统权限、版本。
@@ -112,6 +113,17 @@ class _SettingsTabState extends State<SettingsTab> with WidgetsBindingObserver {
                 subtitle: cfg?.deviceName ?? '',
                 trailing: Icon(Icons.chevron_right, color: p.textFaint),
                 onTap: _rename,
+              ),
+            ],
+          ),
+          MobileGroup(
+            title: l.mSectionSync,
+            children: [
+              MobileTile(
+                title: l.mSentRetention,
+                subtitle: l.mSentRetentionDesc('${sentRetentionDays(cfg)}'),
+                trailing: Icon(Icons.chevron_right, color: p.textFaint),
+                onTap: () => _pickRetention(context),
               ),
             ],
           ),
@@ -262,4 +274,31 @@ class _UpdateTileState extends State<_UpdateTile> {
       ],
     );
   }
+}
+
+/// 选「发送记录」保留几天：1、3、7、30 天
+Future<void> _pickRetention(BuildContext context) async {
+  final l = context.l10n;
+  final state = AppScope.read(context);
+  final cfg = state.config;
+  if (cfg == null) return;
+  final days = await showModalBottomSheet<int>(
+    context: context,
+    useSafeArea: true,
+    builder: (ctx) => Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final d in const [1, 3, 7, 30])
+          ListTile(
+            title: Text(l.mSentRetentionDays(d)),
+            trailing: sentRetentionDays(cfg) == d ? const Icon(Icons.check) : null,
+            onTap: () => Navigator.pop(ctx, d),
+          ),
+      ],
+    ),
+  );
+  if (days == null) return;
+  try {
+    await state.updateConfig(cfg.deepCopy()..sentRetentionDays = days);
+  } catch (_) {}
 }

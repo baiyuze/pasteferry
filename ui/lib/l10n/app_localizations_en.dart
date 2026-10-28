@@ -2482,6 +2482,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mSentRecords => 'Sent';
 
   @override
+  String get mSentRetention => 'Keep sent records';
+
+  @override
+  String mSentRetentionDesc(Object d) {
+    return 'Sent shows what this phone sent in the last $d days';
+  }
+
+  @override
+  String mSentRetentionDays(Object d) {
+    return '$d days';
+  }
+
+  @override
   String get mViewAll => 'View all';
 
   @override

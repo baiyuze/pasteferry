@@ -332,15 +332,19 @@ Future<bool?> showFileConfirmSheet(BuildContext context, List<(String, String, i
 }
 
 /// 发送记录：本机发出去的内容，只显示最近 3 天，高度固定，不挤压上面的发送区。
-class _SentRecords extends StatelessWidget {
-  static const _days = 3;
+/// 「发送记录」保留几天：配置里没设或为 0 时默认 3 天。设置页可改。
+int sentRetentionDays(dynamic cfg) {
+  final d = cfg?.sentRetentionDays ?? 0;
+  return d > 0 ? d : 3;
+}
 
+class _SentRecords extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
     final l = context.l10n;
     final p = context.palette;
-    final since = DateTime.now().subtract(const Duration(days: _days));
+    final since = DateTime.now().subtract(Duration(days: sentRetentionDays(state.config)));
     final sent = state.records
         .where((r) => r.outgoing && recordTime(r).isAfter(since))
         .toList();
