@@ -13,6 +13,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/wlynxg/anet"
 )
 
 // cgnat 是运营商级 NAT 的地址段，Tailscale 的 100.x 地址也在这里面。
@@ -35,7 +37,8 @@ func skippedAdapter(name string) bool {
 // LocalAddrs 返回本机可供对端连接的 IPv4 地址：默认路由所在的网卡排第一，
 // 然后是 Tailscale 地址，最后是其他网卡。
 func LocalAddrs() []netip.Addr {
-	ifaces, err := net.Interfaces()
+	// Android 11 起标准库读不到网卡列表，anet 在那里改用 netlink，其他平台就是 net.Interfaces
+	ifaces, err := anet.Interfaces()
 	if err != nil {
 		return nil
 	}
@@ -44,7 +47,7 @@ func LocalAddrs() []netip.Addr {
 		if ifc.Flags&net.FlagUp == 0 || ifc.Flags&net.FlagLoopback != 0 || skippedAdapter(ifc.Name) {
 			continue
 		}
-		list, err := ifc.Addrs()
+		list, err := anet.InterfaceAddrsByInterface(&ifc)
 		if err != nil {
 			continue
 		}
@@ -89,7 +92,8 @@ func defaultRouteIP() (netip.Addr, bool) {
 
 // localNetworks 返回本机各网卡直连的网段，Addr() 是本机在那个网段里的地址。
 func localNetworks() []netip.Prefix {
-	ifaces, err := net.Interfaces()
+	// Android 11 起标准库读不到网卡列表，anet 在那里改用 netlink，其他平台就是 net.Interfaces
+	ifaces, err := anet.Interfaces()
 	if err != nil {
 		return nil
 	}
@@ -98,7 +102,7 @@ func localNetworks() []netip.Prefix {
 		if ifc.Flags&net.FlagUp == 0 || ifc.Flags&net.FlagLoopback != 0 {
 			continue
 		}
-		list, _ := ifc.Addrs()
+		list, _ := anet.InterfaceAddrsByInterface(&ifc)
 		for _, a := range list {
 			if ipn, ok := a.(*net.IPNet); ok && ipn.IP.To4() != nil {
 				// 不做 Masked：保留本机地址，onLink 要用它排除自己

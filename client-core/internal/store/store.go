@@ -76,6 +76,9 @@ type Clip struct {
 	// Alias 是用户给收藏起的别名，空表示没有。取消收藏后仍留着、只是不显示，
 	// 撤销取消（再收藏一次）时随之回来
 	Alias string
+	// Via 是内容经由哪台没配对的设备送进本机：手机网页传输里登记的手机名。
+	// 这种记录仍是本机发出的（Outgoing），界面上显示「来自 Via」而不是「本机」
+	Via string
 }
 
 // FavoriteExpiry 是收藏行的 expires_at。不用 0：降级到不认识收藏的旧版后台服务时，
@@ -247,6 +250,7 @@ CREATE TABLE IF NOT EXISTS meta (
 		{"source_clip_id", "TEXT NOT NULL DEFAULT ''"},
 		{"is_link", "INTEGER NOT NULL DEFAULT 0"},
 		{"alias", "TEXT NOT NULL DEFAULT ''"},
+		{"via", "TEXT NOT NULL DEFAULT ''"},
 	} {
 		if err := s.addColumnIfMissing("clips", col.name, col.decl); err != nil {
 			return err
@@ -266,6 +270,9 @@ CREATE INDEX IF NOT EXISTS idx_clips_favorite ON clips(favorite, favorited_at DE
 		}
 	}
 	if err := s.migrateTransfers(); err != nil {
+		return err
+	}
+	if err := s.migrateWebSessions(); err != nil {
 		return err
 	}
 	return s.backfillLinks()
@@ -352,8 +359,8 @@ func (s *Store) PutClip(c Clip) error {
 INSERT INTO clips (id, kind, status, origin_device_id, origin_device_name, outgoing,
                    total_size, text_preview, text_content, text_plain, cache_path,
                    source_paths, error, created_at, expires_at,
-                   favorite, favorited_at, source_clip_id, is_link, alias)
-VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                   favorite, favorited_at, source_clip_id, is_link, alias, via)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 ON CONFLICT(id) DO UPDATE SET
     status=excluded.status, total_size=excluded.total_size,
     text_preview=excluded.text_preview, text_content=excluded.text_content,
@@ -365,7 +372,7 @@ ON CONFLICT(id) DO UPDATE SET
 		c.ID, c.Kind, c.Status, c.OriginDeviceID, c.OriginDeviceName, c.Outgoing,
 		c.TotalSize, c.TextPreview, c.TextContent, c.TextPlain, c.CachePath,
 		string(srcJSON), c.Error, c.CreatedAt.Unix(), c.ExpiresAt.Unix(),
-		c.Favorite, favoritedAt, c.SourceClipID, c.IsLink, c.Alias)
+		c.Favorite, favoritedAt, c.SourceClipID, c.IsLink, c.Alias, c.Via)
 	if err != nil {
 		return fmt.Errorf("写入 clip: %w", err)
 	}
@@ -480,7 +487,7 @@ LIMIT ?`, limit)
 const clipCols = `id, kind, status, origin_device_id, origin_device_name, outgoing,
                   total_size, text_preview, text_content, text_plain, cache_path,
                   source_paths, error, created_at, expires_at,
-                  favorite, favorited_at, source_clip_id, is_link, alias,
+                  favorite, favorited_at, source_clip_id, is_link, alias, via,
                   (favorite = 0 AND EXISTS (SELECT 1 FROM clips f
                       WHERE f.favorite = 1 AND f.source_clip_id = clips.id))`
 
@@ -499,7 +506,7 @@ func (s *Store) queryClips(query string, args ...any) ([]Clip, error) {
 		if err := rows.Scan(&c.ID, &c.Kind, &c.Status, &c.OriginDeviceID, &c.OriginDeviceName,
 			&c.Outgoing, &c.TotalSize, &c.TextPreview, &c.TextContent, &c.TextPlain,
 			&c.CachePath, &srcJSON, &c.Error, &created, &expires,
-			&c.Favorite, &favoritedAt, &c.SourceClipID, &c.IsLink, &c.Alias, &c.Favorited); err != nil {
+			&c.Favorite, &favoritedAt, &c.SourceClipID, &c.IsLink, &c.Alias, &c.Via, &c.Favorited); err != nil {
 			return nil, err
 		}
 		c.CreatedAt = time.Unix(created, 0)

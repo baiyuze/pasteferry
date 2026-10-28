@@ -79,6 +79,12 @@ const (
 	DaemonService_RemoveFriend_FullMethodName                  = "/pasteferry.v1.DaemonService/RemoveFriend"
 	DaemonService_SetFriendAutoAccept_FullMethodName           = "/pasteferry.v1.DaemonService/SetFriendAutoAccept"
 	DaemonService_BlockDevice_FullMethodName                   = "/pasteferry.v1.DaemonService/BlockDevice"
+	DaemonService_SubmitText_FullMethodName                    = "/pasteferry.v1.DaemonService/SubmitText"
+	DaemonService_GetWebShare_FullMethodName                   = "/pasteferry.v1.DaemonService/GetWebShare"
+	DaemonService_SetWebShare_FullMethodName                   = "/pasteferry.v1.DaemonService/SetWebShare"
+	DaemonService_NewWebShareInvite_FullMethodName             = "/pasteferry.v1.DaemonService/NewWebShareInvite"
+	DaemonService_CloseWebShareInvite_FullMethodName           = "/pasteferry.v1.DaemonService/CloseWebShareInvite"
+	DaemonService_RemoveWebSession_FullMethodName              = "/pasteferry.v1.DaemonService/RemoveWebSession"
 	DaemonService_PasteFiles_FullMethodName                    = "/pasteferry.v1.DaemonService/PasteFiles"
 	DaemonService_WatchStrangers_FullMethodName                = "/pasteferry.v1.DaemonService/WatchStrangers"
 )
@@ -190,6 +196,18 @@ type DaemonServiceClient interface {
 	SetFriendAutoAccept(ctx context.Context, in *SetFriendAutoAcceptRequest, opts ...grpc.CallOption) (*Friend, error)
 	// 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
 	BlockDevice(ctx context.Context, in *FriendRef, opts ...grpc.CallOption) (*Empty, error)
+	// 发送页里输入的文字：当成本机复制，落库并发给其他设备，不写本机剪贴板（Android App，design/phone-sync.md 3.3.2 节）
+	SubmitText(ctx context.Context, in *SubmitTextRequest, opts ...grpc.CallOption) (*ClipRecord, error)
+	// 手机网页传输（design/phone-sync.md 第 2 节）：手机扫码后用浏览器和本机互传
+	GetWebShare(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*WebShareStatus, error)
+	// 打开或关闭总开关。关闭时停止监听端口，已登记的手机保留
+	SetWebShare(ctx context.Context, in *SetWebShareRequest, opts ...grpc.CallOption) (*WebShareStatus, error)
+	// 二维码窗口打开、或上一个二维码被用掉 / 过期时调用：生成一个待用的会话，返回二维码里的网址
+	NewWebShareInvite(ctx context.Context, in *NewWebShareInviteRequest, opts ...grpc.CallOption) (*WebShareInvite, error)
+	// 二维码窗口关闭：作废还没被用过的二维码
+	CloseWebShareInvite(ctx context.Context, in *WebShareInviteRef, opts ...grpc.CallOption) (*Empty, error)
+	// 移除一台登记过的手机，它的网页立即失效
+	RemoveWebSession(ctx context.Context, in *WebSessionRef, opts ...grpc.CallOption) (*WebShareStatus, error)
 	// 发送窗口、头像里的「粘贴」：剪贴板里是文件时返回它们的路径；是图片时存成 PNG，返回这个文件的路径
 	PasteFiles(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PasteFilesResponse, error)
 	// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
@@ -784,6 +802,66 @@ func (c *daemonServiceClient) BlockDevice(ctx context.Context, in *FriendRef, op
 	return out, nil
 }
 
+func (c *daemonServiceClient) SubmitText(ctx context.Context, in *SubmitTextRequest, opts ...grpc.CallOption) (*ClipRecord, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClipRecord)
+	err := c.cc.Invoke(ctx, DaemonService_SubmitText_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) GetWebShare(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*WebShareStatus, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WebShareStatus)
+	err := c.cc.Invoke(ctx, DaemonService_GetWebShare_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) SetWebShare(ctx context.Context, in *SetWebShareRequest, opts ...grpc.CallOption) (*WebShareStatus, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WebShareStatus)
+	err := c.cc.Invoke(ctx, DaemonService_SetWebShare_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) NewWebShareInvite(ctx context.Context, in *NewWebShareInviteRequest, opts ...grpc.CallOption) (*WebShareInvite, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WebShareInvite)
+	err := c.cc.Invoke(ctx, DaemonService_NewWebShareInvite_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) CloseWebShareInvite(ctx context.Context, in *WebShareInviteRef, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_CloseWebShareInvite_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) RemoveWebSession(ctx context.Context, in *WebSessionRef, opts ...grpc.CallOption) (*WebShareStatus, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WebShareStatus)
+	err := c.cc.Invoke(ctx, DaemonService_RemoveWebSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *daemonServiceClient) PasteFiles(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PasteFilesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PasteFilesResponse)
@@ -920,6 +998,18 @@ type DaemonServiceServer interface {
 	SetFriendAutoAccept(context.Context, *SetFriendAutoAcceptRequest) (*Friend, error)
 	// 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
 	BlockDevice(context.Context, *FriendRef) (*Empty, error)
+	// 发送页里输入的文字：当成本机复制，落库并发给其他设备，不写本机剪贴板（Android App，design/phone-sync.md 3.3.2 节）
+	SubmitText(context.Context, *SubmitTextRequest) (*ClipRecord, error)
+	// 手机网页传输（design/phone-sync.md 第 2 节）：手机扫码后用浏览器和本机互传
+	GetWebShare(context.Context, *Empty) (*WebShareStatus, error)
+	// 打开或关闭总开关。关闭时停止监听端口，已登记的手机保留
+	SetWebShare(context.Context, *SetWebShareRequest) (*WebShareStatus, error)
+	// 二维码窗口打开、或上一个二维码被用掉 / 过期时调用：生成一个待用的会话，返回二维码里的网址
+	NewWebShareInvite(context.Context, *NewWebShareInviteRequest) (*WebShareInvite, error)
+	// 二维码窗口关闭：作废还没被用过的二维码
+	CloseWebShareInvite(context.Context, *WebShareInviteRef) (*Empty, error)
+	// 移除一台登记过的手机，它的网页立即失效
+	RemoveWebSession(context.Context, *WebSessionRef) (*WebShareStatus, error)
 	// 发送窗口、头像里的「粘贴」：剪贴板里是文件时返回它们的路径；是图片时存成 PNG，返回这个文件的路径
 	PasteFiles(context.Context, *Empty) (*PasteFilesResponse, error)
 	// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
@@ -1098,6 +1188,24 @@ func (UnimplementedDaemonServiceServer) SetFriendAutoAccept(context.Context, *Se
 }
 func (UnimplementedDaemonServiceServer) BlockDevice(context.Context, *FriendRef) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method BlockDevice not implemented")
+}
+func (UnimplementedDaemonServiceServer) SubmitText(context.Context, *SubmitTextRequest) (*ClipRecord, error) {
+	return nil, status.Error(codes.Unimplemented, "method SubmitText not implemented")
+}
+func (UnimplementedDaemonServiceServer) GetWebShare(context.Context, *Empty) (*WebShareStatus, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetWebShare not implemented")
+}
+func (UnimplementedDaemonServiceServer) SetWebShare(context.Context, *SetWebShareRequest) (*WebShareStatus, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetWebShare not implemented")
+}
+func (UnimplementedDaemonServiceServer) NewWebShareInvite(context.Context, *NewWebShareInviteRequest) (*WebShareInvite, error) {
+	return nil, status.Error(codes.Unimplemented, "method NewWebShareInvite not implemented")
+}
+func (UnimplementedDaemonServiceServer) CloseWebShareInvite(context.Context, *WebShareInviteRef) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method CloseWebShareInvite not implemented")
+}
+func (UnimplementedDaemonServiceServer) RemoveWebSession(context.Context, *WebSessionRef) (*WebShareStatus, error) {
+	return nil, status.Error(codes.Unimplemented, "method RemoveWebSession not implemented")
 }
 func (UnimplementedDaemonServiceServer) PasteFiles(context.Context, *Empty) (*PasteFilesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method PasteFiles not implemented")
@@ -2084,6 +2192,114 @@ func _DaemonService_BlockDevice_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_SubmitText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitTextRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SubmitText(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SubmitText_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SubmitText(ctx, req.(*SubmitTextRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_GetWebShare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).GetWebShare(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_GetWebShare_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).GetWebShare(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_SetWebShare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetWebShareRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SetWebShare(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SetWebShare_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SetWebShare(ctx, req.(*SetWebShareRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_NewWebShareInvite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NewWebShareInviteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).NewWebShareInvite(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_NewWebShareInvite_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).NewWebShareInvite(ctx, req.(*NewWebShareInviteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_CloseWebShareInvite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WebShareInviteRef)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).CloseWebShareInvite(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_CloseWebShareInvite_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).CloseWebShareInvite(ctx, req.(*WebShareInviteRef))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_RemoveWebSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WebSessionRef)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).RemoveWebSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_RemoveWebSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).RemoveWebSession(ctx, req.(*WebSessionRef))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DaemonService_PasteFiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
@@ -2323,6 +2539,30 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BlockDevice",
 			Handler:    _DaemonService_BlockDevice_Handler,
+		},
+		{
+			MethodName: "SubmitText",
+			Handler:    _DaemonService_SubmitText_Handler,
+		},
+		{
+			MethodName: "GetWebShare",
+			Handler:    _DaemonService_GetWebShare_Handler,
+		},
+		{
+			MethodName: "SetWebShare",
+			Handler:    _DaemonService_SetWebShare_Handler,
+		},
+		{
+			MethodName: "NewWebShareInvite",
+			Handler:    _DaemonService_NewWebShareInvite_Handler,
+		},
+		{
+			MethodName: "CloseWebShareInvite",
+			Handler:    _DaemonService_CloseWebShareInvite_Handler,
+		},
+		{
+			MethodName: "RemoveWebSession",
+			Handler:    _DaemonService_RemoveWebSession_Handler,
 		},
 		{
 			MethodName: "PasteFiles",

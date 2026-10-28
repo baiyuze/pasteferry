@@ -533,7 +533,10 @@ type ClipRecord struct {
 	// 整条文字就是一个 http(s) 网址
 	IsLink bool `protobuf:"varint,17,opt,name=is_link,json=isLink,proto3" json:"is_link,omitempty"`
 	// 用户给收藏起的别名，空表示没有。只有收藏有
-	Alias         string `protobuf:"bytes,18,opt,name=alias,proto3" json:"alias,omitempty"`
+	Alias string `protobuf:"bytes,18,opt,name=alias,proto3" json:"alias,omitempty"`
+	// 经由哪台没配对的设备送进本机：手机网页传输里登记的手机名。只有 outgoing 的记录会有，
+	// 界面上显示「来自 via_name」而不是「本机」
+	ViaName       string `protobuf:"bytes,19,opt,name=via_name,json=viaName,proto3" json:"via_name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -690,6 +693,13 @@ func (x *ClipRecord) GetIsLink() bool {
 func (x *ClipRecord) GetAlias() string {
 	if x != nil {
 		return x.Alias
+	}
+	return ""
+}
+
+func (x *ClipRecord) GetViaName() string {
+	if x != nil {
+		return x.ViaName
 	}
 	return ""
 }
@@ -977,6 +987,7 @@ type Event struct {
 	//	*Event_FriendRemoved
 	//	*Event_FriendRequest
 	//	*Event_ProfileChanged
+	//	*Event_WebShareChanged
 	Payload       isEvent_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1172,6 +1183,15 @@ func (x *Event) GetProfileChanged() *Profile {
 	return nil
 }
 
+func (x *Event) GetWebShareChanged() *WebShareStatus {
+	if x != nil {
+		if x, ok := x.Payload.(*Event_WebShareChanged); ok {
+			return x.WebShareChanged
+		}
+	}
+	return nil
+}
+
 type isEvent_Payload interface {
 	isEvent_Payload()
 }
@@ -1250,6 +1270,11 @@ type Event_ProfileChanged struct {
 	ProfileChanged *Profile `protobuf:"bytes,17,opt,name=profile_changed,json=profileChanged,proto3,oneof"`
 }
 
+type Event_WebShareChanged struct {
+	// 手机网页传输的开关、监听状态或登记的手机变了；invite_used 是刚被扫码用掉的二维码
+	WebShareChanged *WebShareStatus `protobuf:"bytes,18,opt,name=web_share_changed,json=webShareChanged,proto3,oneof"`
+}
+
 func (*Event_ClipAdded) isEvent_Payload() {}
 
 func (*Event_ClipUpdated) isEvent_Payload() {}
@@ -1283,6 +1308,8 @@ func (*Event_FriendRemoved) isEvent_Payload() {}
 func (*Event_FriendRequest) isEvent_Payload() {}
 
 func (*Event_ProfileChanged) isEvent_Payload() {}
+
+func (*Event_WebShareChanged) isEvent_Payload() {}
 
 type Profile struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -2792,7 +2819,10 @@ type ClipDetail struct {
 	// 全文的字数
 	TextLength int32 `protobuf:"varint,2,opt,name=text_length,json=textLength,proto3" json:"text_length,omitempty"`
 	// 本机复制的文件在本机的完整路径
-	SourcePaths   []string `protobuf:"bytes,3,rep,name=source_paths,json=sourcePaths,proto3" json:"source_paths,omitempty"`
+	SourcePaths []string `protobuf:"bytes,3,rep,name=source_paths,json=sourcePaths,proto3" json:"source_paths,omitempty"`
+	// 图片和文件已在本机时，内容在本机的路径（缓存或收藏目录里，或者本机复制的原文件）。
+	// Android 的「保存」「分享」用它；还没下载或已过期时为空
+	LocalPaths    []string `protobuf:"bytes,4,rep,name=local_paths,json=localPaths,proto3" json:"local_paths,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2844,6 +2874,13 @@ func (x *ClipDetail) GetTextLength() int32 {
 func (x *ClipDetail) GetSourcePaths() []string {
 	if x != nil {
 		return x.SourcePaths
+	}
+	return nil
+}
+
+func (x *ClipDetail) GetLocalPaths() []string {
+	if x != nil {
+		return x.LocalPaths
 	}
 	return nil
 }
@@ -5944,6 +5981,476 @@ func (x *CheckReceiveDirResponse) GetPath() string {
 	return ""
 }
 
+type SubmitTextRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Text          string                 `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubmitTextRequest) Reset() {
+	*x = SubmitTextRequest{}
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[74]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubmitTextRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubmitTextRequest) ProtoMessage() {}
+
+func (x *SubmitTextRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[74]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubmitTextRequest.ProtoReflect.Descriptor instead.
+func (*SubmitTextRequest) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_daemon_proto_rawDescGZIP(), []int{74}
+}
+
+func (x *SubmitTextRequest) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
+type WebShareStatus struct {
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	Enabled bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// 开关打开且端口已在监听
+	Listening bool  `protobuf:"varint,2,opt,name=listening,proto3" json:"listening,omitempty"`
+	Port      int32 `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
+	// 固定端口被占用，改用了随机端口：以前收藏的网址打不开，要重新扫码
+	PortFallback bool `protobuf:"varint,4,opt,name=port_fallback,json=portFallback,proto3" json:"port_fallback,omitempty"`
+	// 监听失败的原因（开关开着但没在监听时）
+	Error string `protobuf:"bytes,5,opt,name=error,proto3" json:"error,omitempty"`
+	// 本机的局域网地址（不带端口），默认路由所在的网卡排第一
+	Addresses []string      `protobuf:"bytes,6,rep,name=addresses,proto3" json:"addresses,omitempty"`
+	Sessions  []*WebSession `protobuf:"bytes,7,rep,name=sessions,proto3" json:"sessions,omitempty"`
+	// 刚被扫码用掉的二维码（只在 web_share_changed 事件里有），二维码窗口据此换一张新的
+	InviteUsed    string `protobuf:"bytes,8,opt,name=invite_used,json=inviteUsed,proto3" json:"invite_used,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebShareStatus) Reset() {
+	*x = WebShareStatus{}
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[75]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebShareStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebShareStatus) ProtoMessage() {}
+
+func (x *WebShareStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[75]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebShareStatus.ProtoReflect.Descriptor instead.
+func (*WebShareStatus) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_daemon_proto_rawDescGZIP(), []int{75}
+}
+
+func (x *WebShareStatus) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *WebShareStatus) GetListening() bool {
+	if x != nil {
+		return x.Listening
+	}
+	return false
+}
+
+func (x *WebShareStatus) GetPort() int32 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
+}
+
+func (x *WebShareStatus) GetPortFallback() bool {
+	if x != nil {
+		return x.PortFallback
+	}
+	return false
+}
+
+func (x *WebShareStatus) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+func (x *WebShareStatus) GetAddresses() []string {
+	if x != nil {
+		return x.Addresses
+	}
+	return nil
+}
+
+func (x *WebShareStatus) GetSessions() []*WebSession {
+	if x != nil {
+		return x.Sessions
+	}
+	return nil
+}
+
+func (x *WebShareStatus) GetInviteUsed() string {
+	if x != nil {
+		return x.InviteUsed
+	}
+	return ""
+}
+
+type WebSession struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // 手机第一次打开网页时起的名字
+	CreatedAtUnix int64                  `protobuf:"varint,3,opt,name=created_at_unix,json=createdAtUnix,proto3" json:"created_at_unix,omitempty"`
+	LastSeenUnix  int64                  `protobuf:"varint,4,opt,name=last_seen_unix,json=lastSeenUnix,proto3" json:"last_seen_unix,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebSession) Reset() {
+	*x = WebSession{}
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[76]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebSession) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebSession) ProtoMessage() {}
+
+func (x *WebSession) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[76]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebSession.ProtoReflect.Descriptor instead.
+func (*WebSession) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_daemon_proto_rawDescGZIP(), []int{76}
+}
+
+func (x *WebSession) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *WebSession) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *WebSession) GetCreatedAtUnix() int64 {
+	if x != nil {
+		return x.CreatedAtUnix
+	}
+	return 0
+}
+
+func (x *WebSession) GetLastSeenUnix() int64 {
+	if x != nil {
+		return x.LastSeenUnix
+	}
+	return 0
+}
+
+type SetWebShareRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetWebShareRequest) Reset() {
+	*x = SetWebShareRequest{}
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[77]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetWebShareRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetWebShareRequest) ProtoMessage() {}
+
+func (x *SetWebShareRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[77]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetWebShareRequest.ProtoReflect.Descriptor instead.
+func (*SetWebShareRequest) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_daemon_proto_rawDescGZIP(), []int{77}
+}
+
+func (x *SetWebShareRequest) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+type NewWebShareInviteRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"` // 二维码里用哪个地址；空表示默认（WebShareStatus.addresses 的第一个）
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NewWebShareInviteRequest) Reset() {
+	*x = NewWebShareInviteRequest{}
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[78]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NewWebShareInviteRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NewWebShareInviteRequest) ProtoMessage() {}
+
+func (x *NewWebShareInviteRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[78]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NewWebShareInviteRequest.ProtoReflect.Descriptor instead.
+func (*NewWebShareInviteRequest) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_daemon_proto_rawDescGZIP(), []int{78}
+}
+
+func (x *NewWebShareInviteRequest) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+type WebShareInvite struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Url           string                 `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"` // 二维码内容：http://地址:端口/#i=邀请&k=密钥
+	ExpiresAtUnix int64                  `protobuf:"varint,3,opt,name=expires_at_unix,json=expiresAtUnix,proto3" json:"expires_at_unix,omitempty"`
+	// 二维码点阵，界面按它画方块：边长（模块数）与按行排列的模块，每个字节一个，1 为深色
+	QrSize        int32  `protobuf:"varint,4,opt,name=qr_size,json=qrSize,proto3" json:"qr_size,omitempty"`
+	QrModules     []byte `protobuf:"bytes,5,opt,name=qr_modules,json=qrModules,proto3" json:"qr_modules,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebShareInvite) Reset() {
+	*x = WebShareInvite{}
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[79]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebShareInvite) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebShareInvite) ProtoMessage() {}
+
+func (x *WebShareInvite) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[79]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebShareInvite.ProtoReflect.Descriptor instead.
+func (*WebShareInvite) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_daemon_proto_rawDescGZIP(), []int{79}
+}
+
+func (x *WebShareInvite) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *WebShareInvite) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *WebShareInvite) GetExpiresAtUnix() int64 {
+	if x != nil {
+		return x.ExpiresAtUnix
+	}
+	return 0
+}
+
+func (x *WebShareInvite) GetQrSize() int32 {
+	if x != nil {
+		return x.QrSize
+	}
+	return 0
+}
+
+func (x *WebShareInvite) GetQrModules() []byte {
+	if x != nil {
+		return x.QrModules
+	}
+	return nil
+}
+
+type WebShareInviteRef struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebShareInviteRef) Reset() {
+	*x = WebShareInviteRef{}
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[80]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebShareInviteRef) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebShareInviteRef) ProtoMessage() {}
+
+func (x *WebShareInviteRef) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[80]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebShareInviteRef.ProtoReflect.Descriptor instead.
+func (*WebShareInviteRef) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_daemon_proto_rawDescGZIP(), []int{80}
+}
+
+func (x *WebShareInviteRef) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type WebSessionRef struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebSessionRef) Reset() {
+	*x = WebSessionRef{}
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[81]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebSessionRef) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebSessionRef) ProtoMessage() {}
+
+func (x *WebSessionRef) ProtoReflect() protoreflect.Message {
+	mi := &file_pasteferry_v1_daemon_proto_msgTypes[81]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebSessionRef.ProtoReflect.Descriptor instead.
+func (*WebSessionRef) Descriptor() ([]byte, []int) {
+	return file_pasteferry_v1_daemon_proto_rawDescGZIP(), []int{81}
+}
+
+func (x *WebSessionRef) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 var File_pasteferry_v1_daemon_proto protoreflect.FileDescriptor
 
 const file_pasteferry_v1_daemon_proto_rawDesc = "" +
@@ -5954,7 +6461,7 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
 	"\x04size\x18\x02 \x01(\x03R\x04size\x12\x15\n" +
 	"\x06is_dir\x18\x03 \x01(\bR\x05isDir\x12!\n" +
-	"\fcontent_type\x18\x04 \x01(\tR\vcontentType\"\xfd\x04\n" +
+	"\fcontent_type\x18\x04 \x01(\tR\vcontentType\"\x98\x05\n" +
 	"\n" +
 	"ClipRecord\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12+\n" +
@@ -5977,7 +6484,8 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\tfavorited\x18\x0f \x01(\bR\tfavorited\x12*\n" +
 	"\x11favorited_at_unix\x18\x10 \x01(\x03R\x0ffavoritedAtUnix\x12\x17\n" +
 	"\ais_link\x18\x11 \x01(\bR\x06isLink\x12\x14\n" +
-	"\x05alias\x18\x12 \x01(\tR\x05alias\"1\n" +
+	"\x05alias\x18\x12 \x01(\tR\x05alias\x12\x19\n" +
+	"\bvia_name\x18\x13 \x01(\tR\aviaName\"1\n" +
 	"\x10SubscribeRequest\x12\x1d\n" +
 	"\n" +
 	"since_unix\x18\x01 \x01(\x03R\tsinceUnix\"\x8d\x01\n" +
@@ -6003,7 +6511,7 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\rlan_reachable\x18\v \x01(\bR\flanReachable\x12%\n" +
 	"\x0efeatures_known\x18\f \x01(\bR\rfeaturesKnown\x12\x1f\n" +
 	"\vapp_version\x18\r \x01(\tR\n" +
-	"appVersion\"\xb2\b\n" +
+	"appVersion\"\xff\b\n" +
 	"\x05Event\x12:\n" +
 	"\n" +
 	"clip_added\x18\x01 \x01(\v2\x19.pasteferry.v1.ClipRecordH\x00R\tclipAdded\x12>\n" +
@@ -6023,7 +6531,8 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x0efriend_changed\x18\x0e \x01(\v2\x15.pasteferry.v1.FriendH\x00R\rfriendChanged\x12'\n" +
 	"\x0efriend_removed\x18\x0f \x01(\tH\x00R\rfriendRemoved\x12E\n" +
 	"\x0efriend_request\x18\x10 \x01(\v2\x1c.pasteferry.v1.FriendRequestH\x00R\rfriendRequest\x12A\n" +
-	"\x0fprofile_changed\x18\x11 \x01(\v2\x16.pasteferry.v1.ProfileH\x00R\x0eprofileChangedB\t\n" +
+	"\x0fprofile_changed\x18\x11 \x01(\v2\x16.pasteferry.v1.ProfileH\x00R\x0eprofileChanged\x12K\n" +
+	"\x11web_share_changed\x18\x12 \x01(\v2\x1d.pasteferry.v1.WebShareStatusH\x00R\x0fwebShareChangedB\t\n" +
 	"\apayload\"\x89\x01\n" +
 	"\aProfile\x12!\n" +
 	"\fdisplay_name\x18\x01 \x01(\tR\vdisplayName\x12\x1b\n" +
@@ -6145,13 +6654,15 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\aclip_id\x18\x01 \x01(\tR\x06clipId\x12\x14\n" +
 	"\x05alias\x18\x02 \x01(\tR\x05alias\"/\n" +
 	"\x14GetClipDetailRequest\x12\x17\n" +
-	"\aclip_id\x18\x01 \x01(\tR\x06clipId\"d\n" +
+	"\aclip_id\x18\x01 \x01(\tR\x06clipId\"\x85\x01\n" +
 	"\n" +
 	"ClipDetail\x12\x12\n" +
 	"\x04text\x18\x01 \x01(\tR\x04text\x12\x1f\n" +
 	"\vtext_length\x18\x02 \x01(\x05R\n" +
 	"textLength\x12!\n" +
-	"\fsource_paths\x18\x03 \x03(\tR\vsourcePaths\"\x89\x02\n" +
+	"\fsource_paths\x18\x03 \x03(\tR\vsourcePaths\x12\x1f\n" +
+	"\vlocal_paths\x18\x04 \x03(\tR\n" +
+	"localPaths\"\x89\x02\n" +
 	"\x10QuickPasteStatus\x12\x18\n" +
 	"\arunning\x18\x01 \x01(\bR\arunning\x12!\n" +
 	"\fhotkey_error\x18\x02 \x01(\tR\vhotkeyError\x12\x16\n" +
@@ -6411,7 +6922,40 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x05error\x18\x02 \x01(\tR\x05error\x12\x1d\n" +
 	"\n" +
 	"free_bytes\x18\x03 \x01(\x03R\tfreeBytes\x12\x12\n" +
-	"\x04path\x18\x04 \x01(\tR\x04path*v\n" +
+	"\x04path\x18\x04 \x01(\tR\x04path\"'\n" +
+	"\x11SubmitTextRequest\x12\x12\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text\"\x8d\x02\n" +
+	"\x0eWebShareStatus\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x1c\n" +
+	"\tlistening\x18\x02 \x01(\bR\tlistening\x12\x12\n" +
+	"\x04port\x18\x03 \x01(\x05R\x04port\x12#\n" +
+	"\rport_fallback\x18\x04 \x01(\bR\fportFallback\x12\x14\n" +
+	"\x05error\x18\x05 \x01(\tR\x05error\x12\x1c\n" +
+	"\taddresses\x18\x06 \x03(\tR\taddresses\x125\n" +
+	"\bsessions\x18\a \x03(\v2\x19.pasteferry.v1.WebSessionR\bsessions\x12\x1f\n" +
+	"\vinvite_used\x18\b \x01(\tR\n" +
+	"inviteUsed\"~\n" +
+	"\n" +
+	"WebSession\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12&\n" +
+	"\x0fcreated_at_unix\x18\x03 \x01(\x03R\rcreatedAtUnix\x12$\n" +
+	"\x0elast_seen_unix\x18\x04 \x01(\x03R\flastSeenUnix\".\n" +
+	"\x12SetWebShareRequest\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\"4\n" +
+	"\x18NewWebShareInviteRequest\x12\x18\n" +
+	"\aaddress\x18\x01 \x01(\tR\aaddress\"\x92\x01\n" +
+	"\x0eWebShareInvite\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x10\n" +
+	"\x03url\x18\x02 \x01(\tR\x03url\x12&\n" +
+	"\x0fexpires_at_unix\x18\x03 \x01(\x03R\rexpiresAtUnix\x12\x17\n" +
+	"\aqr_size\x18\x04 \x01(\x05R\x06qrSize\x12\x1d\n" +
+	"\n" +
+	"qr_modules\x18\x05 \x01(\fR\tqrModules\"#\n" +
+	"\x11WebShareInviteRef\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x1f\n" +
+	"\rWebSessionRef\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id*v\n" +
 	"\bClipKind\x12\x19\n" +
 	"\x15CLIP_KIND_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eCLIP_KIND_TEXT\x10\x01\x12\x12\n" +
@@ -6451,7 +6995,7 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x11TransferDirection\x12\"\n" +
 	"\x1eTRANSFER_DIRECTION_UNSPECIFIED\x10\x00\x12\x1f\n" +
 	"\x1bTRANSFER_DIRECTION_OUTGOING\x10\x01\x12\x1f\n" +
-	"\x1bTRANSFER_DIRECTION_INCOMING\x10\x022\xa7\"\n" +
+	"\x1bTRANSFER_DIRECTION_INCOMING\x10\x022\x84&\n" +
 	"\rDaemonService\x12D\n" +
 	"\tSubscribe\x12\x1f.pasteferry.v1.SubscribeRequest\x1a\x14.pasteferry.v1.Event0\x01\x12T\n" +
 	"\vListHistory\x12!.pasteferry.v1.ListHistoryRequest\x1a\".pasteferry.v1.ListHistoryResponse\x12J\n" +
@@ -6510,7 +7054,14 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\vListFriends\x12\x14.pasteferry.v1.Empty\x1a\".pasteferry.v1.ListFriendsResponse\x12>\n" +
 	"\fRemoveFriend\x12\x18.pasteferry.v1.FriendRef\x1a\x14.pasteferry.v1.Empty\x12W\n" +
 	"\x13SetFriendAutoAccept\x12).pasteferry.v1.SetFriendAutoAcceptRequest\x1a\x15.pasteferry.v1.Friend\x12=\n" +
-	"\vBlockDevice\x12\x18.pasteferry.v1.FriendRef\x1a\x14.pasteferry.v1.Empty\x12E\n" +
+	"\vBlockDevice\x12\x18.pasteferry.v1.FriendRef\x1a\x14.pasteferry.v1.Empty\x12I\n" +
+	"\n" +
+	"SubmitText\x12 .pasteferry.v1.SubmitTextRequest\x1a\x19.pasteferry.v1.ClipRecord\x12B\n" +
+	"\vGetWebShare\x12\x14.pasteferry.v1.Empty\x1a\x1d.pasteferry.v1.WebShareStatus\x12O\n" +
+	"\vSetWebShare\x12!.pasteferry.v1.SetWebShareRequest\x1a\x1d.pasteferry.v1.WebShareStatus\x12[\n" +
+	"\x11NewWebShareInvite\x12'.pasteferry.v1.NewWebShareInviteRequest\x1a\x1d.pasteferry.v1.WebShareInvite\x12M\n" +
+	"\x13CloseWebShareInvite\x12 .pasteferry.v1.WebShareInviteRef\x1a\x14.pasteferry.v1.Empty\x12O\n" +
+	"\x10RemoveWebSession\x12\x1c.pasteferry.v1.WebSessionRef\x1a\x1d.pasteferry.v1.WebShareStatus\x12E\n" +
 	"\n" +
 	"PasteFiles\x12\x14.pasteferry.v1.Empty\x1a!.pasteferry.v1.PasteFilesResponse\x12B\n" +
 	"\x0eWatchStrangers\x12\x14.pasteferry.v1.Empty\x1a\x18.pasteferry.v1.Strangers0\x01BDZBgithub.com/baiyuze/pasteferry/proto/gen/pasteferry/v1;pasteferryv1b\x06proto3"
@@ -6528,7 +7079,7 @@ func file_pasteferry_v1_daemon_proto_rawDescGZIP() []byte {
 }
 
 var file_pasteferry_v1_daemon_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
-var file_pasteferry_v1_daemon_proto_msgTypes = make([]protoimpl.MessageInfo, 74)
+var file_pasteferry_v1_daemon_proto_msgTypes = make([]protoimpl.MessageInfo, 82)
 var file_pasteferry_v1_daemon_proto_goTypes = []any{
 	(ClipKind)(0),                      // 0: pasteferry.v1.ClipKind
 	(ClipStatus)(0),                    // 1: pasteferry.v1.ClipStatus
@@ -6611,168 +7162,190 @@ var file_pasteferry_v1_daemon_proto_goTypes = []any{
 	(*DeleteTransfersRequest)(nil),     // 78: pasteferry.v1.DeleteTransfersRequest
 	(*CheckReceiveDirRequest)(nil),     // 79: pasteferry.v1.CheckReceiveDirRequest
 	(*CheckReceiveDirResponse)(nil),    // 80: pasteferry.v1.CheckReceiveDirResponse
+	(*SubmitTextRequest)(nil),          // 81: pasteferry.v1.SubmitTextRequest
+	(*WebShareStatus)(nil),             // 82: pasteferry.v1.WebShareStatus
+	(*WebSession)(nil),                 // 83: pasteferry.v1.WebSession
+	(*SetWebShareRequest)(nil),         // 84: pasteferry.v1.SetWebShareRequest
+	(*NewWebShareInviteRequest)(nil),   // 85: pasteferry.v1.NewWebShareInviteRequest
+	(*WebShareInvite)(nil),             // 86: pasteferry.v1.WebShareInvite
+	(*WebShareInviteRef)(nil),          // 87: pasteferry.v1.WebShareInviteRef
+	(*WebSessionRef)(nil),              // 88: pasteferry.v1.WebSessionRef
 }
 var file_pasteferry_v1_daemon_proto_depIdxs = []int32{
-	0,  // 0: pasteferry.v1.ClipRecord.kind:type_name -> pasteferry.v1.ClipKind
-	1,  // 1: pasteferry.v1.ClipRecord.status:type_name -> pasteferry.v1.ClipStatus
-	8,  // 2: pasteferry.v1.ClipRecord.items:type_name -> pasteferry.v1.ClipItem
-	2,  // 3: pasteferry.v1.Device.connection:type_name -> pasteferry.v1.ConnectionKind
-	9,  // 4: pasteferry.v1.Event.clip_added:type_name -> pasteferry.v1.ClipRecord
-	9,  // 5: pasteferry.v1.Event.clip_updated:type_name -> pasteferry.v1.ClipRecord
-	11, // 6: pasteferry.v1.Event.progress:type_name -> pasteferry.v1.TransferProgress
-	12, // 7: pasteferry.v1.Event.device_changed:type_name -> pasteferry.v1.Device
-	3,  // 8: pasteferry.v1.Event.permission_changed:type_name -> pasteferry.v1.ClipboardPermission
-	59, // 9: pasteferry.v1.Event.status_changed:type_name -> pasteferry.v1.Status
-	29, // 10: pasteferry.v1.Event.clipboard_written:type_name -> pasteferry.v1.ClipboardWriteResult
-	53, // 11: pasteferry.v1.Event.config_changed:type_name -> pasteferry.v1.Config
-	39, // 12: pasteferry.v1.Event.quick_paste_changed:type_name -> pasteferry.v1.QuickPasteStatus
-	74, // 13: pasteferry.v1.Event.transfer_changed:type_name -> pasteferry.v1.Transfer
-	21, // 14: pasteferry.v1.Event.friend_changed:type_name -> pasteferry.v1.Friend
-	23, // 15: pasteferry.v1.Event.friend_request:type_name -> pasteferry.v1.FriendRequest
-	14, // 16: pasteferry.v1.Event.profile_changed:type_name -> pasteferry.v1.Profile
-	2,  // 17: pasteferry.v1.Friend.connection:type_name -> pasteferry.v1.ConnectionKind
-	21, // 18: pasteferry.v1.ListFriendsResponse.friends:type_name -> pasteferry.v1.Friend
-	24, // 19: pasteferry.v1.Strangers.strangers:type_name -> pasteferry.v1.Stranger
-	4,  // 20: pasteferry.v1.ClipboardWriteResult.outcome:type_name -> pasteferry.v1.ClipboardWriteOutcome
-	0,  // 21: pasteferry.v1.ListHistoryRequest.kind_filter:type_name -> pasteferry.v1.ClipKind
-	9,  // 22: pasteferry.v1.ListHistoryResponse.records:type_name -> pasteferry.v1.ClipRecord
-	12, // 23: pasteferry.v1.ListDevicesResponse.self:type_name -> pasteferry.v1.Device
-	12, // 24: pasteferry.v1.ListDevicesResponse.peers:type_name -> pasteferry.v1.Device
-	12, // 25: pasteferry.v1.RedeemPairingCodeResponse.peer:type_name -> pasteferry.v1.Device
-	46, // 26: pasteferry.v1.NearbyDevices.devices:type_name -> pasteferry.v1.NearbyDevice
-	2,  // 27: pasteferry.v1.ReconnectResponse.kind:type_name -> pasteferry.v1.ConnectionKind
-	5,  // 28: pasteferry.v1.Config.service_mode:type_name -> pasteferry.v1.ServiceMode
-	58, // 29: pasteferry.v1.NetworkInfo.egresses:type_name -> pasteferry.v1.NetworkEgress
-	56, // 30: pasteferry.v1.NetworkInfo.lan:type_name -> pasteferry.v1.LanInfo
-	57, // 31: pasteferry.v1.LanInfo.peers:type_name -> pasteferry.v1.LanPeer
-	3,  // 32: pasteferry.v1.Status.clipboard_permission:type_name -> pasteferry.v1.ClipboardPermission
-	54, // 33: pasteferry.v1.Status.official_usage:type_name -> pasteferry.v1.OfficialUsage
-	66, // 34: pasteferry.v1.Status.last_update:type_name -> pasteferry.v1.UpdateResult
-	61, // 35: pasteferry.v1.UpdateInfo.releases:type_name -> pasteferry.v1.UpdateRelease
-	6,  // 36: pasteferry.v1.Transfer.direction:type_name -> pasteferry.v1.TransferDirection
-	8,  // 37: pasteferry.v1.Transfer.items:type_name -> pasteferry.v1.ClipItem
-	6,  // 38: pasteferry.v1.ListTransfersRequest.direction:type_name -> pasteferry.v1.TransferDirection
-	74, // 39: pasteferry.v1.ListTransfersResponse.transfers:type_name -> pasteferry.v1.Transfer
-	6,  // 40: pasteferry.v1.DeleteTransfersRequest.direction:type_name -> pasteferry.v1.TransferDirection
-	10, // 41: pasteferry.v1.DaemonService.Subscribe:input_type -> pasteferry.v1.SubscribeRequest
-	30, // 42: pasteferry.v1.DaemonService.ListHistory:input_type -> pasteferry.v1.ListHistoryRequest
-	32, // 43: pasteferry.v1.DaemonService.DeleteHistory:input_type -> pasteferry.v1.DeleteHistoryRequest
-	33, // 44: pasteferry.v1.DaemonService.Fetch:input_type -> pasteferry.v1.FetchRequest
-	34, // 45: pasteferry.v1.DaemonService.ApplyToClipboard:input_type -> pasteferry.v1.ApplyToClipboardRequest
-	70, // 46: pasteferry.v1.DaemonService.GetImagePreview:input_type -> pasteferry.v1.GetImagePreviewRequest
-	7,  // 47: pasteferry.v1.DaemonService.ListDevices:input_type -> pasteferry.v1.Empty
-	7,  // 48: pasteferry.v1.DaemonService.CreatePairingCode:input_type -> pasteferry.v1.Empty
-	43, // 49: pasteferry.v1.DaemonService.RedeemPairingCode:input_type -> pasteferry.v1.RedeemPairingCodeRequest
-	45, // 50: pasteferry.v1.DaemonService.ConfirmPairing:input_type -> pasteferry.v1.ConfirmPairingRequest
-	49, // 51: pasteferry.v1.DaemonService.Unpair:input_type -> pasteferry.v1.UnpairRequest
-	50, // 52: pasteferry.v1.DaemonService.Reconnect:input_type -> pasteferry.v1.ReconnectRequest
-	52, // 53: pasteferry.v1.DaemonService.SetDeviceAddress:input_type -> pasteferry.v1.SetDeviceAddressRequest
-	7,  // 54: pasteferry.v1.DaemonService.WatchNearby:input_type -> pasteferry.v1.Empty
-	48, // 55: pasteferry.v1.DaemonService.PairNearby:input_type -> pasteferry.v1.PairNearbyRequest
-	7,  // 56: pasteferry.v1.DaemonService.GetConfig:input_type -> pasteferry.v1.Empty
-	53, // 57: pasteferry.v1.DaemonService.UpdateConfig:input_type -> pasteferry.v1.Config
-	7,  // 58: pasteferry.v1.DaemonService.GetStatus:input_type -> pasteferry.v1.Empty
-	7,  // 59: pasteferry.v1.DaemonService.RequestClipboardPermission:input_type -> pasteferry.v1.Empty
-	7,  // 60: pasteferry.v1.DaemonService.RequestLocalNetworkPermission:input_type -> pasteferry.v1.Empty
-	7,  // 61: pasteferry.v1.DaemonService.GetNotificationStatus:input_type -> pasteferry.v1.Empty
-	7,  // 62: pasteferry.v1.DaemonService.RequestNotificationPermission:input_type -> pasteferry.v1.Empty
-	28, // 63: pasteferry.v1.DaemonService.ActivateNotification:input_type -> pasteferry.v1.NotificationAction
-	7,  // 64: pasteferry.v1.DaemonService.GetNetwork:input_type -> pasteferry.v1.Empty
-	67, // 65: pasteferry.v1.DaemonService.ExportDiagnostics:input_type -> pasteferry.v1.ExportDiagnosticsRequest
-	69, // 66: pasteferry.v1.DaemonService.SetVerboseLog:input_type -> pasteferry.v1.SetVerboseLogRequest
-	60, // 67: pasteferry.v1.DaemonService.CheckForUpdate:input_type -> pasteferry.v1.CheckForUpdateRequest
-	63, // 68: pasteferry.v1.DaemonService.DownloadUpdate:input_type -> pasteferry.v1.DownloadUpdateRequest
-	65, // 69: pasteferry.v1.DaemonService.InstallUpdate:input_type -> pasteferry.v1.InstallUpdateRequest
-	35, // 70: pasteferry.v1.DaemonService.SetFavorite:input_type -> pasteferry.v1.SetFavoriteRequest
-	37, // 71: pasteferry.v1.DaemonService.GetClipDetail:input_type -> pasteferry.v1.GetClipDetailRequest
-	36, // 72: pasteferry.v1.DaemonService.SetAlias:input_type -> pasteferry.v1.SetAliasRequest
-	39, // 73: pasteferry.v1.DaemonService.QuickPasteSession:input_type -> pasteferry.v1.QuickPasteStatus
-	7,  // 74: pasteferry.v1.DaemonService.GetQuickPasteStatus:input_type -> pasteferry.v1.Empty
-	40, // 75: pasteferry.v1.DaemonService.SendQuickPasteCommand:input_type -> pasteferry.v1.QuickPasteCommand
-	72, // 76: pasteferry.v1.DaemonService.SendFiles:input_type -> pasteferry.v1.SendFilesRequest
-	73, // 77: pasteferry.v1.DaemonService.CancelTransfer:input_type -> pasteferry.v1.TransferRef
-	73, // 78: pasteferry.v1.DaemonService.ResumeTransfer:input_type -> pasteferry.v1.TransferRef
-	76, // 79: pasteferry.v1.DaemonService.ListTransfers:input_type -> pasteferry.v1.ListTransfersRequest
-	78, // 80: pasteferry.v1.DaemonService.DeleteTransfers:input_type -> pasteferry.v1.DeleteTransfersRequest
-	7,  // 81: pasteferry.v1.DaemonService.MarkTransfersSeen:input_type -> pasteferry.v1.Empty
-	79, // 82: pasteferry.v1.DaemonService.CheckReceiveDir:input_type -> pasteferry.v1.CheckReceiveDirRequest
-	75, // 83: pasteferry.v1.DaemonService.AnswerIncoming:input_type -> pasteferry.v1.AnswerIncomingRequest
-	7,  // 84: pasteferry.v1.DaemonService.GetProfile:input_type -> pasteferry.v1.Empty
-	15, // 85: pasteferry.v1.DaemonService.SetDisplayName:input_type -> pasteferry.v1.SetDisplayNameRequest
-	16, // 86: pasteferry.v1.DaemonService.SetAvatar:input_type -> pasteferry.v1.SetAvatarRequest
-	7,  // 87: pasteferry.v1.DaemonService.ResetAvatar:input_type -> pasteferry.v1.Empty
-	17, // 88: pasteferry.v1.DaemonService.GetAvatar:input_type -> pasteferry.v1.GetAvatarRequest
-	7,  // 89: pasteferry.v1.DaemonService.CreateFriendCode:input_type -> pasteferry.v1.Empty
-	43, // 90: pasteferry.v1.DaemonService.RedeemFriendCode:input_type -> pasteferry.v1.RedeemPairingCodeRequest
-	45, // 91: pasteferry.v1.DaemonService.ConfirmFriend:input_type -> pasteferry.v1.ConfirmPairingRequest
-	7,  // 92: pasteferry.v1.DaemonService.ListFriends:input_type -> pasteferry.v1.Empty
-	19, // 93: pasteferry.v1.DaemonService.RemoveFriend:input_type -> pasteferry.v1.FriendRef
-	20, // 94: pasteferry.v1.DaemonService.SetFriendAutoAccept:input_type -> pasteferry.v1.SetFriendAutoAcceptRequest
-	19, // 95: pasteferry.v1.DaemonService.BlockDevice:input_type -> pasteferry.v1.FriendRef
-	7,  // 96: pasteferry.v1.DaemonService.PasteFiles:input_type -> pasteferry.v1.Empty
-	7,  // 97: pasteferry.v1.DaemonService.WatchStrangers:input_type -> pasteferry.v1.Empty
-	13, // 98: pasteferry.v1.DaemonService.Subscribe:output_type -> pasteferry.v1.Event
-	31, // 99: pasteferry.v1.DaemonService.ListHistory:output_type -> pasteferry.v1.ListHistoryResponse
-	7,  // 100: pasteferry.v1.DaemonService.DeleteHistory:output_type -> pasteferry.v1.Empty
-	7,  // 101: pasteferry.v1.DaemonService.Fetch:output_type -> pasteferry.v1.Empty
-	7,  // 102: pasteferry.v1.DaemonService.ApplyToClipboard:output_type -> pasteferry.v1.Empty
-	71, // 103: pasteferry.v1.DaemonService.GetImagePreview:output_type -> pasteferry.v1.GetImagePreviewResponse
-	41, // 104: pasteferry.v1.DaemonService.ListDevices:output_type -> pasteferry.v1.ListDevicesResponse
-	42, // 105: pasteferry.v1.DaemonService.CreatePairingCode:output_type -> pasteferry.v1.CreatePairingCodeResponse
-	44, // 106: pasteferry.v1.DaemonService.RedeemPairingCode:output_type -> pasteferry.v1.RedeemPairingCodeResponse
-	7,  // 107: pasteferry.v1.DaemonService.ConfirmPairing:output_type -> pasteferry.v1.Empty
-	7,  // 108: pasteferry.v1.DaemonService.Unpair:output_type -> pasteferry.v1.Empty
-	51, // 109: pasteferry.v1.DaemonService.Reconnect:output_type -> pasteferry.v1.ReconnectResponse
-	7,  // 110: pasteferry.v1.DaemonService.SetDeviceAddress:output_type -> pasteferry.v1.Empty
-	47, // 111: pasteferry.v1.DaemonService.WatchNearby:output_type -> pasteferry.v1.NearbyDevices
-	44, // 112: pasteferry.v1.DaemonService.PairNearby:output_type -> pasteferry.v1.RedeemPairingCodeResponse
-	53, // 113: pasteferry.v1.DaemonService.GetConfig:output_type -> pasteferry.v1.Config
-	53, // 114: pasteferry.v1.DaemonService.UpdateConfig:output_type -> pasteferry.v1.Config
-	59, // 115: pasteferry.v1.DaemonService.GetStatus:output_type -> pasteferry.v1.Status
-	7,  // 116: pasteferry.v1.DaemonService.RequestClipboardPermission:output_type -> pasteferry.v1.Empty
-	7,  // 117: pasteferry.v1.DaemonService.RequestLocalNetworkPermission:output_type -> pasteferry.v1.Empty
-	27, // 118: pasteferry.v1.DaemonService.GetNotificationStatus:output_type -> pasteferry.v1.NotificationStatus
-	27, // 119: pasteferry.v1.DaemonService.RequestNotificationPermission:output_type -> pasteferry.v1.NotificationStatus
-	7,  // 120: pasteferry.v1.DaemonService.ActivateNotification:output_type -> pasteferry.v1.Empty
-	55, // 121: pasteferry.v1.DaemonService.GetNetwork:output_type -> pasteferry.v1.NetworkInfo
-	68, // 122: pasteferry.v1.DaemonService.ExportDiagnostics:output_type -> pasteferry.v1.Diagnostics
-	59, // 123: pasteferry.v1.DaemonService.SetVerboseLog:output_type -> pasteferry.v1.Status
-	62, // 124: pasteferry.v1.DaemonService.CheckForUpdate:output_type -> pasteferry.v1.UpdateInfo
-	64, // 125: pasteferry.v1.DaemonService.DownloadUpdate:output_type -> pasteferry.v1.UpdateProgress
-	7,  // 126: pasteferry.v1.DaemonService.InstallUpdate:output_type -> pasteferry.v1.Empty
-	9,  // 127: pasteferry.v1.DaemonService.SetFavorite:output_type -> pasteferry.v1.ClipRecord
-	38, // 128: pasteferry.v1.DaemonService.GetClipDetail:output_type -> pasteferry.v1.ClipDetail
-	9,  // 129: pasteferry.v1.DaemonService.SetAlias:output_type -> pasteferry.v1.ClipRecord
-	40, // 130: pasteferry.v1.DaemonService.QuickPasteSession:output_type -> pasteferry.v1.QuickPasteCommand
-	39, // 131: pasteferry.v1.DaemonService.GetQuickPasteStatus:output_type -> pasteferry.v1.QuickPasteStatus
-	7,  // 132: pasteferry.v1.DaemonService.SendQuickPasteCommand:output_type -> pasteferry.v1.Empty
-	74, // 133: pasteferry.v1.DaemonService.SendFiles:output_type -> pasteferry.v1.Transfer
-	7,  // 134: pasteferry.v1.DaemonService.CancelTransfer:output_type -> pasteferry.v1.Empty
-	7,  // 135: pasteferry.v1.DaemonService.ResumeTransfer:output_type -> pasteferry.v1.Empty
-	77, // 136: pasteferry.v1.DaemonService.ListTransfers:output_type -> pasteferry.v1.ListTransfersResponse
-	7,  // 137: pasteferry.v1.DaemonService.DeleteTransfers:output_type -> pasteferry.v1.Empty
-	7,  // 138: pasteferry.v1.DaemonService.MarkTransfersSeen:output_type -> pasteferry.v1.Empty
-	80, // 139: pasteferry.v1.DaemonService.CheckReceiveDir:output_type -> pasteferry.v1.CheckReceiveDirResponse
-	7,  // 140: pasteferry.v1.DaemonService.AnswerIncoming:output_type -> pasteferry.v1.Empty
-	14, // 141: pasteferry.v1.DaemonService.GetProfile:output_type -> pasteferry.v1.Profile
-	14, // 142: pasteferry.v1.DaemonService.SetDisplayName:output_type -> pasteferry.v1.Profile
-	14, // 143: pasteferry.v1.DaemonService.SetAvatar:output_type -> pasteferry.v1.Profile
-	14, // 144: pasteferry.v1.DaemonService.ResetAvatar:output_type -> pasteferry.v1.Profile
-	18, // 145: pasteferry.v1.DaemonService.GetAvatar:output_type -> pasteferry.v1.Avatar
-	42, // 146: pasteferry.v1.DaemonService.CreateFriendCode:output_type -> pasteferry.v1.CreatePairingCodeResponse
-	23, // 147: pasteferry.v1.DaemonService.RedeemFriendCode:output_type -> pasteferry.v1.FriendRequest
-	7,  // 148: pasteferry.v1.DaemonService.ConfirmFriend:output_type -> pasteferry.v1.Empty
-	22, // 149: pasteferry.v1.DaemonService.ListFriends:output_type -> pasteferry.v1.ListFriendsResponse
-	7,  // 150: pasteferry.v1.DaemonService.RemoveFriend:output_type -> pasteferry.v1.Empty
-	21, // 151: pasteferry.v1.DaemonService.SetFriendAutoAccept:output_type -> pasteferry.v1.Friend
-	7,  // 152: pasteferry.v1.DaemonService.BlockDevice:output_type -> pasteferry.v1.Empty
-	26, // 153: pasteferry.v1.DaemonService.PasteFiles:output_type -> pasteferry.v1.PasteFilesResponse
-	25, // 154: pasteferry.v1.DaemonService.WatchStrangers:output_type -> pasteferry.v1.Strangers
-	98, // [98:155] is the sub-list for method output_type
-	41, // [41:98] is the sub-list for method input_type
-	41, // [41:41] is the sub-list for extension type_name
-	41, // [41:41] is the sub-list for extension extendee
-	0,  // [0:41] is the sub-list for field type_name
+	0,   // 0: pasteferry.v1.ClipRecord.kind:type_name -> pasteferry.v1.ClipKind
+	1,   // 1: pasteferry.v1.ClipRecord.status:type_name -> pasteferry.v1.ClipStatus
+	8,   // 2: pasteferry.v1.ClipRecord.items:type_name -> pasteferry.v1.ClipItem
+	2,   // 3: pasteferry.v1.Device.connection:type_name -> pasteferry.v1.ConnectionKind
+	9,   // 4: pasteferry.v1.Event.clip_added:type_name -> pasteferry.v1.ClipRecord
+	9,   // 5: pasteferry.v1.Event.clip_updated:type_name -> pasteferry.v1.ClipRecord
+	11,  // 6: pasteferry.v1.Event.progress:type_name -> pasteferry.v1.TransferProgress
+	12,  // 7: pasteferry.v1.Event.device_changed:type_name -> pasteferry.v1.Device
+	3,   // 8: pasteferry.v1.Event.permission_changed:type_name -> pasteferry.v1.ClipboardPermission
+	59,  // 9: pasteferry.v1.Event.status_changed:type_name -> pasteferry.v1.Status
+	29,  // 10: pasteferry.v1.Event.clipboard_written:type_name -> pasteferry.v1.ClipboardWriteResult
+	53,  // 11: pasteferry.v1.Event.config_changed:type_name -> pasteferry.v1.Config
+	39,  // 12: pasteferry.v1.Event.quick_paste_changed:type_name -> pasteferry.v1.QuickPasteStatus
+	74,  // 13: pasteferry.v1.Event.transfer_changed:type_name -> pasteferry.v1.Transfer
+	21,  // 14: pasteferry.v1.Event.friend_changed:type_name -> pasteferry.v1.Friend
+	23,  // 15: pasteferry.v1.Event.friend_request:type_name -> pasteferry.v1.FriendRequest
+	14,  // 16: pasteferry.v1.Event.profile_changed:type_name -> pasteferry.v1.Profile
+	82,  // 17: pasteferry.v1.Event.web_share_changed:type_name -> pasteferry.v1.WebShareStatus
+	2,   // 18: pasteferry.v1.Friend.connection:type_name -> pasteferry.v1.ConnectionKind
+	21,  // 19: pasteferry.v1.ListFriendsResponse.friends:type_name -> pasteferry.v1.Friend
+	24,  // 20: pasteferry.v1.Strangers.strangers:type_name -> pasteferry.v1.Stranger
+	4,   // 21: pasteferry.v1.ClipboardWriteResult.outcome:type_name -> pasteferry.v1.ClipboardWriteOutcome
+	0,   // 22: pasteferry.v1.ListHistoryRequest.kind_filter:type_name -> pasteferry.v1.ClipKind
+	9,   // 23: pasteferry.v1.ListHistoryResponse.records:type_name -> pasteferry.v1.ClipRecord
+	12,  // 24: pasteferry.v1.ListDevicesResponse.self:type_name -> pasteferry.v1.Device
+	12,  // 25: pasteferry.v1.ListDevicesResponse.peers:type_name -> pasteferry.v1.Device
+	12,  // 26: pasteferry.v1.RedeemPairingCodeResponse.peer:type_name -> pasteferry.v1.Device
+	46,  // 27: pasteferry.v1.NearbyDevices.devices:type_name -> pasteferry.v1.NearbyDevice
+	2,   // 28: pasteferry.v1.ReconnectResponse.kind:type_name -> pasteferry.v1.ConnectionKind
+	5,   // 29: pasteferry.v1.Config.service_mode:type_name -> pasteferry.v1.ServiceMode
+	58,  // 30: pasteferry.v1.NetworkInfo.egresses:type_name -> pasteferry.v1.NetworkEgress
+	56,  // 31: pasteferry.v1.NetworkInfo.lan:type_name -> pasteferry.v1.LanInfo
+	57,  // 32: pasteferry.v1.LanInfo.peers:type_name -> pasteferry.v1.LanPeer
+	3,   // 33: pasteferry.v1.Status.clipboard_permission:type_name -> pasteferry.v1.ClipboardPermission
+	54,  // 34: pasteferry.v1.Status.official_usage:type_name -> pasteferry.v1.OfficialUsage
+	66,  // 35: pasteferry.v1.Status.last_update:type_name -> pasteferry.v1.UpdateResult
+	61,  // 36: pasteferry.v1.UpdateInfo.releases:type_name -> pasteferry.v1.UpdateRelease
+	6,   // 37: pasteferry.v1.Transfer.direction:type_name -> pasteferry.v1.TransferDirection
+	8,   // 38: pasteferry.v1.Transfer.items:type_name -> pasteferry.v1.ClipItem
+	6,   // 39: pasteferry.v1.ListTransfersRequest.direction:type_name -> pasteferry.v1.TransferDirection
+	74,  // 40: pasteferry.v1.ListTransfersResponse.transfers:type_name -> pasteferry.v1.Transfer
+	6,   // 41: pasteferry.v1.DeleteTransfersRequest.direction:type_name -> pasteferry.v1.TransferDirection
+	83,  // 42: pasteferry.v1.WebShareStatus.sessions:type_name -> pasteferry.v1.WebSession
+	10,  // 43: pasteferry.v1.DaemonService.Subscribe:input_type -> pasteferry.v1.SubscribeRequest
+	30,  // 44: pasteferry.v1.DaemonService.ListHistory:input_type -> pasteferry.v1.ListHistoryRequest
+	32,  // 45: pasteferry.v1.DaemonService.DeleteHistory:input_type -> pasteferry.v1.DeleteHistoryRequest
+	33,  // 46: pasteferry.v1.DaemonService.Fetch:input_type -> pasteferry.v1.FetchRequest
+	34,  // 47: pasteferry.v1.DaemonService.ApplyToClipboard:input_type -> pasteferry.v1.ApplyToClipboardRequest
+	70,  // 48: pasteferry.v1.DaemonService.GetImagePreview:input_type -> pasteferry.v1.GetImagePreviewRequest
+	7,   // 49: pasteferry.v1.DaemonService.ListDevices:input_type -> pasteferry.v1.Empty
+	7,   // 50: pasteferry.v1.DaemonService.CreatePairingCode:input_type -> pasteferry.v1.Empty
+	43,  // 51: pasteferry.v1.DaemonService.RedeemPairingCode:input_type -> pasteferry.v1.RedeemPairingCodeRequest
+	45,  // 52: pasteferry.v1.DaemonService.ConfirmPairing:input_type -> pasteferry.v1.ConfirmPairingRequest
+	49,  // 53: pasteferry.v1.DaemonService.Unpair:input_type -> pasteferry.v1.UnpairRequest
+	50,  // 54: pasteferry.v1.DaemonService.Reconnect:input_type -> pasteferry.v1.ReconnectRequest
+	52,  // 55: pasteferry.v1.DaemonService.SetDeviceAddress:input_type -> pasteferry.v1.SetDeviceAddressRequest
+	7,   // 56: pasteferry.v1.DaemonService.WatchNearby:input_type -> pasteferry.v1.Empty
+	48,  // 57: pasteferry.v1.DaemonService.PairNearby:input_type -> pasteferry.v1.PairNearbyRequest
+	7,   // 58: pasteferry.v1.DaemonService.GetConfig:input_type -> pasteferry.v1.Empty
+	53,  // 59: pasteferry.v1.DaemonService.UpdateConfig:input_type -> pasteferry.v1.Config
+	7,   // 60: pasteferry.v1.DaemonService.GetStatus:input_type -> pasteferry.v1.Empty
+	7,   // 61: pasteferry.v1.DaemonService.RequestClipboardPermission:input_type -> pasteferry.v1.Empty
+	7,   // 62: pasteferry.v1.DaemonService.RequestLocalNetworkPermission:input_type -> pasteferry.v1.Empty
+	7,   // 63: pasteferry.v1.DaemonService.GetNotificationStatus:input_type -> pasteferry.v1.Empty
+	7,   // 64: pasteferry.v1.DaemonService.RequestNotificationPermission:input_type -> pasteferry.v1.Empty
+	28,  // 65: pasteferry.v1.DaemonService.ActivateNotification:input_type -> pasteferry.v1.NotificationAction
+	7,   // 66: pasteferry.v1.DaemonService.GetNetwork:input_type -> pasteferry.v1.Empty
+	67,  // 67: pasteferry.v1.DaemonService.ExportDiagnostics:input_type -> pasteferry.v1.ExportDiagnosticsRequest
+	69,  // 68: pasteferry.v1.DaemonService.SetVerboseLog:input_type -> pasteferry.v1.SetVerboseLogRequest
+	60,  // 69: pasteferry.v1.DaemonService.CheckForUpdate:input_type -> pasteferry.v1.CheckForUpdateRequest
+	63,  // 70: pasteferry.v1.DaemonService.DownloadUpdate:input_type -> pasteferry.v1.DownloadUpdateRequest
+	65,  // 71: pasteferry.v1.DaemonService.InstallUpdate:input_type -> pasteferry.v1.InstallUpdateRequest
+	35,  // 72: pasteferry.v1.DaemonService.SetFavorite:input_type -> pasteferry.v1.SetFavoriteRequest
+	37,  // 73: pasteferry.v1.DaemonService.GetClipDetail:input_type -> pasteferry.v1.GetClipDetailRequest
+	36,  // 74: pasteferry.v1.DaemonService.SetAlias:input_type -> pasteferry.v1.SetAliasRequest
+	39,  // 75: pasteferry.v1.DaemonService.QuickPasteSession:input_type -> pasteferry.v1.QuickPasteStatus
+	7,   // 76: pasteferry.v1.DaemonService.GetQuickPasteStatus:input_type -> pasteferry.v1.Empty
+	40,  // 77: pasteferry.v1.DaemonService.SendQuickPasteCommand:input_type -> pasteferry.v1.QuickPasteCommand
+	72,  // 78: pasteferry.v1.DaemonService.SendFiles:input_type -> pasteferry.v1.SendFilesRequest
+	73,  // 79: pasteferry.v1.DaemonService.CancelTransfer:input_type -> pasteferry.v1.TransferRef
+	73,  // 80: pasteferry.v1.DaemonService.ResumeTransfer:input_type -> pasteferry.v1.TransferRef
+	76,  // 81: pasteferry.v1.DaemonService.ListTransfers:input_type -> pasteferry.v1.ListTransfersRequest
+	78,  // 82: pasteferry.v1.DaemonService.DeleteTransfers:input_type -> pasteferry.v1.DeleteTransfersRequest
+	7,   // 83: pasteferry.v1.DaemonService.MarkTransfersSeen:input_type -> pasteferry.v1.Empty
+	79,  // 84: pasteferry.v1.DaemonService.CheckReceiveDir:input_type -> pasteferry.v1.CheckReceiveDirRequest
+	75,  // 85: pasteferry.v1.DaemonService.AnswerIncoming:input_type -> pasteferry.v1.AnswerIncomingRequest
+	7,   // 86: pasteferry.v1.DaemonService.GetProfile:input_type -> pasteferry.v1.Empty
+	15,  // 87: pasteferry.v1.DaemonService.SetDisplayName:input_type -> pasteferry.v1.SetDisplayNameRequest
+	16,  // 88: pasteferry.v1.DaemonService.SetAvatar:input_type -> pasteferry.v1.SetAvatarRequest
+	7,   // 89: pasteferry.v1.DaemonService.ResetAvatar:input_type -> pasteferry.v1.Empty
+	17,  // 90: pasteferry.v1.DaemonService.GetAvatar:input_type -> pasteferry.v1.GetAvatarRequest
+	7,   // 91: pasteferry.v1.DaemonService.CreateFriendCode:input_type -> pasteferry.v1.Empty
+	43,  // 92: pasteferry.v1.DaemonService.RedeemFriendCode:input_type -> pasteferry.v1.RedeemPairingCodeRequest
+	45,  // 93: pasteferry.v1.DaemonService.ConfirmFriend:input_type -> pasteferry.v1.ConfirmPairingRequest
+	7,   // 94: pasteferry.v1.DaemonService.ListFriends:input_type -> pasteferry.v1.Empty
+	19,  // 95: pasteferry.v1.DaemonService.RemoveFriend:input_type -> pasteferry.v1.FriendRef
+	20,  // 96: pasteferry.v1.DaemonService.SetFriendAutoAccept:input_type -> pasteferry.v1.SetFriendAutoAcceptRequest
+	19,  // 97: pasteferry.v1.DaemonService.BlockDevice:input_type -> pasteferry.v1.FriendRef
+	81,  // 98: pasteferry.v1.DaemonService.SubmitText:input_type -> pasteferry.v1.SubmitTextRequest
+	7,   // 99: pasteferry.v1.DaemonService.GetWebShare:input_type -> pasteferry.v1.Empty
+	84,  // 100: pasteferry.v1.DaemonService.SetWebShare:input_type -> pasteferry.v1.SetWebShareRequest
+	85,  // 101: pasteferry.v1.DaemonService.NewWebShareInvite:input_type -> pasteferry.v1.NewWebShareInviteRequest
+	87,  // 102: pasteferry.v1.DaemonService.CloseWebShareInvite:input_type -> pasteferry.v1.WebShareInviteRef
+	88,  // 103: pasteferry.v1.DaemonService.RemoveWebSession:input_type -> pasteferry.v1.WebSessionRef
+	7,   // 104: pasteferry.v1.DaemonService.PasteFiles:input_type -> pasteferry.v1.Empty
+	7,   // 105: pasteferry.v1.DaemonService.WatchStrangers:input_type -> pasteferry.v1.Empty
+	13,  // 106: pasteferry.v1.DaemonService.Subscribe:output_type -> pasteferry.v1.Event
+	31,  // 107: pasteferry.v1.DaemonService.ListHistory:output_type -> pasteferry.v1.ListHistoryResponse
+	7,   // 108: pasteferry.v1.DaemonService.DeleteHistory:output_type -> pasteferry.v1.Empty
+	7,   // 109: pasteferry.v1.DaemonService.Fetch:output_type -> pasteferry.v1.Empty
+	7,   // 110: pasteferry.v1.DaemonService.ApplyToClipboard:output_type -> pasteferry.v1.Empty
+	71,  // 111: pasteferry.v1.DaemonService.GetImagePreview:output_type -> pasteferry.v1.GetImagePreviewResponse
+	41,  // 112: pasteferry.v1.DaemonService.ListDevices:output_type -> pasteferry.v1.ListDevicesResponse
+	42,  // 113: pasteferry.v1.DaemonService.CreatePairingCode:output_type -> pasteferry.v1.CreatePairingCodeResponse
+	44,  // 114: pasteferry.v1.DaemonService.RedeemPairingCode:output_type -> pasteferry.v1.RedeemPairingCodeResponse
+	7,   // 115: pasteferry.v1.DaemonService.ConfirmPairing:output_type -> pasteferry.v1.Empty
+	7,   // 116: pasteferry.v1.DaemonService.Unpair:output_type -> pasteferry.v1.Empty
+	51,  // 117: pasteferry.v1.DaemonService.Reconnect:output_type -> pasteferry.v1.ReconnectResponse
+	7,   // 118: pasteferry.v1.DaemonService.SetDeviceAddress:output_type -> pasteferry.v1.Empty
+	47,  // 119: pasteferry.v1.DaemonService.WatchNearby:output_type -> pasteferry.v1.NearbyDevices
+	44,  // 120: pasteferry.v1.DaemonService.PairNearby:output_type -> pasteferry.v1.RedeemPairingCodeResponse
+	53,  // 121: pasteferry.v1.DaemonService.GetConfig:output_type -> pasteferry.v1.Config
+	53,  // 122: pasteferry.v1.DaemonService.UpdateConfig:output_type -> pasteferry.v1.Config
+	59,  // 123: pasteferry.v1.DaemonService.GetStatus:output_type -> pasteferry.v1.Status
+	7,   // 124: pasteferry.v1.DaemonService.RequestClipboardPermission:output_type -> pasteferry.v1.Empty
+	7,   // 125: pasteferry.v1.DaemonService.RequestLocalNetworkPermission:output_type -> pasteferry.v1.Empty
+	27,  // 126: pasteferry.v1.DaemonService.GetNotificationStatus:output_type -> pasteferry.v1.NotificationStatus
+	27,  // 127: pasteferry.v1.DaemonService.RequestNotificationPermission:output_type -> pasteferry.v1.NotificationStatus
+	7,   // 128: pasteferry.v1.DaemonService.ActivateNotification:output_type -> pasteferry.v1.Empty
+	55,  // 129: pasteferry.v1.DaemonService.GetNetwork:output_type -> pasteferry.v1.NetworkInfo
+	68,  // 130: pasteferry.v1.DaemonService.ExportDiagnostics:output_type -> pasteferry.v1.Diagnostics
+	59,  // 131: pasteferry.v1.DaemonService.SetVerboseLog:output_type -> pasteferry.v1.Status
+	62,  // 132: pasteferry.v1.DaemonService.CheckForUpdate:output_type -> pasteferry.v1.UpdateInfo
+	64,  // 133: pasteferry.v1.DaemonService.DownloadUpdate:output_type -> pasteferry.v1.UpdateProgress
+	7,   // 134: pasteferry.v1.DaemonService.InstallUpdate:output_type -> pasteferry.v1.Empty
+	9,   // 135: pasteferry.v1.DaemonService.SetFavorite:output_type -> pasteferry.v1.ClipRecord
+	38,  // 136: pasteferry.v1.DaemonService.GetClipDetail:output_type -> pasteferry.v1.ClipDetail
+	9,   // 137: pasteferry.v1.DaemonService.SetAlias:output_type -> pasteferry.v1.ClipRecord
+	40,  // 138: pasteferry.v1.DaemonService.QuickPasteSession:output_type -> pasteferry.v1.QuickPasteCommand
+	39,  // 139: pasteferry.v1.DaemonService.GetQuickPasteStatus:output_type -> pasteferry.v1.QuickPasteStatus
+	7,   // 140: pasteferry.v1.DaemonService.SendQuickPasteCommand:output_type -> pasteferry.v1.Empty
+	74,  // 141: pasteferry.v1.DaemonService.SendFiles:output_type -> pasteferry.v1.Transfer
+	7,   // 142: pasteferry.v1.DaemonService.CancelTransfer:output_type -> pasteferry.v1.Empty
+	7,   // 143: pasteferry.v1.DaemonService.ResumeTransfer:output_type -> pasteferry.v1.Empty
+	77,  // 144: pasteferry.v1.DaemonService.ListTransfers:output_type -> pasteferry.v1.ListTransfersResponse
+	7,   // 145: pasteferry.v1.DaemonService.DeleteTransfers:output_type -> pasteferry.v1.Empty
+	7,   // 146: pasteferry.v1.DaemonService.MarkTransfersSeen:output_type -> pasteferry.v1.Empty
+	80,  // 147: pasteferry.v1.DaemonService.CheckReceiveDir:output_type -> pasteferry.v1.CheckReceiveDirResponse
+	7,   // 148: pasteferry.v1.DaemonService.AnswerIncoming:output_type -> pasteferry.v1.Empty
+	14,  // 149: pasteferry.v1.DaemonService.GetProfile:output_type -> pasteferry.v1.Profile
+	14,  // 150: pasteferry.v1.DaemonService.SetDisplayName:output_type -> pasteferry.v1.Profile
+	14,  // 151: pasteferry.v1.DaemonService.SetAvatar:output_type -> pasteferry.v1.Profile
+	14,  // 152: pasteferry.v1.DaemonService.ResetAvatar:output_type -> pasteferry.v1.Profile
+	18,  // 153: pasteferry.v1.DaemonService.GetAvatar:output_type -> pasteferry.v1.Avatar
+	42,  // 154: pasteferry.v1.DaemonService.CreateFriendCode:output_type -> pasteferry.v1.CreatePairingCodeResponse
+	23,  // 155: pasteferry.v1.DaemonService.RedeemFriendCode:output_type -> pasteferry.v1.FriendRequest
+	7,   // 156: pasteferry.v1.DaemonService.ConfirmFriend:output_type -> pasteferry.v1.Empty
+	22,  // 157: pasteferry.v1.DaemonService.ListFriends:output_type -> pasteferry.v1.ListFriendsResponse
+	7,   // 158: pasteferry.v1.DaemonService.RemoveFriend:output_type -> pasteferry.v1.Empty
+	21,  // 159: pasteferry.v1.DaemonService.SetFriendAutoAccept:output_type -> pasteferry.v1.Friend
+	7,   // 160: pasteferry.v1.DaemonService.BlockDevice:output_type -> pasteferry.v1.Empty
+	9,   // 161: pasteferry.v1.DaemonService.SubmitText:output_type -> pasteferry.v1.ClipRecord
+	82,  // 162: pasteferry.v1.DaemonService.GetWebShare:output_type -> pasteferry.v1.WebShareStatus
+	82,  // 163: pasteferry.v1.DaemonService.SetWebShare:output_type -> pasteferry.v1.WebShareStatus
+	86,  // 164: pasteferry.v1.DaemonService.NewWebShareInvite:output_type -> pasteferry.v1.WebShareInvite
+	7,   // 165: pasteferry.v1.DaemonService.CloseWebShareInvite:output_type -> pasteferry.v1.Empty
+	82,  // 166: pasteferry.v1.DaemonService.RemoveWebSession:output_type -> pasteferry.v1.WebShareStatus
+	26,  // 167: pasteferry.v1.DaemonService.PasteFiles:output_type -> pasteferry.v1.PasteFilesResponse
+	25,  // 168: pasteferry.v1.DaemonService.WatchStrangers:output_type -> pasteferry.v1.Strangers
+	106, // [106:169] is the sub-list for method output_type
+	43,  // [43:106] is the sub-list for method input_type
+	43,  // [43:43] is the sub-list for extension type_name
+	43,  // [43:43] is the sub-list for extension extendee
+	0,   // [0:43] is the sub-list for field type_name
 }
 
 func init() { file_pasteferry_v1_daemon_proto_init() }
@@ -6798,6 +7371,7 @@ func file_pasteferry_v1_daemon_proto_init() {
 		(*Event_FriendRemoved)(nil),
 		(*Event_FriendRequest)(nil),
 		(*Event_ProfileChanged)(nil),
+		(*Event_WebShareChanged)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -6805,7 +7379,7 @@ func file_pasteferry_v1_daemon_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pasteferry_v1_daemon_proto_rawDesc), len(file_pasteferry_v1_daemon_proto_rawDesc)),
 			NumEnums:      7,
-			NumMessages:   74,
+			NumMessages:   82,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

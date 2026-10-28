@@ -66,6 +66,12 @@ type Config struct {
 
 	// QuickPasteDisabled 关掉快捷粘贴窗口。写成反向的，旧配置文件没有这一项时就是开启。
 	QuickPasteDisabled bool `json:"quick_paste_disabled,omitempty"`
+	// WebShareEnabled 打开手机网页传输：后台服务在局域网里提供网页，手机扫码后用浏览器互传。默认关
+	WebShareEnabled bool `json:"web_share_enabled,omitempty"`
+	// MediaAutoApplyDisabled：对端自动推送来的图片和文件收完后不写进剪贴板，只进复制记录，
+	// 用户点了「复制」才写。Android App 默认这样；桌面默认写入（写成反向的，旧配置不变）。
+	// 文字仍由 AutoApplyToClipboard 决定
+	MediaAutoApplyDisabled bool `json:"media_auto_apply_disabled,omitempty"`
 	// QuickPasteHotkey 是呼出快捷窗口的快捷键，写法见 NormalizeHotkey；
 	// 空字符串表示默认：Mac 上 ⌥V，其他平台 Alt+V
 	QuickPasteHotkey string `json:"quick_paste_hotkey,omitempty"`

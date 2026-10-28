@@ -16,6 +16,7 @@
 //	pasteferry-cli send [-relay] DEVICE PATH...  隔空传送：把文件或文件夹发给一台设备
 //	pasteferry-cli transfers [-v]      最近收到和发出的文件（-v 带上 ID）
 //	pasteferry-cli cancel ID           取消一批传输
+//	pasteferry-cli web [on|off|invite [ADDR]|remove ID]  手机网页传输
 package main
 
 import (
@@ -46,7 +47,7 @@ func main() {
 	cmd := flag.Arg(0)
 	if cmd == "" {
 		fmt.Fprintln(os.Stderr,
-			"用法: pasteferry-cli [-data-dir DIR] <status|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]>")
+			"用法: pasteferry-cli [-data-dir DIR] <status|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]|web [on|off|invite [ADDR]|remove ID]>")
 		os.Exit(2)
 	}
 
@@ -124,6 +125,8 @@ func run(cmd, dataDir string) error {
 		return showStrangers(ctx, client)
 	case "receive-from":
 		return setReceiveFrom(ctx, client, flag.Arg(1))
+	case "web":
+		return webShare(ctx, client, flag.Args()[1:])
 	default:
 		return fmt.Errorf("未知命令 %q", cmd)
 	}

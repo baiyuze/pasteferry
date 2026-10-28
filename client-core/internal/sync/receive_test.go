@@ -297,3 +297,43 @@ func TestUnpackFailurePublishesTerminalStateAndRetryUsesFreshCache(t *testing.T)
 		t.Fatalf("cache: %v %v", entries, err)
 	}
 }
+
+// 对端自动推送来的图片和文件：桌面默认收完就写进剪贴板；Android 打开 MediaAutoApplyDisabled，
+// 只进复制记录，用户点了「复制」才写（design/phone-sync.md 3.3.2 节第 6 条）
+func TestPushedMediaAutoApply(t *testing.T) {
+	for _, disabled := range []bool{false, true} {
+		t.Run(map[bool]string{false: "desktop", true: "android"}[disabled], func(t *testing.T) {
+			cb := &receiveClipboard{revision: 10}
+			cfg := config.Default()
+			cfg.MediaAutoApplyDisabled = disabled
+			e, _ := receiveFixture(t, cb, cfg, 0)
+			e.handleOffer(context.Background(), "peer", &pb.ClipOffer{ClipId: "pushed", Kind: pb.ClipKind_CLIP_KIND_FILE,
+				TotalSize: 10, WillPush: true, CreatedAtUnix: time.Now().Unix(), Items: []*pb.ClipItem{{Name: "photo.jpg"}}})
+			rel, dir, err := e.cache.Dir("pushed")
+			if err != nil {
+				t.Fatal(err)
+			}
+			path := filepath.Join(dir, "photo.jpg")
+			if err := os.WriteFile(path, []byte("jpeg-bytes"), 0600); err != nil {
+				t.Fatal(err)
+			}
+			if !e.finishReceive(&receiver{clipID: "pushed", total: 10}, rel, []string{path}) {
+				t.Fatal("receive rejected")
+			}
+			cb.mu.Lock()
+			writes := cb.writes
+			cb.mu.Unlock()
+			if want := map[bool]int{false: 1, true: 0}[disabled]; writes != want {
+				t.Fatalf("推送完成后写了 %d 次剪贴板，应为 %d", writes, want)
+			}
+			if err := e.ApplyToClipboard(context.Background(), "pushed"); err != nil {
+				t.Fatal(err)
+			}
+			cb.mu.Lock()
+			defer cb.mu.Unlock()
+			if cb.writes != writes+1 {
+				t.Error("点了「复制」还是没写进剪贴板")
+			}
+		})
+	}
+}

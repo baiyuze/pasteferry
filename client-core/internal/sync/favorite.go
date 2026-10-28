@@ -376,5 +376,8 @@ func (e *Engine) ClipDetail(id string) (*pb.ClipDetail, error) {
 	if clip.Kind == store.KindFile && clip.Outgoing {
 		d.SourcePaths = clip.SourcePaths
 	}
+	if (clip.Kind == store.KindFile || clip.Kind == store.KindImage) && clip.Status == store.StatusReady {
+		d.LocalPaths, _ = e.localPaths(clip)
+	}
 	return d, nil
 }

@@ -126,6 +126,20 @@ service DaemonService {
   rpc SetFriendAutoAccept(SetFriendAutoAcceptRequest) returns (Friend);
   // 「所有人」模式下拒绝过的陌生设备，以后它的请求直接拒绝
   rpc BlockDevice(FriendRef) returns (Empty);
+
+  // 发送页里输入的文字：当成本机复制，落库并发给其他设备，不写本机剪贴板（Android App，design/phone-sync.md 3.3.2 节）
+  rpc SubmitText(SubmitTextRequest) returns (ClipRecord);
+
+  // 手机网页传输（design/phone-sync.md 第 2 节）：手机扫码后用浏览器和本机互传
+  rpc GetWebShare(Empty) returns (WebShareStatus);
+  // 打开或关闭总开关。关闭时停止监听端口，已登记的手机保留
+  rpc SetWebShare(SetWebShareRequest) returns (WebShareStatus);
+  // 二维码窗口打开、或上一个二维码被用掉 / 过期时调用：生成一个待用的会话，返回二维码里的网址
+  rpc NewWebShareInvite(NewWebShareInviteRequest) returns (WebShareInvite);
+  // 二维码窗口关闭：作废还没被用过的二维码
+  rpc CloseWebShareInvite(WebShareInviteRef) returns (Empty);
+  // 移除一台登记过的手机，它的网页立即失效
+  rpc RemoveWebSession(WebSessionRef) returns (WebShareStatus);
   // 发送窗口、头像里的「粘贴」：剪贴板里是文件时返回它们的路径；是图片时存成 PNG，返回这个文件的路径
   rpc PasteFiles(Empty) returns (PasteFilesResponse);
   // 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
@@ -190,6 +204,9 @@ message ClipRecord {
   bool is_link = 17;
   // 用户给收藏起的别名，空表示没有。只有收藏有
   string alias = 18;
+  // 经由哪台没配对的设备送进本机：手机网页传输里登记的手机名。只有 outgoing 的记录会有，
+  // 界面上显示「来自 via_name」而不是「本机」
+  string via_name = 19;
 }
 
 // ─────────────────────────── 事件流 ───────────────────────────
@@ -275,6 +292,8 @@ message Event {
     // 有人兑换了本机的好友码，界面弹出确认框
     FriendRequest friend_request = 16;
     Profile profile_changed = 17;
+    // 手机网页传输的开关、监听状态或登记的手机变了；invite_used 是刚被扫码用掉的二维码
+    WebShareStatus web_share_changed = 18;
   }
 }
 
@@ -468,6 +487,9 @@ message ClipDetail {
   int32 text_length = 2;
   // 本机复制的文件在本机的完整路径
   repeated string source_paths = 3;
+  // 图片和文件已在本机时，内容在本机的路径（缓存或收藏目录里，或者本机复制的原文件）。
+  // Android 的「保存」「分享」用它；还没下载或已过期时为空
+  repeated string local_paths = 4;
 }
 
 // ─────────────────────────── 快捷粘贴窗口 ───────────────────────────
@@ -893,4 +915,58 @@ message CheckReceiveDirResponse {
   int64 free_bytes = 3;
   // 实际检查的位置：path 为空时是当前设置的位置，没设置时是系统的「下载」文件夹
   string path = 4;
+}
+
+message SubmitTextRequest {
+  string text = 1;
+}
+
+// ─────────────────────────── 手机网页传输 ───────────────────────────
+
+message WebShareStatus {
+  bool enabled = 1;
+  // 开关打开且端口已在监听
+  bool listening = 2;
+  int32 port = 3;
+  // 固定端口被占用，改用了随机端口：以前收藏的网址打不开，要重新扫码
+  bool port_fallback = 4;
+  // 监听失败的原因（开关开着但没在监听时）
+  string error = 5;
+  // 本机的局域网地址（不带端口），默认路由所在的网卡排第一
+  repeated string addresses = 6;
+  repeated WebSession sessions = 7;
+  // 刚被扫码用掉的二维码（只在 web_share_changed 事件里有），二维码窗口据此换一张新的
+  string invite_used = 8;
+}
+
+message WebSession {
+  string id = 1;
+  string name = 2;                  // 手机第一次打开网页时起的名字
+  int64 created_at_unix = 3;
+  int64 last_seen_unix = 4;
+}
+
+message SetWebShareRequest {
+  bool enabled = 1;
+}
+
+message NewWebShareInviteRequest {
+  string address = 1;               // 二维码里用哪个地址；空表示默认（WebShareStatus.addresses 的第一个）
+}
+
+message WebShareInvite {
+  string id = 1;
+  string url = 2;                   // 二维码内容：http://地址:端口/#i=邀请&k=密钥
+  int64 expires_at_unix = 3;
+  // 二维码点阵，界面按它画方块：边长（模块数）与按行排列的模块，每个字节一个，1 为深色
+  int32 qr_size = 4;
+  bytes qr_modules = 5;
+}
+
+message WebShareInviteRef {
+  string id = 1;
+}
+
+message WebSessionRef {
+  string id = 1;
 }

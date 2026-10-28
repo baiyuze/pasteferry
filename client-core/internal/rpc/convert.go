@@ -40,6 +40,7 @@ func clipToProto(c store.Clip) *pb.ClipRecord {
 		Favorite:         c.Favorite,
 		Favorited:        c.Favorited,
 		IsLink:           c.IsLink,
+		ViaName:          c.Via,
 	}
 	if c.Favorite {
 		r.ExpiresAtUnix = 0 // 收藏不会过期

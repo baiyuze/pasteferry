@@ -144,3 +144,10 @@ var (
 	FingerprintFor = deviceid.Fingerprint
 	DeviceIDFor    = deviceid.For
 )
+
+// ProtectSecret 加密一段要落盘的密钥材料（Windows 上用 DPAPI，其他平台原样返回、靠文件权限保护），
+// 与身份私钥的保护方式相同。网页传输的会话密钥用它。
+func ProtectSecret(plain []byte) ([]byte, error) { return protectKey(plain) }
+
+// UnprotectSecret 解开 ProtectSecret 的结果。
+func UnprotectSecret(sealed []byte) ([]byte, error) { return unprotectKey(sealed) }

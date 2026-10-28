@@ -56,6 +56,7 @@ const (
 	trayWMTimer         = 0x0113
 	trayOpenCommand     = 1
 	trayQuitCommand     = 2
+	trayWebShareCommand = 3
 )
 
 type trayNotifyData struct {
@@ -226,6 +227,10 @@ func (t *windowsTray) showMenu() {
 	open, _ := windows.UTF16PtrFromString(openLabel)
 	exit, _ := windows.UTF16PtrFromString(quitLabel)
 	trayAppendMenu.Call(menu, 0, trayOpenCommand, uintptr(unsafe.Pointer(open)))
+	if trayWebShare() {
+		scan, _ := windows.UTF16PtrFromString(trayWebShareLabel(trayLanguage()))
+		trayAppendMenu.Call(menu, 0, trayWebShareCommand, uintptr(unsafe.Pointer(scan)))
+	}
 	trayAppendMenu.Call(menu, 0x800, 0, 0) // MF_SEPARATOR
 	trayAppendMenu.Call(menu, 0, trayQuitCommand, uintptr(unsafe.Pointer(exit)))
 	var point struct{ X, Y int32 }
@@ -236,6 +241,10 @@ func (t *windowsTray) showMenu() {
 	trayPostMessage.Call(t.data.Window, 0, 0, 0) // WM_NULL：点击菜单外部后正确收起
 	switch command {
 	case trayOpenCommand:
+		t.openUI()
+	case trayWebShareCommand:
+		// 界面刚被拉起时还没订阅事件，后台服务会在它订阅时补发 15 秒内的切页请求
+		trayNavigate("webshare")
 		t.openUI()
 	case trayQuitCommand:
 		class, _ := windows.UTF16PtrFromString("FLUTTER_RUNNER_WIN32_WINDOW")

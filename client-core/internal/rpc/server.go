@@ -100,6 +100,10 @@ type Deps struct {
 	Transfers Transfers
 	// Friends 是好友（2.6.0）；为 nil 时相应的方法返回 Unimplemented
 	Friends Friends
+	// WebShare 是手机网页传输；为 nil 时相应的方法返回 Unimplemented
+	WebShare WebShare
+	// SubmitText 把发送页里输入的文字当成本机复制，见 sync.Engine.SubmitLocal；为 nil 时返回 Unimplemented
+	SubmitText func(ctx context.Context, text string) (store.Clip, error)
 }
 
 func (s *Server) GetNotificationStatus(ctx context.Context, _ *pb.Empty) (*pb.NotificationStatus, error) {

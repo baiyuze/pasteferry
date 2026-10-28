@@ -367,3 +367,40 @@ func TestClipDetail(t *testing.T) {
 		t.Fatalf("length=%d text=%d", d.GetTextLength(), len([]rune(d.GetText())))
 	}
 }
+
+// Android 的「保存」「分享」从 ClipDetail 拿本机路径：没下载时为空，下载后指向缓存里的文件。
+func TestClipDetailLocalPaths(t *testing.T) {
+	env := newFavoriteEngine(t)
+	src := store.Clip{
+		ID: "file", Kind: store.KindFile, Status: store.StatusRemoteOnly, OriginDeviceID: "office",
+		Items: []store.Item{{Name: "报告.pdf", Size: 3}}, TotalSize: 3,
+		CreatedAt: time.Now(), ExpiresAt: time.Now().Add(time.Hour),
+	}
+	if err := env.e.store.PutClip(src); err != nil {
+		t.Fatal(err)
+	}
+	if d, err := env.e.ClipDetail("file"); err != nil || len(d.GetLocalPaths()) != 0 {
+		t.Fatalf("没下载时 = %v, %v", d.GetLocalPaths(), err)
+	}
+
+	rel, abs, err := env.e.cache.Dir("file-dl")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(abs, "报告.pdf"), []byte("pdf"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := env.e.store.SetClipCache("file", rel, 3); err != nil {
+		t.Fatal(err)
+	}
+	if err := env.e.store.SetClipStatus("file", store.StatusReady, ""); err != nil {
+		t.Fatal(err)
+	}
+	d, err := env.e.ClipDetail("file")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(d.GetLocalPaths()) != 1 || filepath.Base(d.GetLocalPaths()[0]) != "报告.pdf" {
+		t.Fatalf("下载后 = %v", d.GetLocalPaths())
+	}
+}

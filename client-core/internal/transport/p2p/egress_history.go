@@ -11,6 +11,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/wlynxg/anet"
 )
 
 // egressHistory 记住每个网络里见过的出口 IP，补上某一轮探测漏掉的线路。
@@ -126,7 +128,8 @@ func (h *egressHistory) saveLocked() {
 // localNetworkKey 用本机各网卡的 IPv4 地址标识「当前所在的网络」。
 // 换了 Wi-Fi、插拔网线，地址随之变化，历史与探测结果也就跟着换一套。
 func localNetworkKey() string {
-	ifaces, err := net.Interfaces()
+	// Android 11 起标准库读不到网卡列表，anet 在那里改用 netlink，其他平台就是 net.Interfaces
+	ifaces, err := anet.Interfaces()
 	if err != nil {
 		return ""
 	}
@@ -135,7 +138,7 @@ func localNetworkKey() string {
 		if ifc.Flags&net.FlagUp == 0 || ifc.Flags&net.FlagLoopback != 0 || unstableAdapter(ifc.Name) {
 			continue
 		}
-		list, err := ifc.Addrs()
+		list, err := anet.InterfaceAddrsByInterface(&ifc)
 		if err != nil {
 			continue
 		}

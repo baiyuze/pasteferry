@@ -199,6 +199,11 @@ func (e *Engine) HandleClipboardChange(ctx context.Context, snap clipboard.Snaps
 var errRemotePlaceholder = errors.New("剪贴板仅包含远程软件占位文件")
 
 func (e *Engine) recordOutgoing(c clipboard.Content, cfg config.Config) (store.Clip, error) {
+	return e.recordOutgoingVia(c, cfg, "")
+}
+
+// recordOutgoingVia 与 recordOutgoing 相同，via 是内容经由的设备名（见 store.Clip.Via）。
+func (e *Engine) recordOutgoingVia(c clipboard.Content, cfg config.Config, via string) (store.Clip, error) {
 	if c.Kind == clipboard.KindFile && len(c.Files) > 0 {
 		c.Files = clipfilter.UserFiles(c.Files)
 		if len(c.Files) == 0 {
@@ -212,6 +217,7 @@ func (e *Engine) recordOutgoing(c clipboard.Content, cfg config.Config) (store.C
 		OriginDeviceID:   e.deviceID,
 		OriginDeviceName: e.deviceName(),
 		Outgoing:         true,
+		Via:              via,
 		CreatedAt:        now,
 		ExpiresAt:        now.Add(cfg.HistoryTTL.Std()),
 	}
@@ -732,7 +738,7 @@ func (e *Engine) finishReceive(r *receiver, cacheRel string, tops []string) bool
 	e.emitRecord(clip)
 	e.completePendingFavorites(clip)
 	result := &pb.ClipboardWriteResult{ClipId: clip.ID, Outcome: pb.ClipboardWriteOutcome_CLIPBOARD_WRITE_OUTCOME_PRESERVED}
-	if cfg := e.loadConfig(); cfg.AutoApplyToClipboard && !quiet && (a.manual || cfg.SyncAllowed(clip.OriginDeviceID)) {
+	if cfg := e.loadConfig(); cfg.AutoApplyToClipboard && !quiet && (a.manual || cfg.SyncAllowed(clip.OriginDeviceID) && !cfg.MediaAutoApplyDisabled) {
 		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 		defer cancel()
 		if a.manual {
@@ -940,6 +946,7 @@ func recordProto(clip store.Clip) *pb.ClipRecord {
 		Favorite:         clip.Favorite,
 		Favorited:        clip.Favorited,
 		IsLink:           clip.IsLink,
+		ViaName:          clip.Via,
 	}
 	if clip.Favorite {
 		r.ExpiresAtUnix = 0 // 收藏不会过期

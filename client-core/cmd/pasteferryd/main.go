@@ -36,6 +36,7 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/lan"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/p2p"
 	"github.com/baiyuze/pasteferry/client-core/internal/update"
+	"github.com/baiyuze/pasteferry/client-core/internal/webshare"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
@@ -458,9 +459,28 @@ func run(dataDir string) error {
 	})
 	defer sender.Close()
 
+	// ── 手机网页传输 ──
+	web := webshare.New(webshare.Options{
+		Store:      db,
+		Engine:     engine,
+		LoadConfig: loadCfg,
+		DeviceName: func() string { return loadCfg().DeviceName },
+		Subscribe:  hub.Subscribe,
+		Thumbnail:  prof.Thumbnail,
+		LocalAddrs: lan.LocalAddrs,
+		Protect:    identity.ProtectSecret,
+		Unprotect:  identity.UnprotectSecret,
+		OnChanged: func(st *pb.WebShareStatus) {
+			hub.Publish(rpc.EventWebShareChanged(st))
+		},
+		WorkDir: filepath.Join(paths.Root, "webshare"),
+	})
+	defer web.Close()
+
 	go peerMgr.Run(ctx)
 	sender.Start()
 	go watcher.Run(ctx)
+	web.SetEnabled(cfg.WebShareEnabled)
 
 	// ── 过期回收 ──
 	collector := gc.New(gc.Options{
@@ -494,6 +514,9 @@ func run(dataDir string) error {
 		}
 		if c.LANDisabled != prev.LANDisabled {
 			peerMgr.SetLANEnabled(!c.LANDisabled)
+		}
+		if c.WebShareEnabled != prev.WebShareEnabled {
+			web.SetEnabled(c.WebShareEnabled)
 		}
 		// 关掉或打开接收文件、改了谁可以给我发文件后，让对方的雷达立即更新
 		if c.ReceiveFrom != prev.ReceiveFrom || c.EveryoneUntil != prev.EveryoneUntil {
@@ -621,6 +644,7 @@ func run(dataDir string) error {
 		RequestNotifications: notifier.Request,
 		ActivateNotification: notifier.Activate,
 		Transfers:            transfersAPI{Engine: sender, peers: peerMgr},
+		WebShare:             web,
 		Friends: &friendsAPI{peers: peerMgr, profile: prof, db: db, deviceID: id.DeviceID, changed: func() {
 			peerMgr.BroadcastCard()
 			peerMgr.ApplyEveryone()
@@ -685,6 +709,8 @@ func run(dataDir string) error {
 	// 托盘属于后台服务：关掉界面后仍能打开它。独立数据目录用于测试，
 	// 不创建托盘，避免与用户正在运行的实例混在一起。
 	trayLanguage = func() string { return loadCfg().Language }
+	trayWebShare = func() bool { return web.Status().GetListening() }
+	trayNavigate = hub.Navigate
 	stopTray := startTray(ctx, cancel, dataDir == "")
 	defer stopTray()
 
