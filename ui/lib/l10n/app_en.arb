@@ -1678,6 +1678,11 @@
   "mSentRecords": "Sent",
   "mViewAll": "View all",
   "mClearCache": "Clear",
+  "mCheckUpdate": "Check for updates",
+  "mUpdateFailed": "Could not check for updates",
+  "mUpToDate": "You are up to date",
+  "mNewVersion": "Version {v} is available",
+  "mDownloadInstall": "Download the new version",
   "mSendFailed": "Couldn’t send: {detail}",
   "@mSendFailed": {
     "placeholders": {

@@ -2488,6 +2488,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mClearCache => 'Clear';
 
   @override
+  String get mCheckUpdate => 'Check for updates';
+
+  @override
+  String get mUpdateFailed => 'Could not check for updates';
+
+  @override
+  String get mUpToDate => 'You are up to date';
+
+  @override
+  String mNewVersion(Object v) {
+    return 'Version $v is available';
+  }
+
+  @override
+  String get mDownloadInstall => 'Download the new version';
+
+  @override
   String mSendFailed(String detail) {
     return 'Couldn’t send: $detail';
   }

@@ -83,6 +83,19 @@ class MainActivity : FlutterActivity() {
                 result.success(null)
             }
             "onLan" -> result.success(onLan())
+            "openUrl" -> {
+                val url = call.argument<String>("url") ?: ""
+                if (url.isEmpty()) {
+                    result.success(false)
+                } else {
+                    try {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.success(false)
+                    }
+                }
+            }
             else -> result.notImplemented()
         }
     }

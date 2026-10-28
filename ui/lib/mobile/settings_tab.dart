@@ -8,6 +8,7 @@ import '../main.dart' show AppScope;
 import '../theme.dart';
 import '../widgets/common.dart';
 import 'host.dart';
+import 'update_check.dart';
 import 'ui.dart';
 
 /// 设置页：本机名称、收到文字后写不写剪贴板、后台保持连接与相关的系统权限、版本。
@@ -181,12 +182,84 @@ class _SettingsTabState extends State<SettingsTab> with WidgetsBindingObserver {
                 const SizedBox(height: Insets.sm),
                 Text(l.appName, style: context.text.titleSmall),
                 Text(l.mVersion(state.status?.version ?? ''), style: context.text.bodySmall),
+                const SizedBox(height: Insets.md),
+                _UpdateTile(current: state.status?.version ?? ''),
                 Text(l.aboutDesc, style: context.text.bodySmall),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+/// 检查更新：版本号从更新清单里读（地址固定），有新版就在浏览器里下 APK。
+class _UpdateTile extends StatefulWidget {
+  const _UpdateTile({required this.current});
+
+  final String current;
+
+  @override
+  State<_UpdateTile> createState() => _UpdateTileState();
+}
+
+class _UpdateTileState extends State<_UpdateTile> {
+  bool _busy = false;
+  String? _latest;
+  String? _error;
+
+  Future<void> _check() async {
+    final l = context.l10n;
+    setState(() {
+      _busy = true;
+      _error = null;
+      _latest = null;
+    });
+    final v = await UpdateCheck.latest();
+    if (!mounted) return;
+    setState(() {
+      _busy = false;
+      if (v == null) {
+        _error = l.mUpdateFailed;
+      } else if (UpdateCheck.isNewer(v, widget.current)) {
+        _latest = v;
+      } else {
+        _latest = '';
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final p = context.palette;
+    return Column(
+      children: [
+        OutlinedButton(
+          onPressed: _busy ? null : _check,
+          child: _busy
+              ? const SizedBox.square(dimension: 16, child: CircularProgressIndicator(strokeWidth: 2))
+              : Text(l.mCheckUpdate),
+        ),
+        if (_error != null) ...[
+          const SizedBox(height: Insets.xs),
+          Text(_error!, style: TextStyle(fontSize: 12, color: p.danger)),
+        ],
+        if (_latest != null && _latest!.isEmpty) ...[
+          const SizedBox(height: Insets.xs),
+          Text(l.mUpToDate, style: TextStyle(fontSize: 12, color: p.textDim)),
+        ],
+        if (_latest != null && _latest!.isNotEmpty) ...[
+          const SizedBox(height: Insets.xs),
+          Text(l.mNewVersion(_latest!), style: TextStyle(fontSize: 12, color: p.accent)),
+          const SizedBox(height: Insets.xs),
+          FilledButton(
+            onPressed: () => Host.openUrl(UpdateCheck.apkUrl),
+            child: Text(l.mDownloadInstall),
+          ),
+        ],
+      ],
     );
   }
 }

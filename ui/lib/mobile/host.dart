@@ -35,6 +35,10 @@ abstract final class Host {
 
   static Future<void> requestBatteryUnrestricted() => _channel.invokeMethod('requestBatteryUnrestricted');
 
+  /// 用系统浏览器打开链接（检查更新时下载 APK）
+  static Future<bool> openUrl(String url) async =>
+      await _channel.invokeMethod<bool>('openUrl', {'url': url}) ?? false;
+
   /// 当前网络是 Wi-Fi 或有线网
   static Future<bool> onLan() async => await _channel.invokeMethod<bool>('onLan') ?? true;
 }

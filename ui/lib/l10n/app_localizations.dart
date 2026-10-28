@@ -4064,6 +4064,36 @@ abstract class AppLocalizations {
   /// **'Clear'**
   String get mClearCache;
 
+  /// No description provided for @mCheckUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get mCheckUpdate;
+
+  /// No description provided for @mUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not check for updates'**
+  String get mUpdateFailed;
+
+  /// No description provided for @mUpToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'You are up to date'**
+  String get mUpToDate;
+
+  /// No description provided for @mNewVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {v} is available'**
+  String mNewVersion(Object v);
+
+  /// No description provided for @mDownloadInstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Download the new version'**
+  String get mDownloadInstall;
+
   /// No description provided for @mSendFailed.
   ///
   /// In en, this message translates to:

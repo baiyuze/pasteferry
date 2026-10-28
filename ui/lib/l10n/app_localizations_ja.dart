@@ -2309,6 +2309,23 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mClearCache => 'キャッシュを消去';
 
   @override
+  String get mCheckUpdate => 'アップデートを確認';
+
+  @override
+  String get mUpdateFailed => '確認できませんでした';
+
+  @override
+  String get mUpToDate => '最新版です';
+
+  @override
+  String mNewVersion(Object v) {
+    return '新しいバージョン $v があります';
+  }
+
+  @override
+  String get mDownloadInstall => '新しいバージョンをダウンロード';
+
+  @override
   String mSendFailed(String detail) {
     return '送信できませんでした：$detail';
   }

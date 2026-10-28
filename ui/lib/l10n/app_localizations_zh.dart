@@ -2283,6 +2283,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mClearCache => '清除缓存';
 
   @override
+  String get mCheckUpdate => '检查更新';
+
+  @override
+  String get mUpdateFailed => '检查更新失败，请稍后再试';
+
+  @override
+  String get mUpToDate => '已是最新版本';
+
+  @override
+  String mNewVersion(Object v) {
+    return '有新版本 $v';
+  }
+
+  @override
+  String get mDownloadInstall => '下载新版本';
+
+  @override
   String mSendFailed(String detail) {
     return '发送失败：$detail';
   }
@@ -4661,6 +4678,23 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get mClearCache => '清除快取';
 
   @override
+  String get mCheckUpdate => '檢查更新';
+
+  @override
+  String get mUpdateFailed => '檢查更新失敗，請稍後再試';
+
+  @override
+  String get mUpToDate => '已是最新版本';
+
+  @override
+  String mNewVersion(Object v) {
+    return '有新版本 $v';
+  }
+
+  @override
+  String get mDownloadInstall => '下載新版本';
+
+  @override
   String mSendFailed(String detail) {
     return '傳送失敗：$detail';
   }
@@ -7037,6 +7071,23 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get mClearCache => '清除快取';
+
+  @override
+  String get mCheckUpdate => '檢查更新';
+
+  @override
+  String get mUpdateFailed => '檢查更新失敗，請稍後再試';
+
+  @override
+  String get mUpToDate => '已是最新版本';
+
+  @override
+  String mNewVersion(Object v) {
+    return '有新版本 $v';
+  }
+
+  @override
+  String get mDownloadInstall => '下載新版本';
 
   @override
   String mSendFailed(String detail) {
