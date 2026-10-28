@@ -16,6 +16,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -457,7 +458,10 @@ func TestUploadInChunks(t *testing.T) {
 	if err != nil || !bytes.Equal(got, data) {
 		t.Fatalf("收到的文件不对：%d 字节，%v", len(got), err)
 	}
-	if info, err := os.Stat(filepath.Join(f.receive, "IMG_0001.jpg")); err != nil || info.Mode().Perm() != 0o644 {
+	// Windows 上没有 Unix 权限位，os.Stat 给的是一律可读写
+	if info, err := os.Stat(filepath.Join(f.receive, "IMG_0001.jpg")); err != nil {
+		t.Fatalf("取不到收到的文件：%v", err)
+	} else if info.Mode().Perm() != 0o644 && runtime.GOOS != "windows" {
 		t.Errorf("收到的文件权限 = %v，应为 0644", info.Mode().Perm())
 	}
 	if rec.Kind != "file" || !rec.Mine || len(rec.Items) != 1 || rec.Items[0].Name != "IMG_0001.jpg" {
