@@ -26,3 +26,7 @@ ui/android/key.properties
 *.keystore
 ui/android/build/
 ui/build/
+
+# 宣传物料（视频成片、分镜、发布文案）与产品代码无关，不进仓库；
+# 成片留在 tools/promo/out/ 本地
+tools/promo/
