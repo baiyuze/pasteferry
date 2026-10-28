@@ -3986,6 +3986,18 @@ abstract class AppLocalizations {
   /// **'Paste'**
   String get mPaste;
 
+  /// No description provided for @mPhotosFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos or files'**
+  String get mPhotosFiles;
+
+  /// No description provided for @mFilesSent.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 file sent to your computer} other{{n} files sent to your computer}}'**
+  String mFilesSent(num n);
+
   /// No description provided for @mClipboardNoText.
   ///
   /// In en, this message translates to:

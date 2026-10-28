@@ -1979,6 +1979,18 @@ const SubmitTextRequest$json = {
 final $typed_data.Uint8List submitTextRequestDescriptor = $convert
     .base64Decode('ChFTdWJtaXRUZXh0UmVxdWVzdBISCgR0ZXh0GAEgASgJUgR0ZXh0');
 
+@$core.Deprecated('Use submitFilesRequestDescriptor instead')
+const SubmitFilesRequest$json = {
+  '1': 'SubmitFilesRequest',
+  '2': [
+    {'1': 'paths', '3': 1, '4': 3, '5': 9, '10': 'paths'},
+  ],
+};
+
+/// Descriptor for `SubmitFilesRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List submitFilesRequestDescriptor = $convert
+    .base64Decode('ChJTdWJtaXRGaWxlc1JlcXVlc3QSFAoFcGF0aHMYASADKAlSBXBhdGhz');
+
 @$core.Deprecated('Use webShareStatusDescriptor instead')
 const WebShareStatus$json = {
   '1': 'WebShareStatus',

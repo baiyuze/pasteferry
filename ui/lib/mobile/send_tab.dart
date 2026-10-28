@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/services.dart';
 
 import '../app_state.dart';
@@ -28,6 +29,7 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
   final _text = TextEditingController();
   bool _clipboardHasText = false;
   bool _sending = false;
+  bool _picking = false;
 
   @override
   void initState() {
@@ -70,6 +72,25 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
       text: v.text.replaceRange(start, end, text),
       selection: TextSelection.collapsed(offset: start + text.length),
     );
+  }
+
+  /// 选照片或文件发到电脑。file_selector 在 Android 上会把选中的内容拷到应用缓存，
+  /// 后台服务和 App 在同一个进程里，直接读得到这些路径。
+  Future<void> _pickFiles() async {
+    final l = context.l10n;
+    if (_picking) return;
+    setState(() => _picking = true);
+    try {
+      final files = await openFiles();
+      if (files.isEmpty || !mounted) return;
+      final paths = [for (final f in files) f.path];
+      await AppScope.read(context).submitFiles(paths);
+      if (mounted) showToast(context, l.mFilesSent(paths.length));
+    } catch (e) {
+      if (mounted) showToast(context, l.mSendFailed(AppState.describeError(e)), error: true);
+    } finally {
+      if (mounted) setState(() => _picking = false);
+    }
   }
 
   Future<void> _send() async {
@@ -138,16 +159,26 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
                       contentPadding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.md),
                     ),
                   ),
+                  if (_clipboardHasText)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                        style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: Insets.xs)),
+                        onPressed: _paste,
+                        icon: Icon(AppIcons.docOnClipboard, size: 18),
+                        label: Text(l.mPaste),
+                      ),
+                    ),
                   const SizedBox(height: Insets.md),
                   Row(
                     children: [
-                      // 网页这里是「选择文件」；App 一期只发文字，换成「粘贴」：剪贴板里有文字时才能点
+                      // 和网页一样：左边选照片或文件，右边发文字
                       Expanded(
                         child: FilledButton.icon(
                           style: secondaryButtonStyle(context),
-                          onPressed: _clipboardHasText ? _paste : null,
-                          icon: Icon(AppIcons.docOnClipboard, size: 20),
-                          label: Text(l.mPaste),
+                          onPressed: _picking ? null : _pickFiles,
+                          icon: Icon(AppIcons.folder, size: 20),
+                          label: Text(l.mPhotosFiles),
                         ),
                       ),
                       const SizedBox(width: Insets.md),

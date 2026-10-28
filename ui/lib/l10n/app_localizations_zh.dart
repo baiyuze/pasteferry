@@ -2237,6 +2237,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mPaste => '粘贴';
 
   @override
+  String get mPhotosFiles => '照片或文件';
+
+  @override
+  String mFilesSent(num n) {
+    return '$n 个文件已发到电脑';
+  }
+
+  @override
   String get mClipboardNoText => '剪贴板里没有文字';
 
   @override
@@ -4593,6 +4601,14 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get mPaste => '貼上';
 
   @override
+  String get mPhotosFiles => '照片或檔案';
+
+  @override
+  String mFilesSent(num n) {
+    return '$n 個檔案已傳到電腦';
+  }
+
+  @override
   String get mClipboardNoText => '剪貼簿裡沒有文字';
 
   @override
@@ -6947,6 +6963,14 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get mPaste => '貼上';
+
+  @override
+  String get mPhotosFiles => '照片或檔案';
+
+  @override
+  String mFilesSent(num n) {
+    return '$n 個檔案已傳到電腦';
+  }
 
   @override
   String get mClipboardNoText => '剪貼簿裡沒有文字';

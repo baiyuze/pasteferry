@@ -646,6 +646,8 @@
   "mSendTitle": "パソコンへ送る",
   "mSendHint": "テキストを入力または貼り付け",
   "mPaste": "貼り付け",
+  "mPhotosFiles": "写真またはファイル",
+  "mFilesSent": "{n} 件のファイルをコンピュータに送りました",
   "mClipboardNoText": "クリップボードにテキストがありません",
   "mSendAction": "送信",
   "mSendTo": "{names} に送信します",

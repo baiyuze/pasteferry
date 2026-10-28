@@ -80,6 +80,7 @@ const (
 	DaemonService_SetFriendAutoAccept_FullMethodName           = "/pasteferry.v1.DaemonService/SetFriendAutoAccept"
 	DaemonService_BlockDevice_FullMethodName                   = "/pasteferry.v1.DaemonService/BlockDevice"
 	DaemonService_SubmitText_FullMethodName                    = "/pasteferry.v1.DaemonService/SubmitText"
+	DaemonService_SubmitFiles_FullMethodName                   = "/pasteferry.v1.DaemonService/SubmitFiles"
 	DaemonService_GetWebShare_FullMethodName                   = "/pasteferry.v1.DaemonService/GetWebShare"
 	DaemonService_SetWebShare_FullMethodName                   = "/pasteferry.v1.DaemonService/SetWebShare"
 	DaemonService_NewWebShareInvite_FullMethodName             = "/pasteferry.v1.DaemonService/NewWebShareInvite"
@@ -198,6 +199,8 @@ type DaemonServiceClient interface {
 	BlockDevice(ctx context.Context, in *FriendRef, opts ...grpc.CallOption) (*Empty, error)
 	// 发送页里输入的文字：当成本机复制，落库并发给其他设备，不写本机剪贴板（Android App，design/phone-sync.md 3.3.2 节）
 	SubmitText(ctx context.Context, in *SubmitTextRequest, opts ...grpc.CallOption) (*ClipRecord, error)
+	// 发送页里选的照片和文件：路径由 App 拷到自己的缓存目录后传过来，同样当成本机复制
+	SubmitFiles(ctx context.Context, in *SubmitFilesRequest, opts ...grpc.CallOption) (*ClipRecord, error)
 	// 手机网页传输（design/phone-sync.md 第 2 节）：手机扫码后用浏览器和本机互传
 	GetWebShare(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*WebShareStatus, error)
 	// 打开或关闭总开关。关闭时停止监听端口，已登记的手机保留
@@ -812,6 +815,16 @@ func (c *daemonServiceClient) SubmitText(ctx context.Context, in *SubmitTextRequ
 	return out, nil
 }
 
+func (c *daemonServiceClient) SubmitFiles(ctx context.Context, in *SubmitFilesRequest, opts ...grpc.CallOption) (*ClipRecord, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClipRecord)
+	err := c.cc.Invoke(ctx, DaemonService_SubmitFiles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *daemonServiceClient) GetWebShare(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*WebShareStatus, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(WebShareStatus)
@@ -1000,6 +1013,8 @@ type DaemonServiceServer interface {
 	BlockDevice(context.Context, *FriendRef) (*Empty, error)
 	// 发送页里输入的文字：当成本机复制，落库并发给其他设备，不写本机剪贴板（Android App，design/phone-sync.md 3.3.2 节）
 	SubmitText(context.Context, *SubmitTextRequest) (*ClipRecord, error)
+	// 发送页里选的照片和文件：路径由 App 拷到自己的缓存目录后传过来，同样当成本机复制
+	SubmitFiles(context.Context, *SubmitFilesRequest) (*ClipRecord, error)
 	// 手机网页传输（design/phone-sync.md 第 2 节）：手机扫码后用浏览器和本机互传
 	GetWebShare(context.Context, *Empty) (*WebShareStatus, error)
 	// 打开或关闭总开关。关闭时停止监听端口，已登记的手机保留
@@ -1191,6 +1206,9 @@ func (UnimplementedDaemonServiceServer) BlockDevice(context.Context, *FriendRef)
 }
 func (UnimplementedDaemonServiceServer) SubmitText(context.Context, *SubmitTextRequest) (*ClipRecord, error) {
 	return nil, status.Error(codes.Unimplemented, "method SubmitText not implemented")
+}
+func (UnimplementedDaemonServiceServer) SubmitFiles(context.Context, *SubmitFilesRequest) (*ClipRecord, error) {
+	return nil, status.Error(codes.Unimplemented, "method SubmitFiles not implemented")
 }
 func (UnimplementedDaemonServiceServer) GetWebShare(context.Context, *Empty) (*WebShareStatus, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetWebShare not implemented")
@@ -2210,6 +2228,24 @@ func _DaemonService_SubmitText_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_SubmitFiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitFilesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).SubmitFiles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_SubmitFiles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).SubmitFiles(ctx, req.(*SubmitFilesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DaemonService_GetWebShare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
@@ -2543,6 +2579,10 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SubmitText",
 			Handler:    _DaemonService_SubmitText_Handler,
+		},
+		{
+			MethodName: "SubmitFiles",
+			Handler:    _DaemonService_SubmitFiles_Handler,
 		},
 		{
 			MethodName: "GetWebShare",

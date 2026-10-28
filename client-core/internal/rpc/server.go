@@ -104,6 +104,8 @@ type Deps struct {
 	WebShare WebShare
 	// SubmitText 把发送页里输入的文字当成本机复制，见 sync.Engine.SubmitLocal；为 nil 时返回 Unimplemented
 	SubmitText func(ctx context.Context, text string) (store.Clip, error)
+	// SubmitFiles 把发送页里选的照片和文件当成本机复制；为 nil 时返回 Unimplemented
+	SubmitFiles func(ctx context.Context, paths []string) (store.Clip, error)
 }
 
 func (s *Server) GetNotificationStatus(ctx context.Context, _ *pb.Empty) (*pb.NotificationStatus, error) {

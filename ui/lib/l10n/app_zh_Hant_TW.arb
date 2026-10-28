@@ -646,6 +646,8 @@
   "mSendTitle": "傳給電腦",
   "mSendHint": "輸入或貼上文字",
   "mPaste": "貼上",
+  "mPhotosFiles": "照片或檔案",
+  "mFilesSent": "{n} 個檔案已傳到電腦",
   "mClipboardNoText": "剪貼簿裡沒有文字",
   "mSendAction": "傳送",
   "mSendTo": "將傳給 {names}",

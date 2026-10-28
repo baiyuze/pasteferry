@@ -2436,6 +2436,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mPaste => 'Paste';
 
   @override
+  String get mPhotosFiles => 'Photos or files';
+
+  @override
+  String mFilesSent(num n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n files sent to your computer',
+      one: '1 file sent to your computer',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mClipboardNoText => 'The clipboard has no text';
 
   @override

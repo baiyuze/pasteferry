@@ -482,6 +482,14 @@ class DaemonServiceClient extends $grpc.Client {
     return $createUnaryCall(_$submitText, request, options: options);
   }
 
+  /// 发送页里选的照片和文件：路径由 App 拷到自己的缓存目录后传过来，同样当成本机复制
+  $grpc.ResponseFuture<$0.ClipRecord> submitFiles(
+    $0.SubmitFilesRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$submitFiles, request, options: options);
+  }
+
   /// 手机网页传输（design/phone-sync.md 第 2 节）：手机扫码后用浏览器和本机互传
   $grpc.ResponseFuture<$0.WebShareStatus> getWebShare(
     $0.Empty request, {
@@ -805,6 +813,11 @@ class DaemonServiceClient extends $grpc.Client {
       $grpc.ClientMethod<$0.SubmitTextRequest, $0.ClipRecord>(
           '/pasteferry.v1.DaemonService/SubmitText',
           ($0.SubmitTextRequest value) => value.writeToBuffer(),
+          $0.ClipRecord.fromBuffer);
+  static final _$submitFiles =
+      $grpc.ClientMethod<$0.SubmitFilesRequest, $0.ClipRecord>(
+          '/pasteferry.v1.DaemonService/SubmitFiles',
+          ($0.SubmitFilesRequest value) => value.writeToBuffer(),
           $0.ClipRecord.fromBuffer);
   static final _$getWebShare = $grpc.ClientMethod<$0.Empty, $0.WebShareStatus>(
       '/pasteferry.v1.DaemonService/GetWebShare',
@@ -1268,6 +1281,14 @@ abstract class DaemonServiceBase extends $grpc.Service {
         false,
         false,
         ($core.List<$core.int> value) => $0.SubmitTextRequest.fromBuffer(value),
+        ($0.ClipRecord value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SubmitFilesRequest, $0.ClipRecord>(
+        'SubmitFiles',
+        submitFiles_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.SubmitFilesRequest.fromBuffer(value),
         ($0.ClipRecord value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.WebShareStatus>(
         'GetWebShare',
@@ -1768,6 +1789,14 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.ClipRecord> submitText(
       $grpc.ServiceCall call, $0.SubmitTextRequest request);
+
+  $async.Future<$0.ClipRecord> submitFiles_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SubmitFilesRequest> $request) async {
+    return submitFiles($call, await $request);
+  }
+
+  $async.Future<$0.ClipRecord> submitFiles(
+      $grpc.ServiceCall call, $0.SubmitFilesRequest request);
 
   $async.Future<$0.WebShareStatus> getWebShare_Pre(
       $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {

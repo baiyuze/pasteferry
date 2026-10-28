@@ -373,6 +373,9 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 			// 手机本机的内容：不写回手机自己的剪贴板
 			return engine.SubmitLocal(ctx, clipboard.Content{Kind: clipboard.KindText, Text: text}, "", false)
 		},
+		SubmitFiles: func(ctx context.Context, paths []string) (store.Clip, error) {
+			return engine.SubmitLocal(ctx, clipboard.Content{Kind: clipboard.KindFile, Files: paths}, "", false)
+		},
 	}, hub, token)
 
 	go func() {

@@ -1361,6 +1361,14 @@ class AppState extends ChangeNotifier implements RecordDetails {
     return r;
   }
 
+  /// 发送页里选的照片和文件：路径要先拷到本应用的缓存目录，后台服务才读得到。
+  Future<ClipRecord> submitFiles(List<String> paths) async {
+    final r = await _client.submitFiles(SubmitFilesRequest(paths: paths));
+    _upsert(r);
+    notifyListeners();
+    return r;
+  }
+
   /// 一条记录里第 [index] 张图片：本机路径、文件名，以及能预览的图片总数。
   /// HEIC 这类格式由后台服务先转换，大图可能要一两秒，超时放宽一些。
   @override

@@ -2263,6 +2263,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mPaste => '貼り付け';
 
   @override
+  String get mPhotosFiles => '写真またはファイル';
+
+  @override
+  String mFilesSent(num n) {
+    return '$n 件のファイルをコンピュータに送りました';
+  }
+
+  @override
   String get mClipboardNoText => 'クリップボードにテキストがありません';
 
   @override

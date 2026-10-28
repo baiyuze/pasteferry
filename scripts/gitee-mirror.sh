@@ -3,7 +3,7 @@
 #
 #   1. 推送 GitHub 上的 main 与本地全部 tag
 #   2. 建与 GitHub Release 同名、同正文的发行版
-#   3. 上传 release/ 里的 14 个文件（已有的同名文件跳过，可以重复运行）
+#   3. 上传 release/ 里的 15 个文件（含 Android APK；已有的同名文件跳过，可以重复运行）
 #   4. 只保留最近 KEEP 个发行版的附件：Gitee 每个仓库的附件总共只有 1 GB，一版约 270 MB
 #
 #   ./scripts/gitee-mirror.sh vX.Y.Z "PasteFerry X.Y.Z — Summary" <正文文件>
@@ -27,7 +27,7 @@ KEEP=${KEEP:-2}
 API=https://gitee.com/api/v5/repos/$OWNER/$REPO
 
 TOKEN=$(security find-generic-password -s pasteferry-gitee-token -w)
-[[ $(find release -maxdepth 1 -type f | wc -l) -eq 14 ]] || { echo "release/ 里应当正好有 14 个文件" >&2; exit 1; }
+[[ $(find release -maxdepth 1 -type f | wc -l) -eq 15 ]] || { echo "release/ 里应当正好有 15 个文件" >&2; exit 1; }
 git rev-parse -q --verify "refs/tags/$TAG^{commit}" >/dev/null || { echo "本地没有 tag $TAG" >&2; exit 1; }
 [[ -f $NOTES ]] || { echo "找不到正文文件 $NOTES" >&2; exit 1; }
 

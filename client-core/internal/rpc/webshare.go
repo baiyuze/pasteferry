@@ -98,3 +98,23 @@ func (s *Server) SubmitText(ctx context.Context, req *pb.SubmitTextRequest) (*pb
 	}
 	return clipToProto(clip), nil
 }
+
+func (s *Server) SubmitFiles(ctx context.Context, req *pb.SubmitFilesRequest) (*pb.ClipRecord, error) {
+	if s.deps.SubmitFiles == nil {
+		return nil, status.Error(codes.Unimplemented, "submit files unavailable")
+	}
+	paths := make([]string, 0, len(req.GetPaths()))
+	for _, p := range req.GetPaths() {
+		if p != "" {
+			paths = append(paths, p)
+		}
+	}
+	if len(paths) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "没有要发送的文件")
+	}
+	clip, err := s.deps.SubmitFiles(ctx, paths)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return clipToProto(clip), nil
+}

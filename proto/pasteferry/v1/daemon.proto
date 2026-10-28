@@ -130,6 +130,9 @@ service DaemonService {
   // 发送页里输入的文字：当成本机复制，落库并发给其他设备，不写本机剪贴板（Android App，design/phone-sync.md 3.3.2 节）
   rpc SubmitText(SubmitTextRequest) returns (ClipRecord);
 
+  // 发送页里选的照片和文件：路径由 App 拷到自己的缓存目录后传过来，同样当成本机复制
+  rpc SubmitFiles(SubmitFilesRequest) returns (ClipRecord);
+
   // 手机网页传输（design/phone-sync.md 第 2 节）：手机扫码后用浏览器和本机互传
   rpc GetWebShare(Empty) returns (WebShareStatus);
   // 打开或关闭总开关。关闭时停止监听端口，已登记的手机保留
@@ -919,6 +922,10 @@ message CheckReceiveDirResponse {
 
 message SubmitTextRequest {
   string text = 1;
+}
+
+message SubmitFilesRequest {
+  repeated string paths = 1;
 }
 
 // ─────────────────────────── 手机网页传输 ───────────────────────────

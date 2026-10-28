@@ -7508,6 +7508,57 @@ class SubmitTextRequest extends $pb.GeneratedMessage {
   void clearText() => $_clearField(1);
 }
 
+class SubmitFilesRequest extends $pb.GeneratedMessage {
+  factory SubmitFilesRequest({
+    $core.Iterable<$core.String>? paths,
+  }) {
+    final result = SubmitFilesRequest._();
+    if (paths != null) result.paths.addAll(paths);
+    return result;
+  }
+
+  SubmitFilesRequest._();
+
+  factory SubmitFilesRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SubmitFilesRequest()..mergeFromBuffer(data, registry);
+  factory SubmitFilesRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SubmitFilesRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SubmitFilesRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: SubmitFilesRequest.$_createMessage)
+    ..pPS(1, _omitFieldNames ? '' : 'paths')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SubmitFilesRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SubmitFilesRequest copyWith(void Function(SubmitFilesRequest) updates) =>
+      super.copyWith((message) => updates(message as SubmitFilesRequest))
+          as SubmitFilesRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SubmitFilesRequest() / SubmitFilesRequest.new instead')
+  static SubmitFilesRequest create() => SubmitFilesRequest._();
+  static $pb.GeneratedMessage $_createMessage() => SubmitFilesRequest._();
+  @$core.override
+  SubmitFilesRequest createEmptyInstance() => SubmitFilesRequest._();
+  @$core.pragma('dart2js:noInline')
+  static SubmitFilesRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SubmitFilesRequest>(
+          SubmitFilesRequest.$_createMessage);
+  static SubmitFilesRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<$core.String> get paths => $_getList(0);
+}
+
 class WebShareStatus extends $pb.GeneratedMessage {
   factory WebShareStatus({
     $core.bool? enabled,

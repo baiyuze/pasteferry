@@ -1658,6 +1658,8 @@
   "mSendTitle": "Send to your computer",
   "mSendHint": "Type or paste text",
   "mPaste": "Paste",
+  "mPhotosFiles": "Photos or files",
+  "mFilesSent": "{n, plural, =1{1 file sent to your computer} other{{n} files sent to your computer}}",
   "mClipboardNoText": "The clipboard has no text",
   "mSendAction": "Send",
   "mSendTo": "Goes to {names}",
