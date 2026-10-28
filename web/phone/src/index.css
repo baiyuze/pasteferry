@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+/*
+ * 颜色、圆角与 App 的设计系统一致（ui/lib/theme.dart 的 AppPalette、Radii）：
+ * 大面积中性的石墨灰，强调色只用在按钮、选中态和链接上；不用渐变、不用彩色图标底。
+ * 间距只用 Tailwind 的 1/2/3/4/6/8（4/8/12/16/24/32px），与 App 的 Insets 相同。
+ */
+:root {
+  --pf-accent: #0a66d8;
+  --pf-bg: #f5f5f4;
+  --pf-surface: #ffffff;
+  --pf-border: #e0e0dd;
+  --pf-separator: #ececea;
+  --pf-text: #1d1d1f;
+  --pf-dim: #6e6e73;
+  --pf-faint: #a1a1a6;
+  --pf-fill: #eeeeec;
+  --pf-online: #248a3d;
+  --pf-warning: #b25000;
+  --pf-danger: #d70015;
+  --pf-bar: rgba(245, 245, 244, 0.86);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pf-accent: #3b8beb;
+    --pf-bg: #1c1c1e;
+    --pf-surface: #2a2a2c;
+    --pf-border: #3a3a3c;
+    --pf-separator: #333335;
+    --pf-text: #f5f5f7;
+    --pf-dim: #98989d;
+    --pf-faint: #636366;
+    --pf-fill: #323234;
+    --pf-online: #32d74b;
+    --pf-warning: #ff9f0a;
+    --pf-danger: #ff453a;
+    --pf-bar: rgba(28, 28, 30, 0.86);
+  }
+}
+
+@theme inline {
+  --color-accent: var(--pf-accent);
+  --color-bg: var(--pf-bg);
+  --color-surface: var(--pf-surface);
+  --color-border: var(--pf-border);
+  --color-separator: var(--pf-separator);
+  --color-text: var(--pf-text);
+  --color-dim: var(--pf-dim);
+  --color-faint: var(--pf-faint);
+  --color-fill: var(--pf-fill);
+  --color-online: var(--pf-online);
+  --color-warning: var(--pf-warning);
+  --color-danger: var(--pf-danger);
+  --color-bar: var(--pf-bar);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans", "Segoe UI",
+    Roboto, "Microsoft YaHei", "Noto Sans CJK SC", "Helvetica Neue", sans-serif;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+  body {
+    background: var(--pf-bg);
+    color: var(--pf-text);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+  }
+  /*
+   * 页面上的文字默认不参与长按选中。Android 上长按选中会弹出系统自带的
+   * 「复制 / 分享」工具条，样式完全不受网页控制，和这里的设计不搭，
+   * 复制一律走页面自己的按钮。需要选中的只有输入框、手动复制的全文，
+   * 以及图片自己的「保存到相册」菜单。
+   */
+  #root {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  #root input,
+  #root textarea,
+  #root .selectable,
+  #root .selectable * {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  #root img {
+    -webkit-touch-callout: default;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: default;
+  }
+}
+
+@layer utilities {
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .hairline-b {
+    box-shadow: inset 0 -0.5px 0 var(--pf-separator);
+  }
+  .hairline-t {
+    box-shadow: inset 0 0.5px 0 var(--pf-border);
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 复制文字用的隐藏输入框：留在页面里才能被选中，但看不见。字号不小于 16px，iOS 不会因此放大页面 */
+.offscreen {
+  position: fixed;
+  top: 0;
+  left: -9999px;
+  opacity: 0;
+  font-size: 16px;
+}

@@ -1,0 +1,26 @@
+{
+  "name": "pasteferry-phone-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "手机网页传输的网页（design/phone-sync.md 第 2 节）。构建产物输出到 client-core/internal/webshare/web，由后台服务嵌入",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}
