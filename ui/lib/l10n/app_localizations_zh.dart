@@ -2410,6 +2410,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mDelete => '删除';
+
+  @override
+  String get webShareFirewallPreparing =>
+      '正在检查 Windows 防火墙。如弹出管理员授权窗口，请选择“是”，让手机可以连接这台电脑。';
+
+  @override
+  String get webShareFirewallReady =>
+      'Windows 防火墙已放行。请让手机和电脑连接同一网络后扫码；如果仍无法连接，可点击下方按钮重新检查。';
+
+  @override
+  String get webShareFirewallFailed =>
+      '防火墙授权尚未完成，手机可能无法打开网页。请点击下方按钮重试，并在 Windows 管理员授权窗口中选择“是”。';
+
+  @override
+  String get webShareFirewallAllow => '检查并允许手机连接';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -4818,6 +4833,21 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get mDelete => '刪除';
+
+  @override
+  String get webShareFirewallPreparing =>
+      '正在檢查 Windows 防火牆。如出現管理員授權視窗，請選擇「是」，讓手機可以連接這部電腦。';
+
+  @override
+  String get webShareFirewallReady =>
+      'Windows 防火牆已允許連線。請讓手機和電腦連接同一網絡後掃碼；如仍無法連接，可按下方按鈕重新檢查。';
+
+  @override
+  String get webShareFirewallFailed =>
+      '防火牆授權尚未完成，手機可能無法開啟網頁。請按下方按鈕重試，並在 Windows 管理員授權視窗中選擇「是」。';
+
+  @override
+  String get webShareFirewallAllow => '檢查並允許手機連線';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -7226,4 +7256,19 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get mDelete => '刪除';
+
+  @override
+  String get webShareFirewallPreparing =>
+      '正在檢查 Windows 防火牆。若出現系統管理員授權視窗，請選擇「是」，讓手機可以連線到這台電腦。';
+
+  @override
+  String get webShareFirewallReady =>
+      'Windows 防火牆已允許連入。請讓手機和電腦連上同一網路後掃碼；若仍無法連線，可點選下方按鈕重新檢查。';
+
+  @override
+  String get webShareFirewallFailed =>
+      '防火牆授權尚未完成，手機可能無法開啟網頁。請點選下方按鈕重試，並在 Windows 系統管理員授權視窗中選擇「是」。';
+
+  @override
+  String get webShareFirewallAllow => '檢查並允許手機連線';
 }

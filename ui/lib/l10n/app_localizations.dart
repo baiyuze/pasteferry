@@ -4285,6 +4285,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get mDelete;
+
+  /// No description provided for @webShareFirewallPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking Windows Firewall. If Windows asks for administrator approval, choose Yes so your phone can connect.'**
+  String get webShareFirewallPreparing;
+
+  /// No description provided for @webShareFirewallReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows Firewall rules are ready. Connect your phone to the same network and scan the QR code. If it still cannot connect, check the firewall again below.'**
+  String get webShareFirewallReady;
+
+  /// No description provided for @webShareFirewallFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Firewall setup did not finish. Your phone may be unable to open the page. Try again and approve the Windows administrator prompt.'**
+  String get webShareFirewallFailed;
+
+  /// No description provided for @webShareFirewallAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Check and allow phone connections'**
+  String get webShareFirewallAllow;
 }
 
 class _AppLocalizationsDelegate

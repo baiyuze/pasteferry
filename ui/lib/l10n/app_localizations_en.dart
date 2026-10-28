@@ -2620,4 +2620,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mDelete => 'Delete';
+
+  @override
+  String get webShareFirewallPreparing =>
+      'Checking Windows Firewall. If Windows asks for administrator approval, choose Yes so your phone can connect.';
+
+  @override
+  String get webShareFirewallReady =>
+      'Windows Firewall rules are ready. Connect your phone to the same network and scan the QR code. If it still cannot connect, check the firewall again below.';
+
+  @override
+  String get webShareFirewallFailed =>
+      'Firewall setup did not finish. Your phone may be unable to open the page. Try again and approve the Windows administrator prompt.';
+
+  @override
+  String get webShareFirewallAllow => 'Check and allow phone connections';
 }

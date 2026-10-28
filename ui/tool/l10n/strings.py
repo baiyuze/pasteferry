@@ -439,6 +439,12 @@ S = [
     ("notifyClipboardFailedTitle", "Received; clipboard was not updated", "已接收，但未能写入剪贴板", "受信済みですがクリップボードを更新できませんでした", "已接收，但無法寫入剪貼簿", "已接收，但無法寫入剪貼簿"),
     ("notifyClipboardFailedBody", "{name}\n{error}\nUse Copy to clipboard to try again, here or in History.", "{name}\n{error}\n可从此通知或复制记录重新放入剪贴板。", "{name}\n{error}\nこの通知または履歴からクリップボードに入れて再試行できます。", "{name}\n{error}\n可從此通知或複製記錄重新放入剪貼簿。", "{name}\n{error}\n可從此通知或複製記錄重新放入剪貼簿。"),
 
+    # Windows firewall setup in the phone QR dialog
+    ('webShareFirewallPreparing', 'Checking Windows Firewall. If Windows asks for administrator approval, choose Yes so your phone can connect.', '正在检查 Windows 防火墙。如弹出管理员授权窗口，请选择“是”，让手机可以连接这台电脑。', 'Windows ファイアウォールを確認しています。管理者の承認を求められたら「はい」を選び、スマートフォンからの接続を許可してください。', '正在檢查 Windows 防火牆。若出現系統管理員授權視窗，請選擇「是」，讓手機可以連線到這台電腦。', '正在檢查 Windows 防火牆。如出現管理員授權視窗，請選擇「是」，讓手機可以連接這部電腦。'),
+    ('webShareFirewallReady', 'Windows Firewall rules are ready. Connect your phone to the same network and scan the QR code. If it still cannot connect, check the firewall again below.', 'Windows 防火墙已放行。请让手机和电脑连接同一网络后扫码；如果仍无法连接，可点击下方按钮重新检查。', 'Windows ファイアウォールの設定が完了しました。同じネットワークに接続してスキャンしてください。接続できない場合は、下のボタンで再確認できます。', 'Windows 防火牆已允許連入。請讓手機和電腦連上同一網路後掃碼；若仍無法連線，可點選下方按鈕重新檢查。', 'Windows 防火牆已允許連線。請讓手機和電腦連接同一網絡後掃碼；如仍無法連接，可按下方按鈕重新檢查。'),
+    ('webShareFirewallFailed', 'Firewall setup did not finish. Your phone may be unable to open the page. Try again and approve the Windows administrator prompt.', '防火墙授权尚未完成，手机可能无法打开网页。请点击下方按钮重试，并在 Windows 管理员授权窗口中选择“是”。', 'ファイアウォールの設定が完了していません。スマートフォンでページを開けない場合があります。再試行し、Windows の管理者確認で「はい」を選んでください。', '防火牆授權尚未完成，手機可能無法開啟網頁。請點選下方按鈕重試，並在 Windows 系統管理員授權視窗中選擇「是」。', '防火牆授權尚未完成，手機可能無法開啟網頁。請按下方按鈕重試，並在 Windows 管理員授權視窗中選擇「是」。'),
+    ('webShareFirewallAllow', 'Check and allow phone connections', '检查并允许手机连接', 'スマートフォンの接続を確認・許可', '檢查並允許手機連線', '檢查並允許手機連線'),
+
 ]
 
 # 数字类占位符的类型；其余都是字符串

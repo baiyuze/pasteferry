@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:fixnum/fixnum.dart';
@@ -11,7 +12,8 @@ import 'package:pasteferry_ui/main.dart';
 import 'package:pasteferry_ui/records.dart';
 import 'package:pasteferry_ui/widgets/web_share.dart';
 
-Int64 _now([int ago = 0]) => Int64(DateTime.now().millisecondsSinceEpoch ~/ 1000 - ago);
+Int64 _now([int ago = 0]) =>
+    Int64(DateTime.now().millisecondsSinceEpoch ~/ 1000 - ago);
 
 /// 21×21 的点阵：左上角一个定位图案，够界面画出来就行
 List<int> _modules() {
@@ -29,9 +31,18 @@ class _WebShareState extends AppState {
   final closed = <String>[];
   final toggles = <bool>[];
   final removed = <String>[];
+  int firewallRequests = 0;
+  Future<void> Function()? firewallPermission;
   var _serial = 0;
 
-  WebShareStatus _status(bool on, {List<WebSession> sessions = const []}) => WebShareStatus(
+  @override
+  Future<void> requestLocalNetworkPermission() async {
+    firewallRequests++;
+    await firewallPermission?.call();
+  }
+
+  WebShareStatus _status(bool on, {List<WebSession> sessions = const []}) =>
+      WebShareStatus(
         enabled: on,
         listening: on,
         port: 8790,
@@ -59,40 +70,69 @@ class _WebShareState extends AppState {
   @override
   Future<void> setWebShare(bool enabled) async {
     toggles.add(enabled);
-    debugEvent(Event(webShareChanged: _status(enabled, sessions: webShare?.sessions ?? const [])));
+    debugEvent(
+      Event(
+        webShareChanged: _status(
+          enabled,
+          sessions: webShare?.sessions ?? const [],
+        ),
+      ),
+    );
   }
 
   @override
   Future<void> removeWebSession(String id) async {
     removed.add(id);
-    debugEvent(Event(
-      webShareChanged: _status(true, sessions: webShare!.sessions.where((s) => s.id != id).toList()),
-    ));
+    debugEvent(
+      Event(
+        webShareChanged: _status(
+          true,
+          sessions: webShare!.sessions.where((s) => s.id != id).toList(),
+        ),
+      ),
+    );
   }
 }
 
-_WebShareState _demo({bool on = true, List<WebSession> sessions = const []}) {
+_WebShareState _demo({
+  bool on = true,
+  List<WebSession> sessions = const [],
+  String platform = 'darwin',
+  String language = 'zh-Hans',
+}) {
   final state = _WebShareState();
   state.debugSeed(
     status: Status(version: '2.7.0'),
-    config: Config(language: 'zh-Hans', deviceName: 'MacBook Pro'),
-    self: Device(id: 'self', name: 'MacBook Pro', platform: 'darwin'),
+    config: Config(language: language, deviceName: 'MacBook Pro'),
+    self: Device(id: 'self', name: 'MacBook Pro', platform: platform),
     webShare: state._status(on, sessions: sessions),
   );
   return state;
 }
 
-final _iphone = WebSession(id: 's1', name: 'iPhone', createdAtUnix: _now(7200), lastSeenUnix: _now(120));
+final _iphone = WebSession(
+  id: 's1',
+  name: 'iPhone',
+  createdAtUnix: _now(7200),
+  lastSeenUnix: _now(120),
+);
 
 void main() {
   setUp(() {
-    final view = TestWidgetsFlutterBinding.instance.platformDispatcher.views.first;
+    final view =
+        TestWidgetsFlutterBinding.instance.platformDispatcher.views.first;
     view.physicalSize = const Size(1180, 900);
     view.devicePixelRatio = 1;
   });
-  tearDown(() => TestWidgetsFlutterBinding.instance.platformDispatcher.views.first.reset());
+  tearDown(
+    () => TestWidgetsFlutterBinding.instance.platformDispatcher.views.first
+        .reset(),
+  );
 
-  Future<AppLocalizations> openDevices(WidgetTester tester, AppState state) async {
+  Future<AppLocalizations> openDevices(
+    WidgetTester tester,
+    AppState state,
+  ) async {
     await tester.pumpWidget(PasteFerryApp(state: state));
     await tester.pump();
     final l = AppLocalizations.of(tester.element(find.byType(Shell)));
@@ -117,7 +157,7 @@ void main() {
   });
 
   testWidgets('关着时没有二维码按钮；打开开关后直接弹出二维码', (tester) async {
-    final state = _demo(on: false);
+    final state = _demo(on: false, platform: 'windows');
     final l = await openDevices(tester, state);
     expect(find.text(l.webShareOff), findsOneWidget);
     expect(find.text(l.webShareShowQr), findsNothing);
@@ -128,7 +168,89 @@ void main() {
     expect(find.byType(WebShareDialog), findsOneWidget);
     expect(find.byType(QrCodeView), findsOneWidget);
     expect(find.text('http://192.168.1.5:8790/'), findsOneWidget);
+    expect(state.firewallRequests, 1);
+    expect(find.text(l.webShareFirewallReady), findsOneWidget);
   });
+
+  testWidgets('Windows 二维码窗口等待授权，失败后可以原地重试', (tester) async {
+    final pending = Completer<void>();
+    final state = _demo(platform: 'windows')
+      ..firewallPermission = () => pending.future;
+    final l = await openDevices(tester, state);
+    await tester.tap(find.text(l.webShareShowQr));
+    await tester.pumpAndSettle();
+    expect(state.firewallRequests, 1);
+    expect(find.text(l.webShareFirewallPreparing), findsOneWidget);
+    expect(find.text(l.webShareFirewallReady), findsNothing);
+    expect(find.text(l.webShareFirewallAllow), findsNothing);
+
+    pending.completeError(StateError('UAC cancelled'));
+    await tester.pumpAndSettle();
+    expect(find.text(l.webShareFirewallFailed), findsOneWidget);
+    expect(find.textContaining('UAC cancelled'), findsOneWidget);
+    expect(find.text(l.webShareFirewallReady), findsNothing);
+
+    state.firewallPermission = () async {};
+    await tester.ensureVisible(find.text(l.webShareFirewallAllow));
+    await tester.tap(find.text(l.webShareFirewallAllow));
+    await tester.pumpAndSettle();
+    expect(state.firewallRequests, 2);
+    expect(find.text(l.webShareFirewallReady), findsOneWidget);
+    expect(find.text(l.webShareFirewallFailed), findsNothing);
+
+    // 邀请自动轮换不再申请；重新打开窗口才重新检查，避免每次 UAC。
+    state.debugEvent(
+      Event(webShareChanged: state._status(true)..inviteUsed = 'inv1'),
+    );
+    await tester.pumpAndSettle();
+    expect(state.invites, ['', '']);
+    expect(state.firewallRequests, 2);
+    await tester.tap(find.byTooltip(l.close));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(l.webShareShowQr));
+    await tester.pumpAndSettle();
+    expect(state.firewallRequests, 3);
+  });
+
+  testWidgets('Windows 授权中关闭二维码窗口不会在完成时访问已销毁界面', (tester) async {
+    final pending = Completer<void>();
+    final state = _demo(platform: 'windows')
+      ..firewallPermission = () => pending.future;
+    final l = await openDevices(tester, state);
+    await tester.tap(find.text(l.webShareShowQr));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip(l.close));
+    await tester.pumpAndSettle();
+    pending.complete();
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(find.byType(WebShareDialog), findsNothing);
+  });
+
+  for (final language in ['en', 'ja', 'zh-Hans', 'zh-Hant-TW', 'zh-Hant-HK']) {
+    testWidgets('Windows 最小窗口的 $language 授权提示和二维码可滚动访问', (tester) async {
+      tester.view.physicalSize = const Size(760, 520);
+      final state = _demo(platform: 'windows', language: language)
+        ..firewallPermission = () async => throw StateError('UAC cancelled');
+      await tester.pumpWidget(PasteFerryApp(state: state));
+      await tester.pumpAndSettle();
+      final context = tester.element(find.byType(Shell));
+      final l = AppLocalizations.of(context);
+      unawaited(showWebShareDialog(context));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await tester.ensureVisible(find.text(l.webShareFirewallAllow));
+      await tester.pumpAndSettle();
+      state.firewallPermission = () async {};
+      await tester.tap(find.text(l.webShareFirewallAllow));
+      await tester.pumpAndSettle();
+      expect(state.firewallRequests, 2);
+      expect(find.text(l.webShareFirewallReady), findsOneWidget);
+      await tester.ensureVisible(find.byType(QrCodeView));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    });
+  }
 
   testWidgets('二维码窗口：被扫码用掉后换一张新的，切换地址，关掉时作废', (tester) async {
     final state = _demo(sessions: [_iphone]);
@@ -136,19 +258,28 @@ void main() {
     await tester.tap(find.text(l.webShareShowQr));
     await tester.pumpAndSettle();
     expect(state.invites, ['']);
+    expect(state.firewallRequests, 0);
+    expect(find.text(l.webShareFirewallPreparing), findsNothing);
 
     // 手机扫码登记：后台服务推来 invite_used，窗口换一张新的二维码并提示
-    final android = WebSession(id: 's2', name: 'Android 手机', createdAtUnix: _now(), lastSeenUnix: _now());
-    state.debugEvent(Event(
-      webShareChanged: WebShareStatus(
-        enabled: true,
-        listening: true,
-        port: 8790,
-        addresses: ['192.168.1.5', '10.0.0.8'],
-        sessions: [android, _iphone],
-        inviteUsed: 'inv1',
+    final android = WebSession(
+      id: 's2',
+      name: 'Android 手机',
+      createdAtUnix: _now(),
+      lastSeenUnix: _now(),
+    );
+    state.debugEvent(
+      Event(
+        webShareChanged: WebShareStatus(
+          enabled: true,
+          listening: true,
+          port: 8790,
+          addresses: ['192.168.1.5', '10.0.0.8'],
+          sessions: [android, _iphone],
+          inviteUsed: 'inv1',
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
     expect(state.invites, ['', '']);
     expect(find.text(l.webShareNewPhone('Android 手机')), findsOneWidget);
@@ -181,15 +312,30 @@ void main() {
   });
 
   test('网页发来的记录显示手机的名字', () {
-    final r = ClipRecord(outgoing: true, viaName: 'iPhone', originDeviceName: 'MacBook Pro');
+    final r = ClipRecord(
+      outgoing: true,
+      viaName: 'iPhone',
+      originDeviceName: 'MacBook Pro',
+    );
     expect(recordSource(r), appL10n.fromDevice('iPhone'));
     expect(recordSource(ClipRecord(outgoing: true)), appL10n.thisDeviceShort);
   });
 
   testWidgets('二维码按点阵画出来', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Center(child: SizedBox(width: 200, height: 200, child: QrCodeView(size: 21, modules: Uint8List.fromList(_modules())))),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Center(
+          child: SizedBox(
+            width: 200,
+            height: 200,
+            child: QrCodeView(
+              size: 21,
+              modules: Uint8List.fromList(_modules()),
+            ),
+          ),
+        ),
+      ),
+    );
     expect(find.byType(CustomPaint), findsWidgets);
   });
 }

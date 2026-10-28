@@ -695,5 +695,9 @@
   "mAllow": "允許",
   "mVersion": "版本 {version}",
   "mDeleteConfirm": "刪除這條記錄？",
-  "mDelete": "刪除"
+  "mDelete": "刪除",
+  "webShareFirewallPreparing": "正在檢查 Windows 防火牆。如出現管理員授權視窗，請選擇「是」，讓手機可以連接這部電腦。",
+  "webShareFirewallReady": "Windows 防火牆已允許連線。請讓手機和電腦連接同一網絡後掃碼；如仍無法連接，可按下方按鈕重新檢查。",
+  "webShareFirewallFailed": "防火牆授權尚未完成，手機可能無法開啟網頁。請按下方按鈕重試，並在 Windows 管理員授權視窗中選擇「是」。",
+  "webShareFirewallAllow": "檢查並允許手機連線"
 }

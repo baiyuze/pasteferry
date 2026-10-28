@@ -2437,4 +2437,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mDelete => '削除';
+
+  @override
+  String get webShareFirewallPreparing =>
+      'Windows ファイアウォールを確認しています。管理者の承認を求められたら「はい」を選び、スマートフォンからの接続を許可してください。';
+
+  @override
+  String get webShareFirewallReady =>
+      'Windows ファイアウォールの設定が完了しました。同じネットワークに接続してスキャンしてください。接続できない場合は、下のボタンで再確認できます。';
+
+  @override
+  String get webShareFirewallFailed =>
+      'ファイアウォールの設定が完了していません。スマートフォンでページを開けない場合があります。再試行し、Windows の管理者確認で「はい」を選んでください。';
+
+  @override
+  String get webShareFirewallAllow => 'スマートフォンの接続を確認・許可';
 }

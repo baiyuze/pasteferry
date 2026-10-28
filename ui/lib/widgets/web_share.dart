@@ -83,7 +83,11 @@ class WebShareSection extends StatelessWidget {
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        showToast(context, AppState.describeError(e), error: true);
+                        showToast(
+                          context,
+                          AppState.describeError(e),
+                          error: true,
+                        );
                       }
                     }
                   },
@@ -172,6 +176,8 @@ class _WebShareDialogState extends State<WebShareDialog> {
   String _address = '';
   String? _error;
   bool _refreshing = false;
+  bool _preparingFirewall = false;
+  String? _firewallError;
   Timer? _expiry;
   StreamSubscription<String>? _used;
   late final AppState _state = AppScope.read(context);
@@ -189,6 +195,30 @@ class _WebShareDialogState extends State<WebShareDialog> {
       _refresh(closeOld: false);
     });
     _refresh();
+    // 包括开关自动打开、二维码按钮和托盘入口；只在窗口打开时申请，
+    // 不随邀请轮换重复弹 UAC。后台服务会先检查，已放行时直接返回。
+    if (_state.self?.platform == 'windows') {
+      _preparingFirewall = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _prepareFirewall();
+      });
+    }
+  }
+
+  Future<void> _prepareFirewall() async {
+    setState(() {
+      _preparingFirewall = true;
+      _firewallError = null;
+    });
+    try {
+      await _state.requestLocalNetworkPermission();
+    } catch (e) {
+      if (mounted) {
+        setState(() => _firewallError = AppState.describeError(e));
+      }
+    } finally {
+      if (mounted) setState(() => _preparingFirewall = false);
+    }
   }
 
   @override
@@ -252,149 +282,183 @@ class _WebShareDialogState extends State<WebShareDialog> {
     return Dialog(
       child: SizedBox(
         width: 420,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            Insets.xl,
-            Insets.lg,
-            Insets.md,
-            Insets.xl,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      l.webShareDialogTitle,
-                      style: context.text.titleMedium,
-                    ),
-                  ),
-                  IconAction(
-                    icon: AppIcons.xmark,
-                    tooltip: l.close,
-                    onTap: () => Navigator.pop(context),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: Insets.md),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              Insets.xl,
+              Insets.lg,
+              Insets.md,
+              Insets.xl,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
                   children: [
-                    const SizedBox(height: Insets.sm),
-                    Text(
-                      l.webShareDialogBody,
-                      style: context.text.bodyMedium?.copyWith(
-                        color: p.textDim,
+                    Expanded(
+                      child: Text(
+                        l.webShareDialogTitle,
+                        style: context.text.titleMedium,
                       ),
                     ),
-                    const SizedBox(height: Insets.lg),
-                    Center(
-                      child: Container(
-                        width: 232,
-                        height: 232,
-                        padding: const EdgeInsets.all(Insets.md),
-                        // 二维码一律深色画在白底上：深色模式下也是，反色的码很多扫码器认不出
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(Radii.lg),
-                          border: Border.all(color: p.border),
-                        ),
-                        child: _invite == null
-                            ? Center(
-                                child: _error == null
-                                    ? const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        ),
-                                      )
-                                    : Text(
-                                        _error!,
-                                        textAlign: TextAlign.center,
-                                        style: context.text.bodySmall?.copyWith(
-                                          color: p.danger,
-                                        ),
-                                      ),
-                              )
-                            : QrCodeView(
-                                size: _invite!.qrSize,
-                                modules: Uint8List.fromList(_invite!.qrModules),
-                              ),
-                      ),
+                    IconAction(
+                      icon: AppIcons.xmark,
+                      tooltip: l.close,
+                      onTap: () => Navigator.pop(context),
                     ),
-                    const SizedBox(height: Insets.md),
-                    if (_invite != null)
-                      SelectableText(
-                        _invite!.url.split('#').first,
-                        textAlign: TextAlign.center,
-                        style: context.text.bodySmall?.copyWith(
-                          fontFamily: monoFamily,
-                        ),
-                      ),
-                    if (addresses.length > 1) ...[
-                      const SizedBox(height: Insets.md),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            l.webShareAddress,
-                            style: context.text.bodySmall,
-                          ),
-                          const SizedBox(width: Insets.sm),
-                          DropdownButton<String>(
-                            value: addresses.contains(current)
-                                ? current
-                                : addresses.first,
-                            isDense: true,
-                            underline: const SizedBox.shrink(),
-                            style: context.text.bodySmall?.copyWith(
-                              color: p.text,
-                              fontFamily: monoFamily,
-                            ),
-                            items: [
-                              for (final a in addresses)
-                                DropdownMenuItem(value: a, child: Text(a)),
-                            ],
-                            onChanged: (a) {
-                              if (a == null || a == current) return;
-                              setState(() => _address = a);
-                              _refresh();
-                            },
-                          ),
-                        ],
-                      ),
-                    ] else if (addresses.isEmpty) ...[
-                      const SizedBox(height: Insets.sm),
-                      Text(
-                        l.webShareNoAddress,
-                        textAlign: TextAlign.center,
-                        style: context.text.bodySmall?.copyWith(
-                          color: p.warning,
-                        ),
-                      ),
-                    ],
-                    if (st?.portFallback ?? false) ...[
-                      const SizedBox(height: Insets.sm),
-                      Text(
-                        l.webSharePortFallback,
-                        textAlign: TextAlign.center,
-                        style: context.text.bodySmall?.copyWith(
-                          color: p.warning,
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: Insets.lg),
-                    _Note(icon: AppIcons.lockShield, text: l.webShareSecurity),
-                    const SizedBox(height: Insets.sm),
-                    _Note(icon: AppIcons.info, text: l.webShareCantOpen),
                   ],
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(right: Insets.md),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: Insets.sm),
+                      Text(
+                        l.webShareDialogBody,
+                        style: context.text.bodyMedium?.copyWith(
+                          color: p.textDim,
+                        ),
+                      ),
+                      if (_state.self?.platform == 'windows') ...[
+                        const SizedBox(height: Insets.md),
+                        _Note(
+                          icon: AppIcons.lockShield,
+                          text: _preparingFirewall
+                              ? l.webShareFirewallPreparing
+                              : _firewallError != null
+                              ? l.webShareFirewallFailed
+                              : l.webShareFirewallReady,
+                        ),
+                        if (_firewallError != null) ...[
+                          const SizedBox(height: Insets.sm),
+                          Text(
+                            _firewallError!,
+                            style: context.text.bodySmall?.copyWith(
+                              color: p.danger,
+                            ),
+                          ),
+                        ],
+                        if (!_preparingFirewall)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: OutlinedButton(
+                              onPressed: _prepareFirewall,
+                              child: Text(l.webShareFirewallAllow),
+                            ),
+                          ),
+                      ],
+                      const SizedBox(height: Insets.lg),
+                      Center(
+                        child: Container(
+                          width: 232,
+                          height: 232,
+                          padding: const EdgeInsets.all(Insets.md),
+                          // 二维码一律深色画在白底上：深色模式下也是，反色的码很多扫码器认不出
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(Radii.lg),
+                            border: Border.all(color: p.border),
+                          ),
+                          child: _invite == null
+                              ? Center(
+                                  child: _error == null
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      : Text(
+                                          _error!,
+                                          textAlign: TextAlign.center,
+                                          style: context.text.bodySmall
+                                              ?.copyWith(color: p.danger),
+                                        ),
+                                )
+                              : QrCodeView(
+                                  size: _invite!.qrSize,
+                                  modules: Uint8List.fromList(
+                                    _invite!.qrModules,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      const SizedBox(height: Insets.md),
+                      if (_invite != null)
+                        SelectableText(
+                          _invite!.url.split('#').first,
+                          textAlign: TextAlign.center,
+                          style: context.text.bodySmall?.copyWith(
+                            fontFamily: monoFamily,
+                          ),
+                        ),
+                      if (addresses.length > 1) ...[
+                        const SizedBox(height: Insets.md),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              l.webShareAddress,
+                              style: context.text.bodySmall,
+                            ),
+                            const SizedBox(width: Insets.sm),
+                            DropdownButton<String>(
+                              value: addresses.contains(current)
+                                  ? current
+                                  : addresses.first,
+                              isDense: true,
+                              underline: const SizedBox.shrink(),
+                              style: context.text.bodySmall?.copyWith(
+                                color: p.text,
+                                fontFamily: monoFamily,
+                              ),
+                              items: [
+                                for (final a in addresses)
+                                  DropdownMenuItem(value: a, child: Text(a)),
+                              ],
+                              onChanged: (a) {
+                                if (a == null || a == current) return;
+                                setState(() => _address = a);
+                                _refresh();
+                              },
+                            ),
+                          ],
+                        ),
+                      ] else if (addresses.isEmpty) ...[
+                        const SizedBox(height: Insets.sm),
+                        Text(
+                          l.webShareNoAddress,
+                          textAlign: TextAlign.center,
+                          style: context.text.bodySmall?.copyWith(
+                            color: p.warning,
+                          ),
+                        ),
+                      ],
+                      if (st?.portFallback ?? false) ...[
+                        const SizedBox(height: Insets.sm),
+                        Text(
+                          l.webSharePortFallback,
+                          textAlign: TextAlign.center,
+                          style: context.text.bodySmall?.copyWith(
+                            color: p.warning,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: Insets.lg),
+                      _Note(
+                        icon: AppIcons.lockShield,
+                        text: l.webShareSecurity,
+                      ),
+                      const SizedBox(height: Insets.sm),
+                      _Note(icon: AppIcons.info, text: l.webShareCantOpen),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
