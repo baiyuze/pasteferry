@@ -97,6 +97,12 @@ GLOBE = ('<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-widt
          'M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg>')
 CHEVRON = ('<svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" '
            'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg>')
+PHONE_LABEL = "手机 / 网页版"
+PHONE_ICON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+             'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+             '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/>'
+             '<path d="M11 18.5h2"/></svg>')
+
 
 # GitHub 的标志与星形（Octicons 的 mark-github、star-fill），用在 Star 按钮上
 GITHUB_MARK = ('<svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 '
@@ -1621,6 +1627,8 @@ cd pasteferry-server-macos
             </div>
             {manage(g["manage_caption"], l["manage"])}
           </section>
+
+
         </div>
       </div>
     </section>
@@ -2125,8 +2133,10 @@ def download_page(code: str) -> str:
     base = up + path
     links = {"start": base + START, "server": base + START + "#server", "releases": REPO + "/releases",
              "sums": DL + "SHA256SUMS", "universal": DL + "PasteFerry.dmg", "portable": DL + "PasteFerry-windows-x64.zip",
-             "notes": REPO + "/releases/latest", "lan": base + LAN, "gitee": GITEE + "/releases"}
+             "notes": REPO + "/releases/latest", "lan": base + LAN, "gitee": GITEE + "/releases",
+             "android": DL + "PasteFerry-android-arm64.apk"}
     w, m, lx = d["win"], d["mac"], d["linux"]
+    ph = d["phone"]
     mirror = d.get("mirror")
 
     def mirror_line(files: list[tuple[str, str]]) -> str:
@@ -2158,6 +2168,7 @@ def download_page(code: str) -> str:
             <button type="button" role="tab" id="tab-windows" aria-controls="windows">Windows</button>
             <button type="button" role="tab" id="tab-macos" aria-controls="macos">macOS</button>
             <button type="button" role="tab" id="tab-linux" aria-controls="linux">Linux</button>
+            <button type="button" role="tab" id="tab-phone" aria-controls="phone">{PHONE_LABEL}</button>
           </div>
 
           <section class="os" id="windows" role="tabpanel" aria-labelledby="tab-windows">
@@ -2226,6 +2237,26 @@ def download_page(code: str) -> str:
               </ul>
             </div>
           </section>
+          <section class="os" id="phone" role="tabpanel" aria-labelledby="tab-phone">
+            <h3 class="os-title">{PHONE_ICON}{ph["title"]}</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <div class="dl-row">
+                  {button("PasteFerry-android-arm64.apk", ph["apk"])}
+                </div>{mirror_line([(mirror["android"], "PasteFerry-android-arm64.apk")]) if mirror else ""}
+                <p class="small">{fill(ph["apk_note"], links)}</p>
+                <h4>{ph["web_h"]}</h4>
+                <p class="small">{fill(ph["web_note"], links)}</p>
+                <ol class="steps">
+{items(ph["steps"])}
+                </ol>
+              </div>
+              <ul class="points">
+{items(ph["notes"])}
+              </ul>
+            </div>
+          </section>
+
         </div>
       </div>
     </section>

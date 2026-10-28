@@ -764,6 +764,23 @@ C = {
 
     # ── 下载（download/ 页面） ──
     "download": {
+        "phone": {
+            "title": "手機（安卓 App 或網頁版）",
+            "apk": "下載安卓版（APK）",
+            "apk_note": "安卓 10 以上、arm64 的手機。安裝前系統會讓你確認一次。",
+            "web_h": "網頁版（不用安裝）",
+            "web_note": "在電腦上打開「裝置 › 手機網頁傳輸」，用手機掃 QR 碼，瀏覽器裡就能用。",
+            "steps": [
+                "裝好 App 後，在電腦的「裝置」裡像配對另一台電腦一樣配對手機。",
+                "或者用網頁版：電腦打開「裝置 › 手機網頁傳輸」掃 QR 碼。",
+                "手機上複製的內容貼到隔空貼再傳送；電腦複製的內容會自動出現在手機的記錄裡。",
+            ],
+            "notes": [
+                "文字、截圖、檔案都能雙向傳。",
+                "iPhone、iPad 沒有 App：iOS 不允許背景讀取剪貼簿，且分發需要憑證，請用網頁版。",
+                "內容和電腦之間加密傳輸，建議在家裡或可信的辦公網路使用。",
+            ],
+        },
         "title": "下載隔空貼：Mac（Apple 晶片、Intel）、Windows、Linux",
         "description": "隔空貼各系統的安裝檔：macOS 13 以上的 Apple 晶片版與 Intel 版，Windows 10、11 的安裝程式與免安裝版，"
                        "Linux x64 與 ARM64 的 .deb 和 tar.gz。免費開源。",
@@ -816,7 +833,7 @@ C = {
         },
         "more_h2": "其他",
         "mirror": {"lead": "預設從 Gitee 鏡像下載。備用 GitHub 下載：", "setup": "安裝程式", "portable": "免安裝版",
-                   "apple": "Apple 晶片", "intel": "Intel 晶片", "universal": "通用版"},
+                   "apple": "Apple 晶片", "intel": "Intel 晶片", "universal": "通用版", "android": "安卓版"},
         "more": [
             ("伺服器", "兩台電腦在同一個網路裡不需要伺服器。跨網路時的幾種方式見<a href=\"{server}\">快速入門</a>，"
                       "伺服器的安裝檔在各自的教學裡。"),

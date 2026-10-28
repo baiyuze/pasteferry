@@ -836,6 +836,23 @@ C = {
 
     # ── Download (download/ page) ──
     "download": {
+        "phone": {
+            "title": "Phone (Android app or the web page)",
+            "apk": "Download for Android (APK)",
+            "apk_note": "Android 10 or later, arm64 phones. Android asks once before installing it.",
+            "web_h": "The web page (nothing to install)",
+            "web_note": "Turn on Devices › Phone web transfer on the computer and scan the code with your phone.",
+            "steps": [
+                "After installing the app, pair the phone from Devices on the computer, the same way you pair another computer.",
+                "Or use the web page: turn on Devices › Phone web transfer on the computer and scan the code.",
+                "On the phone, paste what you copied and send it; what you copy on the computer appears in the phone’s records.",
+            ],
+            "notes": [
+                "Text, screenshots and files go both ways.",
+                "There is no iPhone or iPad app: iOS does not let apps read the clipboard in the background, and distributing one needs a certificate. Use the web page instead.",
+                "Contents are encrypted between the phone and the computer; use it at home or on a network you trust.",
+            ],
+        },
         "title": "Download PasteFerry: Mac (Apple silicon, Intel), Windows and Linux",
         "description": "PasteFerry for every system: Apple silicon and Intel versions for macOS 13 or later, an installer and a "
                        "portable zip for Windows 10 and 11, and .deb and tar.gz packages for Linux on x64 and ARM64. Free and open source.",

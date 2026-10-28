@@ -764,6 +764,23 @@ C = {
 
     # ── 下载（download/ 页面） ──
     "download": {
+        "phone": {
+            "title": "手机（安卓 App 或网页版）",
+            "apk": "下载安卓版（APK）",
+            "apk_note": "安卓 10 及以上、arm64 的手机。装之前系统会让你确认一次。",
+            "web_h": "网页版（不用安装）",
+            "web_note": "在电脑上打开「设备 › 手机网页传输」，用手机扫二维码，浏览器里就能用。",
+            "steps": [
+                "装好 App 后，在电脑的「设备」里像配对另一台电脑一样配对手机。",
+                "或者用网页版：电脑打开「设备 › 手机网页传输」扫二维码。",
+                "手机上复制的内容粘贴到隔空贴再发送；电脑复制的内容会自动出现在手机的记录里。",
+            ],
+            "notes": [
+                "文字、截图、文件都能双向传。",
+                "iPhone、iPad 没有 App：iOS 不允许后台读剪贴板，且分发需要证书，请用网页版。",
+                "内容和电脑之间加密传输，建议在家里或可信的办公网络使用。",
+            ],
+        },
         "title": "下载隔空贴：Mac（Apple 芯片、Intel）、Windows、Linux",
         "description": "隔空贴各系统的安装包：macOS 13 及以上的 Apple 芯片版与 Intel 版，Windows 10、11 的安装程序与便携版，"
                        "Linux x64 与 ARM64 的 .deb 和 tar.gz。免费开源。",
@@ -815,7 +832,7 @@ C = {
             ],
         },
         "mirror": {"lead": "默认从 Gitee 国内镜像下载。备用 GitHub 下载：", "setup": "安装程序", "portable": "便携版",
-                   "apple": "Apple 芯片", "intel": "Intel 芯片", "universal": "通用版"},
+                   "apple": "Apple 芯片", "intel": "Intel 芯片", "universal": "通用版", "android": "安卓版"},
         "more_h2": "其他",
         "more": [
             ("服务器", "两台电脑在同一个网络里不需要服务器。跨网络时的几种方式见<a href=\"{server}\">快速开始</a>，"

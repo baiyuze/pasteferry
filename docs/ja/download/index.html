@@ -90,6 +90,7 @@
             <button type="button" role="tab" id="tab-windows" aria-controls="windows">Windows</button>
             <button type="button" role="tab" id="tab-macos" aria-controls="macos">macOS</button>
             <button type="button" role="tab" id="tab-linux" aria-controls="linux">Linux</button>
+            <button type="button" role="tab" id="tab-phone" aria-controls="phone">手机 / 网页版</button>
           </div>
 
           <section class="os" id="windows" role="tabpanel" aria-labelledby="tab-windows">
@@ -173,6 +174,30 @@
               </ul>
             </div>
           </section>
+          <section class="os" id="phone" role="tabpanel" aria-labelledby="tab-phone">
+            <h3 class="os-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>スマホ（Android アプリまたはウェブ版）</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <div class="dl-row">
+                  <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.7.1/PasteFerry-android-arm64.apk"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Android 版をダウンロード（APK）</a>
+                </div>
+                <p class="small">Android 10 以降、arm64 のスマホ。インストール時に一度確認が出ます。</p>
+                <h4>ウェブ版（インストール不要）</h4>
+                <p class="small">パソコンで「デバイス › スマホのウェブ転送」を開き、スマホで QR コードを読み取ります。</p>
+                <ol class="steps">
+                <li>アプリを入れたら、パソコンの「デバイス」から別のパソコンと同じようにスマホをペアリングします。</li>
+                <li>またはウェブ版：パソコンで「デバイス › スマホのウェブ転送」を開いて QR コードを読み取ります。</li>
+                <li>スマホでコピーした内容は貼り付けてから送信します。パソコンでコピーした内容はスマホの履歴に自動で入ります。</li>
+                </ol>
+              </div>
+              <ul class="points">
+                <li>テキスト、スクリーンショット、ファイルは双方向に送れます。</li>
+                <li>iPhone・iPad のアプリはありません。iOS はバックグラウンドでのクリップボード読み取りを許可せず、配布にも証明書が必要です。ウェブ版を使ってください。</li>
+                <li>スマホとパソコンの間は暗号化されます。自宅や信頼できるネットワークで使ってください。</li>
+              </ul>
+            </div>
+          </section>
+
         </div>
       </div>
     </section>

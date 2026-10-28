@@ -90,6 +90,7 @@
             <button type="button" role="tab" id="tab-windows" aria-controls="windows">Windows</button>
             <button type="button" role="tab" id="tab-macos" aria-controls="macos">macOS</button>
             <button type="button" role="tab" id="tab-linux" aria-controls="linux">Linux</button>
+            <button type="button" role="tab" id="tab-phone" aria-controls="phone">手机 / 网页版</button>
           </div>
 
           <section class="os" id="windows" role="tabpanel" aria-labelledby="tab-windows">
@@ -176,6 +177,31 @@
               </ul>
             </div>
           </section>
+          <section class="os" id="phone" role="tabpanel" aria-labelledby="tab-phone">
+            <h3 class="os-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>手机（安卓 App 或网页版）</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <div class="dl-row">
+                  <a class="button" href="https://gitee.com/baiyuze/pasteferry/releases/download/v2.7.1/PasteFerry-android-arm64.apk"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载安卓版（APK）</a>
+                </div>
+                <p class="small">默认从 Gitee 国内镜像下载。备用 GitHub 下载：<a href="https://github.com/baiyuze/pasteferry/releases/download/v2.7.1/PasteFerry-android-arm64.apk">安卓版</a></p>
+                <p class="small">安卓 10 及以上、arm64 的手机。装之前系统会让你确认一次。</p>
+                <h4>网页版（不用安装）</h4>
+                <p class="small">在电脑上打开「设备 › 手机网页传输」，用手机扫二维码，浏览器里就能用。</p>
+                <ol class="steps">
+                <li>装好 App 后，在电脑的「设备」里像配对另一台电脑一样配对手机。</li>
+                <li>或者用网页版：电脑打开「设备 › 手机网页传输」扫二维码。</li>
+                <li>手机上复制的内容粘贴到隔空贴再发送；电脑复制的内容会自动出现在手机的记录里。</li>
+                </ol>
+              </div>
+              <ul class="points">
+                <li>文字、截图、文件都能双向传。</li>
+                <li>iPhone、iPad 没有 App：iOS 不允许后台读剪贴板，且分发需要证书，请用网页版。</li>
+                <li>内容和电脑之间加密传输，建议在家里或可信的办公网络使用。</li>
+              </ul>
+            </div>
+          </section>
+
         </div>
       </div>
     </section>

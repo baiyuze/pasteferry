@@ -90,6 +90,7 @@
             <button type="button" role="tab" id="tab-windows" aria-controls="windows">Windows</button>
             <button type="button" role="tab" id="tab-macos" aria-controls="macos">macOS</button>
             <button type="button" role="tab" id="tab-linux" aria-controls="linux">Linux</button>
+            <button type="button" role="tab" id="tab-phone" aria-controls="phone">手机 / 网页版</button>
           </div>
 
           <section class="os" id="windows" role="tabpanel" aria-labelledby="tab-windows">
@@ -173,6 +174,30 @@
               </ul>
             </div>
           </section>
+          <section class="os" id="phone" role="tabpanel" aria-labelledby="tab-phone">
+            <h3 class="os-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Phone (Android app or the web page)</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <div class="dl-row">
+                  <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.7.1/PasteFerry-android-arm64.apk"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download for Android (APK)</a>
+                </div>
+                <p class="small">Android 10 or later, arm64 phones. Android asks once before installing it.</p>
+                <h4>The web page (nothing to install)</h4>
+                <p class="small">Turn on Devices › Phone web transfer on the computer and scan the code with your phone.</p>
+                <ol class="steps">
+                <li>After installing the app, pair the phone from Devices on the computer, the same way you pair another computer.</li>
+                <li>Or use the web page: turn on Devices › Phone web transfer on the computer and scan the code.</li>
+                <li>On the phone, paste what you copied and send it; what you copy on the computer appears in the phone’s records.</li>
+                </ol>
+              </div>
+              <ul class="points">
+                <li>Text, screenshots and files go both ways.</li>
+                <li>There is no iPhone or iPad app: iOS does not let apps read the clipboard in the background, and distributing one needs a certificate. Use the web page instead.</li>
+                <li>Contents are encrypted between the phone and the computer; use it at home or on a network you trust.</li>
+              </ul>
+            </div>
+          </section>
+
         </div>
       </div>
     </section>
