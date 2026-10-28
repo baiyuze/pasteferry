@@ -92,11 +92,23 @@ apk=ui/build/app/outputs/flutter-apk/app-release.apk
 # （服务名 pasteferry-android-keystore）。这张密钥不能换：换了，已装的用户没法覆盖升级。
 # 没有密钥时留着 gradle 打的调试签名，只能内测。
 KEYSTORE="$HOME/.pasteferry-android/pasteferry-release.jks"
-if [[ -f "$KEYSTORE" ]] && ks_pw=$(security find-generic-password -s pasteferry-android-keystore -a pasteferry -w 2>/dev/null); then
+ks_pw=""
+if [[ -n "${ANDROID_KEYSTORE_BASE64:-}" ]]; then
+    # CI：密钥以 base64 放在 secret 里，临时的 .jks 写在构建目录，用完删除
+    KEYSTORE="${RUNNER_TEMP:-/tmp}/pasteferry-release.jks"
+    printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$KEYSTORE"
+    ks_pw="${ANDROID_KEYSTORE_PASSWORD:-}"
+    key_pw="${ANDROID_KEY_PASSWORD:-$ks_pw}"
+elif [[ -f "$KEYSTORE" ]] && ks_pw=$(security find-generic-password -s pasteferry-android-keystore -a pasteferry -w 2>/dev/null); then
+    key_pw="$ks_pw"
+fi
+
+if [[ -n "$ks_pw" ]]; then
     apksigner="$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)"
     "$apksigner" sign --ks "$KEYSTORE" --ks-key-alias pasteferry \
-        --ks-pass "pass:$ks_pw" --key-pass "pass:$ks_pw" "$apk"
-    unset ks_pw
+        --ks-pass "pass:$ks_pw" --key-pass "pass:$key_pw" "$apk"
+    unset ks_pw key_pw
+    if [[ -n "${ANDROID_KEYSTORE_BASE64:-}" ]]; then rm -f "$KEYSTORE"; fi
     echo "  · 签名：PasteFerry Android release key"
 else
     echo "  · 签名：调试密钥（没有发版密钥，只能内测）"
