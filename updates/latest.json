@@ -1,65 +1,111 @@
 {
   "schema": 1,
-  "latest": "2.7.0",
+  "latest": "2.7.1",
   "date": "2026-10-28",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.7.0/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.7.1/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.7.0/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.7.1/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 26947851,
-      "sha256": "5f4ad6313edfda55c257bc79f2209bc4e20161f0aa08a897d9aa4bdbd718c20d"
+      "size": 26949501,
+      "sha256": "f813813ba5140c068718562f665576383bbac92f64075776fc82ab63492d98d6"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 29102834,
-      "sha256": "3b439afd3220773bf0ea0474a00b26dd99eafab6642a410c942d368866a66ea2"
+      "size": 29106496,
+      "sha256": "f1074e7ead3c89bdea29599230f3fc001ec7a034fda35cb5fcd5f2542b7ea68d"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 54117522,
-      "sha256": "8ec0e7399a38c09b2bc7e98e83d7602271f22cdd537a70c71eb211fddcab9504"
+      "size": 54122805,
+      "sha256": "8ff7de70e1242b6202f4647de72267a711ec9ea4a7bd9dbaaa37c610f4103583"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 24067716,
-      "sha256": "7f214dfa90e96a5366689f8638c053c2237450ebc041f6698fb73dda4fda5928"
+      "size": 24069134,
+      "sha256": "6d0639131e60e9ad3c5ddf22565389c675c7ee182e5dd20a3d6bc5a64c2fbb55"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 30430479,
-      "sha256": "b39ddefbe60cdbdf90c1d661c97f915d4c95dc7105fccba43e2983e19c569711"
+      "size": 30432187,
+      "sha256": "a643b82ff1ff7758d48a454149bed63aac3ec830839f3f369e648475d74df1a6"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 23259278,
-      "sha256": "1442e19afcb71240689b068abe61cf6735a1eb5df6845510d79a1079c8f56137"
+      "size": 23255986,
+      "sha256": "c3b918219a52cb525c4865b5bfaa50478149715bb936576fb109363c8038121e"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 21637268,
-      "sha256": "0b7185bafe355a7220287b2281d9c655650149952c38e52cac87aec6ef68c82e"
+      "size": 21640778,
+      "sha256": "19fbaa8d58fa20d2b9d3fb429cfa545e5c625fe01a478da1d80529bfba2b50e6"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 28143816,
-      "sha256": "f4038541d7619ef8048cf74711d4a517dc872444212c719cdfb1ae710475213f"
+      "size": 28149111,
+      "sha256": "dcba1ffba4629bb9e5200fc64f1987edf4ff9d169ad3c1d253e526533376dc99"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 26366903,
-      "sha256": "ab2f52a80af14f23db27f66c5b7b9161a9e8c87ba4a30a3c69973307edc3ae1e"
+      "size": 26363468,
+      "sha256": "d56178f1b4a76ece048016fa45b5f21d05d990dfea7cdcd2bfcdf0ff2571a5bc"
     }
   },
   "releases": [
+    {
+      "version": "2.7.1",
+      "date": "2026-10-28",
+      "notes": {
+        "en": {
+          "changes": [
+            "Android: picking photos or files first shows every file with its size, and nothing is sent until Send is tapped; multi-select works. The send page lists what this phone sent in the last three days, with View all and Clear. Settings has Check for updates, which opens the APK link when a newer version exists."
+          ],
+          "fixes": [
+            "Tapping Copy in the phone page wrote the text into the clipboard of the computer running it, and the app then kept it as another record. The same text is now ignored for a minute, so copying the same record again only updates the clipboard."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "安卓：选完照片或文件先列出每个文件和大小，点「发送」才真的发；支持多选。发送页底部列出这台手机最近三天发出去的内容，可以「查看全部」和清除。设置里有「检查更新」，有新版本时打开 APK 下载链接。"
+          ],
+          "fixes": [
+            "在手机网页上点「复制」会把文字写进那台电脑的剪贴板，于是又被记成一条新记录。现在同一段文字一分钟内重复复制不再记录，只更新剪贴板。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "Android：写真やファイルを選ぶと、まず各ファイルとサイズの一覧が出て、「送信」を押すまで送られません。複数選択にも対応。送信ページの下部に、このスマホが過去 3 日に送った内容が並び、「すべて見る」と消去ができます。設定に「アップデートを確認」があり、新しい版があれば APK のリンクを開きます。"
+          ],
+          "fixes": [
+            "スマホのページで「コピー」を押すと、そのパソコンのクリップボードに書き込まれ、もう 1 件の履歴として残っていました。同じテキストは 1 分間は記録せず、クリップボードだけ更新します。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "安卓：選完照片或檔案先列出每個檔案和大小，點「傳送」才真的送出；支援多選。傳送頁底部列出這台手機最近三天送出的內容，可以「查看全部」和清除。設定裡有「檢查更新」，有新版本時開啟 APK 下載連結。"
+          ],
+          "fixes": [
+            "在手機網頁上點「複製」會把文字寫進那台電腦的剪貼簿，於是又被記成一筆新記錄。現在同一段文字一分鐘內重複複製不再記錄，只更新剪貼簿。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "安卓：選完照片或檔案先列出每個檔案和大小，按「傳送」才真的送出；支援多選。傳送頁底部列出這部手機最近三日送出的內容，可以「查看全部」和清除。設定裏有「檢查更新」，有新版本時開啟 APK 下載連結。"
+          ],
+          "fixes": [
+            "在手機網頁上按「複製」會把文字寫進那部電腦的剪貼簿，於是又被記成一項新記錄。現在同一段文字一分鐘內重複複製不再記錄，只更新剪貼簿。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.7.0",
       "date": "2026-10-28",
@@ -500,57 +546,6 @@
             "修正接收方重新啟動時遺失傳送請求、重新連線後傳輸仍停在「已中斷」的問題。兩部電腦已經連上時，現在會稍等片刻自動補試一次。",
             "檔案已收完但送達回報遺失時，續傳會直接標為已送達，不再重新傳送一份。",
             "選擇左右排列時，隔空傳送頁現在在所有視窗大小下都維持雷達與列表左右排列；窄視窗裏的裝置名稱不再重疊。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.5.0",
-      "date": "2026-10-22",
-      "notes": {
-        "en": {
-          "changes": [
-            "Send Files: a new Send Files page shows your paired devices on a radar. Drop files or whole folders onto a device, or click it and choose them, to send them straight to that computer. There's no size limit, and received files go to your Downloads folder (changeable in Settings) instead of your history.",
-            "Transfers show progress, speed and time left. If the connection drops, they pick up where they stopped: automatically within 30 minutes, or later with Continue. Every file is checked with SHA-256, and the computer doesn't fall asleep while files are moving.",
-            "When only the official relay gets through, you're asked before sending. A transfer pauses when the day's allowance runs out and continues once the devices connect directly or the allowance resets.",
-            "Settings has a Send Files section: turn receiving on or off, choose where files are saved, turn notifications on or off, and put the transfer list beside or below the radar.",
-            "The sidebar is grouped: History, Favorites and Send Files first, then Devices, Official service and Settings."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "隔空传送：新的「隔空传送」页把配对过的设备排在雷达上。把文件或整个文件夹拖到一台设备上，或者点它再选择文件，就直接发到那台电脑。不限大小；收到的文件存到「下载」（可以在设置里改），不进复制记录。",
-            "传输时显示进度、速度和剩余时间。连接断了会从断点接着传：30 分钟内自动继续，更晚的话点「继续」。每个文件都用 SHA-256 校验，传输期间电脑不会自动睡眠。",
-            "只能经官方中转时，发送前会先问你。当天额度用完时传输暂停，两台连上直连或额度恢复后自动继续。",
-            "设置里新增「隔空传送」一组：接收开关、保存位置、通知，以及传输列表放在雷达右边还是下面。",
-            "侧边栏分成两组：复制记录、收藏、隔空传送在上，设备、官方服务、设置在下。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "ファイル送信：新しい「ファイル送信」ページでは、ペアリングしたデバイスがレーダーに並びます。ファイルやフォルダをデバイスにドロップするか、クリックして選ぶと、そのパソコンへ直接送ります。サイズ無制限で、受信したファイルは履歴ではなく「ダウンロード」フォルダ（設定で変更可）に保存されます。",
-            "転送中は進み具合、速度、残り時間を表示します。接続が切れても中断した位置から再開します（30 分以内なら自動、それ以降は「続ける」）。ファイルはすべて SHA-256 で検証され、転送中はパソコンが自動でスリープしません。",
-            "公式の中継しか通らない場合は、送る前に確認します。その日の上限に達すると転送は一時停止し、直接接続できたときか上限がリセットされたときに自動で再開します。",
-            "設定に「ファイル送信」の項目を追加しました。受信のオン/オフ、保存先、通知、転送リストをレーダーの右に置くか下に置くかを選べます。",
-            "サイドバーを 2 つのグループに分けました。上に履歴・お気に入り・ファイル送信、下にデバイス・公式サービス・設定。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "隔空傳送：新的「隔空傳送」頁把配對過的裝置排在雷達上。把檔案或整個資料夾拖到一台裝置上，或點它再選擇檔案，就直接傳到那台電腦。不限大小；收到的檔案存到「下載」（可以在設定裡更改），不進複製記錄。",
-            "傳輸時顯示進度、速度和剩餘時間。連線中斷會從中斷處接著傳：30 分鐘內自動繼續，更晚的話點「繼續」。每個檔案都用 SHA-256 校驗，傳輸期間電腦不會自動睡眠。",
-            "只能經官方中繼時，傳送前會先問你。當天額度用完時傳輸暫停，兩台連上直連或額度恢復後自動繼續。",
-            "設定裡新增「隔空傳送」一組：接收開關、儲存位置、通知，以及傳輸列表放在雷達右邊還是下面。",
-            "側邊欄分成兩組：複製記錄、收藏、隔空傳送在上，裝置、官方服務、設定在下。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "隔空傳送：新的「隔空傳送」頁把配對過的裝置排在雷達上。把檔案或整個資料夾拖到一部裝置上，或按它再選擇檔案，就直接傳到那部電腦。不限大小；收到的檔案存到「下載」（可以在設定裏更改），不進複製記錄。",
-            "傳輸時顯示進度、速度和剩餘時間。連線中斷會從中斷處接着傳：30 分鐘內自動繼續，更晚的話按「繼續」。每個檔案都用 SHA-256 校驗，傳輸期間電腦不會自動休眠。",
-            "只能經官方中轉時，傳送前會先問你。當天額度用完時傳輸暫停，兩部電腦連上直連或額度恢復後自動繼續。",
-            "設定裏新增「隔空傳送」一組：接收開關、儲存位置、通知，以及傳輸列表放在雷達右邊還是下面。",
-            "側邊欄分成兩組：複製記錄、收藏、隔空傳送在上，裝置、官方服務、設定在下。"
           ]
         }
       }
