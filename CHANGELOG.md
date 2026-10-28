@@ -1,5 +1,22 @@
 # 更新记录 / Changelog
 
+## 2.7.0 — 2026-10-28
+
+Scan a code with your phone to read the records on the computer, copy one,
+or send text, photos and files back. Nothing to install.
+
+### Changes
+
+- **Phone web transfer**: Devices › Phone web transfer turns it on and shows a QR code. Scanning it opens a page in the phone browser, on the same local network, that lists the records from the computer: search them, filter by type, copy a text, look at a picture, download a file. Text, photos and files sent from the page arrive on the computer as a normal record and go into its clipboard. Contents are encrypted between the phone and the computer. A code registers one phone and expires after ten minutes; registered phones can be removed in the same panel. The switch is off by default.
+- Records that came from the phone say so in the history, with the phone's name.
+- On the phone page, copying and sending report in place instead of over the list, and pressing and holding a record no longer opens the browser's own copy bar.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended for phone web transfer. Pairings, contacts, history and settings are preserved. The feature stays off until it is turned on in Devices.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with 2.6.0.
+
 ## 2.6.3 — 2026-10-27
 
 Quick paste picks items with Option+1–9 on a Mac and lets you choose the

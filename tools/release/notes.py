@@ -11,6 +11,29 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.7.0',
+ 'date': '2026-10-28',
+ 'changes': [('Phone web transfer: Devices › Phone web transfer turns it on and shows a QR code. Scanning it opens a '
+              'page in the phone browser, on the same local network, that lists the records from the computer: copy a '
+              'text, look at a picture, download a file. Text, photos and files sent from the page arrive on the '
+              'computer as a normal record and go into its clipboard. Contents are encrypted between the phone and the '
+              'computer, a code registers one phone and expires after ten minutes, and the switch is off by default.',
+              '手机网页传输：「设备 › 手机网页传输」打开后显示二维码，用手机扫一下就在手机浏览器里打开一个页面，列出电脑上的复制记录：复制文字、看图片、下载文件。手机上发出的文字、照片和文件会作为一条普通记录到电脑上，并放进电脑的剪贴板。手机和电脑之间的内容是加密的；一张码只登记一台手机，十分钟内有效；开关默认关闭。',
+              'スマホのウェブ転送：「デバイス › スマホのウェブ転送」をオンにすると QR コードが表示されます。スマホで読み取ると、同じ LAN 上のスマホのブラウザでページが開き、パソコンのコピー履歴が一覧できます。テキストのコピー、画像の表示、ファイルのダウンロードができ、スマホから送ったテキスト・写真・ファイルは通常の履歴としてパソコンに届き、クリップボードにも入ります。スマホとパソコンの間は暗号化され、コード 1 つにつき 1 台、有効期限は 10 分です。スイッチは初期状態でオフです。',
+              '手機網頁傳輸：「裝置 › 手機網頁傳輸」打開後顯示 QR 碼，用手機掃一下就在手機瀏覽器裡打開一個頁面，列出電腦上的複製記錄：複製文字、看圖片、下載檔案。手機上送出的文字、照片和檔案會變成一筆普通記錄到電腦上，並放進電腦的剪貼簿。手機和電腦之間的內容是加密的；一個碼只登記一台手機，十分鐘內有效；開關預設關閉。',
+              '手機網頁傳輸：「裝置 › 手機網頁傳輸」打開後顯示 QR 碼，用手機掃一下就在手機瀏覽器裏打開一個頁面，列出電腦上的複製記錄：複製文字、看圖片、下載檔案。手機上送出的文字、照片和檔案會變成一項普通記錄到電腦上，並放進電腦的剪貼簿。手機和電腦之間的內容是加密的；一個碼只登記一台手機，十分鐘內有效；開關預設關閉。'),
+             ('Records that came from the phone say so in the history, with the phone\'s name.',
+              '手机发来的记录在记录列表里标明来自哪一台手机。',
+              'スマホから届いた履歴には、どのスマホから来たかが表示されます。',
+              '手機送來的記錄在記錄列表裡標明來自哪一台手機。',
+              '手機送來的記錄在記錄列表裏標明來自哪一部手機。'),
+             ('On the phone page, copying and sending report in place instead of over the list, and pressing and holding '
+              'a record no longer opens the browser\'s own copy bar.',
+              '手机网页上，复制和发送的结果就地显示，不再浮在列表上面；长按记录也不会再弹出浏览器自带的选择工具条。',
+              'スマホのページでは、コピーや送信の結果がその場に表示され、一覧の上に重なりません。履歴を長押ししてもブラウザ標準の選択バーは出ません。',
+              '手機網頁上，複製和傳送的結果就地在原處顯示，不再浮在列表上面；長按記錄也不會再跳出瀏覽器自帶的選取工具列。',
+              '手機網頁上，複製和傳送的結果就地在原處顯示，不再浮在列表上面；長按記錄也不會再彈出瀏覽器自帶的選取工具列。')],
+ 'fixes': []},
 {'version': '2.6.3',
  'date': '2026-10-27',
  'changes': [('Quick paste: on a Mac, Option+1–9 now pastes one of the first nine items, the same place as Alt+1–9 on '
