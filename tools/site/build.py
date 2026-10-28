@@ -891,7 +891,7 @@ def features_page(code: str) -> str:
 
     <section class="f-section" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
+        <p class="kicker"><span class="new">{f["phone_kicker"]}</span></p>
         <h2 class="f-h2" id="phone-title">{f["phone_h2"]}</h2>
         <p class="f-intro">{f["phone_intro"]}</p>
         <ul class="facts">
