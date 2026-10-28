@@ -125,10 +125,20 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - uses: android-actions/setup-android@v3
-      # build-android.sh 需要 NDK（gomobile 用它编 arm64 的 Go 核心）
-      - name: 安装 NDK
-        run: sdkmanager "ndk;28.2.13676358" > /dev/null && echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
+      # ubuntu-latest 自带 Android SDK；NDK 若缺失再装（gomobile 用它编 arm64 的 Go 核心）
+      - name: Android SDK 与 NDK
+        run: |
+          test -n "$ANDROID_HOME" || export ANDROID_HOME=/usr/local/lib/android/sdk
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          sdk="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          test -x "$sdk" || sdk="$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager"
+          ndk=$(ls -d "$ANDROID_HOME"/ndk/* 2>/dev/null | sort -V | tail -1)
+          if [[ -z "$ndk" ]]; then
+            "$sdk" --sdk_root="$ANDROID_HOME" "ndk;28.2.13676358" > /dev/null
+            ndk="$ANDROID_HOME/ndk/28.2.13676358"
+          fi
+          echo "ANDROID_NDK_HOME=$ndk" >> "$GITHUB_ENV"
+          echo "NDK=$ndk"
       # gomobile 把 Go 核心打成 AAR，再由 Flutter 打 APK
       - name: Go 核心 AAR
         run: |
