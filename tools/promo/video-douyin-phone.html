@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>隔空贴 2.6 · 跨平台的隔空投送 · 抖音竖屏</title>
+<!--
+  抖音竖屏短片：1080×1920，主题是「我做了个跨平台的隔空投送」，带上 2.6 的手机和 2.6.1 的手机页。
+  所有动画都是时间 t 的函数，window.seek(t) 画出第 t 秒的一帧，由 render.js 逐帧截图
+  （PAGE=video-douyin-airdrop.html VW=1080 VH=1920）。浏览器直接打开会循环播放，#cover 显示封面。
+
+  留存：第一帧就是整句话（隔空投送到了 Windows 就不行）；第 3 秒雷达出现、照片拖到 安卓手机上，音乐同时进高潮；
+  中段三段各 4.5～5 秒：问句从头留到尾，答案字完整出现后至少停 2 秒；结尾求 Star、抛问题引评论。
+
+  节奏 120 BPM，一小节 2 秒：build 1.0 → drop 3.0 → section 15.5（手机）→ finale 25.0（与 drop 差 11 小节）。
+  抖音界面会盖住顶部约 200 px、底部约 480 px 和右侧约 130 px（y 1000–1550 的按钮列），
+  所以 y 1000 以下的东西右边不超过 x 940，最低不超过 y 1440。颜色与 App 的深色界面一致。
+-->
+<style>
+:root {
+  --ground: #0e0e10;
+  --surface: #1c1c1f;
+  --surface-2: #26262a;
+  --rule: #313136;
+  --ink: #f5f5f3;
+  --ink-2: #d4d4d0;
+  --dim: #8e8e93;
+  --blue-ui: #2f7df6;
+  --blue-hi: #5b9dff;
+  --accent: #3b8beb;
+  --red: #ff453a;
+  --green: #30d158;
+  --orange: #ff9f0a;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+  --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif;
+  --mono: "SF Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #000; }
+p { margin: 0; }
+
+#film {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+.scene { position: absolute; inset: 0; visibility: hidden; overflow: hidden; }
+.cam { position: absolute; inset: 0; transform-origin: 50% 45%; }
+
+/* 大标题：逐行从遮罩里升上来 */
+.hl {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.18;
+}
+.ln { display: block; overflow: hidden; padding: 0.02em 0 0.12em; }
+.ln > span { display: inline-block; transform: translateY(115%); }
+.b { color: var(--blue-hi); }
+.kick { font-size: 52px; font-weight: 500; color: var(--dim); }
+.q { top: 210px; font-size: 104px; }
+/* 答案：在右侧按钮列的高度，右边多让一些 */
+.ans { left: 60px; right: 140px; font-size: 76px; }
+.ans small { display: block; margin-top: 8px; font-size: 42px; font-weight: 500; color: var(--ink-2); }
+.ans .ln + .ln + .ln small { margin-top: 0; font-size: 38px; color: var(--dim); }
+
+svg.ic { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 指针 */
+.cursor { position: absolute; left: 0; top: 0; width: 50px; height: 70px; opacity: 0; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); z-index: 20; transform-origin: 0 0; }
+
+/* 文件卡片 */
+.fcard {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  height: 150px;
+  padding: 0 40px;
+  border-radius: 30px;
+  background: var(--surface);
+  border: 2px solid var(--rule);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+}
+.fcard svg.ic { flex: none; width: 76px; height: 76px; color: var(--blue-hi); stroke-width: 5; }
+.fcard b { font-size: 48px; font-weight: 600; }
+.fcard span { font-size: 38px; color: var(--dim); }
+.fcard.sm { left: 0; top: 0; height: 112px; padding: 0 30px; gap: 18px; border-radius: 24px; border-color: #3d3d44; background: #232327; z-index: 10; }
+.fcard.sm svg.ic { width: 58px; height: 58px; }
+.fcard.sm b { font-size: 38px; }
+.fcard.sm span { font-size: 32px; }
+
+/* ── 雷达（照 App 的隔空传送页） ── */
+.rsvg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+.rsvg .outer { fill: none; stroke: #3a3a40; stroke-width: 2.5; }
+.rsvg .inner { fill: url(#disk); stroke: rgba(91, 157, 255, 0.28); stroke-width: 2.5; }
+.rsvg .ripple { fill: none; stroke: var(--blue-hi); stroke-width: 4; opacity: 0; }
+.rlabel { position: absolute; transform: translate(-50%, -50%); padding: 0 16px; background: var(--ground); font-size: 30px; color: var(--dim); white-space: nowrap; }
+.rlabel.in { background: transparent; color: #7f8ba0; }
+.node { position: absolute; width: 0; height: 0; }
+.nc {
+  position: absolute;
+  left: -60px;
+  top: -60px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #2c2c2f;
+  border: 2px solid #3d3d44;
+  display: grid;
+  place-items: center;
+  color: #c7c7cc;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+.nc svg.ic { width: 60px; height: 60px; stroke-width: 6; }
+.nc.me { border: 4px solid var(--accent); color: var(--blue-hi); background: #1b2333; }
+.dot { position: absolute; right: 6px; bottom: 6px; width: 26px; height: 26px; border-radius: 50%; border: 5px solid var(--ground); }
+.dot.g { background: var(--green); }
+.dot.o { background: var(--orange); }
+.pr { position: absolute; left: -20px; top: -20px; width: 160px; height: 160px; transform: rotate(-90deg); overflow: visible; }
+.pr circle { opacity: 0; fill: none; stroke: var(--blue-hi); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 0 999; }
+.node b { position: absolute; left: -220px; width: 440px; top: 76px; text-align: center; font-size: 34px; font-weight: 500; white-space: nowrap; }
+.node em { position: absolute; left: -220px; width: 440px; top: 122px; text-align: center; font-style: normal; font-size: 30px; font-weight: 600; color: var(--blue-hi); white-space: nowrap; }
+
+/* 传输卡片（照 App「收到的 / 发出的」里的一行） */
+.tcard {
+  position: absolute;
+  left: 90px;
+  width: 840px;
+  display: flex;
+  gap: 28px;
+  padding: 30px 36px;
+  border-radius: 28px;
+  background: var(--surface);
+  border: 2px solid var(--rule);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+}
+.tcard > svg.ic { flex: none; width: 66px; height: 66px; margin-top: 4px; color: #aeaeb2; stroke-width: 5; }
+.tb { flex: 1; min-width: 0; }
+.tt { font-size: 38px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ts { margin-top: 6px; font-size: 30px; color: var(--dim); white-space: nowrap; }
+.bar { position: relative; height: 12px; margin: 20px 0 14px; border-radius: 6px; background: #3a3a3e; overflow: hidden; }
+.bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 6px; background: var(--blue-ui); }
+.tm { font-size: 30px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tm + .tm { margin-top: 4px; color: var(--dim); }
+
+/* ── 1 痛点 ── */
+#s1-text { top: 250px; }
+#s1-text .kick { margin-bottom: 24px; }
+#s1-text .big { font-size: 128px; }
+#f1 { left: 160px; width: 760px; top: 720px; }
+.try {
+  position: absolute;
+  left: 110px;
+  width: 800px;
+  height: 108px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 0 28px;
+  border-radius: 24px;
+  background: #19191c;
+  border: 2px solid #2c2c31;
+  font-size: 40px;
+  white-space: nowrap;
+  opacity: 0;
+}
+.try svg.ic { flex: none; width: 54px; height: 54px; color: #98989d; stroke-width: 6; }
+.try b { font-weight: 600; }
+.try span { flex: 1; color: var(--dim); font-size: 36px; }
+.try .x { flex: none; width: 58px; height: 58px; border-radius: 50%; background: var(--red); display: grid; place-items: center; opacity: 0; }
+.try .x svg { width: 30px; height: 30px; color: #fff; stroke-width: 13; }
+
+/* ── 2 揭晓：拖到雷达上 ── */
+#s2-head, #s2b-head { top: 196px; font-size: 116px; }
+#s2b-head .ln + .ln { font-size: 104px; }
+#s2-cap, #s2b-cap { top: 1215px; font-size: 54px; }
+#s2-cap small, #s2b-cap small { font-size: 40px; color: var(--dim); }
+
+/* ── 3 网盘 ── */
+#s3-cloud { position: absolute; left: 465px; top: 470px; width: 150px; height: 150px; color: #8e8e93; }
+#s3-cloud svg { width: 150px; height: 150px; stroke-width: 4.5; }
+#s3-up { position: absolute; left: 290px; width: 500px; top: 618px; text-align: center; font-size: 30px; color: var(--dim); }
+#s3-net { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+#s3-net .via { fill: none; stroke: #4a4a50; stroke-width: 4; stroke-dasharray: 10 12; }
+#s3-net .slash { stroke: var(--red); stroke-width: 9; stroke-linecap: round; }
+#s3-net .direct { stroke: var(--blue-hi); stroke-width: 6; stroke-linecap: round; }
+#s3-net .pk { fill: #cfe1ff; }
+#s3-net .slow { fill: #aeaeb2; }
+#s3-tag { position: absolute; left: 440px; width: 200px; top: 750px; text-align: center; font-size: 34px; font-weight: 600; color: var(--blue-hi); opacity: 0; }
+#t3 { top: 850px; }
+#s3-ans { top: 1195px; }
+
+/* ── 4 断点续传 ── */
+#wifi { position: absolute; left: 450px; top: 478px; width: 180px; height: 180px; }
+#wifi svg { width: 180px; height: 180px; stroke-width: 8; }
+#wifi .sl { stroke: var(--red); stroke-width: 9; }
+#wifi-l { position: absolute; left: 240px; width: 600px; top: 666px; text-align: center; font-size: 34px; font-weight: 600; }
+#t4 { top: 760px; }
+#s4-ans { top: 1110px; }
+
+/* ── 5 文件夹 ── */
+#fold { position: absolute; left: 160px; top: 540px; width: 220px; height: 220px; }
+#fold-l { position: absolute; left: 70px; width: 400px; top: 742px; text-align: center; }
+#fold-l b { display: block; font-size: 38px; font-weight: 600; }
+#fold-l span { font-size: 30px; color: var(--dim); }
+#zip {
+  position: absolute;
+  left: 105px;
+  top: 842px;
+  height: 72px;
+  padding: 0 28px;
+  border-radius: 36px;
+  background: var(--surface-2);
+  border: 2px solid var(--rule);
+  display: flex;
+  align-items: center;
+  font-size: 34px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  opacity: 0;
+}
+#zip i { position: absolute; left: 18px; right: 18px; top: 50%; height: 5px; margin-top: -2px; border-radius: 3px; background: var(--red); transform-origin: left; transform: scaleX(0); }
+#ghost { position: absolute; left: 0; top: 0; width: 130px; height: 130px; opacity: 0; z-index: 10; }
+.tile { position: absolute; left: 0; top: 0; width: 44px; height: 54px; opacity: 0; }
+#t5 { top: 920px; }
+#s5-ans { top: 1255px; }
+
+/* ── 6 找文件 ── */
+#inbox {
+  position: absolute;
+  left: 60px;
+  width: 960px;
+  top: 480px;
+  border-radius: 28px;
+  background: #1c1c1e;
+  border: 2px solid #313136;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+#inbox .tabs { display: flex; align-items: center; gap: 6px; height: 88px; padding: 0 26px; border-bottom: 2px solid #2c2c2e; }
+#inbox .tabs span { padding: 8px 24px; border-radius: 12px; font-size: 32px; color: #98989d; }
+#inbox .tabs .on { background: #3a3a3c; color: var(--ink); font-weight: 600; }
+.ir { display: flex; align-items: center; gap: 24px; height: 112px; padding: 0 30px; border-bottom: 2px solid #26262a; }
+.ir:last-child { border-bottom: 0; }
+.ir svg.ic { flex: none; width: 52px; height: 52px; color: #aeaeb2; stroke-width: 5.5; }
+.ir div { flex: 1; min-width: 0; }
+.ir b { display: block; font-size: 34px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ir span { font-size: 28px; color: var(--dim); white-space: nowrap; }
+#reveal-btn { flex: none; padding: 12px 26px; border-radius: 14px; background: #2c2c2f; border: 2px solid #3d3d44; font-size: 30px; font-weight: 500; color: var(--ink); white-space: nowrap; }
+#finder {
+  position: absolute;
+  left: 100px;
+  width: 840px;
+  top: 770px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #1e1e20;
+  border: 2px solid #3a3a3e;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  display: grid;
+  grid-template-columns: 230px 1fr;
+}
+#finder .bar0 { grid-column: 1 / 3; position: relative; height: 70px; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #2a2a2d; border-bottom: 2px solid #333336; }
+#finder .bar0 i { width: 20px; height: 20px; border-radius: 50%; }
+#finder .bar0 b { position: absolute; left: 0; right: 0; text-align: center; font-size: 30px; font-weight: 600; }
+#finder .side { padding: 14px 12px; background: #252528; font-size: 28px; color: #c7c7cc; }
+#finder .side div { padding: 10px 16px; border-radius: 10px; white-space: nowrap; }
+#finder .side .on { background: #3a3a3e; color: #fff; font-weight: 600; }
+#finder .list { padding: 12px 14px; }
+.fr { display: flex; align-items: center; gap: 18px; height: 62px; padding: 0 16px; border-radius: 10px; font-size: 29px; white-space: nowrap; }
+.fr svg.ic { flex: none; width: 36px; height: 36px; color: #aeaeb2; stroke-width: 6; }
+.fr span { flex: 1; }
+.fr em { font-style: normal; color: var(--dim); font-size: 26px; }
+.fr.sel svg.ic, .fr.sel em { color: rgba(255, 255, 255, 0.9); }
+#s6-ans { top: 1200px; font-size: 72px; }
+
+/* ── 7 结尾 ── */
+#s7-logo { position: absolute; left: 430px; top: 215px; width: 220px; height: 220px; }
+#s7-name { top: 450px; font-size: 150px; letter-spacing: 0.02em; }
+#s7-meta { top: 650px; font-size: 42px; font-weight: 500; color: var(--ink-2); }
+#url {
+  position: absolute;
+  left: 50%;
+  top: 770px;
+  height: 116px;
+  padding: 0 52px;
+  border-radius: 58px;
+  background: var(--surface);
+  border: 3px solid var(--blue-ui);
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  white-space: nowrap;
+  opacity: 0;
+}
+#url span { font-size: 38px; color: var(--dim); font-weight: 500; }
+#url b { font: 600 60px var(--display); letter-spacing: 0.01em; }
+#star {
+  position: absolute;
+  left: 70px;
+  right: 140px;
+  top: 950px;
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  padding: 32px 44px;
+  border-radius: 30px;
+  background: var(--surface);
+  border: 2px solid #3a3a40;
+  opacity: 0;
+}
+#star .gh { flex: none; width: 96px; height: 96px; color: var(--ink); }
+#star p { font-size: 40px; color: var(--dim); line-height: 1.3; }
+#star p + p { margin-top: 6px; font-size: 54px; font-weight: 600; color: var(--ink); }
+#star p + p + p { margin-top: 10px; font-size: 32px; font-weight: 500; color: var(--dim); font-family: var(--mono); }
+#star .st { display: inline-block; width: 52px; height: 52px; margin: 0 6px; vertical-align: -6px; color: #e3b341; }
+#ask {
+  position: absolute;
+  left: 60px;
+  right: 140px;
+  top: 1250px;
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--ink);
+  opacity: 0;
+}
+#ask b { color: var(--blue-hi); }
+
+/* 封面 */
+#cover { position: absolute; inset: 0; visibility: hidden; background: var(--ground); }
+#cover-title { top: 260px; font-size: 86px; line-height: 1.3; }
+#cover-title .b { font-size: 140px; }
+#cover-brand {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 1420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  font-size: 40px;
+  color: var(--dim);
+}
+#cover-brand b { font-size: 56px; color: var(--ink); font-weight: 600; }
+#cover-brand svg { width: 96px; height: 96px; }
+#cover-brand .sep { width: 2px; height: 44px; background: var(--rule); }
+
+/* ── 1 痛点：成功的一条打绿勾 ── */
+.try .x.ok { background: var(--green); }
+#s1-text .big { font-size: 104px; }
+
+/* ── 3 隔得远 ── */
+#s3-globe { position: absolute; left: 470px; top: 500px; width: 140px; height: 140px; color: #8e8e93; }
+#s3-globe svg { width: 140px; height: 140px; stroke-width: 4.5; }
+#s3-gl { position: absolute; left: 340px; width: 400px; top: 640px; text-align: center; font-size: 30px; color: var(--dim); }
+
+/* ── 4 手机 ── */
+#code {
+  position: absolute;
+  left: 110px;
+  width: 800px;
+  top: 500px;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 30px 36px;
+  border-radius: 30px;
+  background: var(--surface);
+  border: 2px solid var(--rule);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+}
+#code .lb { font-size: 34px; color: var(--dim); white-space: nowrap; }
+#code .cd { flex: 1; font: 600 58px var(--mono); letter-spacing: 0.12em; }
+#code .btn { flex: none; padding: 14px 34px; border-radius: 16px; background: var(--blue-ui); font-size: 36px; font-weight: 600; }
+.av { display: grid; place-items: center; border-radius: 50%; color: #fff; font-weight: 600; }
+#buddy { position: absolute; left: 0; top: 0; width: 1080px; opacity: 0; }
+#buddy .av { position: absolute; left: 450px; top: 520px; width: 180px; height: 180px; font-size: 84px; background: linear-gradient(160deg, #ff9f0a, #e8590c); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); }
+#buddy .pr { position: absolute; left: 430px; top: 500px; width: 220px; height: 220px; transform: rotate(-90deg); overflow: visible; }
+#buddy .pr circle { opacity: 0; fill: none; stroke: var(--blue-hi); stroke-width: 9; stroke-linecap: round; stroke-dasharray: 0 999; }
+#buddy b { position: absolute; left: 0; right: 0; top: 724px; text-align: center; font-size: 48px; font-weight: 600; }
+#buddy span { position: absolute; left: 0; right: 0; top: 790px; text-align: center; font-size: 32px; color: var(--dim); }
+#buddy span i { display: inline-block; width: 20px; height: 20px; margin-right: 10px; border-radius: 50%; background: var(--green); vertical-align: 1px; }
+#b-st { position: absolute; left: 0; right: 0; top: 860px; text-align: center; font-size: 36px; font-weight: 600; color: var(--blue-hi); }
+#toast {
+  position: absolute;
+  left: 50%;
+  top: 960px;
+  padding: 18px 34px;
+  border-radius: 22px;
+  background: #2c2c2f;
+  border: 2px solid #3d3d44;
+  font-size: 32px;
+  white-space: nowrap;
+  opacity: 0;
+}
+#toast b { color: var(--green); margin-right: 10px; }
+#s4-ans { top: 1150px; }
+
+/* ── 5 手机页 ── */
+#app {
+  position: absolute;
+  left: 50px;
+  width: 980px;
+  top: 470px;
+  height: 540px;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #1c1c1e;
+  border: 2px solid #313136;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+#app .side { padding: 22px 14px; background: #202023; border-right: 2px solid #2a2a2e; }
+#app .side div { position: relative; padding: 14px 18px; margin-bottom: 4px; border-radius: 12px; font-size: 30px; color: #c7c7cc; white-space: nowrap; }
+#app .side .badge { position: absolute; right: 14px; top: 50%; margin-top: -19px; min-width: 38px; height: 38px; padding: 0 10px; border-radius: 19px; background: var(--red); color: #fff; font-size: 24px; font-weight: 600; display: grid; place-items: center; }
+#app .main { position: relative; padding: 26px 30px; }
+#app h3 { margin: 0; font-size: 40px; }
+#app .sub { margin-top: 4px; font-size: 26px; color: var(--dim); }
+#app .search { margin: 18px 0 12px; height: 60px; padding: 0 22px; border-radius: 14px; background: #2a2a2d; font-size: 27px; color: #8e8e93; display: flex; align-items: center; }
+.fr2 { position: relative; display: flex; align-items: center; gap: 22px; height: 100px; padding: 0 18px; border-radius: 16px; border: 3px solid transparent; }
+.fr2 .av { flex: none; width: 70px; height: 70px; font-size: 34px; }
+.fr2 b { display: block; font-size: 32px; }
+.fr2 span { font-size: 25px; color: var(--dim); white-space: nowrap; }
+.fr2 span i { display: inline-block; width: 15px; height: 15px; margin-right: 8px; border-radius: 50%; vertical-align: 0; }
+#s5-ans { top: 1180px; }
+#ghost5 { position: absolute; left: 0; top: 0; z-index: 10; opacity: 0; }
+</style>
+</head>
+<body>
+<div id="film">
+
+  <!-- 1 痛点 -->
+  <section class="scene" id="s1">
+    <div class="cam">
+      <div class="hl" id="s1-text">
+        <div class="ln kick"><span>电脑上复制的东西，</span></div>
+        <div class="ln big"><span>手机怎么用？</span></div>
+        <div class="ln big"><span class="b">再发一遍给自己？</span></div>
+      </div>
+      <div class="fcard" id="f1"></div>
+      <div class="try" id="try1"></div>
+      <div class="try" id="try2"></div>
+      <div class="try" id="try3"></div>
+    </div>
+  </section>
+
+  <!-- 2 揭晓 -->
+  <section class="scene" id="s2">
+    <div class="cam">
+      <div class="hl" id="s2-head"><div class="ln"><span>电脑开个二维码，</span></div><div class="ln"><span class="b">手机扫一下</span></div></div>
+      <div id="r2"></div>
+      <div class="hl ans" id="s2-cap"><div class="ln"><span>电脑复制过的全部内容，</span></div><div class="ln"><span><small>隔空贴 ·「手机网页传输」· 不用装东西</small></span></div></div>
+      <div class="fcard sm" id="f2"></div>
+      <svg class="cursor" id="c2" viewBox="0 0 30 42"><use href="#i-cursor"/></svg>
+    </div>
+  </section>
+
+  <!-- 2b 反方向 -->
+  <section class="scene" id="s2b">
+    <div class="cam">
+      <div class="hl" id="s2b-head"><div class="ln"><span>反过来，</span></div><div class="ln"><span class="b">手机 → 电脑</span></div></div>
+      <div id="r2b"></div>
+      <div class="hl ans" id="s2b-cap"><div class="ln"><span>手机的照片和文件，</span></div><div class="ln"><span><small>iPhone 用网页版 · 安卓有 App</small></span></div></div>
+      <div class="fcard sm" id="f2b"></div>
+      <svg class="cursor" id="c2b" viewBox="0 0 30 42"><use href="#i-cursor"/></svg>
+    </div>
+  </section>
+
+  <!-- 3 隔得远 -->
+  <section class="scene" id="s3">
+    <div class="cam">
+      <div class="hl q" id="s3-q"><div class="ln"><span>手机浏览器打开，</span></div><div class="ln"><span>就是电脑的记录</span></div></div>
+      <svg id="s3-net" viewBox="0 0 1080 1920">
+        <path class="via" id="via1" d="M290 700 Q 400 570 540 570 Q 680 570 790 700"/>
+        <g id="pks"></g>
+      </svg>
+      <div id="s3-globe"><svg class="ic" viewBox="0 0 100 100"><use href="#i-globe"/></svg></div>
+      <div id="s3-gl">互联网</div>
+      <div id="s3-tag">直连优先</div>
+      <div id="s3-nodes"></div>
+      <div class="tcard" id="t3"></div>
+      <div class="hl ans" id="s3-ans"><div class="ln"><span class="b">在家在公司都能用</span></div><div class="ln"><span><small>端到端加密 · 同一局域网</small></span></div></div>
+    </div>
+  </section>
+
+  <!-- 4 手机 -->
+  <section class="scene" id="s4">
+    <div class="cam">
+      <div class="hl q" id="s4-q"><div class="ln"><span>安卓装了 App，</span></div><div class="ln"><span>配对和电脑一样</span></div></div>
+      <div id="code"><span class="lb">手机码</span><span class="cd">FK7Q3MX</span><span class="btn">添加</span></div>
+      <div id="toast"><b>✓</b>手机已连接</div>
+      <div id="buddy">
+        <svg class="pr" viewBox="0 0 220 220"><circle cx="110" cy="110" r="100"/></svg>
+        <div class="av">明</div>
+        <b>安卓手机</b>
+        <span><i></i>安卓手机 · 在线</span>
+        <div id="b-st"></div>
+      </div>
+      <div class="fcard sm" id="f4"></div>
+      <div class="hl ans" id="s4-ans"><div class="ln"><span><span class="b">扫码连接</span>就能发</span></div><div class="ln"><span><small>手机浏览器直接用，不用装任何东西</small></span></div><div class="ln"><span><small>手机看不到你的剪贴板和设备</small></span></div></div>
+      <svg class="cursor" id="c4" viewBox="0 0 30 42"><use href="#i-cursor"/></svg>
+    </div>
+  </section>
+
+  <!-- 5 手机页 -->
+  <section class="scene" id="s5">
+    <div class="cam">
+      <div class="hl q" id="s5-q"><div class="ln"><span>内容加密传输，</span></div><div class="ln"><span>只在同一局域网</span></div></div>
+      <div id="app">
+        <div class="side"><div>复制记录</div><div>收藏</div><div>设备</div><div id="nav-send">隔空传送</div><div id="nav-fr">手机<span class="badge">1</span></div><div>设置</div></div>
+        <div class="main">
+          <h3>手机</h3>
+          <div class="sub">给别人的电脑发文件，不用配对</div>
+          <div class="search">搜索手机</div>
+          <div class="fr2" id="row-xm"><div class="av" style="background:linear-gradient(160deg,#ff9f0a,#e8590c)">明</div><div><b>安卓手机</b><span id="xm-sub"></span></div></div>
+          <div class="fr2"><div class="av" style="background:linear-gradient(160deg,#bf5af2,#7d3cc9)">杰</div><div><b>iPhone</b><span><i style="background:#ff9f0a"></i>这台电脑 · 已连接</span></div></div>
+          <div class="fr2"><div class="av" style="background:linear-gradient(160deg,#64d2ff,#2f7df6)">王</div><div><b>这台电脑</b><span><i style="background:#636366"></i>iPhone · 网页版</span></div></div>
+        </div>
+      </div>
+      <div class="fcard sm" id="ghost5"></div>
+      <div class="hl ans" id="s5-ans"><div class="ln"><span>新增「<span class="b">手机</span>」页</span></div><div class="ln"><span><small>谁在线一眼看到，文件直接拖进去</small></span></div></div>
+      <svg class="cursor" id="c5" viewBox="0 0 30 42"><use href="#i-cursor"/></svg>
+    </div>
+  </section>
+
+  <!-- 6 结尾 -->
+  <section class="scene" id="s7">
+    <div class="cam">
+      <svg class="logo" id="s7-logo" viewBox="0 0 1024 1024"></svg>
+      <div class="hl" id="s7-name"><div class="ln"><span>隔空贴</span></div></div>
+      <div class="hl" id="s7-meta"><div class="ln"><span>免费开源 · Mac / Windows / Linux / 安卓</span></div></div>
+      <div id="url"><span>官网</span><b>pasteferry.cc</b></div>
+      <div id="star">
+        <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        <div>
+          <p>如果帮到了你</p>
+          <p>去 GitHub 给我点个<svg class="st" viewBox="0 0 100 100"><use href="#i-star" fill="currentColor"/></svg>Star</p>
+          <p>github.com/baiyuze/pasteferry</p>
+        </div>
+      </div>
+      <div id="ask">电脑复制的东西，手机上<br>怎么传文件？<b>评论区说说</b></div>
+    </div>
+  </section>
+
+  <!-- 封面 -->
+  <section id="cover">
+    <div class="hl" id="cover-title"><div class="b">手机也能用</div><div>电脑复制 · 手机粘贴</div></div>
+    <div id="rc"></div>
+    <div class="fcard sm" id="fc"></div>
+    <svg class="cursor" id="cc" viewBox="0 0 30 42"><use href="#i-cursor"/></svg>
+    <div id="cover-brand"><svg class="logo" id="cover-logo" viewBox="0 0 1024 1024"></svg><b>隔空贴</b><span class="sep"></span><span>免费开源 · Mac / Windows / Linux / 安卓</span></div>
+  </section>
+
+  <!-- 线条图标 -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <radialGradient id="disk"><stop offset="0" stop-color="#2f7df6" stop-opacity="0.13"/><stop offset="1" stop-color="#2f7df6" stop-opacity="0.04"/></radialGradient>
+      <symbol id="i-file" viewBox="0 0 100 100"><path d="M30 12h28l18 18v52c0 4-3 6-6 6H30c-4 0-6-2-6-6V18c0-4 2-6 6-6z"/><path d="M58 12v18h18"/></symbol>
+      <symbol id="i-image" viewBox="0 0 100 100"><rect x="14" y="20" width="72" height="60" rx="8"/><circle cx="36" cy="40" r="7"/><path d="M16 74l22-22 16 16 10-10 20 20"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 100 100"><path d="M12 30c0-4 3-7 7-7h20l8 8h34c4 0 7 3 7 7v36c0 4-3 7-7 7H19c-4 0-7-3-7-7z"/></symbol>
+      <symbol id="i-laptop" viewBox="0 0 100 100"><rect x="22" y="26" width="56" height="38" rx="5"/><path d="M12 74h76"/></symbol>
+      <symbol id="i-desktop" viewBox="0 0 100 100"><rect x="16" y="20" width="68" height="46" rx="6"/><path d="M50 66v12M34 80h32"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 100 100"><circle cx="50" cy="50" r="36"/><path d="M14 50h72M50 14c-12 12-12 60 0 72M50 14c12 12 12 60 0 72"/></symbol>
+      <symbol id="i-x" viewBox="0 0 100 100"><path d="M28 28l44 44M72 28 28 72"/></symbol>
+      <symbol id="i-check" viewBox="0 0 100 100"><path d="M24 52l18 18 34-38"/></symbol>
+      <symbol id="i-star" viewBox="0 0 100 100"><path d="m50 10 12 25 27 4-20 19 5 27-24-13-24 13 5-27-20-19 27-4z"/></symbol>
+      <symbol id="i-cursor" viewBox="0 0 30 42"><path d="M2 2v33l8.5-8 6 13 6-2.8-6-12.7H28z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+</div>
+
+<script>
+'use strict';
+
+// ── 工具 ──
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const linear = (x) => x;
+const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+const easeIn = (x) => x * x * x;
+const easeExpo = (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
+const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const easeBack = (x) => 1 + 2.70158 * Math.pow(x - 1, 3) + 1.70158 * Math.pow(x - 1, 2);
+const p = (t, a, b, e = easeOut) => e(clamp((t - a) / (b - a)));
+const bump = (t, a, b) => Math.sin(Math.PI * p(t, a, b, linear));
+
+function mixColor(a, b, k) {
+  const pa = a.match(/\w\w/g).map((h) => parseInt(h, 16));
+  const pb = b.match(/\w\w/g).map((h) => parseInt(h, 16));
+  return `rgb(${pa.map((v, i) => Math.round(lerp(v, pb[i], k))).join(',')})`;
+}
+
+function punch(cam, t, from = 1.06) {
+  const s = lerp(from, 1, p(t, 0, 0.45, easeExpo)) * (1 + 0.008 * t);
+  cam.style.transform = `scale(${s})`;
+}
+
+function reveal(el, t, t0, dur = 0.45) {
+  const k = p(t, t0, t0 + dur, easeExpo);
+  // 还没开始升的行整个藏起来，免得遮罩底下露出一条字边
+  el.firstElementChild.style.opacity = k > 0 ? 1 : 0;
+  el.firstElementChild.style.transform = `translateY(${(1 - k) * 115}%)`;
+}
+function revealAll(box, t, t0, step = 0.12) {
+  [...box.children].forEach((ln, i) => reveal(ln, t, t0 + i * step));
+}
+
+function pop(el, t, t0, from = 0.6, dur = 0.42, base = '') {
+  const k = p(t, t0, t0 + dur, easeBack);
+  el.style.opacity = clamp((t - t0) / 0.1);
+  el.style.transform = `${base} scale(${t < t0 ? from : lerp(from, 1, k)})`;
+}
+
+// 元素从下面升起来
+function rise(el, t, t0, dy = 60, dur = 0.45) {
+  const k = p(t, t0, t0 + dur, easeExpo);
+  el.style.opacity = k;
+  el.style.transform = `translateY(${(1 - k) * dy}px)`;
+}
+
+// 指针：尖端在 (x, y)，按下时缩一下
+function cursorAt(el, x, y, opacity, press = 0) {
+  el.style.opacity = opacity;
+  el.style.transform = `translate(${x - 3}px, ${y - 2}px) scale(${1 - 0.12 * press})`;
+}
+
+const CUES = [];
+function cue(scene, t, type, extra = {}) {
+  CUES.push({ t: +(scene.start + t).toFixed(3), type, ...extra });
+}
+
+const ic = (name) => `<svg class="ic" viewBox="0 0 100 100"><use href="#i-${name}"/></svg>`;
+const fmt = (n) => n.toLocaleString('en-US');
+
+// ── 图标：与 assets/brand/icon.svg 同一套几何 ──
+const LOGO = `
+  <defs>
+    <linearGradient id="LID-body" x1="0" y1="100" x2="0" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FBFBFA"/><stop offset="1" stop-color="#E8E8E6"/>
+    </linearGradient>
+    <filter id="LID-bs" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000" flood-opacity="0.3"/></filter>
+    <filter id="LID-ss" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.22"/></filter>
+  </defs>
+  <g class="lg-body"><rect x="100" y="100" width="824" height="824" rx="184" fill="url(#LID-body)" filter="url(#LID-bs)"/></g>
+  <g class="lg-back">
+    <rect x="230" y="220" width="340" height="420" rx="44" fill="#F5F5F4" stroke="#2C2C2E" stroke-width="28"/>
+    <g fill="#2C2C2E" fill-opacity="0.85"><rect x="290" y="310" width="200" height="30" rx="15"/><rect x="290" y="390" width="150" height="30" rx="15"/><rect x="290" y="470" width="104" height="30" rx="15"/></g>
+  </g>
+  <g class="lg-front">
+    <rect x="454" y="384" width="340" height="420" rx="44" fill="#0A66D8" filter="url(#LID-ss)"/>
+    <g fill="#FFFFFF" fill-opacity="0.95"><rect x="514" y="474" width="200" height="30" rx="15"/><rect x="514" y="554" width="150" height="30" rx="15"/><rect x="514" y="634" width="104" height="30" rx="15"/></g>
+  </g>`;
+for (const svg of $$('.logo')) svg.innerHTML = LOGO.replaceAll('LID', svg.id);
+
+function logoIn(svg, t, t0) {
+  const front = svg.querySelector('.lg-front');
+  const kb = p(t, t0, t0 + 0.45, easeBack);
+  svg.style.opacity = clamp((t - t0) / 0.08);
+  svg.style.transform = `scale(${lerp(0.55, 1, kb)})`;
+  front.style.opacity = p(t, t0 + 0.3, t0 + 0.36, linear);
+  const m = p(t, t0 + 0.3, t0 + 0.72, easeBack);
+  front.setAttribute('transform', `translate(${(1 - m) * -224} ${(1 - m) * -164})`);
+}
+
+// ── 部件 ──
+function nodeHTML({ id, x, y, label, kind = 'laptop', dot = '', me = false }) {
+  return `<div class="node" id="${id}" style="left:${x}px;top:${y}px"><div class="nc${me ? ' me' : ''}">${ic(kind)}${dot ? `<i class="dot ${dot}"></i>` : ''}<svg class="pr" viewBox="0 0 160 160"><circle cx="80" cy="80" r="72"/></svg></div><b>${label}</b><em></em></div>`;
+}
+const RING = 2 * Math.PI * 72;
+function ringProgress(node, k) {
+  const c = node.querySelector('.pr circle');
+  c.style.strokeDasharray = `${RING * clamp(k)} 999`;
+  // 长度为 0 时圆头线帽会画出一个点，干脆藏起来
+  c.style.opacity = k > 0 ? 1 : 0;
+}
+function nodeHover(node, k) {
+  const nc = node.querySelector('.nc');
+  nc.style.transform = `scale(${1 + 0.16 * k})`;
+  nc.style.borderColor = mixColor('3d3d44', '3b8beb', k);
+  nc.style.background = mixColor('2c2c2f', '1e2a40', k);
+  nc.style.color = mixColor('c7c7cc', '5b9dff', k);
+}
+
+
+function ripple(el, t, t0, maxR) {
+  const k = p(t, t0, t0 + 0.9, easeOut);
+  el.setAttribute('r', lerp(60, maxR, k));
+  el.style.opacity = t < t0 ? 0 : 0.55 * (1 - k);
+}
+
+function tcardHTML(icon, title, sub) {
+  return `${ic(icon)}<div class="tb"><div class="tt">${title}</div><div class="ts">${sub}</div><div class="bar"><i></i></div><div class="tm"></div><div class="tm"></div></div>`;
+}
+function tcardSet(el, k, line1, line2 = '', color = '#2f7df6') {
+  const bar = el.querySelector('.bar i');
+  bar.style.width = `${(clamp(k) * 100).toFixed(2)}%`;
+  bar.style.background = color;
+  const [a, b] = el.querySelectorAll('.tm');
+  a.textContent = line1;
+  b.textContent = line2;
+  b.style.display = line2 ? '' : 'none';
+}
+
+// ── 镜头 ──
+const SCENES = [];
+let clock = 0;
+function scene(id, dur, render) {
+  const s = { id, el: document.getElementById(id), start: clock, dur, render };
+  s.cam = s.el.querySelector('.cam');
+  clock += dur;
+  SCENES.push(s);
+  return s;
+}
+
+// 雷达：外圈「其他网络」、内圈「同一网络」，中间是这台电脑；这一版把 安卓手机放在内圈左上，文件拖给它
+function buildRadar(box, cx, cy, R, r, pfx, names = {}) {
+  const n = { me: ['这台电脑', 'laptop'], win: ['安卓手机', 'phone'], mba: ['iPhone', 'phone'], ubu: ['平板', 'tablet'], ...names };
+  const win = [cx - 0.866 * r, cy - 0.5 * r];
+  box.innerHTML = `
+    <svg class="rsvg" viewBox="0 0 1080 1920">
+      <circle class="outer" cx="${cx}" cy="${cy}" r="${R}"/>
+      <circle class="inner" cx="${cx}" cy="${cy}" r="${r}"/>
+      <circle class="ripple" cx="${cx}" cy="${cy}" r="60"/>
+      <circle class="ripple" cx="${cx}" cy="${cy}" r="60"/>
+    </svg>
+    <div class="rlabel" style="left:${cx}px;top:${cy - R}px">其他网络</div>
+    <div class="rlabel in" style="left:${cx}px;top:${cy - r + 30}px">同一网络</div>
+    ${nodeHTML({ id: `${pfx}-me`, x: cx, y: cy, label: n.me[0], kind: n.me[1], me: true })}
+    ${nodeHTML({ id: `${pfx}-win`, x: win[0], y: win[1], label: n.win[0], kind: n.win[1], dot: 'g' })}
+    ${nodeHTML({ id: `${pfx}-mba`, x: cx + 0.866 * r, y: cy - 0.5 * r, label: n.mba[0], kind: n.mba[1], dot: 'g' })}
+    ${nodeHTML({ id: `${pfx}-ubu`, x: cx - 0.966 * R, y: cy + 0.259 * R, label: n.ubu[0], kind: n.ubu[1], dot: 'o' })}`;
+  return {
+    svg: box.querySelector('.rsvg'),
+    ripples: [...box.querySelectorAll('.ripple')],
+    labels: [...box.querySelectorAll('.rlabel')],
+    me: $(`#${pfx}-me`), win: $(`#${pfx}-win`), mba: $(`#${pfx}-mba`), ubu: $(`#${pfx}-ubu`),
+    winXY: win, cx, cy,
+  };
+}
+
+const PHOTOS = `${ic('folder')}<div><b>电脑上的资料</b> <span>3 张 · 2.4 MB</span></div>`;
+
+// 1 痛点：电脑上复制的内容，手机拿不到，只能再发一遍给自己
+$('#f1').innerHTML = `${ic('folder')}<div><b>电脑上的资料</b><br><span>3 张 · 2.4 MB</span></div>`;
+const TRIES = [
+  ['laptop', 'Mac → Mac', '隔空投送，秒到', 0.3, true],
+  ['desktop', 'Mac → Windows', '列表里找不到它', 0.85, false],
+  ['desktop', 'Windows → Linux', '两边都没有隔空投送', 1.4, false],
+];
+TRIES.forEach(([k, a, b, , ok], i) => {
+  $(`#try${i + 1}`).innerHTML = `${ic(k)}<b>${a}</b><span>${b}</span><i class="x${ok ? ' ok' : ''}">${ic(ok ? 'check' : 'x')}</i>`;
+  $(`#try${i + 1}`).style.top = `${930 + i * 128}px`;
+});
+const S1 = scene('s1', 3.0, (t) => {
+  S1.cam.style.transform = `scale(${lerp(1.08, 1, p(t, 0, 0.6, easeExpo)) * (1 + 0.01 * t)})`;
+  $$('#s1-text .ln').forEach((ln) => reveal(ln, t, -1));
+  let dx = 0, dy = 0;
+  TRIES.forEach(([, , , at, ok], i) => {
+    const el = $(`#try${i + 1}`);
+    pop(el, t, at, 0.85, 0.35);
+    el.style.transform += ` translateX(${(1 - p(t, at, at + 0.3, easeExpo)) * 60}px)`;
+    pop(el.querySelector('.x'), t, at + 0.22, 0.3, 0.3);
+    const next = TRIES[i + 1] ? TRIES[i + 1][3] : 99;
+    el.style.opacity = clamp((t - at) / 0.1) * (1 - 0.45 * p(t, next, next + 0.2, linear));
+    // 失败的两次：文件卡片往下试一下，被弹回来时晃两下
+    if (!ok) {
+      dy += 18 * bump(t, at - 0.05, at + 0.22);
+      const s = t - (at + 0.22);
+      if (s > 0 && s < 0.35) dx += 16 * Math.sin(s * 2 * Math.PI * 9) * (1 - s / 0.35);
+    }
+  });
+  $('#f1').style.transform = `translate(${dx}px, ${dy}px)`;
+  S1.el.style.opacity = 1 - 0.45 * p(t, 2.6, 3.0, easeIn);
+});
+cue(S1, 0.0, 'intro');
+cue(S1, 1.0, 'build');
+TRIES.forEach(([, , , at, ok], i) => {
+  cue(S1, at, 'tick', { gain: 0.9, pan: 0.2 });
+  cue(S1, at + 0.22, ok ? 'lock' : 'break', { gain: ok ? 0.7 : 0.6 + 0.1 * i });
+});
+
+// 2 揭晓：电脑开出二维码，手机扫码后直接看到电脑的记录
+function dragScene(id, R, file, cursor, head, cap, label) {
+  const T = { grab: 0.35, move: 0.5, over: 1.15, drop: 1.35 };
+  const S = scene(id, 4.0, (t) => {
+    punch(S.cam, t, 1.1);
+    revealAll($(head), t, -0.1, 0.06);
+    const rk = p(t, 0, 0.55, easeBack);
+    R.svg.style.transformOrigin = `${R.cx}px ${R.cy}px`;
+    R.svg.style.transform = `scale(${lerp(0.6, 1, rk)})`;
+    R.svg.style.opacity = 0.5 + 0.5 * clamp(t / 0.12);
+    R.labels.forEach((l) => (l.style.opacity = p(t, 0.3, 0.5, linear)));
+    ripple(R.ripples[0], t, 0.0, 480);
+    ripple(R.ripples[1], t, T.drop, 420);
+    [R.me, R.win, R.mba, R.ubu].forEach((n, i) => pop(n, t, -0.05 + i * 0.07, 0.3, 0.4));
+    const [mx, my] = R.winXY;
+    const mk = p(t, T.move, T.over, easeInOut);
+    const x = lerp(540, mx + 30, mk), y = lerp(1300, my + 10, mk) - 60 * bump(t, T.move, T.over);
+    const dk = p(t, T.drop, T.drop + 0.25, easeIn);
+    const f = $(file);
+    const w = f.offsetWidth, h = f.offsetHeight;
+    const lift = p(t, 0, T.grab, easeBack);
+    const fx = lerp(x, mx, dk), fy = lerp(y, my, dk);
+    f.style.opacity = (0.6 + 0.4 * clamp(t / 0.08)) * (1 - dk);
+    f.style.transform = `translate(${fx - w / 2}px, ${fy - h / 2}px) scale(${lerp(0.8, 1.04, lift) * lerp(1, 0.8, mk) * lerp(1, 0.12, dk)}) rotate(${-3 * bump(t, T.move, T.over)}deg)`;
+    const press = bump(t, T.grab - 0.15, T.grab) + bump(t, T.drop - 0.05, T.drop + 0.12);
+    cursorAt($(cursor), fx + 20, fy + 10, clamp(t / 0.1) * (1 - p(t, 1.9, 2.2, linear)), press);
+    nodeHover(R.win, p(t, T.over - 0.1, T.over + 0.1, linear) * (1 - 0.6 * p(t, T.drop + 0.2, T.drop + 0.6, linear)));
+    const prog = t < T.drop + 0.1 ? 0 : lerp(0.01, 0.46, p(t, T.drop + 0.1, 4.0, linear));
+    ringProgress(R.win, prog);
+    R.win.querySelector('em').textContent = t < T.drop + 0.1 ? '' : `${label} ${Math.round(prog * 100)}%`;
+    revealAll($(cap), t, 1.55);
+  });
+  cue(S, 0.0, 'pop', { gain: 0.6 });
+  cue(S, T.grab, 'tick', { gain: 0.8 });
+  cue(S, T.move, 'whoosh', { dur: 0.6 });
+  cue(S, T.over, 'tick', { gain: 0.7 });
+  cue(S, T.drop, 'pop', { gain: 1.1 });
+  cue(S, 1.55, 'swoosh', { gain: 0.8 });
+  return S;
+}
+
+// 2 揭晓：电脑开出二维码，手机扫码后直接看到电脑的记录
+const R2 = buildRadar($('#r2'), 540, 850, 310, 200, 'r2');
+$('#f2').innerHTML = PHOTOS;
+const S2 = dragScene('s2', R2, '#f2', '#c2', '#s2-head', '#s2-cap', '发送中');
+cue(S2, 0.0, 'drop');
+
+// 2b 反过来：在 Windows 上把表格拖给 安卓手机
+const R2B = buildRadar($('#r2b'), 540, 850, 310, 200, 'r2b', {
+  me: ['这台电脑', 'desktop'], win: ['安卓手机', 'laptop'], mba: ['iPhone', 'desktop'], ubu: ['平板', 'tablet'],
+});
+$('#f2b').innerHTML = `${ic('file')}<div><b>手机拍的照片</b> <span>3.2 MB</span></div>`;
+dragScene('s2b', R2B, '#f2b', '#c2b', '#s2b-head', '#s2b-cap', '发送中');
+
+// 3 网页版：手机浏览器里就是电脑的复制记录，点「复制」到手机
+$('#s3-nodes').innerHTML = nodeHTML({ id: 'n3a', x: 230, y: 720, label: '同一局域网', me: true }) + nodeHTML({ id: 'n3b', x: 850, y: 720, label: '端到端加密', kind: 'desktop', dot: 'g' });
+$('#t3').innerHTML = tcardHTML('folder', '电脑上的资料 · 3 张 · 2.4 MB', '发送到 端到端加密 台式机');
+$('#pks').innerHTML = Array.from({ length: 6 }, () => '<rect class="pk" width="34" height="14" rx="7" x="-17" y="-7"/>').join('');
+const T3 = { line: 0.45, card: 1.0, ans: 1.6 };
+const S3 = scene('s3', 4.5, (t) => {
+  punch(S3.cam, t, 1.06);
+  revealAll($('#s3-q'), t, 0.0);
+  pop($('#n3a'), t, 0.1, 0.5, 0.4);
+  pop($('#n3b'), t, 0.18, 0.5, 0.4);
+  pop($('#s3-globe'), t, 0.2, 0.6, 0.4);
+  $('#s3-gl').style.opacity = p(t, 0.3, 0.5, linear);
+  // 一条路从家里经互联网连到公司，变蓝，数据一块块跑过去
+  const via = $('#via1');
+  const L = via.getTotalLength();
+  const lk = p(t, T3.line, T3.line + 0.4, easeExpo);
+  via.style.strokeDasharray = lk >= 1 ? '' : `${L * lk} ${L}`;
+  via.style.stroke = mixColor('4a4a50', '5b9dff', p(t, T3.line + 0.3, T3.line + 0.5, linear));
+  via.style.strokeWidth = lerp(4, 6, p(t, T3.line + 0.3, T3.line + 0.5, linear));
+  via.style.opacity = t < T3.line ? 0 : 1;
+  $('#s3-tag').style.top = '480px';
+  $('#s3-tag').style.opacity = 0;
+  $$('#pks rect').forEach((r, i) => {
+    const ph = (t - T3.line - 0.45) / 0.8 - i / 6;
+    const u = ((ph % 1) + 1) % 1;
+    const pt = via.getPointAtLength(L * u);
+    r.setAttribute('transform', `translate(${pt.x} ${pt.y})`);
+    r.style.opacity = ph < 0 ? 0 : Math.sin(Math.PI * u);
+  });
+  nodeHover($('#n3b'), 0.6 * bump(t, T3.line + 0.4, T3.line + 0.9));
+  rise($('#t3'), t, T3.card);
+  const k = lerp(0.22, 0.41, p(t, T3.card, 4.5, linear));
+  const left = Math.round((1 - k) * 1200 / 9.4);
+  tcardSet($('#t3'), k, `${Math.round(k * 100)}% · ${(k * 1.2).toFixed(2)} GB / 1.2 GB · 9.4 MB/s`, `还剩 ${Math.floor(left / 60)} 分 ${String(left % 60).padStart(2, '0')} 秒`);
+  revealAll($('#s3-ans'), t, T3.ans);
+});
+cue(S3, 0.0, 'swoosh');
+cue(S3, 0.2, 'pop', { gain: 0.6 });
+cue(S3, T3.line, 'whoosh', { dur: 0.5 });
+cue(S3, T3.card, 'pop', { gain: 0.8 });
+cue(S3, T3.ans, 'tick', { gain: 0.6 });
+
+// 4 安卓 App：装 APK 后配对方式与电脑相同，收到内容自动进剪贴板
+$('#f4').innerHTML = PHOTOS;
+const RING4 = 2 * Math.PI * 100;
+const T4 = { code: 0.05, press: 0.6, added: 0.8, grab: 1.05, move: 1.15, drop: 1.7, wait: 1.8, ok: 2.5, ans: 2.0 };
+const AV4 = [540, 610];
+const S4 = scene('s4', 4.5, (t) => {
+  punch(S4.cam, t, 1.06);
+  revealAll($('#s4-q'), t, 0.0);
+  // 手机码卡片：出现、点「添加」、收起
+  const code = $('#code');
+  pop(code, t, T4.code, 0.85, 0.4);
+  code.style.opacity = clamp((t - T4.code) / 0.1) * (1 - p(t, T4.added - 0.05, T4.added + 0.1, linear));
+  const pr = bump(t, T4.press - 0.06, T4.press + 0.1);
+  code.querySelector('.btn').style.transform = `scale(${1 - 0.1 * pr})`;
+  cursorAt($('#c4'), lerp(700, 830, p(t, 0.2, T4.press - 0.08, easeInOut)), lerp(820, 575, p(t, 0.2, T4.press - 0.08, easeInOut)), clamp((t - 0.2) / 0.1) * (1 - p(t, T4.added, T4.added + 0.1, linear)), pr);
+  // 提示条
+  const toast = $('#toast');
+  toast.style.opacity = clamp((t - T4.added) / 0.1) * (1 - p(t, T4.added + 0.8, T4.added + 0.95, linear));
+  toast.style.transform = `translateX(-50%) translateY(${(1 - p(t, T4.added, T4.added + 0.3, easeExpo)) * 30}px)`;
+  // 手机连上
+  const b = $('#buddy');
+  b.style.opacity = clamp((t - T4.added - 0.1) / 0.12);
+  const av = b.querySelector('.av');
+  const hk = p(t, T4.drop - 0.25, T4.drop - 0.05, linear) * (1 - p(t, T4.drop + 0.1, T4.drop + 0.4, linear));
+  av.style.transform = `scale(${lerp(0.5, 1, p(t, T4.added + 0.1, T4.added + 0.5, easeBack)) * (1 + 0.12 * hk)})`;
+  av.style.boxShadow = `0 20px 50px rgba(0,0,0,.5), 0 0 0 ${8 * hk}px rgba(91,157,255,${0.8 * hk})`;
+  // 照片拖到头像上
+  const mk = p(t, T4.move, T4.drop - 0.1, easeInOut);
+  const fx0 = lerp(540, AV4[0] + 20, mk), fy0 = lerp(1250, AV4[1] + 10, mk) - 50 * bump(t, T4.move, T4.drop - 0.1);
+  const dk = p(t, T4.drop, T4.drop + 0.22, easeIn);
+  const f = $('#f4');
+  const fx = lerp(fx0, AV4[0], dk), fy = lerp(fy0, AV4[1], dk);
+  f.style.opacity = t < T4.grab - 0.1 ? 0 : clamp((t - T4.grab + 0.1) / 0.1) * (1 - dk);
+  f.style.transform = `translate(${fx - f.offsetWidth / 2}px, ${fy - f.offsetHeight / 2}px) scale(${lerp(0.9, 0.8, mk) * lerp(1, 0.12, dk)}) rotate(${-3 * bump(t, T4.move, T4.drop)}deg)`;
+  if (t > T4.added + 0.1) cursorAt($('#c4'), fx + 20, fy + 10, clamp((t - T4.grab + 0.1) / 0.1) * (1 - p(t, 2.1, 2.4, linear)), bump(t, T4.grab - 0.1, T4.grab + 0.05) + bump(t, T4.drop - 0.05, T4.drop + 0.1));
+  // 状态：等待接受 → 已接受，开始传
+  const st = $('#b-st');
+  const c = b.querySelector('.pr circle');
+  if (t < T4.wait) { st.textContent = ''; c.style.opacity = 0; }
+  else if (t < T4.ok) { st.textContent = '已连接这台安卓手机'; st.style.color = '#8e8e93'; c.style.opacity = 0; }
+  else {
+    const k = lerp(0.02, 0.38, p(t, T4.ok, 4.5, linear));
+    st.textContent = `手机已连接 · 发送中 ${Math.round(k * 100)}%`;
+    st.style.color = '#5b9dff';
+    c.style.opacity = 1;
+    c.style.strokeDasharray = `${RING4 * k} 999`;
+  }
+  revealAll($('#s4-ans'), t, T4.ans);
+});
+cue(S4, 0.0, 'section');
+cue(S4, 0.0, 'swoosh');
+cue(S4, T4.press, 'key', { gain: 0.8 });
+cue(S4, T4.added, 'pop', { gain: 1.0 });
+cue(S4, T4.move, 'whoosh', { dur: 0.5 });
+cue(S4, T4.drop, 'pop', { gain: 0.9 });
+cue(S4, T4.ok, 'lock', { gain: 0.9 });
+
+// 5 安全：端到端加密，只在同一局域网工作
+$('#ghost5').innerHTML = `${ic('image')}<div><b>手机照片.jpg</b> <span>640 KB</span></div>`;
+const T5 = { move: 0.25, click: 0.65, rows: 0.75, grab: 1.15, mv: 1.25, drop: 1.85, ans: 2.1 };
+const S5 = scene('s5', 5.0, (t) => {
+  punch(S5.cam, t, 1.06);
+  revealAll($('#s5-q'), t, 0.0);
+  rise($('#app'), t, 0.05);
+  const appTop = 470, appLeft = 50;
+  // 指针点「手机」
+  const nav = $('#nav-fr');
+  const nx = appLeft + 14 + 110, ny = appTop + 22 + nav.offsetTop + 26;
+  const press = bump(t, T5.click - 0.05, T5.click + 0.12);
+  const on = p(t, T5.click, T5.click + 0.15, linear);
+  nav.style.background = mixColor('202023', '2f7df6', on);
+  nav.style.color = on > 0.5 ? '#fff' : '#c7c7cc';
+  nav.style.fontWeight = on > 0.5 ? 600 : 400;
+  $('#nav-send').style.background = mixColor('3a3a3e', '202023', on);
+  // 手机页内容在点击后升起来
+  $$('#app .main > *').forEach((el, i) => {
+    const k = p(t, T5.rows + i * 0.05, T5.rows + 0.3 + i * 0.05, easeExpo);
+    el.style.opacity = k;
+    el.style.transform = `translateY(${(1 - k) * 24}px)`;
+  });
+  // 把手机的照片拖回电脑
+  const row = $('#row-xm');
+  const rx = appLeft + 250 + 30 + 300, ry = appTop + 26 + row.offsetTop + 50;
+  const mk = p(t, T5.mv, T5.drop - 0.1, easeInOut);
+  const gx = lerp(560, rx, mk), gy = lerp(1250, ry, mk) - 40 * bump(t, T5.mv, T5.drop - 0.1);
+  const dk = p(t, T5.drop, T5.drop + 0.2, easeIn);
+  const g = $('#ghost5');
+  g.style.opacity = t < T5.grab - 0.1 ? 0 : 0.92 * clamp((t - T5.grab + 0.1) / 0.1) * (1 - dk);
+  g.style.transform = `translate(${gx - g.offsetWidth / 2}px, ${gy - g.offsetHeight / 2}px) scale(${lerp(0.85, 0.75, mk) * lerp(1, 0.2, dk)})`;
+  const cx = t < T5.grab - 0.1 ? lerp(700, nx, p(t, T5.move, T5.click - 0.08, easeInOut)) : gx + 20;
+  const cy = t < T5.grab - 0.1 ? lerp(1150, ny, p(t, T5.move, T5.click - 0.08, easeInOut)) : gy + 10;
+  const cp = press + bump(t, T5.grab - 0.1, T5.grab + 0.05) + bump(t, T5.drop - 0.05, T5.drop + 0.1);
+  cursorAt($('#c5'), cx, cy, clamp((t - T5.move + 0.1) / 0.1) * (1 - p(t, 2.3, 2.6, linear)), cp);
+  // 悬停时这一行描蓝边，提示「松开即可发到电脑」；松手后开始发
+  const hk = p(t, T5.drop - 0.35, T5.drop - 0.15, linear) * (1 - p(t, T5.drop + 0.1, T5.drop + 0.3, linear));
+  row.style.borderColor = `rgba(91,157,255,${hk})`;
+  row.style.background = `rgba(47,125,246,${0.18 * hk})`;
+  const sub = $('#xm-sub');
+  if (hk > 0.5) { sub.innerHTML = '松开即可发到电脑'; sub.style.color = '#5b9dff'; }
+  else if (t >= T5.drop + 0.1) {
+    const k = Math.min(1, lerp(0.05, 1, p(t, T5.drop + 0.1, T5.drop + 1.0, linear)));
+    sub.innerHTML = k < 1 ? `发送中 ${Math.round(k * 100)}%` : '<i style="background:#30d158"></i>手机照片.jpg 已送达';
+    sub.style.color = k < 1 ? '#5b9dff' : '';
+  } else { sub.innerHTML = '<i style="background:#30d158"></i>安卓手机 · 在线'; sub.style.color = ''; }
+  revealAll($('#s5-ans'), t, T5.ans);
+});
+cue(S5, 0.0, 'swoosh');
+cue(S5, T5.click, 'key', { gain: 0.8 });
+cue(S5, T5.rows, 'pop', { gain: 0.6 });
+cue(S5, T5.mv, 'whoosh', { dur: 0.5 });
+cue(S5, T5.drop, 'pop', { gain: 0.9 });
+cue(S5, T5.drop + 0.95, 'lock', { gain: 0.7 });
+
+// 6 结尾
+const S7 = scene('s7', 6.5, (t) => {
+  S7.cam.style.transform = `scale(${lerp(1.05, 1, p(t, 0, 0.6, easeExpo)) * (1 + 0.006 * t)})`;
+  logoIn($('#s7-logo'), t, 0.0);
+  reveal($('#s7-name .ln'), t, 0.14);
+  reveal($('#s7-meta .ln'), t, 0.32);
+  pop($('#url'), t, 0.6, 0.7, 0.45, 'translateX(-50%)');
+  $('#url').style.borderColor = mixColor('2f7df6', '5b9dff', bump(t, 1.3, 1.8));
+  pop($('#star'), t, 1.1, 0.85, 0.45);
+  $('#star .st').style.transform = `scale(${1 + 0.45 * bump(t, 1.7, 2.05)})`;
+  $('#star').style.borderColor = mixColor('3a3a40', 'e3b341', 0.8 * bump(t, 1.7, 2.3));
+  $('#ask').style.opacity = p(t, 2.3, 2.6, linear);
+  $('#ask').style.transform = `translateY(${(1 - p(t, 2.3, 2.7, easeExpo)) * 30}px)`;
+});
+cue(S7, 0.0, 'finale');
+cue(S7, 0.33, 'pop', { gain: 0.8 });
+cue(S7, 0.6, 'tick');
+cue(S7, 1.1, 'pop', { gain: 0.7 });
+cue(S7, 1.7, 'toggle', { gain: 0.9 });
+cue(S7, 2.3, 'tick');
+
+const DURATION = clock;
+
+function seek(T) {
+  SCENES.forEach((s, i) => {
+    const t = T - s.start;
+    const last = i === SCENES.length - 1;
+    if (t < 0 || t >= s.dur + (last ? 1 : 0)) {
+      s.el.style.visibility = 'hidden';
+      return;
+    }
+    s.el.style.visibility = 'visible';
+    s.render(Math.min(t, s.dur));
+  });
+}
+
+// 封面：大标题 + 雷达（照片正拖到 安卓手机上）+ 品牌
+const RC = buildRadar($('#rc'), 540, 1010, 310, 200, 'rc');
+$('#fc').innerHTML = PHOTOS;
+function cover() {
+  SCENES.forEach((s) => (s.el.style.visibility = 'hidden'));
+  $('#cover').style.visibility = 'visible';
+  const [mx, my] = RC.winXY;
+  nodeHover(RC.win, 1);
+  ringProgress(RC.win, 0.68);
+  RC.win.querySelector('em').textContent = '发送中 68%';
+  const f = $('#fc');
+  f.style.transform = `translate(${mx + 70 - f.offsetWidth / 2}px, ${my - 140 - f.offsetHeight / 2}px) scale(0.82) rotate(-3deg)`;
+  cursorAt($('#cc'), mx + 20, my - 60, 1);
+  logoIn($('#cover-logo'), 5, 0);
+}
+
+async function ready() {
+  await document.fonts.ready;
+  return { duration: DURATION, cues: CUES.sort((a, b) => a.t - b.t), bpm: 120 };
+}
+
+window.seek = seek;
+window.cover = cover;
+window.ready = ready;
+
+if (!location.search.includes('render')) {
+  ready().then(() => {
+    if (location.hash.startsWith('#cover')) return cover();
+    const t0 = performance.now();
+    const loop = () => {
+      seek(((performance.now() - t0) / 1000) % DURATION);
+      requestAnimationFrame(loop);
+    };
+    loop();
+  });
+}
+</script>
+</body>
+</html>
