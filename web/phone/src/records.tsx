@@ -438,6 +438,9 @@ export function RecordsView({
   const copy = (r: WebRecord) => {
     if (!r.text) return
     if (copyText(r.text)) {
+      // 在网页自己所在的设备上复制了记录：告诉后台忽略这次剪贴板变化，
+      // 否则（页面和后台在同一台电脑上时）会把自己复制的内容又记成一条新记录。
+      rpc(conn.session, 'own_copy', {}).catch(() => {})
       // 复制的反馈留在按钮上，不弹提示条：这个页面主要给手机用，
       // 浮在内容上的提示会挡住列表，和 App 里的做法也不一致。
       setCopiedId(r.id)

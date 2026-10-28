@@ -51,6 +51,8 @@ type Engine interface {
 	ImagePreview(ctx context.Context, clipID string, index int) (path, name string, count int, err error)
 	// SearchHistory 按文字与文件名搜索复制记录，支持拼音，与桌面上的搜索框相同
 	SearchHistory(query string, limit int, f store.Filter) ([]store.Clip, error)
+	// NoteOwnCopy 把网页刚做的这次复制记为自发写入，不再记成一条新记录
+	NoteOwnCopy(ctx context.Context) error
 }
 
 type Options struct {

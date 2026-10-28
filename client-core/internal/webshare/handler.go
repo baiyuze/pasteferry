@@ -354,6 +354,10 @@ func (s *Server) dispatch(ctx context.Context, sess *session, req request) (any,
 		}
 		return s.toWeb(clip, s.sessionName(sess)), nil
 
+	case "own_copy":
+		// 网页在自己的浏览器里复制了记录：把这次剪贴板变化忽略掉，不再记成一条新记录
+		_ = s.opts.Engine.NoteOwnCopy(ctx)
+		return nil, nil
 	case "full_text":
 		var a struct {
 			Clip string `json:"clip"`

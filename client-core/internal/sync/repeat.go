@@ -14,6 +14,10 @@ import (
 // 剪贴板监听会把挨得很近的通知合并（见 clipboard.Watcher），隔得远一点的在这里按内容认出来。
 const repeatWindow = 2 * time.Second
 
+// textRepeatWindow 是文字类内容的窗口：在网页或别处把同一条记录再复制一次，
+// 剪贴板里的内容没变，不该再多记一条。媒体和文件体积大，仍按 repeatWindow 算。
+const textRepeatWindow = 60 * time.Second
+
 // repeatGuard 记着上一次本机复制的内容摘要与时间。
 type repeatGuard struct {
 	mu  sync.Mutex
@@ -26,7 +30,11 @@ func (g *repeatGuard) seen(c clipboard.Content, now time.Time) bool {
 	sum := contentDigest(c)
 	g.mu.Lock()
 	defer g.mu.Unlock()
-	repeat := !g.at.IsZero() && sum == g.sum && now.Sub(g.at) < repeatWindow
+	window := repeatWindow
+	if c.Kind == clipboard.KindText || c.Kind == clipboard.KindHTML {
+		window = textRepeatWindow
+	}
+	repeat := !g.at.IsZero() && sum == g.sum && now.Sub(g.at) < window
 	g.sum, g.at = sum, now
 	return repeat
 }
