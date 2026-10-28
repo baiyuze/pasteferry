@@ -2300,6 +2300,15 @@ class AppLocalizationsJa extends AppLocalizations {
       'テキストとファイルはパソコンの履歴に入り、設定に従ってクリップボードにも入ります。スマホでコピーした内容は自動では送られません。';
 
   @override
+  String get mSentRecords => '送信履歴';
+
+  @override
+  String get mViewAll => 'すべて見る';
+
+  @override
+  String get mClearCache => 'キャッシュを消去';
+
+  @override
   String mSendFailed(String detail) {
     return '送信できませんでした：$detail';
   }

@@ -1675,6 +1675,9 @@
   "mNoPairedDevices": "Pair with a computer first",
   "mSent": "Sent",
   "mSendFootnote": "Text and files go into the records on the computer and, by its setting, into its clipboard. What you copy on the phone is not sent by itself.",
+  "mSentRecords": "Sent",
+  "mViewAll": "View all",
+  "mClearCache": "Clear",
   "mSendFailed": "Couldn’t send: {detail}",
   "@mSendFailed": {
     "placeholders": {

@@ -2274,6 +2274,15 @@ class AppLocalizationsZh extends AppLocalizations {
       '文字和文件会进电脑的复制记录，并按电脑的设置写入剪贴板。手机上复制的内容不会自动发出，粘贴到这里再发送。';
 
   @override
+  String get mSentRecords => '发送记录';
+
+  @override
+  String get mViewAll => '查看全部';
+
+  @override
+  String get mClearCache => '清除缓存';
+
+  @override
   String mSendFailed(String detail) {
     return '发送失败：$detail';
   }
@@ -4643,6 +4652,15 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
       '文字和檔案會進電腦的複製記錄，並按電腦的設定寫入剪貼簿。手機上複製的內容不會自動發出，貼到這裏再傳送。';
 
   @override
+  String get mSentRecords => '傳送記錄';
+
+  @override
+  String get mViewAll => '查看全部';
+
+  @override
+  String get mClearCache => '清除快取';
+
+  @override
   String mSendFailed(String detail) {
     return '傳送失敗：$detail';
   }
@@ -7010,6 +7028,15 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   @override
   String get mSendFootnote =>
       '文字和檔案會進電腦的複製記錄，並按電腦的設定寫入剪貼簿。手機上複製的內容不會自動發出，貼到這裡再傳送。';
+
+  @override
+  String get mSentRecords => '傳送記錄';
+
+  @override
+  String get mViewAll => '查看全部';
+
+  @override
+  String get mClearCache => '清除快取';
 
   @override
   String mSendFailed(String detail) {

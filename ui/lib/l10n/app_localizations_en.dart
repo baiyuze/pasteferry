@@ -2479,6 +2479,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Text and files go into the records on the computer and, by its setting, into its clipboard. What you copy on the phone is not sent by itself.';
 
   @override
+  String get mSentRecords => 'Sent';
+
+  @override
+  String get mViewAll => 'View all';
+
+  @override
+  String get mClearCache => 'Clear';
+
+  @override
   String mSendFailed(String detail) {
     return 'Couldn’t send: $detail';
   }

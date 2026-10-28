@@ -3,11 +3,15 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/services.dart';
 
 import '../app_state.dart';
+import '../gen/pasteferry/v1/daemon.pb.dart';
+import '../records.dart';
 import '../i18n.dart';
 import '../icons.dart';
 import '../main.dart' show AppScope;
 import '../theme.dart';
 import '../widgets/common.dart';
+import 'record_actions.dart';
+import 'records_tab.dart' show showRecordSheet;
 import 'ui.dart';
 
 /// 发送页（design/phone-sync.md 3.2.3 节）：手机上的文字发给在线的设备。
@@ -228,6 +232,9 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
                     padding: const EdgeInsets.symmetric(horizontal: Insets.xs),
                     child: Text(l.mSendFootnote, style: TextStyle(fontSize: 13, height: 1.5, color: p.textDim)),
                   ),
+                  const SizedBox(height: Insets.xl),
+                  _SentRecords(),
+
                 ],
               ),
             ),
@@ -319,6 +326,119 @@ Future<bool?> showFileConfirmSheet(BuildContext context, List<(String, String, i
             ),
           ],
         ),
+      ),
+    ),
+  );
+}
+
+/// 发送记录：本机发出去的内容，只显示最近 3 天，高度固定，不挤压上面的发送区。
+class _SentRecords extends StatelessWidget {
+  static const _days = 3;
+
+  @override
+  Widget build(BuildContext context) {
+    final state = AppScope.of(context);
+    final l = context.l10n;
+    final p = context.palette;
+    final since = DateTime.now().subtract(const Duration(days: _days));
+    final sent = state.records
+        .where((r) => r.outgoing && recordTime(r).isAfter(since))
+        .toList();
+    if (sent.isEmpty) return const SizedBox.shrink();
+    final shown = sent.take(3).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Text(l.mSentRecords, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: p.textDim)),
+            const Spacer(),
+            TextButton(
+              style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: Insets.xs)),
+              onPressed: () => showSentRecordsSheet(context, sent),
+              child: Text(l.mViewAll),
+            ),
+          ],
+        ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: p.surface,
+            borderRadius: BorderRadius.circular(Radii.lg),
+            border: Border.all(color: p.border),
+          ),
+          child: Column(
+            children: [
+              for (var i = 0; i < shown.length; i++) ...[
+                if (i > 0) const Divider(height: 1, indent: 52),
+                ListTile(
+                  dense: true,
+                  leading: Icon(isMedia(shown[i]) ? AppIcons.folder : AppIcons.docOnClipboard, size: 20, color: p.textDim),
+                  title: Text(contentTitle(shown[i]),
+                      maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15)),
+                  subtitle: Text(relativeTime(recordTime(shown[i])), style: TextStyle(fontSize: 12, color: p.textDim)),
+                  onTap: () => showRecordSheet(context, shown[i]),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// 查看全部发送记录，可以一直往上翻；右上角能清空。
+Future<void> showSentRecordsSheet(BuildContext context, List<ClipRecord> sent) {
+  final state = AppScope.read(context);
+  final l = context.l10n;
+  final p = context.palette;
+  return showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (sheetCtx) => ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(sheetCtx).height * 0.85),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.sm, 0),
+            child: Row(
+              children: [
+                Text(l.mSentRecords, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+                const Spacer(),
+                TextButton(
+                  style: TextButton.styleFrom(foregroundColor: p.danger),
+                  onPressed: () async {
+                    final ids = [for (final r in sent) r.id];
+                    try {
+                      await state.deleteRecords(ids: ids);
+                      if (sheetCtx.mounted) Navigator.pop(sheetCtx);
+                    } catch (_) {}
+                  },
+                  child: Text(l.mClearCache),
+                ),
+              ],
+            ),
+          ),
+          Flexible(
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: sent.length,
+              separatorBuilder: (_, _) => const Divider(height: 1, indent: 52),
+              itemBuilder: (_, i) {
+                final r = sent[i];
+                return ListTile(
+                  leading: Icon(isMedia(r) ? AppIcons.folder : AppIcons.docOnClipboard, size: 20, color: p.textDim),
+                  title: Text(contentTitle(r), maxLines: 2, overflow: TextOverflow.ellipsis),
+                  subtitle: Text(relativeTime(recordTime(r)), style: TextStyle(fontSize: 12, color: p.textDim)),
+                  onTap: () => showRecordSheet(context, r),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     ),
   );

@@ -4046,6 +4046,24 @@ abstract class AppLocalizations {
   /// **'Text and files go into the records on the computer and, by its setting, into its clipboard. What you copy on the phone is not sent by itself.'**
   String get mSendFootnote;
 
+  /// No description provided for @mSentRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get mSentRecords;
+
+  /// No description provided for @mViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get mViewAll;
+
+  /// No description provided for @mClearCache.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get mClearCache;
+
   /// No description provided for @mSendFailed.
   ///
   /// In en, this message translates to:
