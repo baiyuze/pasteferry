@@ -40,8 +40,9 @@ ASSETS = {
     "linux-amd64-tar": "PasteFerry-linux-amd64.tar.gz",
     "linux-arm64-tar": "PasteFerry-linux-arm64.tar.gz",
 }
-# 与 Release 一起发布的全部 14 个文件：客户端用不到服务器包，但它们在 SHA256SUMS 里
-RELEASE_FILES = 14
+# 与 Release 一起发布的全部文件：客户端用不到服务器包，但它们在 SHA256SUMS 里。
+# 2.7.0 起加了一个 Android APK（15 个），它不是自动更新的安装包，所以不在上面的 ASSETS 里。
+RELEASE_FILES = 15
 
 # notes.py 每一条的语言顺序 → 清单里的语言代码
 LANGS = ["en", "zh-Hans", "ja", "zh-Hant-TW", "zh-Hant-HK"]

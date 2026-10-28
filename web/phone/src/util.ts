@@ -82,27 +82,28 @@ export function standalone(): boolean {
 
 /**
  * 复制文字。必须在点击事件里同步调用：http 页面用不了 navigator.clipboard，只剩 execCommand，
- * 它只在用户手势里有效。浏览器不让复制时返回 false，调用方让用户长按自己复制。
+ * 它只在用户手势里有效。浏览器不让复制时返回 false，调用方让用户自己复制。
+ *
+ * 临时输入框不能放到屏幕外（left:-9999px）：Android 上浏览器会把系统自带的
+ * 选中工具条夹回可见区域，在列表上弹出一条「分享 / 复制」，看着像我们画的。
+ * 改成放在视口左下角、1px 大小、全透明，选中工具条就不会跑到内容上。
  */
 export function copyText(text: string): boolean {
   const ta = document.createElement('textarea')
-  ta.className = 'offscreen'
   ta.value = text
   if (isIOS) ta.contentEditable = 'true' // iOS 上只读的输入框选不中文字
   else ta.setAttribute('readonly', '') // 不弹出键盘
+  ta.setAttribute('aria-hidden', 'true')
+  ta.tabIndex = -1
+  ta.style.cssText =
+    'position:fixed;left:0;bottom:0;width:1px;height:1px;padding:0;border:0;outline:0;opacity:0;' +
+    'font-size:16px;pointer-events:none;z-index:-1'
   document.body.appendChild(ta)
   let ok = false
   try {
-    if (isIOS) {
-      const range = document.createRange()
-      range.selectNodeContents(ta)
-      const sel = window.getSelection()
-      sel?.removeAllRanges()
-      sel?.addRange(range)
-      ta.setSelectionRange(0, text.length)
-    } else {
-      ta.select()
-    }
+    ta.focus({ preventScroll: true })
+    ta.select()
+    ta.setSelectionRange(0, text.length)
     ok = document.execCommand('copy')
   } catch {
     ok = false

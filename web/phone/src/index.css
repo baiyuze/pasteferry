@@ -126,11 +126,3 @@
   }
 }
 
-/* 复制文字用的隐藏输入框：留在页面里才能被选中，但看不见。字号不小于 16px，iOS 不会因此放大页面 */
-.offscreen {
-  position: fixed;
-  top: 0;
-  left: -9999px;
-  opacity: 0;
-  font-size: 16px;
-}
