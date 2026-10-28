@@ -1,5 +1,21 @@
 # 更新记录 / Changelog
 
+## 2.7.4 — 2026-10-29
+
+Android can copy and share images selected from the phone, and phone notifications no longer cover the bottom controls.
+
+### Fixes
+
+- On Android, copying or sharing an image picked from the phone failed because its temporary cache path was not configured for sharing. These images and files now use valid content URIs, and sharing grants the receiving app read access.
+- All toast messages in the Android app and phone web page now appear at the top, below the system safe area, instead of covering bottom controls. Media actions show a short explanation if they fail, rather than a raw exception and stack trace.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended when using phone web transfer, which is served by the desktop background service. Pairings, contacts, history and settings are preserved.
+- **Server**: no update needed.
+- **Android**: recommended for image copying and sharing. Install the same arm64 APK on Android 9 or later; the fixed signing key supports updating in place.
+- The device-to-device protocol is unchanged and compatible with 2.6.0.
+
 ## 2.7.3 — 2026-10-28
 
 One APK now supports Android 9 and later, and Windows guides phone connections through firewall setup.

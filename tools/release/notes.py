@@ -11,6 +11,25 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.7.4',
+ 'date': '2026-10-29',
+ 'changes': [],
+ 'fixes': [('On Android, copying or sharing an image picked from the phone failed because its temporary cache '
+            'path was not configured for sharing. These images and files now use valid content URIs, and sharing '
+            'grants the receiving app read access.',
+            '安卓上复制或分享从手机选出的图片时，因临时缓存路径未配置而失败。现在图片和文件会使用有效的内容地址，分享时同时授予接收 App 读取权限。',
+            'Android でスマホから選んだ画像をコピー・共有すると、一時キャッシュのパスが未設定のため失敗していました。画像やファイルに有効なコンテンツ URI '
+            'を使い、共有先アプリに読み取り権限を渡すよう修正しました。',
+            '安卓上複製或分享從手機選取的圖片時，因暫存路徑未設定而失敗。現在圖片和檔案會使用有效的內容位址，分享時同時授予接收 App 讀取權限。',
+            '安卓上複製或分享從手機選取的圖片時，因暫存路徑未設定而失敗。現在圖片和檔案會使用有效的內容地址，分享時同時授予接收 App 讀取權限。'),
+           ('All toast messages in the Android app and phone web page now appear at the top, below the system '
+            'safe area, instead of covering bottom controls. Media actions show a short explanation if they fail, '
+            'rather than a raw exception and stack trace.',
+            'Android App 和手机网页的所有 toast 提示统一显示在顶部安全区下方，不再遮挡底部操作。图片和文件操作失败时显示简短说明，不再展示原始异常和堆栈。',
+            'Android '
+            'アプリとスマホのウェブページのすべてのトースト通知を、システムのセーフエリア下の画面上部に表示し、下部の操作を覆わないようにしました。画像やファイルの操作失敗時は例外やスタックトレースではなく短い説明を表示します。',
+            'Android App 和手機網頁的所有 toast 提示統一顯示在頂部安全區下方，不再遮住底部操作。圖片和檔案操作失敗時顯示簡短說明，不再展示原始例外和堆疊。',
+            'Android App 和手機網頁的所有 toast 提示統一顯示在頂部安全區下方，不再遮擋底部操作。圖片和檔案操作失敗時顯示簡短說明，不再展示原始例外和堆疊。')]},
 {'version': '2.7.3',
  'date': '2026-10-28',
  'changes': [('Android: the same arm64 APK now supports Android 9 (API 28) and later. Saving photos and files '
