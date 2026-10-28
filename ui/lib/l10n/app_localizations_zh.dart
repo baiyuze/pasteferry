@@ -2240,6 +2240,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mPhotosFiles => '照片或文件';
 
   @override
+  String mSendConfirmTitle(Object n) {
+    return '确认发送 $n 个文件？';
+  }
+
+  @override
   String mFilesSent(num n) {
     return '$n 个文件已发到电脑';
   }
@@ -2266,7 +2271,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mSendFootnote =>
-      '文字会进入电脑的复制记录，并按电脑的设置写入剪贴板，就像在电脑上复制了一样。手机上复制的内容不会自动发出，要粘贴到这里再发送。';
+      '文字和文件会进电脑的复制记录，并按电脑的设置写入剪贴板。手机上复制的内容不会自动发出，粘贴到这里再发送。';
 
   @override
   String mSendFailed(String detail) {
@@ -4604,6 +4609,11 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get mPhotosFiles => '照片或檔案';
 
   @override
+  String mSendConfirmTitle(Object n) {
+    return '確認傳送 $n 個檔案？';
+  }
+
+  @override
   String mFilesSent(num n) {
     return '$n 個檔案已傳到電腦';
   }
@@ -4630,7 +4640,7 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get mSendFootnote =>
-      '文字會進入電腦的複製記錄，並按電腦的設定寫入剪貼簿，就像在電腦上複製了一樣。手機上複製的內容不會自動送出，要貼到這裡再傳送。';
+      '文字和檔案會進電腦的複製記錄，並按電腦的設定寫入剪貼簿。手機上複製的內容不會自動發出，貼到這裏再傳送。';
 
   @override
   String mSendFailed(String detail) {
@@ -6968,6 +6978,11 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   String get mPhotosFiles => '照片或檔案';
 
   @override
+  String mSendConfirmTitle(Object n) {
+    return '確認傳送 $n 個檔案？';
+  }
+
+  @override
   String mFilesSent(num n) {
     return '$n 個檔案已傳到電腦';
   }
@@ -6994,7 +7009,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get mSendFootnote =>
-      '文字會進入電腦的複製記錄，並依電腦的設定寫入剪貼簿，就像在電腦上複製了一樣。手機上複製的內容不會自動送出，要貼到這裡再傳送。';
+      '文字和檔案會進電腦的複製記錄，並按電腦的設定寫入剪貼簿。手機上複製的內容不會自動發出，貼到這裡再傳送。';
 
   @override
   String mSendFailed(String detail) {

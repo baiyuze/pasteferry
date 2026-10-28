@@ -19,3 +19,10 @@ ui/tool/screenshots/out/
 # Python site generator cache
 __pycache__/
 *.pyc
+
+# Android 发版签名（密钥不進仓库）
+ui/android/key.properties
+*.jks
+*.keystore
+ui/android/build/
+ui/build/

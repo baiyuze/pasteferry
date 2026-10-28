@@ -2439,6 +2439,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mPhotosFiles => 'Photos or files';
 
   @override
+  String mSendConfirmTitle(Object n) {
+    return 'Send $n file(s)?';
+  }
+
+  @override
   String mFilesSent(num n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
@@ -2471,7 +2476,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mSendFootnote =>
-      'The text goes into the computer’s history and onto its clipboard, as if you had copied it there. Text you copy on this phone isn’t sent automatically: paste it here and tap Send.';
+      'Text and files go into the records on the computer and, by its setting, into its clipboard. What you copy on the phone is not sent by itself.';
 
   @override
   String mSendFailed(String detail) {

@@ -86,4 +86,19 @@ $aar_only && exit 0
 
 echo "▶ APK"
 (cd ui && flutter build apk --release --target-platform android-arm64)
-ls -lh ui/build/app/outputs/flutter-apk/app-release.apk
+apk=ui/build/app/outputs/flutter-apk/app-release.apk
+
+# 发版签名：密钥固定在 ~/.pasteferry-android/pasteferry-release.jks，密码在登录钥匙串
+# （服务名 pasteferry-android-keystore）。这张密钥不能换：换了，已装的用户没法覆盖升级。
+# 没有密钥时留着 gradle 打的调试签名，只能内测。
+KEYSTORE="$HOME/.pasteferry-android/pasteferry-release.jks"
+if [[ -f "$KEYSTORE" ]] && ks_pw=$(security find-generic-password -s pasteferry-android-keystore -a pasteferry -w 2>/dev/null); then
+    apksigner="$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)"
+    "$apksigner" sign --ks "$KEYSTORE" --ks-key-alias pasteferry \
+        --ks-pass "pass:$ks_pw" --key-pass "pass:$ks_pw" "$apk"
+    unset ks_pw
+    echo "  · 签名：PasteFerry Android release key"
+else
+    echo "  · 签名：调试密钥（没有发版密钥，只能内测）"
+fi
+ls -lh "$apk"

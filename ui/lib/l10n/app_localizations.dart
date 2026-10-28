@@ -3992,6 +3992,12 @@ abstract class AppLocalizations {
   /// **'Photos or files'**
   String get mPhotosFiles;
 
+  /// No description provided for @mSendConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send {n} file(s)?'**
+  String mSendConfirmTitle(Object n);
+
   /// No description provided for @mFilesSent.
   ///
   /// In en, this message translates to:
@@ -4037,7 +4043,7 @@ abstract class AppLocalizations {
   /// No description provided for @mSendFootnote.
   ///
   /// In en, this message translates to:
-  /// **'The text goes into the computer’s history and onto its clipboard, as if you had copied it there. Text you copy on this phone isn’t sent automatically: paste it here and tap Send.'**
+  /// **'Text and files go into the records on the computer and, by its setting, into its clipboard. What you copy on the phone is not sent by itself.'**
   String get mSendFootnote;
 
   /// No description provided for @mSendFailed.

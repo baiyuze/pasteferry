@@ -74,8 +74,7 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
     );
   }
 
-  /// 选照片或文件发到电脑。file_selector 在 Android 上会把选中的内容拷到应用缓存，
-  /// 后台服务和 App 在同一个进程里，直接读得到这些路径。
+  /// 选照片或文件：先让用户看清会发哪些，确认了才发（支持多选）。
   Future<void> _pickFiles() async {
     final l = context.l10n;
     if (_picking) return;
@@ -83,9 +82,19 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
     try {
       final files = await openFiles();
       if (files.isEmpty || !mounted) return;
-      final paths = [for (final f in files) f.path];
-      await AppScope.read(context).submitFiles(paths);
-      if (mounted) showToast(context, l.mFilesSent(paths.length));
+      final picked = <(String, String, int)>[];
+      for (final f in files) {
+        var size = 0;
+        try {
+          size = await f.length();
+        } catch (_) {}
+        picked.add((f.path, f.name, size));
+      }
+      if (!mounted) return;
+      final ok = await showFileConfirmSheet(context, picked);
+      if (ok != true || !mounted) return;
+      await AppScope.read(context).submitFiles([for (final p in picked) p.$1]);
+      if (mounted) showToast(context, l.mFilesSent(picked.length));
     } catch (e) {
       if (mounted) showToast(context, l.mSendFailed(AppState.describeError(e)), error: true);
     } finally {
@@ -227,4 +236,90 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
       ),
     );
   }
+}
+
+/// 文件大小的简短写法，和网页、桌面一致。
+String _sizeLabel(int n) {
+  if (n < 1024) return '$n B';
+  const units = ['KB', 'MB', 'GB'];
+  var v = n.toDouble();
+  for (final u in units) {
+    v /= 1024;
+    if (v < 1024 || u == 'GB') return v < 10 ? '${v.toStringAsFixed(1)} $u' : '${v.round()} $u';
+  }
+  return '$n B';
+}
+
+/// 选完照片或文件后的确认弹层：先看清发什么、多大，再决定发不发。
+Future<bool?> showFileConfirmSheet(BuildContext context, List<(String, String, int)> files) {
+  final l = context.l10n;
+  final p = context.palette;
+  return showModalBottomSheet<bool>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (_) => ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.7),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.lg),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l.mSendConfirmTitle(files.length),
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: Insets.md),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    for (final f in files)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: Insets.md),
+                        child: Row(
+                          children: [
+                            Icon(AppIcons.folder, size: 20, color: p.textDim),
+                            const SizedBox(width: Insets.md),
+                            Expanded(
+                              child: Text(f.$2,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 15)),
+                            ),
+                            const SizedBox(width: Insets.md),
+                            Text(_sizeLabel(f.$3), style: TextStyle(fontSize: 13, color: p.textDim)),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: Insets.md),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    style: secondaryButtonStyle(context),
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(l.cancel),
+                  ),
+                ),
+                const SizedBox(width: Insets.md),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: Text(l.mSendAction),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

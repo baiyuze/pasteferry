@@ -2266,6 +2266,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mPhotosFiles => '写真またはファイル';
 
   @override
+  String mSendConfirmTitle(Object n) {
+    return '$n 件のファイルを送りますか？';
+  }
+
+  @override
   String mFilesSent(num n) {
     return '$n 件のファイルをコンピュータに送りました';
   }
@@ -2292,7 +2297,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mSendFootnote =>
-      'テキストはパソコンの履歴に入り、パソコンの設定どおりクリップボードにも入ります。パソコンでコピーしたのと同じです。スマホでコピーした内容は自動では送られないので、ここに貼り付けて送信してください。';
+      'テキストとファイルはパソコンの履歴に入り、設定に従ってクリップボードにも入ります。スマホでコピーした内容は自動では送られません。';
 
   @override
   String mSendFailed(String detail) {
