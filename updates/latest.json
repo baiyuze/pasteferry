@@ -1,65 +1,101 @@
 {
   "schema": 1,
-  "latest": "2.7.3",
-  "date": "2026-10-28",
+  "latest": "2.7.4",
+  "date": "2026-10-29",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.7.3/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.7.4/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.7.3/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.7.4/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 26953128,
-      "sha256": "6af168fa3ae2fefc43a85b2d7e2d3db62213bd4d1c2c9656972faf8cc5ca38eb"
+      "size": 26953845,
+      "sha256": "cadcf1400bf1793aeaff1a6c87298c1ee558f2b9124a261e28891d19965be50e"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 29115117,
-      "sha256": "4a004e11dcf442b159c260e4435c271cfe88590ad2f45682ae8169ace1865e52"
+      "size": 29111963,
+      "sha256": "962a1bf093df0b9dbe6c2226596abe9fda0a4d88d1d44bbf2e2451c0877f228d"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 54133703,
-      "sha256": "11a1b65904f33ed290d11d600ed258afa0ef7ade2d89dc82b1924b2add8cb4b3"
+      "size": 54131013,
+      "sha256": "4e49108a90ef22bc8c54337161b5342b3eca7c783a74c9d0a9aedd121fe8d9ce"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 24075707,
-      "sha256": "b1b7c6671a82bc05734e93a6f64a876759c948d34ce86ae2e27c4fe798afb1f8"
+      "size": 24072026,
+      "sha256": "0646c43a9c928f3aaf4f3f789f8414be80d17723f7f5d0c82ff2c3b429dcdab5"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 30441038,
-      "sha256": "58ef420e13de5fc369aef82fec3fbc4829bd5f289415063cc1c91906eb00844c"
+      "size": 30439826,
+      "sha256": "ede39c499d1b0924a9e7ffbd0c3bda1e7897aea219e73dd373c9c86ee089c7a3"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 23258208,
-      "sha256": "e512c53354da1ae4153436efb37937d5b0387f2cd5a67d57df138ebbbb680701"
+      "size": 23257932,
+      "sha256": "17d9585848f5d35d5a77ceb0b87bd66a3aeeec9f7047613b7532c142b9e55ab2"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 21647664,
-      "sha256": "32b86139e9ef5b171f087e46d2979e9c6e6f03f00f0da3d302a63ab3a8ba70bd"
+      "size": 21646312,
+      "sha256": "955ff24616892118da44b9d50b92ca4a38c4840dbd19baea5e5fc7a87fe00842"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 28150705,
-      "sha256": "bfa0f711b79688fd78ad8db0e64c576d3e78fb361cf06277f1617cf5d36734e3"
+      "size": 28150718,
+      "sha256": "0cc6b9a114de214690d4d0deb87d3e793f0fd70747a3fa7942c53ef34fbfbbe1"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 26367648,
-      "sha256": "a1de3fa722512db5ecc23b8da06d7116df80f9fab461e02aa4cbb9d9272ed8da"
+      "size": 26367662,
+      "sha256": "9ca8fa81c0abfd704ce71952b6a85ad3721c858f221cc384a66abb0b2e57755e"
     }
   },
   "releases": [
+    {
+      "version": "2.7.4",
+      "date": "2026-10-29",
+      "notes": {
+        "en": {
+          "fixes": [
+            "On Android, copying or sharing an image picked from the phone failed because its temporary cache path was not configured for sharing. These images and files now use valid content URIs, and sharing grants the receiving app read access.",
+            "All toast messages in the Android app and phone web page now appear at the top, below the system safe area, instead of covering bottom controls. Media actions show a short explanation if they fail, rather than a raw exception and stack trace."
+          ]
+        },
+        "zh-Hans": {
+          "fixes": [
+            "安卓上复制或分享从手机选出的图片时，因临时缓存路径未配置而失败。现在图片和文件会使用有效的内容地址，分享时同时授予接收 App 读取权限。",
+            "Android App 和手机网页的所有 toast 提示统一显示在顶部安全区下方，不再遮挡底部操作。图片和文件操作失败时显示简短说明，不再展示原始异常和堆栈。"
+          ]
+        },
+        "ja": {
+          "fixes": [
+            "Android でスマホから選んだ画像をコピー・共有すると、一時キャッシュのパスが未設定のため失敗していました。画像やファイルに有効なコンテンツ URI を使い、共有先アプリに読み取り権限を渡すよう修正しました。",
+            "Android アプリとスマホのウェブページのすべてのトースト通知を、システムのセーフエリア下の画面上部に表示し、下部の操作を覆わないようにしました。画像やファイルの操作失敗時は例外やスタックトレースではなく短い説明を表示します。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "fixes": [
+            "安卓上複製或分享從手機選取的圖片時，因暫存路徑未設定而失敗。現在圖片和檔案會使用有效的內容位址，分享時同時授予接收 App 讀取權限。",
+            "Android App 和手機網頁的所有 toast 提示統一顯示在頂部安全區下方，不再遮住底部操作。圖片和檔案操作失敗時顯示簡短說明，不再展示原始例外和堆疊。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "fixes": [
+            "安卓上複製或分享從手機選取的圖片時，因暫存路徑未設定而失敗。現在圖片和檔案會使用有效的內容地址，分享時同時授予接收 App 讀取權限。",
+            "Android App 和手機網頁的所有 toast 提示統一顯示在頂部安全區下方，不再遮擋底部操作。圖片和檔案操作失敗時顯示簡短說明，不再展示原始例外和堆疊。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.7.3",
       "date": "2026-10-28",
@@ -470,62 +506,6 @@
           ],
           "fixes": [
             "修正隔空傳送中在線但還沒連上的電腦顯示「需要更新」、連不上時一直不消失的問題。現在還不知道對方能否接收時顯示「正在連線…」，按它會重新連線；只有連上後一直沒有回報功能的舊版本才顯示「需要更新」；對方上次回報的功能在重新啟動後仍然保留。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.5.3",
-      "date": "2026-10-23",
-      "notes": {
-        "en": {
-          "changes": [
-            "Real-time clipboard sharing can now be paused globally or for each paired computer. Local history, manual downloads and Send Files remain available.",
-            "Offline clipboard catch-up is now off by default, including after upgrading. Reconnecting or resuming sharing starts with new copies. Optional catch-up adds up to 20 missed copies from the last 24 hours to history without replacing the current clipboard.",
-            "Launch at login now has its own setting. Changing it does not stop the current session, and quitting does not change the next-login preference. New installations start with it off; upgrades preserve existing login entries."
-          ],
-          "fixes": [
-            "Quit PasteFerry now stops the main window, clipboard background service and quick paste helper without immediately restarting them. Closing the window keeps the app running and explains this on first use."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "新增实时同步总开关和每台电脑的同步开关；暂停自动同步后，本机复制记录、手动下载和隔空传送仍可使用。",
-            "离线内容补发默认关闭，升级后也默认关闭。重连或恢复同步后只同步新复制的内容。可自行开启补发：最多补发 24 小时内的 20 条记录，不覆盖当前剪贴板。",
-            "新增独立的开机启动设置。修改开关不停止当前运行，退出也不改变下次登录时的启动选择。新安装默认关闭，升级保留原有的开机启动选择。"
-          ],
-          "fixes": [
-            "「退出隔空贴」现在会结束主窗口、剪贴板后台和快捷粘贴窗口，不再立即重新拉起。关闭窗口仍会继续后台运行，首次操作时会说明。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "クリップボードの自動同期を全体またはパソコンごとに一時停止できます。ローカル履歴、手動ダウンロード、ファイル送信は引き続き利用できます。",
-            "オフライン中の未送信内容の同期は、更新後も含め初期設定でオフです。再接続・再開後は新しいコピーから同期します。有効にした場合は24時間以内の最大20件を、現在のクリップボードを上書きせず履歴に追加します。",
-            "ログイン時の起動を独立して設定できます。変更しても現在の動作は停止せず、終了しても次回ログイン時の設定は変わりません。新規インストールではオフ、更新時は既存の設定を保持します。"
-          ],
-          "fixes": [
-            "「PasteFerry を終了」でメイン画面、同期サービス、クイック貼り付けをすべて終了し、直後に再起動しなくなりました。ウィンドウを閉じた場合は動作を継続し、初回に説明します。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "新增即時同步總開關和每台電腦的同步開關；暫停自動同步後，本機複製記錄、手動下載和隔空傳送仍可使用。",
-            "離線內容補傳預設關閉，升級後也預設關閉。重新連線或恢復同步後只同步新複製的內容。可自行開啟補傳：最多補傳 24 小時內的 20 筆記錄，不覆寫目前的剪貼簿。",
-            "新增獨立的開機啟動設定。變更開關不停止目前的執行，結束也不改變下次登入時的啟動選擇。新安裝預設關閉，升級保留原有的開機啟動選擇。"
-          ],
-          "fixes": [
-            "「結束隔空貼」現在會結束主視窗、剪貼簿背景服務和快速貼上視窗，不再立即重新啟動。關閉視窗仍會繼續在背景執行，首次操作時會說明。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "新增即時同步總開關和每部電腦的同步開關；暫停自動同步後，本機複製記錄、手動下載和隔空傳送仍可使用。",
-            "離線內容補傳預設關閉，升級後也預設關閉。重新連線或恢復同步後只同步新複製的內容。可自行開啟補傳：最多補傳 24 小時內的 20 筆記錄，不覆寫目前的剪貼簿。",
-            "新增獨立的開機啟動設定。更改開關不停止目前的運作，退出也不改變下次登入時的啟動選擇。新安裝預設關閉，升級保留原有的開機啟動選擇。"
-          ],
-          "fixes": [
-            "「退出隔空貼」現在會結束主視窗、剪貼簿背景服務和快速貼上視窗，不再立即重新啟動。關閉視窗仍會繼續在背景運作，首次操作時會說明。"
           ]
         }
       }
