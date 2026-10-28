@@ -1,65 +1,111 @@
 {
   "schema": 1,
-  "latest": "2.7.2",
+  "latest": "2.7.3",
   "date": "2026-10-28",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.7.2/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.7.3/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.7.2/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.7.3/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 26949836,
-      "sha256": "5f9ba7d03df44cbc9b20ce933829a0f7fb74c4a37460aab5ce8875a7d1eaa6ff"
+      "size": 26953128,
+      "sha256": "6af168fa3ae2fefc43a85b2d7e2d3db62213bd4d1c2c9656972faf8cc5ca38eb"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 29107260,
-      "sha256": "b5e9209ba20239c020a744ed83a15f3333798a919d05bc43d3af2a90366dc0ba"
+      "size": 29115117,
+      "sha256": "4a004e11dcf442b159c260e4435c271cfe88590ad2f45682ae8169ace1865e52"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 54122885,
-      "sha256": "be9a555d491101e7565e2fc9d4a088b1cf3e9f39d4600b1d00336ea0c1408412"
+      "size": 54133703,
+      "sha256": "11a1b65904f33ed290d11d600ed258afa0ef7ade2d89dc82b1924b2add8cb4b3"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 24070355,
-      "sha256": "a06152b20f1c7c02c6698b1a778110a6620948dcdb8cdc543c53352ddf9d446c"
+      "size": 24075707,
+      "sha256": "b1b7c6671a82bc05734e93a6f64a876759c948d34ce86ae2e27c4fe798afb1f8"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 30434206,
-      "sha256": "0d0ed24368dc3d3739cc1a3acda6962f7b433d63fa5536a19a70290574222956"
+      "size": 30441038,
+      "sha256": "58ef420e13de5fc369aef82fec3fbc4829bd5f289415063cc1c91906eb00844c"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 23256512,
-      "sha256": "6ebee829b6df0c1463f04f16551ae013cb4d0060b4f4bd3bc4fcfaf4ec35bec1"
+      "size": 23258208,
+      "sha256": "e512c53354da1ae4153436efb37937d5b0387f2cd5a67d57df138ebbbb680701"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 21644492,
-      "sha256": "645246af84a4fe5b54490f224463091226b7eb3ba4e5c0ef783ab5abb111d8a6"
+      "size": 21647664,
+      "sha256": "32b86139e9ef5b171f087e46d2979e9c6e6f03f00f0da3d302a63ab3a8ba70bd"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 28149199,
-      "sha256": "6c304d59d5645310c445411560a51aac10dda5f9d73dbb396e9198b6536ca44f"
+      "size": 28150705,
+      "sha256": "bfa0f711b79688fd78ad8db0e64c576d3e78fb361cf06277f1617cf5d36734e3"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 26363048,
-      "sha256": "cb8f1154949f288be2fafb2f01359866feaa9f3b1be0b80b4dd6fa1db8fa68cb"
+      "size": 26367648,
+      "sha256": "a1de3fa722512db5ecc23b8da06d7116df80f9fab461e02aa4cbb9d9272ed8da"
     }
   },
   "releases": [
+    {
+      "version": "2.7.3",
+      "date": "2026-10-28",
+      "notes": {
+        "en": {
+          "changes": [
+            "Android: the same arm64 APK now supports Android 9 (API 28) and later. Saving photos and files asks for storage access only on Android 9; Android 10 and later keep using MediaStore without that permission."
+          ],
+          "fixes": [
+            "On Windows, opening the phone QR code now checks firewall access and requests administrator approval when needed. Cancelled or failed setup stays visible with a retry button, and success is shown only after the rules are verified. Existing access does not prompt again."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "安卓：同一个 arm64 APK 现支持 Android 9（API 28）及以上。仅在 Android 9 点击保存图片或文件时申请存储权限；Android 10 及以上继续使用 MediaStore，无需这项权限。"
+          ],
+          "fixes": [
+            "Windows 上打开手机二维码时会自动检查防火墙，需要时弹出管理员授权。取消或失败会显示原因和重试按钮，核对放行规则后才提示成功；已放行时不重复弹窗。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "Android：同じ arm64 APK で Android 9（API 28）以降に対応しました。写真やファイルの保存時にストレージの許可を求めるのは Android 9 のみで、Android 10 以降は引き続き許可不要の MediaStore を使います。"
+          ],
+          "fixes": [
+            "Windows でスマホ用 QR コードを開くとファイアウォールを確認し、必要な場合だけ管理者の承認を求めます。キャンセルや失敗は理由と再試行ボタンを表示し、ルールの確認後にだけ成功と表示します。許可済みなら再度確認しません。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "安卓：同一個 arm64 APK 現支援 Android 9（API 28）以上。僅在 Android 9 點選儲存圖片或檔案時要求儲存空間權限；Android 10 以上繼續使用 MediaStore，無需這項權限。"
+          ],
+          "fixes": [
+            "Windows 上開啟手機 QR 碼時會自動檢查防火牆，需要時要求系統管理員授權。取消或失敗會顯示原因和重試按鈕，確認允許連入規則後才提示成功；已允許時不重複彈出視窗。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "安卓：同一個 arm64 APK 現支援 Android 9（API 28）或以上。只在 Android 9 按儲存圖片或檔案時要求儲存空間權限；Android 10 或以上繼續使用 MediaStore，無需這項權限。"
+          ],
+          "fixes": [
+            "Windows 上開啟手機二維碼時會自動檢查防火牆，需要時要求管理員授權。取消或失敗會顯示原因和重試按鈕，確認允許連線規則後才提示成功；已允許時不重複彈出視窗。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.7.2",
       "date": "2026-10-28",
@@ -480,42 +526,6 @@
           ],
           "fixes": [
             "「退出隔空貼」現在會結束主視窗、剪貼簿背景服務和快速貼上視窗，不再立即重新啟動。關閉視窗仍會繼續在背景運作，首次操作時會說明。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.5.2",
-      "date": "2026-10-22",
-      "notes": {
-        "en": {
-          "fixes": [
-            "An up-to-date device could incorrectly show as needing an update in Send Files when its capability announcement was lost at connection startup. The control receiver is now installed before the connection is announced, and capabilities are refreshed periodically.",
-            "The Send Files radar now stays circular in small windows. The rings, device icons and labels scale together instead of stretching into a narrow ellipse; the selected side-by-side or stacked layout is preserved."
-          ]
-        },
-        "zh-Hans": {
-          "fixes": [
-            "修复隔空传送中已更新的设备仍显示「需要更新」的问题：连接刚建立时功能声明可能丢失，现在先准备好接收器再报告已连接，并定期刷新功能声明。",
-            "小窗口下隔空传送的雷达保持正圆，圆环、设备图标和名称一起等比缩放，不再挤成长椭圆；保留设置中选择的左右或上下布局。"
-          ]
-        },
-        "ja": {
-          "fixes": [
-            "最新のデバイスでも、接続開始時に機能情報が失われると「更新が必要」と表示される問題を修正しました。接続完了を通知する前に受信処理を設定し、機能情報を定期的に更新します。",
-            "小さいウィンドウでもファイル送信のレーダーが円形を保つようになりました。輪、デバイスのアイコンと名前を同じ比率で縮小し、細長い楕円に変形しません。選択した左右・上下配置は維持されます。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "fixes": [
-            "修正隔空傳送中已更新的裝置仍顯示「需要更新」的問題：連線剛建立時功能宣告可能遺失，現在先準備好接收器再回報已連線，並定期重新整理功能宣告。",
-            "小視窗下隔空傳送的雷達維持正圓，圓環、裝置圖示和名稱一起等比例縮放，不再擠成長橢圓；保留設定中選擇的左右或上下配置。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "fixes": [
-            "修正隔空傳送中已更新的裝置仍顯示「需要更新」的問題：連線剛建立時功能聲明可能遺失，現在先準備好接收器再回報已連線，並定期更新功能聲明。",
-            "小視窗下隔空傳送的雷達維持正圓，圓環、裝置圖示和名稱一起等比例縮放，不再擠成長橢圓；保留設定中選擇的左右或上下排列。"
           ]
         }
       }
