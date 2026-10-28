@@ -761,3 +761,14 @@ Kotlin 宿主
 - [受限制的设置](https://support.google.com/android/answer/12623953)（Android 13+）、[Android 开发者验证](https://developer.android.com/developer-verification)。
 - 版本分布：[apilevels.com](https://apilevels.com/)（第三方，StatCounter 2026 年 4 月数据，页面注明 2026-05-28 更新）。
 - iOS：[延长后台执行时间](https://developer.apple.com/documentation/uikit/extending-your-app-s-background-execution-time)（退到后台后约 5 秒挂起）、[UIPasteControl](https://developer.apple.com/documentation/uikit/uipastecontrol)、[UIPasteboard](https://developer.apple.com/documentation/uikit/uipasteboard)、[组播权限](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.networking.multicast)、[通用剪贴板](https://support.apple.com/en-us/102430)、[App Store Connect：App 信息（ICP 备案号）](https://developer.apple.com/help/app-store-connect/reference/app-information/)。
+
+## 3.3.11 发版签名密钥（2.7.0 起）
+
+- 密钥：`~/.pasteferry-android/pasteferry-release.jks`，别名 `pasteferry`，RSA 4096，有效期 10000 天。
+- 密码在登录钥匙串，服务名 `pasteferry-android-keystore`，账号 `pasteferry`。
+- `scripts/build-android.sh` 打完 APK 后用 `apksigner` 签名；没有这个密钥时退回调试签名，只能内测。
+  **不写进 Gradle 的 signingConfigs**：这台机器的 Gradle 9.5 把旧的 `android {}` DSL 当错误，构建会直接失败。
+- 这张密钥**不能换、也不要重新生成**：换掉以后，已经装过旧版的手机无法覆盖升级（签名不同，系统拒绝安装）。
+  丢了只能从离线备份恢复，恢复不了就只能换包名重新发。
+- 必须备份两样东西：`.jks` 文件本身，和钥匙串里的那段密码。建议各存一份离线。
+- 2.7.0 的 Released APK（含网页传输那一版）是用调试密钥签的；从带这张密钥的构建开始，之后每一版都用它。
