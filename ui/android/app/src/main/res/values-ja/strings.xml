@@ -9,4 +9,6 @@
     <string name="notif_last_image">最新：%1$s からの画像</string>
     <string name="notif_last_file">最新：%1$s からのファイル</string>
     <string name="share_title">共有</string>
+    <string name="save_storage_permission">写真やファイルの保存にはストレージへのアクセス許可が必要です。もう一度「保存」を押して再試行してください。</string>
+    <string name="save_permission_pending">先に現在のストレージの許可を完了してください。</string>
 </resources>

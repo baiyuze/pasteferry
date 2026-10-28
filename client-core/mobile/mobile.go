@@ -1,7 +1,7 @@
 // Package mobile 是 Android App 内嵌的 Go 核心（design/phone-sync.md 3.3.1、3.3.2 节），
 // 用 gomobile bind 导出给 Kotlin：
 //
-//	gomobile bind -target=android/arm64 -androidapi 29 -ldflags=-checklinkname=0 ./mobile（见 scripts/build-android.sh）
+//	gomobile bind -target=android/arm64 -androidapi 28 -ldflags=-checklinkname=0 ./mobile（见 scripts/build-android.sh）
 //
 // 组装方式与桌面的 cmd/pasteferryd 相同，只是：
 //   - 只开局域网通道（服务模式固定为 lan），不连服务器；

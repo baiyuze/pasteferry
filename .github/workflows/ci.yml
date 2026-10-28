@@ -151,6 +151,9 @@ jobs:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      - name: Android compatibility tests and API checks
+        run: ./gradlew :app:testDebugUnitTest :app:lintRelease
+        working-directory: ui/android
       - uses: actions/upload-artifact@v4
         with:
           name: PasteFerry-android

@@ -51,7 +51,7 @@
 1. 一期只做局域网。
 2. 先做网页传输，再做 Android App。
 3. iOS 暂不做，iPhone 用户先用网页传输。
-4. Android 最低支持 Android 10（3.3.8 节）。
+4. Android 最低支持 Android 9（3.3.8 节）。
 5. 网页传输在网页里自己加密内容，不用明文 http。
 6. Android 一期：文字自动写进手机剪贴板；图片和文件点了才放进剪贴板；手机在发送页发文字。
 7. Android 支持扫码配对：扫电脑上的二维码，不用核对指纹，电脑上点一次确认（3.3.9 节）。
@@ -500,17 +500,17 @@ Kotlin 宿主
 
 | 项 | 取值 | 理由 |
 |---|---|---|
-| minSdk | **29（Android 10）** | 见下 |
+| minSdk | **28（Android 9）** | App 与 gomobile 核心同时使用 API 28，同一个 arm64 APK 支持 Android 9 及以上 |
 | targetSdk / compileSdk | 36 | 本机 Flutter 3.44.9 的默认值；不用申请局域网权限（3.3.5 节） |
 | CPU 架构 | arm64-v8a | 32 位的 armeabi-v7a 等内测反馈再决定要不要加；模拟器另编 x86_64 |
 
-为什么是 Android 10：
+2.7.3 起从 Android 10 下放到 Android 9，不需要另出兼容 APK：
 
-- **覆盖面**：Flutter 3.44.9 最低能到 Android 7.0（API 24）。按 [apilevels.com](https://apilevels.com/)（StatCounter 2026 年 4 月的全球数据），Android 10 及以上约占 91.1%，7.0 及以上约 96.6%，往下放只多覆盖约 5.5 个百分点。国内的分布可能不同，没有找到可靠数据。
-- **代码路径**：
-  - 前台服务的 `foregroundServiceType`（包括 `connectedDevice`）从 Android 10 起才有；
-  - 不申请存储权限就能用 MediaStore 存进「下载」目录，也是 Android 10 起；
-  - 剪贴板的后台读取限制同样从 Android 10 开始，各版本行为一致，测试矩阵也小。
+- Flutter、Go 核心与现有插件支持 API 28。前台服务经 `ServiceCompat` 在 Android 9 调用不带类型的系统接口。
+- Android 9 只在点击「保存」时申请存储权限；允许后写入公共 Pictures/PasteFerry 或 Download/PasteFerry，图片通知媒体库收录。拒绝则说明原因并保留重试入口，同名文件另存而不覆盖。
+- Android 10 及以上继续经 MediaStore 保存，不申请旧版存储权限；权限声明限定 `maxSdkVersion=28`。
+- Android 9 也保持由用户在发送页粘贴并发送，不额外增加后台剪贴板读取。
+- `FileSaverTest` 用 API 28 / 29 验证授权边界、保存、目录结构和同名文件保护；CI 同时运行 Android lint 检查高版本 API 的使用。
 - **鸿蒙**：鸿蒙 2–4 的华为手机能装 APK（**待真机验证**）；鸿蒙 NEXT 不能。
 
 #### 3.3.9 扫码配对

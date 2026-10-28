@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.pasteferry.app"
-    // design/phone-sync.md 3.3.8 节：Android 10 起；target 36 不用申请 Android 17 的局域网权限
+    // Android 9 起；target 36 不用申请 Android 17 的局域网权限
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "com.pasteferry.app"
-        minSdk = 29
+        minSdk = 28
         targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -30,6 +30,10 @@ android {
             // 发版签名密钥还没生成（phone-task.md C6），先用调试密钥，只给内测
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
     }
 }
 
@@ -47,4 +51,6 @@ dependencies {
     // Go 核心，由 scripts/build-android.sh 用 gomobile bind 生成，不进版本库
     implementation(files("libs/pasteferry-core.aar"))
     implementation("androidx.core:core-ktx:1.17.0")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.16.1")
 }

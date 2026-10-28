@@ -2,7 +2,7 @@
 # 构建 Android App（design/phone-sync.md 3.3.7 节）：先用 gomobile 把 Go 核心打成 AAR，再由 Flutter 打 APK。
 #
 #   ./scripts/build-android.sh          # arm64 的 APK，在 ui/build/app/outputs/flutter-apk/app-release.apk
-#                                       # （不放进 release/：那里只放 Release 的 14 个附件）
+#                                       # （发版时另存为 release/PasteFerry-android-arm64.apk）
 #   ./scripts/build-android.sh --aar    # 只打 AAR，之后可以 flutter run --target-platform android-arm64 调试
 #   ./scripts/build-android.sh --aar --emulator   # 给 x86_64 模拟器调试用的 AAR，见下面 --emulator 的说明
 #
@@ -75,7 +75,7 @@ mkdir -p ui/android/app/libs
 # -checklinkname=0：pion 的间接依赖 wlynxg/anet 用了 go:linkname（3.3.2 节第 2 条）
 (cd client-core && gomobile bind \
     -target=android/arm64 \
-    -androidapi 29 \
+    -androidapi 28 \
     -javapkg=com.pasteferry.core \
     -ldflags="-checklinkname=0 -s -w" \
     -o ../ui/android/app/libs/pasteferry-core.aar \

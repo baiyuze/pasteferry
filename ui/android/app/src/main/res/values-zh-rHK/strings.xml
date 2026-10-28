@@ -9,4 +9,6 @@
     <string name="notif_last_image">最近：來自 %1$s 的圖片</string>
     <string name="notif_last_file">最近：來自 %1$s 的檔案</string>
     <string name="share_title">分享</string>
+    <string name="save_storage_permission">儲存圖片和檔案需要允許存取儲存空間。請再次按「儲存」重試。</string>
+    <string name="save_permission_pending">請先完成目前的儲存空間授權。</string>
 </resources>

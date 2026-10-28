@@ -9,4 +9,6 @@
     <string name="notif_last_image">Latest: image from %1$s</string>
     <string name="notif_last_file">Latest: file from %1$s</string>
     <string name="share_title">Share</string>
+    <string name="save_storage_permission">Allow storage access to save photos and files. Tap Save again to try again.</string>
+    <string name="save_permission_pending">Please finish the current storage permission request first.</string>
 </resources>

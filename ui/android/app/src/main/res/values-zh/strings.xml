@@ -9,4 +9,6 @@
     <string name="notif_last_image">最近：来自 %1$s 的图片</string>
     <string name="notif_last_file">最近：来自 %1$s 的文件</string>
     <string name="share_title">分享</string>
+    <string name="save_storage_permission">保存图片和文件需要允许存储访问。请再次点击“保存”重试。</string>
+    <string name="save_permission_pending">请先完成当前的存储授权。</string>
 </resources>

@@ -2,7 +2,6 @@ package com.pasteferry.app
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -10,9 +9,7 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
-import android.provider.MediaStore
 import android.provider.Settings
-import android.webkit.MimeTypeMap
 import androidx.core.app.NotificationManagerCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -28,6 +25,7 @@ import java.util.concurrent.Executors
 class MainActivity : FlutterActivity() {
     private val io = Executors.newSingleThreadExecutor()
     private var pendingNotification: MethodChannel.Result? = null
+    private var pendingSave: Pair<List<String>, MethodChannel.Result>? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -70,7 +68,7 @@ class MainActivity : FlutterActivity() {
                 if (on) SyncService.start(this) else SyncService.stop(this)
                 result.success(on)
             }
-            "save" -> background(result) { save(call.argument<List<String>>("paths")!!) }
+            "save" -> save(call.argument<List<String>>("paths")!!, result)
             "share" -> {
                 share(call.argument<List<String>>("paths")!!)
                 result.success(null)
@@ -113,40 +111,17 @@ class MainActivity : FlutterActivity() {
 
     // ─────────────── 保存与分享（3.3.3 节） ───────────────
 
-    /** 图片存进相册的 Pictures/PasteFerry，其他文件存进「下载」的 PasteFerry 文件夹。Android 10 起不需要存储权限。返回存下的个数 */
-    private fun save(paths: List<String>): Int {
-        var n = 0
-        for (path in paths) {
-            val f = File(path)
-            val files = if (f.isDirectory) f.walkTopDown().filter { it.isFile }.toList() else listOf(f)
-            for (file in files) {
-                val sub = if (f.isDirectory) file.parentFile!!.relativeTo(f.parentFile!!).path else ""
-                saveOne(file, sub)
-                n++
+    /** Android 9 只在用户点击保存时申请存储权限；新系统不申请。 */
+    private fun save(paths: List<String>, result: MethodChannel.Result) {
+        if (FileSaver(this).needsStoragePermission()) {
+            if (pendingSave != null) {
+                result.error("busy", getString(R.string.save_permission_pending), null)
+                return
             }
-        }
-        return n
-    }
-
-    private fun saveOne(file: File, sub: String) {
-        val mime = mimeOf(file)
-        val image = mime.startsWith("image/")
-        val collection = if (image) MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        else MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        val dir = (if (image) "Pictures/PasteFerry" else "Download/PasteFerry") + (if (sub.isEmpty()) "" else "/$sub")
-        val values = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-            put(MediaStore.MediaColumns.MIME_TYPE, mime)
-            put(MediaStore.MediaColumns.RELATIVE_PATH, dir)
-            put(MediaStore.MediaColumns.IS_PENDING, 1)
-        }
-        val uri = contentResolver.insert(collection, values) ?: throw IllegalStateException("无法保存 ${file.name}")
-        try {
-            contentResolver.openOutputStream(uri)!!.use { out -> file.inputStream().use { it.copyTo(out) } }
-            contentResolver.update(uri, ContentValues().apply { put(MediaStore.MediaColumns.IS_PENDING, 0) }, null, null)
-        } catch (e: Exception) {
-            contentResolver.delete(uri, null, null)
-            throw e
+            pendingSave = paths to result
+            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_STORAGE)
+        } else {
+            background(result) { FileSaver(this).save(paths) }
         }
     }
 
@@ -154,7 +129,7 @@ class MainActivity : FlutterActivity() {
         val files = paths.map(::File).flatMap { if (it.isDirectory) it.walkTopDown().filter(File::isFile).toList() else listOf(it) }
         if (files.isEmpty()) return
         val uris = ArrayList<Uri>(files.map { Core.uriFor(it.path) })
-        val mimes = files.map(::mimeOf).distinct()
+        val mimes = files.map { FileSaver.mimeOf(it) }.distinct()
         val type = mimes.singleOrNull() ?: if (mimes.all { it.startsWith("image/") }) "image/*" else "*/*"
         val send = if (uris.size == 1) {
             Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_STREAM, uris.first())
@@ -164,9 +139,6 @@ class MainActivity : FlutterActivity() {
         send.setType(type).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivity(Intent.createChooser(send, getString(R.string.share_title)))
     }
-
-    private fun mimeOf(f: File): String =
-        MimeTypeMap.getSingleton().getMimeTypeFromExtension(f.extension.lowercase()) ?: "application/octet-stream"
 
     // ─────────────── 权限与系统设置 ───────────────
 
@@ -196,6 +168,16 @@ class MainActivity : FlutterActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_STORAGE) {
+            val save = pendingSave ?: return
+            pendingSave = null
+            if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+                background(save.second) { FileSaver(this).save(save.first) }
+            } else {
+                save.second.error("permission_denied", getString(R.string.save_storage_permission), null)
+            }
+            return
+        }
         if (requestCode != REQUEST_NOTIFICATIONS) return
         pendingNotification?.success(notificationState())
         pendingNotification = null
@@ -226,5 +208,6 @@ class MainActivity : FlutterActivity() {
 
     companion object {
         private const val REQUEST_NOTIFICATIONS = 1
+        private const val REQUEST_STORAGE = 2
     }
 }
