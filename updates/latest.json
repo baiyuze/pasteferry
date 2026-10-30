@@ -1,65 +1,126 @@
 {
   "schema": 1,
-  "latest": "2.8.0",
+  "latest": "2.8.1",
   "date": "2026-10-30",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.8.0/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.8.1/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.8.0/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.8.1/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 26968241,
-      "sha256": "bd1bc6c5158f25ee7aa9078d4b41d5f1041470b259e085281606d8440dcd7241"
+      "size": 26985884,
+      "sha256": "071b9bf8d6da67014bd6a70aac2791a3688d969a211cca7d8b6d335d6f944ef2"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 29118117,
-      "sha256": "751747f95bc116cc1913bf42d242a5dfc86c740c10a87f66878014026e009ba8"
+      "size": 29138251,
+      "sha256": "77bcd8c30d8d79eb6d45fe3f0928abf5959c16496f2c82b06383f2461d699615"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 54128065,
-      "sha256": "0422f297a041b01c0781a13fa5155d0159e0109b3147a56e973568e3274aaa74"
+      "size": 54164755,
+      "sha256": "a3dc718fffdfd5bb95b566fa3414dc6cef467237e18d1b2d823769d1fac33ae8"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 24076787,
-      "sha256": "98fa2fd1ffd55037ff20ced10866ec5943a7128608b64fb3b3b4f5ae6a1cb128"
+      "size": 24093024,
+      "sha256": "cfe3941aeaf0c642fb9c7b1036361f1ed7a2567a2eeacba22cbbc4fe17e2cc75"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 30444185,
-      "sha256": "d2aa257082fc87ec1b83a1dbdc695e66cb46f3dece9122509f18cd82ba67aabf"
+      "size": 30471926,
+      "sha256": "a54095a790074c8223aeff5b89db29ff899bda047e4618b73f0d502fadfad7b8"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 23279276,
-      "sha256": "dc90c5070178bd70203495f0b1a165226d8def5b2976791abd282c0608cd0d94"
+      "size": 23288488,
+      "sha256": "83b419115e78825829dd968a4f7bd586db69b934350335fc722d5fdfd4ee4ac6"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 21647012,
-      "sha256": "b4ee60ba1c73fc05fa376c150e44d2f24f77ba85a4561d0a26bd4f56b348cee5"
+      "size": 21663310,
+      "sha256": "c288d05dd82a194a64bcf1b5fbfadb9da29b3c78848e475c515e39fa41a3a0f8"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 28156761,
-      "sha256": "b060705a6a305511f82f658dde4ac8de95da399d7aa12c316d0fb4060efa2f81"
+      "size": 28178098,
+      "sha256": "579595da0259e5d8679c9ea518a3ff5d36c5c2e671f85848a3947f2bca5ab1fd"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 26375347,
-      "sha256": "2b017114025749c3154357f5b4ad3b76553fb985b2514b81484cd58adc2d2f66"
+      "size": 26392911,
+      "sha256": "c7e79eb7618560505f6001c45dfeb3795193545016add64101aad5b2b95b82dd"
     }
   },
   "releases": [
+    {
+      "version": "2.8.1",
+      "date": "2026-10-30",
+      "notes": {
+        "en": {
+          "changes": [
+            "Phone web transfers now have a separate Send Files page with batch uploads, encrypted downloads, progress and persistent records. Computers can queue files for a registered browser from Devices. These transfers do not enter clipboard history or change the clipboard.",
+            "Android photo and file pickers accept multiple items in one selection for both Send and Send Files, with batch confirmation and an optional Add More action.",
+            "The website and project introduction now describe clipboard sync, searchable history and file transfer across computers and phones, and highlight the Android file transfer features introduced in 2.8."
+          ],
+          "fixes": [
+            "Android and phone web transfer lists use compact rows with actions on the right, readable filenames and metadata, and the same bidirectional transfer icon. Secondary Android actions are available from the row menu.",
+            "Android and phone web toasts now fit their content, stay horizontally centered and use the existing theme, with wrapping for longer messages."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "手机网页新增独立「隔空传送」页，支持批量上传、加密下载、进度和持久记录；电脑可从「设备」向已登记的网页发送文件。这些传输不进入复制记录，也不改动剪贴板。",
+            "安卓「发送」和「隔空传送」的照片、文件选择器均支持一次多选，发送前确认整批内容，也可继续添加。",
+            "官网和项目介绍更新为跨电脑与手机的剪贴板同步、历史检索及文件传送，并突出 2.8 新增的安卓文件传送能力。"
+          ],
+          "fixes": [
+            "安卓和手机网页传输列表改为紧凑行布局，操作位于右侧，保留清晰的文件名、信息及统一的双向传送图标；安卓次要操作可从行内菜单打开。",
+            "安卓和手机网页提示条改为随内容收缩、水平居中并沿用现有主题，较长内容自动换行。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "スマホWeb版に独立した「ファイル転送」ページを追加。複数ファイルのアップロード、暗号化ダウンロード、進捗、永続履歴に対応。パソコンの「デバイス」から登録済みブラウザへ送信でき、コピー履歴やクリップボードは変更しません。",
+            "Androidの「送信」と「ファイル転送」で写真・ファイルを一度に複数選択できます。送信前の一括確認と追加選択にも対応しました。",
+            "公式サイトとプロジェクト紹介を、パソコンとスマホのクリップボード同期・履歴検索・ファイル転送に合わせて更新し、2.8で追加したAndroidの転送機能を紹介します。"
+          ],
+          "fixes": [
+            "AndroidとスマホWebの転送一覧をコンパクトにし、操作を右側に配置。ファイル名と詳細を読みやすく保ち、双方向アイコンを統一。Androidの追加操作は行メニューから使えます。",
+            "AndroidとスマホWeb版の通知幅を内容に合わせ、中央配置と既存テーマに統一。長いメッセージは折り返します。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "手機網頁新增獨立「隔空傳送」頁，支援批次上傳、加密下載、進度和持續保留的記錄；電腦可從「裝置」向已登記的網頁傳送檔案。這些傳輸不進入複製記錄，也不更動剪貼簿。",
+            "安卓「傳送」和「隔空傳送」的照片、檔案選擇器均支援一次多選，傳送前確認整批內容，也可繼續新增。",
+            "官網和專案介紹更新為跨電腦與手機的剪貼簿同步、記錄搜尋及檔案傳送，並介紹 2.8 新增的安卓檔案傳送功能。"
+          ],
+          "fixes": [
+            "安卓和手機網頁傳輸清單改為緊湊列版面，操作位於右側，保留清楚的檔名、資訊及一致的雙向傳送圖示；安卓次要操作可從列內選單開啟。",
+            "安卓和手機網頁提示條改為依內容縮放、水平置中並沿用現有主題，較長內容自動換行。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "手機網頁新增獨立「隔空傳送」頁，支援批次上傳、加密下載、進度和持續保留的記錄；電腦可從「裝置」向已登記的網頁傳送檔案。這些傳輸不進入複製記錄，也不更動剪貼簿。",
+            "安卓「傳送」和「隔空傳送」的相片、檔案選擇器均支援一次多選，傳送前確認整批內容，也可繼續新增。",
+            "官網和專案介紹更新為跨電腦與手機的剪貼簿同步、記錄搜尋及檔案傳送，並介紹 2.8 新增的安卓檔案傳送功能。"
+          ],
+          "fixes": [
+            "安卓和手機網頁傳輸清單改為緊湊列版面，操作位於右側，保留清楚的檔名、資訊及一致的雙向傳送圖示；安卓次要操作可從列內選單開啟。",
+            "安卓和手機網頁提示條改為隨內容收縮、水平置中並沿用現有主題，較長內容自動換行。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.8.0",
       "date": "2026-10-30",
@@ -450,72 +511,6 @@
           ],
           "fixes": [
             "Mac 上的自動更新不論哪種晶片都下載通用版（約 50 MB）；從這一版起按本機晶片下載對應的安裝檔，大小約減半。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.6.0",
-      "date": "2026-10-26",
-      "notes": {
-        "en": {
-          "changes": [
-            "Send files to contacts: add someone else's computer once with a contact code, no pairing needed, then drop files or images on their avatar with an optional note of up to 200 characters. Each batch arrives only after they accept it (contacts they trust can be accepted automatically), and contacts never see your clipboard, history or devices. On different networks, both sides turn on Service.",
-            "Choose who can send you files: no one, contacts only (the default), or everyone on the local network, which switches back to contacts only after 10 minutes.",
-            "Set a display name and avatar for your contacts. Each contact has a page with their status, automatic accepting and every transfer between you.",
-            "Paste copied files or images into the Send dialog with Cmd+V or Ctrl+V.",
-            "Settings now open on a short list of categories (General, Connection, Sync, Quick paste, Send Files, Storage, About), each with its own page, instead of one long page."
-          ],
-          "fixes": [
-            "Notifications showed files under 1 MB as 0.0 MB; small sizes are now shown in KB or bytes."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "给好友发文件：别人的电脑不用配对，用好友码加一次好友，之后把文件或图片拖到对方头像上就能发，可以附 200 字以内的备注。每批文件都要对方接受才会传（常来往的好友可以设成自动接收）；好友看不到你的剪贴板、复制记录和设备。不在同一个网络时，两边都打开「服务」即可。",
-            "可以选择谁能给你发文件：均不允许、仅限好友（默认）或所有人；「所有人」只在局域网里有效，10 分钟后自动回到仅限好友。",
-            "可以设置给好友看的显示名和头像。每个好友有自己的页面：状态、自动接收开关，以及你们之间的全部传输记录。",
-            "在发送窗口里按 ⌘V 或 Ctrl+V，可以直接粘贴复制的文件或图片。",
-            "设置改为类别列表（通用、连接、同步、快捷粘贴、隔空传送、存储、关于），点进去是各自的页面，不用再翻一整页长列表。"
-          ],
-          "fixes": [
-            "通知里不到 1 MB 的文件显示成 0.0 MB，现在按 KB 或字节显示。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "連絡先へのファイル送信：ほかの人のパソコンはペアリング不要で、連絡先コードで一度追加すれば、ファイルや画像を相手のアイコンにドロップして送れます。200 文字までのメモも添えられます。毎回相手が受け入れてから転送され（よくやり取りする相手は自動で受け入れ可能）、連絡先にクリップボード、履歴、デバイスが見えることはありません。別のネットワークでは双方でサービスをオンにします。",
-            "ファイルを受け取る相手を選べます：受け取らない、連絡先のみ（初期設定）、すべての人。「すべての人」はローカルネットワーク内だけで、10 分後に連絡先のみに戻ります。",
-            "連絡先に見せる表示名とアイコンを設定できます。連絡先ごとのページで、状態、自動受け入れ、やり取りしたすべての転送を確認できます。",
-            "送信ダイアログで Cmd+V または Ctrl+V を押すと、コピーしたファイルや画像を貼り付けられます。",
-            "設定はカテゴリの一覧（一般、接続、同期、クイックペースト、ファイル送信、ストレージ、このアプリについて）になり、それぞれのページに分かれました。長い 1 ページをスクロールする必要はありません。"
-          ],
-          "fixes": [
-            "通知で 1 MB 未満のファイルが 0.0 MB と表示されていた問題を修正し、KB またはバイトで表示します。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "給好友傳檔案：別人的電腦不用配對，用好友碼加一次好友，之後把檔案或圖片拖到對方頭像上就能傳，可以附 200 字以內的備註。每批檔案都要對方接受才會傳（常往來的好友可以設成自動接收）；好友看不到你的剪貼簿、複製記錄和裝置。不在同一個網路時，兩邊都打開「服務」即可。",
-            "可以選擇誰能傳檔案給你：均不允許、僅限好友（預設）或所有人；「所有人」只在區域網路裡有效，10 分鐘後自動回到僅限好友。",
-            "可以設定給好友看的顯示名稱和頭像。每個好友有自己的頁面：狀態、自動接收開關，以及你們之間的全部傳輸記錄。",
-            "在傳送視窗裡按 ⌘V 或 Ctrl+V，可以直接貼上複製的檔案或圖片。",
-            "設定改為類別列表（一般、連線、同步、快速貼上、隔空傳送、儲存空間、關於），點進去是各自的頁面，不用再捲動一整頁長列表。"
-          ],
-          "fixes": [
-            "通知中不到 1 MB 的檔案顯示成 0.0 MB，現在按 KB 或位元組顯示。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "給好友傳檔案：別人的電腦不用配對，用好友碼加一次好友，之後把檔案或圖片拖到對方頭像上就能傳，可以附 200 字以內的備註。每批檔案都要對方接受才會傳（常來往的好友可以設成自動接收）；好友看不到你的剪貼簿、複製記錄和裝置。不在同一個網絡時，兩邊都開啟「服務」即可。",
-            "可以選擇誰能傳檔案給你：均不允許、僅限好友（預設）或所有人；「所有人」只在區域網絡裏有效，10 分鐘後自動回到僅限好友。",
-            "可以設定給好友看的顯示名稱和頭像。每個好友有自己的頁面：狀態、自動接收開關，以及你們之間的全部傳輸記錄。",
-            "在傳送視窗裏按 ⌘V 或 Ctrl+V，可以直接貼上複製的檔案或圖片。",
-            "設定改為類別列表（一般、連接、同步、快速貼上、隔空傳送、儲存空間、關於），按進去是各自的頁面，不用再捲動一整頁長列表。"
-          ],
-          "fixes": [
-            "通知中不到 1 MB 的檔案顯示成 0.0 MB，現在按 KB 或位元組顯示。"
           ]
         }
       }
