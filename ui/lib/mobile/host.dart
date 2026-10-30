@@ -41,4 +41,23 @@ abstract final class Host {
 
   /// 当前网络是 Wi-Fi 或有线网
   static Future<bool> onLan() async => await _channel.invokeMethod<bool>('onLan') ?? true;
+
+  /// 系统照片多选器 / 文档多选器。文件在后台导入缓存后才返回。
+  static Future<List<PickedFile>> pickFiles({required bool photos}) async {
+    final files = await _channel.invokeListMethod<Object?>('pickFiles', {'photos': photos}) ?? [];
+    return [for (final file in files) PickedFile.fromMap(file! as Map)];
+  }
+}
+
+class PickedFile {
+  PickedFile.fromMap(Map file)
+      : path = file['path'] as String,
+        name = file['name'] as String,
+        size = file['size'] as int,
+        id = file['id'] as String;
+
+  final String path;
+  final String name;
+  final int size;
+  final String id;
 }

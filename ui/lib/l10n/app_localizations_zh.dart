@@ -2437,6 +2437,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noticeFilesUnreadable => '刚才复制的文件读不到，没有同步';
+
+  @override
+  String get mAddMore => '继续添加';
+
+  @override
+  String get mChoosePhotos => '选择照片…';
+
+  @override
+  String get mMultiSelectHint => '照片可以一次多选；文件可长按一项后，再勾选其他项。';
+
+  @override
+  String get webSendFiles => '发送文件';
+
+  @override
+  String get webFilesQueued => '已加入网页传输，请到手机的「隔空传送」下载。';
+
+  @override
+  String get webFilesLimit => '网页收取单个文件上限 200 MB，一次最多 64 个文件。';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -4872,6 +4890,24 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get noticeFilesUnreadable => '剛才複製的檔案讀不到，沒有同步';
+
+  @override
+  String get mAddMore => '繼續新增';
+
+  @override
+  String get mChoosePhotos => '選擇相片…';
+
+  @override
+  String get mMultiSelectHint => '相片可以一次多選；檔案可長按一個項目後，再勾選其他項目。';
+
+  @override
+  String get webSendFiles => '傳送檔案';
+
+  @override
+  String get webFilesQueued => '已加入網頁傳輸，請到手機的「隔空傳送」下載。';
+
+  @override
+  String get webFilesLimit => '網頁接收單一檔案上限 200 MB，一次最多 64 個檔案。';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -7307,4 +7343,22 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get noticeFilesUnreadable => '剛才複製的檔案讀不到，沒有同步';
+
+  @override
+  String get mAddMore => '繼續新增';
+
+  @override
+  String get mChoosePhotos => '選擇照片…';
+
+  @override
+  String get mMultiSelectHint => '照片可以一次多選；檔案可長按一個項目後，再勾選其他項目。';
+
+  @override
+  String get webSendFiles => '傳送檔案';
+
+  @override
+  String get webFilesQueued => '已加入網頁傳輸，請到手機的「隔空傳送」下載。';
+
+  @override
+  String get webFilesLimit => '網頁接收單一檔案上限 200 MB，一次最多 64 個檔案。';
 }

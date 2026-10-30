@@ -25,7 +25,15 @@ CREATE TABLE IF NOT EXISTS web_sessions (
     key        BLOB NOT NULL,
     created_at INTEGER NOT NULL,
     last_seen  INTEGER NOT NULL
-);`
+);
+CREATE TABLE IF NOT EXISTS web_transfers (
+    id TEXT NOT NULL,
+    session TEXT NOT NULL REFERENCES web_sessions(id) ON DELETE CASCADE,
+    created_at INTEGER NOT NULL,
+    payload BLOB NOT NULL,
+    PRIMARY KEY(session,id)
+);
+CREATE INDEX IF NOT EXISTS idx_web_transfers_session ON web_transfers(session,created_at DESC);`
 
 func (s *Store) migrateWebSessions() error {
 	if _, err := s.db.Exec(webSessionsSchema); err != nil {

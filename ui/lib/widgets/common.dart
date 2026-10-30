@@ -724,25 +724,30 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
             opacity: _fade,
             child: Material(
               color: theme.backgroundColor,
-              elevation: theme.elevation ?? 6,
+              elevation: widget.top ? 3 : (theme.elevation ?? 6),
               shape: theme.shape,
-              child: SizedBox(
-                width: 360,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: widget.top ? 0 : 360,
+                  maxWidth: widget.top ? 320 : 360,
+                ),
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(
                     16,
-                    14,
+                    widget.top ? 10 : 14,
                     widget.actionLabel == null ? 16 : 8,
-                    14,
+                    widget.top ? 10 : 14,
                   ),
                   child: DefaultTextStyle(
                     style: style,
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         widget.icon,
                         const SizedBox(width: Insets.sm),
-                        Expanded(child: Text(
+                        Flexible(child: Text(
                           widget.message,
+                          textAlign: widget.top ? TextAlign.center : TextAlign.start,
                           maxLines: widget.top ? 3 : null,
                           overflow: widget.top ? TextOverflow.ellipsis : null,
                         )),

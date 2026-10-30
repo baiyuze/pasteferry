@@ -1760,5 +1760,11 @@
   "mCopyMediaFailed": "Could not copy this image or file. Try saving it first.",
   "mShareMediaFailed": "Could not open sharing for this image or file. Try saving it first.",
   "mSaveMediaFailed": "Could not save this image or file. Check storage access and free space, then try again.",
-  "noticeFilesUnreadable": "The files you just copied could not be read, so nothing was synced"
+  "noticeFilesUnreadable": "The files you just copied could not be read, so nothing was synced",
+  "mAddMore": "Add more",
+  "mChoosePhotos": "Choose Photos…",
+  "mMultiSelectHint": "Select several photos at once. In Files, touch and hold an item to select more.",
+  "webSendFiles": "Send files",
+  "webFilesQueued": "Added to web transfers. Open Send Files on your phone to download.",
+  "webFilesLimit": "Web downloads support up to 200 MB per file and 64 files per batch."
 }

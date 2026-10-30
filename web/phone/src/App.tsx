@@ -23,6 +23,8 @@ import { S, t } from './i18n'
 import { Dismiss, Edit, History, HistoryFilled, Laptop, MoreHorizontal, PhoneAdd, Send, SendFilled, ShieldLock } from './icons'
 import { RecordsView, type Filter } from './records'
 import { SendView } from './send'
+import { TransfersView } from './transfers'
+import { ArrowSwap, ArrowSwapFilled } from './icons'
 import { Button, Sheet, cx, useToast } from './ui'
 import { errorText, guessName, homeSteps, inApp, standalone } from './util'
 
@@ -202,7 +204,7 @@ function WelcomeScreen({ onClaim }: { onClaim: (name: string) => Promise<void> }
 
 // ── 主界面 ──
 
-type Tab = 'records' | 'send'
+type Tab = 'records' | 'send' | 'transfers'
 
 function Main({ session, hello: initial, onRemoved }: { session: Session; hello: HelloInfo; onRemoved: () => void }) {
   const toast = useToast()
@@ -418,7 +420,7 @@ function Main({ session, hello: initial, onRemoved }: { session: Session; hello:
               <MoreHorizontal size={20} />
             </button>
           </div>
-          <h1 className="mt-2 text-[30px] font-bold tracking-tight">{tab === 'records' ? t('tabRecords') : t('sendTitle', { device: hello.device })}</h1>
+          <h1 className="mt-2 text-[30px] font-bold tracking-tight">{tab === 'records' ? t('tabRecords') : tab === 'transfers' ? t('tabTransfers') : t('sendTitle', { device: hello.device })}</h1>
         </header>
 
         {tab === 'records' ? (
@@ -433,16 +435,17 @@ function Main({ session, hello: initial, onRemoved }: { session: Session; hello:
             onLoadMore={() => load(false)}
             header={homeTip}
           />
-        ) : (
+        ) : tab === 'send' ? (
           <SendView
             onSent={(r) => {
               upsert(r)
             }}
           />
-        )}
+        ) : null}
+        {hello.transfers && <div hidden={tab !== 'transfers'}><TransfersView active={tab === 'transfers'} /></div>}
       </div>
 
-      <TabBar tab={tab} onChange={setTab} />
+      <TabBar tab={tab} onChange={setTab} transfers={!!hello.transfers} />
 
       <Sheet open={menu} onClose={() => setMenu(false)}>
         <div className="px-4 pb-4">
@@ -587,10 +590,11 @@ function RenameSheet({ open, name, onClose, onSave }: { open: boolean; name: str
   )
 }
 
-function TabBar({ tab, onChange }: { tab: Tab; onChange: (t: Tab) => void }) {
+function TabBar({ tab, onChange, transfers }: { tab: Tab; onChange: (t: Tab) => void; transfers: boolean }) {
   const items = [
     { key: 'records' as const, label: t('tabRecords'), Icon: History, Active: HistoryFilled },
     { key: 'send' as const, label: t('tabSend'), Icon: Send, Active: SendFilled },
+    ...(transfers ? [{ key: 'transfers' as const, label: t('tabTransfers'), Icon: ArrowSwap, Active: ArrowSwapFilled }] : []),
   ]
   return (
     <nav className="hairline-t fixed inset-x-0 bottom-0 z-30 bg-bar pb-safe backdrop-blur-xl">

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:file_selector/file_selector.dart';
 
 import '../app_state.dart';
 import '../gen/pasteferry/v1/daemon.pb.dart';
@@ -27,7 +28,7 @@ class WebShareSection extends StatelessWidget {
 
     return GroupSection(
       title: l.webShareTitle,
-      footnote: l.webShareFootnote,
+      footnote: '${l.webShareFootnote} ${l.webFilesLimit}',
       child: GroupBox(
         dividerIndent: 52,
         children: [
@@ -102,10 +103,48 @@ class WebShareSection extends StatelessWidget {
   }
 }
 
-class _SessionRow extends StatelessWidget {
+class _SessionRow extends StatefulWidget {
   const _SessionRow({required this.session});
 
   final WebSession session;
+
+  @override
+  State<_SessionRow> createState() => _SessionRowState();
+}
+
+class _SessionRowState extends State<_SessionRow> {
+  bool _sending = false;
+  WebSession get session => widget.session;
+
+  Future<void> _send() async {
+    if (_sending) return;
+    setState(() => _sending = true);
+    try {
+      final files = await openFiles();
+      if (files.isEmpty || !mounted) return;
+      if (files.length > 64) {
+        if (mounted)
+          showToast(context, context.l10n.webFilesLimit, error: true);
+        return;
+      }
+      for (final file in files) {
+        if (await file.length() > 200 * 1024 * 1024) {
+          if (mounted)
+            showToast(context, context.l10n.webFilesLimit, error: true);
+          return;
+        }
+      }
+      if (!mounted) return;
+      await AppScope.read(
+        context,
+      ).sendFiles('web:${session.id}', [for (final file in files) file.path]);
+      if (mounted) showToast(context, context.l10n.webFilesQueued);
+    } catch (e) {
+      if (mounted) showToast(context, AppState.describeError(e), error: true);
+    } finally {
+      if (mounted) setState(() => _sending = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +177,15 @@ class _SessionRow extends StatelessWidget {
               ],
             ),
           ),
+          OutlinedButton.icon(
+            onPressed:
+                _sending || !(AppScope.of(context).webShare?.listening ?? false)
+                ? null
+                : _send,
+            icon: Icon(AppIcons.send, size: 16),
+            label: Text(l.webSendFiles),
+          ),
+          const SizedBox(width: Insets.sm),
           TextButton(
             onPressed: () async {
               try {

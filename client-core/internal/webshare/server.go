@@ -95,10 +95,11 @@ type Server struct {
 	sessions  map[string]*session // 读过的会话缓存，键是会话 ID
 	stopBG    context.CancelFunc
 
-	uploads *uploads
-	zips    *zipCache
-	events  *broadcaster
-	thumbs  thumbCache
+	uploads    *uploads
+	zips       *zipCache
+	events     *broadcaster
+	thumbs     thumbCache
+	transferMu sync.Mutex
 }
 
 type invite struct {
@@ -266,6 +267,8 @@ func (s *Server) background(ctx context.Context) {
 }
 
 func (s *Server) expireSessions() {
+	s.transferMu.Lock()
+	defer s.transferMu.Unlock()
 	ids, err := s.opts.Store.RemoveWebSessionsIdleSince(s.opts.Now().Add(-sessionIdle))
 	if err != nil {
 		s.log.Warn("清理不用的手机失败", "err", err)
@@ -281,6 +284,8 @@ func (s *Server) expireSessions() {
 	s.mu.Unlock()
 	for _, id := range ids {
 		s.events.closeSession(id)
+		s.uploads.dropSession(id)
+		_ = os.RemoveAll(filepath.Join(s.opts.WorkDir, "transfers", id))
 	}
 	s.changed("")
 }
@@ -364,6 +369,8 @@ func (s *Server) CloseInvite(id string) {
 
 // RemoveSession 移除一台手机，它的网页立即失效。
 func (s *Server) RemoveSession(id string) error {
+	s.transferMu.Lock()
+	defer s.transferMu.Unlock()
 	if err := s.opts.Store.RemoveWebSession(id); err != nil {
 		return err
 	}
@@ -372,6 +379,7 @@ func (s *Server) RemoveSession(id string) error {
 	s.mu.Unlock()
 	s.events.closeSession(id)
 	s.uploads.dropSession(id)
+	_ = os.RemoveAll(filepath.Join(s.opts.WorkDir, "transfers", id))
 	s.changed("")
 	return nil
 }

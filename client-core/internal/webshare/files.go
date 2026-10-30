@@ -385,7 +385,11 @@ func (s *Server) readChunk(clipID string, item int, index int64) ([]byte, error)
 	if err != nil {
 		return nil, err
 	}
-	if index < 0 || index*chunkSize >= f.size && !(index == 0 && f.size == 0) {
+	return readFileChunk(f, index)
+}
+
+func readFileChunk(f downloadFile, index int64) ([]byte, error) {
+	if index < 0 || index > f.size/chunkSize || index*chunkSize >= f.size && !(index == 0 && f.size == 0) {
 		return nil, errBadRequest
 	}
 	file, err := os.Open(f.path)

@@ -51,6 +51,7 @@ export interface HelloInfo {
   maxDownload: number
   maxUpload: number
   maxText: number
+  transfers?: boolean
 }
 
 export interface FileInfo {
@@ -147,7 +148,7 @@ export async function claim(inviteID: string, inviteKey: Uint8Array, name: strin
 }
 
 /** 取一块下载的数据或一张缩略图。回复解密后第一个字节是 0 时后面是数据，是 1 时后面是 JSON 错误。 */
-export async function fetchBin(s: Session, m: 'chunk' | 'thumb', a: unknown): Promise<Uint8Array> {
+export async function fetchBin(s: Session, m: 'chunk' | 'thumb' | 'transfer_chunk', a: unknown): Promise<Uint8Array> {
   const data = await post(`/api/fetch?s=${encodeURIComponent(s.sid)}`, seal(s.key, envelope(m, a)))
   const plain = open(s.key, data)
   if (!plain || plain.length === 0) throw new ApiError('bad_reply')
@@ -239,4 +240,13 @@ export function clearHash() {
 export function parseHash(): { i: string | null; s: string | null; k: string | null } {
   const p = new URLSearchParams(location.hash.replace(/^#/, ''))
   return { i: p.get('i'), s: p.get('s'), k: p.get('k') }
+}
+
+export interface WebTransfer {
+  id: string
+  direction: 'upload' | 'download'
+  status: 'ready' | 'done'
+  items: WebItem[]
+  downloaded: boolean[] | null
+  at: number
 }

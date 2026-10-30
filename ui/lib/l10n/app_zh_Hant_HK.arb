@@ -703,5 +703,11 @@
   "mCopyMediaFailed": "無法複製這張圖片或檔案，請嘗試先儲存。",
   "mShareMediaFailed": "無法分享這張圖片或檔案，請嘗試先儲存。",
   "mSaveMediaFailed": "無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。",
-  "noticeFilesUnreadable": "剛才複製的檔案讀不到，沒有同步"
+  "noticeFilesUnreadable": "剛才複製的檔案讀不到，沒有同步",
+  "mAddMore": "繼續新增",
+  "mChoosePhotos": "選擇相片…",
+  "mMultiSelectHint": "相片可以一次多選；檔案可長按一個項目後，再勾選其他項目。",
+  "webSendFiles": "傳送檔案",
+  "webFilesQueued": "已加入網頁傳輸，請到手機的「隔空傳送」下載。",
+  "webFilesLimit": "網頁接收單一檔案上限 200 MB，一次最多 64 個檔案。"
 }

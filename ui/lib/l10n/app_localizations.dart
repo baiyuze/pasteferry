@@ -4333,6 +4333,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The files you just copied could not be read, so nothing was synced'**
   String get noticeFilesUnreadable;
+
+  /// No description provided for @mAddMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more'**
+  String get mAddMore;
+
+  /// No description provided for @mChoosePhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Photos…'**
+  String get mChoosePhotos;
+
+  /// No description provided for @mMultiSelectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select several photos at once. In Files, touch and hold an item to select more.'**
+  String get mMultiSelectHint;
+
+  /// No description provided for @webSendFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Send files'**
+  String get webSendFiles;
+
+  /// No description provided for @webFilesQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to web transfers. Open Send Files on your phone to download.'**
+  String get webFilesQueued;
+
+  /// No description provided for @webFilesLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Web downloads support up to 200 MB per file and 64 files per batch.'**
+  String get webFilesLimit;
 }
 
 class _AppLocalizationsDelegate

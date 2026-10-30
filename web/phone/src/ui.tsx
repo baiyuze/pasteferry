@@ -155,12 +155,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       <div
         aria-live="polite"
         className={cx(
-          'pointer-events-none fixed inset-x-0 z-50 flex justify-center px-6 transition-all duration-200',
+          'pointer-events-none fixed inset-x-0 z-50 flex justify-center px-4 transition-all duration-200',
           'top-[calc(12px+env(safe-area-inset-top))]',
           visible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0',
         )}
       >
-        <div className="max-w-full rounded-md bg-toast px-4 py-2.5 text-center text-[14px] font-medium text-toast-text shadow-[0_6px_24px_rgba(0,0,0,0.24)]">
+        <div className="w-fit max-w-[min(320px,100%)] break-words rounded-md bg-toast px-4 py-2.5 text-center text-[13px] leading-5 text-toast-text shadow-[0_3px_12px_rgba(0,0,0,0.16)]">
           {msg}
         </div>
       </div>

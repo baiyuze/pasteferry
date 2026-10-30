@@ -110,6 +110,10 @@ void main() {
       expect(toast, findsOneWidget);
       expect(tester.getTopLeft(toast).dy, greaterThanOrEqualTo(36));
       expect(tester.getBottomLeft(toast).dy, lessThan(150));
+      final surface = find.ancestor(of: toast, matching: find.byType(Material)).first;
+      final rect = tester.getRect(surface);
+      expect(rect.width, lessThan(180), reason: '短提示按内容收缩');
+      expect(rect.center.dx, closeTo(206, 1), reason: '提示框水平居中');
       final hit = tester.hitTestOnBinding(tester.getCenter(toast));
       final render = tester.renderObject(toast);
       expect(hit.path.any((entry) => entry.target == render), isFalse,
@@ -129,6 +133,38 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('保存失败'), findsNothing);
   });
+
+  for (final brightness in Brightness.values) {
+    testWidgets('顶部长提示在窄屏和大字体下居中、有边距且不溢出：$brightness', (tester) async {
+      tester.view.physicalSize = const Size(320, 640);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      late BuildContext context;
+      await tester.pumpWidget(MaterialApp(
+        theme: buildMobileTheme(brightness),
+        builder: (_, child) => ToastScope(top: true, child: MediaQuery(
+          data: const MediaQueryData(size: Size(320, 640), textScaler: TextScaler.linear(2)),
+          child: child!,
+        )),
+        home: Builder(builder: (ctx) {
+          context = ctx;
+          return const Scaffold();
+        }),
+      ));
+      const message = '连接失败，请检查电脑与手机的网络设置后重试。' 'very-long-file-name-without-spaces.zip';
+      showToast(context, message, error: true);
+      await tester.pumpAndSettle();
+      final toast = find.text(message);
+      final surface = find.ancestor(of: toast, matching: find.byType(Material)).first;
+      final rect = tester.getRect(surface);
+      expect(rect.width, lessThanOrEqualTo(288));
+      expect(rect.left, greaterThanOrEqualTo(16));
+      expect(rect.center.dx, closeTo(160, 1));
+      expect(tester.takeException(), isNull);
+      await tester.pump(const Duration(seconds: 7));
+      await tester.pumpAndSettle();
+    });
+  }
 
   testWidgets('底部四个标签，默认是记录', (tester) async {
     await _pump(tester, _demo(records: [_text]));

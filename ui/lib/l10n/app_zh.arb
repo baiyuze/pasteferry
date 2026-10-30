@@ -703,5 +703,11 @@
   "mCopyMediaFailed": "无法复制这张图片或文件，请尝试先保存。",
   "mShareMediaFailed": "无法分享这张图片或文件，请尝试先保存。",
   "mSaveMediaFailed": "无法保存这张图片或文件，请检查存储权限和剩余空间后重试。",
-  "noticeFilesUnreadable": "刚才复制的文件读不到，没有同步"
+  "noticeFilesUnreadable": "刚才复制的文件读不到，没有同步",
+  "mAddMore": "继续添加",
+  "mChoosePhotos": "选择照片…",
+  "mMultiSelectHint": "照片可以一次多选；文件可长按一项后，再勾选其他项。",
+  "webSendFiles": "发送文件",
+  "webFilesQueued": "已加入网页传输，请到手机的「隔空传送」下载。",
+  "webFilesLimit": "网页收取单个文件上限 200 MB，一次最多 64 个文件。"
 }

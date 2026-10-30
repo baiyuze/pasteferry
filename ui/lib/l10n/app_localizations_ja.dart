@@ -2465,4 +2465,22 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get noticeFilesUnreadable => 'コピーしたファイルを読み取れなかったため、同期していません';
+
+  @override
+  String get mAddMore => 'さらに追加';
+
+  @override
+  String get mChoosePhotos => '写真を選択…';
+
+  @override
+  String get mMultiSelectHint => '写真は一度に複数選べます。ファイルは長押ししてから、ほかの項目も選択できます。';
+
+  @override
+  String get webSendFiles => 'ファイルを送信';
+
+  @override
+  String get webFilesQueued => 'Web 転送に追加しました。スマートフォンの「ファイル転送」でダウンロードできます。';
+
+  @override
+  String get webFilesLimit => 'Web受信は1ファイル最大200 MB、1回64ファイルまでです。';
 }

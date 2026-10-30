@@ -16,7 +16,7 @@ interface Job {
   error?: string
 }
 
-function readSlice(file: File, start: number, end: number): Promise<Uint8Array> {
+export function readSlice(file: File, start: number, end: number): Promise<Uint8Array> {
   const blob = file.slice(start, end)
   if (blob.arrayBuffer) return blob.arrayBuffer().then((b) => new Uint8Array(b))
   return new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@ function readSlice(file: File, start: number, end: number): Promise<Uint8Array> 
   })
 }
 
-async function withRetry<T>(fn: () => Promise<T>, times: number): Promise<T> {
+export async function withRetry<T>(fn: () => Promise<T>, times: number): Promise<T> {
   try {
     return await fn()
   } catch (e) {

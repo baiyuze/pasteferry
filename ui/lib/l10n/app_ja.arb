@@ -703,5 +703,11 @@
   "mCopyMediaFailed": "画像やファイルをコピーできませんでした。先に保存してみてください。",
   "mShareMediaFailed": "画像やファイルの共有を開けませんでした。先に保存してみてください。",
   "mSaveMediaFailed": "画像やファイルを保存できませんでした。ストレージの許可と空き容量を確認し、再試行してください。",
-  "noticeFilesUnreadable": "コピーしたファイルを読み取れなかったため、同期していません"
+  "noticeFilesUnreadable": "コピーしたファイルを読み取れなかったため、同期していません",
+  "mAddMore": "さらに追加",
+  "mChoosePhotos": "写真を選択…",
+  "mMultiSelectHint": "写真は一度に複数選べます。ファイルは長押ししてから、ほかの項目も選択できます。",
+  "webSendFiles": "ファイルを送信",
+  "webFilesQueued": "Web 転送に追加しました。スマートフォンの「ファイル転送」でダウンロードできます。",
+  "webFilesLimit": "Web受信は1ファイル最大200 MB、1回64ファイルまでです。"
 }

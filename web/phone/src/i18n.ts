@@ -2,6 +2,24 @@
 // 用词与 App 的 ARB 文件一致（复制记录、本机、来自……）。
 
 const zh = {
+  tabTransfers: "隔空传送",
+  chooseFiles: "选择文件…",
+  transferHint: "直接保存到电脑的下载目录，独立于复制记录，不改动剪贴板。",
+  transferReceiveHint: "接收文件：在电脑的「设备 → 手机网页传输」中，找到这台手机并点「发送文件」。网页需保持打开。",
+  transferHistory: "传输记录",
+  transferEmpty: "还没有传输记录，选几个文件试试。",
+  transferReady: "可下载",
+  transferToComputer: "发给电脑",
+  transferFromComputer: "来自电脑",
+  transferDelete: "删除记录",
+  transferDeleteHint: "删除记录后，已保存到电脑的文件保留；待下载文件会移除。最多保留 100 条记录。",
+  transferConfirm: "确认发送 {n} 个文件？",
+  transferFinishing: "正在保存…",
+  transferCancelled: "已取消",
+  transferLimit: "一次最多选择 64 个文件",
+  transferSaveHint: "文件已准备好。点「下载」交给浏览器保存；保存位置和确认提示由浏览器决定。",
+  transferHandedOff: "已交给浏览器下载",
+
   appName: '隔空贴',
   tabRecords: '复制记录',
   tabSend: '发送',
@@ -119,6 +137,24 @@ const zh = {
 export type Strings = typeof zh
 
 const zhTW: Strings = {
+  tabTransfers: "隔空傳送",
+  chooseFiles: "選擇檔案…",
+  transferHint: "直接儲存到電腦的下載目錄，獨立於複製記錄，不更動剪貼簿。",
+  transferReceiveHint: "接收檔案：在電腦的「裝置 → 手機網頁傳輸」找到這支手機，點「傳送檔案」。網頁需保持開啟。",
+  transferHistory: "傳輸記錄",
+  transferEmpty: "還沒有傳輸記錄，選幾個檔案試試。",
+  transferReady: "可下載",
+  transferToComputer: "傳給電腦",
+  transferFromComputer: "來自電腦",
+  transferDelete: "刪除記錄",
+  transferDeleteHint: "刪除記錄後，已存到電腦的檔案保留；待下載檔案會移除。最多保留 100 筆記錄。",
+  transferConfirm: "確認傳送 {n} 個檔案？",
+  transferFinishing: "正在儲存…",
+  transferCancelled: "已取消",
+  transferLimit: "一次最多選擇 64 個檔案",
+  transferSaveHint: "檔案已備妥。點「下載」交給瀏覽器儲存；儲存位置與確認提示由瀏覽器決定。",
+  transferHandedOff: "已交給瀏覽器下載",
+
   appName: '隔空貼',
   tabRecords: '複製記錄',
   tabSend: '傳送',
@@ -238,6 +274,24 @@ function toHK(s: Strings): Strings {
 }
 
 const en: Strings = {
+  tabTransfers: "Send Files",
+  chooseFiles: "Choose files…",
+  transferHint: "Save directly to the computer’s Downloads folder, with separate history and no clipboard changes.",
+  transferReceiveHint: "To receive: on the computer, open Devices → Phone web transfer, find this phone and choose Send files. Keep this page open.",
+  transferHistory: "Transfer history",
+  transferEmpty: "No transfers yet. Choose a few files to get started.",
+  transferReady: "Ready to download",
+  transferToComputer: "To computer",
+  transferFromComputer: "From computer",
+  transferDelete: "Delete record",
+  transferDeleteHint: "Files saved to the computer are kept. Pending downloads are removed. Up to 100 records are kept.",
+  transferConfirm: "Send {n} files?",
+  transferFinishing: "Saving…",
+  transferCancelled: "Cancelled",
+  transferLimit: "Choose up to 64 files at a time",
+  transferSaveHint: "Your file is ready. Tap Download to save it using your browser. The browser controls the save location and prompts.",
+  transferHandedOff: "Handed to browser",
+
   appName: 'PasteFerry',
   tabRecords: 'History',
   tabSend: 'Send',
@@ -342,6 +396,24 @@ const en: Strings = {
 }
 
 const ja: Strings = {
+  tabTransfers: "ファイル転送",
+  chooseFiles: "ファイルを選択…",
+  transferHint: "パソコンのダウンロード先に直接保存。コピー履歴とは別に管理し、クリップボードは変更しません。",
+  transferReceiveHint: "受信するには、パソコンの「デバイス → スマートフォンの Web 転送」でこの端末を選び「ファイルを送信」。このページを開いたままにしてください。",
+  transferHistory: "転送履歴",
+  transferEmpty: "転送履歴はまだありません。ファイルを選んでみましょう。",
+  transferReady: "ダウンロード可能",
+  transferToComputer: "パソコンへ",
+  transferFromComputer: "パソコンから",
+  transferDelete: "履歴を削除",
+  transferDeleteHint: "パソコンに保存済みのファイルは残ります。未ダウンロードのファイルは削除されます。履歴は最大100件です。",
+  transferConfirm: "{n} 個のファイルを送信しますか？",
+  transferFinishing: "保存中…",
+  transferCancelled: "キャンセルしました",
+  transferLimit: "一度に選択できるのは64個までです",
+  transferSaveHint: "ファイルの準備ができました。「ダウンロード」でブラウザに保存します。保存場所や確認画面はブラウザが管理します。",
+  transferHandedOff: "ブラウザへ送信済み",
+
   appName: 'PasteFerry',
   tabRecords: '履歴',
   tabSend: '送信',

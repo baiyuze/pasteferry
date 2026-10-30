@@ -2651,4 +2651,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noticeFilesUnreadable =>
       'The files you just copied could not be read, so nothing was synced';
+
+  @override
+  String get mAddMore => 'Add more';
+
+  @override
+  String get mChoosePhotos => 'Choose Photos…';
+
+  @override
+  String get mMultiSelectHint =>
+      'Select several photos at once. In Files, touch and hold an item to select more.';
+
+  @override
+  String get webSendFiles => 'Send files';
+
+  @override
+  String get webFilesQueued =>
+      'Added to web transfers. Open Send Files on your phone to download.';
+
+  @override
+  String get webFilesLimit =>
+      'Web downloads support up to 200 MB per file and 64 files per batch.';
 }

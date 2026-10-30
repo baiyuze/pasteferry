@@ -249,6 +249,7 @@ type helloInfo struct {
 	MaxDownload int64  `json:"maxDownload"`
 	MaxUpload   int64  `json:"maxUpload"`
 	MaxText     int    `json:"maxText"`
+	Transfers   bool   `json:"transfers"`
 }
 
 func (s *Server) helloInfo(sess *session) helloInfo {
@@ -259,6 +260,7 @@ func (s *Server) helloInfo(sess *session) helloInfo {
 	return helloInfo{
 		Device: device, Name: s.sessionName(sess), Now: s.opts.Now().UnixMilli(),
 		Chunk: chunkSize, MaxDownload: maxDownloadBytes, MaxUpload: maxUploadBytes, MaxText: maxTextBytes,
+		Transfers: true,
 	}
 }
 
@@ -273,6 +275,24 @@ func (s *Server) dispatch(ctx context.Context, sess *session, req request) (any,
 		return nil
 	}
 	switch req.Method {
+	case "transfers", "transfer_file_info", "transfer_downloaded", "transfer_delete":
+		var a struct {
+			ID   string `json:"id"`
+			Item int    `json:"item"`
+		}
+		if err := args(&a); err != nil {
+			return nil, err
+		}
+		return s.transferRPC(sess, req.Method, a.ID, a.Item)
+	case "transfer_upload_done":
+		var a struct {
+			Uploads []string `json:"uploads"`
+			Batch   string   `json:"batch"`
+		}
+		if err := args(&a); err != nil {
+			return nil, err
+		}
+		return s.finishTransferUploads(sess, a.Uploads, a.Batch)
 	case "hello":
 		var a struct {
 			Name string `json:"name"`
@@ -465,9 +485,10 @@ func (s *Server) handleFetch(w http.ResponseWriter, r *http.Request) {
 	}
 	s.touch(sess)
 	var a struct {
-		Clip  string `json:"clip"`
-		Item  int    `json:"item"`
-		Index int64  `json:"n"`
+		Clip     string `json:"clip"`
+		Transfer string `json:"transfer"`
+		Item     int    `json:"item"`
+		Index    int64  `json:"n"`
 	}
 	if len(req.Args) > 0 && json.Unmarshal(req.Args, &a) != nil {
 		fail(errBadRequest)
@@ -476,6 +497,12 @@ func (s *Server) handleFetch(w http.ResponseWriter, r *http.Request) {
 	var data []byte
 	var err error
 	switch req.Method {
+	case "transfer_chunk":
+		var f downloadFile
+		f, err = s.transferFile(sess, a.Transfer, a.Item)
+		if err == nil {
+			data, err = readFileChunk(f, a.Index)
+		}
 	case "thumb":
 		data, err = s.thumbnail(r.Context(), a.Clip)
 	case "chunk":
@@ -558,4 +585,3 @@ func (s *Server) handleEvents(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-

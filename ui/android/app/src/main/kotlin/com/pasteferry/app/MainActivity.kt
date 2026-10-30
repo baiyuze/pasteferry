@@ -2,6 +2,7 @@ package com.pasteferry.app
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -26,6 +27,7 @@ class MainActivity : FlutterActivity() {
     private val io = Executors.newSingleThreadExecutor()
     private var pendingNotification: MethodChannel.Result? = null
     private var pendingSave: Pair<List<String>, MethodChannel.Result>? = null
+    private var pendingPick: MethodChannel.Result? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -69,6 +71,26 @@ class MainActivity : FlutterActivity() {
                 result.success(on)
             }
             "save" -> save(call.argument<List<String>>("paths")!!, result)
+            "pickFiles" -> {
+                if (pendingPick != null) {
+                    result.error("busy", "A picker is already open", null)
+                } else {
+                    pendingPick = result
+                    try {
+                        val picker = BatchPicker(this)
+                        val photos = call.argument<Boolean>("photos") == true
+                        try {
+                            startActivityForResult(picker.intent(photos), REQUEST_PICK)
+                        } catch (e: ActivityNotFoundException) {
+                            // Devices without the system photo picker still have DocumentsUI.
+                            startActivityForResult(picker.documentIntent(photos), REQUEST_PICK)
+                        }
+                    } catch (e: Exception) {
+                        pendingPick = null
+                        result.error("pick_failed", e.message, null)
+                    }
+                }
+            }
             "share" -> {
                 try {
                     val send = MediaSharing(this).intent(call.argument<List<String>>("paths")!!)
@@ -197,8 +219,21 @@ class MainActivity : FlutterActivity() {
             caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != REQUEST_PICK) return
+        val result = pendingPick ?: return
+        pendingPick = null
+        if (resultCode != RESULT_OK || data == null) {
+            result.success(emptyList<Map<String, Any>>())
+        } else {
+            background(result) { BatchPicker(this).importFiles(data) }
+        }
+    }
+
     companion object {
         private const val REQUEST_NOTIFICATIONS = 1
         private const val REQUEST_STORAGE = 2
+        private const val REQUEST_PICK = 3
     }
 }

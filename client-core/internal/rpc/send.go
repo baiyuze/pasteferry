@@ -3,6 +3,7 @@ package rpc
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"google.golang.org/grpc/codes"
@@ -54,7 +55,20 @@ func (s *Server) transfers() (Transfers, error) {
 	return s.deps.Transfers, nil
 }
 
-func (s *Server) SendFiles(_ context.Context, req *pb.SendFilesRequest) (*pb.Transfer, error) {
+func (s *Server) SendFiles(ctx context.Context, req *pb.SendFilesRequest) (*pb.Transfer, error) {
+	if strings.HasPrefix(req.GetDeviceId(), "web:") {
+		w, ok := s.deps.WebShare.(interface {
+			QueueFiles(context.Context, string, []string) (*pb.Transfer, error)
+		})
+		if !ok {
+			return nil, status.Error(codes.Unimplemented, "web transfers unavailable")
+		}
+		out, err := w.QueueFiles(ctx, strings.TrimPrefix(req.GetDeviceId(), "web:"), req.GetPaths())
+		if err != nil {
+			return nil, status.Error(codes.FailedPrecondition, err.Error())
+		}
+		return out, nil
+	}
 	t, err := s.transfers()
 	if err != nil {
 		return nil, err
