@@ -24,6 +24,8 @@ type receiveClipboard struct {
 	revision int64
 	writes   int
 	failure  error
+	// content 是 Read 返回的内容；零值时是空的（大多数用例不关心读到的内容）
+	content clipboard.Content
 }
 
 func (c *receiveClipboard) Peek() (clipboard.Snapshot, error) {
@@ -31,7 +33,11 @@ func (c *receiveClipboard) Peek() (clipboard.Snapshot, error) {
 	defer c.mu.Unlock()
 	return clipboard.Snapshot{ChangeCount: c.revision}, nil
 }
-func (*receiveClipboard) Read() (clipboard.Content, error) { return clipboard.Content{}, nil }
+func (c *receiveClipboard) Read() (clipboard.Content, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.content, nil
+}
 func (c *receiveClipboard) Write(clipboard.Content) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()

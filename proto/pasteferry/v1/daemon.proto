@@ -297,7 +297,16 @@ message Event {
     Profile profile_changed = 17;
     // 手机网页传输的开关、监听状态或登记的手机变了；invite_used 是刚被扫码用掉的二维码
     WebShareStatus web_share_changed = 18;
+    // 需要让用户知道、但和某条记录无关的一件小事（比如刚才复制的文件读不到，没有同步）。
+    // kind 是固定代码，界面按它显示文案
+    AppNotice notice = 19;
   }
+}
+
+// AppNotice 是一条给用户看的提示，只带一个固定代码，文案由界面翻译。
+// 不叫 Notice：界面里已经有一个叫 Notice 的组件
+message AppNotice {
+  string kind = 1;
 }
 
 // ─────────────────────────── 好友 ───────────────────────────

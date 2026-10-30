@@ -4327,6 +4327,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not save this image or file. Check storage access and free space, then try again.'**
   String get mSaveMediaFailed;
+
+  /// No description provided for @noticeFilesUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'The files you just copied could not be read, so nothing was synced'**
+  String get noticeFilesUnreadable;
 }
 
 class _AppLocalizationsDelegate

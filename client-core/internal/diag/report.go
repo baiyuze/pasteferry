@@ -101,8 +101,10 @@ func Build(in Input) string {
 		line("  %-22s %s (this device)", r.apply(in.Self.GetName()), in.Self.GetPlatform())
 	}
 	for _, p := range in.Peers {
-		line("  %-22s %-8s %s", r.apply(p.GetName()), p.GetPlatform(),
-			strings.ToLower(strings.TrimPrefix(p.GetConnection().String(), "CONNECTION_KIND_")))
+		// 版本和「能不能收文件」是排查隔空传送问题的关键：声明与实现不符时，一眼就能看出来
+		line("  %-22s %-8s %-9s %-8s %s", r.apply(p.GetName()), p.GetPlatform(),
+			strings.ToLower(strings.TrimPrefix(p.GetConnection().String(), "CONNECTION_KIND_")),
+			or(p.GetAppVersion(), "-"), "receives files: "+receivesState(p))
 	}
 
 	if n := in.Network; n != nil {
@@ -179,6 +181,20 @@ func or(s, fallback string) string {
 		return fallback
 	}
 	return s
+}
+
+// receivesState 报告对端能不能收隔空传送。三态和界面一致：还不知道 / 能 / 不能。
+func receivesState(p *pb.Device) string {
+	switch {
+	case p.GetReceiveDisabled():
+		return "no (turned off)"
+	case p.GetReceivesFiles():
+		return "yes"
+	case p.GetFeaturesKnown():
+		return "no"
+	default:
+		return "unknown"
+	}
 }
 
 func onOff(on bool) string {

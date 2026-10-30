@@ -702,5 +702,6 @@
   "webShareFirewallAllow": "檢查並允許手機連線",
   "mCopyMediaFailed": "無法複製這張圖片或檔案，請嘗試先儲存。",
   "mShareMediaFailed": "無法分享這張圖片或檔案，請嘗試先儲存。",
-  "mSaveMediaFailed": "無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。"
+  "mSaveMediaFailed": "無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。",
+  "noticeFilesUnreadable": "剛才複製的檔案讀不到，沒有同步"
 }

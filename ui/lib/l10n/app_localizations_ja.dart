@@ -2462,4 +2462,7 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get mSaveMediaFailed =>
       '画像やファイルを保存できませんでした。ストレージの許可と空き容量を確認し、再試行してください。';
+
+  @override
+  String get noticeFilesUnreadable => 'コピーしたファイルを読み取れなかったため、同期していません';
 }

@@ -17,6 +17,7 @@ import (
 	"runtime"
 	"slices"
 	"sync"
+	"sync/atomic"
 	"syscall"
 	"time"
 
@@ -31,6 +32,7 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/profile"
 	"github.com/baiyuze/pasteferry/client-core/internal/rpc"
 	"github.com/baiyuze/pasteferry/client-core/internal/send"
+	"github.com/baiyuze/pasteferry/client-core/internal/sendpeer"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
 	syncengine "github.com/baiyuze/pasteferry/client-core/internal/sync"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/lan"
@@ -41,6 +43,9 @@ import (
 )
 
 var version = "0.1.0-dev"
+
+// syncNoticeAt 是上一次把「复制的文件读不到」推到界面的时间（Unix 秒），用来做一分钟的频率限制
+var syncNoticeAt atomic.Int64
 
 func main() {
 	// 必须在任何其他 goroutine 启动前锁定主线程。
@@ -301,6 +306,7 @@ func run(dataDir string) error {
 		LoadConfig: loadCfg,
 		StatePath:  filepath.Join(paths.Root, "egress.json"),
 		AppVersion: version,
+		SendFiles:  true,
 		OnDeviceChanged: func(d *pb.Device) {
 			hub.Publish(rpc.EventDeviceChanged(d))
 		},
@@ -409,6 +415,17 @@ func run(dataDir string) error {
 		OnProgress: func(p *pb.TransferProgress) {
 			hub.Publish(rpc.EventProgress(p))
 		},
+		// 复制的文件读不到时提示一次，一分钟内不重复提示，免得连点几次刷屏
+		OnNotice: func(kind string) {
+			notifiedAt := syncNoticeAt.Load()
+			now := time.Now()
+			if now.Sub(time.Unix(notifiedAt, 0)) < time.Minute {
+				return
+			}
+			if syncNoticeAt.CompareAndSwap(notifiedAt, now.Unix()) {
+				hub.Publish(rpc.EventNotice(kind))
+			}
+		},
 	})
 
 	// 剪贴板变化在独立 goroutine 里处理：读内容可能耗时，
@@ -420,7 +437,7 @@ func run(dataDir string) error {
 	defer engine.Close()
 
 	// ── 隔空传送 ──
-	listenLAN, dialLAN := lanHooks(id, peerMgr)
+	listenLAN, dialLAN := sendpeer.LANHooks(id, peerMgr)
 	sender = send.New(send.Options{
 		Store:      db,
 		LoadConfig: loadCfg,
@@ -428,8 +445,8 @@ func run(dataDir string) error {
 		OpenStream: peerMgr.P2P().OpenStream,
 		ListenLAN:  listenLAN,
 		DialLAN:    dialLAN,
-		Peer:       func(deviceID string) send.Peer { return sendPeer(peerMgr, deviceID) },
-		Admit:      func(deviceID string) send.Admission { return admit(peerMgr, db, deviceID) },
+		Peer:       func(deviceID string) send.Peer { return sendpeer.Peer(peerMgr, deviceID) },
+		Admit:      func(deviceID string) send.Admission { return sendpeer.Admit(peerMgr, db, deviceID) },
 		Connect: func(deviceID string) {
 			peerMgr.ConnectFriend(deviceID)
 		},

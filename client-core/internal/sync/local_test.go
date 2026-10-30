@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"testing"
+	"time"
 
 	"github.com/pion/webrtc/v4"
 
@@ -154,5 +155,35 @@ func TestSubmitLocalRejectsEmptyContent(t *testing.T) {
 		if _, err := e.SubmitLocal(context.Background(), c, "", false); !errors.Is(err, ErrNothingToSubmit) {
 			t.Errorf("%v: err = %v，应为 ErrNothingToSubmit", c.Kind, err)
 		}
+	}
+}
+
+// 复制的文件都读不到时不进记录，但要给界面一条提示：不然用户只会觉得「没反应」。
+func TestUnreadableClipboardFilesNotice(t *testing.T) {
+	cfg := config.Default()
+	e, cb, _ := localFixture(t, cfg)
+	notices := make(chan string, 4)
+	e.onNotice = func(kind string) { notices <- kind }
+
+	cb.mu.Lock()
+	cb.content = clipboard.Content{
+		Kind:  clipboard.KindFile,
+		Files: []string{filepath.Join(t.TempDir(), "已删除.zip预览文件.txt")},
+	}
+	cb.revision++
+	cb.mu.Unlock()
+
+	e.HandleClipboardChange(context.Background(), clipboard.Snapshot{Kind: clipboard.KindFile, ChangeCount: cb.revision})
+
+	select {
+	case kind := <-notices:
+		if kind != NoticeClipboardFilesUnreadable {
+			t.Fatalf("提示 = %q", kind)
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("文件读不到时没有给界面提示")
+	}
+	if list, err := e.SearchHistory("", 10, store.Filter{}); err == nil && len(list) > 0 {
+		t.Fatalf("读不到的文件不应进记录：%d 条", len(list))
 	}
 }

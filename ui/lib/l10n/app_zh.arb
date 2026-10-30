@@ -702,5 +702,6 @@
   "webShareFirewallAllow": "检查并允许手机连接",
   "mCopyMediaFailed": "无法复制这张图片或文件，请尝试先保存。",
   "mShareMediaFailed": "无法分享这张图片或文件，请尝试先保存。",
-  "mSaveMediaFailed": "无法保存这张图片或文件，请检查存储权限和剩余空间后重试。"
+  "mSaveMediaFailed": "无法保存这张图片或文件，请检查存储权限和剩余空间后重试。",
+  "noticeFilesUnreadable": "刚才复制的文件读不到，没有同步"
 }

@@ -8,14 +8,17 @@ import '../daemon_client.dart';
 import '../i18n.dart';
 import '../icons.dart';
 import '../main.dart' show AppScope;
+import '../notices.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/incoming_dialog.dart';
 import '../widgets/pairing_dialog.dart';
 import 'devices_tab.dart';
 import 'host.dart';
 import 'records_tab.dart';
 import 'send_tab.dart';
 import 'settings_tab.dart';
+import 'transfers_tab.dart';
 import 'ui.dart';
 
 /// Android 的入口：先让宿主拉起 Go 核心、告诉界面数据目录，再像桌面一样经 gRPC 连上去。
@@ -194,7 +197,7 @@ ThemeData buildMobileTheme(Brightness brightness) {
   );
 }
 
-enum MobileTab { records, send, devices, settings }
+enum MobileTab { records, send, transfers, devices, settings }
 
 class MobileShell extends StatefulWidget {
   const MobileShell({super.key, this.startError, this.onRetry, this.initialTab = MobileTab.records});
@@ -210,7 +213,9 @@ class MobileShell extends StatefulWidget {
 
 class _MobileShellState extends State<MobileShell> {
   late MobileTab _tab = widget.initialTab;
+  int _seenNotice = 0;
   bool _pairingDialogOpen = false;
+  bool _incomingDialogOpen = false;
 
   void select(MobileTab t) => setState(() => _tab = t);
 
@@ -218,6 +223,17 @@ class _MobileShellState extends State<MobileShell> {
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
     final l = context.l10n;
+
+    // 与某条记录无关的小提示（比如复制的文件读不到）
+    if (state.noticeSerial != _seenNotice) {
+      _seenNotice = state.noticeSerial;
+      final text = noticeText(l, state.notice);
+      if (text != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) showToast(context, text, error: true);
+        });
+      }
+    }
 
     // 对端发起配对时主动弹出指纹核对，和桌面一样（main.dart 的 Shell）
     final pending = state.pendingPairing;
@@ -234,6 +250,18 @@ class _MobileShellState extends State<MobileShell> {
       });
     }
 
+    // 好友或附近的陌生设备发来文件，等用户接受（自己的设备是自动接收，不会走到这里）
+    final asking = state.askingIncoming.firstOrNull;
+    if (asking != null && !_pairingDialogOpen && !_incomingDialogOpen) {
+      _incomingDialogOpen = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        await showIncomingDialog(context, asking);
+        state.dismissAsk(asking.id);
+        if (mounted) setState(() => _incomingDialogOpen = false);
+      });
+    }
+
     final Widget body;
     if (widget.startError != null) {
       body = _StartFailed(error: widget.startError!, onRetry: widget.onRetry);
@@ -245,6 +273,7 @@ class _MobileShellState extends State<MobileShell> {
         children: [
           const RecordsTab(),
           SendTab(onPair: () => select(MobileTab.devices)),
+          TransfersTab(onPair: () => select(MobileTab.devices)),
           const DevicesTab(),
           const SettingsTab(),
         ],
@@ -261,6 +290,7 @@ class _MobileShellState extends State<MobileShell> {
           items: [
             (FluentIcons.history_24_regular, FluentIcons.history_24_filled, l.mTabRecords),
             (FluentIcons.send_24_regular, FluentIcons.send_24_filled, l.mTabSend),
+            (FluentIcons.arrow_swap_24_regular, FluentIcons.arrow_swap_24_filled, l.navSend),
             (FluentIcons.laptop_24_regular, FluentIcons.laptop_24_filled, l.navDevices),
             (FluentIcons.settings_24_regular, FluentIcons.settings_24_filled, l.navSettings),
           ],

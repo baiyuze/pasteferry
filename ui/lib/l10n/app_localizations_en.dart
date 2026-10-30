@@ -2647,4 +2647,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mSaveMediaFailed =>
       'Could not save this image or file. Check storage access and free space, then try again.';
+
+  @override
+  String get noticeFilesUnreadable =>
+      'The files you just copied could not be read, so nothing was synced';
 }

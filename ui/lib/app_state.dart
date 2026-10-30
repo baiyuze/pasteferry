@@ -85,6 +85,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// 后台服务要界面切到的页面（点了隔空传送的通知），每次请求 serial 加一
   String _pageRequest = '';
+  String _notice = '';
+  int _noticeSerial = 0;
   int _pageRequestSerial = 0;
 
   /// 正在传输的记录的进度（0–1），只在界面上展示，传完即移除。
@@ -221,6 +223,10 @@ class AppState extends ChangeNotifier implements RecordDetails {
   }
 
   String get pageRequest => _pageRequest;
+
+  /// 最近一条给用户看的小提示（固定代码，文案由界面翻译）；配合 serial 触发一次 toast
+  String get notice => _notice;
+  int get noticeSerial => _noticeSerial;
   int get pageRequestSerial => _pageRequestSerial;
 
   String? _settingsCategory;
@@ -742,6 +748,10 @@ class AppState extends ChangeNotifier implements RecordDetails {
       case Event_Payload.navigate:
         _pageRequest = ev.navigate;
         _pageRequestSerial++;
+
+      case Event_Payload.notice:
+        _notice = ev.notice.kind;
+        _noticeSerial++;
 
       case Event_Payload.friendChanged:
         final f = ev.friendChanged;

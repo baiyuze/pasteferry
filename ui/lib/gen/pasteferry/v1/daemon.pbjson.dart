@@ -463,6 +463,15 @@ const Event$json = {
       '9': 0,
       '10': 'webShareChanged'
     },
+    {
+      '1': 'notice',
+      '3': 19,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.AppNotice',
+      '9': 0,
+      '10': 'notice'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -491,7 +500,20 @@ final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
     'gQIAEoCzIcLnBhc3RlZmVycnkudjEuRnJpZW5kUmVxdWVzdEgAUg1mcmllbmRSZXF1ZXN0EkEK'
     'D3Byb2ZpbGVfY2hhbmdlZBgRIAEoCzIWLnBhc3RlZmVycnkudjEuUHJvZmlsZUgAUg5wcm9maW'
     'xlQ2hhbmdlZBJLChF3ZWJfc2hhcmVfY2hhbmdlZBgSIAEoCzIdLnBhc3RlZmVycnkudjEuV2Vi'
-    'U2hhcmVTdGF0dXNIAFIPd2ViU2hhcmVDaGFuZ2VkQgkKB3BheWxvYWQ=');
+    'U2hhcmVTdGF0dXNIAFIPd2ViU2hhcmVDaGFuZ2VkEjIKBm5vdGljZRgTIAEoCzIYLnBhc3RlZm'
+    'VycnkudjEuQXBwTm90aWNlSABSBm5vdGljZUIJCgdwYXlsb2Fk');
+
+@$core.Deprecated('Use appNoticeDescriptor instead')
+const AppNotice$json = {
+  '1': 'AppNotice',
+  '2': [
+    {'1': 'kind', '3': 1, '4': 1, '5': 9, '10': 'kind'},
+  ],
+};
+
+/// Descriptor for `AppNotice`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List appNoticeDescriptor =
+    $convert.base64Decode('CglBcHBOb3RpY2USEgoEa2luZBgBIAEoCVIEa2luZA==');
 
 @$core.Deprecated('Use profileDescriptor instead')
 const Profile$json = {

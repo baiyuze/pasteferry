@@ -335,7 +335,11 @@
 
 - 跨网同步：信令服务器、官方服务、TURN 中转。一期手机和电脑必须在同一个局域网里。
 - 手机发图片、文件（先用网页传输）；系统分享、选中文字菜单、通知栏「发送剪贴板」、快捷设置磁贴这些入口。
-- 好友、隔空传送、快捷粘贴、无障碍。
+- 好友、快捷粘贴、无障碍。
+  - 隔空传送**已经做了**：手机端的 Go 核心组装了 `internal/send`，声明 `send_files_v1` /
+    `send_files_tcp_v1` / `send_files_ask_v1` / `send_files_recv_v1`，界面多了「隔空传送」页。
+    见 [android-send-files.md](android-send-files.md)。2.7.4 及更早的安卓包声明了这些能力却没有实现，
+    所以电脑端对手机平台还按 `send_files_recv_v1` 兜底，见 [friends-send.md](friends-send.md) 10.2 节。
 - 自动更新：一期只提示有新版本，点了跳下载页。
 - iOS（iPhone 用户先用网页传输，见 5.3 节）、鸿蒙 NEXT。
 

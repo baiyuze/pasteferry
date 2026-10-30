@@ -25,6 +25,7 @@ import 'widgets/friends_dialog.dart';
 import 'widgets/incoming_dialog.dart';
 import 'widgets/update_dialog.dart';
 import 'icons.dart';
+import 'notices.dart';
 
 /// 带 --picker 启动的是快捷粘贴窗口进程，见 picker/picker_main.dart。
 void main(List<String> args) {
@@ -154,6 +155,7 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
   bool _incomingDialogOpen = false;
   int _seenOfficialNavigation = 0;
   int _seenPageRequest = 0;
+  int _seenNotice = 0;
   String? _shownUpdateResult;
   AppLifecycleState _lifecycle = AppLifecycleState.resumed;
 
@@ -182,6 +184,16 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
     if (state.officialNavigationSerial != _seenOfficialNavigation) {
       _seenOfficialNavigation = state.officialNavigationSerial;
       if (state.officialEnabled) _section = Section.official;
+    }
+    // 与某条记录无关的小提示（比如复制的文件读不到）
+    if (state.noticeSerial != _seenNotice) {
+      _seenNotice = state.noticeSerial;
+      final text = noticeText(context.l10n, state.notice);
+      if (text != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) showToast(context, text, error: true);
+        });
+      }
     }
     // 点了隔空传送的通知：后台服务让界面切到隔空传送页
     if (state.pageRequestSerial != _seenPageRequest) {

@@ -113,6 +113,8 @@ type Manager struct {
 	legacy   map[string]bool
 	// appVersion 是本机的版本号，随功能声明发给对端
 	appVersion string
+	// sendFiles 报告本机有没有隔空传送，见 Options.SendFiles
+	sendFiles bool
 	// noFeatures 让测试模拟不发功能声明的旧版本
 	noFeatures bool
 
@@ -171,6 +173,10 @@ type Options struct {
 	LANDiscovery lan.Discovery
 	// AppVersion 是本机的版本号，随功能声明发给对端，对端用它提示「需要更新到哪个版本」
 	AppVersion string
+	// SendFiles 报告本机是否组装了隔空传送（internal/send）。只有真的有这个功能的客户端
+	// 才能声明 send_files_v1，见 featuresFor。手机端一期没有隔空传送（design/phone-sync.md 3.1.2），
+	// 打开它会让电脑把文件发给手机、然后一直等不到应答
+	SendFiles bool
 
 	// 好友（2.6.0）。Card 是发给好友的本机名片；Avatar 是本机头像（JPEG，没有时为空）；
 	// SaveAvatar 把好友发来的头像重新编码后存下，返回存放的路径；jpeg 为空时删掉存着的
@@ -217,6 +223,7 @@ func NewManager(opts Options) (*Manager, error) {
 		declared:        make(map[string]bool),
 		legacy:          make(map[string]bool),
 		appVersion:      opts.AppVersion,
+		sendFiles:       opts.SendFiles,
 		contacts:        make(map[string]store.Contact),
 		strangers:       make(map[string]store.Contact),
 		notices:         make(map[string][]byte),
@@ -481,7 +488,27 @@ const (
 	FeatureSendFilesOff = "send_files_off" // 能接收隔空传送，但用户关掉了
 	// 隔空传送能走局域网 TCP 快速通道（2.5.1），见 internal/transport/lantcp
 	FeatureSendFilesTCP = "send_files_tcp_v1"
+	// 真的实现了隔空传送的接收端（2.7.5）。手机端一期没有这个功能，但 2.7.4 及更早的
+	// 安卓包会照抄桌面端的功能声明，所以手机平台只声明 send_files_v1 不算数，见 mobilePlatform
+	FeatureSendFilesRecv = "send_files_recv_v1"
 )
+
+// mobilePlatform 报告这个平台是不是手机。
+//
+// 手机端一期不做隔空传送（design/phone-sync.md 3.1.2），但 2.7.4 及更早的安卓 App 用同一套
+// peers.Manager，照抄了桌面端的功能声明。只改手机端挡不住已经装出去的包，所以收文件的判定
+// 还要看平台：手机平台必须额外声明 FeatureSendFilesRecv 才算真的能收。
+func mobilePlatform(platform string) bool {
+	return platform == "android" || platform == "ios"
+}
+
+// ReceivesSendFiles 报告对端能不能收隔空传送：f 是它声明的功能，platform 是它的系统。
+func ReceivesSendFiles(f map[string]bool, platform string) bool {
+	if !f[FeatureSendFiles] && !f[FeatureSendFilesOff] {
+		return false
+	}
+	return !mobilePlatform(platform) || f[FeatureSendFilesRecv]
+}
 
 func (m *Manager) featuresMessage() *pb.PeerMessage { return m.featuresFor(RoleSelf) }
 
@@ -576,12 +603,29 @@ func (m *Manager) checkLegacy(id string) {
 }
 
 // SendFilesSupport 返回对端能不能接收隔空传送：supported 为 false 说明是旧版本（或者还没收到它的声明），
-// disabled 说明它关掉了接收。
+// 或者对方是还没有隔空传送的手机；disabled 说明它关掉了接收。
 func (m *Manager) SendFilesSupport(deviceID string) (supported, disabled bool) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 	f := m.features[deviceID]
-	return f[FeatureSendFiles] || f[FeatureSendFilesOff], f[FeatureSendFilesOff]
+	if !ReceivesSendFiles(f, m.platformLocked(deviceID)) {
+		return false, false
+	}
+	return true, f[FeatureSendFilesOff]
+}
+
+// platformLocked 返回已认得的设备（配对设备、好友或陌生设备）的平台；都不认识时为空。
+func (m *Manager) platformLocked(deviceID string) string {
+	if d, ok := m.known[deviceID]; ok {
+		return d.Platform
+	}
+	if c, ok := m.contacts[deviceID]; ok {
+		return c.Platform
+	}
+	if c, ok := m.strangers[deviceID]; ok {
+		return c.Platform
+	}
+	return ""
 }
 
 // HasFeature 报告对端是否声明了某项功能。
@@ -1639,7 +1683,7 @@ func (m *Manager) toProtoLocked(d store.Device, online bool, session string) *pb
 		PublicKeyFingerprint: deviceid.Fingerprint(d.PublicKey),
 		PairedAtUnix:         d.PairedAt.Unix(),
 		PairingSession:       session,
-		ReceivesFiles:        f[FeatureSendFiles] || f[FeatureSendFilesOff],
+		ReceivesFiles:        ReceivesSendFiles(f, d.Platform),
 		ReceiveDisabled:      f[FeatureSendFilesOff],
 		LanReachable:         online && m.lan.Reachable(d.ID),
 		FeaturesKnown:        declared || m.legacy[d.ID],

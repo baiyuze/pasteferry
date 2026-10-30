@@ -183,24 +183,30 @@ func (m *Manager) watchIDsLocked() []string {
 
 // ─────────────────────── 功能声明 ───────────────────────
 
-// featuresFor 是发给某个角色的功能声明。自己的设备看「接收文件」开关，别人看「允许这些人给我发文件」
+// featuresFor 是发给某个角色的功能声明。自己的设备看「接收文件」开关，别人看「允许这些人给我发文件」。
+//
+// 没有隔空传送的客户端（手机端，见 Options.SendFiles）什么都不声明 send_files：声明了，
+// 对端就会把文件发给它，然后一直等不到应答（2.7.4 的安卓 App 就是这样）。
 func (m *Manager) featuresFor(role string) *pb.PeerMessage {
-	cfg := m.loadConfig()
 	var f []string
-	switch role {
-	case RoleSelf:
-		f = []string{FeatureSendFiles}
-		if cfg.ReceiveDisabled {
-			f = []string{FeatureSendFilesOff}
-		}
-	default:
-		if receivesFrom(cfg, role, time.Now()) {
+	if m.sendFiles {
+		cfg := m.loadConfig()
+		switch role {
+		case RoleSelf:
 			f = []string{FeatureSendFiles}
-		} else {
-			f = []string{FeatureSendFilesOff}
+			if cfg.ReceiveDisabled {
+				f = []string{FeatureSendFilesOff}
+			}
+		default:
+			if receivesFrom(cfg, role, time.Now()) {
+				f = []string{FeatureSendFiles}
+			} else {
+				f = []string{FeatureSendFilesOff}
+			}
 		}
+		f = append(f, FeatureSendFilesTCP, FeatureSendFilesRecv, FeatureSendAsk)
 	}
-	f = append(f, FeatureSendFilesTCP, FeatureFriends, FeatureSendAsk)
+	f = append(f, FeatureFriends)
 	return &pb.PeerMessage{Payload: &pb.PeerMessage_Features{Features: &pb.PeerFeatures{Features: f, AppVersion: m.appVersion}}}
 }
 
@@ -793,7 +799,7 @@ func (m *Manager) friendLocked(c store.Contact) *pb.Friend {
 		Connection:       conn,
 		LanReachable:     online && m.lan.Reachable(c.ID),
 		FeaturesKnown:    declared || m.legacy[c.ID],
-		ReceivesFiles:    f[FeatureSendAsk] && f[FeatureSendFiles],
+		ReceivesFiles:    f[FeatureSendAsk] && ReceivesSendFiles(f, c.Platform),
 		ReceiveDisabled:  f[FeatureSendFilesOff],
 		AppVersion:       m.peerVersion[c.ID],
 		AutoAccept:       c.AutoAccept,

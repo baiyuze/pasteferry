@@ -2434,6 +2434,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mSaveMediaFailed => '无法保存这张图片或文件，请检查存储权限和剩余空间后重试。';
+
+  @override
+  String get noticeFilesUnreadable => '刚才复制的文件读不到，没有同步';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -4866,6 +4869,9 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get mSaveMediaFailed => '無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。';
+
+  @override
+  String get noticeFilesUnreadable => '剛才複製的檔案讀不到，沒有同步';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -7298,4 +7304,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get mSaveMediaFailed => '無法儲存這張圖片或檔案，請檢查儲存空間權限和可用空間後重試。';
+
+  @override
+  String get noticeFilesUnreadable => '剛才複製的檔案讀不到，沒有同步';
 }

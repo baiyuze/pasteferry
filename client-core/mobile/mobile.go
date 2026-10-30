@@ -35,6 +35,8 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/identity"
 	"github.com/baiyuze/pasteferry/client-core/internal/peers"
 	"github.com/baiyuze/pasteferry/client-core/internal/rpc"
+	"github.com/baiyuze/pasteferry/client-core/internal/send"
+	"github.com/baiyuze/pasteferry/client-core/internal/sendpeer"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
 	syncengine "github.com/baiyuze/pasteferry/client-core/internal/sync"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/p2p"
@@ -138,20 +140,26 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 	if err != nil {
 		return nil, err
 	}
-	// 一期只在局域网里用；对端推送来的图片和文件不自动写剪贴板
+	// 一期只在局域网里用；对端推送来的图片和文件不自动写剪贴板。
+	// 隔空传送收到的文件存进 App 私有目录，用户点「保存」时再导出到「下载」
 	before := cfg
 	cfg.DeviceID = id.DeviceID
 	cfg.ServiceMode = "lan"
 	cfg.MediaAutoApplyDisabled = true
+	cfg.ReceiveDir = filepath.Join(paths.Root, "received")
 	if cfg.DeviceName == "" || cfg.DeviceName == config.Default().DeviceName {
 		cfg.DeviceName = strings.TrimSpace(deviceName)
 	}
 	if !slices.Equal(before.SyncDisabledPeers, cfg.SyncDisabledPeers) || before.DeviceID != cfg.DeviceID ||
 		before.ServiceMode != cfg.ServiceMode || before.MediaAutoApplyDisabled != cfg.MediaAutoApplyDisabled ||
-		before.DeviceName != cfg.DeviceName {
+		before.DeviceName != cfg.DeviceName || before.ReceiveDir != cfg.ReceiveDir {
 		if err := config.Save(paths, cfg); err != nil {
 			return nil, err
 		}
+	}
+	// 隔空传送要求保存位置事先存在（引擎只建它下面的 partial 目录），手机上是 App 私有目录
+	if err := os.MkdirAll(cfg.ReceiveDir, 0o700); err != nil {
+		return nil, fmt.Errorf("创建隔空传送接收目录: %w", err)
 	}
 	slog.Info("隔空贴核心启动", "device_id", id.DeviceID, "name", cfg.DeviceName, "fingerprint", id.Fingerprint(), "version", version)
 
@@ -182,7 +190,8 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 	saveCfg := func(next config.Config) error {
 		cfgMu.Lock()
 		defer cfgMu.Unlock()
-		next.ServiceMode = "lan" // 一期界面上没有服务器设置，防止被意外改掉
+		next.ServiceMode = "lan"                                // 一期界面上没有服务器设置，防止被意外改掉
+		next.ReceiveDir = filepath.Join(paths.Root, "received") // 手机上只存 App 私有目录
 		if err := config.Save(paths, next); err != nil {
 			return err
 		}
@@ -202,6 +211,7 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 
 	var engine *syncengine.Engine
 	var peerMgr *peers.Manager
+	var sender *send.Engine
 	notify := newStatusNotifier(host)
 
 	statusDirty := make(chan struct{}, 1)
@@ -226,11 +236,20 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 		},
 		OnStatusChanged: markDirty,
 		OnPeerMessage: func(deviceID string, msg *pb.PeerMessage) {
+			slog.Debug("收到对端消息", "device", deviceID, "payload", fmt.Sprintf("%T", msg.GetPayload()))
+			// 隔空传送的控制消息（发起、应答、结果、取消）先交给它，剩下的才是复制同步的
+			if sender != nil && sender.HandleMessage(deviceID, msg) {
+				return
+			}
 			if engine != nil {
 				engine.HandlePeerMessage(ctx, deviceID, msg)
 			}
 		},
 		OnPeerStream: func(deviceID, label string, stream *p2p.Stream) {
+			if sender != nil && send.IsStream(label) {
+				sender.HandleStream(deviceID, label, stream)
+				return
+			}
 			if engine != nil {
 				engine.HandlePeerStream(deviceID, label, stream)
 			} else {
@@ -241,16 +260,22 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 			if engine != nil {
 				go engine.PeerReady(ctx, deviceID)
 			}
+			if sender != nil {
+				go sender.PeerReady(deviceID)
+			}
 		},
-		// 一期没有好友与隔空传送：名片只带设备名，别人开来的隔空传送数据流一律关掉
+		// 手机端也有隔空传送（design/android-send-files.md）：功能声明里带上 send_files_v1，
+		// 电脑才会把文件发过来
+		SendFiles: true,
+		// 一期没有好友：名片只带设备名，好友、陌生设备开来的数据流一律关掉（自己的设备照收）
 		Card: func() *pb.FriendCard {
 			n := loadCfg().DeviceName
 			return &pb.FriendCard{DisplayName: n, DeviceName: n, Platform: "android"}
 		},
 		Avatar:          func() []byte { return nil },
 		SaveAvatar:      func(string, []byte) (string, error) { return "", errors.New("不支持好友") },
-		ShareableStream: func(string) bool { return false },
-		InUse:           func(string) bool { return false },
+		ShareableStream: send.IsStream,
+		InUse:           func(deviceID string) bool { return sender != nil && sender.Busy(deviceID) },
 	})
 	if err != nil {
 		return nil, err
@@ -287,15 +312,45 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 		OnProgress: func(p *pb.TransferProgress) {
 			hub.Publish(rpc.EventProgress(p))
 		},
+		// 复制的文件读不到时让界面提示一下（手机上少见：发送页选的文件都在沙盒里）
+		OnNotice: func(kind string) {
+			hub.Publish(rpc.EventNotice(kind))
+		},
 	})
 	c.closes = append(c.closes, engine.Close)
 	// 后台读不到别的 App 复制的内容，Watcher 只会看到自己写入的变化；照样接上，行为与桌面一致
 	watcher.SetOnChange(func(snap clipboard.Snapshot) { go engine.HandleClipboardChange(ctx, snap) })
 
+	// ── 隔空传送（design/android-send-files.md）──
+	// 与桌面同一套引擎；手机端只走局域网，没有好友和官方中转
+	listenLAN, dialLAN := sendpeer.LANHooks(id, peerMgr)
+	sender = send.New(send.Options{
+		Store:      db,
+		LoadConfig: loadCfg,
+		Send:       peerMgr.P2P().Send,
+		OpenStream: peerMgr.P2P().OpenStream,
+		ListenLAN:  listenLAN,
+		DialLAN:    dialLAN,
+		Peer:       func(deviceID string) send.Peer { return sendpeer.Peer(peerMgr, deviceID) },
+		// 好友、陌生设备发来的要问用户（界面弹确认）；自己的设备自动接收
+		Admit: func(deviceID string) send.Admission { return sendpeer.Admit(peerMgr, db, deviceID) },
+		OnChange: func(t *pb.Transfer) {
+			hub.Publish(rpc.EventTransferChanged(t))
+		},
+		OnRemoved: func(id string) {
+			hub.Publish(rpc.EventTransferRemoved(id))
+		},
+		OnNotice: func(kind send.NoticeKind, t *pb.Transfer) {
+			notify.transfer(kind, t)
+		},
+	})
+	c.closes = append(c.closes, sender.Close)
+
 	// 停止时要等 Run 退出（它在退出前关掉局域网通道、放掉 8788 端口），再关 P2P：
 	// 桌面上进程退出时这些自然就没了，这里要能停了再启动
 	runDone := make(chan struct{})
 	go func() { peerMgr.Run(ctx); close(runDone) }()
+	sender.Start()
 	c.closes = append(c.closes, func() {
 		select {
 		case <-runDone:
@@ -366,6 +421,8 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 		ImagePreview:       engine.ImagePreview,
 		CacheBytesUsed:     blobs.Size,
 		Permission:         func() clipboard.Permission { return clipboard.PermissionNotApplicable },
+		// 隔空传送：发文件、取消、续传、接收列表、接受/拒绝都在这里
+		Transfers: sender,
 		Network: func() *pb.NetworkInfo {
 			return &pb.NetworkInfo{Lan: peerMgr.LANInfo()}
 		},
@@ -448,4 +505,19 @@ func (n *statusNotifier) push() {
 	names, from, kind := n.names, n.lastFrom, n.lastKind
 	n.mu.Unlock()
 	n.host.StatusChanged(names, from, kind)
+}
+
+// transfer 是隔空传送的通知。常驻通知里那行「来自 X 的文件」也按它更新：
+// 手机在后台时不弹单独的传输通知（见 design/android-send-files.md 的二期），
+// 至少让用户拉开通知栏能看到有人在发文件。
+func (n *statusNotifier) transfer(kind send.NoticeKind, t *pb.Transfer) {
+	slog.Info("隔空传送", "kind", kind, "transfer", t.GetId(),
+		"device", t.GetDeviceName(), "status", t.GetStatus(), "bytes", t.GetTotalBytes())
+	switch kind {
+	case send.NoticeIncoming, send.NoticeReceived, send.NoticeAsk:
+		n.mu.Lock()
+		n.lastFrom, n.lastKind = t.GetDeviceName(), "file"
+		n.mu.Unlock()
+		n.push()
+	}
 }

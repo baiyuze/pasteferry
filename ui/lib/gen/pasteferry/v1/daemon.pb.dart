@@ -807,6 +807,7 @@ enum Event_Payload {
   friendRequest,
   profileChanged,
   webShareChanged,
+  notice,
   notSet
 }
 
@@ -830,6 +831,7 @@ class Event extends $pb.GeneratedMessage {
     FriendRequest? friendRequest,
     Profile? profileChanged,
     WebShareStatus? webShareChanged,
+    AppNotice? notice,
   }) {
     final result = Event._();
     if (clipAdded != null) result.clipAdded = clipAdded;
@@ -850,6 +852,7 @@ class Event extends $pb.GeneratedMessage {
     if (friendRequest != null) result.friendRequest = friendRequest;
     if (profileChanged != null) result.profileChanged = profileChanged;
     if (webShareChanged != null) result.webShareChanged = webShareChanged;
+    if (notice != null) result.notice = notice;
     return result;
   }
 
@@ -881,13 +884,14 @@ class Event extends $pb.GeneratedMessage {
     16: Event_Payload.friendRequest,
     17: Event_Payload.profileChanged,
     18: Event_Payload.webShareChanged,
+    19: Event_Payload.notice,
     0: Event_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Event',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: Event.$_createMessage)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
     ..aOM<ClipRecord>(1, _omitFieldNames ? '' : 'clipAdded',
         subBuilder: ClipRecord.$_createMessage)
     ..aOM<ClipRecord>(2, _omitFieldNames ? '' : 'clipUpdated',
@@ -920,6 +924,8 @@ class Event extends $pb.GeneratedMessage {
         subBuilder: Profile.$_createMessage)
     ..aOM<WebShareStatus>(18, _omitFieldNames ? '' : 'webShareChanged',
         subBuilder: WebShareStatus.$_createMessage)
+    ..aOM<AppNotice>(19, _omitFieldNames ? '' : 'notice',
+        subBuilder: AppNotice.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -960,6 +966,7 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(16)
   @$pb.TagNumber(17)
   @$pb.TagNumber(18)
+  @$pb.TagNumber(19)
   Event_Payload whichPayload() => _Event_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(1)
   @$pb.TagNumber(2)
@@ -979,6 +986,7 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(16)
   @$pb.TagNumber(17)
   @$pb.TagNumber(18)
+  @$pb.TagNumber(19)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -1175,6 +1183,76 @@ class Event extends $pb.GeneratedMessage {
   void clearWebShareChanged() => $_clearField(18);
   @$pb.TagNumber(18)
   WebShareStatus ensureWebShareChanged() => $_ensure(17);
+
+  /// 需要让用户知道、但和某条记录无关的一件小事（比如刚才复制的文件读不到，没有同步）。
+  /// kind 是固定代码，界面按它显示文案
+  @$pb.TagNumber(19)
+  AppNotice get notice => $_getN(18);
+  @$pb.TagNumber(19)
+  set notice(AppNotice value) => $_setField(19, value);
+  @$pb.TagNumber(19)
+  $core.bool hasNotice() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearNotice() => $_clearField(19);
+  @$pb.TagNumber(19)
+  AppNotice ensureNotice() => $_ensure(18);
+}
+
+/// AppNotice 是一条给用户看的提示，只带一个固定代码，文案由界面翻译。
+/// 不叫 Notice：界面里已经有一个叫 Notice 的组件
+class AppNotice extends $pb.GeneratedMessage {
+  factory AppNotice({
+    $core.String? kind,
+  }) {
+    final result = AppNotice._();
+    if (kind != null) result.kind = kind;
+    return result;
+  }
+
+  AppNotice._();
+
+  factory AppNotice.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AppNotice()..mergeFromBuffer(data, registry);
+  factory AppNotice.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AppNotice()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AppNotice',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: AppNotice.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'kind')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AppNotice clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AppNotice copyWith(void Function(AppNotice) updates) =>
+      super.copyWith((message) => updates(message as AppNotice)) as AppNotice;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use AppNotice() / AppNotice.new instead')
+  static AppNotice create() => AppNotice._();
+  static $pb.GeneratedMessage $_createMessage() => AppNotice._();
+  @$core.override
+  AppNotice createEmptyInstance() => AppNotice._();
+  @$core.pragma('dart2js:noInline')
+  static AppNotice getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<AppNotice>(AppNotice.$_createMessage);
+  static AppNotice? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get kind => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set kind($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasKind() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKind() => $_clearField(1);
 }
 
 class Profile extends $pb.GeneratedMessage {

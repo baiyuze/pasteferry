@@ -155,6 +155,8 @@ func (e *Engine) failReceive(id string, expected *receiveAttempt, failure error)
 	}
 	e.forgetProgress(id)
 	if clip, err := e.store.GetClip(id); err == nil {
+		// 记录只留在数据库里用户看不见，日志里要留下原因（尤其是 30 秒没等到流的超时）
+		e.log.Warn("接收内容失败", "clip", id, "from", clip.OriginDeviceID, "err", failure)
 		e.emitRecord(clip)
 		if a.manual && !a.preview {
 			e.receiveEvent(clip, ReceiveFailed, nil)

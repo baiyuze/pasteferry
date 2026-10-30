@@ -79,6 +79,11 @@ func EventNavigate(page string) *pb.Event {
 	return &pb.Event{Payload: &pb.Event_Navigate{Navigate: page}}
 }
 
+// EventNotice 推一条给用户看的提示，kind 是固定代码，文案由界面翻译。
+func EventNotice(kind string) *pb.Event {
+	return &pb.Event{Payload: &pb.Event_Notice{Notice: &pb.AppNotice{Kind: kind}}}
+}
+
 func (h *Hub) SubscriberCount() int {
 	h.mu.Lock()
 	defer h.mu.Unlock()

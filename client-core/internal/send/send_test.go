@@ -349,6 +349,25 @@ func TestConnectedRetryStopsAfterOneAttempt(t *testing.T) {
 	}
 }
 
+// 对方一直不应答：状态是「中断」，但要带上原因，界面才能说「对方没有应答」而不是只显示「中断」。
+func TestNoAnswerKeepsReason(t *testing.T) {
+	p := newPair(t)
+	p.a.eng.opts.AnswerTimeout = 300 * time.Millisecond
+	p.a.mu.Lock()
+	p.a.dropOffers = 99 // 每次都丢掉，模拟对端永远不应答
+	p.a.mu.Unlock()
+	path := filepath.Join(t.TempDir(), "silent.txt")
+	writeFile(t, path, []byte("silent"))
+	tr, err := p.a.eng.SendFiles("bob", []string{path}, false, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := waitStatus(t, p.a, tr.GetId(), store.TransferInterrupted)
+	if got.Error != "peer_unreachable" {
+		t.Fatalf("中断原因 = %q，应为 peer_unreachable", got.Error)
+	}
+}
+
 func TestCancelDuringConnectedRetry(t *testing.T) {
 	p := newPair(t)
 	p.a.mu.Lock()

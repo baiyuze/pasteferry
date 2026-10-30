@@ -1,4 +1,4 @@
-package main
+package sendpeer
 
 import (
 	"context"
@@ -10,14 +10,15 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/lantcp"
 )
 
-type (
-	listenLANFunc = func(deviceID string) (string, func(context.Context) (io.ReadCloser, string, error), bool)
-	dialLANFunc   = func(ctx context.Context, deviceID, addr, label string) (io.WriteCloser, error)
-)
+// ListenLAN 为对方这次发来的一批开一个临时 TCP 端口，返回给对方拨号的地址和等连接的函数。
+type ListenLAN func(deviceID string) (addr string, accept func(context.Context) (io.ReadCloser, string, error), ok bool)
 
-// lanHooks 把局域网快速通道（2.5.1，lantcp）接到隔空传送上。
+// DialLAN 连到对方给的地址，并写上数据流标签。
+type DialLAN func(ctx context.Context, deviceID, addr, label string) (io.WriteCloser, error)
+
+// LANHooks 把局域网快速通道（2.5.1，lantcp）接到隔空传送上，见 design/send-files-lan-tcp.md。
 // 证书建不起来时两个函数都为空，隔空传送只用数据通道，与 2.5.0 相同。
-func lanHooks(id *identity.Identity, peerMgr *peers.Manager) (listenLANFunc, dialLANFunc) {
+func LANHooks(id *identity.Identity, peerMgr *peers.Manager) (ListenLAN, DialLAN) {
 	link, err := lantcp.New(id.Signer())
 	if err != nil {
 		slog.Warn("局域网快速通道不可用", "err", err)

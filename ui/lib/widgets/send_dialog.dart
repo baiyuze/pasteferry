@@ -454,7 +454,9 @@ String transferStatusText(AppLocalizations l, Transfer t) {
     'waiting' => out ? l.transferWaitingPeer(t.deviceName) : l.transferReceiving,
     'active' => out ? l.transferSending : l.transferReceiving,
     'paused' => l.transferPaused,
-    'interrupted' => out ? l.transferInterrupted : l.transferInterruptedIncoming(t.deviceName),
+    'interrupted' => out
+        ? (t.error == 'peer_unreachable' ? l.reasonTimeout(t.deviceName) : l.transferInterrupted)
+        : l.transferInterruptedIncoming(t.deviceName),
     'done' => out ? l.sendDelivered : (t.present.isNotEmpty && t.present.every((p) => !p) ? l.transferMissing : ''),
     'cancelled' => t.error == 'peer_cancelled' ? l.transferPeerCancelled(t.deviceName) : l.transferCancelled,
     'expired' => l.transferExpired,

@@ -2,6 +2,7 @@ package sync
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -9,6 +10,8 @@ import (
 	gosync "sync"
 	"testing"
 	"time"
+
+	"github.com/pion/webrtc/v4"
 
 	"github.com/baiyuze/pasteferry/client-core/internal/config"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
@@ -188,5 +191,49 @@ func TestBacklogOfferIsMarkedQuiet(t *testing.T) {
 	defer e.mu.Unlock()
 	if e.quiet["live"] || !e.quiet["late"] {
 		t.Errorf("quiet = %v，应只有补发的 late", e.quiet)
+	}
+}
+
+// 推送失败（offer 已经发出去、数据没送到）必须重试，不受「补发离线期间的内容」开关影响：
+// 对端已经有这条记录了，不重试就是永久丢失。
+func TestPushFailureRetriesWithoutBacklog(t *testing.T) {
+	peers := &fakePeers{up: map[string]bool{"office": true}, offers: map[string][]*pb.ClipOffer{}}
+	e := newBacklogEngine(t, peers)
+	e.loadConfig = func() config.Config {
+		cfg := config.Default()
+		cfg.SyncBacklog = false // 默认就是关的
+		return cfg
+	}
+	e.openStream = func(string, string) (*webrtc.DataChannel, error) {
+		return nil, errors.New("连接刚断")
+	}
+	gone := filepath.Join(t.TempDir(), "gone.png")
+	clip := store.Clip{ID: "pic", Kind: store.KindImage, Status: store.StatusReady, Outgoing: true,
+		SourcePaths: []string{gone}, Items: []store.Item{{Name: "gone.png", Size: 10}},
+		TotalSize: 10, CreatedAt: time.Now(), ExpiresAt: time.Now().Add(time.Hour)}
+	if err := e.store.PutClip(clip); err != nil {
+		t.Fatal(err)
+	}
+
+	e.pushOrRequeue(context.Background(), "office", clip)
+	if got := e.pushRetry.take("office"); len(got) != 1 || got[0] != "pic" {
+		t.Fatalf("推送失败后应进重试队列：%v", got)
+	}
+	if got := e.backlog.take("office"); len(got) != 0 {
+		t.Fatalf("不该占用「补发离线期间的内容」队列：%v", got)
+	}
+
+	// 连接恢复：重发同一条 offer（不带补发标记），再推一次
+	e.pushRetry.add("office", "pic")
+	e.PeerReady(context.Background(), "office")
+	offers := peers.received("office")
+	if len(offers) != 1 {
+		t.Fatalf("重连后应重发一次 offer：%d", len(offers))
+	}
+	if offers[0].GetBacklog() {
+		t.Fatal("重推不该标成补发：那会让对端跳过自动写入剪贴板")
+	}
+	if offers[0].GetClipId() != "pic" {
+		t.Fatalf("重发的不是这条记录：%v", offers[0])
 	}
 }

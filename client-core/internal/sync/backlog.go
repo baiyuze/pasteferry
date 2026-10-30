@@ -87,6 +87,8 @@ func (e *Engine) offerToPeers(ctx context.Context, clip store.Clip, cfg config.C
 // 补发的 offer 带 backlog 标记，对端只记进复制记录、不写进剪贴板：
 // 它此刻剪贴板里的内容比这些旧内容更新。
 func (e *Engine) PeerReady(ctx context.Context, peer string) {
+	// 推送没送到的内容无论如何都要重推，所以放在开关判断之前
+	defer e.retryPushes(ctx, peer)
 	generation := e.policyGeneration.Load()
 	ids := e.backlog.take(peer)
 	if len(ids) == 0 {
@@ -126,18 +128,55 @@ func (e *Engine) PeerReady(ctx context.Context, peer string) {
 	}
 }
 
-// pushOrRequeue 推送内容；中途断了就记进待补发，重连后连同 offer 一起重来，
+// pushOrRequeue 推送内容；中途断了就记进「推送重试」，重连后连同 offer 一起重来，
 // 不让对端的记录一直停在「接收中」。
+//
+// 这条不受「补发离线期间的内容」开关影响：对方已经收到了这条记录（offer 发出去了），
+// 只是数据没送到，不重试就等于永久丢失。开关管的是 offer 根本没发出去的情况，见 offerToPeers。
 func (e *Engine) pushOrRequeue(ctx context.Context, peer string, clip store.Clip) {
 	generation := e.policyGeneration.Load()
 	if !e.loadConfig().SyncAllowed(peer) {
 		return
 	}
 	if err := e.pushTo(ctx, peer, clip); err != nil {
-		e.log.Warn("推送内容失败，连接恢复后补发", "clip", clip.ID, "to", peer, "err", err)
+		e.log.Warn("推送内容失败，连接恢复后重试", "clip", clip.ID, "to", peer, "err", err)
 		if generation == e.policyGeneration.Load() {
-			e.queueMissed(peer, clip.ID)
+			e.pushRetry.add(peer, clip.ID)
 		}
+	}
+}
+
+// retryPushes 在连接恢复时重推那些「offer 发出去了、数据没送到」的内容。
+// 重发的是同一条 offer（不带补发标记）：对端已经有这条记录，只会接着收，不会重复记录，
+// 也不会被当成旧内容而跳过自动写入剪贴板。
+func (e *Engine) retryPushes(ctx context.Context, peer string) {
+	ids := e.pushRetry.take(peer)
+	if len(ids) == 0 {
+		return
+	}
+	cfg := e.loadConfig()
+	if !cfg.SyncAllowed(peer) {
+		return
+	}
+	pushed := 0
+	for _, id := range ids {
+		clip, err := e.store.GetClip(id)
+		if err != nil || time.Since(clip.CreatedAt) > backlogMaxAge {
+			continue // 已删除或太旧
+		}
+		offer := e.buildOffer(clip, cfg)
+		if err := e.send(peer, &pb.PeerMessage{Payload: &pb.PeerMessage_Offer{Offer: offer}}); err != nil {
+			// 刚连上又断了：放回去，等下次
+			e.pushRetry.add(peer, id)
+			break
+		}
+		if pushes(offer, clip) {
+			e.pushOrRequeue(ctx, peer, clip)
+			pushed++
+		}
+	}
+	if pushed > 0 {
+		e.log.Info("已重推没送到对方的内容", "to", peer, "条数", pushed)
 	}
 }
 

@@ -304,7 +304,8 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 					return
 				}
 				e.log.Info("对方没有应答", "transfer", t.ID)
-				e.interrupt(t)
+				// 带上原因：界面据此说「对方没有应答」，而不是只显示「中断」，用户不知道该怎么办
+				e.interruptWith(t, "peer_unreachable")
 				return
 			}
 		}
@@ -461,10 +462,14 @@ func sourceErrorCode(err error) string {
 }
 
 // interrupt 把一批标为中断：连上以后自动续传。经官方服务中转、而今天的额度用完了时标为暂停。
-func (e *Engine) interrupt(t store.Transfer) {
+func (e *Engine) interrupt(t store.Transfer) { e.interruptWith(t, "") }
+
+// interruptWith 与 interrupt 相同，另外把原因记进记录：界面据 error 显示更具体的提示，
+// 状态仍然是「中断」，用户点「继续」还是能接着发。
+func (e *Engine) interruptWith(t store.Transfer, reason string) {
 	e.setBusy(t.ID, false)
 	t.Status = store.TransferInterrupted
-	t.Error = ""
+	t.Error = reason
 	if t.Relayed && e.opts.LoadConfig().Official() && e.opts.RelayQuotaExhausted != nil && e.opts.RelayQuotaExhausted() {
 		t.Status, t.Error = store.TransferPaused, "relay_quota"
 	}

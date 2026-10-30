@@ -72,6 +72,7 @@ type Engine struct {
 	onProgress          func(*pb.TransferProgress)
 	onReceive           func(ReceiveEvent)
 	onClipboardResult   func(*pb.ClipboardWriteResult)
+	onNotice            func(kind string)
 	receiveStartTimeout time.Duration
 	offerMu             sync.Mutex
 
@@ -83,7 +84,9 @@ type Engine struct {
 	quiet map[string]bool
 
 	// 没送达对端、等连接恢复后补发的内容，见 backlog.go
-	backlog          backlog
+	backlog backlog
+	// pushRetry 是「offer 已发出、数据没送到」的队列，连接恢复后重推，不受补发开关影响
+	pushRetry        backlog
 	policyGeneration atomic.Uint64
 	// 上一次本机复制，用来认出同一次复制引起的重复变化，见 repeat.go
 	recentCopy repeatGuard
@@ -108,12 +111,18 @@ type Options struct {
 	PairedPeers func() []string
 	OnRecord    func(*pb.ClipRecord)
 	// OnRemoved 在引擎自己删掉一条记录时调用（取消收藏时合并掉的原记录等）
-	OnRemoved           func(clipID string)
-	OnProgress          func(*pb.TransferProgress)
-	OnReceive           func(ReceiveEvent)
-	OnClipboardResult   func(*pb.ClipboardWriteResult)
+	OnRemoved         func(clipID string)
+	OnProgress        func(*pb.TransferProgress)
+	OnReceive         func(ReceiveEvent)
+	OnClipboardResult func(*pb.ClipboardWriteResult)
+	// OnNotice 推一条给用户看的提示，kind 是固定代码（目前只有 clipboard_files_unreadable）
+	OnNotice            func(kind string)
 	ReceiveStartTimeout time.Duration
 }
+
+// NoticeClipboardFilesUnreadable：本机复制的文件全都读不到（压缩包预览、邮件附件、
+// 网盘占位文件等虚拟路径），这次复制没有同步。界面据此提示用户，不然他们只会觉得「没反应」
+const NoticeClipboardFilesUnreadable = "clipboard_files_unreadable"
 
 func New(opts Options) *Engine {
 	log := opts.Logger
@@ -137,6 +146,7 @@ func New(opts Options) *Engine {
 		onProgress:          opts.OnProgress,
 		onReceive:           opts.OnReceive,
 		onClipboardResult:   opts.OnClipboardResult,
+		onNotice:            opts.OnNotice,
 		receiveStartTimeout: opts.ReceiveStartTimeout,
 		receives:            make(map[string]*receiveAttempt),
 		incoming:            make(map[string]*receiver),
@@ -185,6 +195,9 @@ func (e *Engine) HandleClipboardChange(ctx context.Context, snap clipboard.Snaps
 	}
 	if err != nil {
 		e.log.Warn("记录本机复制失败", "err", err)
+		if errors.Is(err, errFilesUnreadable) && e.onNotice != nil {
+			e.onNotice(NoticeClipboardFilesUnreadable)
+		}
 		return
 	}
 
@@ -197,6 +210,9 @@ func (e *Engine) HandleClipboardChange(ctx context.Context, snap clipboard.Snaps
 
 // recordOutgoing 把本机复制的内容落库。
 var errRemotePlaceholder = errors.New("剪贴板仅包含远程软件占位文件")
+
+// errFilesUnreadable：剪贴板里的文件路径全都打不开，多半是压缩包预览、邮件附件这类虚拟路径
+var errFilesUnreadable = errors.New("剪贴板中的文件都不可访问")
 
 func (e *Engine) recordOutgoing(c clipboard.Content, cfg config.Config) (store.Clip, error) {
 	return e.recordOutgoingVia(c, cfg, "")
@@ -273,7 +289,7 @@ func (e *Engine) recordOutgoingVia(c clipboard.Content, cfg config.Config, via s
 			})
 		}
 		if len(clip.Items) == 0 {
-			return clip, errors.New("剪贴板中的文件都不可访问")
+			return clip, errFilesUnreadable
 		}
 		clip.TextPreview = describeItems(clip.Items)
 

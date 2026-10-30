@@ -67,6 +67,29 @@ func TestReportRedacts(t *testing.T) {
 	}
 }
 
+// 排查隔空传送问题看 Devices 段：版本号和三态的「能不能收文件」都要在。
+func TestReportShowsPeerVersionAndReceivesFiles(t *testing.T) {
+	in := sampleInput(t, "")
+	in.Peers = []*pb.Device{
+		{Id: "b", Name: "Pixel 8", Platform: "android", AppVersion: "2.7.4",
+			Connection: pb.ConnectionKind_CONNECTION_KIND_DIRECT, ReceivesFiles: true, FeaturesKnown: true},
+		{Id: "c", Name: "OLD-PC", Platform: "windows", AppVersion: "2.5.0",
+			Connection: pb.ConnectionKind_CONNECTION_KIND_OFFLINE, ReceivesFiles: false, FeaturesKnown: true},
+		{Id: "d", Name: "NEW-PC", Platform: "linux",
+			Connection: pb.ConnectionKind_CONNECTION_KIND_RELAY},
+	}
+	report := Build(in)
+	for _, want := range []string{
+		"2.7.4", "receives files: yes",
+		"2.5.0", "receives files: no",
+		"receives files: unknown",
+	} {
+		if !strings.Contains(report, want) {
+			t.Errorf("报告里应当有 %q：\n%s", want, report)
+		}
+	}
+}
+
 func TestTailLines(t *testing.T) {
 	dir := t.TempDir()
 	old := filepath.Join(dir, "daemon.log.1")

@@ -38,6 +38,12 @@ type device struct {
 }
 
 func newDevice(t *testing.T, name string, net *lan.MemoryNetwork, cfg config.Config) *device {
+	return newDeviceWith(t, name, net, cfg, nil)
+}
+
+// newDeviceWith 与 newDevice 相同，另外可以在建 Manager 之前改一下 Options，
+// 用来模拟没有隔空传送的手机端。
+func newDeviceWith(t *testing.T, name string, net *lan.MemoryNetwork, cfg config.Config, tweak func(*Options)) *device {
 	t.Helper()
 	dir := t.TempDir()
 	id, err := identity.LoadOrCreate(filepath.Join(dir, "identity.json"))
@@ -61,7 +67,7 @@ func newDevice(t *testing.T, name string, net *lan.MemoryNetwork, cfg config.Con
 	if net != nil {
 		disc = net.Discovery()
 	}
-	d.m, err = NewManager(Options{
+	opts := Options{
 		Identity:   id,
 		Store:      db,
 		Logger:     testLogger(name),
@@ -75,7 +81,12 @@ func newDevice(t *testing.T, name string, net *lan.MemoryNetwork, cfg config.Con
 		OnPeerMessage: func(_ string, msg *pb.PeerMessage) { d.messages <- msg },
 		LANPort:       -1,
 		LANDiscovery:  disc,
-	})
+		SendFiles:     true,
+	}
+	if tweak != nil {
+		tweak(&opts)
+	}
+	d.m, err = NewManager(opts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -424,6 +435,82 @@ func TestRefreshPeerFeatures(t *testing.T) {
 	waitFor(t, "刷新接收开关", func() bool { ok, off := a.m.SendFilesSupport(b.id()); return ok && off })
 	if !a.m.HasFeature(b.id(), FeatureSendFilesTCP) {
 		t.Fatal("快速通道能力丢失")
+	}
+}
+
+// 没有隔空传送的客户端（手机端）不能声明 send_files，否则对端会把文件发给它、
+// 然后一直等不到应答。见 Options.SendFiles。
+func TestFeaturesWithoutSendFiles(t *testing.T) {
+	phone := newDeviceWith(t, "phone", nil, lanOnly(), func(o *Options) { o.SendFiles = false })
+	msg := phone.m.featuresFor(RoleSelf)
+	if f := msg.GetFeatures().GetFeatures(); slices.Contains(f, FeatureSendFiles) ||
+		slices.Contains(f, FeatureSendFilesOff) || slices.Contains(f, FeatureSendFilesTCP) ||
+		slices.Contains(f, FeatureSendFilesRecv) || slices.Contains(f, FeatureSendAsk) {
+		t.Fatalf("没有隔空传送却声明了文件相关能力: %v", f)
+	}
+
+	desktop := newDevice(t, "pc", nil, lanOnly())
+	msg = desktop.m.featuresFor(RoleSelf)
+	if f := msg.GetFeatures().GetFeatures(); !slices.Contains(f, FeatureSendFiles) ||
+		!slices.Contains(f, FeatureSendFilesTCP) || !slices.Contains(f, FeatureSendFilesRecv) {
+		t.Fatalf("桌面端应声明隔空传送: %v", f)
+	}
+}
+
+// 2.7.4 及更早的安卓包会照抄桌面端的声明：手机平台只声明 send_files_v1 不算数，
+// 要额外声明 send_files_recv_v1（真的实现了隔空传送）才认。
+func TestOldAndroidPackageDoesNotReceiveFiles(t *testing.T) {
+	d := newDevice(t, "pc", nil, lanOnly())
+	const phoneID = "phonephonephonephonephonephoneph"
+	advertised := featureSet([]string{FeatureSendFiles, FeatureSendFilesTCP, FeatureSendAsk})
+
+	d.m.mu.Lock()
+	d.m.known[phoneID] = store.Device{ID: phoneID, Name: "Pixel 8", Platform: "android"}
+	d.m.features[phoneID] = advertised
+	d.m.mu.Unlock()
+
+	dev := peerDevice(t, d, phoneID)
+	if dev.GetReceivesFiles() {
+		t.Fatal("手机平台只声明 send_files_v1 时，不能让界面以为它能收文件")
+	}
+	if ok, _ := d.m.SendFilesSupport(phoneID); ok {
+		t.Fatal("手机平台只声明 send_files_v1 时，不能允许发文件")
+	}
+
+	// 以后手机端真的实现了隔空传送，声明 send_files_recv_v1 就恢复
+	d.m.mu.Lock()
+	d.m.features[phoneID] = featureSet([]string{FeatureSendFiles, FeatureSendFilesTCP, FeatureSendFilesRecv, FeatureSendAsk})
+	d.m.mu.Unlock()
+	if dev = peerDevice(t, d, phoneID); !dev.GetReceivesFiles() {
+		t.Fatal("声明了 send_files_recv_v1 的手机应该能收文件")
+	}
+	if ok, _ := d.m.SendFilesSupport(phoneID); !ok {
+		t.Fatal("声明了 send_files_recv_v1 的手机应该允许发文件")
+	}
+
+	// 桌面端不受影响
+	d.m.mu.Lock()
+	d.m.known["desktopphonephonephonephoneph"] = store.Device{ID: "desktopphonephonephonephoneph", Name: "PC", Platform: "windows"}
+	d.m.features["desktopphonephonephonephoneph"] = advertised
+	d.m.mu.Unlock()
+	if !peerDevice(t, d, "desktopphonephonephonephoneph").GetReceivesFiles() {
+		t.Fatal("桌面平台只声明 send_files_v1 就该能收文件")
+	}
+
+	// 好友这条路径用的是名片里的平台，也要一起挡住
+	d.m.mu.Lock()
+	const friendID = "friendfriendfriendfriendfriend"
+	d.m.contacts[friendID] = store.Contact{ID: friendID, DisplayName: "手机", Platform: "android"}
+	d.m.features[friendID] = advertised
+	friend := d.m.friendLocked(d.m.contacts[friendID])
+	d.m.features[friendID] = featureSet([]string{FeatureSendFiles, FeatureSendFilesTCP, FeatureSendFilesRecv, FeatureSendAsk})
+	friendWithRecv := d.m.friendLocked(d.m.contacts[friendID])
+	d.m.mu.Unlock()
+	if friend.GetReceivesFiles() {
+		t.Fatal("好友是手机平台、只声明 send_files_v1 时，不能让界面以为它能收文件")
+	}
+	if !friendWithRecv.GetReceivesFiles() {
+		t.Fatal("好友是手机平台、声明了 send_files_recv_v1 时应该能收文件")
 	}
 }
 
