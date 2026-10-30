@@ -11,6 +11,41 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.8.1',
+ 'date': '2026-10-30',
+ 'changes': [('Phone web transfers now have a separate Send Files page with batch uploads, encrypted '
+              'downloads, progress and persistent records. Computers can queue files for a registered '
+              'browser from Devices. These transfers do not enter clipboard history or change the clipboard.',
+              '手机网页新增独立「隔空传送」页，支持批量上传、加密下载、进度和持久记录；电脑可从「设备」向已登记的网页发送文件。这些传输不进入复制记录，也不改动剪贴板。',
+              'スマホWeb版に独立した「ファイル転送」ページを追加。複数ファイルのアップロード、暗号化ダウンロード、進捗、永続履歴に対応。パソコンの「デバイス」から登録済みブラウザへ送信でき、コピー履歴やクリップボードは変更しません。',
+              '手機網頁新增獨立「隔空傳送」頁，支援批次上傳、加密下載、進度和持續保留的記錄；電腦可從「裝置」向已登記的網頁傳送檔案。這些傳輸不進入複製記錄，也不更動剪貼簿。',
+              '手機網頁新增獨立「隔空傳送」頁，支援批次上傳、加密下載、進度和持續保留的記錄；電腦可從「裝置」向已登記的網頁傳送檔案。這些傳輸不進入複製記錄，也不更動剪貼簿。'),
+             ('Android photo and file pickers accept multiple items in one selection for both Send and Send '
+              'Files, with batch confirmation and an optional Add More action.',
+              '安卓「发送」和「隔空传送」的照片、文件选择器均支持一次多选，发送前确认整批内容，也可继续添加。',
+              'Androidの「送信」と「ファイル転送」で写真・ファイルを一度に複数選択できます。送信前の一括確認と追加選択にも対応しました。',
+              '安卓「傳送」和「隔空傳送」的照片、檔案選擇器均支援一次多選，傳送前確認整批內容，也可繼續新增。',
+              '安卓「傳送」和「隔空傳送」的相片、檔案選擇器均支援一次多選，傳送前確認整批內容，也可繼續新增。'),
+             ('The website and project introduction now describe clipboard sync, searchable history and file '
+              'transfer across computers and phones, and highlight the Android file transfer features '
+              'introduced in 2.8.',
+              '官网和项目介绍更新为跨电脑与手机的剪贴板同步、历史检索及文件传送，并突出 2.8 新增的安卓文件传送能力。',
+              '公式サイトとプロジェクト紹介を、パソコンとスマホのクリップボード同期・履歴検索・ファイル転送に合わせて更新し、2.8で追加したAndroidの転送機能を紹介します。',
+              '官網和專案介紹更新為跨電腦與手機的剪貼簿同步、記錄搜尋及檔案傳送，並介紹 2.8 新增的安卓檔案傳送功能。',
+              '官網和專案介紹更新為跨電腦與手機的剪貼簿同步、記錄搜尋及檔案傳送，並介紹 2.8 新增的安卓檔案傳送功能。')],
+ 'fixes': [('Android transfer rows separate filenames, device and size details, status and touch controls, '
+            'so long names and large text no longer compete with action buttons. The phone web page uses the '
+            'same grouped layout and bidirectional transfer icon.',
+            '安卓传输列表将文件名、设备与大小、状态和触控操作分行显示，长文件名和大字体不再与按钮挤在一起；手机网页采用一致的分组布局和双向传送图标。',
+            'Android転送一覧でファイル名、デバイスとサイズ、状態、操作を分け、長い名前や大きな文字でもボタンと重ならないよう改善。スマホWeb版も同じグループ表示と双方向転送アイコンに統一しました。',
+            '安卓傳輸清單將檔案名稱、裝置與大小、狀態及觸控操作分行顯示，長檔名和大字體不再與按鈕擠在一起；手機網頁採用一致的分組版面及雙向傳送圖示。',
+            '安卓傳輸清單將檔案名稱、裝置與大小、狀態及觸控操作分行顯示，長檔名和大字體不再與按鈕擠在一起；手機網頁採用一致的分組版面及雙向傳送圖示。'),
+           ('Android and phone web toasts now fit their content, stay horizontally centered and use the '
+            'existing theme, with wrapping for longer messages.',
+            '安卓和手机网页提示条改为随内容收缩、水平居中并沿用现有主题，较长内容自动换行。',
+            'AndroidとスマホWeb版の通知幅を内容に合わせ、中央配置と既存テーマに統一。長いメッセージは折り返します。',
+            '安卓和手機網頁提示條改為依內容縮放、水平置中並沿用現有主題，較長內容自動換行。',
+            '安卓和手機網頁提示條改為隨內容收縮、水平置中並沿用現有主題，較長內容自動換行。')]},
 {'version': '2.8.0',
  'date': '2026-10-30',
  'changes': [('Android can now send and receive files with Send Files: pick a device, choose files or folders, follow the progress, save what you receive to Downloads or share it, and continue an interrupted transfer. On the same local network it uses the same encrypted TCP fast link as the computers, and a phone and a computer can send to each other in both directions.',

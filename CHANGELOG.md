@@ -1,5 +1,28 @@
 # 更新记录 / Changelog
 
+## 2.8.1 — 2026-10-30
+
+This release improves file transfers on phones, adds a dedicated browser transfer page, and refreshes the cross-device product introduction.
+
+### Changes
+
+- Phone web transfers now have a separate Send Files page with batch uploads, encrypted downloads, progress and persistent records. Computers can queue files for a registered browser from Devices. These transfers do not enter clipboard history or change the clipboard.
+- Android photo and file pickers accept multiple items in one selection for both Send and Send Files, with batch confirmation and an optional Add More action.
+- The website and project introduction now describe clipboard sync, searchable history and file transfer across computers and phones, and highlight the Android file transfer features introduced in 2.8.
+
+### Fixes
+
+- Android transfer rows separate filenames, device and size details, status and touch controls, so long names and large text no longer compete with action buttons. The phone web page uses the same grouped layout and bidirectional transfer icon.
+- Android and phone web toasts now fit their content, stay horizontally centered and use the existing theme, with wrapping for longer messages.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: update the computer hosting the phone web page to use browser file transfers, then reload the phone page.
+- **Android**: recommended for native batch selection and the improved transfer layout.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged. Browser transfer endpoints are additive; existing web sessions remain valid.
+- Browser transfers require the page to remain open on the same network as the computer. Downloads support up to 200 MB per file, uploads up to 4 GB per file, and batches up to 64 files. Interrupted browser uploads must be selected again; queued and completed records survive a reload.
+
 ## 2.8.0 — 2026-10-30
 
 Android can now send and receive files with Send Files (隔空传送), the same feature the desktop apps have.

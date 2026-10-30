@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>隔空貼 PasteFerry：Mac、Windows、Linux 之間共用剪貼簿、互傳檔案</title>
-  <meta name="description" content="在一台電腦上複製，到另一台直接貼上。Mac、Windows、Linux 都能用，文字、圖片、檔案、資料夾都行，家裡和公司之間也能同步。免費開源。">
+  <title>隔空貼 PasteFerry：跨裝置剪貼簿、複製記錄與檔案傳送</title>
+  <meta name="description" content="電腦間複製貼上、找回記錄，電腦與安卓互傳照片和檔案。支援 Mac、Windows、Linux、安卓；手機也能掃碼使用網頁，不必安裝。安卓與網頁在同一網路使用。免費開源。">
   <link rel="canonical" href="https://pasteferry.cc/zh-tw/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/">
@@ -24,8 +24,8 @@
   <meta name="theme-color" content="#141416">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="隔空貼">
-  <meta property="og:title" content="隔空貼：在這台電腦複製，到那台電腦貼上">
-  <meta property="og:description" content="在一台電腦上複製，到另一台直接貼上。Mac、Windows、Linux 都能用，文字、圖片、檔案、資料夾都行，家裡和公司之間也能同步。免費開源。">
+  <meta property="og:title" content="隔空貼 PasteFerry：跨裝置剪貼簿、複製記錄與檔案傳送">
+  <meta property="og:description" content="電腦間複製貼上、找回記錄，電腦與安卓互傳照片和檔案。支援 Mac、Windows、Linux、安卓；手機也能掃碼使用網頁，不必安裝。安卓與網頁在同一網路使用。免費開源。">
   <meta property="og:url" content="https://pasteferry.cc/zh-tw/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-zh-hant.png">
   <meta property="og:image:width" content="1200">
@@ -60,10 +60,10 @@
           "PasteFerry",
           "CopySync"
         ],
-        "description": "在 Mac、Windows 與 Linux 電腦之間共用剪貼簿、互傳檔案的開源工具。在一台電腦上複製文字、圖片、檔案或資料夾，到另一台直接貼上。同一個網路裡不需要伺服器；不在同一個網路時開啟「服務」或用自建伺服器。裝置之間優先直連，內容端對端加密。",
+        "description": "電腦間複製貼上、找回記錄，電腦與安卓互傳照片和檔案。支援 Mac、Windows、Linux、安卓；手機也能掃碼使用網頁，不必安裝。安卓與網頁在同一網路使用。免費開源。",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "macOS 13 以上（Intel 與 Apple 晶片）；Windows 10、Windows 11（x64）；Linux（x64、ARM64）",
-        "softwareVersion": "2.8.0",
+        "softwareVersion": "2.8.1",
         "datePublished": "2026-10-30",
         "inLanguage": "zh-TW",
         "license": "https://www.gnu.org/licenses/agpl-3.0.html",
@@ -139,14 +139,14 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="features/#friends">2.7 新功能：手機掃碼同步，安卓版上線 →</a>
-        <h1 class="display">在這台電腦複製，<br>到那台電腦貼上。</h1>
-        <p class="lede">Mac、Windows、Linux、安卓都行，不用同一個帳號。文字、截圖、檔案都可以；手機掃個碼也能用，不用裝東西。文字、截圖、檔案、資料夾都可以，也能直接把檔案傳給好友。</p>
+        <a class="release-note" href="features/#friends">2.8 新功能：安卓隔空傳送，手機電腦互傳檔案 →</a>
+        <h1 class="display">電腦與手機，<br>內容隨手互通。</h1>
+        <p class="lede">電腦間複製貼上、找回記錄；電腦與安卓互傳照片和檔案。Mac、Windows、Linux、安卓都能用，不必使用同一帳號。手機也能掃碼開啟網頁；安卓與網頁限同一網路。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 看完整示範 <span class="tour-duration">1:25</span></a>
         </div>
-        <p class="note">版本 2.8.0，免費開源。macOS 13 以上；Windows 10、11；Linux（x64 與 ARM64）。</p>
+        <p class="note">版本 2.8.1，免費開源。macOS 13 以上；Windows 10、11；Linux（x64 與 ARM64）。 支援安卓 9 以上；手機可掃碼使用網頁。</p>
         <a class="start-link" href="start/">第一次用？三步設定好 →</a>
         <div class="stage" data-play role="img" aria-label="示範：在 MacBook 上按下 Command C，檔案化成一張紙，經直連飛到 Windows 筆電，在那裡按下 Ctrl V 貼上">
           <figure class="device mac">
@@ -190,14 +190,14 @@
     <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
         <h2 id="phone-title">手機也能用了。</h2>
-        <p class="intro">電腦上開一個 QR 碼，手機掃碼就在瀏覽器裡看到全部複製記錄：複製一條到手機、把照片和檔案傳回電腦。裝 App 也行，不裝也行。</p>
+        <p class="intro">安卓 App 可與電腦雙向隔空傳送，照片和檔案一次多選，收到後儲存或分享。不想安裝？掃碼開啟網頁，查看複製記錄、傳送內容，也能獨立收發檔案。</p>
         <figure class="spot wide" data-reveal>
           <img src="../assets/screenshots/zh-tw/web-share-dark.png?v=622d05e495" width="2552" height="1632" loading="lazy" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表">
         </figure>
         <ul class="points">
-          <li><b>手機瀏覽器直接用</b>，不用裝任何東西。</li>
-          <li><b>安卓 App 已上線</b>，配對方式與電腦相同。</li>
-          <li><b>端到端加密</b>，只在同一區域網路工作。</li>
+          <li><b>手機瀏覽器直接用</b>，記錄與獨立檔案收發。</li>
+          <li><b>安卓雙向傳檔案</b>，多選、儲存與分享。</li>
+          <li><b>同一網路使用</b>，網頁需保持開啟。</li>
         </ul>
         <p class="more"><a href="features/#phone">了解手機端怎麼用 →</a></p>
       </div>
@@ -206,7 +206,7 @@
     <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <h2 id="send-title">拖過去，<br>就到了。</h2>
-        <p class="intro">拖到另一台電腦上就傳過去了。不限大小，中斷了接著傳。</p>
+        <p class="intro">電腦上拖放、安卓上多選，照片和檔案直接傳到另一台裝置。App 傳輸中斷後可繼續。</p>
         <figure class="spot wide" data-reveal>
           <img src="../assets/screenshots/zh-tw/send-dark.png?v=00c9c464f8" width="2552" height="1632" loading="lazy" alt="隔空傳送頁：左邊是雷達，中間是這台 Mac，周圍是同一區域網路和其他網路裡的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度">
         </figure>
@@ -333,7 +333,7 @@
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
         </div>
-        <p class="note">版本 2.8.0，免費開源。macOS 13 以上；Windows 10、11；Linux（x64 與 ARM64）。</p>
+        <p class="note">版本 2.8.1，免費開源。macOS 13 以上；Windows 10、11；Linux（x64 與 ARM64）。 支援安卓 9 以上；手機可掃碼使用網頁。</p>
         <a class="start-link" href="start/">第一次用？三步設定好 →</a>
         <div class="star-ask">
           <p>覺得好用，到 GitHub 點個 Star。</p>

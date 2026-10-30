@@ -5,8 +5,8 @@
 <h1 align="center">隔空贴 PasteFerry</h1>
 
 <p align="center">
-  在这台电脑复制，到那台电脑粘贴；按一下 <kbd>⌥V</kbd>，复制过的随叫随到。<br>
-  Mac、Windows、Linux 互通，不限账号；不在同一个网络，也能打洞直连。
+  跨设备剪贴板、复制历史与隔空传送，电脑和手机一起用。<br>
+  Mac、Windows、Linux、安卓互通，不限账号。电脑间复制粘贴；电脑与安卓在同一网络互传照片和文件，手机也能扫码用网页。
 </p>
 
 <p align="center">

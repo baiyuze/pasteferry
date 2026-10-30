@@ -6,10 +6,10 @@ SITE = "https://pasteferry.cc/"
 C = {
     "brand": "隔空贴",
     "brand_alt": ["PasteFerry", "CopySync"],
-    "title": "隔空贴 PasteFerry：Mac、Windows、Linux 之间共享剪贴板、互传文件",
-    "description": '在一台电脑上复制，到另一台直接粘贴。Mac、Windows、Linux 都能用，文字、图片、文件、文件夹都行，家里和公司之间也能同步。免费开源。',
-    "og_title": "隔空贴：在这台电脑复制，到那台电脑粘贴",
-    "og_description": '在一台电脑上复制，到另一台直接粘贴。Mac、Windows、Linux 都能用，文字、图片、文件、文件夹都行，家里和公司之间也能同步。免费开源。',
+    "title": "隔空贴 PasteFerry：跨设备剪贴板、复制历史与文件传送",
+    "description": "电脑间复制粘贴、找回历史，电脑与安卓互传照片和文件。支持 Mac、Windows、Linux、安卓；手机也能扫码用网页，不必安装。安卓和网页在同一网络使用。免费开源。",
+    "og_title": "隔空贴 PasteFerry：跨设备剪贴板、复制历史与文件传送",
+    "og_description": "电脑间复制粘贴、找回历史，电脑与安卓互传照片和文件。支持 Mac、Windows、Linux、安卓；手机也能扫码用网页，不必安装。安卓和网页在同一网络使用。免费开源。",
     "og_image": "og.png",
     "skip": "跳到正文",
     "home_label": "隔空贴首页",
@@ -21,13 +21,13 @@ C = {
     "nav_download": "下载",
     "lang_label": "语言",
 
-    "h1": "在这台电脑复制，<br>到那台电脑粘贴。",
-    "lede": 'Mac、Windows、Linux、安卓都行，不用同一个账号。文字、截图、文件、文件夹都可以；手机扫个码也能用，不用装东西。',
+    "h1": "电脑与手机，<br>内容随手互通。",
+    "lede": "电脑间复制粘贴、找回历史；电脑与安卓互传照片和文件。Mac、Windows、Linux、安卓都能用，不用同一个账号。手机也能扫码打开网页；安卓和网页限同一网络。",
     "dl_button": "下载隔空贴",
     "dl_mac": "下载 Mac 版",
     "dl_win": "下载 Windows 版",
     "dl_linux": "下载 Linux 版",
-    "dl_note": "版本 2.8.0，免费开源。macOS 13 及以上；Windows 10、11；Linux（x64 与 ARM64）。",
+    "dl_note": '版本 2.8.1，免费开源。macOS 13 及以上；Windows 10、11；Linux（x64 与 ARM64）。 支持安卓 9 及以上；手机可扫码用网页。',
     "start_link": "第一次用？三步配好 →",
     "stage_label": "演示：在 MacBook 上按下 Command C，文件化作一张纸，经直连飞到 Windows 笔记本，在那里按下 Ctrl V 粘贴出来",
     "stage_file": "季度汇报-终版.pptx",
@@ -177,7 +177,7 @@ C = {
 
     "specs_h2": "技术规格",
     "specs": [
-        ("版本", '2.8.0，<time datetime="2026-10-30">2026 年 10 月 30 日</time>发布'),
+        ("版本", '2.8.1，<time datetime="2026-10-30">2026 年 10 月 30 日</time>发布'),
         ("Mac 客户端", "macOS 13 Ventura 及以上；Apple 芯片与 Intel 芯片各有一个安装包，约 25 MB，不需要 Rosetta；也有两种芯片通用的版本，约 47 MB"),
         ("Windows 客户端", "Windows 10 与 Windows 11，x64；按用户安装，不需要管理员权限；安装包约 23 MB"),
         ("Linux 客户端", "x64 与 ARM64；.deb（Debian、Ubuntu 等）或 tar.gz（其他发行版），约 22 MB；"
@@ -861,8 +861,7 @@ C = {
     },
 
     "gitee_hint": "国内服务器从 GitHub 下载慢的话，可以改从 Gitee 镜像下载：",
-    "ld_description": "在 Mac、Windows 与 Linux 电脑之间共享剪贴板、互传文件的开源工具。在一台电脑上复制文字、图片、文件或文件夹，到另一台直接粘贴。"
-                      "同一网络里不需要服务器；不在一个网络时打开「服务」或用自建服务器。设备之间优先直连，内容端到端加密。",
+    "ld_description": "电脑间复制粘贴、找回历史，电脑与安卓互传照片和文件。支持 Mac、Windows、Linux、安卓；手机也能扫码用网页，不必安装。安卓和网页在同一网络使用。免费开源。",
     "ld_os": "macOS 13 及以上（Intel 与 Apple 芯片）；Windows 10、Windows 11（x64）；Linux（x64、ARM64）",
     "ld_currency": "CNY",
     "ld_features": [

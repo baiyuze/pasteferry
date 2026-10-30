@@ -6,10 +6,10 @@ SITE = "https://pasteferry.cc/"
 C = {
     "brand": "PasteFerry",
     "brand_alt": ["隔空贴", "CopySync"],
-    "title": "PasteFerry: share the clipboard and send files between Mac, Windows and Linux",
-    "description": 'Copy on one computer and paste on another. Works on Mac, Windows and Linux with text, images, files and folders, even between home and the office. Free and open source.',
-    "og_title": "PasteFerry: copy on this computer, paste on that one",
-    "og_description": 'Copy on one computer and paste on another. Works on Mac, Windows and Linux with text, images, files and folders, even between home and the office. Free and open source.',
+    "title": "PasteFerry: cross-device clipboard, history and file transfer",
+    "description": "Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
+    "og_title": "PasteFerry: cross-device clipboard, history and file transfer",
+    "og_description": "Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
     "og_image": "og-en.png",
     "skip": "Skip to content",
     "home_label": "PasteFerry home",
@@ -21,13 +21,13 @@ C = {
     "nav_download": "Download",
     "lang_label": "Language",
 
-    "h1": "Copy on this computer.<br>Paste on that one.",
-    "lede": 'Mac, Windows, Linux and Android, no shared account needed. Text, screenshots and files; a phone joins in by scanning a code — nothing to install.',
+    "h1": "Your computers. Your phone.<br>Everything within reach.",
+    "lede": "Copy and paste between computers. Find past clips. Send photos and files between computers and Android. Mac, Windows, Linux and Android, with no shared account. Phones can also scan a code to use the web page. Android and web work on the same network.",
     "dl_button": "Download PasteFerry",
     "dl_mac": "Download for Mac",
     "dl_win": "Download for Windows",
     "dl_linux": "Download for Linux",
-    "dl_note": "Version 2.8.0, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64).",
+    "dl_note": 'Version 2.8.1, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64). Android 9 or later; phones can also use the web page.',
     "start_link": "New here? Set it up in three steps →",
     "stage_label": "Demo: Command C on a MacBook turns a file into a sheet that flies over a direct connection to a Windows "
                    "laptop, where Ctrl V pastes it",
@@ -186,7 +186,7 @@ C = {
 
     "specs_h2": "Specifications",
     "specs": [
-        ("Version", '2.8.0, released <time datetime="2026-10-30">October 30, 2026</time>'),
+        ("Version", '2.8.1, released <time datetime="2026-10-30">October 30, 2026</time>'),
         ("Mac app", "macOS 13 Ventura or later; separate downloads for Apple silicon and Intel, about 25 MB each, no Rosetta; "
                     "a universal version for both is about 47 MB"),
         ("Windows app", "Windows 10 and Windows 11, x64; installs per user, no administrator rights; about 23 MB download"),
@@ -937,10 +937,7 @@ C = {
         ],
     },
 
-    "ld_description": "Open-source app that shares the clipboard and sends files between Mac, Windows and Linux computers. Copy "
-                      "text, images, files or folders on one computer and paste on the other. No server is needed on the same "
-                      "network; on different networks, turn on Service or use your own server. Devices connect directly when "
-                      "possible, and content is end-to-end encrypted.",
+    "ld_description": "Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
     "ld_os": "macOS 13 or later (Intel and Apple silicon); Windows 10, Windows 11 (x64); Linux (x64, ARM64)",
     "ld_currency": "USD",
     "ld_features": [

@@ -6,10 +6,10 @@ SITE = "https://pasteferry.cc/"
 C = {
     "brand": "PasteFerry",
     "brand_alt": ["隔空贴", "CopySync"],
-    "title": "PasteFerry：Mac、Windows、Linux でクリップボードを共有し、ファイルを送り合う",
-    "description": 'あるパソコンでコピーして、別のパソコンでそのまま貼り付け。Mac・Windows・Linux に対応し、テキスト、画像、ファイル、フォルダを扱えます。自宅と会社のあいだでも同期できます。無料・オープンソース。',
-    "og_title": "PasteFerry：このコンピューターでコピーして、あのコンピューターで貼り付け",
-    "og_description": 'あるパソコンでコピーして、別のパソコンでそのまま貼り付け。Mac・Windows・Linux に対応し、テキスト、画像、ファイル、フォルダを扱えます。自宅と会社のあいだでも同期できます。無料・オープンソース。',
+    "title": "PasteFerry：デバイス間のクリップボード・履歴・ファイル転送",
+    "description": "パソコン間でコピーと貼り付け、履歴の検索、パソコンとAndroid間で写真やファイルの転送。Mac・Windows・Linux・Androidに対応。スマホはQRコードでWeb版も利用可能。AndroidとWeb版は同一ネットワーク内で使用。無料・オープンソース。",
+    "og_title": "PasteFerry：デバイス間のクリップボード・履歴・ファイル転送",
+    "og_description": "パソコン間でコピーと貼り付け、履歴の検索、パソコンとAndroid間で写真やファイルの転送。Mac・Windows・Linux・Androidに対応。スマホはQRコードでWeb版も利用可能。AndroidとWeb版は同一ネットワーク内で使用。無料・オープンソース。",
     "og_image": "og-en.png",
     "skip": "本文へ移動",
     "home_label": "PasteFerry ホーム",
@@ -21,13 +21,13 @@ C = {
     "nav_download": "ダウンロード",
     "lang_label": "言語",
 
-    "h1": "こっちでコピーして、<br>あっちで貼り付け。",
-    "lede": 'Mac・Windows・Linux・Android で使え、同じアカウントは不要。テキスト、スクリーンショット、ファイルに対応し、スマホは QR コードを読むだけで使えます。',
+    "h1": "パソコンとスマホを、<br>もっと近くに。",
+    "lede": "パソコン間でコピーと貼り付け、過去の履歴を検索。パソコンとAndroid間で写真やファイルを転送。Mac・Windows・Linux・Androidに対応し、共通アカウントは不要。スマホはQRコードでWeb版も使えます。AndroidとWeb版は同一ネットワーク内で使用します。",
     "dl_button": "PasteFerry をダウンロード",
     "dl_mac": "Mac 版をダウンロード",
     "dl_win": "Windows 版をダウンロード",
     "dl_linux": "Linux 版をダウンロード",
-    "dl_note": "バージョン 2.8.0、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。",
+    "dl_note": 'バージョン 2.8.1、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。 Android 9以降。スマホはWeb版も利用可能。',
     "start_link": "はじめての方は、3 ステップで設定 →",
     "stage_label": "デモ：MacBook で Command C を押すと、ファイルが一枚の紙になって直接接続で Windows ノートへ飛び、そこで Ctrl V を押して貼り付けます",
     "stage_file": "四半期報告_最終版.pptx",
@@ -177,7 +177,7 @@ C = {
 
     "specs_h2": "仕様",
     "specs": [
-        ("バージョン", '2.8.0（<time datetime="2026-10-30">2026 年 10 月 30 日</time>公開）'),
+        ("バージョン", '2.8.1（<time datetime="2026-10-30">2026 年 10 月 30 日</time>公開）'),
         ("Mac アプリ", "macOS 13 Ventura 以降。Apple シリコン版と Intel 版に分かれ、ダウンロードはそれぞれ約 25 MB で Rosetta 不要。"
                        "両方で動くユニバーサル版は約 47 MB"),
         ("Windows アプリ", "Windows 10 と Windows 11、x64。ユーザーごとのインストールで管理者権限不要。ダウンロードは約 23 MB"),
@@ -871,8 +871,7 @@ C = {
         ],
     },
 
-    "ld_description": "Mac、Windows、Linux のコンピューター間でクリップボードを共有し、ファイルを送り合うオープンソースのアプリ。テキスト、画像、ファイル、フォルダを一台でコピーし、もう一台でそのまま貼り付けられる。"
-                      "同じネットワークならサーバーは不要で、別のネットワークでは「サービス」か自前のサーバーを使う。デバイス間は直接接続を優先し、内容はエンドツーエンド暗号化。",
+    "ld_description": "パソコン間でコピーと貼り付け、履歴の検索、パソコンとAndroid間で写真やファイルの転送。Mac・Windows・Linux・Androidに対応。スマホはQRコードでWeb版も利用可能。AndroidとWeb版は同一ネットワーク内で使用。無料・オープンソース。",
     "ld_os": "macOS 13 以降（Intel と Apple シリコン）、Windows 10、Windows 11（x64）、Linux（x64、ARM64）",
     "ld_currency": "JPY",
     "ld_features": [

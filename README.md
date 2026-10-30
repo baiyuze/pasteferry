@@ -5,10 +5,9 @@
 <h1 align="center">PasteFerry</h1>
 
 <p align="center">
-  Copy on one computer, paste on the other — and press <kbd>⌥V</kbd> to bring back anything you copied.<br>
-  Mac, Windows, Linux and Android, across accounts, connected directly even across
-  networks. A phone can also use the records from a computer in its browser, with
-  nothing to install.
+  Clipboard sync, searchable history and file transfer — across your computers and phone.<br>
+  Mac, Windows, Linux and Android, without a shared account. Use the Android app
+  to send and receive files on your local network, or scan a code to use the phone web page.
 </p>
 
 <p align="center">
@@ -63,11 +62,11 @@ With PasteFerry you pair two computers once. After that, copy on one and paste o
 - **Size-aware transfer.** Anything under 50 MB (adjustable) is sent as you copy; larger files sync as a record you fetch when you need them.
 - **Nothing lost while offline.** What you copy meanwhile lands in the other computer's history once it's back.
 
-### Send Files (new in 2.5)
+### Send Files (Android support in 2.8)
 
 - Open **Send Files** and your paired computers appear on a radar. Drop files or whole folders onto one and they go straight to it.
 - **Any size.** Progress, speed and time left are shown; if the connection drops, the transfer resumes where it stopped, and every file is checked with SHA-256.
-- Received files go to Downloads (changeable) and stay out of your clipboard history. Both computers need 2.5 or later.
+- Received files go to Downloads (changeable) and stay out of your clipboard history. Desktop apps need 2.5 or later; Android needs 2.8 or later. Android works on the local network.
 
 ### Send to contacts (new in 2.6)
 
