@@ -20,6 +20,7 @@ from content.tour import localized as tour_copy
 from content.privacy import COPY as PRIVACY_COPY
 from content.official import COPY as OFFICIAL_COPY
 from content.features import localized as features_copy
+from content.feedback import COPY as FEEDBACK_COPY
 
 ROOT = Path(__file__).resolve().parents[2]
 DOCS = ROOT / "docs"
@@ -72,7 +73,8 @@ FEATURES = "features/"
 HOW = "how/"
 SECURITY = "security/"
 FAQ = "faq/"
-SUBPAGES = [FEATURES, START, OFFICIAL, LAN, CLOUD, GUIDE, TAILSCALE, DOWNLOAD, TOUR, PRIVACY, HOW, SECURITY, FAQ]
+FEEDBACK = "feedback/"
+SUBPAGES = [FEATURES, START, OFFICIAL, LAN, CLOUD, GUIDE, TAILSCALE, DOWNLOAD, TOUR, PRIVACY, HOW, SECURITY, FAQ, FEEDBACK]
 DEPLOY_PAGES = [LAN, CLOUD, GUIDE, TAILSCALE]
 
 # 放到网站上的技术方案：文件名 → 网页名。其他 design/*.md 链接到 GitHub
@@ -258,6 +260,7 @@ def footer(c: dict, code: str, up: str, sub: str = "") -> str:
         langs.append(f'<a href="{up}{path + sub or "./"}" hreflang="{hl}" lang="{hl}" data-lang="{other}"{cur}>{name}</a>')
     links = "".join(f'\n        <a href="{href}">{label}</a>' for label, href in c["footer_links"])
     links += f'\n        <a href="{up}{LANGS[code][0]}{PRIVACY}">{PRIVACY_COPY[code][0]}</a>'
+    links += f'\n        <a href="{up}{LANGS[code][0]}{FEEDBACK}">{FEEDBACK_COPY[code]["name"]}</a>'
     return f"""  <footer class="footer">
     <div class="wrap">
       <p>{c["footer_license"]}</p>
@@ -313,11 +316,12 @@ def header(c: dict, code: str, up: str, sub: str = "") -> str:
         f'<li>{link(HOW, c["nav_how"])}</li>',
         f'<li>{link(SECURITY, f["nav_security"])}</li>',
         f'<li>{link(FAQ, c["nav_faq"])}</li>',
+        f'<li>{link(FEEDBACK, FEEDBACK_COPY[code]["name"])}</li>',
         '<li class="sep" role="separator"></li>',
         f'<li><a href="{REPO}/blob/main/CHANGELOG.md">{f["nav_changelog"]}</a></li>',
         f'<li class="narrow-gh"><a href="{REPO}">GitHub</a></li>',
     ]
-    in_more = sub in (HOW, SECURITY, FAQ)
+    in_more = sub in (HOW, SECURITY, FAQ, FEEDBACK)
 
     return f"""  <header class="bar">
     <div class="wrap">
@@ -1237,7 +1241,7 @@ def faq_page(code: str) -> str:
         <div class="faq">
 {faq_list(c["faq"], links)}
         </div>
-        <p class="more"><a href="{REPO}/issues">{f["faq_more"]}</a></p>
+        <p class="more"><a href="{base}{FEEDBACK}">{FEEDBACK_COPY[code]["name"]} →</a><a href="{REPO}/issues">{f["faq_more"]}</a></p>
       </div>
     </section>
   </main>
@@ -2837,6 +2841,60 @@ def write(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
     print("✓", path.relative_to(ROOT))
 
+def feedback_page(code: str) -> str:
+    c, f = load(code), FEEDBACK_COPY[code]
+    up = "../" * (LANGS[code][0] + FEEDBACK).count("/")
+    top = page_top(c, code, FEEDBACK, f['name'] + ' — PasteFerry', f['lede'])
+    top = top.replace('</head>', f'  <link rel="stylesheet" href="{up}assets/feedback.css">\n'
+                      '  <meta name="referrer" content="no-referrer">\n'
+                      "  <meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'\">\n</head>")
+    categories = ''.join(f'<option value="{key}">{esc(f[key])}</option>' for key in ('bug', 'idea', 'discussion'))
+    language_options = ''.join(f'<option value="{key}">{name}</option>' for key, (_, _, _, name) in LANGS.items())
+    labels = json.dumps({**f, 'lang': code}, ensure_ascii=False).replace('<', '\\u003c')
+    # Per-message owner credentials stay within this origin; omit third-party scripts here.
+    bottom = page_bottom(c, code, FEEDBACK).replace(ANALYTICS, '')
+    return top + f'''
+  <main id="main" class="wrap feedback-shell">
+    <h1>{esc(f['name'])}</h1>
+    <p class="feedback-intro">{esc(f['lede'])}</p>
+    <p class="feedback-notice">{esc(f['notice'])} <a href="../privacy/">{esc(f['privacy'])}</a></p>
+    <p id="feedback-status" class="feedback-status" role="status" aria-live="polite"></p>
+    <div id="feedback-toolbar" class="feedback-toolbar">
+      <select id="feedback-category" aria-label="{esc(f['category'])}"><option value="">{esc(f['all'])}</option>{categories}</select>
+      <select id="feedback-language" aria-label="{esc(f['language'])}"><option value="">{esc(f['all_languages'])}</option>{language_options}</select>
+      <button id="feedback-new" class="primary" type="button">{esc(f['new'])}</button>
+    </div>
+    <button id="feedback-back" type="button" hidden>{esc(f['back'])}</button>
+    <div id="feedback-list" aria-live="polite"></div>
+    <button id="feedback-more" type="button" hidden>{esc(f['more'])}</button>
+    <form id="feedback-form" class="feedback-form" hidden>
+      <h2 id="feedback-form-title">{esc(f['new'])}</h2>
+      <div class="feedback-fields">
+        <label>{esc(f['nickname'])} · {esc(f['optional'])}<input name="nickname" maxlength="30" autocomplete="nickname"></label>
+        <label id="feedback-category-field">{esc(f['category'])}<select name="category">{categories}</select></label>
+      </div>
+      <label id="feedback-title-field">{esc(f['title'])}<input name="title" maxlength="100" required></label>
+      <label>{esc(f['body'])}<textarea name="body" maxlength="2000" required placeholder="{esc(f['draft'])}"></textarea></label>
+      <div class="feedback-fields">
+        <label>{esc(f['platform'])} · {esc(f['optional'])}<input name="platform" maxlength="30"></label>
+        <label>{esc(f['version'])} · {esc(f['optional'])}<input name="app_version" maxlength="30"></label>
+      </div>
+      <p id="feedback-draft-state" class="feedback-note"></p>
+      <button type="submit" class="primary">{esc(f['submit'])}</button>
+    </form>
+    <section class="feedback-mine" aria-labelledby="feedback-mine-title">
+      <div class="feedback-mine-head"><h2 id="feedback-mine-title">{esc(f['mine'])}</h2><button id="feedback-clear" type="button">{esc(f['clear'])}</button></div>
+      <p class="feedback-note">{esc(f['mine_note'])}</p>
+      <div id="feedback-mine"></div>
+      <p class="feedback-note">{esc(f['clearing'])}</p>
+    </section>
+    <noscript><p>{esc(f['error'])} JavaScript</p></noscript>
+  </main>
+  <script type="application/json" id="feedback-copy">{labels}</script>
+  <script src="{up}assets/feedback.js" defer></script>
+''' + bottom
+
+
 def privacy_page(code: str) -> str:
     c = load(code)
     title, sections = PRIVACY_COPY[code]
@@ -2897,6 +2955,7 @@ def main() -> None:
         write(DOCS / path / HOW / "index.html", how_page(code))
         write(DOCS / path / SECURITY / "index.html", security_page(code))
         write(DOCS / path / FAQ / "index.html", faq_page(code))
+        write(DOCS / path / FEEDBACK / "index.html", feedback_page(code))
     for md_name, page in DESIGN_DOCS.items():
         write(DOCS / "design" / f"{page}.html", design_page(md_name, page))
     write(DOCS / "404.html", not_found())

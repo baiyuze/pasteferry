@@ -67,3 +67,14 @@ COPY = {
         ("お問い合わせ", "本説明についての質問は github.com/baiyuze/pasteferry/issues で issue を作成してください。"),
     ]),
 }
+
+# User-submitted website messages are separate from encrypted device content.
+FEEDBACK_PRIVACY = {
+    "zh": ("讨论与反馈", "主动提交的昵称和文字会保存在服务器上用于审核及处理反馈，通过后公开。启用 AI 审核时，必要的文本会发送给第三方 AI 服务（如 DeepSeek），由其按自身数据处理条款处理；管理员也可查看和处理提交。浏览器保存草稿、提交记录和逐条查询凭证，最多保留 30 天。清除本地记录不会撤回服务器消息；可在原浏览器中撤回。未公开、已撤回和已下架内容保留 90 天后清理，公开内容保留至撤回或删除。防刷使用临时来源摘要，不保存原始 IP。请勿提交密码、密钥或个人隐私。"),
+    "zh-tw": ("討論與回饋", "主動提交的暱稱與文字會儲存於伺服器，用於審核與處理回饋，通過後公開。啟用 AI 審核時，必要文字會傳送至第三方 AI 服務（如 DeepSeek），依其資料處理條款處理；管理員亦可查看及處理提交。瀏覽器儲存草稿、提交紀錄與逐則查詢憑證，最多保留 30 天。清除本機紀錄不會撤回伺服器上的訊息；可在原瀏覽器中撤回。未公開、已撤回及已下架內容保留 90 天後清理，公開內容保留至撤回或刪除。防濫用使用暫時性來源摘要，不儲存原始 IP。請勿提交密碼、金鑰或個人隱私。"),
+    "zh-hk": ("討論與意見", "主動提交的暱稱及文字會儲存於伺服器，用於審核及處理意見，通過後公開。啟用 AI 審核時，必要文字會傳送至第三方 AI 服務（如 DeepSeek），按其資料處理條款處理；管理員亦可查看及處理提交。瀏覽器儲存草稿、提交記錄及逐則查詢憑證，最多保留 30 日。清除本機記錄不會撤回伺服器上的訊息；可在原瀏覽器中撤回。未公開、已撤回及已下架內容保留 90 日後清理，公開內容保留至撤回或刪除。防濫用使用暫時來源摘要，不儲存原始 IP。請勿提交密碼、金鑰或個人私隱。"),
+    "en": ("Discussion and feedback", "Nicknames and text you submit are stored on the server for review and support, and become public after approval. When AI review is enabled, necessary text is sent to a third-party AI service such as DeepSeek under that provider's data handling terms; administrators can also read and handle submissions. Your browser saves drafts, submission records and per-message access credentials for up to 30 days. Clearing local data does not withdraw server messages; use the original browser to withdraw them. Unpublished, withdrawn and hidden content is removed after 90 days; public content remains until withdrawn or deleted. Abuse prevention uses temporary source digests rather than storing raw IP addresses. Do not submit passwords, API keys or private information."),
+    "ja": ("ディスカッションとフィードバック", "送信したニックネームと文章は審査や対応のためサーバーに保存し、承認後に公開します。AI 審査が有効な場合、必要な文章を DeepSeek などの外部 AI サービスに送信し、その事業者のデータ取扱条件に従って処理します。管理者も投稿を閲覧し対応できます。ブラウザーには下書き、投稿記録、投稿ごとの確認用情報を最長30日間保存します。ローカルの記録を削除してもサーバー上の投稿は取り下げられません。取り下げには元のブラウザーを使用してください。未公開、取り下げ済み、非公開の内容は90日後に削除し、公開内容は取り下げまたは削除まで保存します。不正利用対策には一時的な送信元ダイジェストを使用し、生の IP アドレスは保存しません。パスワード、API キー、個人情報を送信しないでください。"),
+}
+for _code, _section in FEEDBACK_PRIVACY.items():
+    COPY[_code][1].insert(5, _section)

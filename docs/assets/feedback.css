@@ -1,0 +1,29 @@
+.feedback-shell {max-width: 58rem; padding-top: 4rem; padding-bottom: 5rem}
+.feedback-shell h1 {font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.04em; line-height: 1.2}
+.feedback-shell h2 {font-size: 1.4rem; margin: 0 0 1rem}
+.feedback-shell .feedback-intro {color: var(--ink-2); margin: 1rem 0 2rem; line-height: 1.8}
+.feedback-toolbar {display:flex; flex-wrap:wrap; gap:.8rem; align-items:center; margin: 1.5rem 0}
+.feedback-shell select,.feedback-shell input,.feedback-shell textarea {background:var(--surface); color:var(--ink); border:1px solid var(--rule-strong); border-radius:.65rem; padding:.8rem; width:100%; font:inherit}
+.feedback-shell select {width:auto; max-width:100%}
+.feedback-shell textarea {resize:vertical; min-height:10rem; line-height:1.7}
+.feedback-shell :focus-visible {outline:2px solid var(--blue-hi); outline-offset:3px}
+.feedback-shell button {cursor:pointer; border:1px solid var(--rule-strong); border-radius:.65rem; padding:.65rem 1rem; background:var(--surface-2); color:var(--ink); font:inherit}
+.feedback-shell button.primary {background:var(--blue); border-color:var(--blue); color:white}
+.feedback-shell button:disabled {opacity:.55; cursor:wait}
+.feedback-card,.feedback-form {padding:1.5rem; margin:1rem 0; background:var(--surface); border:1px solid var(--rule); border-radius:1rem}
+.feedback-card h3 {font-size:1.15rem; margin:.75rem 0}
+.feedback-card a {color:var(--ink); text-decoration:none}
+.feedback-card a:hover {color:var(--blue-hi)}
+.feedback-card p {line-height:1.8; white-space:pre-wrap; overflow-wrap:anywhere}
+.feedback-card .feedback-meta {font-size:.85rem; color:var(--dim); display:flex; flex-wrap:wrap; gap:.6rem}
+.feedback-form {display:grid; gap:1rem; scroll-margin-top:6rem}
+.feedback-form label {display:grid; gap:.5rem; font-size:.95rem; min-width:0}
+.feedback-form label[hidden],.feedback-shell [hidden] {display:none!important}
+.feedback-fields {display:grid; gap:1rem; grid-template-columns:1fr 1fr}
+.feedback-note {font-size:.86rem; line-height:1.8; color:var(--dim)}
+.feedback-notice {border-left:2px solid var(--blue); padding:.3rem 0 .3rem 1rem; line-height:1.8; color:var(--ink-2)}
+.feedback-status {line-height:1.8; color:var(--blue-hi); min-height:1.8em; overflow-wrap:anywhere}
+.feedback-mine {margin-top:4rem; padding-top:2rem; border-top:1px solid var(--rule)}
+.feedback-mine-head {display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem}
+.feedback-actions {display:flex; flex-wrap:wrap; gap:.65rem; margin-top:1rem}
+@media(max-width:600px){.feedback-fields{grid-template-columns:1fr}.feedback-card,.feedback-form{padding:1rem}.feedback-shell{padding-top:2.5rem}.feedback-toolbar>*{flex:1}}

@@ -637,6 +637,51 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/faq/"/>
   </url>
   <url>
+    <loc>https://pasteferry.cc/feedback/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/feedback/"/>
+  </url>
+  <url>
+    <loc>https://pasteferry.cc/zh-tw/feedback/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/feedback/"/>
+  </url>
+  <url>
+    <loc>https://pasteferry.cc/zh-hk/feedback/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/feedback/"/>
+  </url>
+  <url>
+    <loc>https://pasteferry.cc/en/feedback/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/feedback/"/>
+  </url>
+  <url>
+    <loc>https://pasteferry.cc/ja/feedback/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/feedback/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/feedback/"/>
+  </url>
+  <url>
     <loc>https://pasteferry.cc/design/nat-traversal.html</loc>
     <lastmod>2026-10-30</lastmod>
   </url>

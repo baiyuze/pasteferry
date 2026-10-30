@@ -45,6 +45,20 @@ downloaded). No analytics cookies or persistent visitor identifiers are used,
 and IP addresses and browser identifiers are not stored. With Do Not Track or
 Global Privacy Control turned on, the website's own counters are not sent.
 
+## Discussion and feedback
+
+Nicknames and text you submit are stored for review and support, and become
+public after approval. With AI review enabled, necessary text is sent to a
+third-party AI service such as DeepSeek under its data handling terms.
+Administrators can also read and handle submissions. Do not include passwords,
+API keys or private information.
+
+Your browser saves drafts, submission records and per-message access credentials
+for up to 30 days. Clearing local data does not withdraw server messages; use
+the original browser to withdraw them. Unpublished, withdrawn and hidden content
+is removed after 90 days. Public content remains until withdrawn or deleted.
+Abuse prevention uses temporary source digests, without storing raw IP addresses.
+
 ## How it is used
 
 This information is used to provide and improve the service, publish updates,

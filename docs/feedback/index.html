@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>讨论与反馈 — PasteFerry</title>
+  <meta name="description" content="反馈问题、提出建议，或分享你的使用经验。">
+  <link rel="canonical" href="https://pasteferry.cc/feedback/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/feedback/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/feedback/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/feedback/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/feedback/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/feedback/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="隔空贴">
+  <meta property="og:title" content="讨论与反馈 — PasteFerry">
+  <meta property="og:description" content="反馈问题、提出建议，或分享你的使用经验。">
+  <meta property="og:url" content="https://pasteferry.cc/feedback/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../assets/site.css?v=dbae55d27c">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <link rel="stylesheet" href="../assets/feedback.css?v=de6e3a6394">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href=".././" aria-label="隔空贴首页"><img src="../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">隔空贴</a>
+      <nav aria-label="页面导航">
+        <a href="../features/">功能</a>
+        <a class="mid" href="../start/">快速开始</a>
+        <a class="wide" href="../start/#server">连接方式</a>
+        <a href="../download/">下载</a>
+        <details class="menu">
+          <summary aria-label="更多页面" class="current"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../start/">快速开始</a></li>
+            <li class="narrow"><a href="../start/#server">连接方式</a></li>
+            <li><a href="../how/">工作原理</a></li>
+            <li><a href="../security/">安全与隐私</a></li>
+            <li><a href="../faq/">常见问题</a></li>
+            <li><a href="./" aria-current="page">讨论与反馈</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新记录</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="在 GitHub 上给隔空贴点 Star"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang">
+          <summary aria-label="语言：简体中文"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>简体中文</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../feedback/" hreflang="zh-CN" lang="zh-CN" data-lang="zh" aria-current="page">简体中文</a></li>
+            <li><a href="../zh-tw/feedback/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../zh-hk/feedback/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../en/feedback/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../ja/feedback/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap feedback-shell">
+    <h1>讨论与反馈</h1>
+    <p class="feedback-intro">反馈问题、提出建议，或分享你的使用经验。</p>
+    <p class="feedback-notice">发言需审核，通过后自动公开。启用 AI 审核时，文本会提交给第三方 AI 服务（如 DeepSeek）；请勿填写密码、密钥或个人隐私。 <a href="../privacy/">隐私说明</a></p>
+    <p id="feedback-status" class="feedback-status" role="status" aria-live="polite"></p>
+    <div id="feedback-toolbar" class="feedback-toolbar">
+      <select id="feedback-category" aria-label="分类"><option value="">全部</option><option value="bug">问题反馈</option><option value="idea">功能建议</option><option value="discussion">使用交流</option></select>
+      <select id="feedback-language" aria-label="消息语言"><option value="">全部语言</option><option value="zh">简体中文</option><option value="zh-tw">繁體中文（台灣）</option><option value="zh-hk">繁體中文（香港）</option><option value="en">English</option><option value="ja">日本語</option></select>
+      <button id="feedback-new" class="primary" type="button">发布新话题</button>
+    </div>
+    <button id="feedback-back" type="button" hidden>返回话题列表</button>
+    <div id="feedback-list" aria-live="polite"></div>
+    <button id="feedback-more" type="button" hidden>加载更多</button>
+    <form id="feedback-form" class="feedback-form" hidden>
+      <h2 id="feedback-form-title">发布新话题</h2>
+      <div class="feedback-fields">
+        <label>昵称 · 选填<input name="nickname" maxlength="30" autocomplete="nickname"></label>
+        <label id="feedback-category-field">分类<select name="category"><option value="bug">问题反馈</option><option value="idea">功能建议</option><option value="discussion">使用交流</option></select></label>
+      </div>
+      <label id="feedback-title-field">标题<input name="title" maxlength="100" required></label>
+      <label>正文<textarea name="body" maxlength="2000" required placeholder="写下你的问题或想法……"></textarea></label>
+      <div class="feedback-fields">
+        <label>系统 · 选填<input name="platform" maxlength="30"></label>
+        <label>App 版本 · 选填<input name="app_version" maxlength="30"></label>
+      </div>
+      <p id="feedback-draft-state" class="feedback-note"></p>
+      <button type="submit" class="primary">提交审核</button>
+    </form>
+    <section class="feedback-mine" aria-labelledby="feedback-mine-title">
+      <div class="feedback-mine-head"><h2 id="feedback-mine-title">我的提交</h2><button id="feedback-clear" type="button">清除本地记录</button></div>
+      <p class="feedback-note">仅显示当前浏览器保存的记录。清除缓存或更换设备后，可能无法找回未公开的提交。</p>
+      <div id="feedback-mine"></div>
+      <p class="feedback-note">清除本地记录不会撤回消息，请先撤回需要删除的公开内容。</p>
+    </section>
+    <noscript><p>暂时无法连接，请稍后重试。 JavaScript</p></noscript>
+  </main>
+  <script type="application/json" id="feedback-copy">{"name": "讨论与反馈", "lede": "反馈问题、提出建议，或分享你的使用经验。", "all": "全部", "bug": "问题反馈", "idea": "功能建议", "discussion": "使用交流", "new": "发布新话题", "mine": "我的提交", "mine_note": "仅显示当前浏览器保存的记录。清除缓存或更换设备后，可能无法找回未公开的提交。", "nickname": "昵称", "title": "标题", "body": "正文", "category": "分类", "platform": "系统", "version": "App 版本", "optional": "选填", "submit": "提交审核", "reply": "参与讨论", "back": "返回话题列表", "more": "加载更多", "empty": "还没有公开的话题，欢迎留下你的反馈。", "loading": "正在加载……", "error": "暂时无法连接，请稍后重试。", "saved": "草稿已保存到当前浏览器", "storage_warning": "浏览器无法保存记录，刷新后可能无法找回草稿和提交凭证。", "submitted": "已提交，审核通过后公开。", "uncertain": "提交结果待确认，请使用原记录重试。", "withdrawn": "已撤回", "expired": "记录已失效", "confirm_withdraw": "撤回这条消息？公开内容也会停止展示。", "clear": "清除本地记录", "confirm_clear": "清除本地草稿和凭证？此操作不会撤回服务器上的消息。", "retry": "重试原提交", "withdraw": "撤回", "official": "官方", "pending": "AI 审核中", "manual": "等待人工审核", "approved": "已公开", "rejected": "未通过", "hidden": "已下架", "open": "待处理", "in_progress": "处理中", "resolved": "已解决", "closed": "已关闭", "notice": "发言需审核，通过后自动公开。启用 AI 审核时，文本会提交给第三方 AI 服务（如 DeepSeek）；请勿填写密码、密钥或个人隐私。", "draft": "写下你的问题或想法……", "privacy": "隐私说明", "clearing": "清除本地记录不会撤回消息，请先撤回需要删除的公开内容。", "no_topic": "话题不存在或暂未公开。", "all_languages": "全部语言", "language": "消息语言", "published": "已发布", "failure": "内容可能包含不适当信息，请修改后重试。", "visitor": "访客", "lang": "zh"}</script>
+  <script src="../assets/feedback.js?v=4405ff0989" defer></script>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>隔空贴以 GNU AGPL-3.0 开源。</p>
+      <nav aria-label="页脚链接">
+        <a href="https://github.com/baiyuze/pasteferry/releases">所有版本</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新记录</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技术方案</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">许可说明</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">反馈问题</a>
+        <a href="../privacy/">隐私说明</a>
+        <a href="../feedback/">讨论与反馈</a>
+      </nav>
+      <nav aria-label="语言">
+        <a href="../feedback/" hreflang="zh-CN" lang="zh-CN" data-lang="zh" aria-current="page">简体中文</a>
+        <a href="../zh-tw/feedback/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../zh-hk/feedback/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../en/feedback/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../ja/feedback/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../assets/site.js?v=fb60f6e5ce" defer></script>
+</body>
+</html>
