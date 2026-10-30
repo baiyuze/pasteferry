@@ -228,7 +228,7 @@ C = {
      ('开着 UU 远程时，为什么一直冒出 .uuremote_ 文件？',
       ['这是旧版本的问题，升级到新版就好了。'])],
 
-    "closing": "两台电脑，一个剪贴板。",
+    "closing": "电脑与手机，内容随手互通。",
     "footer_license": "隔空贴以 GNU AGPL-3.0 开源。",
     "footer_label": "页脚链接",
     "footer_links": [

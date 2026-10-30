@@ -247,7 +247,7 @@ C = {
      ('Why do .uuremote_ files keep appearing while UU Remote is running?',
       ['That was a bug in older versions. Update to the latest one.'])],
 
-    "closing": "Two computers, one clipboard.",
+    "closing": "Your devices. Your content. Within reach.",
     "footer_license": "PasteFerry is open source under the GNU AGPL-3.0.",
     "footer_label": "Footer",
     "footer_links": [

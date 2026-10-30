@@ -229,7 +229,7 @@ C = {
      ('UU Remote を使っていると .uuremote_ ファイルが増え続けるのはなぜ？',
       ['古いバージョンの問題です。新しいバージョンに更新すれば直ります。'])],
 
-    "closing": "2 台のコンピューター、<br>ひとつのクリップボード。",
+    "closing": "パソコンとスマホ、<br>コンテンツを手元に。",
     "footer_license": "PasteFerry は GNU AGPL-3.0 のオープンソースです。",
     "footer_label": "フッターのリンク",
     "footer_links": [

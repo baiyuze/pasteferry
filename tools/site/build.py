@@ -567,7 +567,7 @@ def home(code: str) -> str:
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="{FEATURES}#friends">{keys(f["badge"])}</a>
+        <a class="release-note" href="{FEATURES}#phone">{keys(f["badge"])}</a>
         <h1 class="display">{c["h1"]}</h1>
         <p class="lede">{c["lede"]}</p>{cta(c, "", START, tour_ui["watch"])}
         <div class="stage" data-play role="img" aria-label="{esc(c["stage_label"])}">
