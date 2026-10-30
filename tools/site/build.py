@@ -2849,6 +2849,7 @@ def feedback_page(code: str) -> str:
                       '  <meta name="referrer" content="no-referrer">\n'
                       "  <meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'\">\n</head>")
     categories = ''.join(f'<option value="{key}">{esc(f[key])}</option>' for key in ('bug', 'idea', 'discussion'))
+    form_categories = categories.replace('value="discussion"', 'value="discussion" selected')
     language_options = ''.join(f'<option value="{key}">{name}</option>' for key, (_, _, _, name) in LANGS.items())
     labels = json.dumps({**f, 'lang': code}, ensure_ascii=False).replace('<', '\\u003c')
     # Per-message owner credentials stay within this origin; omit third-party scripts here.
@@ -2866,27 +2867,27 @@ def feedback_page(code: str) -> str:
     <button id="feedback-back" type="button" hidden>{esc(f['back'])}</button>
     <div id="feedback-list" aria-live="polite"></div>
     <button id="feedback-more" type="button" hidden>{esc(f['more'])}</button>
-    <form id="feedback-form" class="feedback-form" hidden>
+    <form id="feedback-form" class="feedback-form" novalidate hidden>
       <h2 id="feedback-form-title">{esc(f['new'])}</h2>
-      <div class="feedback-fields">
-        <label>{esc(f['nickname'])} · {esc(f['optional'])}<input name="nickname" maxlength="30" autocomplete="nickname"></label>
-        <label id="feedback-category-field">{esc(f['category'])}<select name="category">{categories}</select></label>
-      </div>
-      <label id="feedback-title-field">{esc(f['title'])}<input name="title" maxlength="100" required></label>
+      <label id="feedback-category-field">{esc(f['category'])}<select name="category">{form_categories}</select></label>
       <label>{esc(f['body'])}<textarea name="body" maxlength="2000" required placeholder="{esc(f['draft'])}"></textarea></label>
-      <div class="feedback-fields">
-        <label>{esc(f['platform'])} · {esc(f['optional'])}<input name="platform" maxlength="30"></label>
-        <label>{esc(f['version'])} · {esc(f['optional'])}<input name="app_version" maxlength="30"></label>
-      </div>
+      <details class="feedback-extra"><summary>{esc(f['extra'])}</summary>
+        <label>{esc(f['nickname'])} · {esc(f['optional'])}<input name="nickname" maxlength="30" autocomplete="nickname"></label>
+        <label id="feedback-title-field">{esc(f['title'])} · {esc(f['optional'])}<input name="title" maxlength="100"></label>
+      </details>
       <p id="feedback-draft-state" class="feedback-note"></p>
+      <p id="feedback-form-status" class="feedback-status" role="status" aria-live="polite"></p>
       <button type="submit" class="primary">{esc(f['submit'])}</button>
     </form>
-    <section class="feedback-mine" aria-labelledby="feedback-mine-title">
-      <div class="feedback-mine-head"><h2 id="feedback-mine-title">{esc(f['mine'])}</h2><button id="feedback-clear" type="button">{esc(f['clear'])}</button></div>
+    <details id="feedback-mine-panel" class="feedback-mine">
+      <summary id="feedback-mine-title">{esc(f['mine'])} <span id="feedback-mine-count">(0)</span></summary>
+      <div class="feedback-mine-content">
+      <button id="feedback-clear" type="button">{esc(f['clear'])}</button>
       <p class="feedback-note">{esc(f['mine_note'])}</p>
       <div id="feedback-mine"></div>
       <p class="feedback-note">{esc(f['clearing'])}</p>
-    </section>
+      </div>
+    </details>
     <noscript><p>{esc(f['error'])} JavaScript</p></noscript>
   </main>
   <script type="application/json" id="feedback-copy">{labels}</script>

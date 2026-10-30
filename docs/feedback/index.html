@@ -34,7 +34,7 @@
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
   <link rel="stylesheet" href="../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
-  <link rel="stylesheet" href="../assets/feedback.css?v=ce9ca376ee">
+  <link rel="stylesheet" href="../assets/feedback.css?v=921fafb422">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 </head>
@@ -90,31 +90,31 @@
     <button id="feedback-back" type="button" hidden>返回话题列表</button>
     <div id="feedback-list" aria-live="polite"></div>
     <button id="feedback-more" type="button" hidden>加载更多</button>
-    <form id="feedback-form" class="feedback-form" hidden>
+    <form id="feedback-form" class="feedback-form" novalidate hidden>
       <h2 id="feedback-form-title">发布新话题</h2>
-      <div class="feedback-fields">
-        <label>昵称 · 选填<input name="nickname" maxlength="30" autocomplete="nickname"></label>
-        <label id="feedback-category-field">分类<select name="category"><option value="bug">问题反馈</option><option value="idea">功能建议</option><option value="discussion">使用交流</option></select></label>
-      </div>
-      <label id="feedback-title-field">标题<input name="title" maxlength="100" required></label>
+      <label id="feedback-category-field">分类<select name="category"><option value="bug">问题反馈</option><option value="idea">功能建议</option><option value="discussion" selected>使用交流</option></select></label>
       <label>正文<textarea name="body" maxlength="2000" required placeholder="写下你的问题或想法……"></textarea></label>
-      <div class="feedback-fields">
-        <label>系统 · 选填<input name="platform" maxlength="30"></label>
-        <label>App 版本 · 选填<input name="app_version" maxlength="30"></label>
-      </div>
+      <details class="feedback-extra"><summary>补充信息（选填）</summary>
+        <label>昵称 · 选填<input name="nickname" maxlength="30" autocomplete="nickname"></label>
+        <label id="feedback-title-field">标题 · 选填<input name="title" maxlength="100"></label>
+      </details>
       <p id="feedback-draft-state" class="feedback-note"></p>
-      <button type="submit" class="primary">提交审核</button>
+      <p id="feedback-form-status" class="feedback-status" role="status" aria-live="polite"></p>
+      <button type="submit" class="primary">提交</button>
     </form>
-    <section class="feedback-mine" aria-labelledby="feedback-mine-title">
-      <div class="feedback-mine-head"><h2 id="feedback-mine-title">我的提交</h2><button id="feedback-clear" type="button">清除本地记录</button></div>
+    <details id="feedback-mine-panel" class="feedback-mine">
+      <summary id="feedback-mine-title">我的提交 <span id="feedback-mine-count">(0)</span></summary>
+      <div class="feedback-mine-content">
+      <button id="feedback-clear" type="button">清除本地记录</button>
       <p class="feedback-note">仅显示当前浏览器保存的记录。清除缓存或更换设备后，可能无法找回未公开的提交。</p>
       <div id="feedback-mine"></div>
       <p class="feedback-note">清除本地记录不会撤回消息，请先撤回需要删除的公开内容。</p>
-    </section>
+      </div>
+    </details>
     <noscript><p>暂时无法连接，请稍后重试。 JavaScript</p></noscript>
   </main>
-  <script type="application/json" id="feedback-copy">{"name": "讨论与反馈", "lede": "反馈问题、提出建议，或分享你的使用经验。", "all": "全部", "bug": "问题反馈", "idea": "功能建议", "discussion": "使用交流", "new": "发布新话题", "mine": "我的提交", "mine_note": "仅显示当前浏览器保存的记录。清除缓存或更换设备后，可能无法找回未公开的提交。", "nickname": "昵称", "title": "标题", "body": "正文", "category": "分类", "platform": "系统", "version": "App 版本", "optional": "选填", "submit": "提交审核", "reply": "参与讨论", "back": "返回话题列表", "more": "加载更多", "empty": "还没有公开的话题，欢迎留下你的反馈。", "loading": "正在加载……", "error": "暂时无法连接，请稍后重试。", "saved": "草稿已保存到当前浏览器", "storage_warning": "浏览器无法保存记录，刷新后可能无法找回草稿和提交凭证。", "submitted": "已提交，审核通过后公开。", "uncertain": "提交结果待确认，请使用原记录重试。", "withdrawn": "已撤回", "expired": "记录已失效", "confirm_withdraw": "撤回这条消息？公开内容也会停止展示。", "clear": "清除本地记录", "confirm_clear": "清除本地草稿和凭证？此操作不会撤回服务器上的消息。", "retry": "重试原提交", "withdraw": "撤回", "official": "官方", "pending": "AI 审核中", "manual": "等待人工审核", "approved": "已公开", "rejected": "未通过", "hidden": "已下架", "open": "待处理", "in_progress": "处理中", "resolved": "已解决", "closed": "已关闭", "draft": "写下你的问题或想法……", "privacy": "隐私说明", "clearing": "清除本地记录不会撤回消息，请先撤回需要删除的公开内容。", "no_topic": "话题不存在或暂未公开。", "all_languages": "全部语言", "language": "消息语言", "published": "已发布", "failure": "内容可能包含不适当信息，请修改后重试。", "visitor": "访客", "lang": "zh"}</script>
-  <script src="../assets/feedback.js?v=4405ff0989" defer></script>
+  <script type="application/json" id="feedback-copy">{"name": "讨论与反馈", "lede": "反馈问题、提出建议，或分享你的使用经验。", "all": "全部", "bug": "问题反馈", "idea": "功能建议", "discussion": "使用交流", "new": "发布新话题", "mine": "我的提交", "mine_note": "仅显示当前浏览器保存的记录。清除缓存或更换设备后，可能无法找回未公开的提交。", "nickname": "昵称", "title": "标题", "body": "正文", "category": "分类", "platform": "系统", "version": "App 版本", "optional": "选填", "submit": "提交", "reply": "参与讨论", "back": "返回话题列表", "more": "加载更多", "empty": "还没有公开的话题，欢迎留下你的反馈。", "loading": "正在加载……", "error": "暂时无法连接，请稍后重试。", "saved": "草稿已保存到当前浏览器", "storage_warning": "浏览器无法保存记录，刷新后可能无法找回草稿和提交凭证。", "submitted": "已提交，审核通过后公开。", "uncertain": "提交结果待确认，请使用原记录重试。", "withdrawn": "已撤回", "expired": "记录已失效", "confirm_withdraw": "撤回这条消息？公开内容也会停止展示。", "clear": "清除本地记录", "confirm_clear": "清除本地草稿和凭证？此操作不会撤回服务器上的消息。", "retry": "重试原提交", "withdraw": "撤回", "official": "官方", "pending": "AI 审核中", "manual": "等待人工审核", "approved": "已公开", "rejected": "未通过", "hidden": "已下架", "open": "待处理", "in_progress": "处理中", "resolved": "已解决", "closed": "已关闭", "draft": "写下你的问题或想法……", "privacy": "隐私说明", "clearing": "清除本地记录不会撤回消息，请先撤回需要删除的公开内容。", "no_topic": "话题不存在或暂未公开。", "all_languages": "全部语言", "language": "消息语言", "published": "已发布", "failure": "内容可能包含不适当信息，请修改后重试。", "visitor": "访客", "sending": "正在提交……", "required_fields": "请写下你的问题或想法。", "secure_unavailable": "当前浏览器无法安全提交，请使用新版浏览器打开 HTTPS 官网。", "rate_limited": "提交过于频繁，请稍后再试，内容已保留。", "unavailable": "暂时无法接收新消息，请稍后再试，内容已保留。", "invalid_fields": "请检查填写内容和长度后重试。", "extra": "补充信息（选填）", "lang": "zh"}</script>
+  <script src="../assets/feedback.js?v=cee3ef803a" defer></script>
 
   <footer class="footer">
     <div class="wrap">

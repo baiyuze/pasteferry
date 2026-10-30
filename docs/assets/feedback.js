@@ -1,17 +1,38 @@
 (function () {
   'use strict';
+  // Owner credentials must only be created and sent over a secure connection.
+  if (location.protocol === 'http:' && !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) {
+    location.replace('https://' + location.host + location.pathname + location.search + location.hash);
+    return;
+  }
   var copy = JSON.parse(document.getElementById('feedback-copy').textContent);
   var prefix = 'pasteferry.feedback.v1.';
   var records = [], draft = null, topic = null, cursor = '', loading = false, timer;
   var form = document.getElementById('feedback-form');
   var status = document.getElementById('feedback-status');
+  var formStatus = document.getElementById('feedback-form-status');
+  var submitButton = form.querySelector('[type=submit]');
   var list = document.getElementById('feedback-list');
   var mine = document.getElementById('feedback-mine');
+  var minePanel = document.getElementById('feedback-mine-panel');
   var maxAge = 30 * 86400000;
   var storageOK = true;
   function text(tag, value, cls) { var el = document.createElement(tag); el.textContent = value; if (cls) el.className = cls; return el; }
   function button(label, action) { var el = text('button', label); el.type = 'button'; el.addEventListener('click', action); return el; }
-  function announce(message) { status.textContent = message + (!storageOK && message !== copy.storage_warning ? ' ' + copy.storage_warning : ''); }
+  function announce(message) {
+    status.textContent = message + (!storageOK && message !== copy.storage_warning ? ' ' + copy.storage_warning : '');
+    formStatus.textContent = status.textContent;
+  }
+  function credentials() {
+    if (!window.crypto || typeof window.crypto.getRandomValues !== 'function') throw new Error('secure_unavailable');
+    var secret = new Uint8Array(32), uuid = new Uint8Array(16);
+    window.crypto.getRandomValues(secret); window.crypto.getRandomValues(uuid);
+    // UUID v4 without requiring crypto.randomUUID (absent in some webviews).
+    uuid[6] = (uuid[6] & 15) | 64; uuid[8] = (uuid[8] & 63) | 128;
+    var hex = Array.from(uuid, function (byte) { return ('0' + byte.toString(16)).slice(-2); }).join('');
+    return {id: hex.slice(0, 8) + '-' + hex.slice(8, 12) + '-' + hex.slice(12, 16) + '-' + hex.slice(16, 20) + '-' + hex.slice(20),
+      owner_token: btoa(String.fromCharCode.apply(null, secret)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')};
+  }
   function saveRecords() {
     records = records.filter(function (r) { return Date.now() - r.saved < maxAge; }).slice(-50);
     try { localStorage.setItem(prefix + 'records', JSON.stringify(records)); return true; }
@@ -49,7 +70,7 @@
     var el = text('article', '', 'feedback-card');
     var meta = text('div', '', 'feedback-meta');
     meta.append(text('span', copy[m.category] || copy.discussion));
-    meta.append(text('span', own ? label(m) : (copy[m.resolution] || copy.published)));
+    meta.append(text('span', own ? label(m) : (!m.parent_id && m.category !== 'discussion' ? (copy[m.resolution] || copy.published) : copy.published)));
     meta.append(text('span', !m.nickname || m.nickname === 'Visitor' ? copy.visitor : m.nickname));
     if (m.platform || m.app_version) meta.append(text('span', [m.platform, m.app_version].filter(Boolean).join(' · ')));
     if (m.author_kind === 'official') meta.append(text('strong', copy.official));
@@ -78,6 +99,7 @@
     } catch (_) { /* Preserve the last confirmed state while offline. */ }
   }
   function renderMine() {
+    document.getElementById('feedback-mine-count').textContent = '(' + records.length + ')';
     mine.replaceChildren();
     records.slice().reverse().forEach(function (r) {
       var m = r.message || Object.assign({}, r.input, {status: 'pending', created_at: Math.floor(r.saved / 1000)});
@@ -100,14 +122,14 @@
     return result;
   }
   function fillForm(data) {
-    ['nickname','title','body','category','platform','app_version'].forEach(function (key) { if (data[key] !== undefined) form.elements.namedItem(key).value = data[key]; });
+    ['nickname','title','body','category'].forEach(function (key) { if (data[key] !== undefined) form.elements.namedItem(key).value = data[key]; });
   }
   function openForm() {
     form.hidden = false;
+    formStatus.textContent = '';
     document.getElementById('feedback-form-title').textContent = topic ? copy.reply : copy.new;
     document.getElementById('feedback-title-field').hidden = !!topic;
     document.getElementById('feedback-category-field').hidden = !!topic;
-    form.elements.namedItem('title').required = !topic;
     if (draft && draft.values.parent_id === (topic ? topic.id : '')) fillForm(draft.values);
   }
   form.addEventListener('input', function () {
@@ -119,7 +141,8 @@
   });
   async function send(record) {
     if (loading) return;
-    loading = true; form.querySelector('[type=submit]').disabled = true;
+    loading = true; submitButton.disabled = true; submitButton.textContent = copy.sending;
+    announce(copy.sending);
     try {
       var message = await api('messages', record.input);
       record.message = message; record.uncertain = false; saveRecords();
@@ -128,24 +151,31 @@
         draft = null; try { localStorage.removeItem(prefix + 'draft'); } catch (_) {}
       }
       form.reset(); form.hidden = true; document.getElementById('feedback-draft-state').textContent = '';
-      announce(copy.submitted); renderMine(); await refreshMine(); await loadPage(false);
+      announce(copy.submitted); renderMine(); minePanel.open = true; minePanel.scrollIntoView({behavior: 'smooth', block: 'start'});
+      await refreshMine(); await loadPage(false);
     } catch (err) {
       if (err.httpStatus && err.httpStatus < 500) {
         records = records.filter(function (r) { return r !== record; }); saveRecords();
-        announce(err.message === 'content_not_allowed' ? copy.failure : copy.error);
+        var errorKey = {content_not_allowed: 'failure', rate_limited: 'rate_limited', feedback_closed: 'unavailable', feedback_full: 'unavailable', invalid_request: 'invalid_fields'}[err.message];
+        announce(copy[errorKey] || (err.httpStatus === 429 ? copy.rate_limited : copy.error));
       } else { record.uncertain = true; saveRecords(); announce(copy.uncertain); }
       renderMine();
-    } finally { loading = false; form.querySelector('[type=submit]').disabled = false; }
+    } finally { loading = false; submitButton.disabled = false; submitButton.textContent = copy.submit; }
   }
   form.addEventListener('submit', function (event) {
-    event.preventDefault(); if (loading || !form.reportValidity()) return;
+    event.preventDefault(); if (loading) return;
+    if (!form.checkValidity()) { announce(copy.required_fields); form.reportValidity(); return; }
     clearTimeout(timer);
     var fields = values();
+    if (!fields.body) { announce(copy.required_fields); return; }
     var record = records.find(function (r) { return r.uncertain && JSON.stringify(r.fields) === JSON.stringify(fields); });
     if (!record) {
-      var secret = new Uint8Array(32); crypto.getRandomValues(secret);
-      var owner = btoa(String.fromCharCode.apply(null, secret)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-      record = {input: Object.assign({id: crypto.randomUUID(), owner_token: owner}, fields), fields: fields, saved: Date.now(), uncertain: true};
+      var credential;
+      try { credential = credentials(); }
+      catch (_) { announce(copy.secure_unavailable); return; }
+      var input = Object.assign(credential, fields);
+      if (!topic && !input.title) input.title = Array.from(fields.body.split(/\r?\n/)[0]).slice(0, 60).join('');
+      record = {input: input, fields: fields, saved: Date.now(), uncertain: true};
       records.push(record); saveRecords();
     }
     void send(record);
@@ -184,7 +214,7 @@
       document.getElementById('feedback-more').hidden = true;
     }
   }
-  document.getElementById('feedback-new').addEventListener('click', function () { openForm(); form.scrollIntoView({behavior: 'smooth'}); form.elements.namedItem('title').focus(); });
+  document.getElementById('feedback-new').addEventListener('click', function () { openForm(); form.scrollIntoView({behavior: 'smooth'}); form.elements.namedItem('body').focus(); });
   document.getElementById('feedback-back').addEventListener('click', function () { location.hash = ''; });
   document.getElementById('feedback-more').addEventListener('click', function () { void loadPage(true); });
   ['feedback-category','feedback-language'].forEach(function (id) { document.getElementById(id).addEventListener('change', function () { void loadPage(false); }); });

@@ -22,7 +22,17 @@
 .feedback-fields {display:grid; gap:1rem; grid-template-columns:1fr 1fr}
 .feedback-note {font-size:.86rem; line-height:1.8; color:var(--dim)}
 .feedback-status {line-height:1.8; color:var(--blue-hi); min-height:1.8em; overflow-wrap:anywhere}
-.feedback-mine {margin-top:4rem; padding-top:2rem; border-top:1px solid var(--rule)}
-.feedback-mine-head {display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem}
+.feedback-mine {margin-top:1.75rem; border-top:1px solid var(--rule); scroll-margin-top:5rem; color:var(--ink-2)}
+.feedback-mine summary {cursor:pointer; padding:1rem 0; font-size:.9rem}
+#feedback-mine-count {color:var(--dim)}
+.feedback-mine-content {padding:0 0 1rem}
+.feedback-mine .feedback-card {padding:1rem; margin:.75rem 0}
+.feedback-mine .feedback-card h3 {font-size:1rem}
+.feedback-mine .feedback-card p {font-size:.9rem}
+.feedback-mine button {font-size:.85rem; padding:.45rem .75rem}
+.feedback-form .feedback-status:empty {display:none}
+.feedback-extra summary {cursor:pointer; color:var(--ink-2); padding:.5rem 0}
+.feedback-extra[open] label {margin-top:1rem}
+@media(max-width:600px){.feedback-form input,.feedback-form textarea,.feedback-form select{font-size:16px}.feedback-form button[type=submit]{min-height:48px}}
 .feedback-actions {display:flex; flex-wrap:wrap; gap:.65rem; margin-top:1rem}
 @media(max-width:600px){.feedback-fields{grid-template-columns:1fr}.feedback-card,.feedback-form{padding:1rem}.feedback-shell{padding-top:2.5rem}.feedback-toolbar>*{flex:1}}

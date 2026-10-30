@@ -30,3 +30,22 @@ for code, values in VALUES.items():
     assert len(values) == len(KEYS), (code, len(values), len(KEYS))
     COPY[code] = dict(zip(KEYS, values))
     COPY[code]['visitor'] = {'zh':'访客','zh-tw':'訪客','zh-hk':'訪客','en':'Visitor','ja':'ゲスト'}[code]
+
+SUBMISSION_COPY = {
+    'zh': ('正在提交……', '请写下你的问题或想法。', '当前浏览器无法安全提交，请使用新版浏览器打开 HTTPS 官网。', '提交过于频繁，请稍后再试，内容已保留。', '暂时无法接收新消息，请稍后再试，内容已保留。', '请检查填写内容和长度后重试。'),
+    'zh-tw': ('正在提交……', '請寫下你的問題或想法。', '目前瀏覽器無法安全提交，請使用新版瀏覽器開啟 HTTPS 官網。', '提交過於頻繁，請稍後再試，內容已保留。', '暫時無法接收新訊息，請稍後再試，內容已保留。', '請檢查填寫內容和長度後重試。'),
+    'zh-hk': ('正在提交……', '請寫下你的問題或想法。', '目前瀏覽器無法安全提交，請使用新版瀏覽器開啟 HTTPS 官網。', '提交過於頻繁，請稍後再試，內容已保留。', '暫時無法接收新訊息，請稍後再試，內容已保留。', '請檢查填寫內容和長度後再試。'),
+    'en': ('Submitting…', 'Please write your problem or idea.', 'This browser cannot submit securely. Open the HTTPS website in an up-to-date browser.', 'Too many submissions. Please try again shortly. Your text has been kept.', 'New messages cannot be accepted right now. Please try later. Your text has been kept.', 'Please check your entries and their length, then try again.'),
+    'ja': ('送信中……', '問題やアイデアを入力してください。', 'このブラウザーでは安全に送信できません。最新のブラウザーで HTTPS の公式サイトを開いてください。', '送信回数が多すぎます。入力内容は保持されています。しばらくしてから再度お試しください。', '現在、新しい投稿を受け付けられません。入力内容は保持されています。後で再度お試しください。', '入力内容と文字数を確認してから再度お試しください。'),
+}
+for code, messages in SUBMISSION_COPY.items():
+    COPY[code].update(zip(('sending', 'required_fields', 'secure_unavailable', 'rate_limited', 'unavailable', 'invalid_fields'), messages))
+
+for code, (submit, extra) in {
+    'zh': ('提交', '补充信息（选填）'),
+    'zh-tw': ('提交', '補充資訊（選填）'),
+    'zh-hk': ('提交', '補充資料（選填）'),
+    'en': ('Submit', 'Additional details (optional)'),
+    'ja': ('送信する', '追加情報（任意）'),
+}.items():
+    COPY[code].update(submit=submit, extra=extra)
