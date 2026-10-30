@@ -123,14 +123,16 @@ class _SessionRowState extends State<_SessionRow> {
       final files = await openFiles();
       if (files.isEmpty || !mounted) return;
       if (files.length > 64) {
-        if (mounted)
+        if (mounted) {
           showToast(context, context.l10n.webFilesLimit, error: true);
+        }
         return;
       }
       for (final file in files) {
         if (await file.length() > 200 * 1024 * 1024) {
-          if (mounted)
+          if (mounted) {
             showToast(context, context.l10n.webFilesLimit, error: true);
+          }
           return;
         }
       }

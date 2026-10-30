@@ -40,7 +40,7 @@ separate snapshot directories and safely renamed in the receive directory.
 - TypeScript checking and the production Vite build passed. Generated assets
   are embedded with the backend source in the same commit.
 - The transfer tab uses the same Fluent Arrow Swap regular/filled glyphs as
-  Android. History separates title, device and size, status and action rows;
+  Android. History keeps title, device, size and status compact, with controls on the right;
   a multi-file download opens a flat list in a sheet.
-- Flutter: 228 tests passed, including six mobile transfer layout cases at
+- Flutter: 229 tests passed, including seven mobile transfer layout cases at
   320 logical pixels and 2x text size across light/dark themes and statuses.

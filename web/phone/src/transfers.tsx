@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ApiError, fetchBin, rpc, sendChunk, type FileInfo, type WebTransfer } from './api'
 import { useConn } from './context'
 import { t } from './i18n'
-import { ArrowDownload, Attach, Checkmark, Copy, Document } from './icons'
+import { ArrowDownload, Attach, Checkmark, Copy, Document, Trash } from './icons'
 import { readSlice, withRetry } from './send'
 import { Button, Group, Separator, Sheet, useToast } from './ui'
 import { errorText, humanSize } from './util'
@@ -105,9 +105,8 @@ export function TransfersView({ active }: { active: boolean }) {
 
   return <div className="px-4 pb-6">
     <div className="rounded-lg border border-border bg-surface p-4">
-      <div className="text-[16px] font-semibold">{t('sendTitle', { device: conn.device })}</div>
-      <p className="mt-1 text-[13px] leading-relaxed text-dim">{t('transferHint')}</p>
-      <Button kind="secondary" className="mt-4 min-h-12 w-full px-3 py-2" disabled={!!job} onClick={() => input.current?.click()}><Attach size={20} />{t('chooseFiles')}</Button>
+      <div className="flex items-center gap-3"><div className="min-w-0 flex-1 text-[16px] font-semibold">{t('sendTitle', { device: conn.device })}</div><Button kind="secondary" className="min-h-10 shrink-0 px-3 py-2 text-[14px]" disabled={!!job} onClick={() => input.current?.click()}><Attach size={18} />{t('chooseFiles')}</Button></div>
+      <p className="mt-2 text-[13px] leading-relaxed text-dim">{t('transferHint')}</p>
       <input ref={input} hidden multiple type="file" onChange={e => {
         const files = Array.from(e.target.files || []); e.target.value = ''
         if (files.length > 64) { toast(t('transferLimit')); return }
@@ -126,20 +125,22 @@ export function TransfersView({ active }: { active: boolean }) {
     {uploadError && <p role="alert" className="mt-3 break-words text-[13px] text-danger">{uploadError}</p>}
     <h2 className="mt-6 mb-2 px-1 text-[13px] font-semibold text-dim">{t('transferHistory')}</h2>
     {!rows.length && <p className="rounded-lg border border-border bg-surface px-4 py-8 text-center text-[14px] text-dim">{t('transferEmpty')}</p>}
-    {rows.length > 0 && <Group>{rows.map((row, index) => <div key={row.id}>{index > 0 && <Separator inset={16} />}<article className="p-4">
-      <div className="flex items-start gap-3">
+    {rows.length > 0 && <Group>{rows.map((row, index) => <div key={row.id}>{index > 0 && <Separator inset={16} />}<article className="px-4 py-3">
+      <div className="flex items-center gap-3">
         <span className="rounded-md bg-fill p-2.5 text-dim">{row.items.length > 1 ? <Copy size={22} /> : <Document size={22} />}</span>
         <div className="min-w-0 flex-1">
           <div className="line-clamp-2 break-all text-[15px] font-semibold">{row.items.length === 1 ? row.items[0].name : t('andMore', { name: row.items[0]?.name || '', n: row.items.length })}</div>
           <div className="mt-1 text-[12px] text-dim">{row.direction === 'upload' ? t('transferToComputer') : t('transferFromComputer')} · {humanSize(row.items.reduce((n, i) => n + i.size, 0))}</div>
-          <time className="text-[12px] text-dim" dateTime={new Date(row.at).toISOString()}>{new Date(row.at).toLocaleString()}</time>
+          <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[12px] text-dim">
+            <time dateTime={new Date(row.at).toISOString()}>{new Date(row.at).toLocaleString()}</time>
+            <span className="inline-flex items-center gap-1">{row.status === 'done' && <Checkmark size={14} className="text-online" />}{row.direction === 'upload' ? t('uploaded') : row.status === 'done' ? t('transferHandedOff') : t('transferReady')}</span>
+          </div>
+          {download?.id === row.id && <progress className="mt-2 h-1 w-full accent-accent" max={1} value={download.progress} />}
         </div>
-      </div>
-      <div className="mt-3 flex items-center gap-1.5 text-[13px] text-dim">{row.status === 'done' && <Checkmark size={16} className="text-online" />}{row.direction === 'upload' ? t('uploaded') : row.status === 'done' ? t('transferHandedOff') : t('transferReady')}</div>
-      {download?.id === row.id && <progress className="mt-3 h-1.5 w-full accent-accent" max={1} value={download.progress} />}
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        {row.direction === 'download' && <Button kind="secondary" className="min-h-11 px-4 text-[14px]" disabled={!!download || !!ready} onClick={() => row.items.length === 1 ? receive(row, 0) : setFileList(row)}><ArrowDownload size={18} />{download?.id === row.id ? `${Math.round(download.progress * 100)}%` : t('download')}</Button>}
-        <Button kind="plain" className="min-h-11 px-3 text-[14px] text-dim" disabled={download?.id === row.id} onClick={() => remove(row)}>{t('transferDelete')}</Button>
+        <div className="flex shrink-0 items-center gap-1">
+          {row.direction === 'download' && <Button kind="secondary" aria-label={t('download')} title={t('download')} className="h-10 w-10" disabled={!!download || !!ready} onClick={() => row.items.length === 1 ? receive(row, 0) : setFileList(row)}><ArrowDownload size={20} /></Button>}
+          <Button kind="plain" aria-label={t('transferDelete')} title={t('transferDelete')} className="h-10 w-10 text-dim" disabled={download?.id === row.id} onClick={() => remove(row)}><Trash size={18} /></Button>
+        </div>
       </div>
     </article></div>)}</Group>}
     <p className="mt-3 px-1 text-[12px] text-dim">{t('transferDeleteHint')}</p>

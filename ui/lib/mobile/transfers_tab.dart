@@ -37,9 +37,17 @@ class _TransfersTabState extends State<TransfersTab> {
     try {
       final picked = await pickFilesForSend(context);
       if (picked == null || !mounted) return;
-      await sendFilesTo(context, device, [for (final file in picked) file.path]);
+      await sendFilesTo(context, device, [
+        for (final file in picked) file.path,
+      ]);
     } catch (e) {
-      if (mounted) showToast(context, l.mSendFailed(AppState.describeError(e)), error: true);
+      if (mounted) {
+        showToast(
+          context,
+          l.mSendFailed(AppState.describeError(e)),
+          error: true,
+        );
+      }
     } finally {
       if (mounted) setState(() => _picking = false);
     }
@@ -79,51 +87,79 @@ class _TransfersTabState extends State<TransfersTab> {
     ]..sort((a, b) => b.createdAtUnix.compareTo(a.createdAtUnix));
 
     return ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(bottom: Insets.xl),
-        children: [
-          MobileHeader(title: l.navSend),
-          MobileGroup(
-            title: l.navDevices,
-            footer: devices.isEmpty ? l.mNoOnlineDevices : null,
-            children: [
-              for (final d in devices)
-                Padding(
-                  padding: const EdgeInsets.all(Insets.lg),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                    Row(children: [
-                      Icon(AppIcons.deviceLaptop, size: 24, color: context.palette.textDim),
-                      const SizedBox(width: Insets.md),
-                      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(d.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: context.text.bodyLarge),
-                        Text(routeLabel(l, state, d), style: context.text.bodySmall),
-                      ])),
-                    ]),
-                    const SizedBox(height: Insets.md),
-                    FilledButton.icon(
-                      style: secondaryButtonStyle(context),
-                      onPressed: _picking ? null : () => _send(state, d),
-                      icon: Icon(AppIcons.plus, size: 18),
-                      label: Text(l.sendChooseFiles),
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(bottom: Insets.xl),
+      children: [
+        MobileHeader(title: l.navSend),
+        MobileGroup(
+          title: l.navDevices,
+          footer: devices.isEmpty ? l.mNoOnlineDevices : null,
+          children: [
+            for (final d in devices)
+              Padding(
+                padding: const EdgeInsets.all(Insets.lg),
+                child: Row(
+                  children: [
+                    Icon(
+                      AppIcons.deviceLaptop,
+                      size: 24,
+                      color: context.palette.textDim,
                     ),
-                  ]),
+                    const SizedBox(width: Insets.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            d.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.text.bodyLarge,
+                          ),
+                          Text(
+                            routeLabel(l, state, d),
+                            style: context.text.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: Insets.sm),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 140),
+                      child: FilledButton(
+                        style: secondaryButtonStyle(context),
+                        onPressed: _picking ? null : () => _send(state, d),
+                        child: Text(
+                          l.sendChooseFiles,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              if (devices.isEmpty && widget.onPair != null)
-                MobileTile(title: l.addDevice, onTap: widget.onPair),
+              ),
+            if (devices.isEmpty && widget.onPair != null)
+              MobileTile(title: l.addDevice, onTap: widget.onPair),
+          ],
+        ),
+        if (rows.isNotEmpty)
+          MobileGroup(
+            title: l.friendHistory,
+            children: [
+              for (final t in rows)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    Insets.lg,
+                    Insets.md,
+                    Insets.lg,
+                    Insets.md,
+                  ),
+                  child: MobileTransferCard(transfer: t, actions: _actions(t)),
+                ),
             ],
           ),
-          if (rows.isNotEmpty)
-            MobileGroup(
-              title: l.friendHistory,
-              children: [
-                for (final t in rows)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.lg, 0),
-                    child: MobileTransferCard(transfer: t, actions: _actions(t)),
-                  ),
-              ],
-            ),
-        ],
+      ],
     );
   }
 
@@ -132,31 +168,117 @@ class _TransfersTabState extends State<TransfersTab> {
     final l = context.l10n;
     final state = AppScope.read(context);
     final done = t.status == 'done';
-    final resumable = t.direction == TransferDirection.TRANSFER_DIRECTION_OUTGOING && (t.status == 'interrupted' || t.status == 'paused');
-    final finished = const {'done', 'failed', 'declined', 'cancelled', 'expired'}.contains(t.status);
-    final buttons = <Widget>[
-      if (done && t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING) ...[
-        FilledButton.icon(style: secondaryButtonStyle(context), onPressed: () => _save(t), icon: Icon(AppIcons.download, size: 18), label: Text(l.save)),
-        OutlinedButton.icon(onPressed: () => _share(t), icon: Icon(AppIcons.share, size: 18), label: Text(l.mShare)),
-      ],
+    final resumable =
+        t.direction == TransferDirection.TRANSFER_DIRECTION_OUTGOING &&
+        (t.status == 'interrupted' || t.status == 'paused');
+    final finished = const {
+      'done',
+      'failed',
+      'declined',
+      'cancelled',
+      'expired',
+    }.contains(t.status);
+    Widget action(
+      IconData icon,
+      String label,
+      VoidCallback onPressed, {
+      bool primary = false,
+    }) => IconButton(
+      tooltip: label,
+      onPressed: onPressed,
+      icon: Icon(icon, size: 20),
+      style: IconButton.styleFrom(
+        backgroundColor: primary ? context.palette.fill : Colors.transparent,
+        foregroundColor: context.palette.textDim,
+        minimumSize: const Size(40, 40),
+        padding: const EdgeInsets.all(8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Radii.md),
+        ),
+      ),
+    );
+    final secondary = <({String label, IconData icon, VoidCallback run})>[
+      if (done && t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING)
+        (label: l.mShare, icon: AppIcons.share, run: () => _share(t)),
       if (resumable)
-        FilledButton.icon(style: secondaryButtonStyle(context), onPressed: () => state.resumeTransfer(t.id), icon: Icon(AppIcons.arrowClockwise, size: 18), label: Text(l.continueAction)),
-      if (const {'scanning', 'queued', 'waiting', 'asking', 'active', 'paused', 'interrupted'}.contains(t.status))
-        OutlinedButton.icon(onPressed: () => state.cancelTransfer(t.id), icon: Icon(AppIcons.xmark, size: 18), label: Text(t.status == 'queued' ? l.sendRemoveQueued : l.cancel)),
+        (
+          label: l.cancel,
+          icon: AppIcons.xmark,
+          run: () => state.cancelTransfer(t.id),
+        ),
       if (finished || resumable || done)
-        TextButton(
-          onPressed: () => state.deleteTransfers(ids: [t.id]),
-          style: TextButton.styleFrom(foregroundColor: context.palette.textDim),
-          child: Text(l.mDelete),
+        (
+          label: l.mDelete,
+          icon: AppIcons.trash,
+          run: () => state.deleteTransfers(ids: [t.id]),
+        ),
+    ];
+    final buttons = <Widget>[
+      if (done && t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING)
+        action(AppIcons.download, l.save, () => _save(t), primary: true),
+      if (resumable)
+        action(
+          AppIcons.arrowClockwise,
+          l.continueAction,
+          () => state.resumeTransfer(t.id),
+          primary: true,
+        ),
+      if (!resumable &&
+          const {
+            'scanning',
+            'queued',
+            'waiting',
+            'asking',
+            'active',
+          }.contains(t.status))
+        action(
+          AppIcons.xmark,
+          t.status == 'queued' ? l.sendRemoveQueued : l.cancel,
+          () => state.cancelTransfer(t.id),
+        ),
+      if (secondary.length == 1)
+        action(
+          secondary.first.icon,
+          secondary.first.label,
+          secondary.first.run,
+        ),
+      if (secondary.length > 1)
+        PopupMenuButton<int>(
+          tooltip: l.moreActions,
+          icon: Icon(
+            AppIcons.ellipsis,
+            size: 20,
+            color: context.palette.textDim,
+          ),
+          padding: const EdgeInsets.all(8),
+          constraints: const BoxConstraints(minWidth: 140),
+          onSelected: (i) => secondary[i].run(),
+          itemBuilder: (_) => [
+            for (var i = 0; i < secondary.length; i++)
+              PopupMenuItem(
+                value: i,
+                child: Row(
+                  children: [
+                    Icon(secondary[i].icon, size: 18),
+                    const SizedBox(width: 10),
+                    Text(secondary[i].label),
+                  ],
+                ),
+              ),
+          ],
         ),
     ];
     return buttons;
   }
 }
 
-/// Mobile filenames, metadata and actions each get their own row.
+/// Compact transfer row with metadata on the left and controls on the right.
 class MobileTransferCard extends StatelessWidget {
-  const MobileTransferCard({super.key, required this.transfer, this.actions = const []});
+  const MobileTransferCard({
+    super.key,
+    required this.transfer,
+    this.actions = const [],
+  });
   final Transfer transfer;
   final List<Widget> actions;
 
@@ -165,49 +287,89 @@ class MobileTransferCard extends StatelessWidget {
     final t = transfer;
     final l = context.l10n;
     final p = context.palette;
-    final incoming = t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING;
+    final incoming =
+        t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING;
     final active = t.status == 'active';
     final bad = const {'failed', 'declined', 'interrupted'}.contains(t.status);
-    final status = t.status == 'done' ? l.sendDelivered : transferStatusText(l, t);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: Insets.lg),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(Radii.md)),
-            child: Icon(transferIcon(t), size: 22, color: p.textDim),
+    final status = t.status == 'done'
+        ? l.sendDelivered
+        : transferStatusText(l, t);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: p.fill,
+            borderRadius: BorderRadius.circular(Radii.md),
           ),
-          const SizedBox(width: Insets.md),
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(transferTitle(l, t), maxLines: 2, overflow: TextOverflow.ellipsis,
-              style: context.text.bodyLarge?.copyWith(fontWeight: FontWeight.w600, height: 1.35)),
-            const SizedBox(height: Insets.xs),
-            Text([incoming ? l.transferFrom(t.deviceName) : l.transferTo(t.deviceName),
-              if (t.totalBytes > 0) humanBytes(t.totalBytes.toInt())].join(' · '),
-              maxLines: 2, overflow: TextOverflow.ellipsis, style: context.text.bodySmall),
-          ])),
-        ]),
-        const SizedBox(height: Insets.md),
-        if (active) ...[
-          LinearProgressIndicator(minHeight: 4, borderRadius: BorderRadius.circular(2),
-            value: t.totalBytes > 0 ? (t.doneBytes.toDouble() / t.totalBytes.toDouble()).clamp(0, 1) : null),
-          const SizedBox(height: Insets.sm),
-          Text(progressLabel(l, t), style: context.text.bodySmall),
-          if (t.currentFile.isNotEmpty)
-            Text(t.currentFile.split('/').last, maxLines: 1, overflow: TextOverflow.ellipsis, style: context.text.bodySmall),
-        ] else
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Icon(t.status == 'done' ? AppIcons.checkmarkCircle : bad ? AppIcons.exclamationmarkCircle : AppIcons.clock,
-              size: 16, color: t.status == 'done' ? p.online : bad ? p.danger : p.textDim),
-            const SizedBox(width: 6),
-            Expanded(child: Text(status, style: context.text.bodySmall?.copyWith(color: bad ? p.danger : p.textDim))),
-          ]),
+          child: Icon(transferIcon(t), size: 22, color: p.textDim),
+        ),
+        const SizedBox(width: Insets.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                transferTitle(l, t),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: context.text.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                [
+                  incoming
+                      ? l.transferFrom(t.deviceName)
+                      : l.transferTo(t.deviceName),
+                  if (t.totalBytes > 0) humanBytes(t.totalBytes.toInt()),
+                ].join(' · '),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: context.text.bodySmall,
+              ),
+              if (active) ...[
+                const SizedBox(height: 4),
+                LinearProgressIndicator(
+                  minHeight: 3,
+                  borderRadius: BorderRadius.circular(2),
+                  value: t.totalBytes > 0
+                      ? (t.doneBytes.toDouble() / t.totalBytes.toDouble())
+                            .clamp(0, 1)
+                      : null,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  progressLabel(l, t),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.text.bodySmall,
+                ),
+              ] else
+                Text(
+                  status,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.text.bodySmall?.copyWith(
+                    color: bad
+                        ? p.danger
+                        : t.status == 'done'
+                        ? p.online
+                        : p.textDim,
+                  ),
+                ),
+            ],
+          ),
+        ),
         if (actions.isNotEmpty) ...[
-          const SizedBox(height: Insets.md),
-          Wrap(spacing: Insets.sm, runSpacing: Insets.sm, crossAxisAlignment: WrapCrossAlignment.center, children: actions),
+          const SizedBox(width: 4),
+          Row(mainAxisSize: MainAxisSize.min, children: actions),
         ],
-      ]),
+      ],
     );
   }
 }
