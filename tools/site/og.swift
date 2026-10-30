@@ -58,15 +58,15 @@ func render(name: String, title: String, note: String, lang: String = "",
     try rep.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: path))
 }
 
-try render(name: "隔空贴 PasteFerry", title: "在这台电脑复制，\n到那台电脑粘贴。",
-           note: "剪贴板同步 · Mac、Windows、Linux · 免费开源",
+try render(name: "隔空贴 PasteFerry", title: "电脑与手机，\n内容随手互通。",
+           note: "剪贴板 · 历史 · 文件传送 · 免费开源",
            to: "docs/assets/og.png")
-try render(name: "隔空貼 PasteFerry", title: "在這台電腦複製，\n到那台電腦貼上。",
-           note: "剪貼簿同步 · Mac、Windows、Linux · 免費開源", lang: "zh-Hant",
+try render(name: "隔空貼 PasteFerry", title: "電腦與手機，\n內容隨手互通。",
+           note: "剪貼簿 · 歷史 · 檔案傳送 · 免費開源", lang: "zh-Hant",
            shot: "docs/assets/screenshots/zh-tw/history.png",
            to: "docs/assets/og-zh-hant.png")
-try render(name: "PasteFerry", title: "Copy on one.\nPaste on the other.",
-           note: "Clipboard sync · Mac, Windows, Linux · Free",
+try render(name: "PasteFerry", title: "Computers. Phones.\nWithin reach.",
+           note: "Clipboard · History · File transfer · Free",
            shot: "docs/assets/screenshots/en/history.png",
            to: "docs/assets/og-en.png")
 print("✓ docs/assets/og.png, og-zh-hant.png, og-en.png")

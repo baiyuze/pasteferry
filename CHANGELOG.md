@@ -12,7 +12,7 @@ This release improves file transfers on phones, adds a dedicated browser transfe
 
 ### Fixes
 
-- Android transfer rows separate filenames, device and size details, status and touch controls, so long names and large text no longer compete with action buttons. The phone web page uses the same grouped layout and bidirectional transfer icon.
+- Android and phone web transfer lists use compact rows with actions on the right, readable filenames and metadata, and the same bidirectional transfer icon. Secondary Android actions are available from the row menu.
 - Android and phone web toasts now fit their content, stay horizontally centered and use the existing theme, with wrapping for longer messages.
 
 ### Upgrade notes
