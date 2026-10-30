@@ -86,80 +86,86 @@ class _TransfersTabState extends State<TransfersTab> {
       ...state.transfers(TransferDirection.TRANSFER_DIRECTION_OUTGOING),
     ]..sort((a, b) => b.createdAtUnix.compareTo(a.createdAtUnix));
 
-    return ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: Insets.xl),
-      children: [
-        MobileHeader(title: l.navSend),
-        MobileGroup(
-          title: l.navDevices,
-          footer: devices.isEmpty ? l.mNoOnlineDevices : null,
-          children: [
-            for (final d in devices)
-              Padding(
-                padding: const EdgeInsets.all(Insets.lg),
-                child: Row(
-                  children: [
-                    Icon(
-                      AppIcons.deviceLaptop,
-                      size: 24,
-                      color: context.palette.textDim,
-                    ),
-                    const SizedBox(width: Insets.md),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            d.name,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: context.text.bodyLarge,
-                          ),
-                          Text(
-                            routeLabel(l, state, d),
-                            style: context.text.bodySmall,
-                          ),
-                        ],
+    return SafeArea(
+      bottom: false,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: Insets.xl),
+        children: [
+          MobileHeader(title: l.navSend),
+          MobileGroup(
+            title: l.navDevices,
+            footer: devices.isEmpty ? l.mNoOnlineDevices : null,
+            children: [
+              for (final d in devices)
+                Padding(
+                  padding: const EdgeInsets.all(Insets.lg),
+                  child: Row(
+                    children: [
+                      Icon(
+                        AppIcons.deviceLaptop,
+                        size: 24,
+                        color: context.palette.textDim,
                       ),
-                    ),
-                    const SizedBox(width: Insets.sm),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 140),
-                      child: FilledButton(
-                        style: secondaryButtonStyle(context),
-                        onPressed: _picking ? null : () => _send(state, d),
-                        child: Text(
-                          l.sendChooseFiles,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
+                      const SizedBox(width: Insets.md),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              d.name,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: context.text.bodyLarge,
+                            ),
+                            Text(
+                              routeLabel(l, state, d),
+                              style: context.text.bodySmall,
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            if (devices.isEmpty && widget.onPair != null)
-              MobileTile(title: l.addDevice, onTap: widget.onPair),
-          ],
-        ),
-        if (rows.isNotEmpty)
-          MobileGroup(
-            title: l.friendHistory,
-            children: [
-              for (final t in rows)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    Insets.lg,
-                    Insets.md,
-                    Insets.lg,
-                    Insets.md,
+                      const SizedBox(width: Insets.sm),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 140),
+                        child: FilledButton(
+                          style: secondaryButtonStyle(context),
+                          onPressed: _picking ? null : () => _send(state, d),
+                          child: Text(
+                            l.sendChooseFiles,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  child: MobileTransferCard(transfer: t, actions: _actions(t)),
                 ),
+              if (devices.isEmpty && widget.onPair != null)
+                MobileTile(title: l.addDevice, onTap: widget.onPair),
             ],
           ),
-      ],
+          if (rows.isNotEmpty)
+            MobileGroup(
+              title: l.friendHistory,
+              children: [
+                for (final t in rows)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      Insets.lg,
+                      Insets.md,
+                      Insets.lg,
+                      Insets.md,
+                    ),
+                    child: MobileTransferCard(
+                      transfer: t,
+                      actions: _actions(t),
+                    ),
+                  ),
+              ],
+            ),
+        ],
+      ),
     );
   }
 

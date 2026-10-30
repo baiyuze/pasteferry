@@ -7,6 +7,7 @@ import 'package:pasteferry_ui/i18n.dart';
 import 'package:pasteferry_ui/main.dart' show AppScope;
 import 'package:pasteferry_ui/mobile/mobile_app.dart';
 import 'package:pasteferry_ui/mobile/transfers_tab.dart';
+import 'package:pasteferry_ui/mobile/ui.dart';
 
 class _State extends AppState {
   final cancelled = <String>[];
@@ -74,10 +75,12 @@ void main() {
     addTearDown(state.dispose);
     await tester.pumpWidget(AppScope(state: state, child: MaterialApp(
       theme: buildMobileTheme(Brightness.light), locale: const Locale('zh'),
+      builder: (_, child) => MediaQuery(data: const MediaQueryData(size: Size(360, 800), padding: EdgeInsets.only(top: 32)), child: child!),
       localizationsDelegates: AppLocalizations.localizationsDelegates, supportedLocales: supportedLocales,
       home: const Scaffold(body: TransfersTab()),
     )));
     await tester.pumpAndSettle();
+    expect(tester.getTopLeft(find.byType(MobileHeader)).dy, greaterThanOrEqualTo(32));
     final title = find.text('report.pdf');
     expect(tester.getTopLeft(find.byTooltip('保存')).dx, greaterThanOrEqualTo(tester.getTopRight(title).dx));
     expect(tester.getSize(find.byType(MobileTransferCard)).height, lessThan(105));
