@@ -34,7 +34,7 @@
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
   <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
-  <link rel="stylesheet" href="../../assets/feedback.css?v=de6e3a6394">
+  <link rel="stylesheet" href="../../assets/feedback.css?v=ce9ca376ee">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 </head>
@@ -81,7 +81,6 @@
   <main id="main" class="wrap feedback-shell">
     <h1>ディスカッションとフィードバック</h1>
     <p class="feedback-intro">不具合の報告、機能の提案、使い方の共有はこちら。</p>
-    <p class="feedback-notice">投稿は審査を通過すると自動公開されます。AI 審査を有効にしている場合、文章を DeepSeek などの外部 AI サービスに送信します。パスワード、API キー、個人情報を含めないでください。 <a href="../privacy/">プライバシー</a></p>
     <p id="feedback-status" class="feedback-status" role="status" aria-live="polite"></p>
     <div id="feedback-toolbar" class="feedback-toolbar">
       <select id="feedback-category" aria-label="カテゴリー"><option value="">すべて</option><option value="bug">不具合報告</option><option value="idea">機能の提案</option><option value="discussion">情報交換</option></select>
@@ -114,7 +113,7 @@
     </section>
     <noscript><p>接続できません。しばらくしてから再度お試しください。 JavaScript</p></noscript>
   </main>
-  <script type="application/json" id="feedback-copy">{"name": "ディスカッションとフィードバック", "lede": "不具合の報告、機能の提案、使い方の共有はこちら。", "all": "すべて", "bug": "不具合報告", "idea": "機能の提案", "discussion": "情報交換", "new": "新しいトピック", "mine": "自分の投稿", "mine_note": "このブラウザーに保存された記録のみ表示します。閲覧データの削除や端末の変更で、未公開の投稿を確認できなくなる場合があります。", "nickname": "ニックネーム", "title": "タイトル", "body": "本文", "category": "カテゴリー", "platform": "OS", "version": "App バージョン", "optional": "任意", "submit": "審査に送信", "reply": "返信する", "back": "一覧に戻る", "more": "もっと見る", "empty": "公開されたトピックはまだありません。ご意見をお寄せください。", "loading": "読み込み中……", "error": "接続できません。しばらくしてから再度お試しください。", "saved": "下書きをこのブラウザーに保存しました", "storage_warning": "ブラウザーに保存できません。再読み込みすると下書きや投稿確認用の情報が失われる場合があります。", "submitted": "送信しました。審査を通過すると公開されます。", "uncertain": "送信結果を確認できません。元の投稿を再送してください。", "withdrawn": "取り下げ済み", "expired": "記録の有効期限切れ", "confirm_withdraw": "この投稿を取り下げますか？公開も停止します。", "clear": "ローカルの記録を削除", "confirm_clear": "下書きと確認用の情報を削除しますか？サーバー上の投稿は取り下げられません。", "retry": "再送する", "withdraw": "取り下げる", "official": "公式", "pending": "AI 審査中", "manual": "手動審査を待っています", "approved": "公開済み", "rejected": "承認されませんでした", "hidden": "非公開", "open": "未対応", "in_progress": "対応中", "resolved": "解決済み", "closed": "終了", "notice": "投稿は審査を通過すると自動公開されます。AI 審査を有効にしている場合、文章を DeepSeek などの外部 AI サービスに送信します。パスワード、API キー、個人情報を含めないでください。", "draft": "問題やアイデアを入力してください……", "privacy": "プライバシー", "clearing": "ローカルの記録を消しても投稿は取り下げられません。必要な投稿を先に取り下げてください。", "no_topic": "このトピックは存在しないか、まだ公開されていません。", "all_languages": "すべての言語", "language": "投稿の言語", "published": "公開済み", "failure": "不適切な内容が含まれている可能性があります。修正して再度お試しください。", "visitor": "ゲスト", "lang": "ja"}</script>
+  <script type="application/json" id="feedback-copy">{"name": "ディスカッションとフィードバック", "lede": "不具合の報告、機能の提案、使い方の共有はこちら。", "all": "すべて", "bug": "不具合報告", "idea": "機能の提案", "discussion": "情報交換", "new": "新しいトピック", "mine": "自分の投稿", "mine_note": "このブラウザーに保存された記録のみ表示します。閲覧データの削除や端末の変更で、未公開の投稿を確認できなくなる場合があります。", "nickname": "ニックネーム", "title": "タイトル", "body": "本文", "category": "カテゴリー", "platform": "OS", "version": "App バージョン", "optional": "任意", "submit": "審査に送信", "reply": "返信する", "back": "一覧に戻る", "more": "もっと見る", "empty": "公開されたトピックはまだありません。ご意見をお寄せください。", "loading": "読み込み中……", "error": "接続できません。しばらくしてから再度お試しください。", "saved": "下書きをこのブラウザーに保存しました", "storage_warning": "ブラウザーに保存できません。再読み込みすると下書きや投稿確認用の情報が失われる場合があります。", "submitted": "送信しました。審査を通過すると公開されます。", "uncertain": "送信結果を確認できません。元の投稿を再送してください。", "withdrawn": "取り下げ済み", "expired": "記録の有効期限切れ", "confirm_withdraw": "この投稿を取り下げますか？公開も停止します。", "clear": "ローカルの記録を削除", "confirm_clear": "下書きと確認用の情報を削除しますか？サーバー上の投稿は取り下げられません。", "retry": "再送する", "withdraw": "取り下げる", "official": "公式", "pending": "AI 審査中", "manual": "手動審査を待っています", "approved": "公開済み", "rejected": "承認されませんでした", "hidden": "非公開", "open": "未対応", "in_progress": "対応中", "resolved": "解決済み", "closed": "終了", "draft": "問題やアイデアを入力してください……", "privacy": "プライバシー", "clearing": "ローカルの記録を消しても投稿は取り下げられません。必要な投稿を先に取り下げてください。", "no_topic": "このトピックは存在しないか、まだ公開されていません。", "all_languages": "すべての言語", "language": "投稿の言語", "published": "公開済み", "failure": "不適切な内容が含まれている可能性があります。修正して再度お試しください。", "visitor": "ゲスト", "lang": "ja"}</script>
   <script src="../../assets/feedback.js?v=4405ff0989" defer></script>
 
   <footer class="footer">

@@ -21,7 +21,6 @@
 .feedback-form label[hidden],.feedback-shell [hidden] {display:none!important}
 .feedback-fields {display:grid; gap:1rem; grid-template-columns:1fr 1fr}
 .feedback-note {font-size:.86rem; line-height:1.8; color:var(--dim)}
-.feedback-notice {border-left:2px solid var(--blue); padding:.3rem 0 .3rem 1rem; line-height:1.8; color:var(--ink-2)}
 .feedback-status {line-height:1.8; color:var(--blue-hi); min-height:1.8em; overflow-wrap:anywhere}
 .feedback-mine {margin-top:4rem; padding-top:2rem; border-top:1px solid var(--rule)}
 .feedback-mine-head {display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem}

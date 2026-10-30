@@ -2857,7 +2857,6 @@ def feedback_page(code: str) -> str:
   <main id="main" class="wrap feedback-shell">
     <h1>{esc(f['name'])}</h1>
     <p class="feedback-intro">{esc(f['lede'])}</p>
-    <p class="feedback-notice">{esc(f['notice'])} <a href="../privacy/">{esc(f['privacy'])}</a></p>
     <p id="feedback-status" class="feedback-status" role="status" aria-live="polite"></p>
     <div id="feedback-toolbar" class="feedback-toolbar">
       <select id="feedback-category" aria-label="{esc(f['category'])}"><option value="">{esc(f['all'])}</option>{categories}</select>
