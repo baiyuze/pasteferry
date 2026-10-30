@@ -1,5 +1,31 @@
 # 更新记录 / Changelog
 
+## 2.8.0 — 2026-10-30
+
+Android can now send and receive files with Send Files (隔空传送), the same feature the desktop apps have.
+
+### Changes
+
+- **Android file transfer**: the phone has a new Send Files page. Pick a device, choose files or folders, and watch progress; received files can be saved to Downloads or shared to other apps, and an interrupted transfer continues where it stopped. On the same local network the phone uses the same encrypted TCP fast link as the computers, and the phone and a computer can send to each other in both directions.
+- **Android capability reporting**: the phone now advertises the file transfer capabilities it actually has, so computers stop offering it a feature it cannot use.
+
+### Fixes
+
+- Sending a file from a computer to a phone waited 30 seconds, then failed with "no answer" on every reconnect. The Android app announced file-transfer support it did not implement, and the desktop trusted that announcement; the phone now implements it, and computers no longer treat an older Android build as able to receive files.
+- A received clipboard item whose download timed out was marked failed with no log entry at all, which made the case impossible to diagnose from a diagnostics report. It now logs the reason.
+- A push that failed right after the offer was delivered was dropped permanently when offline catch-up was off. It is now retried when the connection returns, without touching the offline catch-up setting.
+- An outgoing transfer that got no answer showed only "Interrupted". It now says the other device did not respond.
+- The diagnostics report now lists each device's version and whether it can receive files.
+- Copying files whose paths cannot be read (for example from a zip preview or a mail attachment) failed silently. The app now tells the user that nothing was synced.
+- The phone web page showed its toast on a white surface over a near-white page, so the message was hard to see. The toast is now dark with light text, matching the app.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended. The diagnostics report and the retry for failed pushes are in the background service, and computers need this version to be offered file transfer from an Android phone.
+- **Server**: no update needed.
+- **Android**: required for file transfer. Install the arm64 APK on Android 9 or later; the fixed signing key supports updating in place.
+- The device-to-device protocol is unchanged: a phone and a computer on 2.8.0 use the existing file transfer messages, and older Android builds keep working for clipboard sync.
+
 ## 2.7.4 — 2026-10-29
 
 Android can copy and share images selected from the phone, and phone notifications no longer cover the bottom controls.
