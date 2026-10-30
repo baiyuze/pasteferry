@@ -160,7 +160,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           visible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0',
         )}
       >
-        <div className="max-w-full rounded-md border border-border bg-surface px-4 py-2.5 text-center text-[14px] font-medium text-text shadow-[0_6px_24px_rgba(0,0,0,0.12)]">
+        <div className="max-w-full rounded-md bg-toast px-4 py-2.5 text-center text-[14px] font-medium text-toast-text shadow-[0_6px_24px_rgba(0,0,0,0.24)]">
           {msg}
         </div>
       </div>

@@ -19,6 +19,9 @@
   --pf-warning: #b25000;
   --pf-danger: #d70015;
   --pf-bar: rgba(245, 245, 244, 0.86);
+  /* 提示条：与 App 的 snackBarTheme 一致，深色底白字，浅色页面上才看得清 */
+  --pf-toast: #2c2c2e;
+  --pf-toast-text: #ffffff;
   color-scheme: light dark;
 }
 
@@ -37,6 +40,8 @@
     --pf-warning: #ff9f0a;
     --pf-danger: #ff453a;
     --pf-bar: rgba(28, 28, 30, 0.86);
+    --pf-toast: #3a3a3c;
+    --pf-toast-text: #f5f5f7;
   }
 }
 
@@ -54,6 +59,8 @@
   --color-warning: var(--pf-warning);
   --color-danger: var(--pf-danger);
   --color-bar: var(--pf-bar);
+  --color-toast: var(--pf-toast);
+  --color-toast-text: var(--pf-toast-text);
 
   --radius-sm: 6px;
   --radius-md: 10px;
