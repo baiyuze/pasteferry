@@ -86,16 +86,17 @@ func (f *fakeEngine) ImagePreview(_ context.Context, id string, _ int) (string, 
 }
 
 type fixture struct {
-	srv      *Server
-	db       *store.Store
-	engine   *fakeEngine
-	receive  string
-	base     string
-	now      *time.Time
-	nowMu    *sync.Mutex
-	events   chan *pb.Event
-	changed  chan *pb.WebShareStatus
-	protects int
+	srv       *Server
+	db        *store.Store
+	engine    *fakeEngine
+	receive   string
+	base      string
+	now       *time.Time
+	nowMu     *sync.Mutex
+	events    chan *pb.Event
+	changed   chan *pb.WebShareStatus
+	protects  int
+	transfers chan *pb.Transfer
 }
 
 func newFixture(t *testing.T) *fixture {
@@ -107,7 +108,7 @@ func newFixture(t *testing.T) *fixture {
 	}
 	t.Cleanup(func() { db.Close() })
 	f := &fixture{db: db, receive: filepath.Join(dir, "Downloads"), events: make(chan *pb.Event, 64),
-		changed: make(chan *pb.WebShareStatus, 64), nowMu: &sync.Mutex{}}
+		transfers: make(chan *pb.Transfer, 128), changed: make(chan *pb.WebShareStatus, 64), nowMu: &sync.Mutex{}}
 	now := time.Now()
 	f.now = &now
 	f.engine = &fakeEngine{db: db, onRecord: func(id string) {
@@ -129,7 +130,8 @@ func newFixture(t *testing.T) *fixture {
 			f.protects++
 			return append([]byte("sealed:"), b...), nil
 		},
-		Unprotect: func(b []byte) ([]byte, error) { return bytes.TrimPrefix(b, []byte("sealed:")), nil },
+		Unprotect:         func(b []byte) ([]byte, error) { return bytes.TrimPrefix(b, []byte("sealed:")), nil },
+		OnTransferChanged: func(t *pb.Transfer) { f.transfers <- t },
 		OnChanged: func(st *pb.WebShareStatus) {
 			select {
 			case f.changed <- st:

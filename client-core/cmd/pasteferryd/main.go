@@ -490,7 +490,8 @@ func run(dataDir string) error {
 		OnChanged: func(st *pb.WebShareStatus) {
 			hub.Publish(rpc.EventWebShareChanged(st))
 		},
-		WorkDir: filepath.Join(paths.Root, "webshare"),
+		OnTransferChanged: func(t *pb.Transfer) { hub.Publish(rpc.EventTransferChanged(t)) },
+		WorkDir:           filepath.Join(paths.Root, "webshare"),
 	})
 	defer web.Close()
 

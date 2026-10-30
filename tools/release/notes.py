@@ -11,6 +11,23 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'changes': [],
+ 'date': '2026-10-30',
+ 'fixes': [("Browser-to-computer file transfers now appear immediately in the computer's Received list. "
+            'Computer-to-browser transfers also appear in Sent, with per-file completion, cancellation and '
+            'live updates.',
+            '网页发给电脑的文件现在会立即出现在电脑「收到」列表；电脑发给网页的文件也会显示在「发出」列表，支持逐文件完成状态、取消和实时刷新。',
+            'ブラウザからパソコンへ送ったファイルが「受信済み」にすぐ表示されるよう修正しました。逆方向も「送信済み」に表示され、ファイルごとの完了状態、キャンセル、即時更新に対応します。',
+            '網頁傳給電腦的檔案現在會立即出現在電腦「收到」清單；電腦傳給網頁的檔案也會顯示在「傳出」清單，支援逐一檔案的完成狀態、取消和即時更新。',
+            '網頁傳給電腦的檔案現在會立即出現在電腦「收到」列表；電腦傳給網頁的檔案也會顯示在「傳出」列表，支援逐一檔案的完成狀態、取消和即時更新。'),
+           ('Retained browser transfer records from 2.8.1 are imported into desktop history once. Retries '
+            'and restarts do not duplicate records or restore deleted history; removing a browser cancels '
+            'its waiting transfers without deleting received files.',
+            '升级后会一次性补入 2.8.1 仍保留的网页传输记录；重试和重启不会重复记录或恢复已删除的历史。移除网页设备会取消待传任务，并保留已收到的文件。',
+            '2.8.1で保持されているブラウザ転送履歴を一度だけパソコンに取り込みます。再試行や再起動で履歴が重複したり削除済み履歴が復活したりしません。ブラウザの登録解除は待機中の転送をキャンセルし、受信済みファイルは保持します。',
+            '升級後會一次補入 2.8.1 仍保留的網頁傳輸記錄；重試和重新啟動不會重複記錄或還原已刪除的歷史。移除網頁裝置會取消待傳工作，並保留已收到的檔案。',
+            '升級後會一次補入 2.8.1 仍保留的網頁傳輸記錄；重試和重新啟動不會重複記錄或還原已刪除的歷史。移除網頁裝置會取消待傳工作，並保留已收到的檔案。')],
+ 'version': '2.8.2'},
 {'version': '2.8.1',
  'date': '2026-10-30',
  'changes': [('Phone web transfers now have a separate Send Files page with batch uploads, encrypted '

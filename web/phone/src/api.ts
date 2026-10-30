@@ -245,7 +245,7 @@ export function parseHash(): { i: string | null; s: string | null; k: string | n
 export interface WebTransfer {
   id: string
   direction: 'upload' | 'download'
-  status: 'ready' | 'done'
+  status: 'ready' | 'done' | 'cancelled'
   items: WebItem[]
   downloaded: boolean[] | null
   at: number

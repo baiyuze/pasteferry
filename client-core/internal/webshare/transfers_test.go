@@ -33,6 +33,7 @@ func TestBrowserTransfersAreSeparatePersistentAndSessionScoped(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	queued.Id = strings.TrimPrefix(queued.Id, "web:"+c.sid+":")
 	// Host sources changing or disappearing cannot change the queued snapshot.
 	_ = os.WriteFile(paths[0], []byte("changed"), 0600)
 	_ = os.Remove(paths[1])
@@ -192,6 +193,7 @@ func TestBrowserUploadsAreAtomicIdempotentAndNeverClipboardItems(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	queued.Id = strings.TrimPrefix(queued.Id, "web:"+c.sid+":")
 	if err := f.srv.RemoveSession(c.sid); err != nil {
 		t.Fatal(err)
 	}

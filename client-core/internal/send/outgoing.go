@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -155,7 +156,7 @@ func (e *Engine) Resume(id string) error {
 	if err != nil {
 		return ErrNotFound
 	}
-	if t.Direction != store.Outgoing || (t.Status != store.TransferInterrupted && t.Status != store.TransferPaused) {
+	if strings.HasPrefix(t.DeviceID, "web:") || t.Direction != store.Outgoing || (t.Status != store.TransferInterrupted && t.Status != store.TransferPaused) {
 		return ErrNotResumable
 	}
 	t.Status, t.Error = store.TransferQueued, ""

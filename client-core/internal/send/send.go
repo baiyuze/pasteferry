@@ -257,6 +257,9 @@ func (e *Engine) recover() {
 	}
 	now := e.opts.Now()
 	for _, t := range list {
+		if strings.HasPrefix(t.DeviceID, "web:") {
+			continue
+		}
 		switch {
 		case t.Direction == store.Outgoing && t.Status == store.TransferScanning:
 			e.wg.Add(1)

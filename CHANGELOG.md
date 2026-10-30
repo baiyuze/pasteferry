@@ -1,5 +1,21 @@
 # 更新记录 / Changelog
 
+## 2.8.2 — 2026-10-30
+
+This release fixes missing desktop history for browser file transfers.
+
+### Fixes
+
+- Browser-to-computer file transfers now appear immediately in the computer's Received list. Computer-to-browser transfers also appear in Sent, with per-file completion, cancellation and live updates.
+- Retained browser transfer records from 2.8.1 are imported into desktop history once. Retries and restarts do not duplicate records or restore deleted history; removing a browser cancels its waiting transfers without deleting received files.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: update the computer hosting the phone web page, then reload the browser page. Existing browser sessions and saved files are preserved.
+- **Android**: native app transfers were not affected by this browser history issue. Android browser users receive the fix from the updated computer.
+- **Server**: no update needed. The device-to-device protocol is unchanged.
+- A browser download is marked complete when handed to the browser; the page cannot confirm that the browser saved it to disk.
+
 ## 2.8.1 — 2026-10-30
 
 This release improves file transfers on phones, adds a dedicated browser transfer page, and refreshes the cross-device product introduction.

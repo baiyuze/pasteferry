@@ -133,12 +133,12 @@ export function TransfersView({ active }: { active: boolean }) {
           <div className="mt-1 text-[12px] text-dim">{row.direction === 'upload' ? t('transferToComputer') : t('transferFromComputer')} · {humanSize(row.items.reduce((n, i) => n + i.size, 0))}</div>
           <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[12px] text-dim">
             <time dateTime={new Date(row.at).toISOString()}>{new Date(row.at).toLocaleString()}</time>
-            <span className="inline-flex items-center gap-1">{row.status === 'done' && <Checkmark size={14} className="text-online" />}{row.direction === 'upload' ? t('uploaded') : row.status === 'done' ? t('transferHandedOff') : t('transferReady')}</span>
+            <span className="inline-flex items-center gap-1">{row.status === 'done' && <Checkmark size={14} className="text-online" />}{row.status === 'cancelled' ? t('transferCancelled') : row.direction === 'upload' ? t('uploaded') : row.status === 'done' ? t('transferHandedOff') : t('transferReady')}</span>
           </div>
           {download?.id === row.id && <progress className="mt-2 h-1 w-full accent-accent" max={1} value={download.progress} />}
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          {row.direction === 'download' && <Button kind="secondary" aria-label={t('download')} title={t('download')} className="h-10 w-10" disabled={!!download || !!ready} onClick={() => row.items.length === 1 ? receive(row, 0) : setFileList(row)}><ArrowDownload size={20} /></Button>}
+          {row.direction === 'download' && row.status !== 'cancelled' && <Button kind="secondary" aria-label={t('download')} title={t('download')} className="h-10 w-10" disabled={!!download || !!ready} onClick={() => row.items.length === 1 ? receive(row, 0) : setFileList(row)}><ArrowDownload size={20} /></Button>}
           <Button kind="plain" aria-label={t('transferDelete')} title={t('transferDelete')} className="h-10 w-10 text-dim" disabled={download?.id === row.id} onClick={() => remove(row)}><Trash size={18} /></Button>
         </div>
       </div>

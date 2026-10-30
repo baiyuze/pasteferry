@@ -162,11 +162,11 @@
             <div class="os-grid">
               <div class="os-steps">
                 <ol class="steps">
-                <li><a href="https://github.com/baiyuze/pasteferry/releases/download/v2.8.1/pasteferry-server-windows-amd64.zip">pasteferry-server-windows-amd64.zip</a> をダウンロードし、右クリックで「すべて展開」します。</li>
+                <li><a href="https://github.com/baiyuze/pasteferry/releases/download/v2.8.2/pasteferry-server-windows-amd64.zip">pasteferry-server-windows-amd64.zip</a> をダウンロードし、右クリックで「すべて展開」します。</li>
                 <li>展開したフォルダーを開き、<code>install.cmd</code> をダブルクリックします。<span class="aside">「Windows によって PC が保護されました」と出たら「詳細情報」から「実行」を、ユーザーアカウント制御が出たら「はい」を押します。サーバーはまだコード署名していないため、一度だけ確認されます。</span></li>
                 <li>インストールは新しく開くウィンドウで進みます。最後に表示される <code>ws://…/signal</code> がアプリに入力するアドレスです。</li>
                 </ol>
-                <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.8.1/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Windows 版サーバーをダウンロード</a>
+                <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.8.2/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Windows 版サーバーをダウンロード</a>
                 <ul class="points">
                 <li><strong>Windows サービスとして動作：</strong>Windows の起動とともに立ち上がり、サインイン不要で、ウィンドウも出ません。「サービス」では PasteFerry Server と表示されます。</li>
                 <li><strong>ファイアウォールは設定済み：</strong>pasteferry-server.exe だけを対象にした受信規則をスクリプトが追加するので、ポートを開ける必要はありません。</li>
@@ -194,7 +194,7 @@
 <span class="t-step">&gt; Starting</span>
   √ Running
 
-Installed: pasteferry-server 2.8.1. It runs as a Windows service and starts with Windows.
+Installed: pasteferry-server 2.8.2. It runs as a Windows service and starts with Windows.
 In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
@@ -228,7 +228,7 @@ In PasteFerry on each computer, set Settings → Connection → Custom server to
                   <li>「ターミナル」を開き、次の行を順に実行します：
                 <div class="code">
                   <button class="copy" type="button" data-done="コピーしました">コピー</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.8.1/pasteferry-server-macos.tar.gz
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.8.2/pasteferry-server-macos.tar.gz
 tar xzf pasteferry-server-macos.tar.gz
 cd pasteferry-server-macos
 ./install.sh</code></pre>
@@ -252,7 +252,7 @@ cd pasteferry-server-macos
 <span class="t-step">▶ Starting</span>
   ✓ Running
 
-Installed: pasteferry-server 2.8.1. It starts whenever you log in to this Mac.
+Installed: pasteferry-server 2.8.2. It starts whenever you log in to this Mac.
 In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
@@ -284,7 +284,7 @@ In PasteFerry on each computer, set Settings → Connection → Custom server to
                   <li>そのマシン上で（または ssh でログインして）次の行を順に実行します：<span class="aside">ARM（64 ビット OS の Raspberry Pi など）では <code>amd64</code> を <code>arm64</code> に置き換えます。</span>
                 <div class="code">
                   <button class="copy" type="button" data-done="コピーしました">コピー</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.8.1/pasteferry-server-linux-amd64.tar.gz
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.8.2/pasteferry-server-linux-amd64.tar.gz
 tar xzf pasteferry-server-linux-amd64.tar.gz
 cd pasteferry-server-linux-amd64
 sudo ./install.sh</code></pre>
@@ -307,7 +307,7 @@ sudo ./install.sh</code></pre>
 <span class="t-step">▶ Starting</span>
   ✓ Running
 
-Installed: pasteferry-server 2.8.1
+Installed: pasteferry-server 2.8.2
 In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
@@ -347,7 +347,7 @@ Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768
         <p class="intro">別のコンピューターのブラウザーで <code>http://192.168.1.20:8787/healthz</code>（あなたのアドレスに置き換え）を開きます。次の 1 行が表示されれば、ネットワークはつながっています。</p>
         <figure class="browser" role="img" aria-label="ブラウザーで http://192.168.1.20:8787/healthz を開くと、サーバーの状態 ok とバージョンが表示される">
           <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">http://192.168.1.20:8787/healthz</span></div>
-          <pre class="b-body">{"status":"ok","version":"2.8.1"}</pre>
+          <pre class="b-body">{"status":"ok","version":"2.8.2"}</pre>
         </figure>
         <p class="note">開けない場合は、下の<a href="#faq">よくある質問</a>をご覧ください。</p>
       </div>
@@ -402,7 +402,7 @@ Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768
         <div class="cta">
           <a class="button" href="../../ja/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry をダウンロード</a>
         </div>
-        <p class="note">バージョン 2.8.1、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。 Android 9以降。スマホはWeb版も利用可能。</p>
+        <p class="note">バージョン 2.8.2、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。 Android 9以降。スマホはWeb版も利用可能。</p>
         <a class="source" href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md">サーバーの詳しい構築手順（グローバル IP、Docker を含む、英語・中国語）</a>
       </div>
     </section>

@@ -2,6 +2,7 @@ package send
 
 import (
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -143,6 +144,18 @@ func (m *meter) live(p *pb.Transfer) {
 
 // toProto 转成界面用的格式。正在传的带上实时进度；收完的顺便看看文件还在不在原处。
 func (e *Engine) toProto(t store.Transfer) *pb.Transfer {
+	p := TransferProto(t)
+	e.mu.Lock()
+	m := e.progress[t.ID]
+	e.mu.Unlock()
+	if m != nil {
+		m.live(p)
+	}
+	return p
+}
+
+// TransferProto converts persisted history for both native and browser transfers.
+func TransferProto(t store.Transfer) *pb.Transfer {
 	p := &pb.Transfer{
 		Id: t.ID, Direction: pb.TransferDirection(t.Direction), DeviceId: t.DeviceID, DeviceName: t.DeviceName,
 		Status: t.Status, Paths: t.Paths, TotalBytes: t.TotalBytes, DoneBytes: t.DoneBytes,
@@ -159,12 +172,6 @@ func (e *Engine) toProto(t store.Transfer) *pb.Transfer {
 	for _, it := range t.Items {
 		p.Items = append(p.Items, &pb.ClipItem{Name: it.Name, Size: it.Size, IsDir: it.IsDir})
 	}
-	e.mu.Lock()
-	m := e.progress[t.ID]
-	e.mu.Unlock()
-	if m != nil {
-		m.live(p)
-	}
 	if t.Direction == store.Incoming && t.Status == store.TransferDone {
 		for _, path := range t.Paths {
 			_, err := os.Lstat(path)
@@ -179,6 +186,9 @@ func (e *Engine) janitor() {
 	now := e.opts.Now()
 	if list, err := e.opts.Store.UnfinishedTransfers(); err == nil {
 		for _, t := range list {
+			if strings.HasPrefix(t.DeviceID, "web:") {
+				continue
+			}
 			e.mu.Lock()
 			running := e.out[t.ID] != nil || e.in[t.ID] != nil || e.progress[t.ID] != nil
 			e.mu.Unlock()

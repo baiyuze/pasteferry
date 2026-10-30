@@ -8,6 +8,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
+
+	"github.com/baiyuze/pasteferry/client-core/internal/send"
 
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
@@ -60,8 +63,7 @@ func (s *Server) QueueFiles(ctx context.Context, sessionID string, paths []strin
 			_ = os.RemoveAll(dir)
 		}
 	}()
-	t := store.WebTransfer{ID: id, Session: sessionID, Direction: "download", Status: "ready", CreatedAt: s.opts.Now().UnixMilli()}
-	var total int64
+	t := store.WebTransfer{ID: id, Session: sessionID, Direction: "download", Status: "ready", CreatedAt: s.opts.Now().UnixMilli(), SourcePaths: append([]string(nil), paths...)}
 	for index, path := range paths {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -106,13 +108,13 @@ func (s *Server) QueueFiles(ctx context.Context, sessionID string, paths []strin
 		t.Items = append(t.Items, store.Item{Name: info.Name(), Size: n})
 		t.Paths = append(t.Paths, dst)
 		t.Downloaded = append(t.Downloaded, false)
-		total += n
 	}
-	if err := s.opts.Store.PutWebTransfer(t); err != nil {
+	record, err := s.saveTransfer(t, s.sessionName(sess))
+	if err != nil {
 		return nil, err
 	}
 	ok = true
-	return &pb.Transfer{Id: id, DeviceId: "web:" + sessionID, DeviceName: s.sessionName(sess), Status: "waiting", Direction: pb.TransferDirection_TRANSFER_DIRECTION_OUTGOING, TotalBytes: total, FileCount: int64(len(paths))}, nil
+	return send.TransferProto(*record), nil
 }
 
 func (s *Server) transferDir(session, id string) string {
@@ -175,7 +177,7 @@ func (s *Server) finishTransferUploads(sess *session, ids []string, batch string
 		t.Paths = append(t.Paths, p)
 		t.Items = append(t.Items, store.Item{Name: filepath.Base(p), Size: u.size})
 	}
-	if err := s.opts.Store.PutWebTransfer(t); err != nil {
+	if _, err := s.saveTransfer(t, s.sessionName(sess)); err != nil {
 		return nil, err
 	}
 	ok = true
@@ -184,7 +186,7 @@ func (s *Server) finishTransferUploads(sess *session, ids []string, batch string
 
 func (s *Server) transferFile(sess *session, id string, item int) (downloadFile, error) {
 	t, err := s.opts.Store.WebTransfer(sess.id, id)
-	if err != nil || t.Direction != "download" || item < 0 || item >= len(t.Paths) {
+	if err != nil || (t.Status != "ready" && t.Status != "done") || t.Direction != "download" || item < 0 || item >= len(t.Paths) {
 		return downloadFile{}, errGone
 	}
 	f := downloadFile{path: t.Paths[item], name: t.Items[item].Name, size: t.Items[item].Size, mime: mime.TypeByExtension(filepath.Ext(t.Items[item].Name))}
@@ -218,7 +220,7 @@ func (s *Server) transferRPC(sess *session, method, id string, item int) (any, e
 		}
 		return map[string]any{"name": f.name, "size": f.size, "chunks": (f.size + chunkSize - 1) / chunkSize, "mime": f.mime}, nil
 	case "transfer_downloaded":
-		if t.Direction != "download" || item < 0 || item >= len(t.Downloaded) {
+		if (t.Status != "ready" && t.Status != "done") || t.Direction != "download" || item < 0 || item >= len(t.Downloaded) {
 			return nil, errBadRequest
 		}
 		t.Downloaded[item] = true
@@ -228,9 +230,15 @@ func (s *Server) transferRPC(sess *session, method, id string, item int) (any, e
 				t.Status = "ready"
 			}
 		}
-		err = s.opts.Store.PutWebTransfer(t)
+		_, err = s.saveTransfer(t, s.sessionName(sess))
 		return transferWeb(t), err
 	case "transfer_delete":
+		if t.Status == "ready" {
+			t.Status = "cancelled"
+			if _, err := s.saveTransfer(t, s.sessionName(sess)); err != nil {
+				return nil, err
+			}
+		}
 		if err := s.opts.Store.DeleteWebTransfer(sess.id, id); err != nil {
 			return nil, err
 		}
@@ -240,4 +248,129 @@ func (s *Server) transferRPC(sess *session, method, id string, item int) (any, e
 		return map[string]bool{}, nil
 	}
 	return nil, errBadRequest
+}
+
+// saveTransfer uses a session-qualified ID: browser-generated IDs are not global.
+func (s *Server) saveTransfer(w store.WebTransfer, name string) (*store.Transfer, error) {
+	created := time.UnixMilli(w.CreatedAt)
+	t := store.Transfer{ID: "web:" + w.Session + ":" + w.ID, DeviceID: "web:" + w.Session,
+		DeviceName: name, Items: w.Items, Paths: w.Paths, FileCount: int64(len(w.Items)),
+		CreatedAt: created, UpdatedAt: s.opts.Now(), PeerRole: store.RoleSelf,
+		Direction: store.Outgoing, Status: store.TransferWaiting}
+	if len(w.SourcePaths) != 0 {
+		t.Paths = w.SourcePaths
+	}
+	if w.Direction == "upload" {
+		t.Direction = store.Incoming
+		if len(w.Paths) > 0 {
+			t.DestDir = filepath.Dir(w.Paths[0])
+		}
+	}
+	for i, item := range w.Items {
+		t.TotalBytes += item.Size
+		if w.Direction == "upload" || (i < len(w.Downloaded) && w.Downloaded[i]) {
+			t.DoneBytes += item.Size
+		}
+	}
+	if w.Status == "done" {
+		t.Status = store.TransferDone
+	}
+	if w.Status == "cancelled" {
+		t.Status = store.TransferCancelled
+	}
+	if store.TransferFinished(t.Status) {
+		t.FinishedAt = s.opts.Now()
+	}
+	saved, err := s.opts.Store.PutWebTransferHistory(w, t)
+	if err == nil && saved != nil && s.opts.OnTransferChanged != nil {
+		s.opts.OnTransferChanged(send.TransferProto(*saved))
+	}
+	return saved, err
+}
+
+// restoreTransferHistory imports 2.8.1 records once, without retransferring files.
+func (s *Server) restoreTransferHistory() {
+	sessions, err := s.opts.Store.WebSessions()
+	if err != nil {
+		s.log.Warn("读取网页传输历史失败", "err", err)
+		return
+	}
+	for _, registered := range sessions {
+		list, err := s.opts.Store.WebTransfers(registered.ID)
+		if err != nil {
+			s.log.Warn("读取网页传输历史失败", "err", err)
+			continue
+		}
+		for _, w := range list {
+			if w.DesktopID != "" {
+				continue
+			}
+			if _, err := s.saveTransfer(w, s.sessionName(&session{name: registered.Name})); err != nil {
+				s.log.Warn("恢复网页传输记录失败", "err", err)
+			}
+		}
+	}
+	// A crash between session removal and queue cancellation must not leave a
+	// permanently waiting desktop row.
+	pending, err := s.opts.Store.PendingWebTransfers()
+	if err != nil {
+		s.log.Warn("读取网页待传记录失败", "err", err)
+		return
+	}
+	for _, t := range pending {
+		if _, err := s.opts.Store.WebSession(strings.TrimPrefix(t.DeviceID, "web:")); store.IsNotFound(err) {
+			s.cancelHistory(t)
+		}
+	}
+}
+
+func (s *Server) cancelHistory(t store.Transfer) {
+	t.Status, t.UpdatedAt, t.FinishedAt = store.TransferCancelled, s.opts.Now(), s.opts.Now()
+	if err := s.opts.Store.PutTransfer(t); err != nil {
+		s.log.Warn("取消网页传输记录失败", "err", err)
+		return
+	}
+	if s.opts.OnTransferChanged != nil {
+		s.opts.OnTransferChanged(send.TransferProto(t))
+	}
+}
+
+func (s *Server) cancelSessionTransfers(id string) {
+	list, err := s.opts.Store.PendingWebTransfers()
+	if err != nil {
+		s.log.Warn("读取网页待传记录失败", "err", err)
+		return
+	}
+	for _, t := range list {
+		if t.DeviceID == "web:"+id {
+			s.cancelHistory(t)
+		}
+	}
+}
+
+// CancelTransfer cancels a host queue and removes only its private snapshot.
+func (s *Server) CancelTransfer(id string) error {
+	s.transferMu.Lock()
+	defer s.transferMu.Unlock()
+	t, err := s.opts.Store.GetTransfer(id)
+	if err != nil {
+		return send.ErrNotFound
+	}
+	if store.TransferFinished(t.Status) {
+		return nil
+	}
+	parts := strings.Split(id, ":")
+	if len(parts) != 3 || parts[0] != "web" {
+		return send.ErrNotFound
+	}
+	w, err := s.opts.Store.WebTransfer(parts[1], parts[2])
+	if err != nil {
+		return send.ErrNotFound
+	}
+	w.Status = "cancelled"
+	if _, err := s.saveTransfer(w, t.DeviceName); err != nil {
+		return err
+	}
+	_ = os.RemoveAll(s.transferDir(w.Session, w.ID))
+	return nil
 }

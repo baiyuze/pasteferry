@@ -155,6 +155,14 @@ CREATE TABLE IF NOT EXISTS transfer_entries (
 
 // PutTransfer 新建或整体更新一条传输记录。
 func (s *Store) PutTransfer(t Transfer) error {
+	return putTransfer(s.db, t)
+}
+
+type transferWriter interface {
+	Exec(string, ...any) (sql.Result, error)
+}
+
+func putTransfer(db transferWriter, t Transfer) error {
 	items, err := json.Marshal(nonNilItems(t.Items))
 	if err != nil {
 		return err
@@ -180,7 +188,7 @@ func (s *Store) PutTransfer(t Transfer) error {
 	if t.UpdatedAt.IsZero() {
 		t.UpdatedAt = time.Now()
 	}
-	_, err = s.db.Exec(`
+	_, err = db.Exec(`
 INSERT INTO transfers (id, direction, device_id, device_name, status, items, paths,
                        total_bytes, done_bytes, file_count, dest_dir, error, shortfall,
                        seen, relayed, allow_relay, attempt, created_at, updated_at, finished_at, renamed,

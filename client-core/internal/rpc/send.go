@@ -81,6 +81,16 @@ func (s *Server) SendFiles(ctx context.Context, req *pb.SendFilesRequest) (*pb.T
 }
 
 func (s *Server) CancelTransfer(_ context.Context, req *pb.TransferRef) (*pb.Empty, error) {
+	if strings.HasPrefix(req.GetId(), "web:") {
+		w, ok := s.deps.WebShare.(interface{ CancelTransfer(string) error })
+		if !ok {
+			return nil, status.Error(codes.Unimplemented, "web transfers unavailable")
+		}
+		if err := w.CancelTransfer(req.GetId()); err != nil {
+			return nil, transferError(err)
+		}
+		return &pb.Empty{}, nil
+	}
 	t, err := s.transfers()
 	if err != nil {
 		return nil, err

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"time"
 )
 
 // WebTransfer belongs to one browser session and never enters clipboard history.
@@ -16,7 +17,11 @@ type WebTransfer struct {
 	Items      []Item
 	Paths      []string
 	Downloaded []bool
-	CreatedAt  int64
+	// DesktopID is persisted even when desktop history is deleted, so retries
+	// and upgrades never resurrect a record the user removed.
+	DesktopID   string
+	SourcePaths []string // original host paths, separate from download snapshots
+	CreatedAt   int64
 }
 
 func (s *Store) PutWebTransfer(t WebTransfer) error {
@@ -67,4 +72,53 @@ func (s *Store) WebTransfer(session, id string) (WebTransfer, error) {
 func (s *Store) DeleteWebTransfer(session, id string) error {
 	_, err := s.db.Exec(`DELETE FROM web_transfers WHERE session=? AND id=?`, session, id)
 	return err
+}
+
+// PutWebTransferHistory atomically saves browser state and its desktop history.
+// A linked but deleted desktop row stays deleted. Seen is owned by the desktop.
+func (s *Store) PutWebTransferHistory(w WebTransfer, t Transfer) (*Transfer, error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+	first := w.DesktopID == ""
+	w.DesktopID = t.ID
+	var seen bool
+	var finished int64
+	err = tx.QueryRow(`SELECT seen, finished_at FROM transfers WHERE id=?`, t.ID).Scan(&seen, &finished)
+	write := err == nil || (first && errors.Is(err, sql.ErrNoRows))
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return nil, err
+	}
+	if write {
+		t.Seen = seen
+		if finished > 0 {
+			t.FinishedAt = time.Unix(finished, 0)
+		}
+		if err := putTransfer(tx, t); err != nil {
+			return nil, err
+		}
+	}
+	b, err := json.Marshal(w)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := tx.Exec(`INSERT INTO web_transfers(id,session,created_at,payload) VALUES(?,?,?,?)
+ON CONFLICT(session,id) DO UPDATE SET payload=excluded.payload`, w.ID, w.Session, w.CreatedAt, b); err != nil {
+		return nil, err
+	}
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+	if !write {
+		return nil, nil
+	}
+	return &t, nil
+}
+
+// PendingWebTransfers includes orphaned queues whose browser session was revoked.
+func (s *Store) PendingWebTransfers() ([]Transfer, error) {
+	return s.queryTransfers(`SELECT ` + transferColumns + ` FROM transfers
+WHERE device_id LIKE 'web:%' AND status NOT IN ('done','failed','cancelled','declined','expired')`)
 }

@@ -1409,10 +1409,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
       // 发给「所有人」模式下的陌生设备时要先连上它
       options: CallOptions(timeout: const Duration(seconds: 30)),
     );
-    if (!deviceId.startsWith('web:')) {
-      _upsertTransfer(t);
-      notifyListeners();
-    }
+    _upsertTransfer(t);
+    notifyListeners();
     return t;
   }
 

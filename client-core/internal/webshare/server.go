@@ -70,7 +70,8 @@ type Options struct {
 	Protect   func([]byte) ([]byte, error)
 	Unprotect func([]byte) ([]byte, error)
 	// OnChanged 在开关、监听状态、登记的手机变化时调用，界面据此刷新
-	OnChanged func(*pb.WebShareStatus)
+	OnChanged         func(*pb.WebShareStatus)
+	OnTransferChanged func(*pb.Transfer)
 	// WorkDir 放上传到一半的文件与打包下载的 zip，退出时清空
 	WorkDir string
 	// Port 为 0 时用 DefaultPort；测试里用 -1 表示随机端口
@@ -142,6 +143,7 @@ func New(opts Options) *Server {
 	s.uploads = newUploads(filepath.Join(opts.WorkDir, "uploads"))
 	s.zips = newZipCache(filepath.Join(opts.WorkDir, "zips"))
 	s.events = newBroadcaster()
+	s.restoreTransferHistory()
 	return s
 }
 
@@ -283,6 +285,7 @@ func (s *Server) expireSessions() {
 	}
 	s.mu.Unlock()
 	for _, id := range ids {
+		s.cancelSessionTransfers(id)
 		s.events.closeSession(id)
 		s.uploads.dropSession(id)
 		_ = os.RemoveAll(filepath.Join(s.opts.WorkDir, "transfers", id))
@@ -377,6 +380,7 @@ func (s *Server) RemoveSession(id string) error {
 	s.mu.Lock()
 	delete(s.sessions, id)
 	s.mu.Unlock()
+	s.cancelSessionTransfers(id)
 	s.events.closeSession(id)
 	s.uploads.dropSession(id)
 	_ = os.RemoveAll(filepath.Join(s.opts.WorkDir, "transfers", id))
