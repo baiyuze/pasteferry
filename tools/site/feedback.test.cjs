@@ -9,9 +9,22 @@ const html = fs.readFileSync(path.join(__dirname, '../../docs/feedback/index.htm
 const copy = JSON.parse(html.match(/id="feedback-copy">([^<]+)<\/script>/)[1]);
 const flush = () => new Promise(resolve => setImmediate(resolve));
 
+test('all feedback languages enforce CSP before scripts and contain no inline JavaScript', () => {
+  for (const lang of ['', 'en/', 'ja/', 'zh-tw/', 'zh-hk/']) {
+    const page = fs.readFileSync(path.join(__dirname, '../../docs', lang, 'feedback/index.html'), 'utf8');
+    assert.ok(page.indexOf('Content-Security-Policy') < page.indexOf('<script'));
+    for (const match of page.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
+      assert.ok(/src=|type="application\/json"/.test(match[1]), lang + ': inline executable script');
+    }
+    assert.match(page, /assets\/platform\.js/);
+  }
+});
+
 function fixture(options = {}) {
   class Element {
     constructor() { this.textContent = ''; this.value = ''; this.hidden = false; this.listeners = {}; this.children = []; }
+    set innerHTML(_) { throw new Error('Untrusted HTML sink used'); }
+    insertAdjacentHTML() { throw new Error('Untrusted HTML sink used'); }
     addEventListener(name, listener) { this.listeners[name] = listener; }
     append(...nodes) { this.children.push(...nodes); }
     replaceChildren(...nodes) { this.children = nodes; }
@@ -42,7 +55,7 @@ function fixture(options = {}) {
     fetch: async (url, init) => {
       if (url === '/_feedback/v1/messages') {
         const input = JSON.parse(init.body); requests.push(input);
-        return new Promise(resolve => { finish = () => resolve(options.failure ? {ok: false, status: 429, json: async () => ({code: 'rate_limited'})} : {ok: true, status: 201, json: async () => ({...input, owner_token: undefined, status: 'pending', route: 'manual'})}); });
+        return new Promise(resolve => { finish = () => resolve(options.failure ? {ok: false, status: 429, json: async () => ({code: 'rate_limited'})} : {ok: true, status: 201, json: async () => ({...input, owner_token: undefined, status: 'pending', route: 'manual', ...options.ownerFields})}); });
       }
       return {ok: true, status: 200, json: async () => ({items: options.items || [], next_cursor: ''})};
     },
@@ -111,4 +124,18 @@ test('discussion topics and replies do not display issue progress', async () => 
     const rendered = text(f.el('feedback-list'));
     assert.equal(rendered.includes(copy.open), hasProgress, category + '/' + parent_id);
   }
+});
+
+test('malicious public and owner content stays text and never becomes HTML', async () => {
+  const payload = '</script><img src=x onerror=alert(1)><svg/onload=alert(2)>';
+  const item = {id: 'a0b1c2d3-1111-4111-8111-111111111111', nickname: payload, title: payload, body: payload, reason: payload, status: 'approved', category: 'discussion'};
+  const f = fixture({items: [item], ownerFields: {reason: payload}}); await flush();
+  const all = element => [element, ...element.children.flatMap(all)];
+  let nodes = all(f.el('feedback-list'));
+  assert.equal(nodes.filter(node => node.textContent === payload).length, 3);
+  assert.equal(nodes.find(node => node.href)?.href, '#' + item.id);
+  f.fields.nickname.value = payload; f.fields.title.value = payload; f.fields.body.value = payload;
+  f.submit(); f.finish(); await flush(); await flush();
+  nodes = all(f.el('feedback-mine'));
+  assert.equal(nodes.filter(node => node.textContent === payload).length, 4);
 });

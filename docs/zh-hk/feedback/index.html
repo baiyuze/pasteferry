@@ -1,16 +1,8 @@
 <!doctype html>
 <html lang="zh-HK">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
   <meta charset="utf-8">
-  <script>
-    (function () {
-      if (location.hostname !== "baiyuze.github.io") return;
-      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
-      if (!prefix) return;
-      var path = location.pathname.slice(prefix[0].length) || "/";
-      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
-    })();
-  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>討論與意見 — PasteFerry</title>
   <meta name="description" content="回報問題、提出建議，或分享你的使用經驗。">
@@ -33,10 +25,9 @@
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
   <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
-  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <script src="../../assets/platform.js?v=831bd90379"></script>
   <link rel="stylesheet" href="../../assets/feedback.css?v=921fafb422">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 </head>
 <body>
   <a class="skip" href="#main">跳至主要內容</a>

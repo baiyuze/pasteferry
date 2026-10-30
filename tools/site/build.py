@@ -2834,8 +2834,11 @@ def write(path: Path, text: str) -> None:
         chinese = bool(re.search(r'<html[^>]+lang="zh(?:-CN|-TW|-HK)?"', text))
         download_base = GITEE_DL if chinese else f"{REPO}/releases/download/v{VERSION}/"
         text = text.replace(DL, download_base)
-        text = text.replace('  <meta charset="utf-8">\n',
-                            '  <meta charset="utf-8">\n' + GITHUB_PAGES_REDIRECT, 1)
+        # Feedback's external platform script includes the legacy redirect so
+        # its strict policy never needs inline JavaScript.
+        if path.parent.name != 'feedback':
+            text = text.replace('  <meta charset="utf-8">\n',
+                                '  <meta charset="utf-8">\n' + GITHUB_PAGES_REDIRECT, 1)
         text = versioned(path, text)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
@@ -2845,9 +2848,12 @@ def feedback_page(code: str) -> str:
     c, f = load(code), FEEDBACK_COPY[code]
     up = "../" * (LANGS[code][0] + FEEDBACK).count("/")
     top = page_top(c, code, FEEDBACK, f['name'] + ' — PasteFerry', f['lede'])
+    # Apply the policy before any executable script, including platform setup.
+    top = top.replace('<head>\n', '<head>\n'
+                      "  <meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'\">\n")
+    top = top.replace(PLATFORM, f'  <script src="{up}assets/platform.js"></script>\n')
     top = top.replace('</head>', f'  <link rel="stylesheet" href="{up}assets/feedback.css">\n'
-                      '  <meta name="referrer" content="no-referrer">\n'
-                      "  <meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'\">\n</head>")
+                      '  <meta name="referrer" content="no-referrer">\n</head>')
     categories = ''.join(f'<option value="{key}">{esc(f[key])}</option>' for key in ('bug', 'idea', 'discussion'))
     form_categories = categories.replace('value="discussion"', 'value="discussion" selected')
     language_options = ''.join(f'<option value="{key}">{name}</option>' for key, (_, _, _, name) in LANGS.items())
