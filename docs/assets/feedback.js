@@ -7,6 +7,9 @@
   }
   var copy = JSON.parse(document.getElementById('feedback-copy').textContent);
   var prefix = 'pasteferry.feedback.v1.';
+  // Separate keys prevent an older tab's snapshot from erasing new credentials.
+  var recordPrefix = 'pasteferry.feedback.v2.record.';
+  var migratedKey = 'pasteferry.feedback.v2.migrated';
   var records = [], draft = null, topic = null, cursor = '', loading = false, timer;
   var form = document.getElementById('feedback-form');
   var status = document.getElementById('feedback-status');
@@ -33,15 +36,47 @@
     return {id: hex.slice(0, 8) + '-' + hex.slice(8, 12) + '-' + hex.slice(12, 16) + '-' + hex.slice(16, 20) + '-' + hex.slice(20),
       owner_token: btoa(String.fromCharCode.apply(null, secret)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')};
   }
+  function validRecord(r) {
+    return r && r.input && /^[a-f0-9-]{36}$/.test(r.input.id) && typeof r.input.owner_token === 'string' && Number.isFinite(r.saved) && Date.now() - r.saved < maxAge;
+  }
+  function storedRecords() {
+    var keys = [], result = [];
+    for (var i = 0; i < localStorage.length; i++) { var key = localStorage.key(i); if (key && key.indexOf(recordPrefix) === 0) keys.push(key); }
+    keys.forEach(function (key) {
+      var r;
+      try { r = JSON.parse(localStorage.getItem(key)); } catch (_) {}
+      if (validRecord(r) && key === recordPrefix + r.input.id) { r.persisted = true; result.push(r); }
+      else localStorage.removeItem(key);
+    });
+    return result;
+  }
   function saveRecords() {
-    records = records.filter(function (r) { return Date.now() - r.saved < maxAge; }).slice(-50);
-    try { localStorage.setItem(prefix + 'records', JSON.stringify(records)); return true; }
+    try {
+      var stored = storedRecords(), merged = new Map(stored.map(function (r) { return [r.input.id, r]; }));
+      records.filter(validRecord).forEach(function (r) {
+        var saved = merged.get(r.input.id);
+        // A removed persisted key means another tab explicitly cleared it.
+        if (r.persisted && !saved) return;
+        if (!saved || (saved.input.owner_token === r.input.owner_token && ((saved.message && saved.message.revision) || 0) <= ((r.message && r.message.revision) || 0))) merged.set(r.input.id, r);
+      });
+      records = Array.from(merged.values()).sort(function (a, b) { return a.saved - b.saved; }).slice(-50);
+      var kept = new Set(records.map(function (r) { return r.input.id; }));
+      records.forEach(function (r) { localStorage.setItem(recordPrefix + r.input.id, JSON.stringify(r)); r.persisted = true; });
+      stored.forEach(function (r) { if (!kept.has(r.input.id)) localStorage.removeItem(recordPrefix + r.input.id); });
+      return true;
+    }
     catch (_) { storageOK = false; announce(copy.storage_warning); return false; }
   }
   function restore() {
     try {
-      var raw = JSON.parse(localStorage.getItem(prefix + 'records') || '[]');
-      if (Array.isArray(raw)) records = raw.filter(function (r) { return r && r.input && typeof r.input.id === 'string' && typeof r.input.owner_token === 'string' && Date.now() - r.saved < maxAge; }).slice(-50);
+      if (!localStorage.getItem(migratedKey)) {
+        var raw = JSON.parse(localStorage.getItem(prefix + 'records') || '[]');
+        if (Array.isArray(raw)) raw.filter(validRecord).slice(-50).forEach(function (r) {
+          if (!localStorage.getItem(recordPrefix + r.input.id)) localStorage.setItem(recordPrefix + r.input.id, JSON.stringify(r));
+        });
+        localStorage.setItem(migratedKey, '1');
+      }
+      records = storedRecords().sort(function (a, b) { return a.saved - b.saved; }).slice(-50);
       draft = JSON.parse(localStorage.getItem(prefix + 'draft') || 'null');
       if (draft && Date.now() - draft.saved >= maxAge) { draft = null; localStorage.removeItem(prefix + 'draft'); }
     } catch (_) { storageOK = false; announce(copy.storage_warning); }
@@ -155,7 +190,9 @@
       await refreshMine(); await loadPage(false);
     } catch (err) {
       if (err.httpStatus && err.httpStatus < 500) {
-        records = records.filter(function (r) { return r !== record; }); saveRecords();
+        records = records.filter(function (r) { return r !== record; });
+        try { localStorage.removeItem(recordPrefix + record.input.id); } catch (_) { storageOK = false; }
+        saveRecords();
         var errorKey = {content_not_allowed: 'failure', rate_limited: 'rate_limited', feedback_closed: 'unavailable', feedback_full: 'unavailable', invalid_request: 'invalid_fields'}[err.message];
         announce(copy[errorKey] || (err.httpStatus === 429 ? copy.rate_limited : copy.error));
       } else { record.uncertain = true; saveRecords(); announce(copy.uncertain); }
@@ -168,6 +205,9 @@
     clearTimeout(timer);
     var fields = values();
     if (!fields.body) { announce(copy.required_fields); return; }
+    // Snapshot the submitted fields before cancelling the debounced draft save.
+    draft = {saved: Date.now(), values: fields};
+    try { localStorage.setItem(prefix + 'draft', JSON.stringify(draft)); } catch (_) { storageOK = false; }
     var record = records.find(function (r) { return r.uncertain && JSON.stringify(r.fields) === JSON.stringify(fields); });
     if (!record) {
       var credential;
@@ -221,10 +261,21 @@
   document.getElementById('feedback-clear').addEventListener('click', function () {
     if (!window.confirm(copy.confirm_clear)) return;
     clearTimeout(timer); records = []; draft = null;
-    try { localStorage.removeItem(prefix + 'records'); localStorage.removeItem(prefix + 'draft'); } catch (_) { announce(copy.storage_warning); }
+    try {
+      storedRecords().forEach(function (r) { localStorage.removeItem(recordPrefix + r.input.id); });
+      localStorage.removeItem(prefix + 'records'); localStorage.removeItem(prefix + 'draft');
+    } catch (_) { announce(copy.storage_warning); }
     form.reset(); document.getElementById('feedback-draft-state').textContent = ''; renderMine();
   });
   window.addEventListener('hashchange', function () { form.hidden = true; form.reset(); void loadPage(false); });
+  window.addEventListener('storage', function (event) {
+    if (event.key !== null && event.key.indexOf(recordPrefix) !== 0) return;
+    try {
+      var latest = storedRecords(), byID = new Map(records.map(function (r) { return [r.input.id, r]; }));
+      records = latest.map(function (r) { var current = byID.get(r.input.id); if (current && current.input.owner_token === r.input.owner_token) { Object.assign(current, r); return current; } return r; });
+      renderMine();
+    } catch (_) { storageOK = false; announce(copy.storage_warning); }
+  });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) { void refreshMine(); void loadPage(false); } });
   setInterval(function () { if (!document.hidden) { void refreshMine(); if (topic) void loadPage(false); } }, 60000);
   restore(); renderMine(); void loadPage(false); void refreshMine();

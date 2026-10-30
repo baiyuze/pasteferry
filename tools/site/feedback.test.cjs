@@ -42,16 +42,16 @@ function fixture(options = {}) {
   form.checkValidity = () => !!fields.body.value;
   form.reportValidity = () => { form.reported = true; };
   form.reset = () => { Object.values(fields).forEach(field => { field.value = ''; }); fields.category.value = 'discussion'; };
-  const stored = new Map(), requests = [];
+  const stored = options.storage || new Map(), requests = [], documentListeners = {}, windowListeners = {};
   let finish;
   const context = {
-    document: {getElementById: el, createElement: () => new Element(), addEventListener() {}},
+    document: {getElementById: el, createElement: () => new Element(), addEventListener(name, fn) { documentListeners[name] = fn; }},
     location: {protocol: 'https:', hostname: 'pasteferry.cc', host: 'pasteferry.cc', pathname: '/feedback/', search: '', hash: '', replace(url) { this.redirect = url; }},
     crypto: {getRandomValues: bytes => webcrypto.getRandomValues(bytes)},
-    localStorage: {getItem: key => stored.get(key) || null, setItem: (key, value) => stored.set(key, value), removeItem: key => stored.delete(key)},
+    localStorage: {get length() { return stored.size; }, key: i => [...stored.keys()][i] || null, getItem: key => stored.get(key) || null, setItem: (key, value) => stored.set(key, value), removeItem: key => stored.delete(key)},
     FormData: class {get(key) { return fields[key]?.value || ''; }},
     AbortController, Uint8Array, URLSearchParams, setTimeout, clearTimeout, setInterval() {},
-    btoa: value => Buffer.from(value, 'binary').toString('base64'), addEventListener() {},
+    btoa: value => Buffer.from(value, 'binary').toString('base64'), confirm: () => true, addEventListener(name, fn) { windowListeners[name] = fn; },
     fetch: async (url, init) => {
       if (url === '/_feedback/v1/messages') {
         const input = JSON.parse(init.body); requests.push(input);
@@ -64,7 +64,7 @@ function fixture(options = {}) {
   if (options.noCrypto) context.crypto = undefined;
   if (options.http) context.location.protocol = 'http:';
   vm.runInNewContext(source, context);
-  return {el, form, fields, button, requests, stored, context, finish: () => finish(), submit: () => form.listeners.submit({preventDefault() {}})};
+  return {el, form, fields, button, requests, stored, context, documentListeners, windowListeners, finish: () => finish(), submit: () => form.listeners.submit({preventDefault() {}})};
 }
 
 test('body-only mobile submission shows progress and uses secure UUID without randomUUID', async () => {
@@ -79,7 +79,7 @@ test('body-only mobile submission shows progress and uses secure UUID without ra
   assert.equal(input.title, '手机端反馈：只有正文也能提交');
   assert.match(input.id, /^[\da-f]{8}-[\da-f]{4}-4[\da-f]{3}-[89ab][\da-f]{3}-[\da-f]{12}$/);
   assert.equal(Buffer.from(input.owner_token, 'base64url').length, 32);
-  assert.equal(JSON.parse(f.stored.get('pasteferry.feedback.v1.records'))[0].input.id, input.id);
+  assert.equal(JSON.parse(f.stored.get('pasteferry.feedback.v2.record.' + input.id)).input.id, input.id);
   f.finish(); await flush(); await flush();
   assert.equal(f.form.hidden, true);
   assert.equal(f.el('feedback-mine-panel').open, true);
@@ -106,6 +106,7 @@ test('rate limiting preserves input and shows the reason beside the enabled butt
   assert.equal(f.el('feedback-form-status').textContent, copy.rate_limited);
   assert.equal(f.fields.body.value, 'Example');
   assert.equal(f.button.disabled, false);
+  assert.equal([...f.stored.keys()].some(key => key.startsWith('pasteferry.feedback.v2.record.')), false);
 });
 
 test('HTTP upgrades before reading or generating owner credentials', () => {
@@ -138,4 +139,38 @@ test('malicious public and owner content stays text and never becomes HTML', asy
   f.submit(); f.finish(); await flush(); await flush();
   nodes = all(f.el('feedback-mine'));
   assert.equal(nodes.filter(node => node.textContent === payload).length, 4);
+});
+
+test('multiple tabs preserve independent owner credentials and clearing cannot resurrect them', async () => {
+  const storage = new Map(), first = fixture({storage}), second = fixture({storage});
+  async function submit(f, body) { f.fields.body.value = body; f.submit(); f.finish(); await flush(); await flush(); }
+  await submit(first, 'First tab');
+  await submit(second, 'Second tab');
+  first.documentListeners.visibilitychange(); await flush(); await flush();
+  const fresh = fixture({storage}); await flush();
+  assert.equal(fresh.el('feedback-mine-count').textContent, '(2)');
+  for (const input of [...first.requests, ...second.requests]) {
+    assert.equal(JSON.parse(storage.get('pasteferry.feedback.v2.record.' + input.id)).input.owner_token, input.owner_token);
+  }
+  second.el('feedback-clear').listeners.click();
+  first.documentListeners.visibilitychange(); await flush(); await flush();
+  assert.equal(fixture({storage}).el('feedback-mine-count').textContent, '(0)');
+});
+
+test('legacy credentials migrate once and old tabs cannot overwrite or restore cleared records', async () => {
+  const old = {input:{id:'a0b1c2d3-1111-4111-8111-111111111111',owner_token:'legacy-secret',body:'Old text'},saved:Date.now()};
+  const storage = new Map([['pasteferry.feedback.v1.records',JSON.stringify([old])]]);
+  const f = fixture({storage}); await flush();
+  assert.equal(f.el('feedback-mine-count').textContent, '(1)');
+  storage.set('pasteferry.feedback.v1.records', '[]');
+  assert.equal(fixture({storage}).el('feedback-mine-count').textContent, '(1)');
+  f.el('feedback-clear').listeners.click();
+  storage.set('pasteferry.feedback.v1.records', JSON.stringify([old]));
+  assert.equal(fixture({storage}).el('feedback-mine-count').textContent, '(0)');
+});
+
+test('successful submission clears an older debounced draft', async () => {
+  const storage = new Map([['pasteferry.feedback.v1.draft',JSON.stringify({saved:Date.now(),values:{parent_id:'',body:'Earlier draft'}})]]);
+  const f = fixture({storage}); f.fields.body.value = 'Submitted content'; f.submit(); f.finish(); await flush(); await flush();
+  assert.equal(storage.has('pasteferry.feedback.v1.draft'), false);
 });
