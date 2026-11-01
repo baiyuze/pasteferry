@@ -41,12 +41,12 @@ RELEASES = [
             '友だちへのファイル送信を会話画面と送信画面からキャンセルできます。待機中・承認待ちにも対応し、画面を開き直しても進行中の転送を表示します。',
             '傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。',
             '傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。'),
-           ('File transfer streams remain open until the receiver confirms completion, preventing '
-            'premature closure during consecutive transfers.',
-            '文件传输通道会保持到接收方确认完成，避免连续发送时提前关闭连接。',
-            'ファイル転送の通信路を受信側の完了確認まで保持し、連続送信時に早く閉じる問題を防ぎます。',
-            '檔案傳輸通道會保持到接收端確認完成，避免連續傳送時提前關閉連線。',
-            '檔案傳輸通道會保持到接收端確認完成，避免連續傳送時提前關閉連線。'),
+           ('File transfer streams remain open until the receiver confirms completion, and cancellation '
+            'no longer stalls subsequent transfers.',
+            '文件传输通道会保持到接收方确认完成；取消传输后，下一批文件也能正常发送。',
+            'ファイル転送の通信路を受信側の完了確認まで保持し、キャンセル後に次の転送が止まる問題も修正しました。',
+            '檔案傳輸通道會保持到接收端確認完成；取消傳輸後，下一批檔案也能正常傳送。',
+            '檔案傳輸通道會保持到接收端確認完成；取消傳輸後，下一批檔案也能正常傳送。'),
            ('Adding a friend can recover when the initial handshake reply arrives before the pairing '
             'session is ready.',
             '添加好友时，即使首次握手回复早于配对会话准备完成，也能通过重试恢复。',
