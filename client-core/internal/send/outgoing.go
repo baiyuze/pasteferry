@@ -31,8 +31,13 @@ type outgoing struct {
 
 func (o *outgoing) abort(cause error) {
 	o.cancel(cause)
+	o.closePipe()
+}
+
+func (o *outgoing) closePipe() {
 	o.mu.Lock()
 	p := o.pipe
+	o.pipe = nil
 	o.mu.Unlock()
 	if p != nil {
 		_ = p.Close() // 让卡在发送缓冲上的写入立刻返回
@@ -249,6 +254,7 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 	defer cancel(nil)
 	o := &outgoing{id: t.ID, device: t.DeviceID, ctx: ctx, cancel: cancel,
 		answer: make(chan *pb.SendAnswer, 2), result: make(chan *pb.SendResult, 1), done: make(chan struct{})}
+	defer o.closePipe()
 	e.mu.Lock()
 	e.out[t.ID] = o
 	e.mu.Unlock()
@@ -374,6 +380,7 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 			e.interrupt(e.withProgress(t))
 			return
 		}
+		o.closePipe()
 		if result.GetOk() {
 			t.DoneBytes = t.TotalBytes
 			e.finish(t, store.TransferDone, "")
@@ -407,7 +414,8 @@ func (e *Engine) stream(ctx context.Context, o *outgoing, t store.Transfer, inde
 	o.mu.Lock()
 	o.pipe = p
 	o.mu.Unlock()
-	defer p.Close()
+	// Keep the stream alive until the receiver acknowledges the end frame.
+	// An empty local send buffer alone does not confirm remote consumption.
 
 	m := e.meterFor(t)
 	m.start(t.DoneBytes)

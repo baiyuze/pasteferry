@@ -176,6 +176,13 @@ func TestFriendAskCancelledBySender(t *testing.T) {
 // 好友接受后仍能取消正在发送的文件，清掉临时数据，后续发送照常。
 func TestFriendActiveSendCancelledBySender(t *testing.T) {
 	p := friendPair(t)
+	t.Cleanup(func() {
+		if t.Failed() {
+			a, _ := p.a.db.ListTransfers(store.Outgoing, 20, time.Time{})
+			b, _ := p.b.db.ListTransfers(store.Incoming, 20, time.Time{})
+			t.Logf("sender: %+v; receiver: %+v", a, b)
+		}
+	})
 	path := filepath.Join(t.TempDir(), "big.bin")
 	writeFile(t, path, randomBytes(t, 60<<20))
 	tr, err := p.a.eng.SendFiles("bob", []string{path}, false, "")
