@@ -40,7 +40,19 @@ RELEASES = [
             '发给好友的文件可在好友会话和发送窗口取消，包括排队和等待对方接收的任务；重新打开窗口仍能看到进行中的传输。',
             '友だちへのファイル送信を会話画面と送信画面からキャンセルできます。待機中・承認待ちにも対応し、画面を開き直しても進行中の転送を表示します。',
             '傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。',
-            '傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。')]},
+            '傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。'),
+           ('File transfer streams remain open until the receiver confirms completion, preventing '
+            'premature closure during consecutive transfers.',
+            '文件传输通道会保持到接收方确认完成，避免连续发送时提前关闭连接。',
+            'ファイル転送の通信路を受信側の完了確認まで保持し、連続送信時に早く閉じる問題を防ぎます。',
+            '檔案傳輸通道會保持到接收端確認完成，避免連續傳送時提前關閉連線。',
+            '檔案傳輸通道會保持到接收端確認完成，避免連續傳送時提前關閉連線。'),
+           ('Adding a friend can recover when the initial handshake reply arrives before the pairing '
+            'session is ready.',
+            '添加好友时，即使首次握手回复早于配对会话准备完成，也能通过重试恢复。',
+            '友だち追加の初回応答がペアリング準備より早く届いた場合も、再試行で復旧します。',
+            '新增好友時，即使首次交握回覆早於配對工作階段準備完成，也能透過重試恢復。',
+            '新增好友時，即使首次交握回覆早於配對工作階段準備完成，亦能透過重試恢復。')]},
 {'changes': [],
  'date': '2026-10-30',
  'fixes': [("Browser-to-computer file transfers now appear immediately in the computer's Received list. "

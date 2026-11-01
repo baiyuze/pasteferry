@@ -10,6 +10,8 @@ This release improves connection recovery, prevents misleading compatibility mes
 - Settings no longer wait indefinitely for a background-service request. Startup failures can be retried, and settings become available as soon as the configuration is loaded.
 - A failed initial connection can recover without restarting the app. Network setup failures release the failed connection, changing the signaling server cancels the old startup attempt, and Windows retries failed local-network advertisements.
 - Files being sent to a friend can be cancelled from the friend conversation and send dialog, including queued transfers and transfers waiting for acceptance. Ongoing transfers remain visible when the dialog is reopened.
+- File transfer streams remain open until the receiver confirms completion, preventing premature closure during consecutive transfers.
+- Adding a friend can recover when the initial handshake reply arrives before the pairing session is ready.
 
 ### Upgrade notes
 
