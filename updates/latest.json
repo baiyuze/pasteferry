@@ -1,65 +1,121 @@
 {
   "schema": 1,
-  "latest": "2.8.2",
-  "date": "2026-10-30",
+  "latest": "2.8.3",
+  "date": "2026-11-01",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.8.2/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.8.3/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.8.2/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.8.3/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 26982138,
-      "sha256": "22c73f31e1768a31f44d28bd1d3bf74c11312eac5a9eb6acd4ac36a7b826eb78"
+      "size": 26997610,
+      "sha256": "0fa187d4ed13f68b4c137802e9ce8cea2fe3ce5d99f79a0e800604447f5bb2a1"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 29146376,
-      "sha256": "178003c62194f0c78e9ea15d9a6a562f63c2fde810bba2f33e7eaf74878018fe"
+      "size": 29156558,
+      "sha256": "38191b1b8307060324da2d3e1c70109df3d28aa00b8c9309ffc588b23669d9c8"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 54174413,
-      "sha256": "d7f93ef6ae11e14d3e9b954f63d761c2d586f15317971ac3d8e89d35c66e83d6"
+      "size": 54202958,
+      "sha256": "c9d2afc30b0989d7abc8962eac52e60c1559119db6d84714f501d8aea5452015"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 24098240,
-      "sha256": "d4c3d14a73621b2aeaf6c9599f4aa9f99f2311b93cce2f7d402c02b2010e154e"
+      "size": 24099776,
+      "sha256": "c2fd677b511725445aa1bcb8738a06d352b3a0a7ba330eea1a861c15f8c2f5e9"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 30476234,
-      "sha256": "da5be5bed810dfcd67b8b7b7d2a7ec39de053273a8fc73819ae09051c7318b0f"
+      "size": 30483173,
+      "sha256": "aebbc09a002f1e60ad4f9debddabae5c3b94c3a95a18f6702f734c15aef3fb6a"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 23286736,
-      "sha256": "0019768c89ac78b644b241373c2588abff0054301acede61a69e422d601d17df"
+      "size": 23287252,
+      "sha256": "938e8769cb5499d92ce3d383b0ab3d53a65a5470cffbe7269ac913e93156a7fc"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 21668802,
-      "sha256": "936275a06b64b40d013125f2ccd0c0647538a7654d34c2a3f04294855fa65aa4"
+      "size": 21678742,
+      "sha256": "f746e42a8080382ca31bebbf3c9126dacd0ee423099e71f3a143361c595de9f1"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 28185650,
-      "sha256": "a69adb38de8d4da9b36217ab14af894b0a4aaa01a136194ccc1b9ad9fda64950"
+      "size": 28197909,
+      "sha256": "805781922f101a8b299998c5c81cf96572f15999d6ffa6dc00fcf4cd489456db"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 26398084,
-      "sha256": "f17d859954a2a14d1e694fa3dafdd1cb1d9115981ef01b0b0106eb3d53a8d47b"
+      "size": 26407293,
+      "sha256": "d16cbea4f02a5d6ce12a30d030c391e102bdb17927b5b9fb911f9046051f6507"
     }
   },
   "releases": [
+    {
+      "version": "2.8.3",
+      "date": "2026-11-01",
+      "notes": {
+        "en": {
+          "fixes": [
+            "Devices now show \"Connecting\" while the connection and capabilities are being established, instead of misleading update or version mismatch messages. Reconnection also refreshes stale capability information.",
+            "Settings no longer wait indefinitely for a background-service request. Startup failures can be retried, and settings become available as soon as the configuration is loaded.",
+            "A failed initial connection can recover without restarting the app. Network setup failures release the failed connection, changing the signaling server cancels the old startup attempt, and Windows retries failed local-network advertisements.",
+            "Files being sent to a friend can be cancelled from the friend conversation and send dialog, including queued transfers and transfers waiting for acceptance. Ongoing transfers remain visible when the dialog is reopened.",
+            "File transfer streams remain open until the receiver confirms completion, and cancellation no longer stalls subsequent transfers.",
+            "Adding a friend can recover when the initial handshake reply arrives before the pairing session is ready."
+          ]
+        },
+        "zh-Hans": {
+          "fixes": [
+            "设备建立连接、确认功能期间显示「正在连接」，不再误报需要更新或版本不匹配；重新连接时也会刷新过期的功能信息。",
+            "设置不再因后台请求无响应而一直转圈；启动失败后可重试，配置读取完成即可使用设置。",
+            "首次连接失败后可自行恢复，无需退出重开；网络初始化失败会清理连接，切换信令服务器会停止旧的启动尝试，Windows 会重试失败的局域网广播。",
+            "发给好友的文件可在好友会话和发送窗口取消，包括排队和等待对方接收的任务；重新打开窗口仍能看到进行中的传输。",
+            "文件传输通道会保持到接收方确认完成；取消传输后，下一批文件也能正常发送。",
+            "添加好友时，即使首次握手回复早于配对会话准备完成，也能通过重试恢复。"
+          ]
+        },
+        "ja": {
+          "fixes": [
+            "接続と機能確認の間は「接続中」と表示し、更新やバージョン不一致の誤案内を防ぎます。再接続時には古い機能情報も更新します。",
+            "設定画面がバックグラウンド処理の応答を無期限に待たないよう修正。起動失敗後は再試行でき、設定の読み込み後すぐに操作できます。",
+            "初回接続の失敗後、アプリの再起動なしで復旧できるよう修正。失敗した接続を解放し、シグナリング先の変更で古い接続試行を中止し、WindowsのLAN広告を再試行します。",
+            "友だちへのファイル送信を会話画面と送信画面からキャンセルできます。待機中・承認待ちにも対応し、画面を開き直しても進行中の転送を表示します。",
+            "ファイル転送の通信路を受信側の完了確認まで保持し、キャンセル後に次の転送が止まる問題も修正しました。",
+            "友だち追加の初回応答がペアリング準備より早く届いた場合も、再試行で復旧します。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "fixes": [
+            "裝置建立連線、確認功能期間顯示「正在連線」，不再誤報需要更新或版本不符；重新連線時也會更新過期的功能資訊。",
+            "設定不再因背景請求無回應而一直轉圈；啟動失敗後可重試，設定讀取完成即可使用。",
+            "首次連線失敗後可自行恢復，無須退出重開；網路初始化失敗會清理連線，切換信令伺服器會停止舊的啟動嘗試，Windows 會重試失敗的區域網路廣播。",
+            "傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。",
+            "檔案傳輸通道會保持到接收端確認完成；取消傳輸後，下一批檔案也能正常傳送。",
+            "新增好友時，即使首次交握回覆早於配對工作階段準備完成，也能透過重試恢復。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "fixes": [
+            "裝置建立連線、確認功能期間顯示「正在連線」，不再誤報需要更新或版本不符；重新連線時亦會更新過期的功能資訊。",
+            "設定不再因背景請求無回應而一直轉圈；啟動失敗後可重試，設定讀取完成即可使用。",
+            "首次連線失敗後可自行恢復，無須退出重開；網絡初始化失敗會清理連線，切換信令伺服器會停止舊的啟動嘗試，Windows 會重試失敗的區域網絡廣播。",
+            "傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。",
+            "檔案傳輸通道會保持到接收端確認完成；取消傳輸後，下一批檔案也能正常傳送。",
+            "新增好友時，即使首次交握回覆早於配對工作階段準備完成，亦能透過重試恢復。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.8.2",
       "date": "2026-10-30",
@@ -465,37 +521,6 @@
             "「報告已拷貝」這類提示會被開着的對話框擋住，現在顯示在最上面。",
             "自動更新失敗時只說「更新沒有完成」。現在會說明原因，記錄檔和診斷報告裏也有。",
             "Linux 上更新時系統沒有彈出密碼框（例如 PasteFerry 是從 SSH 啟動的），之前提示「已取消安裝」。現在會說明沒有彈出密碼框，以及怎樣從桌面重新啟動。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.6.2",
-      "date": "2026-10-27",
-      "notes": {
-        "en": {
-          "fixes": [
-            "In quick paste, typing a number into the empty search box pasted that item, so numbers such as tracking or phone numbers could not be searched. Numbers now always go into the search box; press ⌘1–⌘9 on a Mac or Alt+1–Alt+9 on Windows and Linux to paste one of the first nine items."
-          ]
-        },
-        "zh-Hans": {
-          "fixes": [
-            "快捷粘贴里，搜索框为空时输入数字会直接粘贴对应的那一条，没法搜快递单号、电话这类数字。现在数字一律输入到搜索框；要粘贴前 9 条，Mac 上按 ⌘1–⌘9，Windows、Linux 上按 Alt+1–Alt+9。"
-          ]
-        },
-        "ja": {
-          "fixes": [
-            "クイックペーストで、検索欄が空のときに数字を入力するとその番号の項目が貼り付けられ、追跡番号や電話番号などの数字を検索できませんでした。数字は常に検索欄に入力されるようになりました。先頭 9 件を貼り付けるには、Mac では ⌘1〜⌘9、Windows と Linux では Alt+1〜Alt+9 を押します。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "fixes": [
-            "快速貼上裡，搜尋框是空的時候輸入數字會直接貼上對應的那一筆，沒辦法搜尋物流單號、電話這類數字。現在數字一律輸入到搜尋框；要貼上前 9 筆，Mac 上按 ⌘1–⌘9，Windows、Linux 上按 Alt+1–Alt+9。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "fixes": [
-            "快速貼上裏，搜尋框是空的時候輸入數字會直接貼上對應的那一項，沒法搜尋速遞單號、電話這類數字。現在數字一律輸入到搜尋框；要貼上前 9 項，Mac 上按 ⌘1–⌘9，Windows、Linux 上按 Alt+1–Alt+9。"
           ]
         }
       }
