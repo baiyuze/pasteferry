@@ -691,7 +691,7 @@ class FriendDetail extends StatelessWidget {
             padding: const EdgeInsets.only(right: Insets.md),
             itemCount: list.length,
             separatorBuilder: (_, _) => Divider(height: 1, color: p.separator),
-            itemBuilder: (_, i) => _HistoryRow(transfer: list[i]),
+            itemBuilder: (_, i) => _HistoryRow(key: ValueKey(list[i].id), transfer: list[i]),
           );
     return Column(
       mainAxisSize: inDialog ? MainAxisSize.min : MainAxisSize.max,
@@ -757,7 +757,7 @@ class FriendDetail extends StatelessWidget {
 }
 
 class _HistoryRow extends StatelessWidget {
-  const _HistoryRow({required this.transfer});
+  const _HistoryRow({super.key, required this.transfer});
 
   final Transfer transfer;
 
@@ -803,6 +803,8 @@ class _HistoryRow extends StatelessWidget {
           ),
           if (!out && t.status == 'done' && t.paths.isNotEmpty)
             TextButton(onPressed: () => revealFile(t.paths.first), child: Text(revealLabel(l))),
+          if (out && canCancelTransfer(t))
+            TransferCancelButton(key: ValueKey(t.id), transfer: t),
         ],
       ),
     );

@@ -354,6 +354,41 @@ class _SendDialogState extends State<SendDialog> {
   }
 }
 
+bool canCancelTransfer(Transfer t) =>
+    const {'scanning', 'queued', 'waiting', 'asking', 'active', 'paused', 'interrupted'}.contains(t.status);
+
+/// 发送窗口与好友记录共用的取消入口。
+class TransferCancelButton extends StatefulWidget {
+  const TransferCancelButton({super.key, required this.transfer});
+
+  final Transfer transfer;
+
+  @override
+  State<TransferCancelButton> createState() => _TransferCancelButtonState();
+}
+
+class _TransferCancelButtonState extends State<TransferCancelButton> {
+  bool _busy = false;
+
+  Future<void> _cancel() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await AppScope.read(context).cancelTransfer(widget.transfer.id);
+    } catch (e) {
+      if (mounted) showToast(context, AppState.describeError(e), error: true);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => TextButton(
+        onPressed: _busy ? null : _cancel,
+        child: Text(widget.transfer.status == 'queued' ? context.l10n.sendRemoveQueued : context.l10n.cancel),
+      );
+}
+
 /// 发送窗口里的一批：名称、大小，进度或结果。
 class TransferBatchRow extends StatelessWidget {
   const TransferBatchRow({super.key, required this.transfer});
@@ -366,8 +401,6 @@ class TransferBatchRow extends StatelessWidget {
     final p = context.palette;
     final t = transfer;
     final active = t.status == 'active';
-    final cancellable =
-        const {'scanning', 'queued', 'waiting', 'asking', 'active', 'paused', 'interrupted'}.contains(t.status);
     final status = switch (t.status) {
       'done' => l.sendDelivered,
       'active' => null,
@@ -415,19 +448,10 @@ class TransferBatchRow extends StatelessWidget {
               ],
             ),
           ),
-          if (cancellable)
+          if (canCancelTransfer(t))
             Padding(
               padding: const EdgeInsets.only(left: Insets.sm),
-              child: t.status == 'queued'
-                  ? TextButton(
-                      onPressed: () => AppScope.read(context).cancelTransfer(t.id),
-                      child: Text(l.sendRemoveQueued),
-                    )
-                  : IconAction(
-                      icon: AppIcons.xmark,
-                      tooltip: l.cancel,
-                      onTap: () => AppScope.read(context).cancelTransfer(t.id),
-                    ),
+              child: TransferCancelButton(key: ValueKey(t.id), transfer: t),
             ),
         ],
       ),

@@ -63,13 +63,21 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
   bool _dragging = false;
   bool _sending = false;
 
-  /// 这个窗口里发出的批次
-  final List<String> _sent = [];
+  /// 本窗口发出、或打开后看到的未结束批次；结束后仍保留结果。
+  final Set<String> _sent = {};
 
   @override
   void initState() {
     super.initState();
     _add(widget.initial);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    for (final t in AppScope.of(context).transfers(TransferDirection.TRANSFER_DIRECTION_OUTGOING)) {
+      if (t.deviceId == widget.target.id && canCancelTransfer(t)) _sent.add(t.id);
+    }
   }
 
   @override
@@ -134,10 +142,10 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
       });
       return const SizedBox.shrink();
     }
-    final batches = [
-      for (final id in _sent)
-        ?state.transfers(TransferDirection.TRANSFER_DIRECTION_OUTGOING).where((t) => t.id == id).firstOrNull,
-    ];
+    // 重开窗口也保留未结束的批次，随时可以取消；本窗口发出的保留结果。
+    final batches = state.transfers(TransferDirection.TRANSFER_DIRECTION_OUTGOING)
+        .where((t) => _sent.contains(t.id) || t.deviceId == target.id && canCancelTransfer(t)).toList()
+      ..sort((a, b) => b.createdAtUnix.compareTo(a.createdAtUnix));
     final route = friend != null ? friendStatus(l, state, friend) : l.strangerNearby;
     final pasteKey = Platform.isMacOS ? '⌘V' : 'Ctrl+V';
     final total = _staged.fold<int>(0, (n, path) => n + (_sizes[path] ?? 0));
@@ -152,7 +160,7 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
         child: Dialog(
           child: SizedBox(
             width: 540,
-            child: Padding(
+            child: SingleChildScrollView(child: Padding(
               padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.xl),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -187,7 +195,13 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
                       children: [
                         if (batches.isNotEmpty) ...[
                           const SizedBox(height: Insets.lg),
-                          for (final t in batches.reversed) TransferBatchRow(transfer: t),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxHeight: 160),
+                            child: ListView(
+                              shrinkWrap: true,
+                              children: [for (final t in batches) TransferBatchRow(key: ValueKey(t.id), transfer: t)],
+                            ),
+                          ),
                         ],
                         const SizedBox(height: Insets.lg),
                         if (_staged.isNotEmpty) ...[
@@ -294,7 +308,7 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
                   ),
                 ],
               ),
-            ),
+            )),
           ),
         ),
       ),

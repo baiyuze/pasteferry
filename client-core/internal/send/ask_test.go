@@ -164,10 +164,56 @@ func TestFriendAskCancelledBySender(t *testing.T) {
 	if err := p.a.eng.Cancel(tr.Id); err != nil {
 		t.Fatal(err)
 	}
-	waitStatus(t, p.b, got.ID, store.TransferCancelled)
+	waitStatus(t, p.a, tr.Id, store.TransferCancelled)
+	if cancelled := waitStatus(t, p.b, got.ID, store.TransferCancelled); cancelled.Error != "peer_cancelled" {
+		t.Fatalf("接收方的取消原因 = %q", cancelled.Error)
+	}
 	if _, _, err := p.b.eng.Answer(got.ID, true); err != ErrNotAsking {
 		t.Fatalf("取消后不能再接受: %v", err)
 	}
+}
+
+// 好友接受后仍能取消正在发送的文件，清掉临时数据，后续发送照常。
+func TestFriendActiveSendCancelledBySender(t *testing.T) {
+	p := friendPair(t)
+	path := filepath.Join(t.TempDir(), "big.bin")
+	writeFile(t, path, randomBytes(t, 60<<20))
+	tr, err := p.a.eng.SendFiles("bob", []string{path}, false, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := askingOn(t, p.b)
+	if _, _, err := p.b.eng.Answer(got.ID, true); err != nil {
+		t.Fatal(err)
+	}
+	waitStatus(t, p.a, tr.Id, store.TransferActive)
+	if err := p.a.eng.Cancel(tr.Id); err != nil {
+		t.Fatal(err)
+	}
+	waitStatus(t, p.a, tr.Id, store.TransferCancelled)
+	if cancelled := waitStatus(t, p.b, tr.Id, store.TransferCancelled); cancelled.Error != "peer_cancelled" {
+		t.Fatalf("接收方的取消原因 = %q", cancelled.Error)
+	}
+	if _, err := os.Stat(filepath.Join(p.b.recvDir, partialDir, tr.Id)); !os.IsNotExist(err) {
+		t.Fatal("取消后仍留着未收完的临时数据")
+	}
+	if _, err := os.Stat(filepath.Join(p.b.recvDir, "big.bin")); !os.IsNotExist(err) {
+		t.Fatal("取消的文件不应保存到接收目录")
+	}
+	path = filepath.Join(t.TempDir(), "next.txt")
+	data := []byte("send after cancellation")
+	writeFile(t, path, data)
+	next, err := p.a.eng.SendFiles("bob", []string{path}, false, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	asking := askingOn(t, p.b)
+	if _, _, err := p.b.eng.Answer(asking.ID, true); err != nil {
+		t.Fatal(err)
+	}
+	waitStatus(t, p.a, next.Id, store.TransferDone)
+	waitStatus(t, p.b, next.Id, store.TransferDone)
+	sameFile(t, data, filepath.Join(p.b.recvDir, "next.txt"))
 }
 
 func TestSendToFriendNeedsAskAndValidNote(t *testing.T) {
