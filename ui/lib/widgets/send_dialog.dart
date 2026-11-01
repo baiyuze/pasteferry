@@ -52,6 +52,8 @@ Future<Transfer?> sendFilesById(BuildContext context, String id, String name, Li
           continue;
         case SendFailure.offline:
           showToast(context, l.sendErrOffline(name), error: true);
+        case SendFailure.connecting:
+          showToast(context, l.sendConnectingTip(name));
         case SendFailure.unsupported:
           showToast(context, l.sendNeedsUpdateTip(name), error: true);
         case SendFailure.disabled:

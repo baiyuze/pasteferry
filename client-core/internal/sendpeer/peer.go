@@ -23,7 +23,8 @@ func Peer(peerMgr *peers.Manager, deviceID string) send.Peer {
 				return send.Peer{
 					Known: true, Name: d.GetName(), Online: d.GetOnline(), Role: peers.RoleSelf,
 					Connected: connected, Relayed: relayed,
-					Supported: d.GetReceivesFiles(), Disabled: d.GetReceiveDisabled(),
+					Connecting: !connected || !d.GetFeaturesKnown(),
+					Supported:  d.GetReceivesFiles(), Disabled: d.GetReceiveDisabled(),
 					Ask: peerMgr.HasFeature(deviceID, peers.FeatureSendAsk),
 				}
 			}
@@ -37,7 +38,8 @@ func Peer(peerMgr *peers.Manager, deviceID string) send.Peer {
 			return send.Peer{
 				Known: true, Name: name, Online: fr.GetOnline(), Role: peers.RoleFriend,
 				Connected: connected, Relayed: relayed,
-				Supported: fr.GetReceivesFiles() || fr.GetReceiveDisabled(), Disabled: fr.GetReceiveDisabled(),
+				Connecting: !connected || !fr.GetFeaturesKnown(),
+				Supported:  fr.GetReceivesFiles() || fr.GetReceiveDisabled(), Disabled: fr.GetReceiveDisabled(),
 				Ask: peerMgr.HasFeature(deviceID, peers.FeatureSendAsk),
 			}
 		}
@@ -46,9 +48,10 @@ func Peer(peerMgr *peers.Manager, deviceID string) send.Peer {
 			return send.Peer{
 				Known: true, Name: st.GetDisplayName(), Online: true, Role: peers.RoleStranger,
 				Connected: connected, Relayed: relayed,
-				Supported: peerMgr.HasFeature(deviceID, peers.FeatureSendFiles) || peerMgr.HasFeature(deviceID, peers.FeatureSendFilesOff),
-				Disabled:  peerMgr.HasFeature(deviceID, peers.FeatureSendFilesOff),
-				Ask:       peerMgr.HasFeature(deviceID, peers.FeatureSendAsk),
+				Connecting: !connected || !peerMgr.FeaturesKnown(deviceID),
+				Supported:  peerMgr.HasFeature(deviceID, peers.FeatureSendFiles) || peerMgr.HasFeature(deviceID, peers.FeatureSendFilesOff),
+				Disabled:   peerMgr.HasFeature(deviceID, peers.FeatureSendFilesOff),
+				Ask:        peerMgr.HasFeature(deviceID, peers.FeatureSendAsk),
 			}
 		}
 	}

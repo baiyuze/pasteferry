@@ -292,15 +292,19 @@ func (p *Peer) setState(s ConnState) {
 	p.mu.Unlock()
 
 	if changed {
-		p.log.Debug("连接状态变化", "state", s)
-		if p.onState != nil {
-			p.onState(s)
-		}
+		p.notifyState(s)
+	}
+}
+
+func (p *Peer) notifyState(s ConnState) {
+	p.log.Debug("连接状态变化", "state", s)
+	if p.onState != nil {
+		p.onState(s)
 	}
 }
 
 // Connect 主动发起连接。已在连接中或已连通时直接返回。
-func (p *Peer) Connect(ctx context.Context) error {
+func (p *Peer) Connect(ctx context.Context) (err error) {
 	// 必须在同一个临界区里完成"检查 + 占位"。
 	//
 	// 否则两个 goroutine（配对确认与上线通知常常同时触发）都会看到
@@ -325,6 +329,13 @@ func (p *Peer) Connect(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	defer func() {
+		if err != nil {
+			// CreateOffer 等准备步骤也可能遇到暂时的网络错误。
+			// 此时还没有握手超时计时器，留下 pc 会让以后每次 Connect 都跳过。
+			p.closeConnection(pc)
+		}
+	}()
 
 	// 发起方创建控制通道；应答方靠 OnDataChannel 拿到它
 	ordered := true
@@ -363,7 +374,6 @@ func (p *Peer) Connect(ctx context.Context) error {
 	if err := p.sendSignal(ctx, offerMessage(offer, false)); err != nil {
 		// offer 根本没发出去（信令无路可走），对方不可能应答：立即复位。
 		// 通道一恢复上层就能重试，不必等握手超时
-		p.Close()
 		return err
 	}
 	// 初次握手由发起方等：应答方先公布出口地址，发起方先往那边发包
@@ -567,7 +577,7 @@ func (p *Peer) HandleSignal(ctx context.Context, msg *pb.SignalMessage) error {
 	}
 }
 
-func (p *Peer) handleOffer(ctx context.Context, offer *pb.SdpOffer) error {
+func (p *Peer) handleOffer(ctx context.Context, offer *pb.SdpOffer) (err error) {
 	p.mu.Lock()
 	pc := p.pc
 	polite := p.polite
@@ -588,6 +598,11 @@ func (p *Peer) handleOffer(ctx context.Context, offer *pb.SdpOffer) error {
 		making = false
 	}
 	p.mu.Unlock()
+	defer func() {
+		if err != nil && !restart && pc != nil {
+			p.closeConnection(pc)
+		}
+	}()
 
 	p.holdCandidates()
 	defer p.releaseCandidates()
@@ -833,7 +848,7 @@ func (p *Peer) newPeerConnection() (*webrtc.PeerConnection, error) {
 			// 留着的话 Connect 以为连接还在、不会重建；控制通道看上去仍是打开的，
 			// 发出的消息石沉大海
 			p.log.Warn("连接已失效，关闭以便重连", "state", s)
-			p.Close()
+			p.closeConnection(pc)
 		case webrtc.PeerConnectionStateDisconnected:
 			// 断开可能是暂时的（网络抖动），pion 会继续检测，恢复不了时转为失败
 			p.setState(StateOffline)
@@ -1161,10 +1176,24 @@ func (p *Peer) OpenStream(label string) (*webrtc.DataChannel, error) {
 }
 
 func (p *Peer) Close() {
+	p.closeConnection(nil)
+}
+
+// closeConnection 只清理本次握手的连接；迟到的错误不能关闭随后建立的新连接。
+// pc 为空时无条件关闭（用户主动断开）。
+func (p *Peer) closeConnection(pc *webrtc.PeerConnection) {
 	p.mu.Lock()
+	if pc != nil && p.pc != pc {
+		p.mu.Unlock()
+		return
+	}
+	changed := p.state != StateOffline
 	p.closeLocked()
+	p.state = StateOffline
 	p.mu.Unlock()
-	p.setState(StateOffline)
+	if changed {
+		p.notifyState(StateOffline)
+	}
 }
 
 func (p *Peer) closeLocked() {

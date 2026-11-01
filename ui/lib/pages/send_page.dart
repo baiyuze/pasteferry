@@ -504,7 +504,11 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
 
   /// 在线、但还不知道对方能不能收文件（还没连上、没收到它的功能声明）。
   /// 这时不能说对方要更新：点它就先去连
-  bool _connecting(Device d) => d.online && !d.featuresKnown && !d.receivesFiles;
+  bool _connecting(Device d) => d.online && (
+      d.connection == ConnectionKind.CONNECTION_KIND_UNSPECIFIED ||
+      !d.receivesFiles && (!d.featuresKnown ||
+          d.connection != ConnectionKind.CONNECTION_KIND_DIRECT &&
+          d.connection != ConnectionKind.CONNECTION_KIND_RELAY));
 
   void _connect(AppState state, Device d) {
     state.reconnect(d.id).catchError((_) => ConnectionKind.CONNECTION_KIND_UNSPECIFIED);
@@ -531,7 +535,7 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
     final enabled = _canSend(d);
     // 名字下面平时不写字，只在发送中、刚送达、或者发不了的时候写一行
     String? note;
-    if (!enabled) {
+    if (_connecting(d) || !enabled) {
       note = _statusOf(context, state, d);
     } else if (sending != null && sending.status == 'active' && sending.totalBytes > 0) {
       note = '${(sending.doneBytes.toInt() * 100 / sending.totalBytes.toInt()).floor()}%';
@@ -539,7 +543,7 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
       note = '✓ ${l.sendDelivered}';
     }
     // 头像右下角的小圆点是连接方式：绿色局域网，蓝色直连，橙色中转
-    final dot = !enabled
+    final dot = !enabled || _connecting(d)
         ? null
         : d.connection == ConnectionKind.CONNECTION_KIND_RELAY
             ? p.warning

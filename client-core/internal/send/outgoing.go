@@ -53,6 +53,11 @@ func (e *Engine) SendFiles(deviceID string, paths []string, allowRelay bool, not
 		return nil, ErrUnknownDevice
 	case !p.Online:
 		return nil, ErrOffline
+	case p.Connecting && (!p.Supported || other && !p.Ask):
+		if e.opts.Connect != nil {
+			go e.opts.Connect(deviceID)
+		}
+		return nil, ErrConnecting
 	case !p.Supported, other && !p.Ask:
 		// 旧版本收到会直接接收，绕过对方用户的确认，所以不发
 		return nil, ErrUnsupported

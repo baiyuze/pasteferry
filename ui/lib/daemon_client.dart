@@ -88,7 +88,10 @@ class DaemonConnection {
   final DaemonServiceClient client;
   final DaemonEndpoint endpoint;
 
-  static Future<DaemonConnection> connect({String? dataDir}) async {
+  static Future<DaemonConnection> connect({
+    String? dataDir,
+    Duration requestTimeout = const Duration(seconds: 15),
+  }) async {
     final ep = await DaemonEndpoint.read(dataDir);
     final channel = ClientChannel(
       '127.0.0.1',
@@ -102,9 +105,33 @@ class DaemonConnection {
     final client = DaemonServiceClient(
       channel,
       options: CallOptions(metadata: {'x-pasteferry-token': ep.token}),
+      interceptors: [_RequestDeadline(requestTimeout)],
     );
     return DaemonConnection._(channel, client, ep);
   }
 
   Future<void> close() => _channel.shutdown();
+}
+
+/// 本机连接建立后，单次请求也必须有期限。事件订阅和下载等流式请求保持长连接。
+class _RequestDeadline extends ClientInterceptor {
+  _RequestDeadline(this.timeout);
+
+  final Duration timeout;
+
+  @override
+  ResponseFuture<R> interceptUnary<Q, R>(
+    ClientMethod<Q, R> method,
+    Q request,
+    CallOptions options,
+    ClientUnaryInvoker<Q, R> invoker,
+  ) {
+    return invoker(
+      method,
+      request,
+      options.timeout == null
+          ? options.mergedWith(CallOptions(timeout: timeout))
+          : options,
+    );
+  }
 }

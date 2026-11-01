@@ -111,6 +111,8 @@ type Manager struct {
 	// declared 记下本次连接里对端是否发过声明；legacy 是连上 legacyWait 后仍没声明、判定为旧版本的设备
 	declared map[string]bool
 	legacy   map[string]bool
+	// connectionEpoch 让上一轮连接的延迟检查不能影响刚重建的连接。
+	connectionEpoch map[string]uint64
 	// appVersion 是本机的版本号，随功能声明发给对端
 	appVersion string
 	// sendFiles 报告本机有没有隔空传送，见 Options.SendFiles
@@ -120,6 +122,8 @@ type Manager struct {
 
 	// 好友（对方的一台电脑），见 friends.go
 	contacts map[string]store.Contact
+	// 已成为好友后回复确认的时间；避免两端把确认回执互相无限回发。
+	confirmReplyAt map[string]time.Time
 	// 「所有人」模式下认识的陌生设备，只在内存里
 	strangers map[string]store.Contact
 	// 删除了好友、还没告诉对方的：设备 ID → 对方公钥（验对方回执的签名）
@@ -222,9 +226,11 @@ func NewManager(opts Options) (*Manager, error) {
 		peerVersion:     make(map[string]string),
 		declared:        make(map[string]bool),
 		legacy:          make(map[string]bool),
+		connectionEpoch: make(map[string]uint64),
 		appVersion:      opts.AppVersion,
 		sendFiles:       opts.SendFiles,
 		contacts:        make(map[string]store.Contact),
+		confirmReplyAt:  make(map[string]time.Time),
 		strangers:       make(map[string]store.Contact),
 		notices:         make(map[string][]byte),
 		lastUse:         make(map[string]time.Time),
@@ -437,16 +443,26 @@ func (m *Manager) reconnectLoop(ctx context.Context) {
 func (m *Manager) connectPending(ctx context.Context) {
 	m.mu.RLock()
 	var candidates []string
+	now := time.Now()
 	for id := range m.known {
 		if m.isOnlineLocked(id) && m.p2p.State(id) == p2p.StateOffline {
 			candidates = append(candidates, id)
+		}
+	}
+	for _, others := range []map[string]store.Contact{m.contacts, m.strangers} {
+		for id := range others {
+			// 失败的握手、刚断掉的连接继续重试；已经空闲断开的好友不常连。
+			if m.isOnlineLocked(id) && m.p2p.State(id) == p2p.StateOffline &&
+				(now.Sub(m.lastUse[id]) < friendIdle || (m.inUse != nil && m.inUse(id))) {
+				candidates = append(candidates, id)
+			}
 		}
 	}
 	m.mu.RUnlock()
 
 	for _, id := range candidates {
 		connectCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
-		if err := m.p2p.Connect(connectCtx, id); err != nil {
+		if err := m.p2p.RetryDirect(connectCtx, id); err != nil {
 			m.log.Debug("重连失败，稍后重试", "device", id, "err", err)
 		}
 		cancel()
@@ -547,6 +563,7 @@ func (m *Manager) updatePeerFeatures(id string, f *pb.PeerFeatures) {
 	sort.Strings(names)
 	m.mu.Lock()
 	role := m.roleLocked(id)
+	reply := role != "" && !m.declared[id] && !m.noFeatures
 	if role != "" {
 		m.features[id] = set
 		m.peerVersion[id] = version
@@ -575,26 +592,42 @@ func (m *Manager) updatePeerFeatures(id string, f *pb.PeerFeatures) {
 		m.notify(d)
 	}
 	m.notifyFriend(id)
+	// 首次收到声明时回一份，补救本端声明早到或切换连接时的丢失。
+	if reply {
+		_ = m.p2p.Send(id, m.featuresFor(role))
+	}
 }
 
 // checkLegacy 在连上 legacyWait 之后检查对端发过功能声明没有：
 // 还连着却一直没发，说明是不认识声明的旧版本。
-func (m *Manager) checkLegacy(id string) {
+func (m *Manager) checkLegacy(id string, epoch uint64) {
 	m.mu.Lock()
-	ok := m.roleLocked(id) != ""
-	isLegacy := ok && connected(m.conn[id]) && !m.declared[id]
+	role := m.roleLocked(id)
+	isLegacy := role != "" && m.connectionEpoch[id] == epoch && connected(m.conn[id]) && !m.declared[id]
+	c := m.contacts[id]
 	if isLegacy {
 		m.legacy[id] = true
 		// 上次存下的声明不再可信（对方装回了旧版本）
 		delete(m.features, id)
 		delete(m.peerVersion, id)
+		if role == RoleFriend {
+			c.Features, c.AppVersion = nil, ""
+			m.contacts[id] = c
+		}
 	}
 	m.mu.Unlock()
 	if !isLegacy {
 		return
 	}
-	if err := m.store.SetDeviceFeatures(id, nil, ""); err != nil {
-		m.log.Warn("清除对端功能声明失败", "device", id, "err", err)
+	switch role {
+	case RoleSelf:
+		if err := m.store.SetDeviceFeatures(id, nil, ""); err != nil {
+			m.log.Warn("清除对端功能声明失败", "device", id, "err", err)
+		}
+	case RoleFriend:
+		if err := m.store.PutContact(c); err != nil {
+			m.log.Warn("清除好友功能声明失败", "device", id, "err", err)
+		}
 	}
 	if d, ok := m.device(id); ok {
 		m.notify(d)
@@ -633,6 +666,14 @@ func (m *Manager) HasFeature(deviceID, feature string) bool {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 	return m.features[deviceID][feature]
+}
+
+// FeaturesKnown 报告是否已经知道对端的功能；尚未声明与明确不支持是两种状态。
+func (m *Manager) FeaturesKnown(deviceID string) bool {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	_, declared := m.features[deviceID]
+	return declared || m.legacy[deviceID]
 }
 
 // ConnState 返回与某台设备的 P2P 连接状态。
@@ -786,11 +827,13 @@ func (m *Manager) handlePeerRestarted(deviceID string) {
 // connectIfOffline 在对端上线时建立 P2P 通道，这样真正要传数据时已经就绪。
 // 谁发起由 p2p.Manager 内部按 device_id 字典序决定，这里无脑调用即可。
 func (m *Manager) connectIfOffline(deviceID string) {
-	m.mu.RLock()
-	_, paired := m.known[deviceID]
-	m.mu.RUnlock()
-	if !paired {
+	role := m.Role(deviceID)
+	if role == "" {
 		return
+	}
+	if role != RoleSelf {
+		// 上线或重启后交换一次名片与功能声明，并为失败的握手保留重试窗口。
+		m.touch(deviceID)
 	}
 	go func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -801,7 +844,7 @@ func (m *Manager) connectIfOffline(deviceID string) {
 		if m.p2p.State(deviceID) != p2p.StateOffline {
 			return
 		}
-		if err := m.p2p.Connect(ctx, deviceID); err != nil {
+		if err := m.p2p.RetryDirect(ctx, deviceID); err != nil {
 			m.log.Warn("建立 P2P 连接失败", "device", deviceID, "err", err)
 		}
 	}()
@@ -906,8 +949,20 @@ func (m *Manager) handleP2PState(deviceID string, state p2p.ConnState) {
 	prev := m.conn[deviceID]
 	m.conn[deviceID] = state
 	role := m.roleLocked(deviceID)
+	if state != prev && (state == p2p.StateOffline || state == p2p.StateConnecting) {
+		m.connectionEpoch[deviceID]++
+		delete(m.declared, deviceID)
+		delete(m.legacy, deviceID)
+		// 连接恢复前，旧的「不能接收」不再作为更新依据；已知能接收的声明仍可用于排队发送。
+		f := m.features[deviceID]
+		if !ReceivesSendFiles(f, m.platformLocked(deviceID)) || (role != RoleSelf && !f[FeatureSendAsk]) {
+			delete(m.features, deviceID)
+			delete(m.peerVersion, deviceID)
+		}
+	}
+	epoch := m.connectionEpoch[deviceID]
 	if connected(state) && !connected(prev) {
-		m.declared[deviceID] = false
+		// 功能声明可能早于这个就绪回调到达，不能在这里把它重置。
 		m.lastUse[deviceID] = time.Now()
 	}
 	m.mu.Unlock()
@@ -921,7 +976,7 @@ func (m *Manager) handleP2PState(deviceID string, state p2p.ConnState) {
 		if !m.noFeatures {
 			_ = m.p2p.Send(deviceID, m.featuresFor(role))
 		}
-		time.AfterFunc(legacyWait, func() { m.checkLegacy(deviceID) })
+		time.AfterFunc(legacyWait, func() { m.checkLegacy(deviceID, epoch) })
 	}
 
 	m.log.Info("P2P 连接状态", "device", deviceID, "state", state)
@@ -1518,11 +1573,12 @@ const reconnectWait = 15 * time.Second
 // （局域网里打招呼、信令服务器断着的马上重连），找到就发起连接；走中转的马上再试一次直连，
 // 打不通照旧走中转。直连了就立即返回，否则最多等 reconnectWait，返回那时的连接状态。
 func (m *Manager) Reconnect(ctx context.Context, deviceID string) (pb.ConnectionKind, error) {
-	m.mu.RLock()
-	_, ok := m.known[deviceID]
-	m.mu.RUnlock()
-	if !ok {
+	role := m.Role(deviceID)
+	if role == "" {
 		return pb.ConnectionKind_CONNECTION_KIND_UNSPECIFIED, ErrNotPaired
+	}
+	if role != RoleSelf {
+		m.touch(deviceID)
 	}
 	if m.p2p.State(deviceID) == p2p.StateDirect {
 		return pb.ConnectionKind_CONNECTION_KIND_DIRECT, nil

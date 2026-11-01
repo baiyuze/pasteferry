@@ -70,6 +70,21 @@ class _SettingsPageState extends State<SettingsPage> {
     final cfg = state.config;
 
     if (cfg == null) {
+      if (state.link == LinkState.offline) {
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(context.l10n.errUnavailable),
+              const SizedBox(height: Insets.md),
+              OutlinedButton(
+                onPressed: state.connect,
+                child: Text(context.l10n.retry),
+              ),
+            ],
+          ),
+        );
+      }
       return const Center(child: CircularProgressIndicator(strokeWidth: 2.5));
     }
     _syncControllers(cfg);

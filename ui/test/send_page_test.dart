@@ -87,14 +87,18 @@ void main() {
             peers: [
               // 在线（服务器或局域网报告）但还没连上、没收到功能声明
               Device(id: 'new', name: 'Linux 台式机', platform: 'linux', online: true),
+              // 重连时旧的负面能力记录不能显示成版本不兼容。
+              Device(id: 'retry', name: 'Reconnecting PC', platform: 'windows', online: true,
+                  connection: ConnectionKind.CONNECTION_KIND_OFFLINE, featuresKnown: true, lanReachable: true),
               // 连上以后一直没声明，判定为旧版本
               Device(id: 'old', name: 'Old PC', platform: 'windows', online: true,
                   connection: ConnectionKind.CONNECTION_KIND_DIRECT, featuresKnown: true),
             ],
           );
         final l = await open(tester, state);
-        expect(find.text(l.reconnecting), findsOneWidget);
+        expect(find.text(l.reconnecting), findsNWidgets(2));
         expect(find.byTooltip(l.sendConnectingTip('Linux 台式机')), findsOneWidget);
+        expect(find.byTooltip(l.sendConnectingTip('Reconnecting PC')), findsOneWidget);
         expect(find.text(l.sendNeedsUpdate), findsOneWidget);
         expect(find.byTooltip(l.sendNeedsUpdateTip('Old PC')), findsOneWidget);
       });

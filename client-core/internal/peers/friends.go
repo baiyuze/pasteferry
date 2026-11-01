@@ -676,6 +676,11 @@ func (m *Manager) handleFriendConfirm(from string, c *pb.FriendConfirm) {
 		}
 	}
 	_, isFriend := m.contacts[from]
+	reply := p == nil && isFriend && c.GetAccepted() &&
+		!connected(m.conn[from]) && time.Since(m.confirmReplyAt[from]) >= time.Second
+	if reply {
+		m.confirmReplyAt[from] = time.Now()
+	}
 	if p != nil {
 		if c.GetAccepted() {
 			p.peerDecision = 1
@@ -685,8 +690,8 @@ func (m *Manager) handleFriendConfirm(from string, c *pb.FriendConfirm) {
 	}
 	m.mu.Unlock()
 	switch {
-	case p == nil && isFriend && c.GetAccepted():
-		// 本端已经成为好友了，对方还没收到本端的确认
+	case reply:
+		// 对方可能还没收到本端的确认；连通前短时间内只回一次，连通后停止，避免回执循环。
 		go m.sendConfirm(from, true, 1)
 	case p != nil && !c.GetAccepted():
 		m.log.Info("对方没有添加好友", "peer", from)
@@ -898,6 +903,7 @@ func (m *Manager) RemoveFriend(ctx context.Context, id string) error {
 	c, ok := m.contacts[id]
 	if ok {
 		delete(m.contacts, id)
+		delete(m.confirmReplyAt, id)
 		delete(m.features, id)
 		m.notices[id] = c.PublicKey
 	}
@@ -977,6 +983,7 @@ func (m *Manager) handleFriendRemove(from string, r *pb.FriendRemove) {
 	_, isFriend := m.contacts[from]
 	if isFriend {
 		delete(m.contacts, from)
+		delete(m.confirmReplyAt, from)
 		delete(m.features, from)
 	}
 	m.mu.Unlock()

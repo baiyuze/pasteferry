@@ -535,7 +535,7 @@ func TestFeaturesUnknownWhileNotConnected(t *testing.T) {
 	a.m.known[peer.ID] = peer
 	a.m.serverOnline[peer.ID] = true
 	a.m.mu.Unlock()
-	a.m.checkLegacy(peer.ID)
+	a.m.checkLegacy(peer.ID, 0)
 	dev := peerDevice(t, a, peer.ID)
 	if !dev.GetOnline() || dev.GetFeaturesKnown() || dev.GetReceivesFiles() {
 		t.Fatalf("没连上就判定了功能: %v", dev)

@@ -32,7 +32,12 @@ String friendStatus(AppLocalizations l, AppState state, Friend f) {
       _ => l.offline,
     };
   }
-  if (!f.featuresKnown && !f.receivesFiles) return l.reconnecting;
+  if (f.connection == ConnectionKind.CONNECTION_KIND_UNSPECIFIED ||
+      !f.receivesFiles && (!f.featuresKnown ||
+          f.connection != ConnectionKind.CONNECTION_KIND_DIRECT &&
+          f.connection != ConnectionKind.CONNECTION_KIND_RELAY)) {
+    return l.reconnecting;
+  }
   if (f.receiveDisabled) return l.sendNotReceiving;
   if (!f.receivesFiles) return l.sendNeedsUpdate;
   return switch (f.connection) {
@@ -267,7 +272,9 @@ Future<void> openFriendSend(BuildContext context, Friend f) async {
     showToast(context, l.sendErrOffline(f.displayName), error: true);
     return;
   }
-  if (!f.featuresKnown && !f.receivesFiles) {
+  if (f.connection != ConnectionKind.CONNECTION_KIND_DIRECT &&
+      f.connection != ConnectionKind.CONNECTION_KIND_RELAY ||
+      !f.featuresKnown && !f.receivesFiles) {
     unawaited(AppScope.read(context).reconnect(f.id).catchError((_) => ConnectionKind.CONNECTION_KIND_UNSPECIFIED));
   }
   await showFriendSendDialog(context, SendTarget.friend(f));

@@ -41,7 +41,7 @@ func transferError(err error) error {
 		return status.Error(codes.InvalidArgument, err.Error())
 	case errors.Is(err, send.ErrNotFound), errors.Is(err, send.ErrUnknownDevice):
 		return status.Error(codes.NotFound, err.Error())
-	case errors.Is(err, send.ErrOffline), errors.Is(err, send.ErrUnsupported), errors.Is(err, send.ErrPeerDisabled),
+	case errors.Is(err, send.ErrOffline), errors.Is(err, send.ErrConnecting), errors.Is(err, send.ErrUnsupported), errors.Is(err, send.ErrPeerDisabled),
 		errors.Is(err, send.ErrNeedRelayConsent), errors.Is(err, send.ErrNotResumable):
 		return status.Error(codes.FailedPrecondition, err.Error())
 	}

@@ -21,6 +21,7 @@ typedef PairingCode = ({String code, List<String> addresses});
 /// 隔空传送发不出去的原因，后台服务把它写在错误消息里（见 rpc/send.go）。
 enum SendFailure {
   offline,
+  connecting,
   unsupported,
   disabled,
   needRelayConsent,
@@ -50,14 +51,18 @@ enum PairingFailure {
 /// 所有与 daemon 的交互都经过这里：页面只读状态、调方法，不直接碰 gRPC。
 /// 这样断线重连、事件合并这些琐事集中在一处，页面代码保持干净。
 class AppState extends ChangeNotifier implements RecordDetails {
-  AppState({BackgroundService? service, QuickPasteService? quickPasteService})
+  AppState({BackgroundService? service, QuickPasteService? quickPasteService,
+    Future<DaemonConnection> Function()? connectDaemon})
     : service = service ?? BackgroundService(),
-      quickPasteService = quickPasteService ?? QuickPasteService();
+      quickPasteService = quickPasteService ?? QuickPasteService(),
+      _connectDaemon = connectDaemon ?? DaemonConnection.connect;
 
   final BackgroundService service;
 
   /// Mac 上快捷粘贴窗口的 LaunchAgent，见 quick_paste_service.dart
   final QuickPasteService quickPasteService;
+
+  final Future<DaemonConnection> Function() _connectDaemon;
 
   DaemonConnection? _conn;
   StreamSubscription<Event>? _events;
@@ -371,7 +376,15 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   // ─────────────────────────── 连接 ───────────────────────────
 
-  Future<void> connect() => _connectionWork = _connect();
+  Future<void> connect() {
+    final pending = _connectionWork;
+    if (pending != null) return pending;
+    final work = _connect();
+    _connectionWork = work;
+    return work.whenComplete(() {
+      if (identical(_connectionWork, work)) _connectionWork = null;
+    });
+  }
 
   Future<void> _connect() async {
     if (_quitting) return;
@@ -380,18 +393,24 @@ class AppState extends ChangeNotifier implements RecordDetails {
     await _replaceLegacyService();
 
     try {
-      final conn = await DaemonConnection.connect();
+      final conn = await _connectDaemon();
       _conn = conn;
 
-      // 首屏需要的数据一次取齐，避免界面分几次闪烁
-      final results = await Future.wait([
+      // 配置先到就先显示设置；历史记录或状态查询迟迟不回不能把设置页堵住。
+      final results = await Future.wait<Object>([
         conn.client.listHistory(ListHistoryRequest(limit: 200)),
-        conn.client.getConfig(Empty()),
+        conn.client.getConfig(Empty()).then((cfg) {
+          if (!_quitting && identical(_conn, conn)) {
+            _config = cfg;
+            notifyListeners();
+          }
+          return cfg;
+        }),
         conn.client.getStatus(Empty()),
         conn.client.listHistory(
           ListHistoryRequest(limit: 500, favorites: true),
         ),
-      ]);
+      ], eagerError: true);
 
       _records
         ..clear()
@@ -400,7 +419,6 @@ class AppState extends ChangeNotifier implements RecordDetails {
         await conn.close();
         return;
       }
-      _config = results[1] as Config;
       _status = results[2] as Status;
       // 旧版后台服务不认识 favorites，会把复制记录原样返回：只收下真的收藏
       _favorites
@@ -408,13 +426,14 @@ class AppState extends ChangeNotifier implements RecordDetails {
         ..addAll(
           (results[3] as ListHistoryResponse).records.where((r) => r.favorite),
         );
-      await _loadQuickPasteStatus();
-
-      await _loadDevices();
-      await _loadFriends();
-      await _loadWebShare();
-      await _loadTransfers();
-      await refreshNotificationStatus();
+      await Future.wait([
+        _loadQuickPasteStatus(),
+        _loadDevices(),
+        _loadFriends(),
+        _loadWebShare(),
+        _loadTransfers(),
+        refreshNotificationStatus(),
+      ], eagerError: true);
 
       _events = conn.client
           .subscribe(SubscribeRequest())
@@ -472,7 +491,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   Future<void> _refreshServiceState() async {
     try {
-      _serviceState = await service.state();
+      _serviceState = await service.state().timeout(const Duration(seconds: 5));
     } catch (_) {
       _serviceState = null;
     }
@@ -626,7 +645,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
     if (conn == null) return;
     try {
       _webShare = await conn.client.getWebShare(Empty());
-    } on GrpcError {
+    } on GrpcError catch (e) {
+      if (e.code != StatusCode.unimplemented) rethrow;
       _webShare = null; // 旧版后台服务没有手机网页传输
     }
   }
@@ -666,7 +686,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
       ]);
       _friends = (results[0] as ListFriendsResponse).friends;
       _profile = results[1] as Profile;
-    } on GrpcError {
+    } on GrpcError catch (e) {
+      if (e.code != StatusCode.unimplemented) rethrow;
       // 旧版后台服务没有好友
       _friends = const [];
       _profile = null;
@@ -675,6 +696,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   void _scheduleRetry(String message) {
     if (_quitting) return;
+    _retry?.cancel();
     _events?.cancel();
     _events = null;
     _conn?.close();
@@ -865,7 +887,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
       _transfers
         ..clear()
         ..addAll(resp.transfers);
-    } on GrpcError {
+    } on GrpcError catch (e) {
+      if (e.code != StatusCode.unimplemented) rethrow;
       // 更新期间连上的可能还是不认识隔空传送的旧版后台服务
       _transfers.clear();
     }
@@ -1196,7 +1219,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// [language] 是更新日志的语言，见 [settingFromLocale]。
   Future<UpdateInfo> checkForUpdate(String language) =>
-      _client.checkForUpdate(CheckForUpdateRequest(language: language));
+      _client.checkForUpdate(CheckForUpdateRequest(language: language),
+          options: CallOptions(timeout: const Duration(seconds: 30)));
 
   /// 下载并校验新版本。取消订阅即停止下载。
   Stream<UpdateProgress> downloadUpdate(String version) =>
@@ -1297,7 +1321,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
     if (conn == null) return;
     try {
       _quickPaste = await conn.client.getQuickPasteStatus(Empty());
-    } on GrpcError {
+    } on GrpcError catch (e) {
+      if (e.code != StatusCode.unimplemented) rethrow;
       _quickPaste = null; // 旧版后台服务没有快捷窗口
     }
   }
@@ -1452,6 +1477,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
     if (e is! GrpcError) return SendFailure.other;
     return switch ((e.message ?? '').split(':').first.trim()) {
       'offline' => SendFailure.offline,
+      'connecting' => SendFailure.connecting,
       'unsupported' => SendFailure.unsupported,
       'disabled' => SendFailure.disabled,
       'relay' => SendFailure.needRelayConsent,

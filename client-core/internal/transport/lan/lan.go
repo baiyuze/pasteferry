@@ -900,7 +900,17 @@ func (t *Transport) updateAdvert() {
 	text := t.advertTextLocked()
 	t.mu.Unlock()
 	if err := t.discovery.Update(text); err != nil {
-		t.log.Debug("更新局域网广播失败", "err", err)
+		// Windows 更新广播会先注销旧记录，重新注册暂时失败后就完全不可见。
+		// 与启动失败一样重试，不能一直等到下一次换网或重启软件。
+		t.mu.Lock()
+		first := t.running && t.discoveryRetry.IsZero()
+		if first {
+			t.discoveryRetry = time.Now().Add(discoveryRetryEvery)
+		}
+		t.mu.Unlock()
+		if first {
+			t.log.Warn("更新局域网广播失败，稍后重试", "err", err)
+		}
 	}
 }
 

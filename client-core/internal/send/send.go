@@ -32,6 +32,7 @@ import (
 var (
 	ErrUnknownDevice    = errors.New("unknown_device")
 	ErrOffline          = errors.New("offline")
+	ErrConnecting       = errors.New("connecting")
 	ErrUnsupported      = errors.New("unsupported")
 	ErrPeerDisabled     = errors.New("disabled")
 	ErrNeedRelayConsent = errors.New("relay")
@@ -89,12 +90,13 @@ type Peer struct {
 	// Role 是对方的角色：store.RoleSelf / RoleFriend / RoleStranger
 	Role string
 	// Ask 表示对方能等它的用户接受（声明了 send_files_ask_v1）。发给好友、陌生设备时必须有
-	Ask       bool
-	Online    bool
-	Connected bool // P2P 连接已建立
-	Relayed   bool // 连接经中转
-	Supported bool // 对方声明能接收隔空传送
-	Disabled  bool // 对方关闭了接收
+	Ask        bool
+	Online     bool
+	Connected  bool // P2P 连接已建立
+	Connecting bool // 尚未连通或尚未确认接收能力，不能据此提示版本过旧
+	Relayed    bool // 连接经中转
+	Supported  bool // 对方声明能接收隔空传送
+	Disabled   bool // 对方关闭了接收
 }
 
 // NoticeKind 是要发给用户的系统通知。

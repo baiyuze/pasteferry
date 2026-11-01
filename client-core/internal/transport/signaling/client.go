@@ -62,6 +62,9 @@ type Client struct {
 	conn      *websocket.Conn
 	url       string
 	connected bool
+	// cancelSession 也覆盖拨号与握手阶段，此时 conn 还没有发布。
+	cancelSession context.CancelFunc
+	urlVersion    uint64
 	// urlChanged 在地址变化（或 Redial）时唤醒正在等待的 Run，立即连接
 	urlChanged chan struct{}
 }
@@ -106,13 +109,18 @@ func New(opts Options) *Client {
 // 当前连接会被断开，以便立即切换；地址为空表示不用服务器。
 func (c *Client) SetURL(url string) {
 	c.mu.Lock()
-	changed := c.url != url
+	if c.url == url {
+		c.mu.Unlock()
+		return
+	}
 	c.url = url
+	c.urlVersion++
 	conn := c.conn
+	cancel := c.cancelSession
 	c.mu.Unlock()
 
-	if !changed {
-		return
+	if cancel != nil {
+		cancel()
 	}
 	if conn != nil {
 		conn.Close(websocket.StatusNormalClosure, "切换服务器")
@@ -194,10 +202,21 @@ func (c *Client) Run(ctx context.Context) {
 
 // session 完成一次完整的连接生命周期。established 表示握手成功过。
 func (c *Client) session(ctx context.Context) (established bool, err error) {
-	url := c.URL()
+	c.mu.Lock()
+	url, version := c.url, c.urlVersion
 	if url == "" {
+		c.mu.Unlock()
 		return false, errors.New("未配置信令服务器地址")
 	}
+	ctx, cancelSession := context.WithCancel(ctx)
+	c.cancelSession = cancelSession
+	c.mu.Unlock()
+	defer func() {
+		cancelSession()
+		c.mu.Lock()
+		c.cancelSession = nil
+		c.mu.Unlock()
+	}()
 
 	dialCtx, cancel := context.WithTimeout(ctx, dialTimeout)
 	var dialOpts *websocket.DialOptions
@@ -217,6 +236,10 @@ func (c *Client) session(ctx context.Context) (established bool, err error) {
 	}
 
 	c.mu.Lock()
+	if c.urlVersion != version || ctx.Err() != nil {
+		c.mu.Unlock()
+		return false, context.Canceled
+	}
 	c.conn = conn
 	c.connected = true
 	c.mu.Unlock()

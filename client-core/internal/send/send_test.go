@@ -576,7 +576,8 @@ func TestRefusesPeersThatCannotReceive(t *testing.T) {
 		want error
 	}{
 		{"旧版本", func() {}, ErrUnsupported},
-		{"关闭了接收", func() { peer.Supported, peer.Disabled = true, true }, ErrPeerDisabled},
+		{"还没连上", func() { peer.Connecting = true }, ErrConnecting},
+		{"关闭了接收", func() { peer.Connecting = false; peer.Supported, peer.Disabled = true, true }, ErrPeerDisabled},
 		{"离线", func() { peer.Disabled, peer.Online = false, false }, ErrOffline},
 		{"没配对", func() { peer.Known = false }, ErrUnknownDevice},
 	}
