@@ -11,6 +11,36 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.8.3',
+ 'date': '2026-11-01',
+ 'changes': [],
+ 'fixes': [('Devices now show "Connecting" while the connection and capabilities are being established, '
+            'instead of misleading update or version mismatch messages. Reconnection also refreshes '
+            'stale capability information.',
+            '设备建立连接、确认功能期间显示「正在连接」，不再误报需要更新或版本不匹配；重新连接时也会刷新过期的功能信息。',
+            '接続と機能確認の間は「接続中」と表示し、更新やバージョン不一致の誤案内を防ぎます。再接続時には古い機能情報も更新します。',
+            '裝置建立連線、確認功能期間顯示「正在連線」，不再誤報需要更新或版本不符；重新連線時也會更新過期的功能資訊。',
+            '裝置建立連線、確認功能期間顯示「正在連線」，不再誤報需要更新或版本不符；重新連線時亦會更新過期的功能資訊。'),
+           ('Settings no longer wait indefinitely for a background-service request. Startup failures '
+            'can be retried, and settings become available as soon as the configuration is loaded.',
+            '设置不再因后台请求无响应而一直转圈；启动失败后可重试，配置读取完成即可使用设置。',
+            '設定画面がバックグラウンド処理の応答を無期限に待たないよう修正。起動失敗後は再試行でき、設定の読み込み後すぐに操作できます。',
+            '設定不再因背景請求無回應而一直轉圈；啟動失敗後可重試，設定讀取完成即可使用。',
+            '設定不再因背景請求無回應而一直轉圈；啟動失敗後可重試，設定讀取完成即可使用。'),
+           ('A failed initial connection can recover without restarting the app. Network setup failures '
+            'release the failed connection, changing the signaling server cancels the old startup '
+            'attempt, and Windows retries failed local-network advertisements.',
+            '首次连接失败后可自行恢复，无需退出重开；网络初始化失败会清理连接，切换信令服务器会停止旧的启动尝试，Windows 会重试失败的局域网广播。',
+            '初回接続の失敗後、アプリの再起動なしで復旧できるよう修正。失敗した接続を解放し、シグナリング先の変更で古い接続試行を中止し、WindowsのLAN広告を再試行します。',
+            '首次連線失敗後可自行恢復，無須退出重開；網路初始化失敗會清理連線，切換信令伺服器會停止舊的啟動嘗試，Windows 會重試失敗的區域網路廣播。',
+            '首次連線失敗後可自行恢復，無須退出重開；網絡初始化失敗會清理連線，切換信令伺服器會停止舊的啟動嘗試，Windows 會重試失敗的區域網絡廣播。'),
+           ('Files being sent to a friend can be cancelled from the friend conversation and send '
+            'dialog, including queued transfers and transfers waiting for acceptance. Ongoing transfers '
+            'remain visible when the dialog is reopened.',
+            '发给好友的文件可在好友会话和发送窗口取消，包括排队和等待对方接收的任务；重新打开窗口仍能看到进行中的传输。',
+            '友だちへのファイル送信を会話画面と送信画面からキャンセルできます。待機中・承認待ちにも対応し、画面を開き直しても進行中の転送を表示します。',
+            '傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。',
+            '傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。')]},
 {'changes': [],
  'date': '2026-10-30',
  'fixes': [("Browser-to-computer file transfers now appear immediately in the computer's Received list. "

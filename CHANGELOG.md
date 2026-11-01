@@ -1,5 +1,23 @@
 # 更新记录 / Changelog
 
+## 2.8.3 — 2026-11-01
+
+This release improves connection recovery, prevents misleading compatibility messages during connection setup, and makes friend file transfers cancellable.
+
+### Fixes
+
+- Devices now show "Connecting" while the connection and capabilities are being established, instead of misleading update or version mismatch messages. Reconnection also refreshes stale capability information.
+- Settings no longer wait indefinitely for a background-service request. Startup failures can be retried, and settings become available as soon as the configuration is loaded.
+- A failed initial connection can recover without restarting the app. Network setup failures release the failed connection, changing the signaling server cancels the old startup attempt, and Windows retries failed local-network advertisements.
+- Files being sent to a friend can be cancelled from the friend conversation and send dialog, including queued transfers and transfers waiting for acceptance. Ongoing transfers remain visible when the dialog is reopened.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended on each device to receive the connection and Settings fixes. Pairings, friends, history and settings are preserved.
+- **Android**: optional; includes the shared connection recovery fixes.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.8.2 — 2026-10-30
 
 This release fixes missing desktop history for browser file transfers.
