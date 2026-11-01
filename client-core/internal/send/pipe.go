@@ -42,7 +42,7 @@ func (p *dcPipe) finish(ctx context.Context) error {
 	return p.cw.WaitDrained(ctx, time.Minute)
 }
 
-func (p *dcPipe) Close() error { return p.dc.Close() }
+func (p *dcPipe) Close() error { return p.cw.Close() }
 
 // tcpPipe 是局域网 TCP：内核负责送达，写完以后关掉写方向即可。
 type tcpPipe struct {

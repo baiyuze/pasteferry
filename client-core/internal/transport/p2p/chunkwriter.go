@@ -34,6 +34,12 @@ type ChunkWriter struct {
 
 	mu  sync.Mutex
 	err error
+
+	// SCTP reset must follow the last Send. Closing concurrently with Send
+	// can leave late chunks on a reset stream and stall acceptance of later
+	// data channels while their DCEP opener waits behind that orphan stream.
+	sendMu sync.Mutex
+	closed bool
 }
 
 // NewChunkWriter 包住一条刚打开的数据通道。onProgress 在每发出一个分片后收到累计字节数，可以为 nil。
@@ -79,7 +85,9 @@ func (w *ChunkWriter) flushChunk() error {
 	if err := w.waitForBuffer(); err != nil {
 		return err
 	}
-	if w.dc.ReadyState() != webrtc.DataChannelStateOpen {
+	w.sendMu.Lock()
+	defer w.sendMu.Unlock()
+	if w.closed || w.dc.ReadyState() != webrtc.DataChannelStateOpen {
 		return errors.New("数据通道已关闭")
 	}
 	if err := w.dc.Send(w.buf); err != nil {
@@ -92,6 +100,15 @@ func (w *ChunkWriter) flushChunk() error {
 		w.onProgress(w.sent)
 	}
 	return nil
+}
+
+// Close stops writes before resetting the data channel, without waiting for
+// buffered data or a writer that is paused by backpressure.
+func (w *ChunkWriter) Close() error {
+	w.sendMu.Lock()
+	defer w.sendMu.Unlock()
+	w.closed = true
+	return w.dc.Close()
 }
 
 // waitForBuffer 在发送缓冲积压过多时等待它回落。

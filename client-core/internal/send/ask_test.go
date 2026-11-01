@@ -175,6 +175,15 @@ func TestFriendAskCancelledBySender(t *testing.T) {
 
 // 好友接受后仍能取消正在发送的文件，清掉临时数据，后续发送照常。
 func TestFriendActiveSendCancelledBySender(t *testing.T) {
+	testFriendSendCancelledBySender(t, true)
+}
+
+func TestFriendSendCancelledDuringStreamSetup(t *testing.T) {
+	testFriendSendCancelledBySender(t, false)
+}
+
+func testFriendSendCancelledBySender(t *testing.T, waitForData bool) {
+	t.Helper()
 	p := friendPair(t)
 	t.Cleanup(func() {
 		if t.Failed() {
@@ -194,6 +203,12 @@ func TestFriendActiveSendCancelledBySender(t *testing.T) {
 		t.Fatal(err)
 	}
 	waitStatus(t, p.a, tr.Id, store.TransferActive)
+	if waitForData {
+		waitFor(t, 30*time.Second, func() bool {
+			tr, _ := p.b.db.GetTransfer(got.ID)
+			return p.b.eng.withProgress(tr).DoneBytes > 256<<10
+		})
+	}
 	if err := p.a.eng.Cancel(tr.Id); err != nil {
 		t.Fatal(err)
 	}
