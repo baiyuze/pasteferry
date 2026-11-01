@@ -48,12 +48,13 @@ type pendingPair struct {
 
 	// 这次是配对还是加好友（lan.IntentDevice / lan.IntentFriend），对方的用途（不知道时为空）
 	// 和名片。两边的用途一致才继续，见 friends.go
-	intent      string
-	peerIntent  string
-	peerCard    *pb.FriendCard
-	intentKnown chan struct{} // 知道对方的用途后关闭
-	intentDone  bool
-	mismatch    error
+	intent        string
+	peerIntent    string
+	peerCard      *pb.FriendCard
+	intentKnown   chan struct{} // 知道对方的用途后关闭
+	intentDone    bool
+	intentReplyAt time.Time
+	mismatch      error
 	// 加好友：两边的用户各自点了「添加」（1）或「取消」（-1）
 	localDecision int
 	peerDecision  int

@@ -563,14 +563,19 @@ func (m *Manager) handlePairIntent(from string, in *pb.PairIntent) {
 		m.mu.Unlock()
 		return
 	}
-	first := p.peerIntent == ""
+	// The first reply can arrive before the other side records its session.
+	// Answer retries too, while limiting replies so they cannot echo forever.
+	now := time.Now()
+	reply := now.Sub(p.intentReplyAt) >= time.Second
+	if reply {
+		p.intentReplyAt = now
+	}
 	p.peerIntent = intent
 	if in.GetCard() != nil {
 		p.peerCard = cleanCard(in.GetCard())
 	}
 	m.mu.Unlock()
-	if first {
-		// 对方可能还没收到本端的，回一条
+	if reply {
 		go m.sendIntent(p)
 	}
 	m.evaluateIntent(p)
