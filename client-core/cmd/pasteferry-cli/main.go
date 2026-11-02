@@ -40,6 +40,9 @@ import (
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
+// version 通过 -X main.version=... 在构建时注入，便于 brew 等打包工具标定版本。
+var version = "0.1.0-dev"
+
 func main() {
 	dataDir := flag.String("data-dir", "", "数据目录（默认为系统标准位置）")
 	flag.Parse()
@@ -47,7 +50,7 @@ func main() {
 	cmd := flag.Arg(0)
 	if cmd == "" {
 		fmt.Fprintln(os.Stderr,
-			"用法: pasteferry-cli [-data-dir DIR] <status|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]|web [on|off|invite [ADDR]|remove ID]>")
+			"用法: pasteferry-cli [-data-dir DIR] <status|version|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]|web [on|off|invite [ADDR]|remove ID]>")
 		os.Exit(2)
 	}
 
@@ -58,6 +61,11 @@ func main() {
 }
 
 func run(cmd, dataDir string) error {
+	if cmd == "version" {
+		fmt.Println(version)
+		return nil
+	}
+
 	paths, err := resolvePaths(dataDir)
 	if err != nil {
 		return err
