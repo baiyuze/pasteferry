@@ -90,9 +90,59 @@
   </tr>
 </table>
 
-### 其他
-
 - 后台常驻，开机自启，崩溃自动恢复；App 里检查更新，确认后自动安装。
+
+### 无 GUI 精简安装：`pasteferry-cli` 与 Tinycast 扩展
+
+如果你只需要在电脑上管理 PasteFerry 的配对、剪贴板历史、配对码与连接配置，而不想跑完整 GUI，可以用下面两个配件：
+
+- `pasteferry-cli`：后台 `pasteferryd` 的命令行客户端。装好后可通过 `pasteferry-cli status/devices/history/config/pair/unpair/apply` 等命令管理设备。
+- Tinycast 扩展：在 Tinycast 里打开一个菜单项，展示已配对 / 待配对设备、剪贴板历史、配对码和连接配置，并可直接操作。
+
+#### 1. 安装 `pasteferry-cli`
+
+Homebrew 已提供公式，安装与更新都很方便：
+
+```zsh
+# 安装
+brew install baiyuze/tap/pasteferry-cli
+
+# 升级
+brew upgrade pasteferry-cli
+```
+
+安装后可用 `pasteferry-cli version` 确认版本。若你的本机同时跑着 GUI 版本，建议用独立的 `--data-dir`，避免两个客户端读到同一个 `daemon.json`。
+
+**注意：** `pasteferry-cli` 本身不会后台服务。要同步剪贴板、接收隔空传送，必须先启动 `pasteferryd`（GUI 应用的“启用后台同步”会在后台启动它），并给 `pasteferry-cli` 独立数据目录：
+
+```zsh
+pasteferry-cli -data-dir ~/.pasteferry-cli status
+pasteferry-cli -data-dir ~/.pasteferry-cli devices
+```
+
+#### 2. 安装 Tinycast 扩展
+
+把生成的扩展放到 Tinycast 扩展目录：
+
+```zsh
+# 例如把 dist 放进扩展目录
+cp -R dist /Users/用户/Library/Application\ Support/com.tinycast.app/extensions/pasteferry/
+```
+
+打开 Tinycast 的菜单，选中 `PasteFerry` 开始使用。扩展会自动轮询 `pasteferry-cli -json`，因此依赖你本机已安装 `pasteferry-cli` 并在 `PATH` 里。
+
+扩展支持的操作：
+
+| 区域 | 内容 | 可操作 |
+|---|---|---|
+| 设备 | 已配对/待配对、在线/离线、传输方式 | 确认配对、取消配对 |
+| 剪贴板历史 | 文本/图片/文件、状态、大小、时间 | 写回剪贴板、收藏 |
+| 配对码 | 生成当前配对码 | 生成、显示有效期与局域网地址 |
+| 连接配置 | 设备名称、接收来源、局域网发现 | 修改并保存 |
+
+#### 3. 与 GUI 的关系
+
+新方案不替代现有桌面 GUI。GUI 继续负责日常复制/粘贴、快捷粘贴和完整配置面板；CLI 适合脚本、自动化、精简安装、远程管理；Tinycast 扩展适合快速应答。三者共用同一套 `client-core/cmd/pasteferry-cli`，协议也相同，所以行为和排障都一致。
 - 简体中文、繁体中文（台湾、香港）、英文、日文界面。
 
 ## 核心：打洞直连

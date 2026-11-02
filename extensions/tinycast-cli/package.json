@@ -1,0 +1,24 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "pasteferry",
+  "title": "PasteFerry",
+  "description": "配对设备、剪贴板历史、配对码与连接配置。后台运行，只需一个菜单项。",
+  "icon": "icon.png",
+  "author": "PasteFerry",
+  "license": "AGPL-3.0-only",
+  "categories": [
+    "Developer Tools",
+    "System"
+  ],
+  "platforms": [
+    "macOS"
+  ],
+  "commands": [
+    {
+      "name": "index",
+      "title": "PasteFerry",
+      "description": "查看已配对/待配对设备、剪贴板历史、配对码与连接配置。",
+      "mode": "view"
+    }
+  ]
+}

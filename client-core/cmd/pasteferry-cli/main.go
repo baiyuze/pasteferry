@@ -21,6 +21,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -43,25 +44,43 @@ import (
 // version 通过 -X main.version=... 在构建时注入，便于 brew 等打包工具标定版本。
 var version = "0.1.0-dev"
 
+// jsonOutput 是全局 -json / --json 开关。只读类命令把结构化结果打到 stdout，
+// 供 Tinycast 扩展等界面直接解析；不加这个开关时输出仍是给人看的文本。
+var jsonOutput bool
+
 func main() {
+	flag.BoolVar(&jsonOutput, "json", false, "以 JSON 输出（供界面或脚本解析）")
 	dataDir := flag.String("data-dir", "", "数据目录（默认为系统标准位置）")
 	flag.Parse()
 
 	cmd := flag.Arg(0)
 	if cmd == "" {
 		fmt.Fprintln(os.Stderr,
-			"用法: pasteferry-cli [-data-dir DIR] <status|version|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]|web [on|off|invite [ADDR]|remove ID]>")
+			"用法: pasteferry-cli [-json] [-data-dir DIR] <status|version|watch|history|config [get|set KEY VALUE]|devices|nat|pair|join CODE [ADDRESS]|confirm SESSION|unpair DEVICE|apply ID|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]|web [on|off|invite [ADDR]|remove ID]>")
 		os.Exit(2)
 	}
 
 	if err := run(cmd, *dataDir); err != nil {
+		if jsonOutput {
+			// 界面按 stdout 解析；错误也走 JSON，stdout 始终只有一段可解析的内容
+			_ = json.NewEncoder(os.Stdout).Encode(jsonError{OK: false, Error: err.Error()})
+			os.Exit(1)
+		}
 		fmt.Fprintln(os.Stderr, "错误:", err)
 		os.Exit(1)
 	}
 }
 
+type jsonError struct {
+	OK    bool   `json:"ok"`
+	Error string `json:"error"`
+}
+
 func run(cmd, dataDir string) error {
 	if cmd == "version" {
+		if jsonOutput {
+			return printJSON(map[string]any{"ok": true, "version": version})
+		}
 		fmt.Println(version)
 		return nil
 	}
@@ -92,19 +111,43 @@ func run(cmd, dataDir string) error {
 
 	switch cmd {
 	case "status":
+		if jsonOutput {
+			return statusJSON(ctx, client, ep)
+		}
 		return showStatus(ctx, client, ep)
 	case "watch":
 		return watch(ctx, client)
 	case "history":
+		if jsonOutput {
+			return historyJSON(ctx, client)
+		}
 		return showHistory(ctx, client)
 	case "config":
-		return showConfig(ctx, client)
+		// 不带子命令时仍是给人看的文本；带 get/set 走 JSON
+		if flag.NArg() < 2 {
+			return showConfig(ctx, client)
+		}
+		return configCommand(ctx, client)
 	case "devices":
+		if jsonOutput {
+			return devicesJSON(ctx, client)
+		}
 		return showDevices(ctx, client)
 	case "nat":
 		return showNetwork(ctx, client)
 	case "pair":
+		if jsonOutput {
+			return pairingJSON(ctx, client)
+		}
 		return createPairing(ctx, client)
+	case "confirm":
+		return confirmJSON(ctx, client, flag.Arg(1), true)
+	case "unpair":
+		return unpairCommand(ctx, client, flag.Arg(1))
+	case "apply":
+		return applyCommand(ctx, client, flag.Arg(1), flag.Arg(2) == "plain")
+	case "favorite":
+		return favoriteCommand(ctx, client, flag.Arg(1), flag.Arg(2) != "off")
 	case "join":
 		return joinPairing(ctx, client, flag.Arg(1), flag.Arg(2))
 	case "nearby":
@@ -688,4 +731,440 @@ func humanBytes(n int64) string {
 		exp++
 	}
 	return fmt.Sprintf("%.1f %ciB", float64(n)/float64(div), "KMGTPE"[exp])
+}
+
+// ---- JSON 输出入口 ----
+
+type statusJSONResp struct {
+	OK   bool   `json:"ok"`
+	Msg  string `json:"message,omitempty"`
+	Data struct {
+		Daemon struct {
+			PID        int     `json:"pid"`
+			Port       int     `json:"port"`
+			Version    string  `json:"version"`
+			DeviceID   string  `json:"device_id"`
+			DeviceName string  `json:"device_name"`
+			Signaling  string  `json:"signaling"`
+			LAN        string  `json:"lan"`
+			Peers      int     `json:"peers_online"`
+			Clipboard  string  `json:"clipboard_permission"`
+			CacheMB    float64 `json:"cache_bytes_used_mb"`
+		} `json:"daemon"`
+		OfficialUsage struct {
+			Available        bool    `json:"available"`
+			UploadBytesMB    float64 `json:"upload_bytes_mb"`
+			DownloadBytesMB  float64 `json:"download_bytes_mb"`
+			LimitBytesMB     float64 `json:"limit_bytes_mb"`
+			RemainingBytesMB float64 `json:"remaining_bytes_mb"`
+			UpdatedAtUnix    int64   `json:"updated_at_unix"`
+			ResetAtUnix      int64   `json:"reset_at_unix"`
+			Reason           string  `json:"reason"`
+		} `json:"official_usage"`
+	} `json:"data"`
+}
+
+func statusJSON(ctx context.Context, c pb.DaemonServiceClient, ep rpc.Endpoint) error {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	st, err := c.GetStatus(ctx, &pb.Empty{})
+	if err != nil {
+		return err
+	}
+	resp := statusJSONResp{OK: true}
+	resp.Data.Daemon.PID = ep.PID
+	resp.Data.Daemon.Port = ep.Port
+	resp.Data.Daemon.Version = st.GetVersion()
+	resp.Data.Daemon.DeviceID = st.GetDeviceId()
+	resp.Data.Daemon.DeviceName = st.GetDeviceName()
+	resp.Data.Daemon.Signaling = boolText(st.GetSignalingConnected(), "已连接", "未连接")
+	resp.Data.Daemon.LAN = boolText(st.GetLanEnabled(), "开启", "关闭")
+	if st.GetLanBlocked() {
+		resp.Data.Daemon.LAN += "（被系统拦截，需要允许本地网络访问）"
+	}
+	resp.Data.Daemon.Peers = int(st.GetPeersOnline())
+	resp.Data.Daemon.Clipboard = statusJSONClip(st.GetClipboardPermission())
+	resp.Data.Daemon.CacheMB = float64(st.GetCacheBytesUsed()) / 1024 / 1024
+	if u := st.GetOfficialUsage(); u != nil {
+		resp.Data.OfficialUsage = struct {
+			Available        bool    `json:"available"`
+			UploadBytesMB    float64 `json:"upload_bytes_mb"`
+			DownloadBytesMB  float64 `json:"download_bytes_mb"`
+			LimitBytesMB     float64 `json:"limit_bytes_mb"`
+			RemainingBytesMB float64 `json:"remaining_bytes_mb"`
+			UpdatedAtUnix    int64   `json:"updated_at_unix"`
+			ResetAtUnix      int64   `json:"reset_at_unix"`
+			Reason           string  `json:"reason"`
+		}{
+			Available:        u.GetAvailable(),
+			UploadBytesMB:    func(n int64) float64 { return float64(n) / 1024 / 1024 }(u.GetUploadBytes()),
+			DownloadBytesMB:  func(n int64) float64 { return float64(n) / 1024 / 1024 }(u.GetDownloadBytes()),
+			LimitBytesMB:     func(n int64) float64 { return float64(n) / 1024 / 1024 }(u.GetLimitBytes()),
+			RemainingBytesMB: func(n int64) float64 { return float64(n) / 1024 / 1024 }(u.GetRemainingBytes()),
+			UpdatedAtUnix:    u.GetUpdatedAtUnix(),
+			ResetAtUnix:      u.GetResetAtUnix(),
+			Reason:           u.GetReason(),
+		}
+	}
+	return printJSON(resp)
+}
+
+func statusJSONClip(p pb.ClipboardPermission) string {
+	switch p {
+	case pb.ClipboardPermission_CLIPBOARD_PERMISSION_ALWAYS_ALLOW:
+		return "always_allow"
+	case pb.ClipboardPermission_CLIPBOARD_PERMISSION_ASK:
+		return "ask"
+	case pb.ClipboardPermission_CLIPBOARD_PERMISSION_DEFAULT:
+		return "default"
+	default:
+		return p.String()
+	}
+}
+
+func printJSON(v any) error {
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetEscapeHTML(false)
+	return enc.Encode(v)
+}
+
+type devicesJSONResp struct {
+	OK   bool   `json:"ok"`
+	Msg  string `json:"message,omitempty"`
+	Data struct {
+		Self struct {
+			ID       string `json:"id"`
+			Name     string `json:"name"`
+			Platform string `json:"platform"`
+		} `json:"self"`
+		Peers []struct {
+			ID          string `json:"id"`
+			Name        string `json:"name"`
+			Platform    string `json:"platform"`
+			Online      bool   `json:"online"`
+			Connection  string `json:"connection"`
+			Receives    bool   `json:"receives_files"`
+			ReceiveOff  bool   `json:"receive_disabled"`
+			LAN         bool   `json:"lan_reachable"`
+			Fingerprint string `json:"public_key_fingerprint"`
+			PairedAt    int64  `json:"paired_at_unix"`
+			Pairing     string `json:"pairing_session,omitempty"`
+		} `json:"peers"`
+	} `json:"data"`
+}
+
+func devicesJSON(ctx context.Context, c pb.DaemonServiceClient) error {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	resp, err := c.ListDevices(ctx, &pb.Empty{})
+	if err != nil {
+		return err
+	}
+	js := devicesJSONResp{OK: true}
+	js.Data.Peers = []struct {
+		ID          string `json:"id"`
+		Name        string `json:"name"`
+		Platform    string `json:"platform"`
+		Online      bool   `json:"online"`
+		Connection  string `json:"connection"`
+		Receives    bool   `json:"receives_files"`
+		ReceiveOff  bool   `json:"receive_disabled"`
+		LAN         bool   `json:"lan_reachable"`
+		Fingerprint string `json:"public_key_fingerprint"`
+		PairedAt    int64  `json:"paired_at_unix"`
+		Pairing     string `json:"pairing_session,omitempty"`
+	}{}
+	js.Data.Self.ID = resp.GetSelf().GetId()
+	js.Data.Self.Name = resp.GetSelf().GetName()
+	js.Data.Self.Platform = resp.GetSelf().GetPlatform()
+	for _, p := range resp.GetPeers() {
+		js.Data.Peers = append(js.Data.Peers, struct {
+			ID          string `json:"id"`
+			Name        string `json:"name"`
+			Platform    string `json:"platform"`
+			Online      bool   `json:"online"`
+			Connection  string `json:"connection"`
+			Receives    bool   `json:"receives_files"`
+			ReceiveOff  bool   `json:"receive_disabled"`
+			LAN         bool   `json:"lan_reachable"`
+			Fingerprint string `json:"public_key_fingerprint"`
+			PairedAt    int64  `json:"paired_at_unix"`
+			Pairing     string `json:"pairing_session,omitempty"`
+		}{
+			ID:          p.GetId(),
+			Name:        p.GetName(),
+			Platform:    p.GetPlatform(),
+			Online:      p.GetOnline(),
+			Connection:  p.GetConnection().String(),
+			Receives:    p.GetReceivesFiles(),
+			ReceiveOff:  p.GetReceiveDisabled(),
+			LAN:         p.GetLanReachable(),
+			Fingerprint: p.GetPublicKeyFingerprint(),
+			PairedAt:    p.GetPairedAtUnix(),
+			Pairing:     p.GetPairingSession(),
+		})
+	}
+	return printJSON(js)
+}
+
+type historyJSONResp struct {
+	OK   bool   `json:"ok"`
+	Msg  string `json:"message,omitempty"`
+	Data struct {
+		Records []struct {
+			ID         string  `json:"id"`
+			Kind       string  `json:"kind"`
+			Status     string  `json:"status"`
+			Outgoing   bool    `json:"outgoing"`
+			OriginID   string  `json:"origin_device_id"`
+			OriginName string  `json:"origin_device_name"`
+			Count      int     `json:"item_count"`
+			SizeMB     float64 `json:"total_size_mb"`
+			Preview    string  `json:"text_preview"`
+			CreatedAt  int64   `json:"created_at_unix"`
+			ExpiresAt  int64   `json:"expires_at_unix"`
+			Error      string  `json:"error,omitempty"`
+			Favorite   bool    `json:"favorite"`
+			Favorited  bool    `json:"favorited"`
+			IsLink     bool    `json:"is_link"`
+			Alias      string  `json:"alias"`
+		} `json:"records"`
+	} `json:"data"`
+}
+
+func historyJSON(ctx context.Context, c pb.DaemonServiceClient) error {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	resp, err := c.ListHistory(ctx, &pb.ListHistoryRequest{Limit: 20})
+	if err != nil {
+		return err
+	}
+	js := historyJSONResp{OK: true}
+	js.Data.Records = []struct {
+		ID         string  `json:"id"`
+		Kind       string  `json:"kind"`
+		Status     string  `json:"status"`
+		Outgoing   bool    `json:"outgoing"`
+		OriginID   string  `json:"origin_device_id"`
+		OriginName string  `json:"origin_device_name"`
+		Count      int     `json:"item_count"`
+		SizeMB     float64 `json:"total_size_mb"`
+		Preview    string  `json:"text_preview"`
+		CreatedAt  int64   `json:"created_at_unix"`
+		ExpiresAt  int64   `json:"expires_at_unix"`
+		Error      string  `json:"error,omitempty"`
+		Favorite   bool    `json:"favorite"`
+		Favorited  bool    `json:"favorited"`
+		IsLink     bool    `json:"is_link"`
+		Alias      string  `json:"alias"`
+	}{}
+	for _, r := range resp.GetRecords() {
+		js.Data.Records = append(js.Data.Records, struct {
+			ID         string  `json:"id"`
+			Kind       string  `json:"kind"`
+			Status     string  `json:"status"`
+			Outgoing   bool    `json:"outgoing"`
+			OriginID   string  `json:"origin_device_id"`
+			OriginName string  `json:"origin_device_name"`
+			Count      int     `json:"item_count"`
+			SizeMB     float64 `json:"total_size_mb"`
+			Preview    string  `json:"text_preview"`
+			CreatedAt  int64   `json:"created_at_unix"`
+			ExpiresAt  int64   `json:"expires_at_unix"`
+			Error      string  `json:"error,omitempty"`
+			Favorite   bool    `json:"favorite"`
+			Favorited  bool    `json:"favorited"`
+			IsLink     bool    `json:"is_link"`
+			Alias      string  `json:"alias"`
+		}{
+			ID:         r.GetId(),
+			Kind:       r.GetKind().String(),
+			Status:     r.GetStatus().String(),
+			Outgoing:   r.GetOutgoing(),
+			OriginID:   r.GetOriginDeviceId(),
+			OriginName: r.GetOriginDeviceName(),
+			Count:      len(r.GetItems()),
+			SizeMB:     float64(r.GetTotalSize()) / 1024 / 1024,
+			Preview:    r.GetTextPreview(),
+			CreatedAt:  r.GetCreatedAtUnix(),
+			ExpiresAt:  r.GetExpiresAtUnix(),
+			Error:      r.GetError(),
+			Favorite:   r.GetFavorite(),
+			Favorited:  r.GetFavorited(),
+			IsLink:     r.GetIsLink(),
+			Alias:      r.GetAlias(),
+		})
+	}
+	return printJSON(js)
+}
+
+type pairJSONResp struct {
+	OK   bool   `json:"ok"`
+	Msg  string `json:"message,omitempty"`
+	Data struct {
+		Code      string   `json:"code"`
+		ExpiresAt int64    `json:"expires_at_unix"`
+		LAN       []string `json:"lan_addresses"`
+		Peer      struct {
+			ID          string `json:"id"`
+			Name        string `json:"name"`
+			Platform    string `json:"platform"`
+			Online      bool   `json:"online"`
+			Fingerprint string `json:"public_key_fingerprint"`
+			Receives    bool   `json:"receives_files"`
+			ReceiveOff  bool   `json:"receive_disabled"`
+			Pairing     string `json:"pairing_session,omitempty"`
+		} `json:"peer"`
+	} `json:"data"`
+}
+
+func pairingJSON(ctx context.Context, c pb.DaemonServiceClient) error {
+	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
+	defer cancel()
+
+	createCtx, createCancel := context.WithTimeout(ctx, 15*time.Second)
+	resp, err := c.CreatePairingCode(createCtx, &pb.Empty{})
+	createCancel()
+	if err != nil {
+		return err
+	}
+	js := pairJSONResp{OK: true}
+	js.Data.Code = resp.GetCode()
+	js.Data.ExpiresAt = resp.GetExpiresAtUnix()
+	js.Data.LAN = append([]string(nil), resp.GetLanAddresses()...)
+	return printJSON(js)
+}
+
+func configCommand(ctx context.Context, c pb.DaemonServiceClient) error {
+	switch flag.Arg(1) {
+	case "get":
+		if flag.NArg() != 2 {
+			return errors.New("用法: pasteferry-cli config get")
+		}
+		cfg, err := c.GetConfig(ctx, &pb.Empty{})
+		if err != nil {
+			return err
+		}
+		return printJSON(configJSON(cfg))
+	case "set":
+		if flag.NArg() < 4 {
+			return errors.New("用法: pasteferry-cli config set KEY VALUE")
+		}
+		req := pb.Config{}
+		switch flag.Arg(2) {
+		case "name":
+			req.DeviceName = flag.Arg(3)
+		case "receive-from":
+			req.ReceiveFrom = flag.Arg(3)
+		case "receive-disabled":
+			req.ReceiveDisabled = flag.Arg(3) == "true"
+		case "lan-disabled":
+			req.LanDisabled = flag.Arg(3) == "true"
+		default:
+			return errors.New("不支持的配置项: " + flag.Arg(2))
+		}
+		_, err := c.UpdateConfig(ctx, &req)
+		if err != nil {
+			return err
+		}
+		return printJSON(map[string]any{"ok": true, "updated": flag.Arg(2)})
+	default:
+		return errors.New("未知 config 子命令: " + flag.Arg(1))
+	}
+}
+
+func configJSON(cfg *pb.Config) map[string]any {
+	return map[string]any{
+		"device_name":      cfg.GetDeviceName(),
+		"signaling_url":    cfg.GetSignalingUrl(),
+		"receive_from":     cfg.GetReceiveFrom(),
+		"receive_disabled": cfg.GetReceiveDisabled(),
+		"lan_disabled":     cfg.GetLanDisabled(),
+		"auto_apply":       cfg.GetAutoApplyToClipboard(),
+		"launch_at_login":  cfg.GetLaunchAtLogin(),
+		"sync_text":        cfg.GetSyncText(),
+		"sync_html":        cfg.GetSyncHtml(),
+		"sync_image":       cfg.GetSyncImage(),
+		"sync_file":        cfg.GetSyncFile(),
+		"history_ttl":      cfg.GetHistoryTtlSeconds(),
+		"receive_dir":      cfg.GetReceiveDir(),
+	}
+}
+
+type confirmJSONResp struct {
+	OK   bool   `json:"ok"`
+	Msg  string `json:"message,omitempty"`
+	Data struct {
+		Peer struct {
+			ID   string `json:"id"`
+			Name string `json:"name"`
+		} `json:"peer"`
+	} `json:"data"`
+}
+
+func confirmJSON(ctx context.Context, c pb.DaemonServiceClient, session string, accept bool) error {
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+	_, err := c.ConfirmPairing(ctx, &pb.ConfirmPairingRequest{
+		PairingSession: session,
+		Accept:         accept,
+	})
+	if err != nil {
+		return err
+	}
+	return printJSON(confirmJSONResp{OK: true})
+}
+
+func unpairCommand(ctx context.Context, c pb.DaemonServiceClient, device string) error {
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+	devs, err := c.ListDevices(ctx, &pb.Empty{})
+	if err != nil {
+		return err
+	}
+	var id string
+	for _, p := range devs.GetPeers() {
+		if p.GetId() == device || p.GetName() == device {
+			id = p.GetId()
+		}
+	}
+	if id == "" {
+		return errors.New("没有匹配的已配对设备: " + device)
+	}
+	if _, err := c.Unpair(ctx, &pb.UnpairRequest{DeviceId: id}); err != nil {
+		return err
+	}
+	return printJSON(map[string]any{"ok": true, "unpaired": id})
+}
+
+func applyCommand(ctx context.Context, c pb.DaemonServiceClient, id string, plain bool) error {
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+	_, err := c.ApplyToClipboard(ctx, &pb.ApplyToClipboardRequest{
+		ClipId:    id,
+		PlainText: plain,
+	})
+	if err != nil {
+		return err
+	}
+	return printJSON(map[string]any{"ok": true, "applied": id})
+}
+
+func favoriteCommand(ctx context.Context, c pb.DaemonServiceClient, id string, on bool) error {
+	if id == "" {
+		return errors.New("用法: pasteferry-cli favorite ID [off]")
+	}
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+	_, err := c.SetFavorite(ctx, &pb.SetFavoriteRequest{
+		ClipId:   id,
+		Favorite: on,
+	})
+	if err != nil {
+		return err
+	}
+	return printJSON(map[string]any{"ok": true, "favorited": id, "on": on})
 }
