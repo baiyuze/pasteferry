@@ -26,9 +26,9 @@
 class PasteferryCli < Formula
   desc "PasteFerry 命令行客户端：管理配对设备、剪贴板历史、配对码与连接配置（无 GUI）"
   homepage "https://pasteferry.cc/"
-  head "https://github.com/baiyuze/pasteferry.git", branch: "main"
   version "2.8.3"
   license "AGPL-3.0-only"
+  head "https://github.com/baiyuze/pasteferry.git", branch: "main"
 
   depends_on "go" => :build
 
