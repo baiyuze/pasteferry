@@ -132,34 +132,18 @@ function Command() {
   const peersOnline = (status && status.peers_online) || 0;
   const cacheMB = (status && status.cache_bytes_used_mb) || 0;
 
-  const items = [];
-
-  // 状态栏
-  items.push(React.createElement(List.Item, {
-    key: "__status",
-    title: (status && status.device_name) || "本机",
-    subtitle: "PasteFerry 后台状态",
-    icon: Icon.Desktop,
-    accessories: [
-      { text: "在线 " + peersOnline },
-      { text: formatBytes(cacheMB) },
-    ],
-    actions: React.createElement(ActionPanel, null,
-      React.createElement(Action, { title: "刷新", icon: Icon.ArrowClockwise, onAction: reload }),
-      React.createElement(Action.CopyToClipboard, { title: "复制设备名", content: (status && status.device_name) || "" }),
-    ),
-  }));
-
-  // 设备
-  items.push(React.createElement(List.Section, { key: "__dh", title: "设备", subtitle: "已配对 / 待配对" }));
-  if (devices.length === 0) {
-    items.push(React.createElement(List.EmptyView, {
-      key: "__de",
-      icon: Icon.People,
-      title: "暂无设备",
-      description: "用「生成配对码」或手机端扫码加入。",
-    }));
-  } else {
+  // ---- 设备视图项 ----
+  function renderDevices() {
+    const rows = [];
+    if (devices.length === 0) {
+      rows.push(React.createElement(List.EmptyView, {
+        key: "__de",
+        icon: Icon.People,
+        title: "暂无设备",
+        description: "用「生成配对码」或手机端扫码加入。",
+      }));
+      return rows;
+    }
     devices.forEach((device) => {
       const pairing = device.pairing_session || "";
       const actions = [];
@@ -197,7 +181,7 @@ function Command() {
       if (pairing) subtitleParts.push("待确认配对");
       if (device.receive_disabled) subtitleParts.push("不收文件");
 
-      items.push(React.createElement(List.Item, {
+      rows.push(React.createElement(List.Item, {
         key: "dev-" + device.id,
         title: device.name,
         subtitle: subtitleParts.join(" · "),
@@ -208,62 +192,44 @@ function Command() {
         actions: React.createElement(ActionPanel, null, actions),
       }));
     });
+    return rows;
   }
 
-  // 剪贴板历史
+  // ---- 主页：状态 + 设备 + 配对码 + 连接配置 + 历史入口 ----
+  // 历史已拆为独立视图（HistoryView），主页只放入口。
+  const items = [];
+
+  items.push(React.createElement(List.Item, {
+    key: "__status",
+    title: (status && status.device_name) || "本机",
+    subtitle: "PasteFerry 后台状态",
+    icon: Icon.Desktop,
+    accessories: [
+      { text: "在线 " + peersOnline },
+      { text: formatBytes(cacheMB) },
+    ],
+    actions: React.createElement(ActionPanel, null,
+      React.createElement(Action, { title: "刷新", icon: Icon.ArrowClockwise, onAction: reload }),
+      React.createElement(Action.CopyToClipboard, { title: "复制设备名", content: (status && status.device_name) || "" }),
+    ),
+  }));
+
+  items.push(React.createElement(List.Section, { key: "__dh", title: "设备", subtitle: "已配对 / 待配对" }));
+  items.push(...renderDevices());
+
   items.push(React.createElement(List.Section, { key: "__hh", title: "剪贴板历史", subtitle: "共 " + history.length + " 条" }));
-  if (history.length === 0) {
-    items.push(React.createElement(List.EmptyView, {
-      key: "__he",
-      icon: Icon.Clipboard,
-      title: "没有记录",
-      description: "复制或收到内容后会出现在这里。",
-    }));
-  } else {
-    history.forEach((record) => {
-      const subtitleParts = [];
-      subtitleParts.push(kindText(record.kind));
-      subtitleParts.push(record.status === "READY" ? "就绪" : (record.status || "").toLowerCase());
-      subtitleParts.push(record.outgoing ? "来自对端" : "本机复制");
-      if (record.origin_name) subtitleParts.push("来自 " + record.origin_name);
-      if (record.alias) subtitleParts.push("别名 " + record.alias);
-
-      const actions = [];
-      actions.push(React.createElement(Action, {
-        key: "apply",
-        title: record.kind === "TEXT" ? "写回剪贴板(纯文本)" : "写回剪贴板",
-        icon: Icon.Clipboard,
-        onAction: async () => {
-          const r = await guard(() => runJSON(["apply", record.id, record.kind === "TEXT" ? "plain" : ""].filter(Boolean)));
-          if (r) showToast(Toast.Style.Success, "已写入剪贴板");
-          reload();
-        },
-      }));
-      actions.push(React.createElement(Action, {
-        key: "fav",
-        title: record.favorited ? "取消收藏" : "收藏",
-        icon: record.favorited ? Icon.StarDisabled : Icon.Star,
-        onAction: async () => {
-          const r = await guard(() => runJSON(["favorite", record.id, record.favorited ? "off" : ""].filter(Boolean)));
-          if (r) showToast(Toast.Style.Success, record.favorited ? "已取消收藏" : "已收藏");
-          reload();
-        },
-      }));
-
-      items.push(React.createElement(List.Item, {
-        key: "rec-" + record.id,
-        title: record.text_preview || "(无预览)",
-        subtitle: subtitleParts.join(" · "),
-        icon: Icon.Clipboard,
-        accessories: [
-          { text: formatBytes(record.total_size_mb) },
-          { text: formatTime(record.created_at_unix) },
-          record.favorite ? { icon: Icon.Star, tooltip: "已收藏" } : null,
-        ].filter(Boolean),
-        actions: React.createElement(ActionPanel, null, actions),
-      }));
-    });
-  }
+  items.push(React.createElement(List.Item, {
+    key: "__history-entry",
+    title: "查看剪贴板历史",
+    subtitle: "共 " + history.length + " 条记录",
+    icon: Icon.Clipboard,
+    actions: React.createElement(ActionPanel, null,
+      React.createElement(Action.Push, {
+        title: "打开剪贴板历史",
+        target: React.createElement(HistoryView, { history: history, onChanged: reload }),
+      }),
+    ),
+  }));
 
   // 配对码
   items.push(React.createElement(List.Section, { key: "__ph", title: "配对码", subtitle: "生成后手机端输入" }));
@@ -335,8 +301,68 @@ function Command() {
 
   return React.createElement(
     List,
-    { isLoading: loading, searchBarPlaceholder: "搜索设备、历史…" },
+    { isLoading: loading, searchBarPlaceholder: "搜索设备、配置…" },
     items
+  );
+}
+
+// ---- 剪贴板历史独立视图 ----
+
+function HistoryView({ history, onChanged }) {
+  const reload = React.useCallback(() => { if (onChanged) onChanged(); }, [onChanged]);
+  if (!history) history = [];
+  return React.createElement(
+    List,
+    { searchBarPlaceholder: "搜索历史…" },
+    history.length === 0
+      ? React.createElement(List.EmptyView, {
+          icon: Icon.Clipboard,
+          title: "没有记录",
+          description: "复制或收到内容后会出现在这里。",
+        })
+      : history.map((record) => {
+          const subtitleParts = [];
+          subtitleParts.push(kindText(record.kind));
+          subtitleParts.push(record.status === "CLIP_STATUS_READY" ? "就绪" : (record.status || "").toLowerCase());
+          subtitleParts.push(record.outgoing ? "来自对端" : "本机复制");
+          if (record.origin_device_name) subtitleParts.push("来自 " + record.origin_device_name);
+          if (record.alias) subtitleParts.push("别名 " + record.alias);
+
+          const actions = [];
+          actions.push(React.createElement(Action, {
+            key: "apply",
+            title: record.kind === "TEXT" ? "写回剪贴板(纯文本)" : "写回剪贴板",
+            icon: Icon.Clipboard,
+            onAction: async () => {
+              const r = await guard(() => runJSON(["apply", record.id, record.kind === "TEXT" ? "plain" : ""].filter(Boolean)));
+              if (r) showToast(Toast.Style.Success, "已写入剪贴板");
+              reload();
+            },
+          }));
+          actions.push(React.createElement(Action, {
+            key: "fav",
+            title: record.favorited ? "取消收藏" : "收藏",
+            icon: record.favorited ? Icon.StarDisabled : Icon.Star,
+            onAction: async () => {
+              const r = await guard(() => runJSON(["favorite", record.id, record.favorited ? "off" : ""].filter(Boolean)));
+              if (r) showToast(Toast.Style.Success, record.favorited ? "已取消收藏" : "已收藏");
+              reload();
+            },
+          }));
+
+          return React.createElement(List.Item, {
+            key: "rec-" + record.id,
+            title: record.text_preview || "(无预览)",
+            subtitle: subtitleParts.join(" · "),
+            icon: Icon.Clipboard,
+            accessories: [
+              { text: formatBytes(record.total_size_mb) },
+              { text: formatTime(record.created_at_unix) },
+              record.favorite ? { icon: Icon.Star, tooltip: "已收藏" } : null,
+            ].filter(Boolean),
+            actions: React.createElement(ActionPanel, null, actions),
+          });
+        })
   );
 }
 
