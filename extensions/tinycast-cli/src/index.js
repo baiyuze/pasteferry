@@ -151,7 +151,7 @@ function Command() {
   }));
 
   // 设备
-  items.push(React.createElement(List.Header, { key: "__dh", title: "设备", subtitle: "已配对 / 待配对" }));
+  items.push(React.createElement(List.Section, { key: "__dh", title: "设备", subtitle: "已配对 / 待配对" }));
   if (devices.length === 0) {
     items.push(React.createElement(List.EmptyView, {
       key: "__de",
@@ -211,7 +211,7 @@ function Command() {
   }
 
   // 剪贴板历史
-  items.push(React.createElement(List.Header, { key: "__hh", title: "剪贴板历史", subtitle: "共 " + history.length + " 条" }));
+  items.push(React.createElement(List.Section, { key: "__hh", title: "剪贴板历史", subtitle: "共 " + history.length + " 条" }));
   if (history.length === 0) {
     items.push(React.createElement(List.EmptyView, {
       key: "__he",
@@ -266,7 +266,7 @@ function Command() {
   }
 
   // 配对码
-  items.push(React.createElement(List.Header, { key: "__ph", title: "配对码", subtitle: "生成后手机端输入" }));
+  items.push(React.createElement(List.Section, { key: "__ph", title: "配对码", subtitle: "生成后手机端输入" }));
   items.push(React.createElement(List.Item, {
     key: "__pair",
     title: "生成配对码",
@@ -289,7 +289,7 @@ function Command() {
   }));
 
   // 连接配置
-  items.push(React.createElement(List.Header, { key: "__ch", title: "连接配置", subtitle: "设备名 / 接收来源 / 局域网发现" }));
+  items.push(React.createElement(List.Section, { key: "__ch", title: "连接配置", subtitle: "设备名 / 接收来源 / 局域网发现" }));
   items.push(React.createElement(List.Item, {
     key: "__cfg-name",
     title: "设备名称",
