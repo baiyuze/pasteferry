@@ -1,7 +1,7 @@
 
 # 构建产物
-/dist/
-/node_modules/
+**/dist/
+**/node_modules
 
 # 发布包
 *.tgz

@@ -5,28 +5,33 @@
 // 不依赖任何 HTTP 服务，只要 CLI 在 PATH 上即可。
 
 const React = require("react");
-const { List, ActionPanel, Action, Icon, showToast, Toast, Form, getPreferenceValues, confirmAlert } = require("@raycast/api");
+const { List, ActionPanel, Action, Icon, showToast, Toast, Form, confirmAlert, Detail, Color, Keyboard } = require("@raycast/api");
 const { execFile } = require("node:child_process");
 
 const CLI = "pasteferry-cli";
-const REFRESH_MS = 15000;
-
-// ---- 调用本机 pasteferry-cli ----
+const fs = require("node:fs");
+const CANDIDATE_DIRS = ["/usr/local/bin", "/opt/homebrew/bin", "/usr/bin", "/bin"];
+const CLI_PATH = (() => {
+  for (const dir of CANDIDATE_DIRS) {
+    const p = dir + "/" + CLI;
+    try { if (fs.existsSync(p)) return p; } catch (e) { break; }
+  }
+  return CLI;
+})();
 
 function runJSON(args) {
   return new Promise((resolve, reject) => {
-    execFile(CLI, ["-json", ...args], { timeout: 20000, maxBuffer: 8 * 1024 * 1024 },
+    execFile(CLI_PATH, ["-json", ...args], { timeout: 20000, maxBuffer: 8 * 1024 * 1024 },
       (err, stdout) => {
         if (err) {
           const out = String(stdout || "").trim();
-          // CLI 在 JSON 模式下把错误也打成 {"ok":false,"error":"..."}
           if (out.startsWith("{")) {
             try {
               const j = JSON.parse(out);
-              if (j && j.error) { reject(new Error(j.error)); return; }
+              if (j && j.ok === false) { reject(new Error(j.error || "未知错误")); return; }
             } catch (e) {}
           }
-          reject(err);
+          reject(new Error("__DAEMON_DOWN__:" + String(err.message || err)));
           return;
         }
         const out = String(stdout || "").trim();
@@ -48,7 +53,9 @@ async function guard(fn) {
   }
 }
 
-// ---- 工具函数 ----
+function formatDaemonDownHint() {
+  return "请先启动 pasteferryd：运行 \"brew services start pasteferry\" 或直接打开 PasteFerry 应用；若已开机自启，重启 Mac 后再试。";
+}
 
 function formatBytes(mb) {
   if (typeof mb !== "number") return "—";
@@ -72,7 +79,12 @@ function connectionText(c) {
 
 function platformText(p) {
   if (!p) return "";
-  return p === "darwin" ? "macOS" : p === "windows" ? "Windows" : p === "linux" ? "Linux" : p;
+  if (p === "darwin") return "macOS";
+  if (p === "windows") return "Windows";
+  if (p === "linux") return "Linux";
+  if (p === "android") return "Android";
+  if (p === "ios") return "iOS";
+  return p;
 }
 
 function kindText(k) {
@@ -81,8 +93,6 @@ function kindText(k) {
   if (k === "FILE") return "文件";
   return k.toLowerCase();
 }
-
-// ---- 主页 ----
 
 function Command() {
   const [status, setStatus] = React.useState(null);
@@ -99,7 +109,8 @@ function Command() {
       guard(() => runJSON(["history"])),
       guard(() => runJSON(["config", "get"])),
     ]);
-    if (s === null && d === null && h === null && c === null) {
+    const down = !s || !s.ok;
+    if (down) {
       setDaemonDown(true);
     } else {
       setDaemonDown(false);
@@ -112,8 +123,12 @@ function Command() {
   }, []);
 
   React.useEffect(() => {
+    void reload();
+  }, [reload]);
+
+  React.useEffect(() => {
     reload();
-    const id = setInterval(reload, REFRESH_MS);
+    const id = setInterval(reload, 15000);
     return () => clearInterval(id);
   }, [reload]);
 
@@ -124,7 +139,7 @@ function Command() {
       React.createElement(List.EmptyView, {
         icon: Icon.Wifi,
         title: "后台服务未运行",
-        description: "请先启动 pasteferryd（例如开机自启的 PasteFerry 后台服务）。",
+        description: formatDaemonDownHint(),
       })
     );
   }
@@ -132,7 +147,6 @@ function Command() {
   const peersOnline = (status && status.peers_online) || 0;
   const cacheMB = (status && status.cache_bytes_used_mb) || 0;
 
-  // ---- 主页：状态 + 入口（设备/历史/连接配置） ----
   const items = [];
 
   items.push(React.createElement(List.Item, {
@@ -188,7 +202,6 @@ function Command() {
     ),
   }));
 
-  // 配对码（常用，留在主页）
   items.push(React.createElement(List.Section, { key: "__ph", title: "配对码", subtitle: "生成后手机端输入" }));
   items.push(React.createElement(List.Item, {
     key: "__pair",
@@ -218,8 +231,6 @@ function Command() {
   );
 }
 
-// ---- 设备独立视图 ----
-
 function DevicesView({ devices, onChanged }) {
   const reload = React.useCallback(() => { if (onChanged) onChanged(); }, [onChanged]);
   if (!devices) devices = [];
@@ -228,7 +239,7 @@ function DevicesView({ devices, onChanged }) {
     { searchBarPlaceholder: "搜索设备…" },
     devices.length === 0
       ? React.createElement(List.EmptyView, {
-          icon: Icon.People,
+          icon: Icon.TwoPeople,
           title: "暂无设备",
           description: "用「生成配对码」或手机端扫码加入。",
         })
@@ -269,6 +280,39 @@ function DevicesView({ devices, onChanged }) {
           if (pairing) subtitleParts.push("待确认配对");
           if (device.receive_disabled) subtitleParts.push("不收文件");
 
+          const detailItems = [];
+          detailItems.push(React.createElement(Detail.Item, {
+            label: "平台",
+            text: platformText(device.platform) || "未知平台",
+          }));
+          detailItems.push(React.createElement(Detail.Item, {
+            label: "连接",
+            text: connectionText(device.connection) || "未知连接",
+          }));
+          if (pairing) {
+            detailItems.push(React.createElement(Detail.Item, {
+              label: "配对会话",
+              text: "待确认",
+            }));
+          }
+          if (device.receive_disabled) {
+            detailItems.push(React.createElement(Detail.Item, {
+              label: "接收",
+              text: "已关闭",
+            }));
+          }
+          if (device.is_connected) {
+            detailItems.push(React.createElement(Detail.Item, {
+              label: "已连接",
+              text: "是",
+            }));
+          } else {
+            detailItems.push(React.createElement(Detail.Item, {
+              label: "已连接",
+              text: "否",
+            }));
+          }
+
           return React.createElement(List.Item, {
             key: "dev-" + device.id,
             title: device.name,
@@ -278,12 +322,11 @@ function DevicesView({ devices, onChanged }) {
               device.online ? { text: "在线" } : { text: "离线", icon: Icon.Moon },
             ],
             actions: React.createElement(ActionPanel, null, actions),
+            details: detailItems,
           });
         })
   );
 }
-
-// ---- 连接配置独立视图 ----
 
 function ConfigView({ config, onChanged }) {
   const reload = React.useCallback(() => { if (onChanged) onChanged(); }, [onChanged]);
@@ -368,8 +411,6 @@ function ConfigView({ config, onChanged }) {
   );
 }
 
-// ---- 剪贴板历史独立视图 ----
-
 function HistoryView({ history, onChanged }) {
   const reload = React.useCallback(() => { if (onChanged) onChanged(); }, [onChanged]);
   if (!history) history = [];
@@ -428,13 +469,11 @@ function HistoryView({ history, onChanged }) {
   );
 }
 
-// ---- 配置表单 ----
-
 function ConfigNameForm({ current, onDone }) {
   const [name, setName] = React.useState(current);
   return React.createElement(Form, {
     actions: React.createElement(ActionPanel, null,
-      React.createElement(Form.SubmitForm, {
+      React.createElement(Action.SubmitForm, {
         title: "保存",
         onSubmit: async () => {
           const r = await guard(() => runJSON(["config", "set", "name", name]));
@@ -459,7 +498,7 @@ function ConfigReceiveForm({ current, onDone }) {
   const [value, setValue] = React.useState(current);
   return React.createElement(Form, {
     actions: React.createElement(ActionPanel, null,
-      React.createElement(Form.SubmitForm, {
+      React.createElement(Action.SubmitForm, {
         title: "保存",
         onSubmit: async () => {
           const r = await guard(() => runJSON(["config", "set", "receive-from", value]));
