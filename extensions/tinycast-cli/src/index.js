@@ -5,7 +5,7 @@
 // 不依赖任何 HTTP 服务，只要 CLI 在 PATH 上即可。
 
 const React = require("react");
-const { List, ActionPanel, Action, Icon, showToast, Toast, Form, getPreferenceValues } = require("@raycast/api");
+const { List, ActionPanel, Action, Icon, showToast, Toast, Form, getPreferenceValues, confirmAlert } = require("@raycast/api");
 const { execFile } = require("node:child_process");
 
 const CLI = "pasteferry-cli";
@@ -139,7 +139,7 @@ function Command() {
     key: "__status",
     title: (status && status.device_name) || "本机",
     subtitle: "PasteFerry 后台状态",
-    icon: Icon.Laptop,
+    icon: Icon.Desktop,
     accessories: [
       { text: "在线 " + peersOnline },
       { text: formatBytes(cacheMB) },
@@ -155,7 +155,7 @@ function Command() {
   if (devices.length === 0) {
     items.push(React.createElement(List.EmptyView, {
       key: "__de",
-      icon: Icon.Friends,
+      icon: Icon.People,
       title: "暂无设备",
       description: "用「生成配对码」或手机端扫码加入。",
     }));
@@ -175,13 +175,17 @@ function Command() {
           },
         }));
       }
-      actions.push(React.createElement(Action.ShowConfirmation, {
+      actions.push(React.createElement(Action, {
         key: "unpair",
         title: "取消配对",
         icon: Icon.Trash,
-        message: "取消与 " + device.name + " 的配对？",
-        confirmTitle: "取消配对",
-        onConfirm: async () => {
+        onAction: async () => {
+          const confirmed = await confirmAlert({
+            title: "取消配对",
+            message: "取消与 " + device.name + " 的配对？",
+            primaryAction: { title: "取消配对" },
+          });
+          if (!confirmed) return;
           const r = await guard(() => runJSON(["unpair", device.id]));
           if (r) showToast(Toast.Style.Success, "已取消配对", device.name);
           reload();
@@ -197,7 +201,7 @@ function Command() {
         key: "dev-" + device.id,
         title: device.name,
         subtitle: subtitleParts.join(" · "),
-        icon: pairing ? Icon.Warning : Icon.Computer,
+        icon: pairing ? Icon.Warning : Icon.Desktop,
         accessories: [
           device.online ? { text: "在线" } : { text: "离线", icon: Icon.Moon },
         ],
@@ -314,7 +318,7 @@ function Command() {
     key: "__cfg-lan",
     title: "局域网发现",
     subtitle: config.lan_disabled ? "已关闭" : "已开启",
-    icon: config.lan_disabled ? Icon.WifiSlash : Icon.Wifi,
+    icon: config.lan_disabled ? Icon.WifiDisabled : Icon.Wifi,
     actions: React.createElement(ActionPanel, null,
       React.createElement(Action, {
         title: config.lan_disabled ? "开启局域网发现" : "关闭局域网发现",
@@ -342,7 +346,7 @@ function ConfigNameForm({ current, onDone }) {
   const [name, setName] = React.useState(current);
   return React.createElement(Form, {
     actions: React.createElement(ActionPanel, null,
-      React.createElement(Form.SubmitAction, {
+      React.createElement(Form.SubmitForm, {
         title: "保存",
         onSubmit: async () => {
           const r = await guard(() => runJSON(["config", "set", "name", name]));
@@ -367,7 +371,7 @@ function ConfigReceiveForm({ current, onDone }) {
   const [value, setValue] = React.useState(current);
   return React.createElement(Form, {
     actions: React.createElement(ActionPanel, null,
-      React.createElement(Form.SubmitAction, {
+      React.createElement(Form.SubmitForm, {
         title: "保存",
         onSubmit: async () => {
           const r = await guard(() => runJSON(["config", "set", "receive-from", value]));

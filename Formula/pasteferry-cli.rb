@@ -14,9 +14,10 @@
 #   brew upgrade pasteferry-cli
 # 因为 head 指向上游 main，升级时 brew 会拉取新提交重新编译。
 #
-# 注意：本 formula 只装 CLI，不装后台守护进程 pasteferryd。
-# 剪贴板同步需要 pasteferryd 在跑（开机自启的 LaunchAgent）。
-# 想纯无头管理设备/历史，可另写 formula 装 pasteferryd；本文件先解决 CLI 的便利安装与更新。
+# 注意：本 formula 只装 CLI，不装 GUI 与后台守护进程 pasteferryd。
+# 剪贴板同步需要 pasteferryd 在跑；纯无头场景请自行启动 pasteferryd（见下）。
+# 想要完整 GUI + 后台服务 + 命令行客户端，请改用 cask：
+#   brew install baiyuze/tap/pasteferry
 
 # PasteFerry CLI：PasteFerry 的无图形界面命令行客户端。
 #
