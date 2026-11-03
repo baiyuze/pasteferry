@@ -132,71 +132,7 @@ function Command() {
   const peersOnline = (status && status.peers_online) || 0;
   const cacheMB = (status && status.cache_bytes_used_mb) || 0;
 
-  // ---- 设备视图项 ----
-  function renderDevices() {
-    const rows = [];
-    if (devices.length === 0) {
-      rows.push(React.createElement(List.EmptyView, {
-        key: "__de",
-        icon: Icon.People,
-        title: "暂无设备",
-        description: "用「生成配对码」或手机端扫码加入。",
-      }));
-      return rows;
-    }
-    devices.forEach((device) => {
-      const pairing = device.pairing_session || "";
-      const actions = [];
-      if (pairing) {
-        actions.push(React.createElement(Action, {
-          key: "confirm",
-          title: "确认配对",
-          icon: Icon.Check,
-          onAction: async () => {
-            const r = await guard(() => runJSON(["confirm", pairing]));
-            if (r) showToast(Toast.Style.Success, "已确认配对", device.name);
-            reload();
-          },
-        }));
-      }
-      actions.push(React.createElement(Action, {
-        key: "unpair",
-        title: "取消配对",
-        icon: Icon.Trash,
-        onAction: async () => {
-          const confirmed = await confirmAlert({
-            title: "取消配对",
-            message: "取消与 " + device.name + " 的配对？",
-            primaryAction: { title: "取消配对" },
-          });
-          if (!confirmed) return;
-          const r = await guard(() => runJSON(["unpair", device.id]));
-          if (r) showToast(Toast.Style.Success, "已取消配对", device.name);
-          reload();
-        },
-      }));
-      const subtitleParts = [];
-      subtitleParts.push(platformText(device.platform) || "未知平台");
-      subtitleParts.push(connectionText(device.connection));
-      if (pairing) subtitleParts.push("待确认配对");
-      if (device.receive_disabled) subtitleParts.push("不收文件");
-
-      rows.push(React.createElement(List.Item, {
-        key: "dev-" + device.id,
-        title: device.name,
-        subtitle: subtitleParts.join(" · "),
-        icon: pairing ? Icon.Warning : Icon.Desktop,
-        accessories: [
-          device.online ? { text: "在线" } : { text: "离线", icon: Icon.Moon },
-        ],
-        actions: React.createElement(ActionPanel, null, actions),
-      }));
-    });
-    return rows;
-  }
-
-  // ---- 主页：状态 + 设备 + 配对码 + 连接配置 + 历史入口 ----
-  // 历史已拆为独立视图（HistoryView），主页只放入口。
+  // ---- 主页：状态 + 入口（设备/历史/连接配置） ----
   const items = [];
 
   items.push(React.createElement(List.Item, {
@@ -214,10 +150,19 @@ function Command() {
     ),
   }));
 
-  items.push(React.createElement(List.Section, { key: "__dh", title: "设备", subtitle: "已配对 / 待配对" }));
-  items.push(...renderDevices());
-
-  items.push(React.createElement(List.Section, { key: "__hh", title: "剪贴板历史", subtitle: "共 " + history.length + " 条" }));
+  items.push(React.createElement(List.Section, { key: "__nav", title: "管理" }));
+  items.push(React.createElement(List.Item, {
+    key: "__devices-entry",
+    title: "查看设备列表",
+    subtitle: "已配对 / 待配对，共 " + devices.length + " 台",
+    icon: Icon.Desktop,
+    actions: React.createElement(ActionPanel, null,
+      React.createElement(Action.Push, {
+        title: "打开设备列表",
+        target: React.createElement(DevicesView, { devices: devices, onChanged: reload }),
+      }),
+    ),
+  }));
   items.push(React.createElement(List.Item, {
     key: "__history-entry",
     title: "查看剪贴板历史",
@@ -230,8 +175,20 @@ function Command() {
       }),
     ),
   }));
+  items.push(React.createElement(List.Item, {
+    key: "__config-entry",
+    title: "查看连接配置",
+    subtitle: "设备名 / 接收来源 / 局域网发现 / 同步开关",
+    icon: Icon.Person,
+    actions: React.createElement(ActionPanel, null,
+      React.createElement(Action.Push, {
+        title: "打开连接配置",
+        target: React.createElement(ConfigView, { config: config, onChanged: reload }),
+      }),
+    ),
+  }));
 
-  // 配对码
+  // 配对码（常用，留在主页）
   items.push(React.createElement(List.Section, { key: "__ph", title: "配对码", subtitle: "生成后手机端输入" }));
   items.push(React.createElement(List.Item, {
     key: "__pair",
@@ -254,8 +211,107 @@ function Command() {
     ),
   }));
 
-  // 连接配置
-  items.push(React.createElement(List.Section, { key: "__ch", title: "连接配置", subtitle: "设备名 / 接收来源 / 局域网发现" }));
+  return React.createElement(
+    List,
+    { isLoading: loading, searchBarPlaceholder: "搜索…" },
+    items
+  );
+}
+
+// ---- 设备独立视图 ----
+
+function DevicesView({ devices, onChanged }) {
+  const reload = React.useCallback(() => { if (onChanged) onChanged(); }, [onChanged]);
+  if (!devices) devices = [];
+  return React.createElement(
+    List,
+    { searchBarPlaceholder: "搜索设备…" },
+    devices.length === 0
+      ? React.createElement(List.EmptyView, {
+          icon: Icon.People,
+          title: "暂无设备",
+          description: "用「生成配对码」或手机端扫码加入。",
+        })
+      : devices.map((device) => {
+          const pairing = device.pairing_session || "";
+          const actions = [];
+          if (pairing) {
+            actions.push(React.createElement(Action, {
+              key: "confirm",
+              title: "确认配对",
+              icon: Icon.Check,
+              onAction: async () => {
+                const r = await guard(() => runJSON(["confirm", pairing]));
+                if (r) showToast(Toast.Style.Success, "已确认配对", device.name);
+                reload();
+              },
+            }));
+          }
+          actions.push(React.createElement(Action, {
+            key: "unpair",
+            title: "取消配对",
+            icon: Icon.Trash,
+            onAction: async () => {
+              const confirmed = await confirmAlert({
+                title: "取消配对",
+                message: "取消与 " + device.name + " 的配对？",
+                primaryAction: { title: "取消配对" },
+              });
+              if (!confirmed) return;
+              const r = await guard(() => runJSON(["unpair", device.id]));
+              if (r) showToast(Toast.Style.Success, "已取消配对", device.name);
+              reload();
+            },
+          }));
+          const subtitleParts = [];
+          subtitleParts.push(platformText(device.platform) || "未知平台");
+          subtitleParts.push(connectionText(device.connection));
+          if (pairing) subtitleParts.push("待确认配对");
+          if (device.receive_disabled) subtitleParts.push("不收文件");
+
+          return React.createElement(List.Item, {
+            key: "dev-" + device.id,
+            title: device.name,
+            subtitle: subtitleParts.join(" · "),
+            icon: pairing ? Icon.Warning : Icon.Desktop,
+            accessories: [
+              device.online ? { text: "在线" } : { text: "离线", icon: Icon.Moon },
+            ],
+            actions: React.createElement(ActionPanel, null, actions),
+          });
+        })
+  );
+}
+
+// ---- 连接配置独立视图 ----
+
+function ConfigView({ config, onChanged }) {
+  const reload = React.useCallback(() => { if (onChanged) onChanged(); }, [onChanged]);
+  if (!config) config = {};
+
+  function syncToggle(key, label, icon) {
+    const on = !!config[key];
+    return React.createElement(List.Item, {
+      key: "sync-" + key,
+      title: label,
+      subtitle: on ? "已开启" : "已关闭",
+      icon: icon,
+      actions: React.createElement(ActionPanel, null,
+        React.createElement(Action, {
+          title: on ? "关闭" + label : "开启" + label,
+          icon: icon,
+          onAction: async () => {
+            const r = await guard(() => runJSON(["config", "set", key, on ? "false" : "true"]));
+            if (r) showToast(Toast.Style.Success, on ? "已关闭" + label : "已开启" + label);
+            reload();
+          },
+        }),
+      ),
+    });
+  }
+
+  const items = [];
+  items.push(React.createElement(List.Section, { key: "cfg-basic", title: "基础" }));
   items.push(React.createElement(List.Item, {
     key: "__cfg-name",
     title: "设备名称",
@@ -299,9 +355,15 @@ function Command() {
     ),
   }));
 
+  items.push(React.createElement(List.Section, { key: "cfg-sync", title: "同步到对端（电脑→手机）" }));
+  items.push(syncToggle("sync_text", "同步文本", Icon.Clipboard));
+  items.push(syncToggle("sync_html", "同步富文本", Icon.Clipboard));
+  items.push(syncToggle("sync_image", "同步图片", Icon.Desktop));
+  items.push(syncToggle("sync_file", "同步文件", Icon.Download));
+
   return React.createElement(
     List,
-    { isLoading: loading, searchBarPlaceholder: "搜索设备、配置…" },
+    { searchBarPlaceholder: "搜索配置…" },
     items
   );
 }
