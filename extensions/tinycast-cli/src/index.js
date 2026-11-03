@@ -411,7 +411,6 @@ function ConfigReceiveForm({ current, onDone }) {
       id: "value",
       title: "接收来源",
       placeholder: "off / friends / everyone",
-      info: "off=均不允许，friends=仅好友，everyone=所有人",
       value: value,
       onChange: setValue,
       autoFocus: true,
