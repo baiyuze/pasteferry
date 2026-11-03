@@ -1053,7 +1053,10 @@ func configCommand(ctx context.Context, c pb.DaemonServiceClient) error {
 		if flag.NArg() < 4 {
 			return errors.New("用法: pasteferry-cli config set KEY VALUE")
 		}
-		req := pb.Config{}
+		req, err := c.GetConfig(ctx, &pb.Empty{})
+		if err != nil {
+			return err
+		}
 		switch flag.Arg(2) {
 		case "name":
 			req.DeviceName = flag.Arg(3)
@@ -1063,10 +1066,18 @@ func configCommand(ctx context.Context, c pb.DaemonServiceClient) error {
 			req.ReceiveDisabled = flag.Arg(3) == "true"
 		case "lan-disabled":
 			req.LanDisabled = flag.Arg(3) == "true"
+		case "sync_text":
+			req.SyncText = flag.Arg(3) == "true"
+		case "sync_html":
+			req.SyncHtml = flag.Arg(3) == "true"
+		case "sync_image":
+			req.SyncImage = flag.Arg(3) == "true"
+		case "sync_file":
+			req.SyncFile = flag.Arg(3) == "true"
 		default:
 			return errors.New("不支持的配置项: " + flag.Arg(2))
 		}
-		_, err := c.UpdateConfig(ctx, &req)
+		_, err = c.UpdateConfig(ctx, req)
 		if err != nil {
 			return err
 		}
