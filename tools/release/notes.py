@@ -11,6 +11,22 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.9.0',
+ 'date': '2026-11-04',
+ 'changes': [('The desktop CLI now reports its own version and provides read-only JSON queries for '
+              'background status, paired devices, recent clipboard history and settings, with consistent '
+              'success and error responses.',
+              '桌面命令行工具现在可以查询自身版本，并以 JSON 读取后台状态、配对设备、最近复制记录和设置；成功与错误使用一致的返回格式。',
+              'デスクトップのCLIにバージョン表示と、バックグラウンド状態・ペアリング済み端末・最近のコピー履歴・設定の読み取り専用JSON出力を追加しました。成功とエラーは共通の形式で返します。',
+              '桌面命令列工具現在可以查詢自身版本，並以 JSON 讀取背景狀態、配對裝置、最近複製記錄和設定；成功與錯誤使用一致的回傳格式。',
+              '桌面命令列工具現在可以查詢自身版本，並以 JSON 讀取背景狀態、配對裝置、最近複製記錄和設定；成功與錯誤使用一致的回傳格式。'),
+             ('Mac users can install the official desktop app and its bundled CLI from the baiyuze/tap '
+              'Homebrew cask. The installation guide covers upgrades and existing manual installations.',
+              'Mac 用户可通过 baiyuze/tap 的 Homebrew cask 安装官方桌面 App 和内置命令行工具；安装说明包含升级和已有手动安装的处理方式。',
+              'Macではbaiyuze/tapのHomebrew caskから公式デスクトップアプリと同梱CLIをインストールできます。更新方法と手動インストール済みの場合の手順も案内します。',
+              'Mac 使用者可透過 baiyuze/tap 的 Homebrew cask 安裝官方桌面 App 和內建命令列工具；安裝說明包含更新和已有手動安裝的處理方式。',
+              'Mac 用戶可透過 baiyuze/tap 的 Homebrew cask 安裝官方桌面 App 和內置命令列工具；安裝說明包含更新和已有手動安裝的處理方式。')],
+ 'fixes': []},
 {'version': '2.8.3',
  'date': '2026-11-01',
  'changes': [],
