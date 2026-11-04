@@ -13,6 +13,10 @@ One PR, one independent goal. Related tests and docs belong in the same PR.
 
 <!-- Summarize concrete changes. Move unrelated features or refactors to another PR.
 列出具体修改；无关功能或重构请另开 PR。
+Explain supporting refactors or dependency changes needed for this goal.
+如包含完成当前目标所需的重构或依赖调整，请说明关联。
+If this builds on another person's PR or patch, link the source and describe what was reused or adapted.
+如基于他人的 PR 或补丁，请关联来源并说明沿用或调整的内容。
 -->
 
 -
@@ -30,6 +34,8 @@ If this depends on another PR, link it and explain the merge order.
 <!-- List actual commands or manual steps and their results.
 State relevant platforms not tested; documentation-only changes can use formatting/link checks.
 填写实际执行的命令或手动步骤及结果，注明尚未验证的相关平台。
+You do not need devices for every platform; describe existing CI or environment blockers separately.
+无需自备全部平台设备；如有既有 CI 故障或环境限制，请单独说明。
 纯文档修改可以填写格式和链接检查结果。
 -->
 

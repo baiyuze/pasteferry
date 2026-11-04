@@ -1,0 +1,25 @@
+name: Feature proposal / 功能讨论
+description: Discuss a feature or larger change before implementation. / 实现前讨论新功能或较大改动。
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Describe the goal and expected scope; a finished implementation is not required.
+        请说明目标和预计范围，不需要先完成实现。
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or goal / 问题与目标
+      description: What would you like to improve, and who would benefit? / 希望解决什么问题，哪些使用者会受益？
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach / 拟议方案
+      description: Describe an approach if you have one; it is fine to discuss options first. / 如已有想法，请简述方案；也可以先讨论可行方向。
+  - type: textarea
+    id: scope
+    attributes:
+      label: Expected scope / 预计范围
+      description: Affected platforms or behavior, compatibility concerns, and dependencies on other work, if known. / 如已知，请说明涉及的平台或行为、兼容性影响及对其他改动的依赖。
