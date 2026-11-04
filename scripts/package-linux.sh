@@ -35,7 +35,7 @@ echo "▶ 后台服务与命令行（${VERSION}，${ARCH}）"
 # 纯 Go，不依赖 glibc 版本：剪贴板经 X11 协议直接通信，不链接 libX11
 (cd client-core && CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=$VERSION" \
     -o "../$APP/pasteferryd" ./cmd/pasteferryd)
-(cd client-core && CGO_ENABLED=0 go build -trimpath -ldflags "-s -w" -o "../$APP/pasteferry-cli" ./cmd/pasteferry-cli)
+(cd client-core && CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=$VERSION" -o "../$APP/pasteferry-cli" ./cmd/pasteferry-cli)
 
 echo "▶ 界面"
 (cd ui && flutter build linux --release --build-name "$VERSION" --dart-define=APP_VERSION="$VERSION" \

@@ -38,7 +38,7 @@ Push-Location client-core
 try {
     # -H=windowsgui：后台服务没有控制台窗口，开机自启时不会闪一下黑框
     Invoke-Checked { go build -trimpath -ldflags "-s -w -H=windowsgui -X main.version=$Version" -o "$app\pasteferryd.exe" ./cmd/pasteferryd } 'go build pasteferryd'
-    Invoke-Checked { go build -trimpath -ldflags '-s -w' -o "$app\pasteferry-cli.exe" ./cmd/pasteferry-cli } 'go build pasteferry-cli'
+    Invoke-Checked { go build -trimpath -ldflags "-s -w -X main.version=$Version" -o "$app\pasteferry-cli.exe" ./cmd/pasteferry-cli } 'go build pasteferry-cli'
 } finally {
     Pop-Location
     Remove-Item Env:CGO_ENABLED, Env:GOOS, Env:GOARCH

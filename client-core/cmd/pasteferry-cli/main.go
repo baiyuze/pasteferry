@@ -21,6 +21,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -40,24 +41,72 @@ import (
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
+// version is set by the packaging scripts for every supported platform.
+var version = "dev"
+var jsonOutput bool
+
+func reportError(err error, code int) {
+	if jsonOutput {
+		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"ok": false, "error": err.Error()})
+	} else {
+		fmt.Fprintln(os.Stderr, "错误:", err)
+	}
+	os.Exit(code)
+}
+
 func main() {
+	flag.CommandLine = flag.NewFlagSet("pasteferry-cli", flag.ContinueOnError)
+	flag.CommandLine.SetOutput(io.Discard)
+	flag.BoolVar(&jsonOutput, "json", false, "以 JSON 输出只读查询结果")
 	dataDir := flag.String("data-dir", "", "数据目录（默认为系统标准位置）")
-	flag.Parse()
+	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
+		if errors.Is(err, flag.ErrHelp) {
+			if jsonOutput {
+				if err := writeJSON(map[string]string{"usage": "pasteferry-cli [-json] [-data-dir DIR] <version|status|devices|history|config [get]>"}); err != nil {
+					reportError(err, 1)
+				}
+				return
+			}
+			fmt.Println("用法: pasteferry-cli [-json] [-data-dir DIR] <version|status|devices|history|config [get]|...>")
+			return
+		}
+		reportError(err, 2)
+	}
 
 	cmd := flag.Arg(0)
 	if cmd == "" {
+		if jsonOutput {
+			reportError(errors.New("缺少命令：version、status、devices、history 或 config get"), 2)
+		}
 		fmt.Fprintln(os.Stderr,
-			"用法: pasteferry-cli [-data-dir DIR] <status|watch|history|config|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]|web [on|off|invite [ADDR]|remove ID]>")
+			"用法: pasteferry-cli [-json] [-data-dir DIR] <version|status|watch|history|config [get]|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]|web [on|off|invite [ADDR]|remove ID]>")
 		os.Exit(2)
 	}
 
 	if err := run(cmd, *dataDir); err != nil {
-		fmt.Fprintln(os.Stderr, "错误:", err)
-		os.Exit(1)
+		reportError(err, 1)
 	}
 }
 
 func run(cmd, dataDir string) error {
+	if jsonOutput {
+		if err := validateJSONCommand(cmd); err != nil {
+			return err
+		}
+	}
+	if cmd == "version" {
+		if flag.NArg() != 1 {
+			return errors.New("用法: pasteferry-cli version")
+		}
+		if jsonOutput {
+			return writeJSON(map[string]string{"version": version})
+		}
+		fmt.Println(version)
+		return nil
+	}
+	if cmd == "config" && (flag.NArg() > 2 || (flag.NArg() == 2 && flag.Arg(1) != "get")) {
+		return errors.New("用法: pasteferry-cli config [get]")
+	}
 	paths, err := resolvePaths(dataDir)
 	if err != nil {
 		return err
@@ -81,6 +130,9 @@ func run(cmd, dataDir string) error {
 	client := pb.NewDaemonServiceClient(conn)
 	// token 随每次调用发送，daemon 侧用常数时间比较校验
 	ctx := metadata.AppendToOutgoingContext(context.Background(), "x-pasteferry-token", ep.Token)
+	if jsonOutput {
+		return queryJSON(ctx, client, ep, cmd)
+	}
 
 	switch cmd {
 	case "status":

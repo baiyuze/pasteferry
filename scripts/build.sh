@@ -47,7 +47,7 @@ build_universal client-core ./cmd/pasteferryd "$DIST/pasteferryd" \
     "-s -w -X main.version=$VERSION"
 
 echo "▶ 构建 CLI"
-build_universal client-core ./cmd/pasteferry-cli "$DIST/pasteferry-cli" "-s -w"
+build_universal client-core ./cmd/pasteferry-cli "$DIST/pasteferry-cli" "-s -w -X main.version=$VERSION"
 
 echo "▶ 构建服务器"
 build_universal server ./cmd/pasteferry-server "$DIST/pasteferry-server" \
