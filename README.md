@@ -157,6 +157,48 @@ Self-hosting takes one install command; see the [server deployment guide](server
 | **Phone web page** | Any phone or tablet on the same network; nothing to install |
 | **iPhone / iPad** | No app: distributing one needs an Apple developer certificate, and iOS doesn't let apps watch the clipboard in the background. Use the web page instead |
 
+### Install the Mac app with Homebrew
+
+The official tap installs the desktop app and links its bundled CLI into your command path:
+
+```sh
+brew tap baiyuze/tap
+brew install --cask baiyuze/tap/pasteferry
+```
+
+If PasteFerry was installed manually, quit it and move the existing `/Applications/PasteFerry.app`
+out of the way first. Keep application data to preserve pairings, history and settings.
+Open the installed app, enable background sync and grant the requested permissions.
+To update through Homebrew, including this app's built-in updater support:
+
+```sh
+brew update
+brew upgrade --cask --greedy baiyuze/tap/pasteferry
+```
+
+Uninstall with `brew uninstall --cask baiyuze/tap/pasteferry`; user data is preserved.
+See the [official tap](https://github.com/baiyuze/homebrew-tap).
+
+### Command-line queries (2.9 and later)
+
+Desktop packages include `pasteferry-cli`. Homebrew links it into your command path.
+For a manually installed Mac app, use `/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli`;
+on Windows, use `pasteferry-cli.exe` from the installation folder; on Linux, use `pasteferry-cli`.
+
+```sh
+pasteferry-cli version
+pasteferry-cli -json status
+pasteferry-cli -json devices
+pasteferry-cli -json history
+pasteferry-cli -json config get
+```
+
+`version` works without the background service. Other queries read the current user's running service.
+Put `-json` before the command to receive an `ok`/`data` or `ok`/`error` JSON response.
+History returns the latest 20 record summaries. Without `-json`, output remains human-readable.
+Use `-data-dir DIR` to select an existing running instance; the CLI does not start a service.
+See the [CLI JSON reference](design/cli-json.md) for the supported read-only queries and output format.
+
 ## Documentation
 
 - [How it works](guide/how-it-works.md): architecture, NAT traversal, security model, fallbacks, lessons learned

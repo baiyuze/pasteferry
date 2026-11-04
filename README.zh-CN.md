@@ -149,6 +149,45 @@ Mac 版还没有经过 Apple 公证，Windows 版还没有代码签名：Mac 上
 | **服务器** | 可选：Linux（x86_64、ARM64；systemd 或 Docker）、macOS，或 Windows 10/11 x64 |
 | **iPhone / iPad** | 暂不支持：iOS 不允许 App 在后台监听剪贴板 |
 
+### 通过 Homebrew 安装 Mac 版
+
+官方 tap 安装的是完整桌面 App，并提供 App 内置的 `pasteferry-cli`：
+
+```sh
+brew tap baiyuze/tap
+brew install --cask baiyuze/tap/pasteferry
+```
+
+已有手动安装的 App 时，先退出并移走 `/Applications/PasteFerry.app`，保留应用数据，再执行安装。
+首次打开后启用后台同步并按提示授权。通过 Homebrew 升级：
+
+```sh
+brew update
+brew upgrade --cask --greedy baiyuze/tap/pasteferry
+```
+
+`--greedy` 会包含支持 App 内更新的软件。卸载使用 `brew uninstall --cask baiyuze/tap/pasteferry`，保留配对、历史和设置。
+详见 [官方 tap](https://github.com/baiyuze/homebrew-tap)。
+
+### 命令行查询（2.9 起）
+
+桌面 App 自带 CLI；Homebrew 会把它加入命令路径。手动安装的 Mac App 可以从
+`/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli` 调用；Windows 使用安装目录中的
+`pasteferry-cli.exe`，Linux 使用 `pasteferry-cli`。
+
+```sh
+pasteferry-cli version
+pasteferry-cli -json status
+pasteferry-cli -json devices
+pasteferry-cli -json history
+pasteferry-cli -json config get
+```
+
+`version` 无需后台服务；其他查询读取当前登录用户正在使用的后台服务。
+`-json` 放在命令前，输出统一的 `ok`/`data` 或 `ok`/`error` JSON；历史返回最近 20 条摘要。
+不加 `-json` 时沿用文本输出。可用 `-data-dir DIR` 指定一个已经运行的实例的数据目录；CLI 本身不启动后台服务。
+JSON 模式支持上述只读查询，格式及示例见 [CLI JSON 接口](design/cli-json.md)。
+
 ## 文档
 
 - [工作原理](guide/how-it-works.zh-CN.md)：架构、NAT 打洞、安全模型、兜底、踩过的坑
