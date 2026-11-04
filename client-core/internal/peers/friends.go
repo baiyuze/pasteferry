@@ -584,10 +584,12 @@ func (m *Manager) handlePairIntent(from string, in *pb.PairIntent) {
 // evaluateIntent 在两边的用途都知道以后：一致的加好友弹出确认框；不一致就作废这次配对。
 func (m *Manager) evaluateIntent(p *pendingPair) {
 	m.mu.Lock()
-	if p.peerIntent == "" || p.intentDone {
+	if m.pending[p.session] != p || p.peerIntent == "" ||
+		(p.intentDone && p.intent == p.peerIntent) {
 		m.mu.Unlock()
 		return
 	}
+	wasKnown := p.intentDone
 	p.intentDone = true
 	announce := false
 	switch {
@@ -602,7 +604,11 @@ func (m *Manager) evaluateIntent(p *pendingPair) {
 		delete(m.pending, p.session)
 		m.mismatched[p.session] = ErrIsFriendCode
 	}
-	close(p.intentKnown)
+	// A delayed reply from an earlier attempt can initially report matching
+	// purposes. A later mismatch still invalidates this pending session.
+	if !wasKnown {
+		close(p.intentKnown)
+	}
 	m.mu.Unlock()
 	if p.mismatch != nil {
 		m.log.Info("配对用途不一致，作废", "peer", p.peer.ID, "本端", p.intent, "对方", p.peerIntent)

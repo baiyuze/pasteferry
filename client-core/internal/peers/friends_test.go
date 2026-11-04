@@ -3,6 +3,7 @@ package peers
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"net/http/httptest"
 	"strings"
 	"testing"
@@ -243,3 +244,30 @@ func TestAddFriendViaServer(t *testing.T) {
 }
 
 var _ = p2p.StateOffline
+
+func TestPairingRejectsFriendIntentAfterEarlierDeviceIntent(t *testing.T) {
+	p := &pendingPair{
+		session: "current-session", intent: lan.IntentDevice,
+		peerIntent: lan.IntentDevice, intentKnown: make(chan struct{}),
+	}
+	p.peer.ID = "peer"
+	m := &Manager{
+		pending:    map[string]*pendingPair{p.session: p},
+		mismatched: make(map[string]error), log: slog.Default(),
+	}
+	// A reply from the preceding device-code attempt can arrive before the
+	// current friend-code attempt explains its purpose. It must not make the
+	// current session ignore the subsequent friend intent.
+	m.evaluateIntent(p)
+	p.peerIntent = lan.IntentFriend
+	m.evaluateIntent(p)
+	if !errors.Is(m.mismatched[p.session], ErrIsFriendCode) {
+		t.Fatal("a later friend intent must invalidate device pairing")
+	}
+	if _, ok := m.pending[p.session]; ok {
+		t.Fatal("mismatched pairing remains pending")
+	}
+	if err := m.ConfirmPairing(context.Background(), p.session, true); !errors.Is(err, ErrIsFriendCode) {
+		t.Fatalf("confirmation must reject the friend code: %v", err)
+	}
+}
