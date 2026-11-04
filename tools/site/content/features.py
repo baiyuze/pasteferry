@@ -29,11 +29,12 @@ COPY = {
     "star_button": ("在 GitHub 上点 Star", "在 GitHub 上點 Star", "在 GitHub 上按 Star", "Star on GitHub", "GitHub でスター"),
 
     # ── 首页 ──
-    "badge": ('2.8 新功能：安卓隔空传送，手机电脑互传文件 →',
- '2.8 新功能：安卓隔空傳送，手機電腦互傳檔案 →',
- '2.8 新功能：安卓隔空傳送，手機電腦互傳檔案 →',
- 'New in 2.8: send files between Android and your computer →',
- '2.8 の新機能：Android とパソコンでファイル転送 →'),
+    # {version} 由官网 VERSION 生成；每次发版同步更新功能摘要。
+    "badge": ('{version} 新功能：命令行查询，支持 Homebrew 安装 →',
+ '{version} 新功能：命令列查詢，支援 Homebrew 安裝 →',
+ '{version} 新功能：命令列查詢，支援 Homebrew 安裝 →',
+ 'New in {version}: CLI queries and Homebrew installation →',
+ '{version} の新機能：CLI での状態確認と Homebrew インストール →'),
     # 首页手机区块（2.7）
     "home_phone_h2": ("手机也能用了。", "手機也能用了。", "手機也能用了。", "Your phone joins in.", "スマホでも使える。"),
     "home_phone_intro": ('安卓 App 可与电脑双向隔空传送，照片和文件一次多选，收到后保存或分享。不想安装？扫码打开网页，查看复制记录、发送内容，也能独立收发文件。',

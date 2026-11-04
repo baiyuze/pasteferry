@@ -537,6 +537,7 @@ def home(code: str) -> str:
     a = up + "assets/"
     shots = shots_dir(code)
 
+    badge = fill(f["badge"], {"version": ".".join(VERSION.split(".")[:2])})
     ours = ' class="ours"'
     compare_head = "".join(
         f'<th scope="col"{ours if i == 0 else ""}>{h}</th>' for i, h in enumerate(c["compare_cols"]))
@@ -571,7 +572,7 @@ def home(code: str) -> str:
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="{FEATURES}#phone">{keys(f["badge"])}</a>
+        <a class="release-note" href="{REPO}/releases/tag/v{VERSION}">{keys(badge)}</a>
         <h1 class="display">{c["h1"]}</h1>
         <p class="lede">{c["lede"]}</p>{cta(c, "", START, tour_ui["watch"])}
         <div class="stage" data-play role="img" aria-label="{esc(c["stage_label"])}">
