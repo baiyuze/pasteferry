@@ -822,6 +822,7 @@ C = {
             "apple": "Apple 晶片（M1 及更新機型）",
             "intel": "Intel 晶片",
             "universal": "也有兩種晶片都能用的<a href=\"{universal}\">通用版</a>，檔案大一倍。",
+            "homebrew": '也可透過 Homebrew 安裝完整 App 和內建命令列工具：<code>brew install --cask baiyuze/tap/pasteferry</code>。若已手動安裝，請先結束並移走 App，保留應用程式資料。<a href="{homebrew}">查看安裝與更新說明</a>。',
             "steps": [
                 "打開下載的 DMG，把隔空貼拖進「應用程式」。",
                 "從「應用程式」裡打開。<span class=\"aside\">第一次會提示「無法驗證開發者」：到「系統設定 → 隱私權與安全性」，點頁面下方的「強制打開」。</span>",

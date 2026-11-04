@@ -2,19 +2,24 @@
 
 ## 2.9.0 — 2026-11-04
 
-This release adds script-friendly desktop CLI queries and an official Homebrew installation option for Mac.
+This release adds script-friendly desktop CLI queries and an official Homebrew installation option for Mac, and fixes a pairing-purpose race.
 
 ### Changes
 
 - The desktop CLI now reports its own version and provides read-only JSON queries for background status, paired devices, recent clipboard history and settings, with consistent success and error responses.
 - Mac users can install the official desktop app and its bundled CLI from the baiyuze/tap Homebrew cask. The installation guide covers upgrades and existing manual installations.
 
+### Fixes
+
+- Device pairing now rejects a friend code even when a delayed reply from an earlier pairing attempt arrives first.
+
 ### Upgrade notes
 
-- **Mac, Windows and Linux apps**: optional; update to use the new CLI version and JSON queries. Existing pairings, friends, history and settings are preserved.
-- **Android**: optional; there are no Android-specific changes.
+- **Mac, Windows and Linux apps**: recommended for the pairing fix and the new CLI version and JSON queries. Existing pairings, friends, history and settings are preserved.
+- **Android**: optional; includes the shared pairing fix, with no Android-specific interface changes.
 - **Server**: no update needed.
 - The device-to-device protocol is unchanged and compatible with existing releases.
+- If you installed an earlier 2.9.0 test build, reinstall from this release to receive the final pairing fix; both builds use the same version number. The final desktop build is `53ee171d`.
 
 ## 2.8.3 — 2026-11-01
 

@@ -833,6 +833,7 @@ C = {
             "apple": "Apple シリコン（M1 以降）",
             "intel": "Intel プロセッサ",
             "universal": "両方で動く<a href=\"{universal}\">ユニバーサル版</a>もあります。サイズは 2 倍です。",
+            "homebrew": 'Homebrewでもデスクトップアプリと同梱CLIをインストールできます：<code>brew install --cask baiyuze/tap/pasteferry</code>。手動インストール済みの場合は、終了して既存のアプリを移動し、アプリのデータは保持してください。<a href="{homebrew}">インストールと更新の手順</a>をご覧ください。',
             "steps": [
                 "ダウンロードした DMG を開き、PasteFerry を「アプリケーション」にドラッグします。",
                 "「アプリケーション」から開きます。<span class=\"aside\">初回は「開発元を検証できません」と表示されます。"

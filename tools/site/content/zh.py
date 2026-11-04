@@ -822,6 +822,7 @@ C = {
             "apple": "Apple 芯片（M1 及更新）",
             "intel": "Intel 芯片",
             "universal": "两种芯片都能用的<a href=\"{universal}\">通用版</a>也在，体积大一倍。",
+            "homebrew": '也可通过 Homebrew 安装完整 App 和内置命令行工具：<code>brew install --cask baiyuze/tap/pasteferry</code>。已有手动安装的版本，请先退出并移走 App，保留应用数据。<a href="{homebrew}">查看安装与升级说明</a>。',
             "steps": [
                 "打开下载的 DMG，把隔空贴拖进「应用程序」。",
                 "从「应用程序」里打开。<span class=\"aside\">第一次会提示「无法验证开发者」：到「系统设置 → 隐私与安全性」，点页面下方的「仍要打开」。</span>",

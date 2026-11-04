@@ -894,6 +894,7 @@ C = {
             "apple": "Apple silicon (M1 and later)",
             "intel": "Intel",
             "universal": "A <a href=\"{universal}\">universal version</a> that runs on both is also available, at twice the size.",
+            "homebrew": 'You can also install the desktop app and bundled CLI with <code>brew install --cask baiyuze/tap/pasteferry</code>. If already installed manually, quit and move the existing app first; keep your application data. See the <a href="{homebrew}">installation and upgrade guide</a>.',
             "steps": [
                 "Open the DMG you downloaded and drag PasteFerry into Applications.",
                 "Open it from Applications.<span class=\"aside\">The first time, macOS says it can't verify the developer: go to "

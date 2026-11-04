@@ -2186,7 +2186,8 @@ def download_page(code: str) -> str:
     links = {"start": base + START, "server": base + START + "#server", "releases": REPO + "/releases",
              "sums": DL + "SHA256SUMS", "universal": DL + "PasteFerry.dmg", "portable": DL + "PasteFerry-windows-x64.zip",
              "notes": REPO + "/releases/latest", "lan": base + LAN, "gitee": GITEE + "/releases",
-             "android": DL + "PasteFerry-android-arm64.apk"}
+             "android": DL + "PasteFerry-android-arm64.apk",
+             "homebrew": "https://github.com/baiyuze/homebrew-tap"}
     w, m, lx = d["win"], d["mac"], d["linux"]
     ph = d["phone"]
     mirror = d.get("mirror")
@@ -2251,6 +2252,7 @@ def download_page(code: str) -> str:
                 </div>{mirror_line([(mirror["apple"], "PasteFerry-mac-apple-silicon.dmg"), (mirror["intel"], "PasteFerry-mac-intel.dmg"),
                                     (mirror["universal"], "PasteFerry.dmg")]) if mirror else ""}
                 <p class="small">{fill(m["universal"], links)}</p>
+                <p class="small">{fill(m["homebrew"], links)}</p>
                 <ol class="steps">
 {items(m["steps"])}
                 </ol>
