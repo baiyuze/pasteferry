@@ -209,6 +209,12 @@ See the [CLI JSON reference](design/cli-json.md) for the supported read-only que
 - [Privacy](PRIVACY.md), [security](SECURITY.md), [official service protocol](design/official-gateway.md)
 - [Changelog](CHANGELOG.md)
 
+## Contributing
+
+Please read the [contribution guidelines](CONTRIBUTING.md) before opening a pull request.
+Keep each PR focused on one independent goal, including its related tests and documentation.
+Discuss larger changes in an issue first and describe the checks you actually ran in the PR template.
+
 ## Support the project
 
 PasteFerry is free and open source. If it helps you, **a ⭐ star** is the best support and helps others who need it find it. Questions and ideas are welcome as [issues](https://github.com/baiyuze/pasteferry/issues).

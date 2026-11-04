@@ -198,6 +198,11 @@ JSON 模式支持上述只读查询，格式及示例见 [CLI JSON 接口](desig
 - [隐私说明](PRIVACY.md)、[安全说明](SECURITY.md)、[「服务」的公开协议](design/official-gateway.md)
 - [更新记录](CHANGELOG.md)
 
+## 参与贡献
+
+提交 PR 前请阅读[贡献规范](CONTRIBUTING.zh-CN.md)。每个 PR 只处理一个独立目标，相关测试和文档可以一并提交。
+较大改动请先开 Issue 讨论，并在 PR 模板中写清修改范围和实际验证结果。
+
 ## 支持一下
 
 隔空贴免费开源。如果它帮到了你，**点一个 ⭐ Star** 就是最好的支持，也能让更多需要它的人看到。遇到问题或有想法，欢迎[提 issue](https://github.com/baiyuze/pasteferry/issues)。
