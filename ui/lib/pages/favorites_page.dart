@@ -14,6 +14,8 @@ import '../widgets/common.dart';
 import '../widgets/favorite_actions.dart';
 import '../widgets/image_preview_dialog.dart';
 import '../widgets/record_hover.dart';
+import '../pixel_theme.dart';
+import '../pixel_art.dart';
 
 /// 收藏：另存的一份，不会被自动清理。见 design/quick-paste-and-favorites.md 第 3 节。
 ///
@@ -112,14 +114,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               sliver: DecoratedSliver(
                                 decoration: BoxDecoration(
                                   color: context.palette.surface,
-                                  borderRadius: BorderRadius.circular(Radii.md),
+                                  borderRadius: BorderRadius.circular(context.shape.md),
                                   border: Border.all(color: context.palette.border),
                                 ),
                                 sliver: SliverPadding(
                                   padding: const EdgeInsets.all(Insets.xs),
                                   sliver: SliverList.separated(
                                     itemCount: records.length,
-                                    separatorBuilder: (_, _) => const Divider(indent: 44, endIndent: 8),
+                                    separatorBuilder: (_, _) => const ThemedDivider(indent: 44, endIndent: 8),
                                     itemBuilder: (_, i) => _FavoriteRow(
                                       key: ValueKey(records[i].id),
                                       record: records[i],
@@ -181,13 +183,13 @@ class _FavoriteRowState extends State<_FavoriteRow> {
       onExit: (_) => setState(() => _hovered = false),
       child: InkWell(
         onTap: previewable ? () => showImagePreview(context, r.id) : null,
-        borderRadius: BorderRadius.circular(Radii.sm),
+        borderRadius: BorderRadius.circular(context.shape.sm),
         child: Container(
           constraints: const BoxConstraints(minHeight: 52),
           padding: const EdgeInsets.symmetric(horizontal: Insets.md, vertical: Insets.sm),
           decoration: BoxDecoration(
             color: _hovered ? p.hover : Colors.transparent,
-            borderRadius: BorderRadius.circular(Radii.sm),
+            borderRadius: BorderRadius.circular(context.shape.sm),
           ),
           child: Row(
             children: [
@@ -238,7 +240,7 @@ class _FavoriteRowState extends State<_FavoriteRow> {
   Widget _trailing(BuildContext context, ClipRecord r) {
     final l = context.l10n;
     if (_busy) {
-      return const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2));
+      return const SizedBox(width: 16, height: 16, child: ThemedSpinner(strokeWidth: 2));
     }
     final unfavorite = IconAction(
       icon: AppIcons.starFill,
@@ -263,7 +265,7 @@ class _FavoriteRowState extends State<_FavoriteRow> {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(width: 72, child: LinearProgressIndicator(minHeight: 3)),
+            const SizedBox(width: 72, child: ThemedProgressBar(minHeight: 3)),
             const SizedBox(width: Insets.sm),
             rename,
             unfavorite,

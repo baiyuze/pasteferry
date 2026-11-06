@@ -5,6 +5,7 @@ import '../i18n.dart';
 import '../main.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../pixel_theme.dart';
 import 'devices_page.dart' show connectionLabel, platformIcon;
 
 /// 官方服务：今日中转额度、各设备走直连还是中转、本机设备 ID。
@@ -91,7 +92,7 @@ class OfficialServicePage extends StatelessWidget {
                           Expanded(
                             child: SelectableText(
                               state.status?.deviceId ?? state.self?.id ?? '',
-                              style: context.text.bodyMedium?.copyWith(fontFamily: monoFamily),
+                              style: context.text.bodyMedium?.copyWith(fontFamily: context.typography.mono),
                             ),
                           ),
                           IconButton(
@@ -206,8 +207,8 @@ class OfficialServicePage extends StatelessWidget {
               const SizedBox(height: Insets.md),
               // 条的长度是剩余额度：满格表示今天还没用
               ClipRRect(
-                borderRadius: BorderRadius.circular(3),
-                child: LinearProgressIndicator(
+                borderRadius: BorderRadius.circular(context.shape.scaled(3)),
+                child: ThemedProgressBar(
                   value: limit > 0 ? (remaining / limit).clamp(0.0, 1.0) : 0,
                   minHeight: 6,
                   color: low ? p.warning : p.accent,

@@ -8,6 +8,7 @@ import 'background_service.dart';
 import 'daemon_client.dart';
 import 'i18n.dart';
 import 'quick_paste_service.dart';
+import 'theme_controller.dart';
 import 'gen/pasteferry/v1/daemon.pb.dart';
 import 'gen/pasteferry/v1/daemon.pbgrpc.dart' show DaemonServiceClient;
 import 'widgets/record_hover.dart' show RecordDetails;
@@ -63,6 +64,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
   final QuickPasteService quickPasteService;
 
   final Future<DaemonConnection> Function() _connectDaemon;
+
+  /// 主题与深浅模式，见 theme_controller.dart
+  final theme = ThemeController();
 
   DaemonConnection? _conn;
   StreamSubscription<Event>? _events;
@@ -371,6 +375,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
     _favoriteSearch.dispose();
     _events?.cancel();
     _conn?.close();
+    theme.dispose();
     super.dispose();
   }
 
@@ -427,6 +432,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
           (results[3] as ListHistoryResponse).records.where((r) => r.favorite),
         );
       await Future.wait([
+        theme.attach(conn.client, _config!),
         _loadQuickPasteStatus(),
         _loadDevices(),
         _loadFriends(),
@@ -701,6 +707,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
     _events = null;
     _conn?.close();
     _conn = null;
+    theme.detach();
     _setLink(LinkState.offline, message);
     // daemon 可能正在重启，自动重连省去用户手动操作
     _retry = Timer(const Duration(seconds: 3), connect);
@@ -745,6 +752,10 @@ class AppState extends ChangeNotifier implements RecordDetails {
       case Event_Payload.configChanged:
         // 别处（快捷窗口、另一个界面窗口）改了设置
         _config = ev.configChanged;
+        theme.applyConfig(ev.configChanged);
+
+      case Event_Payload.themesChanged:
+        theme.onThemesChanged(ev.themesChanged);
 
       case Event_Payload.quickPasteChanged:
         _quickPaste = ev.quickPasteChanged;

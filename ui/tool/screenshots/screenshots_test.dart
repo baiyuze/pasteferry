@@ -19,6 +19,8 @@ import 'package:pasteferry_ui/picker/picker_state.dart';
 import 'package:pasteferry_ui/picker/picker_view.dart';
 import 'package:pasteferry_ui/icons.dart';
 import 'package:pasteferry_ui/theme.dart';
+import 'package:pasteferry_ui/theme_controller.dart';
+import 'package:pasteferry_ui/theme_json.dart';
 import 'package:pasteferry_ui/widgets/avatar.dart';
 import 'package:pasteferry_ui/widgets/friend_send_dialog.dart';
 import 'package:pasteferry_ui/widgets/friends_dialog.dart';
@@ -39,6 +41,24 @@ final _lang = Platform.environment['SCREENSHOT_LANG'] ?? 'zh';
 final _locale = switch (_lang) { 'zh-tw' => zhHantTW, 'zh-hk' => zhHantHK, _ => Locale(_lang) };
 String _t(String zh, String en, String ja, {required String tw, required String hk}) =>
     switch (_lang) { 'en' => en, 'ja' => ja, 'zh-tw' => tw, 'zh-hk' => hk, _ => zh };
+
+/// 截图用哪套主题：SCREENSHOT_THEME=pixel 渲染像素主题，不设时是默认主题；
+/// SCREENSHOT_THEME_FILE 指向一份主题 JSON 时用它（宣传片里展示自定义主题）
+final AppThemeSpec _spec = switch (Platform.environment['SCREENSHOT_THEME_FILE']) {
+  final String file => parseTheme(File(file).readAsStringSync()),
+  null => AppThemeSpec.byId(Platform.environment['SCREENSHOT_THEME'] ?? ''),
+};
+
+ThemeData _theme(Brightness brightness) =>
+    buildTheme(brightness, spec: _spec, fontFamily: 'SF', fontFamilyFallback: _cjk);
+
+/// 与 App 一样，主题规定了字号阶梯时把字号吸附上去。像素主题的场景与光标会一直动，
+/// 截图时按「减少动态效果」只画静止的一帧，否则等不到画面静止
+Widget _textScale(BuildContext context, Widget? child) {
+  final scaled = ThemeTextScale(child: child!);
+  if (!_spec.shape.pixel) return scaled;
+  return MediaQuery(data: MediaQuery.of(context).copyWith(disableAnimations: true), child: scaled);
+}
 
 /// 汉字的字形跟着语言走：日文界面用冬青黑体，繁体用苹方的台湾、香港字形，否则用简体的苹方
 final _cjk = switch (_lang) {
@@ -119,6 +139,14 @@ Future<void> _loadFonts() async {
   // 官方服务等少数地方用的是 Material 图标
   final material = FontLoader('MaterialIcons')..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
   await material.load();
+  // 像素主题的字体与图标（App 自带的资源）
+  for (final (name, file) in const [
+    ('FusionPixel', 'FusionPixel12.otf'),
+    ('FusionPixelMono', 'FusionPixel12Mono.otf'),
+    ('PixelIcons', 'PixelIcons.ttf'),
+  ]) {
+    await (FontLoader(name)..addFont(rootBundle.load('assets/fonts/$file'))).load();
+  }
 }
 
 final _now = DateTime.now();
@@ -431,13 +459,14 @@ Future<void> _render(
   required bool settle,
 }) async {
 
-  final theme = buildTheme(brightness, fontFamily: 'SF', fontFamilyFallback: _cjk);
+  final theme = _theme(brightness);
   await tester.pumpWidget(RepaintBoundary(
     key: _boundary,
     child: AppScope(
       state: state,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        builder: _textScale,
         theme: theme,
         locale: _locale,
         supportedLocales: supportedLocales,
@@ -466,7 +495,8 @@ Future<void> _capture(WidgetTester tester, String name) async {
   await tester.runAsync(() async {
     final image = await boundary.toImage(pixelRatio: 2);
     final png = await image.toByteData(format: ImageByteFormat.png);
-    File('tool/screenshots/out/$name.png')
+    // SCREENSHOT_OUT：另一个流程（宣传片）同时在渲染时，各写各的目录
+    File('${Platform.environment['SCREENSHOT_OUT'] ?? 'tool/screenshots/out'}/$name.png')
       ..createSync(recursive: true)
       ..writeAsBytesSync(png!.buffer.asUint8List());
   });
@@ -476,6 +506,7 @@ void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     appL10n = lookupAppLocalizations(_locale);
+    AppIcons.pixel = _spec.pixelIcons;
     await _loadFonts();
   });
 
@@ -755,6 +786,41 @@ void main() {
     await _shoot(tester, 'settings', state: _demo(), section: Section.settings);
   });
 
+  // 「外观」：自带的两套主题加两套演示用的自定义主题
+  AppState appearanceDemo() {
+    final state = _demo()..requestPage('settings:appearance');
+    final sunset = parseTheme({
+      'id': 'sunset-pixel',
+      'base': 'pixel',
+      'modes': {
+        'dark': {'accent': '#FF8A5B', 'background': '#16110F', 'sidebar': '#100C0A', 'surface': '#1E1714', 'selection': '#2A201B', 'border': '#3A2D27'},
+        'light': {'accent': '#C2410C'},
+      },
+    });
+    final mint = parseTheme({
+      'id': 'mint',
+      'base': 'default',
+      'modes': {
+        'dark': {'accent': '#34D399'},
+        'light': {'accent': '#047857'},
+      },
+    });
+    state.theme.debugSeed(themes: [
+      for (final e in AppThemeSpec.builtins.entries) ThemeChoice(id: e.key, names: const {}, builtin: true, spec: e.value),
+      ThemeChoice(id: 'sunset-pixel', names: {'zh-Hans': '落日像素', 'en': 'Sunset Pixel', 'ja': 'サンセット', 'zh-Hant-TW': '落日像素', 'zh-Hant-HK': '落日像素'}, builtin: false, spec: sunset),
+      ThemeChoice(id: 'mint', names: {'zh-Hans': '薄荷', 'en': 'Mint', 'ja': 'ミント', 'zh-Hant-TW': '薄荷', 'zh-Hant-HK': '薄荷'}, builtin: false, spec: mint),
+    ], id: _spec.id);
+    return state;
+  }
+
+  testWidgets('appearance', (tester) async {
+    await _shoot(tester, 'appearance', state: appearanceDemo(), section: Section.settings);
+  });
+
+  testWidgets('appearance-dark', (tester) async {
+    await _shoot(tester, 'appearance-dark', state: appearanceDemo(), section: Section.settings, brightness: Brightness.dark);
+  });
+
   AppState officialDemo() {
     final state = _demo();
     final bjt = _now.toUtc().add(const Duration(hours: 8));
@@ -861,7 +927,8 @@ void main() {
             state: _demo(),
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
-              theme: buildTheme(brightness, fontFamily: 'SF', fontFamilyFallback: _cjk),
+              builder: _textScale,
+              theme: _theme(brightness),
               locale: _locale,
               supportedLocales: supportedLocales,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -973,7 +1040,7 @@ Future<void> _shootPicker(WidgetTester tester, String name, {String query = ''})
         records: _pickerRecords(),
         favorites: _favorites(),
       );
-    final theme = buildTheme(Brightness.dark, fontFamily: 'SF', fontFamilyFallback: _cjk).copyWith(
+    final theme = _theme(Brightness.dark).copyWith(
       scaffoldBackgroundColor: Colors.transparent,
       canvasColor: Colors.transparent,
     );
@@ -981,6 +1048,7 @@ Future<void> _shootPicker(WidgetTester tester, String name, {String query = ''})
       key: _boundary,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        builder: _textScale,
         color: Colors.transparent,
         theme: theme,
         locale: _locale,
@@ -991,7 +1059,7 @@ Future<void> _shootPicker(WidgetTester tester, String name, {String query = ''})
             width: 560,
             height: 460,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Radii.lg),
+              borderRadius: BorderRadius.circular(_spec.shape.lg),
               boxShadow: const [
                 BoxShadow(color: Color(0x73000000), blurRadius: 36, offset: Offset(0, 14)),
                 BoxShadow(color: Color(0x40000000), blurRadius: 3),

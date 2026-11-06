@@ -2455,6 +2455,108 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get webFilesLimit => '网页收取单个文件上限 200 MB，一次最多 64 个文件。';
+
+  @override
+  String get appearance => '外观';
+
+  @override
+  String get settingsAppearanceSummary => '主题、浅色与深色';
+
+  @override
+  String get themeTitle => '主题';
+
+  @override
+  String get themeDefault => '默认';
+
+  @override
+  String get themePixel => '像素';
+
+  @override
+  String get themeMode => '浅色与深色';
+
+  @override
+  String get themeModeSystem => '跟随系统';
+
+  @override
+  String get themeModeLight => '浅色';
+
+  @override
+  String get themeModeDark => '深色';
+
+  @override
+  String get themeCustom => '自定义';
+
+  @override
+  String get themeDelete => '删除主题';
+
+  @override
+  String themeDeleteConfirm(String name) {
+    return '删除主题「$name」？';
+  }
+
+  @override
+  String get themeLowContrast => '这个主题里有些文字可能看不清';
+
+  @override
+  String get themeFootnote => '主题只用于这台设备（包括快捷粘贴窗口），不会同步到其他设备。';
+
+  @override
+  String get themeBuiltinGroup => '软件自带';
+
+  @override
+  String get themeCustomGroup => '自定义';
+
+  @override
+  String get themeUse => '使用';
+
+  @override
+  String get themeDuplicate => '复制一份';
+
+  @override
+  String themeCopyName(String name) {
+    return '$name 副本';
+  }
+
+  @override
+  String get themeExport => '导出…';
+
+  @override
+  String get themeImport => '导入主题…';
+
+  @override
+  String themeImported(String name) {
+    return '已导入「$name」';
+  }
+
+  @override
+  String themeImportedWarn(String name, int count) {
+    return '已导入「$name」，有 $count 处文字颜色可能看不清';
+  }
+
+  @override
+  String get themeExported => '主题已导出';
+
+  @override
+  String get themeCustomEmpty => '还没有自定义主题。复制一份自带主题，或者导入、让 AI 帮你做一套。';
+
+  @override
+  String get themeAskAi => '让 AI 帮你做主题';
+
+  @override
+  String get themeAskAiBody =>
+      '把下面这个 MCP 服务加到 Claude、Cursor 等 AI 应用里，然后直接说「帮我做一套赛博朋克风的主题」。AI 会读取主题格式、配色、检查对比度，再把主题应用上。';
+
+  @override
+  String get themeAskAiCopy => '复制配置';
+
+  @override
+  String get themeAskAiCopied => '配置已复制';
+
+  @override
+  String get themeScanlines => '扫描线';
+
+  @override
+  String get themeScanlinesDesc => '整个窗口叠一层很淡的 CRT 扫描线，只在像素主题里有效';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -4908,6 +5010,108 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get webFilesLimit => '網頁接收單一檔案上限 200 MB，一次最多 64 個檔案。';
+
+  @override
+  String get appearance => '外觀';
+
+  @override
+  String get settingsAppearanceSummary => '主題、淺色與深色';
+
+  @override
+  String get themeTitle => '主題';
+
+  @override
+  String get themeDefault => '預設';
+
+  @override
+  String get themePixel => '像素';
+
+  @override
+  String get themeMode => '淺色與深色';
+
+  @override
+  String get themeModeSystem => '跟隨系統';
+
+  @override
+  String get themeModeLight => '淺色';
+
+  @override
+  String get themeModeDark => '深色';
+
+  @override
+  String get themeCustom => '自訂';
+
+  @override
+  String get themeDelete => '刪除主題';
+
+  @override
+  String themeDeleteConfirm(String name) {
+    return '刪除主題「$name」？';
+  }
+
+  @override
+  String get themeLowContrast => '這個主題裡有些文字可能看不清楚';
+
+  @override
+  String get themeFootnote => '主題只用於這部裝置（包括快速貼上視窗），不會同步到其他裝置。';
+
+  @override
+  String get themeBuiltinGroup => '內置';
+
+  @override
+  String get themeCustomGroup => '自訂';
+
+  @override
+  String get themeUse => '使用';
+
+  @override
+  String get themeDuplicate => '複製一份';
+
+  @override
+  String themeCopyName(String name) {
+    return '$name 副本';
+  }
+
+  @override
+  String get themeExport => '匯出…';
+
+  @override
+  String get themeImport => '匯入主題…';
+
+  @override
+  String themeImported(String name) {
+    return '已匯入「$name」';
+  }
+
+  @override
+  String themeImportedWarn(String name, int count) {
+    return '已匯入「$name」，有 $count 處文字顏色可能看不清楚';
+  }
+
+  @override
+  String get themeExported => '主題已匯出';
+
+  @override
+  String get themeCustomEmpty => '還沒有自訂主題。複製一份內置主題，或者匯入、讓 AI 幫你做一套。';
+
+  @override
+  String get themeAskAi => '讓 AI 幫你做主題';
+
+  @override
+  String get themeAskAiBody =>
+      '把下面這個 MCP 服務加到 Claude、Cursor 等 AI 應用程式裏，然後直接說「幫我做一套賽博朋克風的主題」。AI 會讀取主題格式、配色、檢查對比度，再把主題套用上。';
+
+  @override
+  String get themeAskAiCopy => '複製設定';
+
+  @override
+  String get themeAskAiCopied => '設定已複製';
+
+  @override
+  String get themeScanlines => '掃描線';
+
+  @override
+  String get themeScanlinesDesc => '整個視窗疊一層很淡的 CRT 掃描線，只在像素主題裏有效';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -7361,4 +7565,106 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get webFilesLimit => '網頁接收單一檔案上限 200 MB，一次最多 64 個檔案。';
+
+  @override
+  String get appearance => '外觀';
+
+  @override
+  String get settingsAppearanceSummary => '主題、淺色與深色';
+
+  @override
+  String get themeTitle => '主題';
+
+  @override
+  String get themeDefault => '預設';
+
+  @override
+  String get themePixel => '像素';
+
+  @override
+  String get themeMode => '淺色與深色';
+
+  @override
+  String get themeModeSystem => '跟隨系統';
+
+  @override
+  String get themeModeLight => '淺色';
+
+  @override
+  String get themeModeDark => '深色';
+
+  @override
+  String get themeCustom => '自訂';
+
+  @override
+  String get themeDelete => '刪除主題';
+
+  @override
+  String themeDeleteConfirm(String name) {
+    return '刪除主題「$name」？';
+  }
+
+  @override
+  String get themeLowContrast => '這個主題裡有些文字可能看不清楚';
+
+  @override
+  String get themeFootnote => '主題只用於這台裝置（包括快速貼上視窗），不會同步到其他裝置。';
+
+  @override
+  String get themeBuiltinGroup => '內建';
+
+  @override
+  String get themeCustomGroup => '自訂';
+
+  @override
+  String get themeUse => '使用';
+
+  @override
+  String get themeDuplicate => '複製一份';
+
+  @override
+  String themeCopyName(String name) {
+    return '$name 副本';
+  }
+
+  @override
+  String get themeExport => '匯出…';
+
+  @override
+  String get themeImport => '匯入主題…';
+
+  @override
+  String themeImported(String name) {
+    return '已匯入「$name」';
+  }
+
+  @override
+  String themeImportedWarn(String name, int count) {
+    return '已匯入「$name」，有 $count 處文字顏色可能看不清楚';
+  }
+
+  @override
+  String get themeExported => '主題已匯出';
+
+  @override
+  String get themeCustomEmpty => '還沒有自訂主題。複製一份內建主題，或者匯入、讓 AI 幫你做一套。';
+
+  @override
+  String get themeAskAi => '讓 AI 幫你做主題';
+
+  @override
+  String get themeAskAiBody =>
+      '把下面這個 MCP 服務加到 Claude、Cursor 等 AI 應用程式裡，然後直接說「幫我做一套賽博龐克風的主題」。AI 會讀取主題格式、配色、檢查對比度，再把主題套用上。';
+
+  @override
+  String get themeAskAiCopy => '複製設定';
+
+  @override
+  String get themeAskAiCopied => '設定已複製';
+
+  @override
+  String get themeScanlines => '掃描線';
+
+  @override
+  String get themeScanlinesDesc => '整個視窗疊一層很淡的 CRT 掃描線，只在像素主題裡有效';
 }

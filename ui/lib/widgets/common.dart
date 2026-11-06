@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../pixel_theme.dart';
 import '../theme.dart';
 import '../i18n.dart';
 import '../icons.dart';
+import '../pixel_art.dart';
 
 /// 页面统一的标题区。保证各页视觉节奏一致。
 class PageHeader extends StatelessWidget {
@@ -100,16 +102,12 @@ class GroupBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: context.palette.surface,
-        borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(color: context.palette.border),
-      ),
+      decoration: context.shape.box(color: context.palette.surface, border: context.palette.border),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           for (var i = 0; i < children.length; i++) ...[
-            if (i > 0) Divider(indent: dividerIndent),
+            if (i > 0) ThemedDivider(indent: dividerIndent),
             children[i],
           ],
         ],
@@ -136,7 +134,14 @@ class GroupSection extends StatelessWidget {
           if (title.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(left: 2, bottom: Insets.sm),
-              child: Text(title, style: context.text.titleSmall),
+              // 像素主题：像游戏菜单的小标题，前面一个强调色小方块，字用次要色
+              child: context.shape.pixel
+                  ? Row(children: [
+                      Container(width: 4, height: 4, color: context.palette.accent),
+                      const SizedBox(width: 6),
+                      Expanded(child: Text(title, style: context.text.titleSmall?.copyWith(color: context.palette.textDim))),
+                    ])
+                  : Text(title, style: context.text.titleSmall),
             ),
           child,
           if (footnote != null)
@@ -200,10 +205,47 @@ class SmallSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (context.shape.pixel) return _PixelSwitch(value: value, onChanged: onChanged);
     return SizedBox(
       height: 24,
       child: FittedBox(
         child: Switch(value: value, onChanged: onChanged),
+      ),
+    );
+  }
+}
+
+/// 像素主题的开关：粗边框的槽里一个方块，开时方块在右、槽是强调色
+class _PixelSwitch extends StatelessWidget {
+  const _PixelSwitch({required this.value, required this.onChanged});
+
+  final bool value;
+  final ValueChanged<bool>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final s = context.shape;
+    final enabled = onChanged != null;
+    return MouseRegion(
+      cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+      child: GestureDetector(
+        onTap: enabled ? () => onChanged!(!value) : null,
+        child: Opacity(
+          opacity: enabled ? 1 : 0.5,
+          child: Container(
+            width: 36,
+            height: 20,
+            padding: const EdgeInsets.all(4),
+            alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+            decoration: s.box(color: value ? p.accent : p.fill, border: p.borderStrong, bevel: (p.bevelDark, p.bevelLight)),
+            child: Container(
+              width: 12,
+              height: 12,
+              decoration: s.box(color: value ? p.onAccent : p.textFaint, bevel: (p.bevelLight, p.bevelDark)),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -227,9 +269,12 @@ class Segmented<T> extends StatelessWidget {
     final p = context.palette;
     return Container(
       padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
+      // 像素主题：凹下去的槽，选中的一段是凸起的按键
+      decoration: context.shape.box(
         color: p.fill,
-        borderRadius: BorderRadius.circular(Radii.sm + 1),
+        border: context.shape.pixel ? p.borderStrong : null,
+        radius: context.shape.scaled(7),
+        bevel: (p.bevelDark, p.bevelLight),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -240,18 +285,21 @@ class Segmented<T> extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => onChanged(v),
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 120),
+                  duration: context.motion.duration(const Duration(milliseconds: 120)),
+                  curve: context.motion.curve(Curves.linear),
                   padding: const EdgeInsets.symmetric(horizontal: Insets.md, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: v == value ? p.surface : Colors.transparent,
-                    borderRadius: BorderRadius.circular(Radii.sm - 1),
-                    boxShadow: v == value
-                        ? const [
-                            BoxShadow(
-                                color: Color(0x1A000000), blurRadius: 2, offset: Offset(0, 1)),
-                          ]
-                        : null,
-                  ),
+                  // 比轨道小一圈：轨道留了 2px 内边距，圆角也小 2px，两者同心。
+                  decoration: context.shape.pixel
+                      ? (v == value
+                          ? context.shape.box(color: p.selection, bevel: (p.bevelLight, p.bevelDark))
+                          : const BoxDecoration())
+                      : BoxDecoration(
+                          color: v == value ? p.surface : Colors.transparent,
+                          borderRadius: BorderRadius.circular(context.shape.scaled(5)),
+                          boxShadow: v == value
+                              ? context.shape.shadows(const Color(0x1A000000), blur: 2, offset: const Offset(0, 1))
+                              : null,
+                        ),
                   child: Text(
                     label,
                     style: context.text.labelMedium?.copyWith(
@@ -337,10 +385,18 @@ class _SearchFieldState extends State<SearchField> {
     final controller = widget.controller;
     final focusNode = widget.focusNode;
     final p = context.palette;
-    final round = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(Radii.sm),
-      borderSide: BorderSide.none,
-    );
+    // 像素主题：凹下去的槽
+    final InputBorder round = context.shape.pixel
+        ? PixelInputBorder(
+            borderSide: BorderSide(color: p.borderStrong, width: context.shape.borderWidth),
+            unit: context.shape.unit,
+            topLeft: p.bevelDark,
+            bottomRight: p.bevelLight,
+          )
+        : OutlineInputBorder(
+            borderRadius: BorderRadius.circular(context.shape.sm),
+            borderSide: BorderSide.none,
+          );
     return SizedBox(
       width: widget.width,
       height: 28,
@@ -369,7 +425,8 @@ class _SearchFieldState extends State<SearchField> {
               contentPadding: EdgeInsets.zero,
               border: round,
               enabledBorder: round,
-              focusedBorder: round.copyWith(borderSide: BorderSide(color: p.accent, width: 1.5)),
+              focusedBorder: round.copyWith(
+                  borderSide: BorderSide(color: p.accent, width: context.shape.pixel ? context.shape.borderWidth : 1.5)),
               prefixIcon: Icon(AppIcons.search, size: 14, color: p.textFaint),
               prefixIconConstraints: const BoxConstraints(minWidth: 28, minHeight: 0),
               suffixIcon: controller.text.isEmpty
@@ -414,7 +471,11 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 36, color: context.palette.textFaint),
+            // 像素主题：换成对应的像素插画
+            if (context.shape.pixel && PixelArtKind.forIcon(icon) != null)
+              PixelArt(PixelArtKind.forIcon(icon)!, scale: 3)
+            else
+              Icon(icon, size: 36, color: context.palette.textFaint),
             const SizedBox(height: Insets.lg),
             Text(title, style: context.text.titleMedium, textAlign: TextAlign.center),
             if (description != null) ...[
@@ -455,11 +516,7 @@ class Notice extends StatelessWidget {
     final icon = this.icon ?? AppIcons.exclamationmarkCircle;
     return Container(
       padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.md, Insets.md),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(color: p.border),
-      ),
+      decoration: context.shape.box(color: p.surface, border: p.border),
       child: Row(
         children: [
           Icon(icon, size: 18, color: iconColor ?? p.warning),
@@ -497,7 +554,7 @@ class StatusDot extends StatelessWidget {
         Container(
           width: 7,
           height: 7,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          decoration: context.shape.circle(color: color),
         ),
         const SizedBox(width: 6),
         Text(label, style: context.text.bodySmall?.copyWith(color: labelColor)),
@@ -514,6 +571,7 @@ class AppMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (context.shape.pixel) return PixelAppMark(size: size);
     return Image.asset(
       'assets/app_icon.png',
       width: size,
@@ -557,7 +615,7 @@ class _IconActionState extends State<IconAction> {
             height: 28,
             decoration: BoxDecoration(
               color: _hovered ? p.hover : Colors.transparent,
-              borderRadius: BorderRadius.circular(Radii.sm),
+              borderRadius: BorderRadius.circular(context.shape.sm),
             ),
             child: Icon(widget.icon, size: 16, color: widget.color ?? (_hovered ? p.text : p.textDim)),
           ),
@@ -720,8 +778,9 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
       child: IgnorePointer(
         ignoring: widget.top && widget.onAction == null,
         child: Center(
-          child: FadeTransition(
-            opacity: _fade,
+          child: _ToastIn(
+            animation: _fade,
+            top: widget.top,
             child: Material(
               color: theme.backgroundColor,
               elevation: widget.top ? 3 : (theme.elevation ?? 6),
@@ -770,6 +829,32 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// 提示条出现的方式：默认淡入；像素主题里分几帧滑进来，不淡入
+class _ToastIn extends StatelessWidget {
+  const _ToastIn({required this.animation, required this.top, required this.child});
+
+  final Animation<double> animation;
+  final bool top;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!context.shape.pixel) return FadeTransition(opacity: animation, child: child);
+    final curve = context.motion.curve(Curves.easeOut);
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        final t = curve.transform(animation.value);
+        return Opacity(
+          opacity: animation.value == 0 ? 0 : 1,
+          child: Transform.translate(offset: Offset(0, (1 - t) * (top ? -12 : 12)), child: child),
+        );
+      },
+      child: child,
     );
   }
 }

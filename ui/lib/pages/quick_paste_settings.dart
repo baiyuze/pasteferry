@@ -128,7 +128,7 @@ class _KeyCap extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: p.surface,
-        borderRadius: BorderRadius.circular(Radii.sm),
+        borderRadius: BorderRadius.circular(context.shape.sm),
         border: Border.all(color: active ? p.accent : p.border, width: active ? 1.5 : 1),
       ),
       child: Text(text, textAlign: TextAlign.center, style: context.text.labelLarge),

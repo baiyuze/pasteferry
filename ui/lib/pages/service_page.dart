@@ -8,6 +8,7 @@ import '../i18n.dart';
 import '../main.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../pixel_art.dart';
 
 /// 后台服务没装、没在跑时的引导页。
 ///
@@ -82,10 +83,10 @@ class _ServicePageState extends State<ServicePage> {
               FilledButton(
                 onPressed: _busy ? null : () => _run(state.enableService),
                 child: _busy
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 14,
                         height: 14,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        child: ThemedSpinner(strokeWidth: 2, color: context.palette.onAccent),
                       )
                     : Text(button),
               ),

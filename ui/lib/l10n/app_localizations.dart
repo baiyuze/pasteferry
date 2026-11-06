@@ -4369,6 +4369,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web downloads support up to 200 MB per file and 64 files per batch.'**
   String get webFilesLimit;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @settingsAppearanceSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme, light and dark'**
+  String get settingsAppearanceSummary;
+
+  /// No description provided for @themeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get themeTitle;
+
+  /// No description provided for @themeDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get themeDefault;
+
+  /// No description provided for @themePixel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pixel'**
+  String get themePixel;
+
+  /// No description provided for @themeMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light and dark'**
+  String get themeMode;
+
+  /// No description provided for @themeModeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Match system'**
+  String get themeModeSystem;
+
+  /// No description provided for @themeModeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeModeLight;
+
+  /// No description provided for @themeModeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeModeDark;
+
+  /// No description provided for @themeCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get themeCustom;
+
+  /// No description provided for @themeDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete theme'**
+  String get themeDelete;
+
+  /// No description provided for @themeDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the theme “{name}”?'**
+  String themeDeleteConfirm(String name);
+
+  /// No description provided for @themeLowContrast.
+  ///
+  /// In en, this message translates to:
+  /// **'Some text in this theme may be hard to read'**
+  String get themeLowContrast;
+
+  /// No description provided for @themeFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Themes apply only to this device, including Quick Paste. They are not synced to other devices.'**
+  String get themeFootnote;
+
+  /// No description provided for @themeBuiltinGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Built in'**
+  String get themeBuiltinGroup;
+
+  /// No description provided for @themeCustomGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get themeCustomGroup;
+
+  /// No description provided for @themeUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Use'**
+  String get themeUse;
+
+  /// No description provided for @themeDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get themeDuplicate;
+
+  /// No description provided for @themeCopyName.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} copy'**
+  String themeCopyName(String name);
+
+  /// No description provided for @themeExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export…'**
+  String get themeExport;
+
+  /// No description provided for @themeImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import theme…'**
+  String get themeImport;
+
+  /// No description provided for @themeImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported “{name}”'**
+  String themeImported(String name);
+
+  /// No description provided for @themeImportedWarn.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported “{name}”. {count} text colors may be hard to read.'**
+  String themeImportedWarn(String name, int count);
+
+  /// No description provided for @themeExported.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme exported'**
+  String get themeExported;
+
+  /// No description provided for @themeCustomEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No custom themes yet. Duplicate a built-in theme, import one, or ask an AI to make one.'**
+  String get themeCustomEmpty;
+
+  /// No description provided for @themeAskAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI to make a theme'**
+  String get themeAskAi;
+
+  /// No description provided for @themeAskAiBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add this MCP server to an AI app such as Claude or Cursor, then ask for a theme, for example “Make me a cyberpunk theme”. The AI reads the theme format, picks colors, checks contrast and applies the theme.'**
+  String get themeAskAiBody;
+
+  /// No description provided for @themeAskAiCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy configuration'**
+  String get themeAskAiCopy;
+
+  /// No description provided for @themeAskAiCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration copied'**
+  String get themeAskAiCopied;
+
+  /// No description provided for @themeScanlines.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanlines'**
+  String get themeScanlines;
+
+  /// No description provided for @themeScanlinesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Overlay faint CRT scanlines on the window. Pixel themes only.'**
+  String get themeScanlinesDesc;
 }
 
 class _AppLocalizationsDelegate

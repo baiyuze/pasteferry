@@ -10,10 +10,12 @@ import '../icons.dart';
 import '../main.dart';
 import '../platform.dart';
 import '../theme.dart';
+import '../pixel_theme.dart';
 import 'avatar.dart';
 import 'common.dart';
 import 'friend_send_dialog.dart';
 import 'send_dialog.dart';
+import '../pixel_art.dart';
 
 // 好友：列表、加好友、确认框、和某个好友的传输记录、连不上时的提示。见 design/friends-send.md 第 5、8、9.2 节。
 
@@ -130,7 +132,7 @@ class FriendsDialog extends StatelessWidget {
                     shrinkWrap: true,
                     padding: const EdgeInsets.only(right: Insets.md),
                     itemCount: friends.length,
-                    separatorBuilder: (_, _) => Divider(height: 1, color: p.separator),
+                    separatorBuilder: (_, _) => ThemedDivider(height: 1, color: p.separator),
                     itemBuilder: (_, i) => _FriendRow(friend: friends[i]),
                   ),
                 ),
@@ -390,7 +392,7 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
                     if (_loading)
                       const Padding(
                         padding: EdgeInsets.all(Insets.xl),
-                        child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                        child: Center(child: ThemedSpinner(strokeWidth: 2)),
                       )
                     else if (_error != null)
                       Notice(title: l.codeFailedTitle, message: _error!)
@@ -404,14 +406,14 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: Insets.lg),
-                            decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(Radii.md)),
+                            decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(context.shape.md)),
                             child: Text(
                               expired ? '—' : _formatCode(_code ?? ''),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.w600,
-                                fontFamily: monoFamily,
+                                fontFamily: context.typography.mono,
                                 letterSpacing: 6,
                                 color: p.text,
                               ),
@@ -464,7 +466,7 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
                         FilledButton(
                           onPressed: _redeeming ? null : _redeem,
                           child: _redeeming
-                              ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2))
+                              ? const SizedBox(width: 14, height: 14, child: ThemedSpinner(strokeWidth: 2))
                               : Text(l.friendCodeAdd),
                         ),
                       ],
@@ -592,14 +594,14 @@ class _FriendConfirmDialogState extends State<FriendConfirmDialog> {
                 const SizedBox(height: Insets.sm),
                 Container(
                   padding: const EdgeInsets.all(Insets.md),
-                  decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(Radii.md)),
+                  decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(context.shape.md)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       for (final fp in ([r.fingerprint, r.selfFingerprint]..sort()))
                         Text(
                           fp,
-                          style: TextStyle(fontFamily: monoFamily, fontSize: 18, letterSpacing: 2, color: p.text),
+                          style: TextStyle(fontFamily: context.typography.mono, fontSize: 18, letterSpacing: 2, color: p.text),
                         ),
                       const SizedBox(height: Insets.sm),
                       Text(l.friendSafetyHint, style: context.text.bodySmall),
@@ -611,7 +613,7 @@ class _FriendConfirmDialogState extends State<FriendConfirmDialog> {
               if (_waiting)
                 Row(
                   children: [
-                    const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2)),
+                    const SizedBox(width: 14, height: 14, child: ThemedSpinner(strokeWidth: 2)),
                     const SizedBox(width: Insets.sm),
                     Expanded(child: Text(l.friendWaitingPeer, style: context.text.bodySmall)),
                     TextButton(onPressed: () => Navigator.pop(context), child: Text(l.close)),
@@ -690,7 +692,7 @@ class FriendDetail extends StatelessWidget {
             shrinkWrap: inDialog,
             padding: const EdgeInsets.only(right: Insets.md),
             itemCount: list.length,
-            separatorBuilder: (_, _) => Divider(height: 1, color: p.separator),
+            separatorBuilder: (_, _) => ThemedDivider(height: 1, color: p.separator),
             itemBuilder: (_, i) => _HistoryRow(key: ValueKey(list[i].id), transfer: list[i]),
           );
     return Column(

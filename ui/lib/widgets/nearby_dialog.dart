@@ -15,6 +15,7 @@ import '../theme.dart';
 import 'common.dart';
 import 'pairing_dialog.dart';
 import 'radar.dart';
+import '../pixel_art.dart';
 
 Future<void> showNearbyDialog(BuildContext context) =>
     pushPairingSetupRoute(context, (_) => const NearbyDialog());
@@ -248,7 +249,12 @@ class _NearbyDialogState extends State<NearbyDialog> with SingleTickerProviderSt
             Positioned.fill(
               child: RepaintBoundary(
                 child: CustomPaint(
-                  painter: RadarPainter(pulse: _pulse, ring: p.separator, wave: p.accent),
+                  painter: RadarPainter(
+                    pulse: _pulse,
+                    ring: p.separator,
+                    wave: p.accent,
+                    pixel: context.shape.pixel ? context.shape.unit * 2 : 0,
+                  ),
                 ),
               ),
             ),
@@ -315,16 +321,17 @@ class _NearbyNodeState extends State<_NearbyNode> {
             alignment: Alignment.center,
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 120),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                duration: context.motion.duration(const Duration(milliseconds: 120)),
+                curve: context.motion.curve(Curves.linear),
+                decoration: context.shape.circle(
                   color: p.surface,
-                  border: Border.all(color: highlight ? p.accent : p.border, width: highlight ? 1.5 : 1),
-                  boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 6, offset: Offset(0, 2))],
+                  border: highlight ? p.accent : p.border,
+                  borderWidth: highlight ? 1.5 : 1,
+                  shadows: context.shape.shadows(const Color(0x14000000), blur: 6, offset: const Offset(0, 2)),
                 ),
               ),
               Icon(platformIcon(d.platform), size: 22, color: highlight ? p.accent : p.textDim),
-              if (widget.busy) const SizedBox.expand(child: CircularProgressIndicator(strokeWidth: 1.5)),
+              if (widget.busy) const SizedBox.expand(child: ThemedSpinner(strokeWidth: 1.5)),
             ],
           ),
         ),
@@ -343,8 +350,8 @@ class _NearbyNodeState extends State<_NearbyNode> {
     // 新出现的设备从小到大淡入
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 260),
-      curve: Curves.easeOut,
+      duration: context.motion.duration(const Duration(milliseconds: 260)),
+      curve: context.motion.curve(Curves.easeOut),
       builder: (context, v, child) => Opacity(
         opacity: v,
         child: Transform.scale(scale: 0.7 + 0.3 * v, child: child),

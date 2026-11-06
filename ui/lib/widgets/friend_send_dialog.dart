@@ -14,6 +14,7 @@ import 'avatar.dart';
 import 'common.dart';
 import 'friends_dialog.dart';
 import 'send_dialog.dart';
+import '../pixel_art.dart';
 
 // 发给好友或「所有人」模式下附近的陌生设备：先选好文件（拖入、选择、粘贴），可以写一句备注，点「发送」。
 // 对方点「接受」后才开始传。见 design/friends-send.md 第 6 节。
@@ -224,6 +225,7 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
                               color: _dragging ? p.accent : p.textFaint,
                               dashed: !_dragging,
                               fill: _dragging ? p.accent.withValues(alpha: 0.06) : Colors.transparent,
+                              radius: context.shape.md,
                             ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -298,7 +300,7 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
                             FilledButton(
                               onPressed: _staged.isEmpty || _sending ? null : _send,
                               child: _sending
-                                  ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2))
+                                  ? const SizedBox(width: 14, height: 14, child: ThemedSpinner(strokeWidth: 2))
                                   : Text(l.sendAction),
                             ),
                           ],

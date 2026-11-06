@@ -71,6 +71,18 @@ flutter:
   assets:
     - assets/app_icon.png
 
+  # 像素主题的字体与图标，见 tools/pixel-theme/build_assets.py。许可证在同一目录
+  fonts:
+    - family: FusionPixel
+      fonts:
+        - asset: assets/fonts/FusionPixel12.otf
+    - family: FusionPixelMono
+      fonts:
+        - asset: assets/fonts/FusionPixel12Mono.otf
+    - family: PixelIcons
+      fonts:
+        - asset: assets/fonts/PixelIcons.ttf
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

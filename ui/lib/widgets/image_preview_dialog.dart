@@ -9,6 +9,7 @@ import '../i18n.dart';
 import '../icons.dart';
 import '../main.dart';
 import '../theme.dart';
+import '../pixel_art.dart';
 
 Future<void> showImagePreview(BuildContext context, String clipId) =>
     showDialog<void>(
@@ -187,7 +188,7 @@ class _ImagePreviewDialogState extends State<ImagePreviewDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(
+            ThemedSpinner(
               value: state.progressOf(record.id),
               strokeWidth: 2,
             ),
@@ -225,7 +226,7 @@ class _ImagePreviewDialogState extends State<ImagePreviewDialog> {
           );
         }
         if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+          return const Center(child: ThemedSpinner(strokeWidth: 2));
         }
         return InteractiveViewer(
           transformationController: _transform,
@@ -249,7 +250,7 @@ class _ImagePreviewDialogState extends State<ImagePreviewDialog> {
                   frame != null || synchronous
                   ? child
                   : const Center(
-                      child: CircularProgressIndicator(strokeWidth: 2),
+                      child: ThemedSpinner(strokeWidth: 2),
                     ),
               errorBuilder: (_, _, _) => _message(context.l10n.previewUnreadable),
             ),

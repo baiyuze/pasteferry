@@ -11,6 +11,7 @@ import '../icons.dart';
 import '../main.dart';
 import '../theme.dart';
 import 'common.dart';
+import '../pixel_art.dart';
 
 /// 设备页里的「手机网页传输」：开关、显示二维码、已登记的手机（design/phone-sync.md 第 2 节）。
 /// 旧版后台服务没有这个功能时不显示。
@@ -408,7 +409,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
                           // 二维码一律深色画在白底上：深色模式下也是，反色的码很多扫码器认不出
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(Radii.lg),
+                            borderRadius: BorderRadius.circular(context.shape.lg),
                             border: Border.all(color: p.border),
                           ),
                           child: _invite == null
@@ -417,7 +418,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
                                       ? const SizedBox(
                                           width: 20,
                                           height: 20,
-                                          child: CircularProgressIndicator(
+                                          child: ThemedSpinner(
                                             strokeWidth: 2,
                                           ),
                                         )
@@ -442,7 +443,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
                           _invite!.url.split('#').first,
                           textAlign: TextAlign.center,
                           style: context.text.bodySmall?.copyWith(
-                            fontFamily: monoFamily,
+                            fontFamily: context.typography.mono,
                           ),
                         ),
                       if (addresses.length > 1) ...[
@@ -463,7 +464,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
                               underline: const SizedBox.shrink(),
                               style: context.text.bodySmall?.copyWith(
                                 color: p.text,
-                                fontFamily: monoFamily,
+                                fontFamily: context.typography.mono,
                               ),
                               items: [
                                 for (final a in addresses)

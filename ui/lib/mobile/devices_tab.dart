@@ -127,7 +127,7 @@ Future<void> _showDeviceSheet(BuildContext context, Device d) => showModalBottom
           Text(d.online ? connectionLabel(d) : l.offline, style: ctx.text.bodySmall, textAlign: TextAlign.center),
           const SizedBox(height: Insets.lg),
           Container(
-            decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(Radii.md)),
+            decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(context.shape.md)),
             child: MobileTile(
               title: l.peerRealtimeSync,
               trailing: Switch(

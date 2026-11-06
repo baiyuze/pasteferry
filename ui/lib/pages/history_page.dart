@@ -15,6 +15,8 @@ import '../widgets/image_preview_dialog.dart';
 import '../widgets/record_hover.dart';
 import '../icons.dart';
 import '../platform.dart';
+import '../pixel_theme.dart';
+import '../pixel_art.dart';
 
 export '../records.dart' show kindIcon, recordTitle, highlightMatches;
 
@@ -136,14 +138,14 @@ class _HistoryPageState extends State<HistoryPage> {
                       sliver: DecoratedSliver(
                         decoration: BoxDecoration(
                           color: context.palette.surface,
-                          borderRadius: BorderRadius.circular(Radii.md),
+                          borderRadius: BorderRadius.circular(context.shape.md),
                           border: Border.all(color: context.palette.border),
                         ),
                         sliver: SliverPadding(
                           padding: const EdgeInsets.all(Insets.xs),
                           sliver: SliverList.separated(
                             itemCount: records.length,
-                            separatorBuilder: (_, _) => const Divider(indent: 44, endIndent: 8),
+                            separatorBuilder: (_, _) => const ThemedDivider(indent: 44, endIndent: 8),
                             itemBuilder: (_, i) =>
                                 _RecordRow(record: records[i], highlight: searching ? state.searchQuery : null),
                           ),
@@ -275,16 +277,18 @@ class _RecordRowState extends State<_RecordRow> {
       onExit: (_) => setState(() => _hovered = false),
       child: InkWell(
         onTap: previewable ? () => showImagePreview(context, r.id) : null,
-        borderRadius: BorderRadius.circular(Radii.sm),
+        borderRadius: BorderRadius.circular(context.shape.sm),
         child: Container(
           constraints: const BoxConstraints(minHeight: 52),
           padding: const EdgeInsets.symmetric(horizontal: Insets.md, vertical: Insets.sm),
           decoration: BoxDecoration(
             color: _hovered ? p.hover : Colors.transparent,
-            borderRadius: BorderRadius.circular(Radii.sm),
+            borderRadius: BorderRadius.circular(context.shape.sm),
           ),
           child: Row(
             children: [
+              // 像素主题：悬停的一行左边出现闪动的 ▶
+              if (context.shape.pixel) SizedBox(width: 10, child: _hovered ? const PixelCursor() : null),
               Icon(kindIcon(r), size: 18, color: p.textDim),
               const SizedBox(width: Insets.md),
               Expanded(
@@ -357,7 +361,7 @@ class _RecordRowState extends State<_RecordRow> {
       return const SizedBox(
         width: 16,
         height: 16,
-        child: CircularProgressIndicator(strokeWidth: 2),
+        child: ThemedSpinner(strokeWidth: 2),
       );
     }
     switch (r.status) {
@@ -378,7 +382,7 @@ class _RecordRowState extends State<_RecordRow> {
         // 知道总量时显示真实进度，否则显示不确定进度
         return SizedBox(
           width: 72,
-          child: LinearProgressIndicator(
+          child: ThemedProgressBar(
             minHeight: 3,
             value: AppScope.of(context).progressOf(r.id),
           ),

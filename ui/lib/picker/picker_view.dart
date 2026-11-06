@@ -12,6 +12,7 @@ import '../records.dart';
 import '../theme.dart';
 import '../widgets/common.dart' show committedText, humanBytes, relativeTime;
 import '../widgets/record_hover.dart';
+import '../pixel_theme.dart';
 import 'picker_state.dart';
 
 /// 快捷粘贴窗口。窗口本身由原生外壳创建（Mac 上是不抢焦点的 NSPanel），大小固定，这里画满整个窗口。
@@ -23,12 +24,13 @@ class PickerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<String>(
-      valueListenable: state.language,
-      builder: (context, language, _) {
-        final locale = localeFromSetting(language);
+    return ListenableBuilder(
+      listenable: Listenable.merge([state.language, state.theme]),
+      builder: (context, _) {
+        final locale = localeFromSetting(state.language.value);
         final tag = (locale ?? resolveLocale(WidgetsBinding.instance.platformDispatcher.locales)).toLanguageTag();
-        ThemeData theme(Brightness b) => buildTheme(b, language: tag).copyWith(
+        final spec = state.theme.spec;
+        ThemeData theme(Brightness b) => buildTheme(b, spec: spec, language: tag).copyWith(
               // 窗口是透明的，圆角外面要透出桌面（Mac）
               scaffoldBackgroundColor: Colors.transparent,
               canvasColor: Colors.transparent,
@@ -39,13 +41,14 @@ class PickerApp extends StatelessWidget {
           color: Colors.transparent,
           theme: theme(Brightness.light),
           darkTheme: theme(Brightness.dark),
+          themeMode: state.theme.mode,
           locale: locale,
           supportedLocales: supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           localeListResolutionCallback: (preferred, _) => resolveLocale(preferred),
           builder: (context, child) {
             appL10n = context.l10n;
-            return child!;
+            return ThemeTextScale(child: child!);
           },
           home: PickerView(state: state),
         );
@@ -220,12 +223,15 @@ class _PickerViewState extends State<PickerView> {
         onKeyEvent: _onKey,
         child: Container(
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: p.surface,
-            // Mac 上窗口透明，自己画圆角；Windows 11 的圆角由系统画，Linux 用直角
-            borderRadius: _mac ? BorderRadius.circular(Radii.lg) : null,
-            border: Border.all(color: p.border),
-          ),
+          // 像素主题：切角粗边的窗口
+          decoration: context.shape.pixel
+              ? context.shape.box(color: p.surface, border: p.borderStrong)
+              : BoxDecoration(
+                  color: p.surface,
+                  // Mac 上窗口透明，自己画圆角；Windows 11 的圆角由系统画，Linux 用直角
+                  borderRadius: _mac ? BorderRadius.circular(context.shape.lg) : null,
+                  border: Border.all(color: p.border),
+                ),
           child: ListenableBuilder(
             listenable: s,
             builder: (context, _) => Column(
@@ -301,7 +307,7 @@ class _PickerViewState extends State<PickerView> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: t == s.tab ? p.fill : Colors.transparent,
-                    borderRadius: BorderRadius.circular(Radii.sm),
+                    borderRadius: BorderRadius.circular(context.shape.sm),
                   ),
                   child: Text(
                     label(t),
@@ -464,7 +470,7 @@ class _KeyHint extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: p.fill,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(context.shape.scaled(4)),
                 border: Border.all(color: p.border, width: 0.5),
               ),
               child: k.enter ? Icon(AppIcons.returnKey, size: 10, color: p.textDim) : Text(k.text, style: capStyle),
@@ -502,9 +508,11 @@ class _PickerRow extends StatelessWidget {
     final p = context.palette;
     final r = record;
     final enabled = PickerState.selectable(r);
-    final onAccent = selected && enabled;
-    final fg = !enabled ? p.textFaint : (onAccent ? Colors.white : p.text);
-    final sub = onAccent ? Colors.white.withValues(alpha: 0.8) : p.textFaint;
+    // 像素主题：选中行不填强调色，左边一条强调色竖条
+    final bar = context.shape.pixel && selected && enabled;
+    final onAccent = selected && enabled && !bar;
+    final fg = !enabled ? p.textFaint : (onAccent ? p.onAccent : p.text);
+    final sub = onAccent ? p.onAccent.withValues(alpha: 0.8) : p.textFaint;
     final pending = state.pendingId == r.id;
     final isImage = r.kind == ClipKind.CLIP_KIND_IMAGE || (r.kind == ClipKind.CLIP_KIND_FILE && r.imageCount == 1 && r.items.length == 1);
     if (isImage) state.loadThumbnail(r);
@@ -529,29 +537,31 @@ class _PickerRow extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: Insets.xs),
             padding: const EdgeInsets.symmetric(horizontal: Insets.sm),
-            decoration: BoxDecoration(
-              color: onAccent ? p.accent : (selected ? p.hover : Colors.transparent),
-              borderRadius: BorderRadius.circular(Radii.sm),
-            ),
+            decoration: bar
+                ? BoxDecoration(color: p.selection, border: Border(left: BorderSide(color: p.accent, width: 4)))
+                : BoxDecoration(
+                    color: onAccent ? p.accent : (selected ? p.hover : Colors.transparent),
+                    borderRadius: BorderRadius.circular(context.shape.sm),
+                  ),
             child: Row(
               children: [
                 SizedBox(
                   width: Platform.isMacOS ? 26 : 40,
                   child: number == null
                       ? null
-                      : Text(number!, style: context.text.labelMedium?.copyWith(color: onAccent ? Colors.white : dim)),
+                      : Text(number!, style: context.text.labelMedium?.copyWith(color: onAccent ? p.onAccent : dim)),
                 ),
                 SizedBox(
                   width: 22,
                   height: 22,
                   child: thumb != null && thumb.isNotEmpty
                       ? ClipRRect(
-                          borderRadius: BorderRadius.circular(3),
+                          borderRadius: BorderRadius.circular(context.shape.scaled(3)),
                           child: Image.file(File(thumb), fit: BoxFit.cover, cacheWidth: 64,
                               errorBuilder: (_, _, _) => Icon(kindIcon(r), size: 16, color: sub)),
                         )
                       : Icon(r.status == ClipStatus.CLIP_STATUS_REMOTE_ONLY ? AppIcons.arrowDownCircle : kindIcon(r),
-                          size: 16, color: onAccent ? Colors.white : p.textDim),
+                          size: 16, color: onAccent ? p.onAccent : p.textDim),
                 ),
                 const SizedBox(width: Insets.sm),
                 Expanded(
@@ -564,13 +574,13 @@ class _PickerRow extends StatelessWidget {
                 ),
                 if (!favoritesTab && r.favorited) ...[
                   const SizedBox(width: Insets.xs),
-                  Icon(AppIcons.starFill, size: 12, color: onAccent ? Colors.white : p.accent),
+                  Icon(AppIcons.starFill, size: 12, color: onAccent ? p.onAccent : p.accent),
                 ],
                 const SizedBox(width: Insets.sm),
                 if (pending)
                   SizedBox(
                     width: 60,
-                    child: LinearProgressIndicator(minHeight: 3, value: state.progressOf(r.id)),
+                    child: ThemedProgressBar(minHeight: 3, value: state.progressOf(r.id)),
                   )
                 else
                   ConstrainedBox(

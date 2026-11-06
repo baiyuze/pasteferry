@@ -112,7 +112,7 @@ class _FriendsPageState extends State<FriendsPage> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: p.surface,
-                            borderRadius: BorderRadius.circular(Radii.md),
+                            borderRadius: BorderRadius.circular(context.shape.md),
                             border: Border.all(color: p.border),
                           ),
                           padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.md),
@@ -168,7 +168,7 @@ class _FriendListRowState extends State<_FriendListRow> {
           padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: 7),
           decoration: BoxDecoration(
             color: widget.selected ? p.selection : (_hover ? p.hover : Colors.transparent),
-            borderRadius: BorderRadius.circular(Radii.sm),
+            borderRadius: BorderRadius.circular(context.shape.sm),
           ),
           child: Row(
             children: [
@@ -201,8 +201,8 @@ class _FriendListRowState extends State<_FriendListRow> {
               if (asking > 0)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                  decoration: BoxDecoration(color: p.accent, borderRadius: BorderRadius.circular(9)),
-                  child: Text('$asking', style: context.text.labelSmall?.copyWith(color: Colors.white)),
+                  decoration: BoxDecoration(color: p.accent, borderRadius: BorderRadius.circular(context.shape.scaled(9))),
+                  child: Text('$asking', style: context.text.labelSmall?.copyWith(color: p.onAccent)),
                 ),
             ],
           ),
@@ -248,7 +248,7 @@ class _DropToFriendState extends State<_DropToFriend> {
               child: Container(
                 decoration: BoxDecoration(
                   color: p.accent.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(Radii.md),
+                  borderRadius: BorderRadius.circular(context.shape.md),
                   border: Border.all(color: p.accent, width: 2),
                 ),
                 alignment: Alignment.center,

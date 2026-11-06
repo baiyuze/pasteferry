@@ -12,6 +12,7 @@ import '../widgets/pairing_dialog.dart';
 import '../widgets/web_share.dart';
 import '../icons.dart';
 import '../platform.dart';
+import '../pixel_art.dart';
 
 class DevicesPage extends StatelessWidget {
   const DevicesPage({super.key});
@@ -150,7 +151,7 @@ class _DeviceRow extends StatelessWidget {
                       : device.publicKeyFingerprint,
                   // 等宽：用户要逐字符比对，等宽能显著降低看错的概率
                   style: context.text.bodySmall?.copyWith(
-                    fontFamily: monoFamily,
+                    fontFamily: context.typography.mono,
                     letterSpacing: 0.4,
                   ),
                 ),
@@ -195,7 +196,7 @@ class _DeviceRow extends StatelessWidget {
             const SizedBox(
               width: 12,
               height: 12,
-              child: CircularProgressIndicator(strokeWidth: 2),
+              child: ThemedSpinner(strokeWidth: 2),
             ),
             const SizedBox(width: Insets.xs + 2),
             Text(context.l10n.reconnecting, style: context.text.bodySmall),
@@ -332,7 +333,7 @@ class _DeviceMenu extends StatelessWidget {
               TextField(
                 controller: controller,
                 autofocus: true,
-                style: TextStyle(fontFamily: monoFamily, fontSize: 14),
+                style: TextStyle(fontFamily: context.typography.mono, fontSize: 14),
                 decoration: const InputDecoration(hintText: '192.168.1.20'),
                 onSubmitted: (v) => Navigator.pop(ctx, v),
               ),

@@ -11,6 +11,7 @@ import 'host.dart';
 import 'update_check.dart';
 import 'send_tab.dart' show sentRetentionDays;
 import 'ui.dart';
+import '../pixel_art.dart';
 
 /// 设置页：本机名称、收到文字后写不写剪贴板、后台保持连接与相关的系统权限、版本。
 class SettingsTab extends StatefulWidget {
@@ -148,6 +149,51 @@ class _SettingsTabState extends State<SettingsTab> with WidgetsBindingObserver {
               ),
             ],
           ),
+          // 外观：选主题、浅色与深色（只在这台手机上，不同步）
+          ListenableBuilder(
+            listenable: state.theme,
+            builder: (context, _) {
+              final theme = state.theme;
+              final current = theme.themes.where((t) => t.id == theme.id).firstOrNull;
+              return MobileGroup(
+                title: l.appearance,
+                children: [
+                  MobileTile(
+                    title: l.themeTitle,
+                    subtitle: current?.displayName(l) ?? l.themeDefault,
+                    trailing: Icon(Icons.chevron_right, color: p.textFaint),
+                    onTap: () => _pick<String>(
+                      context,
+                      l.themeTitle,
+                      [for (final t in theme.themes) (t.id, t.displayName(l))],
+                      theme.id,
+                      theme.select,
+                    ),
+                  ),
+                  MobileTile(
+                    title: l.themeMode,
+                    subtitle: switch (theme.mode) {
+                      ThemeMode.light => l.themeModeLight,
+                      ThemeMode.dark => l.themeModeDark,
+                      ThemeMode.system => l.themeModeSystem,
+                    },
+                    trailing: Icon(Icons.chevron_right, color: p.textFaint),
+                    onTap: () => _pick<ThemeMode>(
+                      context,
+                      l.themeMode,
+                      [
+                        (ThemeMode.system, l.themeModeSystem),
+                        (ThemeMode.light, l.themeModeLight),
+                        (ThemeMode.dark, l.themeModeDark),
+                      ],
+                      theme.mode,
+                      theme.setMode,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
           MobileGroup(
             title: l.mSectionBackground,
             children: [
@@ -206,6 +252,44 @@ class _SettingsTabState extends State<SettingsTab> with WidgetsBindingObserver {
   }
 }
 
+/// 底部弹出的单选列表：选主题、选浅色深色
+Future<void> _pick<T>(
+  BuildContext context,
+  String title,
+  List<(T, String)> options,
+  T current,
+  Future<void> Function(T) onPick,
+) async {
+  final picked = await showModalBottomSheet<T>(
+    context: context,
+    builder: (ctx) => SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.sm),
+            child: Text(title, style: ctx.text.titleMedium),
+          ),
+          for (final (value, label) in options)
+            MobileTile(
+              title: label,
+              trailing: value == current ? Icon(Icons.check, color: ctx.palette.accent) : null,
+              onTap: () => Navigator.pop(ctx, value),
+            ),
+          const SizedBox(height: Insets.md),
+        ],
+      ),
+    ),
+  );
+  if (picked == null || picked == current) return;
+  try {
+    await onPick(picked);
+  } catch (e) {
+    if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+  }
+}
+
 /// 检查更新：版本号从更新清单里读（地址固定），有新版就在浏览器里下 APK。
 class _UpdateTile extends StatefulWidget {
   const _UpdateTile({required this.current});
@@ -251,7 +335,7 @@ class _UpdateTileState extends State<_UpdateTile> {
         OutlinedButton(
           onPressed: _busy ? null : _check,
           child: _busy
-              ? const SizedBox.square(dimension: 16, child: CircularProgressIndicator(strokeWidth: 2))
+              ? const SizedBox.square(dimension: 16, child: ThemedSpinner(strokeWidth: 2))
               : Text(l.mCheckUpdate),
         ),
         if (_error != null) ...[

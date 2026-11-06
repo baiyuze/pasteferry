@@ -141,11 +141,10 @@ class _HoverCard extends StatelessWidget {
       type: MaterialType.transparency,
       child: Container(
         padding: const EdgeInsets.all(Insets.md),
-        decoration: BoxDecoration(
+        decoration: context.shape.box(
           color: p.surface,
-          borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(color: p.border),
-          boxShadow: const [BoxShadow(color: Color(0x26000000), blurRadius: 16, offset: Offset(0, 4))],
+          border: p.borderStrong,
+          shadows: context.shape.shadows(const Color(0x26000000), blur: 16, offset: const Offset(0, 4)),
         ),
         child: body,
       ),
@@ -269,7 +268,7 @@ class _ImageBodyState extends State<_ImageBody> {
               child: data == null
                   ? const SizedBox(width: 120, height: 60)
                   : ClipRRect(
-                      borderRadius: BorderRadius.circular(Radii.sm),
+                      borderRadius: BorderRadius.circular(context.shape.sm),
                       child: Image.file(
                         File(data.$1),
                         fit: BoxFit.contain,

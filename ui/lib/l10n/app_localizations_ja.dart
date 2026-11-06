@@ -2483,4 +2483,107 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get webFilesLimit => 'Web受信は1ファイル最大200 MB、1回64ファイルまでです。';
+
+  @override
+  String get appearance => '外観';
+
+  @override
+  String get settingsAppearanceSummary => 'テーマ、ライトとダーク';
+
+  @override
+  String get themeTitle => 'テーマ';
+
+  @override
+  String get themeDefault => 'デフォルト';
+
+  @override
+  String get themePixel => 'ピクセル';
+
+  @override
+  String get themeMode => 'ライトとダーク';
+
+  @override
+  String get themeModeSystem => 'システムに合わせる';
+
+  @override
+  String get themeModeLight => 'ライト';
+
+  @override
+  String get themeModeDark => 'ダーク';
+
+  @override
+  String get themeCustom => 'カスタム';
+
+  @override
+  String get themeDelete => 'テーマを削除';
+
+  @override
+  String themeDeleteConfirm(String name) {
+    return 'テーマ「$name」を削除しますか？';
+  }
+
+  @override
+  String get themeLowContrast => 'このテーマでは一部の文字が読みにくい場合があります';
+
+  @override
+  String get themeFootnote => 'テーマはこのデバイス（クイックペーストを含む）にのみ適用され、他のデバイスには同期されません。';
+
+  @override
+  String get themeBuiltinGroup => '内蔵';
+
+  @override
+  String get themeCustomGroup => 'カスタム';
+
+  @override
+  String get themeUse => '使用';
+
+  @override
+  String get themeDuplicate => '複製';
+
+  @override
+  String themeCopyName(String name) {
+    return '$name のコピー';
+  }
+
+  @override
+  String get themeExport => '書き出す…';
+
+  @override
+  String get themeImport => 'テーマを読み込む…';
+
+  @override
+  String themeImported(String name) {
+    return '「$name」を読み込みました';
+  }
+
+  @override
+  String themeImportedWarn(String name, int count) {
+    return '「$name」を読み込みました。$count か所の文字色が読みにくい可能性があります';
+  }
+
+  @override
+  String get themeExported => 'テーマを書き出しました';
+
+  @override
+  String get themeCustomEmpty =>
+      'カスタムテーマはまだありません。内蔵テーマを複製するか、読み込むか、AI に作ってもらいましょう。';
+
+  @override
+  String get themeAskAi => 'AI にテーマを作ってもらう';
+
+  @override
+  String get themeAskAiBody =>
+      'この MCP サーバーを Claude や Cursor などの AI アプリに追加して、「サイバーパンク風のテーマを作って」のように頼んでください。AI がテーマの形式を読み、配色を決め、コントラストを確認して適用します。';
+
+  @override
+  String get themeAskAiCopy => '設定をコピー';
+
+  @override
+  String get themeAskAiCopied => '設定をコピーしました';
+
+  @override
+  String get themeScanlines => '走査線';
+
+  @override
+  String get themeScanlinesDesc => 'ウインドウ全体に薄い CRT 走査線を重ねます。ピクセルテーマのみ';
 }

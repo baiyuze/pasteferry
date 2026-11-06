@@ -9,7 +9,9 @@ import '../i18n.dart';
 import '../main.dart';
 import '../platform.dart';
 import '../theme.dart';
+import '../pixel_theme.dart';
 import 'common.dart';
+import '../pixel_art.dart';
 
 /// 打开更新窗口：先检查，有新版本时列出各版的更新日志，用户确认后下载、校验、安装并自动重新打开。
 Future<void> showUpdateDialog(BuildContext context) => showDialog<void>(
@@ -178,8 +180,8 @@ class _UpdateDialogState extends State<UpdateDialog> {
             Text(l.updateDownloading(humanBytes(_done), humanBytes(_total)), style: context.text.bodyMedium),
             const SizedBox(height: Insets.md),
             ClipRRect(
-              borderRadius: BorderRadius.circular(3),
-              child: LinearProgressIndicator(value: fraction, minHeight: 6, color: p.accent, backgroundColor: p.fill),
+              borderRadius: BorderRadius.circular(context.shape.scaled(3)),
+              child: ThemedProgressBar(value: fraction, minHeight: 6, color: p.accent, backgroundColor: p.fill),
             ),
           ],
         );
@@ -196,7 +198,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
 
   Widget _busy(BuildContext context, String text) => Row(
         children: [
-          const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)),
+          const SizedBox(width: 18, height: 18, child: ThemedSpinner(strokeWidth: 2)),
           const SizedBox(width: Insets.md),
           Expanded(child: Text(text, style: context.text.bodyMedium)),
         ],

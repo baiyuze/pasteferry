@@ -11,6 +11,7 @@ import '../main.dart';
 import '../platform.dart';
 import '../theme.dart';
 import 'common.dart';
+import '../pixel_art.dart';
 
 /// 新建 issue 的地址：用仓库里的问题模板（.github/ISSUE_TEMPLATE/bug_report.yml），版本号预先填好
 const _newIssue = 'https://github.com/baiyuze/pasteferry/issues/new?template=bug_report.yml';
@@ -136,7 +137,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
                       height: 220,
                       decoration: BoxDecoration(
                         color: p.fill,
-                        borderRadius: BorderRadius.circular(Radii.sm),
+                        borderRadius: BorderRadius.circular(context.shape.sm),
                       ),
                       child: Stack(
                         children: [
@@ -213,14 +214,14 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
       );
     }
     if (_report == null) {
-      return const Center(child: SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)));
+      return const Center(child: SizedBox(width: 16, height: 16, child: ThemedSpinner(strokeWidth: 2)));
     }
     return Scrollbar(
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(Insets.md, Insets.sm, 36, Insets.sm),
         child: SelectableText(
           _report!,
-          style: context.text.bodySmall?.copyWith(fontFamily: monoFamily, fontSize: 11, height: 1.45, color: context.palette.text),
+          style: context.text.bodySmall?.copyWith(fontFamily: context.typography.mono, fontSize: 11, height: 1.45, color: context.palette.text),
         ),
       ),
     );

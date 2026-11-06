@@ -11,6 +11,7 @@ import '../gen/pasteferry/v1/daemon.pb.dart';
 import '../gen/pasteferry/v1/daemon.pbgrpc.dart' show DaemonServiceClient;
 import '../hotkey.dart';
 import '../records.dart';
+import '../theme_controller.dart';
 import '../widgets/record_hover.dart';
 import 'picker_host.dart';
 
@@ -50,6 +51,9 @@ class PickerState extends ChangeNotifier implements RecordDetails {
 
   /// 界面语言跟着设置走，单独通知，免得每次列表变化都重建 MaterialApp
   final language = ValueNotifier<String>('');
+
+  /// 主题与深浅模式，跟主窗口用同一份配置
+  final theme = ThemeController();
 
   bool _connected = false;
   bool get connected => _connected;
@@ -150,6 +154,7 @@ class PickerState extends ChangeNotifier implements RecordDetails {
         ..addAll((results[1] as ListHistoryResponse).records.where((r) => r.favorite));
       _config = results[2] as Config;
       language.value = _config!.language;
+      await theme.attach(conn.client, _config!);
       _events = conn.client.subscribe(SubscribeRequest()).listen(
             _onEvent,
             onError: (_) => _lost(),
@@ -266,7 +271,10 @@ class PickerState extends ChangeNotifier implements RecordDetails {
       case Event_Payload.configChanged:
         _config = ev.configChanged;
         language.value = _config!.language;
+        theme.applyConfig(ev.configChanged);
         _applyConfig();
+      case Event_Payload.themesChanged:
+        theme.onThemesChanged(ev.themesChanged);
       case Event_Payload.progress:
         final p = ev.progress;
         if (p.total > 0) _progress[p.clipId] = (p.transferred.toInt() / p.total.toInt()).clamp(0.0, 1.0);

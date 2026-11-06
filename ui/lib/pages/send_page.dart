@@ -12,6 +12,7 @@ import '../i18n.dart';
 import '../icons.dart';
 import '../main.dart';
 import '../platform.dart';
+import '../pixel_theme.dart';
 import '../theme.dart';
 import '../widgets/avatar.dart';
 import '../widgets/common.dart';
@@ -23,6 +24,7 @@ import '../widgets/radar.dart';
 import '../widgets/record_hover.dart';
 import '../widgets/send_dialog.dart';
 import 'devices_page.dart' show platformIcon;
+import '../pixel_art.dart';
 
 /// 隔空传送：雷达上是已配对的设备，把文件拖到一台上，或者点它在弹出的窗口里拖，就直接发过去。
 /// 下面是收到的和发出的列表。见 design/send-files.md。
@@ -427,6 +429,7 @@ class _SendPageState extends State<SendPage> with SingleTickerProviderStateMixin
                       highlight: _dragging,
                       innerGaps: innerGaps,
                       outerGaps: outerGaps,
+                      pixel: context.shape.pixel ? context.shape.unit * 2 : 0,
                     ),
                   ),
                 ),
@@ -595,6 +598,7 @@ class _SendRadarPainter extends CustomPainter {
     required this.highlight,
     this.innerGaps = const [],
     this.outerGaps = const [],
+    this.pixel = 0,
   }) : super(repaint: pulse);
 
   final Animation<double> pulse;
@@ -609,10 +613,23 @@ class _SendRadarPainter extends CustomPainter {
   final List<(double, double)> innerGaps;
   final List<(double, double)> outerGaps;
 
+  /// 大于 0 时按这么大的方格画（像素主题）：轨道是点线，波纹一圈圈跳着往外走
+  final double pixel;
+
   @override
   void paint(Canvas canvas, Size size) {
     final c = size.center(Offset.zero);
     Rect oval(double rx, double ry) => Rect.fromCenter(center: c, width: rx * 2, height: ry * 2);
+    if (pixel > 0) {
+      final t = (pulse.value * 8).floorToDouble() / 8;
+      final k = Curves.easeOut.transform(t);
+      drawPixelOval(canvas, oval(30 + (outer.width - 30) * k, 30 + (outer.height - 30) * k),
+          wave.withValues(alpha: 0.6 * (1 - t)), pixel);
+      final ringColor = highlight ? wave : ring;
+      drawPixelOval(canvas, oval(inner.width, inner.height), ringColor, pixel, gaps: innerGaps, dashed: true);
+      drawPixelOval(canvas, oval(outer.width, outer.height), ringColor, pixel, gaps: outerGaps, dashed: true);
+      return;
+    }
 
     // 扩散的光带：边缘最亮，向里渐隐，越往外越淡
     final t = pulse.value;
@@ -665,6 +682,7 @@ class _SendRadarPainter extends CustomPainter {
       old.inner != inner ||
       old.outer != outer ||
       old.highlight != highlight ||
+      old.pixel != pixel ||
       old.innerGaps.toString() != innerGaps.toString() ||
       old.outerGaps.toString() != outerGaps.toString();
 }
@@ -723,6 +741,15 @@ class _SendNode extends StatefulWidget {
 class _SendNodeState extends State<_SendNode> {
   bool _hover = false;
 
+  /// 发完一批加一：像素主题里在设备上迸一圈星星
+  int _finished = 0;
+
+  @override
+  void didUpdateWidget(_SendNode old) {
+    super.didUpdateWidget(old);
+    if (old.sending && !widget.sending) _finished++;
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
@@ -734,47 +761,58 @@ class _SendNodeState extends State<_SendNode> {
             ? p.accent.withValues(alpha: widget.dropTarget || _hover ? 1 : 0.6)
             : p.border;
 
+    final pixel = context.shape.pixel;
     final node = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         AnimatedScale(
-          scale: widget.dropTarget ? 1.08 : 1,
-          duration: const Duration(milliseconds: 120),
-          child: SizedBox.square(
-            dimension: _SendNode.avatar,
-            child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 120),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: widget.dropTarget ? Color.alphaBlend(p.accent.withValues(alpha: 0.08), p.surface) : p.surface,
-                    border: Border.all(color: border, width: highlight || widget.dropping ? 1.5 : 1),
-                    boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 2))],
-                  ),
-                ),
-                Icon(platformIcon(d.platform), size: 24, color: highlight ? p.accent : p.textDim),
-                if (widget.sending)
-                  SizedBox.expand(
-                    child: CircularProgressIndicator(strokeWidth: 2, value: widget.progress),
-                  ),
-                if (widget.dot != null)
-                  Positioned(
-                    right: 2,
-                    bottom: 2,
-                    child: Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: widget.dot,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: p.background, width: 2),
-                      ),
+          // 像素主题不放大，改成一格一格上下跳
+          scale: widget.dropTarget && !pixel ? 1.08 : 1,
+          duration: context.motion.duration(const Duration(milliseconds: 120)),
+          curve: context.motion.curve(Curves.linear),
+          child: PixelBounce(
+            active: pixel && widget.dropTarget,
+            child: SizedBox.square(
+              dimension: _SendNode.avatar,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  AnimatedContainer(
+                    duration: context.motion.duration(const Duration(milliseconds: 120)),
+                    curve: context.motion.curve(Curves.linear),
+                    decoration: context.shape.circle(
+                      color: widget.dropTarget ? Color.alphaBlend(p.accent.withValues(alpha: 0.08), p.surface) : p.surface,
+                      border: border,
+                      borderWidth: highlight || widget.dropping ? 1.5 : 1,
+                      shadows: context.shape.shadows(const Color(0x14000000), blur: 8, offset: const Offset(0, 2)),
                     ),
                   ),
-              ],
+                  Icon(platformIcon(d.platform), size: 24, color: highlight ? p.accent : p.textDim),
+                  if (widget.sending)
+                    SizedBox.expand(
+                      child: ThemedSpinner(strokeWidth: 2, value: widget.progress),
+                    ),
+                  if (widget.dot != null)
+                    Positioned(
+                      right: 2,
+                      bottom: 2,
+                      child: Container(
+                        width: 12,
+                        height: 12,
+                        decoration: context.shape.circle(color: widget.dot, border: p.background, borderWidth: 2),
+                      ),
+                    ),
+                  // 像素主题：发送中一架纸飞机往设备飞，发完迸一圈星星
+                  if (pixel && widget.sending) const Positioned(left: -30, top: -18, child: PixelPlane()),
+                  if (pixel && _finished > 0)
+                    Positioned(
+                      left: -30,
+                      top: -30,
+                      child: PixelBurst(key: ValueKey(_finished), size: _SendNode.avatar + 60),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
@@ -960,7 +998,7 @@ class _TransferRowState extends State<_TransferRow> {
           padding: const EdgeInsets.symmetric(horizontal: Insets.md, vertical: Insets.sm),
           decoration: BoxDecoration(
             color: _hovered ? p.hover : Colors.transparent,
-            borderRadius: BorderRadius.circular(Radii.sm),
+            borderRadius: BorderRadius.circular(context.shape.sm),
           ),
           child: Row(
             children: [
@@ -998,7 +1036,7 @@ class _TransferRowState extends State<_TransferRow> {
                       Text(l.transferRenamed(t.renamedFiles.toInt()), style: context.text.bodySmall),
                     if (active) ...[
                       const SizedBox(height: 4),
-                      LinearProgressIndicator(
+                      ThemedProgressBar(
                         minHeight: 3,
                         value: t.totalBytes > 0 ? t.doneBytes.toInt() / t.totalBytes.toInt() : null,
                       ),
@@ -1029,7 +1067,7 @@ class _TransferRowState extends State<_TransferRow> {
     final path = t.thumbs.where((x) => x.isNotEmpty).firstOrNull;
     if (path == null || !File(path).existsSync()) return null;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(Radii.sm),
+      borderRadius: BorderRadius.circular(context.shape.sm),
       child: Image.file(File(path), width: 36, height: 36, fit: BoxFit.cover, cacheWidth: 72),
     );
   }
@@ -1317,14 +1355,15 @@ class _PersonNodeState extends State<_PersonNode> {
                   children: [
                     AnimatedScale(
                       scale: _dropping ? 1.08 : 1,
-                      duration: const Duration(milliseconds: 120),
+                      duration: context.motion.duration(const Duration(milliseconds: 120)),
+                      curve: context.motion.curve(Curves.linear),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
                           DecoratedBox(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: highlight ? p.accent : Colors.transparent, width: 2),
+                            decoration: context.shape.circle(
+                              border: highlight ? p.accent : Colors.transparent,
+                              borderWidth: 2,
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(2),
@@ -1340,7 +1379,7 @@ class _PersonNodeState extends State<_PersonNode> {
                           if (sending != null)
                             SizedBox.square(
                               dimension: 52,
-                              child: CircularProgressIndicator(
+                              child: ThemedSpinner(
                                 strokeWidth: 2,
                                 value: sending.status == 'active' && sending.totalBytes > 0
                                     ? sending.doneBytes.toInt() / sending.totalBytes.toInt()

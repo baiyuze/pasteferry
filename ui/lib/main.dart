@@ -26,6 +26,7 @@ import 'widgets/incoming_dialog.dart';
 import 'widgets/update_dialog.dart';
 import 'icons.dart';
 import 'notices.dart';
+import 'pixel_art.dart';
 
 /// 带 --picker 启动的是快捷粘贴窗口进程，见 picker/picker_main.dart。
 void main(List<String> args) {
@@ -78,7 +79,7 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
       state: _state,
       // 语言设置存在后台服务的配置里，配置变了要重建 MaterialApp 才会换语言
       child: ListenableBuilder(
-        listenable: _state,
+        listenable: Listenable.merge([_state, _state.theme]),
         builder: (context, _) {
           final locale = localeFromSetting(_state.config?.language ?? '');
           // zh、zh-Hant-TW、zh-Hant-HK、en、ja：Windows 与 Linux 上按它挑汉字字体
@@ -88,11 +89,13 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
                         WidgetsBinding.instance.platformDispatcher.locales,
                       ))
                   .toLanguageTag();
+          final theme = _state.theme;
+          final spec = theme.spec;
           final (light, dark) = _themes.putIfAbsent(
-            language,
+            '$language#${theme.revision}',
             () => (
-              buildTheme(Brightness.light, language: language),
-              buildTheme(Brightness.dark, language: language),
+              buildTheme(Brightness.light, spec: spec, language: language),
+              buildTheme(Brightness.dark, spec: spec, language: language),
             ),
           );
           return MaterialApp(
@@ -101,6 +104,7 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
             debugShowCheckedModeBanner: false,
             theme: light,
             darkTheme: dark,
+            themeMode: theme.mode,
             locale: locale,
             supportedLocales: supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -108,7 +112,7 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
                 resolveLocale(preferred),
             builder: (context, child) {
               appL10n = context.l10n;
-              return child!;
+              return ThemeTextScale(child: PixelScanlinesLayer(on: theme.scanlines, child: child!));
             },
             home: const Shell(),
           );
@@ -354,17 +358,25 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
             onSelect: (s) => setState(() => _section = s),
           ),
           Expanded(
-            child: needsService
-                ? const ServicePage()
-                : switch (_section) {
-                    Section.history => const HistoryPage(),
-                    Section.favorites => const FavoritesPage(),
-                    Section.send => const SendPage(),
-                    Section.friends => const FriendsPage(),
-                    Section.devices => const DevicesPage(),
-                    Section.official => const OfficialServicePage(),
-                    Section.settings => const SettingsPage(),
-                  },
+            // 像素主题：页面顶部垫一块场景（夜里的远山、白天的云），其他主题不画
+            child: Stack(
+              children: [
+                if (context.shape.pixel) const Positioned(left: 0, right: 0, top: 0, child: PixelScene()),
+                Positioned.fill(
+                  child: needsService
+                      ? const ServicePage()
+                      : switch (_section) {
+                          Section.history => const HistoryPage(),
+                          Section.favorites => const FavoritesPage(),
+                          Section.send => const SendPage(),
+                          Section.friends => const FriendsPage(),
+                          Section.devices => const DevicesPage(),
+                          Section.official => const OfficialServicePage(),
+                          Section.settings => const SettingsPage(),
+                        },
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -456,7 +468,7 @@ class _Sidebar extends StatelessWidget {
           ),
           if (state.officialEnabled)
             _NavItem(
-              icon: Icons.cloud_outlined,
+              icon: AppIcons.cloud,
               label: l.officialService,
               selected: current == Section.official,
               onTap: () => onSelect(Section.official),
@@ -469,6 +481,8 @@ class _Sidebar extends StatelessWidget {
           ),
           const Spacer(),
           const _UpdateHint(),
+          // 像素主题：底下一小块营地（深色是帐篷与篝火，浅色是小房子与花）
+          if (context.shape.pixel) const PixelCamp(),
           const _ConnectionFooter(),
         ],
       ),
@@ -504,6 +518,8 @@ class _NavItemState extends State<_NavItem> {
   Widget build(BuildContext context) {
     final p = context.palette;
     final selected = widget.selected;
+    // 像素主题：选中项不整块填色，左边一条强调色竖条
+    final bar = context.shape.pixel && selected;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: 1),
@@ -513,38 +529,50 @@ class _NavItemState extends State<_NavItem> {
         onExit: (_) => setState(() => _hovered = false),
         child: GestureDetector(
           onTap: widget.onTap,
-          child: Container(
-            height: 30,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
+          // 像素主题：选中项左边一个一闪一闪的 ▶，像游戏菜单的光标
+          child: bar
+              ? Stack(clipBehavior: Clip.none, children: [_navBox(context, p, selected, bar), const Positioned(left: -9, top: 10, child: PixelCursor())])
+              : _navBox(context, p, selected, bar),
+        ),
+      ),
+    );
+  }
+
+  Widget _navBox(BuildContext context, AppPalette p, bool selected, bool bar) {
+    return Container(
+      height: 30,
+      padding: EdgeInsets.only(left: bar ? 6 : 10, right: 10),
+      decoration: bar
+          ? BoxDecoration(
+              color: p.selection,
+              border: Border(left: BorderSide(color: p.accent, width: 4)),
+            )
+          : context.shape.box(
               color: selected
                   ? p.selection
                   : (_hovered ? p.hover : Colors.transparent),
-              borderRadius: BorderRadius.circular(Radii.sm),
+              radius: context.shape.sm,
             ),
-            child: Row(
-              children: [
-                Icon(
-                  widget.icon,
-                  size: 16,
-                  color: selected ? p.accent : p.textDim,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    widget.label,
-                    style: context.text.labelLarge?.copyWith(
-                      fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                    ),
-                  ),
-                ),
-                if (widget.trailing != null)
-                  Text(widget.trailing!, style: context.text.labelSmall),
-                ?widget.trailingWidget,
-              ],
+      child: Row(
+        children: [
+          Icon(
+            widget.icon,
+            size: 16,
+            color: selected ? p.accent : p.textDim,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              widget.label,
+              style: context.text.labelLarge?.copyWith(
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+              ),
             ),
           ),
-        ),
+          if (widget.trailing != null)
+            Text(widget.trailing!, style: context.text.labelSmall),
+          ?widget.trailingWidget,
+        ],
       ),
     );
   }
@@ -582,7 +610,7 @@ class _SendBadge extends StatelessWidget {
       message: lines.join('\n'),
       child: SizedBox.square(
         dimension: 12,
-        child: CircularProgressIndicator(
+        child: ThemedSpinner(
           strokeWidth: 1.6,
           value: state.transferProgress,
         ),
@@ -664,7 +692,7 @@ class _ConnectionFooter extends StatelessWidget {
           Container(
             width: 7,
             height: 7,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            decoration: context.shape.circle(color: color),
           ),
           const SizedBox(width: Insets.sm),
           Expanded(

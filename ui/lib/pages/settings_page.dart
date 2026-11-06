@@ -16,8 +16,10 @@ import '../widgets/feedback_dialog.dart';
 import '../widgets/update_dialog.dart';
 import '../icons.dart';
 import '../platform.dart';
+import 'appearance_settings.dart';
 import 'quick_paste_settings.dart';
 import 'send_settings.dart';
+import '../pixel_art.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -85,7 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         );
       }
-      return const Center(child: CircularProgressIndicator(strokeWidth: 2.5));
+      return const Center(child: ThemedSpinner(strokeWidth: 2.5));
     }
     _syncControllers(cfg);
     // 好友连不上时点「打开服务…」等：直接进到某一类
@@ -251,7 +253,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: TextField(
                           controller: _serverController,
                           style: context.text.bodyMedium?.copyWith(
-                            fontFamily: monoFamily,
+                            fontFamily: context.typography.mono,
                             fontSize: 12,
                           ),
                           decoration: InputDecoration(
@@ -432,6 +434,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ],
+      _Category.appearance: [const AppearanceSection()],
       _Category.quickPaste: [
         QuickPasteSection(
           config: cfg,
@@ -819,7 +822,7 @@ class _Dropdown<T> extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(10, 5, 8, 5),
         decoration: BoxDecoration(
           color: p.surface,
-          borderRadius: BorderRadius.circular(Radii.sm),
+          borderRadius: BorderRadius.circular(context.shape.sm),
           border: Border.all(color: p.border),
         ),
         child: Row(
@@ -838,6 +841,7 @@ class _Dropdown<T> extends StatelessWidget {
 /// 设置的类别：首页列出来，点进去是各自的一页
 enum _Category {
   general,
+  appearance,
   connection,
   sync,
   quickPaste,
@@ -850,6 +854,7 @@ enum _Category {
 
   String title(AppLocalizations l) => switch (this) {
     general => l.general,
+    appearance => l.appearance,
     connection => l.settingsConnection,
     sync => l.sync,
     quickPaste => l.quickPaste,
@@ -860,6 +865,7 @@ enum _Category {
 
   String summary(AppLocalizations l) => switch (this) {
     general => l.settingsGeneralSummary,
+    appearance => l.settingsAppearanceSummary,
     connection => l.settingsConnectionSummary,
     sync => l.settingsSyncSummary,
     quickPaste => l.settingsQuickPasteSummary,
@@ -870,6 +876,7 @@ enum _Category {
 
   IconData get icon => switch (this) {
     general => AppIcons.gear,
+    appearance => AppIcons.paint,
     connection => AppIcons.globe,
     sync => AppIcons.sync,
     quickPaste => AppIcons.keyboard,
@@ -892,7 +899,7 @@ class _CategoryList extends StatelessWidget {
   final String version;
 
   static const _groups = [
-    [_Category.general, _Category.connection],
+    [_Category.general, _Category.appearance, _Category.connection],
     [_Category.sync, _Category.quickPaste, _Category.send],
     [_Category.storage, _Category.about],
   ];

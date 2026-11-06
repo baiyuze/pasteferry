@@ -2672,4 +2672,109 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get webFilesLimit =>
       'Web downloads support up to 200 MB per file and 64 files per batch.';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get settingsAppearanceSummary => 'Theme, light and dark';
+
+  @override
+  String get themeTitle => 'Theme';
+
+  @override
+  String get themeDefault => 'Default';
+
+  @override
+  String get themePixel => 'Pixel';
+
+  @override
+  String get themeMode => 'Light and dark';
+
+  @override
+  String get themeModeSystem => 'Match system';
+
+  @override
+  String get themeModeLight => 'Light';
+
+  @override
+  String get themeModeDark => 'Dark';
+
+  @override
+  String get themeCustom => 'Custom';
+
+  @override
+  String get themeDelete => 'Delete theme';
+
+  @override
+  String themeDeleteConfirm(String name) {
+    return 'Delete the theme “$name”?';
+  }
+
+  @override
+  String get themeLowContrast => 'Some text in this theme may be hard to read';
+
+  @override
+  String get themeFootnote =>
+      'Themes apply only to this device, including Quick Paste. They are not synced to other devices.';
+
+  @override
+  String get themeBuiltinGroup => 'Built in';
+
+  @override
+  String get themeCustomGroup => 'Custom';
+
+  @override
+  String get themeUse => 'Use';
+
+  @override
+  String get themeDuplicate => 'Duplicate';
+
+  @override
+  String themeCopyName(String name) {
+    return '$name copy';
+  }
+
+  @override
+  String get themeExport => 'Export…';
+
+  @override
+  String get themeImport => 'Import theme…';
+
+  @override
+  String themeImported(String name) {
+    return 'Imported “$name”';
+  }
+
+  @override
+  String themeImportedWarn(String name, int count) {
+    return 'Imported “$name”. $count text colors may be hard to read.';
+  }
+
+  @override
+  String get themeExported => 'Theme exported';
+
+  @override
+  String get themeCustomEmpty =>
+      'No custom themes yet. Duplicate a built-in theme, import one, or ask an AI to make one.';
+
+  @override
+  String get themeAskAi => 'Ask AI to make a theme';
+
+  @override
+  String get themeAskAiBody =>
+      'Add this MCP server to an AI app such as Claude or Cursor, then ask for a theme, for example “Make me a cyberpunk theme”. The AI reads the theme format, picks colors, checks contrast and applies the theme.';
+
+  @override
+  String get themeAskAiCopy => 'Copy configuration';
+
+  @override
+  String get themeAskAiCopied => 'Configuration copied';
+
+  @override
+  String get themeScanlines => 'Scanlines';
+
+  @override
+  String get themeScanlinesDesc =>
+      'Overlay faint CRT scanlines on the window. Pixel themes only.';
 }

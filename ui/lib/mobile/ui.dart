@@ -7,6 +7,7 @@ import '../i18n.dart';
 import '../icons.dart';
 import '../main.dart' show AppScope;
 import '../theme.dart';
+import '../pixel_theme.dart';
 import 'host.dart';
 
 /// 手机 App 的界面部件。样子与手机网页传输（web/phone/src/ui.tsx、App.tsx）一一对应，
@@ -161,7 +162,7 @@ class _MobileSearchFieldState extends State<MobileSearchField> {
     return Container(
       height: 40,
       padding: const EdgeInsets.symmetric(horizontal: Insets.md),
-      decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(Radii.md)),
+      decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(context.shape.md)),
       child: Row(
         children: [
           Icon(AppIcons.search, size: 18, color: p.textDim),
@@ -215,7 +216,7 @@ class MobileSegmented<T> extends StatelessWidget {
     final dark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(Radii.md)),
+      decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(context.shape.md)),
       child: Row(
         children: [
           for (final (v, label) in segments)
@@ -224,14 +225,15 @@ class MobileSegmented<T> extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
                 onTap: () => onChanged(v),
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
+                  duration: context.motion.duration(const Duration(milliseconds: 150)),
+                  curve: context.motion.curve(Curves.linear),
                   height: 30,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: v == value ? (dark ? p.border : p.surface) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(7),
+                    borderRadius: BorderRadius.circular(context.shape.scaled(7)),
                     boxShadow: v == value
-                        ? const [BoxShadow(color: Color(0x14000000), blurRadius: 2, offset: Offset(0, 1))]
+                        ? context.shape.shadows(const Color(0x14000000), blur: 2, offset: const Offset(0, 1))
                         : null,
                   ),
                   child: Text(
@@ -280,7 +282,7 @@ class MobileGroup extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               color: p.surface,
-              borderRadius: BorderRadius.circular(Radii.lg),
+              borderRadius: BorderRadius.circular(context.shape.lg),
               border: Border.all(color: p.border),
             ),
             child: Material(
@@ -288,7 +290,7 @@ class MobileGroup extends StatelessWidget {
               child: Column(
                 children: [
                   for (var i = 0; i < children.length; i++) ...[
-                    if (i > 0) Divider(indent: inset, height: 1),
+                    if (i > 0) ThemedDivider(indent: inset, height: 1),
                     children[i],
                   ],
                 ],
@@ -456,7 +458,7 @@ class _LanNoticeState extends State<LanNotice> with WidgetsBindingObserver {
         padding: const EdgeInsets.all(Insets.lg),
         decoration: BoxDecoration(
           color: p.surface,
-          borderRadius: BorderRadius.circular(Radii.lg),
+          borderRadius: BorderRadius.circular(context.shape.lg),
           border: Border.all(color: p.border),
         ),
         child: Row(

@@ -20,6 +20,7 @@ import 'send_tab.dart';
 import 'settings_tab.dart';
 import 'transfers_tab.dart';
 import 'ui.dart';
+import '../pixel_art.dart';
 
 /// Android 的入口：先让宿主拉起 Go 核心、告诉界面数据目录，再像桌面一样经 gRPC 连上去。
 void runMobile() {
@@ -79,14 +80,15 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
     return AppScope(
       state: _state,
       child: ListenableBuilder(
-        listenable: _state,
+        listenable: Listenable.merge([_state, _state.theme]),
         builder: (context, _) {
           final locale = localeFromSetting(_state.config?.language ?? '');
           final language =
               (locale ?? resolveLocale(WidgetsBinding.instance.platformDispatcher.locales)).toLanguageTag();
+          final spec = _state.theme.spec;
           final (light, dark) = _themes.putIfAbsent(
-            language,
-            () => (buildMobileTheme(Brightness.light), buildMobileTheme(Brightness.dark)),
+            '$language#${_state.theme.revision}',
+            () => (buildMobileTheme(Brightness.light, spec: spec), buildMobileTheme(Brightness.dark, spec: spec)),
           );
           return MaterialApp(
             title: 'PasteFerry',
@@ -94,13 +96,14 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
             debugShowCheckedModeBanner: false,
             theme: light,
             darkTheme: dark,
+            themeMode: _state.theme.mode,
             locale: locale,
             supportedLocales: supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             localeListResolutionCallback: (preferred, _) => resolveLocale(preferred),
             builder: (context, child) {
               appL10n = context.l10n;
-              return ToastScope(top: true, child: child!);
+              return ThemeTextScale(child: ToastScope(top: true, child: child!));
             },
             home: MobileShell(startError: _startError, onRetry: _start),
           );
@@ -112,10 +115,11 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
 
 /// 手机上的字号与触控尺寸：配色、圆角沿用桌面的设计系统（theme.dart），
 /// 字号放大一档、控件高 48，和网页传输的页面（web/phone）一致。
-ThemeData buildMobileTheme(Brightness brightness) {
-  final base = buildTheme(brightness);
-  final p = base.extension<AppPalette>()!;
-  final text = TextTheme(
+ThemeData buildMobileTheme(Brightness brightness, {AppThemeSpec spec = AppThemeSpec.standard}) {
+  final base = buildTheme(brightness, spec: spec);
+  final p = spec.palette(brightness);
+  final r = spec.shape;
+  var text = TextTheme(
     headlineMedium: TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: p.text, letterSpacing: -0.6),
     headlineSmall: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: p.text, letterSpacing: -0.4),
     titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: p.text, letterSpacing: -0.3),
@@ -128,7 +132,10 @@ ThemeData buildMobileTheme(Brightness brightness) {
     labelMedium: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: p.textDim),
     labelSmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: p.textDim),
   );
-  final shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(Radii.md));
+  // 主题自带字体（像素字体）时换上它；字号由 ThemeTextScale 吸附到点阵字号
+  final family = spec.typography.family;
+  if (family != null) text = text.apply(fontFamily: family);
+  final shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(r.md));
   const padding = EdgeInsets.symmetric(horizontal: 18, vertical: 12);
   return base.copyWith(
     textTheme: text,
@@ -140,9 +147,9 @@ ThemeData buildMobileTheme(Brightness brightness) {
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         backgroundColor: p.accent,
-        foregroundColor: Colors.white,
+        foregroundColor: p.onAccent,
         disabledBackgroundColor: p.accent.withValues(alpha: 0.4),
-        disabledForegroundColor: Colors.white.withValues(alpha: 0.8),
+        disabledForegroundColor: p.onAccent.withValues(alpha: 0.8),
         shape: shape,
         padding: padding,
         minimumSize: const Size(0, 48),
@@ -175,13 +182,13 @@ ThemeData buildMobileTheme(Brightness brightness) {
       isDense: false,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       hintStyle: text.bodyLarge?.copyWith(color: p.textFaint),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(Radii.md), borderSide: BorderSide(color: p.border)),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(r.md), borderSide: BorderSide(color: p.border)),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(Radii.md),
+        borderRadius: BorderRadius.circular(r.md),
         borderSide: BorderSide(color: p.border),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(Radii.md),
+        borderRadius: BorderRadius.circular(r.md),
         borderSide: BorderSide(color: p.accent, width: 1.5),
       ),
     ),
@@ -192,7 +199,7 @@ ThemeData buildMobileTheme(Brightness brightness) {
       surfaceTintColor: Colors.transparent,
       showDragHandle: true,
       dragHandleColor: p.border,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.lg))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(r.lg))),
     ),
   );
 }
@@ -266,7 +273,7 @@ class _MobileShellState extends State<MobileShell> {
     if (widget.startError != null) {
       body = _StartFailed(error: widget.startError!, onRetry: widget.onRetry);
     } else if (state.link == LinkState.connecting && state.config == null) {
-      body = const Center(child: CircularProgressIndicator(strokeWidth: 2.5));
+      body = const Center(child: ThemedSpinner(strokeWidth: 2.5));
     } else {
       body = IndexedStack(
         index: _tab.index,

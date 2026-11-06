@@ -191,6 +191,7 @@ void main() {
         // 设置首页列出各类，逐个点进去、拉到底，再回到首页
         final pages = <String, String>{
           l.general: l.language,
+          l.appearance: l.themeMode,
           l.settingsConnection: l.lanDiscovery,
           l.sync: l.syncImages,
           // 辅助功能授权只有 Mac 上有
@@ -200,10 +201,15 @@ void main() {
           l.about: l.updateAuto,
         };
         for (final MapEntry(key: title, value: last) in pages.entries) {
-          await tester.dragUntilVisible(find.text(title).last, find.byType(ListView).last, const Offset(0, -100));
-          await tester.tap(find.text(title).last);
+          // 只在设置的列表里找：「隔空传送」这些标题侧边栏里也有；列表下面的项没滚到时还没建出来
+          final row = find.descendant(of: find.byType(ListView).last, matching: find.text(title));
+          await tester.dragUntilVisible(row, find.byType(ListView).last, const Offset(0, -100));
+          await tester.ensureVisible(row);
           await tester.pump();
-          await tester.dragUntilVisible(find.text(last), find.byType(ListView).last, const Offset(0, -100));
+          await tester.tap(row);
+          await tester.pump();
+          final end = find.descendant(of: find.byType(ListView).last, matching: find.text(last));
+          await tester.dragUntilVisible(end, find.byType(ListView).last, const Offset(0, -100));
           await tester.tap(find.text(l.navSettings).last);
           await tester.pump();
         }

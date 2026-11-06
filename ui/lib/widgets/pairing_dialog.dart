@@ -9,6 +9,7 @@ import '../theme.dart';
 import 'common.dart';
 import '../icons.dart';
 import '../platform.dart';
+import '../pixel_art.dart';
 
 // 保存“添加设备”或“搜索附近设备”这条路由。配对请求到达时只移除它，不误关上层的确认框。
 final _pairingSetupRoutes = Expando<DialogRoute<void>>();
@@ -134,7 +135,7 @@ class _GenerateTabState extends State<_GenerateTab> {
     final p = context.palette;
     final l = context.l10n;
     if (_loading) {
-      return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+      return const Center(child: ThemedSpinner(strokeWidth: 2));
     }
     if (_error != null) {
       return Padding(
@@ -168,7 +169,7 @@ class _GenerateTabState extends State<_GenerateTab> {
                   padding: const EdgeInsets.symmetric(vertical: Insets.lg),
                   decoration: BoxDecoration(
                     color: p.fill,
-                    borderRadius: BorderRadius.circular(Radii.md),
+                    borderRadius: BorderRadius.circular(context.shape.md),
                   ),
                   child: Text(
                     _code ?? '',
@@ -176,7 +177,7 @@ class _GenerateTabState extends State<_GenerateTab> {
                     style: TextStyle(
                       fontSize: 34,
                       fontWeight: FontWeight.w600,
-                      fontFamily: monoFamily,
+                      fontFamily: context.typography.mono,
                       letterSpacing: 10,
                       color: p.text,
                     ),
@@ -236,7 +237,7 @@ class _AddressLine extends StatelessWidget {
                 TextSpan(text: '${l.localAddress}  ', style: context.text.bodySmall),
                 TextSpan(
                   text: addresses.join('  ·  '),
-                  style: TextStyle(fontFamily: monoFamily, fontSize: 13, color: p.text),
+                  style: TextStyle(fontFamily: context.typography.mono, fontSize: 13, color: p.text),
                 ),
               ]),
               textAlign: TextAlign.center,
@@ -332,7 +333,7 @@ class _JoinTabState extends State<_JoinTab> {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w600,
-                fontFamily: monoFamily,
+                fontFamily: context.typography.mono,
                 letterSpacing: 10,
               ),
               inputFormatters: [
@@ -355,7 +356,7 @@ class _JoinTabState extends State<_JoinTab> {
               TextField(
                 controller: _addressController,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: monoFamily, fontSize: 14),
+                style: TextStyle(fontFamily: context.typography.mono, fontSize: 14),
                 decoration: InputDecoration(
                   labelText: l.peerAddress,
                   hintText: '192.168.1.20',
@@ -383,10 +384,10 @@ class _JoinTabState extends State<_JoinTab> {
             FilledButton(
               onPressed: _busy ? null : _submit,
               child: _busy
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 14,
                       height: 14,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      child: ThemedSpinner(strokeWidth: 2, color: context.palette.onAccent),
                     )
                   : Text(l.continueAction),
             ),
@@ -494,7 +495,7 @@ class _PairingConfirmDialogState extends State<PairingConfirmDialog> {
                 padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.md),
                 decoration: BoxDecoration(
                   color: p.fill,
-                  borderRadius: BorderRadius.circular(Radii.md),
+                  borderRadius: BorderRadius.circular(context.shape.md),
                 ),
                 child: Column(
                   children: [
@@ -508,7 +509,7 @@ class _PairingConfirmDialogState extends State<PairingConfirmDialog> {
                               style: TextStyle(
                                 fontSize: 21,
                                 fontWeight: FontWeight.w600,
-                                fontFamily: monoFamily,
+                                fontFamily: context.typography.mono,
                                 letterSpacing: 1.5,
                                 color: p.text,
                               ),
@@ -545,10 +546,10 @@ class _PairingConfirmDialogState extends State<PairingConfirmDialog> {
                     child: FilledButton(
                       onPressed: _busy ? null : () => _respond(true),
                       child: _busy
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 14,
                               height: 14,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                              child: ThemedSpinner(strokeWidth: 2, color: context.palette.onAccent),
                             )
                           : Text(l.confirmMatch),
                     ),

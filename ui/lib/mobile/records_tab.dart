@@ -10,6 +10,7 @@ import '../main.dart' show AppScope;
 import '../records.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../pixel_theme.dart';
 import 'ui.dart';
 import 'record_actions.dart';
 
@@ -77,13 +78,13 @@ class _RecordsTabState extends State<RecordsTab> {
               sliver: DecoratedSliver(
                 decoration: BoxDecoration(
                   color: p.surface,
-                  borderRadius: BorderRadius.circular(Radii.lg),
+                  borderRadius: BorderRadius.circular(context.shape.lg),
                   border: Border.all(color: p.border),
                 ),
                 sliver: SliverList.separated(
                   itemCount: records.length,
                   // 分隔线从文字处开始：左边距 16 + 图标 40 + 间距 12
-                  separatorBuilder: (_, _) => const Divider(indent: 68, height: 1),
+                  separatorBuilder: (_, _) => const ThemedDivider(indent: 68, height: 1),
                   itemBuilder: (context, i) => _RecordRow(
                     record: records[i],
                     first: i == 0,
@@ -120,8 +121,8 @@ class _RecordRow extends StatelessWidget {
     final media = isMedia(r);
     return InkWell(
       borderRadius: BorderRadius.vertical(
-        top: first ? const Radius.circular(Radii.lg) : Radius.zero,
-        bottom: last ? const Radius.circular(Radii.lg) : Radius.zero,
+        top: first ? Radius.circular(context.shape.lg) : Radius.zero,
+        bottom: last ? Radius.circular(context.shape.lg) : Radius.zero,
       ),
       onTap: () => showRecordSheet(context, r),
       onLongPress: () => confirmDelete(context, r),
@@ -174,7 +175,7 @@ class _RecordRow extends StatelessWidget {
                     ),
                   if (r.status == ClipStatus.CLIP_STATUS_FETCHING) ...[
                     const SizedBox(height: 6),
-                    LinearProgressIndicator(value: progress, minHeight: 3, borderRadius: BorderRadius.circular(2)),
+                    ThemedProgressBar(value: progress, minHeight: 3, borderRadius: BorderRadius.circular(context.shape.scaled(2))),
                   ],
                 ],
               ),
@@ -230,7 +231,7 @@ class RecordThumb extends StatelessWidget {
     return SizedBox.square(
       dimension: size,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(Radii.sm),
+        borderRadius: BorderRadius.circular(context.shape.sm),
         child: image ? _Preview(clipId: r.id, fallback: Center(child: icon)) : Center(child: icon),
       ),
     );
@@ -350,7 +351,7 @@ class _RecordSheet extends StatelessWidget {
             ],
             if (busy) ...[
               const SizedBox(height: Insets.sm),
-              LinearProgressIndicator(value: state.progressOf(r.id), minHeight: 3),
+              ThemedProgressBar(value: state.progressOf(r.id), minHeight: 3),
             ],
             const SizedBox(height: Insets.lg),
             FilledButton.icon(
@@ -419,7 +420,7 @@ class _FullText extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(Insets.md),
-              decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(Radii.md)),
+              decoration: BoxDecoration(color: p.fill, borderRadius: BorderRadius.circular(context.shape.md)),
               child: SelectableText(text, style: const TextStyle(fontSize: 16, height: 1.6)),
             ),
             if (d != null && d.textLength > text.runes.length) ...[
@@ -453,7 +454,7 @@ class _MediaBody extends StatelessWidget {
         if (r.status == ClipStatus.CLIP_STATUS_READY && r.imageCount > 0) ...[
           Center(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(Radii.md),
+              borderRadius: BorderRadius.circular(context.shape.md),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 224),
                 child: _Preview(clipId: r.id, fallback: const SizedBox.shrink()),
@@ -466,13 +467,13 @@ class _MediaBody extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: p.surface,
-            borderRadius: BorderRadius.circular(Radii.lg),
+            borderRadius: BorderRadius.circular(context.shape.lg),
             border: Border.all(color: p.border),
           ),
           child: Column(
             children: [
               for (var i = 0; i < items.length; i++) ...[
-                if (i > 0) const Divider(indent: Insets.lg, height: 1),
+                if (i > 0) const ThemedDivider(indent: Insets.lg, height: 1),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.md),
                   child: Row(

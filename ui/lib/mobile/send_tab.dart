@@ -9,10 +9,12 @@ import '../icons.dart';
 import '../main.dart' show AppScope;
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../pixel_theme.dart';
 import 'record_actions.dart';
 import 'file_picker.dart';
 import 'records_tab.dart' show showRecordSheet;
 import 'ui.dart';
+import '../pixel_art.dart';
 
 /// 发送页（design/phone-sync.md 3.2.3 节）：手机上的文字发给在线的设备。
 ///
@@ -147,15 +149,15 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
                       hintText: l.mSendHint,
                       fillColor: p.surface,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(Radii.lg),
+                        borderRadius: BorderRadius.circular(context.shape.lg),
                         borderSide: BorderSide(color: p.border),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(Radii.lg),
+                        borderRadius: BorderRadius.circular(context.shape.lg),
                         borderSide: BorderSide(color: p.border),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(Radii.lg),
+                        borderRadius: BorderRadius.circular(context.shape.lg),
                         borderSide: BorderSide(color: p.accent),
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.md),
@@ -188,9 +190,9 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
                         child: FilledButton.icon(
                           onPressed: canSend ? _send : null,
                           icon: _sending
-                              ? const SizedBox.square(
+                              ? SizedBox.square(
                                   dimension: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                  child: ThemedSpinner(strokeWidth: 2, color: context.palette.onAccent),
                                 )
                               : Icon(AppIcons.send, size: 20),
                           label: Text(l.mSendAction),
@@ -271,13 +273,13 @@ class _SentRecords extends StatelessWidget {
         DecoratedBox(
           decoration: BoxDecoration(
             color: p.surface,
-            borderRadius: BorderRadius.circular(Radii.lg),
+            borderRadius: BorderRadius.circular(context.shape.lg),
             border: Border.all(color: p.border),
           ),
           child: Column(
             children: [
               for (var i = 0; i < shown.length; i++) ...[
-                if (i > 0) const Divider(height: 1, indent: 52),
+                if (i > 0) const ThemedDivider(height: 1, indent: 52),
                 ListTile(
                   dense: true,
                   leading: Icon(isMedia(shown[i]) ? AppIcons.folder : AppIcons.docOnClipboard, size: 20, color: p.textDim),
@@ -333,7 +335,7 @@ Future<void> showSentRecordsSheet(BuildContext context, List<ClipRecord> sent) {
             child: ListView.separated(
               shrinkWrap: true,
               itemCount: sent.length,
-              separatorBuilder: (_, _) => const Divider(height: 1, indent: 52),
+              separatorBuilder: (_, _) => const ThemedDivider(height: 1, indent: 52),
               itemBuilder: (_, i) {
                 final r = sent[i];
                 return ListTile(

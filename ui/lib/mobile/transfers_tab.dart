@@ -8,6 +8,7 @@ import '../main.dart' show AppScope;
 import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/send_dialog.dart';
+import '../pixel_theme.dart';
 import 'host.dart';
 import 'file_picker.dart';
 import 'ui.dart';
@@ -199,7 +200,7 @@ class _TransfersTabState extends State<TransfersTab> {
         minimumSize: const Size(40, 40),
         padding: const EdgeInsets.all(8),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Radii.md),
+          borderRadius: BorderRadius.circular(context.shape.md),
         ),
       ),
     );
@@ -307,7 +308,7 @@ class MobileTransferCard extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: p.fill,
-            borderRadius: BorderRadius.circular(Radii.md),
+            borderRadius: BorderRadius.circular(context.shape.md),
           ),
           child: Icon(transferIcon(t), size: 22, color: p.textDim),
         ),
@@ -340,9 +341,9 @@ class MobileTransferCard extends StatelessWidget {
               ),
               if (active) ...[
                 const SizedBox(height: 4),
-                LinearProgressIndicator(
+                ThemedProgressBar(
                   minHeight: 3,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(context.shape.scaled(2)),
                   value: t.totalBytes > 0
                       ? (t.doneBytes.toDouble() / t.totalBytes.toDouble())
                             .clamp(0, 1)

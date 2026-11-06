@@ -11,6 +11,7 @@ import '../app_state.dart';
 import '../i18n.dart';
 import '../main.dart';
 import '../theme.dart';
+import '../pixel_theme.dart';
 import 'common.dart';
 
 // 头像：好友看到的本机头像、好友的头像，见 design/friends-send.md 第 4.4 节。
@@ -81,7 +82,7 @@ class PersonAvatar extends StatelessWidget {
         ),
       );
     }
-    return ClipOval(
+    return ThemedClipOval(
       child: SizedBox(
         width: size,
         height: size,
@@ -179,10 +180,7 @@ class _SelfAvatarButtonState extends State<SelfAvatarButton> {
           ],
         ],
         child: DecoratedBox(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: _dragging ? context.palette.accent : Colors.transparent, width: 2),
-          ),
+          decoration: context.shape.circle(border: _dragging ? context.palette.accent : Colors.transparent, borderWidth: 2),
           child: avatar,
         ),
       ),
@@ -365,7 +363,7 @@ class _CropDialogState extends State<_CropDialog> {
           const SizedBox(width: Insets.xl),
           Padding(
             padding: const EdgeInsets.only(top: Insets.xl),
-            child: ClipOval(child: _image(96)),
+            child: ThemedClipOval(child: _image(96)),
           ),
         ],
       ),

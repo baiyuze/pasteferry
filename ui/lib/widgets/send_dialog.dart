@@ -12,6 +12,7 @@ import '../i18n.dart';
 import '../icons.dart';
 import '../main.dart';
 import '../theme.dart';
+import '../pixel_theme.dart';
 import 'common.dart';
 
 // 隔空传送的发送：点设备弹出的窗口，以及隔空传送页与窗口共用的发送逻辑。见 design/send-files.md 第 2 节。
@@ -303,6 +304,7 @@ class _SendDialogState extends State<SendDialog> {
                           color: _dragging ? p.accent : p.textFaint,
                           dashed: !_dragging,
                           fill: _dragging ? p.accent.withValues(alpha: 0.06) : Colors.transparent,
+                          radius: context.shape.md,
                         ),
                         child: Padding(
                           padding: EdgeInsets.symmetric(
@@ -425,7 +427,7 @@ class TransferBatchRow extends StatelessWidget {
                 ),
                 if (active) ...[
                   const SizedBox(height: 4),
-                  LinearProgressIndicator(
+                  ThemedProgressBar(
                     minHeight: 3,
                     value: t.totalBytes > 0 ? t.doneBytes.toInt() / t.totalBytes.toInt() : null,
                   ),
@@ -511,15 +513,16 @@ String transferReason(AppLocalizations l, Transfer t) {
 
 /// 拖放区的边框：平时是虚线，拖着文件经过时变成实线。
 class DropZonePainter extends CustomPainter {
-  DropZonePainter({required this.color, required this.dashed, required this.fill});
+  DropZonePainter({required this.color, required this.dashed, required this.fill, required this.radius});
 
   final Color color;
   final bool dashed;
   final Color fill;
+  final double radius;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = RRect.fromRectAndRadius(Offset.zero & size, const Radius.circular(Radii.md));
+    final rect = RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius));
     canvas.drawRRect(rect, Paint()..color = fill);
     final paint = Paint()
       ..color = color
@@ -538,5 +541,5 @@ class DropZonePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(DropZonePainter old) => old.color != color || old.dashed != dashed || old.fill != fill;
+  bool shouldRepaint(DropZonePainter old) => old.color != color || old.dashed != dashed || old.fill != fill || old.radius != radius;
 }
