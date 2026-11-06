@@ -20,6 +20,23 @@ the puppeteer installation, and optionally `NODE_BIN`, `PYTHON_BIN`, `CHROME`.
 ./tools/shorts/build.sh /absolute/output/path
 ```
 
+Each film lives in its own directory with `story.json` and `video.html`; pass it
+as the second argument (the 2.1 film in this directory is the default). The 2.10
+themes film is in `themes-2.10/`; its `prepare.sh` renders the app screenshots it
+needs with `ui/tool/screenshots`, so it also needs Flutter and fonttools.
+
+```bash
+./tools/shorts/build.sh dist/shorts-2.10 tools/shorts/themes-2.10
+```
+
+The narration voice is set by `tts` in `story.json`. Without it, the local macOS
+Tingting voice is used. The themes film uses `{"engine": "edge"}`: a Microsoft
+neural voice (`zh-CN-YunxiNeural`, the young male voice common on Douyin;
+`zh-CN-YunjianNeural` is a calm mature male voice) through the
+`edge-tts` Python package, which sends the narration text to Microsoft's online
+service. Override the voice for one render with `TTS_VOICE`. Check the voice's
+terms before commercial use.
+
 Use `node tools/shorts/render.js /output/path stills` to inspect the key frames
 before rendering. `story.json` owns the narration, timings and captions. Visuals
 in `video.html` use the same deterministic timeline. Refresh both when editing.

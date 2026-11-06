@@ -22,7 +22,7 @@ canvas{image-rendering:pixelated;display:block}
 #caption{position:absolute;left:60px;top:1470px;max-width:840px;font-size:48px;line-height:60px;padding:18px 30px;background:#0C0D0F;color:#E6E8EB;
   box-shadow:0 -6px 0 0 #3DDC97,0 6px 0 0 #3DDC97,-6px 0 0 0 #3DDC97,6px 0 0 0 #3DDC97}
 #wipe{position:absolute;inset:0;pointer-events:none}
-.chat{position:absolute;left:60px;top:480px;width:960px;height:340px;background:#17191D;padding:30px 36px;font-size:36px;line-height:54px;
+.chat{position:absolute;left:60px;top:470px;width:960px;height:280px;background:#17191D;padding:24px 36px;font-size:36px;line-height:48px;
   box-shadow:0 -6px 0 0 #3C414B,0 6px 0 0 #3C414B,-6px 0 0 0 #3C414B,6px 0 0 0 #3C414B}
 .bubble{display:inline-block;background:#3DDC97;color:#0C0D0F;padding:6px 20px;margin-bottom:18px}
 .bubble i{display:inline-block;width:18px;height:36px;background:#0C0D0F;vertical-align:-6px;margin-left:4px}
@@ -71,7 +71,7 @@ canvas{image-rendering:pixelated;display:block}
     <div class="kicker">MCP · 让 AI 帮你做主题</div>
     <div class="head" style="top:240px;font-size:72px;line-height:96px">说一句话<br><em>AI 帮你配色</em></div>
     <div class="chat"><div class="bubble" id="ask"></div><div id="tools"></div></div>
-    <div class="screen" style="left:120px;top:870px;width:840px;height:560px"><canvas id="c5" width="1920" height="1280"></canvas></div>
+    <div class="screen" style="left:120px;top:800px;width:840px;height:560px"><canvas id="c5" width="1920" height="1280"></canvas></div>
   </section>
 
   <section class="scene" id="s6">
@@ -119,7 +119,8 @@ function sky(t){const [c,x]=ctx('sky');x.imageSmoothingEnabled=false;x.fillStyle
 // ── 每一段 ──
 function s0(t){const [c,x]=ctx('c0');const p=step((t-1.4)/1.3,12);x.drawImage(IMG['default-history'],0,0,1920,1280);
   if(p>0){const B=80;for(let by=0;by<16;by++)for(let bx=0;bx<24;bx++){if(rnd(bx*31+by*977)<p)x.drawImage(IMG['pixel-history-dark'],bx*B,by*B,B,B,bx*B,by*B,B,B);}}}
-function s1(t){const [c,x]=ctx('c1');const z=1+step((t-3.6)/4.6,8)*.45;const w=1920/z,h=1280/z;const sx=(1920-w)*.62,sy=0;
+// 从整个窗口一格一格推近到内容区上半部（页眉的夜景），左边从侧边栏的右边缘开始
+function s1(t){const [c,x]=ctx('c1');const p=step((t-3.6)/4.6,8);const z=1+p*.45;const w=1920/z,h=1280/z;const sx=400*p,sy=0;
   x.drawImage(IMG['pixel-history-dark'],sx,sy,w,h,0,0,1920,1280);x.imageSmoothingEnabled=false;const f=Math.floor(t*4);
   for(let i=0;i<26;i++){if((f+i)%3)continue;const px=Math.floor(rnd(i*11+5)*1900),py=Math.floor(rnd(i*11+6)*300);x.fillStyle=i%5?'#C9D1E0':G;x.fillRect(px,py,8*z,8*z);}}
 function s2(t){const [c,x]=ctx('c2');const k=t<10.2?.2+step((t-8.8)/1.4,6)*.6:.8-step((t-10.2)/1.6,6)*.3;const cut=Math.round(1920*k/16)*16;
@@ -129,17 +130,22 @@ function s2(t){const [c,x]=ctx('c2');const k=t<10.2?.2+step((t-8.8)/1.4,6)*.6:.8
 function s3(t){const [c,x]=ctx('c3');const S=1.28,ox=300,oy=160;x.imageSmoothingEnabled=true;x.drawImage(IMG['pixel-send-dark'],ox,oy,1500,1000,0,0,1920,1280);x.imageSmoothingEnabled=false;
   const at=(px,py)=>[(px-ox)*S,(py-oy)*S];const me=at(0.397*2360,0.541*1440),to=at(0.223*2360,0.541*1440);
   const hop=Math.floor(((t-13.6)/2.6)*10)/10;
-  if(t>=13.6&&t<16.2){const px=me[0]+(to[0]-me[0])*hop,py=me[1]-180*Math.sin(Math.PI*hop)-40;drawSprite(x,PLANE,px-48,py-30,6,{k:'#0A0B0D',w:'#F4F4F1',a:G});
-    for(let i=1;i<4;i++){const q=Math.max(0,hop-i*.08);x.fillStyle='#5F6570';x.fillRect(me[0]+(to[0]-me[0])*q-6,me[1]-180*Math.sin(Math.PI*q)-40+20,8,8);}}
-  burst(x,to[0],to[1]-40,(t-16.2)/1.1,8);
-  if(t>=16.2){x.strokeStyle=G;x.lineWidth=8;const b=Math.floor(t*4)%2?0:6;x.strokeRect(to[0]-110,to[1]-160-b,220,220);}}
+  const arc=q=>[me[0]+(to[0]-me[0])*q,me[1]-260*Math.sin(Math.PI*q)];
+  if(t>=13.6&&t<16.2){const [px,py]=arc(hop);
+    for(let i=1;i<5;i++){const [qx,qy]=arc(Math.max(0,hop-i*.06));x.fillStyle='#5F6570';x.fillRect(qx-6,qy-6,12,12);}
+    // 原图机头朝右；往左飞时水平翻过来
+    x.save();x.translate(px,py);x.scale(-1,1);drawSprite(x,PLANE,-80,-50,10,{k:'#0A0B0D',w:'#F4F4F1',a:G});x.restore();}
+  burst(x,to[0],to[1],(t-16.2)/1.1,10);
+  if(t>=16.2){x.strokeStyle=G;x.lineWidth=10;const b=Math.floor(t*4)%2?0:8;x.strokeRect(to[0]-80,to[1]-80-b,160,160);}}
 // 只放大主题卡片那一块（原图 1920×1280 里的 420,160 起 1050×700）
 function s4(t){const [c,x]=ctx('c4');x.drawImage(IMG['pixel-appearance-dark'],420,160,1050,700,0,0,1920,1280);x.imageSmoothingEnabled=false;
   const S=1920/1050;const spots=[[440,310],[848,310],[440,760],[848,760]].map(([a,b])=>[(a-420)*S,(b-160)*S]);const i=Math.min(3,Math.floor((t-18.2)/0.7));const [sx,sy]=spots[Math.max(0,i)];
-  if(Math.floor(t*3)%2===0)cursor(x,Math.max(4,sx-40),sy,10);
-  if(t>20.9){const mx=1180,my=860;x.fillStyle='#000';x.fillRect(mx+14,my+14,380,272);x.fillStyle='#17191D';x.fillRect(mx,my,380,272);x.strokeStyle='#3C414B';x.lineWidth=6;x.strokeRect(mx+3,my+3,374,266);
-    x.font='36px Pixel';x.textBaseline='middle';const items=['使用','复制一份','导出…','删除主题'];const hi=Math.min(3,Math.floor((t-21.1)/0.4));
-    items.forEach((s,k)=>{if(k===hi%2+0&&k<2){x.fillStyle='#1F2227';x.fillRect(mx+12,my+16+k*62,356,56);x.fillStyle=G;x.fillRect(mx+12,my+16+k*62,8,56);}x.fillStyle='#E6E8EB';x.fillText(s,mx+40,my+44+k*62);});}}
+  // 卡片在放大后的位置（左上角）与大小
+  const cards=[[56,134],[796,134],[56,826],[796,826]];const [cx,cy]=cards[Math.max(0,i)];
+  if(t<20.9){x.strokeStyle=G;x.lineWidth=12;const b=Math.floor(t*3)%2?0:6;x.strokeRect(cx-12-b,cy-12-b,674+24+2*b,410+24+2*b);}
+  if(t>20.9){const mx=1150,my=600,W=700,H=500,rh=110;x.fillStyle='#000';x.fillRect(mx+24,my+24,W,H);x.fillStyle='#17191D';x.fillRect(mx,my,W,H);x.strokeStyle='#3C414B';x.lineWidth=10;x.strokeRect(mx+5,my+5,W-10,H-10);
+    x.font='64px Pixel';x.textBaseline='middle';const items=['使用','复制一份','导出…','删除主题'];const hi=1+Math.min(1,Math.floor((t-21.3)/0.7));
+    items.forEach((s,k)=>{const y=my+30+k*rh;if(k===hi){x.fillStyle='#1F2227';x.fillRect(mx+20,y,W-40,rh-10);x.fillStyle=G;x.fillRect(mx+20,y,14,rh-10);}x.fillStyle=k===3?'#F87171':'#E6E8EB';x.fillText(s,mx+70,y+(rh-10)/2);});}}
 function s5(t){const ask='帮我做一套落日像素主题';const n=Math.max(0,Math.min(ask.length,Math.floor((t-23.1)/1.3*ask.length)));
   document.getElementById('ask').innerHTML=ask.slice(0,n)+(n<ask.length&&Math.floor(t*4)%2?'<i></i>':'');
   const lines=[[24.7,'读取主题格式'],[25.2,'配色，检查文字对比度'],[25.7,'已保存并应用「落日像素」']];

@@ -1,4 +1,10 @@
-"""Local Chinese narration and original synthesized music; no external service."""
+"""Chinese narration and original synthesized music.
+
+The narration voice comes from story.json "tts": the default is the local macOS Tingting voice;
+{"engine": "edge", "voice": "zh-CN-YunjianNeural"} uses a Microsoft neural voice through the
+edge-tts package, which sends the narration text to Microsoft's online service. TTS_VOICE
+overrides the voice name for a one-off render.
+"""
 import json,os,subprocess,sys,wave
 from pathlib import Path
 import numpy as np
@@ -15,7 +21,13 @@ subtitles=[];mixes=[]
 for i,row in enumerate(story['segments']):
     text=out/f'voice-{i}.txt';aiff=out/f'voice-{i}.aiff';wav=out/f'voice-{i}.wav'
     text.write_text(row['voice'])
-    command('say','-v','Tingting','-r','210','-o',str(aiff),'-f',str(text))
+    tts=story.get('tts',{})
+    if tts.get('engine')=='edge':
+        aiff=out/f'voice-{i}.mp3'
+        command(sys.executable,'-m','edge_tts','--voice',os.environ.get('TTS_VOICE',tts.get('voice','zh-CN-YunjianNeural')),
+                '--rate',tts.get('rate','+0%'),'--pitch',tts.get('pitch','+0Hz'),'--file',str(text),'--write-media',str(aiff))
+    else:
+        command('say','-v','Tingting','-r','210','-o',str(aiff),'-f',str(text))
     seconds=float(subprocess.check_output(['ffprobe','-v','quiet','-show_entries','format=duration','-of','csv=p=0',str(aiff)],text=True))
     slot=row['end']-row['start']-.18
     tempo=max(1,seconds/slot)
