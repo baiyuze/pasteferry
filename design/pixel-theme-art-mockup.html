@@ -1,0 +1,232 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>隔空贴 · 像素主题：画面与动效样稿</title>
+<style>
+@font-face{font-family:Pixel;src:url('../ui/assets/fonts/FusionPixel12.otf')}
+*{box-sizing:border-box}
+body{margin:0;padding:32px 40px 60px;background:#202226;color:#ddd;font:14px/1.6 -apple-system,'PingFang SC',sans-serif}
+h1,h2{font:24px/32px Pixel;margin:0;color:#fff}
+.note{color:#9aa;margin:4px 0 14px;font-size:13px}
+section{margin-bottom:44px}
+canvas{image-rendering:pixelated;display:block}
+.app,.gal{font:12px/18px Pixel;color:var(--text)}
+.app{display:flex;width:1000px;height:600px;background:var(--bg);position:relative;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.ic{width:16px;height:16px;flex:none}
+.dim{color:var(--dim)}
+.side{width:190px;background:var(--sidebar);display:flex;flex-direction:column;padding-top:18px;border-right:2px solid var(--border);position:relative}
+.brand{display:flex;align-items:center;gap:8px;padding:6px 18px 16px}
+.nav{display:flex;align-items:center;gap:10px;height:30px;margin:1px 10px;padding:0 10px;color:var(--dim);position:relative}
+.nav span:nth-of-type(1){flex:1;color:var(--text)}
+.nav .cursor+svg+span{flex:1}
+.nav .count{color:var(--faint)}
+.nav.sel{background:var(--raised)} .nav.sel .ic{color:var(--accent)}
+.cursor{position:absolute;left:-8px;color:var(--accent);animation:blink 1s steps(1) infinite;font-size:10px}
+@keyframes blink{50%{opacity:0}}
+.grow{flex:1}
+.camp{width:190px;height:96px}
+.foot{display:flex;align-items:center;gap:8px;padding:10px 18px;border-top:2px solid var(--border);color:var(--dim);background:var(--sidebar)}
+.dot{width:6px;height:6px;background:var(--accent)}
+.main{flex:1;position:relative;padding:0 28px}
+.scene{position:absolute;left:0;top:0;width:100%;height:200px}
+.head{position:relative;padding:40px 0 92px}
+.h1{font-size:24px;line-height:32px}
+.sub,.m{color:var(--dim)}
+.group{position:relative;background:var(--surface);margin:2px;box-shadow:0 -2px 0 0 var(--border),0 2px 0 0 var(--border),-2px 0 0 0 var(--border),2px 0 0 0 var(--border)}
+.row{display:flex;align-items:center;gap:14px;padding:10px 16px;position:relative}
+.row.hover{background:var(--raised)}
+.rowcur{position:absolute;left:4px;color:var(--accent);font-size:10px;animation:blink 1s steps(1) infinite}
+.rt{flex:1;min-width:0}.t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sep{height:2px;margin-left:46px;background:linear-gradient(to right,var(--sep) 50%,transparent 50%);background-size:4px 2px}
+.acts{display:flex;align-items:center;gap:14px;color:var(--dim)} .link{color:var(--accent)}
+.prog{width:120px;height:14px;padding:2px;background:var(--bg);box-shadow:0 0 0 2px var(--strong)}
+.cells{width:116px;height:10px}
+.toast{position:absolute;right:40px;bottom:36px;display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--text);color:var(--bg);
+  box-shadow:0 -2px 0 0 var(--text),0 2px 0 0 var(--text),-2px 0 0 0 var(--text),2px 0 0 0 var(--text),6px 6px 0 0 var(--drop);animation:slide 3s steps(1) infinite}
+@keyframes slide{0%{transform:translateY(24px);opacity:0}8%{transform:translateY(12px);opacity:1}14%{transform:translateY(0)}80%{opacity:1}100%{opacity:1}}
+.empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:60px}
+.et{font-size:12px}
+.sendstage{position:relative;height:400px}
+.radar{position:absolute;left:0;top:0;width:100%;height:400px}
+.node{position:absolute;display:flex;flex-direction:column;align-items:center;gap:6px}
+.node>canvas.sprite{padding:10px;background:var(--surface);box-shadow:0 -2px 0 0 var(--strong),0 2px 0 0 var(--strong),-2px 0 0 0 var(--strong),2px 0 0 0 var(--strong)}
+.node.me>canvas.sprite{box-shadow:0 -2px 0 0 var(--accent),0 2px 0 0 var(--accent),-2px 0 0 0 var(--accent),2px 0 0 0 var(--accent)}
+.me{left:calc(50% - 38px);top:150px}.peer{left:10%;top:40px}.peer2{right:12%;top:250px}
+.bounce>canvas.sprite{animation:bounce .6s steps(1) infinite}
+@keyframes bounce{50%{transform:translateY(-4px)}}
+.burst{position:absolute;left:-30px;top:-30px;width:120px;height:120px;pointer-events:none}
+.plane{position:absolute;left:44%;top:150px}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:1000px}
+.cell{background:var(--bg);padding:20px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.cell .t{color:var(--text)}
+.fxc{width:160px;height:80px}
+</style><body>
+<section><h1>像素主题：画面与动效</h1>
+<p class="note">在「石墨 + 像素绿」的基础上加三样东西：页眉的像素场景、空状态与引导里的像素插画、游戏式的小动效。场景与插画都由程序按规则画出来，不打包图片；内容区仍是干净的纯色，文字看得清。说明见 design/pixel-theme.md 第 12 节。</p></section>
+<section><h2>① 深色：页眉夜景 + 侧边栏篝火 + 菜单光标</h2><p class="note">页眉是远山、松树、月亮、星星与绿色萤火虫，底部用像素抖动渐隐进背景；侧边栏底下一小块草地、帐篷和篝火；悬停的行与选中的菜单项前面有闪动的 ▶；放入剪贴板时右下角弹出像素提示。</p><div class="app" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--accent:#3DDC97;--onaccent:#0C0D0F;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--sep:#25282E">
+  <aside class="side"><div class="brand"><canvas class="sprite" data-art="logo" data-scale="1"></canvas>隔空贴</div><div class="nav sel"><span class="cursor">▶</span><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span><span class="count">10</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span>收藏</span><span class="count">5</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg><span>隔空传送</span><span class="count"></span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 2h6v2H5zm10 0h4v2h-4zM5 10h6v2H5zm10 0h4v2h-4zm4-6h2v6h-2zm-8 0h2v6h-2zM3 4h2v6H3zM0 18h2v4H0zm14 0h2v4h-2zm8 0h2v4h-2zM4 14h8v2H4zm12 0h4v2h-4zM2 16h2v2H2zm10 0h2v2h-2zm8 0h2v2h-2z"/></svg><span>好友</span><span class="count"></span></div><div style="height:16px"></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2h2v4H1v-4h2v2Zm2-4h14V6h2v10H3V6h2v8Zm14-8H5V4h14v2Z"/></svg><span>设备</span><span class="count"></span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H13V24H11V22H6V20H18V22ZM4 22H2V20H4V22ZM22 22H20V20H22V22ZM6 20H4V18H6V20ZM20 20H18V18H20V20ZM4 18H2V13H0V11H2V6H4V18ZM8 18H6V16H8V18ZM22 11H24V13H22V18H20V13H16V16H8V8H16V11H20V6H22V11ZM10 10V14H14V10H10ZM8 8H6V6H8V8ZM6 6H4V4H6V6ZM20 6H18V4H20V6ZM4 4H2V2H4V4ZM13 2H18V4H6V2H11V0H13V2ZM22 4H20V2H22V4Z"/></svg><span>设置</span><span class="count"></span></div>
+    <div class="grow"></div><canvas class="camp" data-mode="dark"></canvas>
+    <div class="foot"><span class="dot"></span>2 台设备在线</div></aside>
+  <main class="main"><canvas class="scene" data-mode="dark"></canvas>
+    <div class="head"><div class="h1">复制记录</div><div class="sub">共 10 条，保留 3 天</div></div>
+    <div class="group"><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M2 5h20v2H2zm0 6h12v2H2zm0 6h16v2H2z"/></svg><div class="rt"><div class="t">git push origin release/1.0</div><div class="m">本机 · 54 B · 刚刚</div></div></div><div class="sep"></div><div class="row hover"><span class=rowcur>▶</span><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M4 2h16v2H4zm0 18h16v2H4zM2 4h2v16H2zm18 0h2v16h-2zm-4 8h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2zm-8 0h2v2h-2zm2 2h2v2h-2zm2 2h2v2h-2z"/><path d="M20 16h2v2h-2zM8 16h2v2H8zm-2 2h2v2H6zM8 6h2v2H8zM6 8h2v2H6zm2 2h2v2H8zm2-2h2v2h-2z"/></svg><div class="rt"><div class="t">图片</div><div class="m">来自 MacBook Air · 2.4 MB · 2 分钟前</div></div><div class="acts"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span class="link">放入剪贴板</span><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H6V20H18V22ZM9 6H15V4H17V6H22V8H20V20H18V8H6V20H4V8H2V6H7V4H9V6ZM15 4H9V2H15V4Z"/></svg></div></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">季度汇报-终版.key</div><div class="m">来自 MacBook Air · 38.2 MB · 9 分钟前</div></div></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">合同扫描件.pdf</div><div class="m">来自 MacBook Air · 18.6 MB · 正在接收</div></div><div class="prog"><canvas class="cells" data-v="0.6"></canvas></div></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h7v2H4zm0 10h7v2H4zM2 8h2v8H2zm18-2h-7v2h7zm0 10h-7v2h7zm2-8h-2v8h2zM7 11h10v2H7z"/></svg><div class="rt"><div class="t">https://github.com/baiyuze/pasteferry</div><div class="m">本机 · 44 B · 3 小时前</div></div></div></div>
+        <div class="toast"><canvas class="sprite" data-art="check" data-scale="2"></canvas>已放入剪贴板</div></main>
+</div></section>
+<section><h2>② 浅色：页眉白天 + 空状态插画</h2><p class="note">白天是太阳、方块云与丘陵；侧边栏底下是小房子和花。空页面放一张像素插画加一句下一步该做什么。</p><div class="app" style="--bg:#F5F5F2;--sidebar:#ECECE7;--surface:#FFFFFF;--raised:#FAFAF8;--border:#DCDCD5;--strong:#1C1D20;--text:#1C1D20;--dim:#5E626A;--faint:#9A9DA4;--accent:#08875B;--onaccent:#FFFFFF;--hl:rgba(255,255,255,.7);--sh:rgba(0,0,0,.18);--drop:rgba(28,29,32,.9);--sep:#E2E2DC">
+  <aside class="side"><div class="brand"><canvas class="sprite" data-art="logo" data-scale="1"></canvas>隔空贴</div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span><span class="count">10</span></div><div class="nav sel"><span class="cursor">▶</span><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span>收藏</span><span class="count">5</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg><span>隔空传送</span><span class="count"></span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 2h6v2H5zm10 0h4v2h-4zM5 10h6v2H5zm10 0h4v2h-4zm4-6h2v6h-2zm-8 0h2v6h-2zM3 4h2v6H3zM0 18h2v4H0zm14 0h2v4h-2zm8 0h2v4h-2zM4 14h8v2H4zm12 0h4v2h-4zM2 16h2v2H2zm10 0h2v2h-2zm8 0h2v2h-2z"/></svg><span>好友</span><span class="count"></span></div><div style="height:16px"></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2h2v4H1v-4h2v2Zm2-4h14V6h2v10H3V6h2v8Zm14-8H5V4h14v2Z"/></svg><span>设备</span><span class="count"></span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H13V24H11V22H6V20H18V22ZM4 22H2V20H4V22ZM22 22H20V20H22V22ZM6 20H4V18H6V20ZM20 20H18V18H20V20ZM4 18H2V13H0V11H2V6H4V18ZM8 18H6V16H8V18ZM22 11H24V13H22V18H20V13H16V16H8V8H16V11H20V6H22V11ZM10 10V14H14V10H10ZM8 8H6V6H8V8ZM6 6H4V4H6V6ZM20 6H18V4H20V6ZM4 4H2V2H4V4ZM13 2H18V4H6V2H11V0H13V2ZM22 4H20V2H22V4Z"/></svg><span>设置</span><span class="count"></span></div>
+    <div class="grow"></div><canvas class="camp" data-mode="light"></canvas>
+    <div class="foot"><span class="dot"></span>2 台设备在线</div></aside>
+  <main class="main"><canvas class="scene" data-mode="light"></canvas>
+    <div class="head"><div class="h1">收藏</div><div class="sub">收藏的内容不会被自动清理</div></div>
+    <div class="empty"><canvas class="art" data-art="clipboard" data-scale="4"></canvas>
+          <div class="et">还没有收藏</div><div class="m">在复制记录里点 ☆，这一条会一直留着</div></div></main>
+</div></section>
+<section><h2>③ 隔空传送：设备是像素小电脑，纸飞机飞过去，完成时迸出星星</h2><p class="note">拖着文件经过的设备一格一格上下跳；发送中一架纸飞机从本机飞向对方；完成时对方设备上迸出一圈像素星星。</p><div class="app" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--accent:#3DDC97;--onaccent:#0C0D0F;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--sep:#25282E">
+  <aside class="side"><div class="brand"><canvas class="sprite" data-art="logo" data-scale="1"></canvas>隔空贴</div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span><span class="count">10</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span>收藏</span><span class="count">5</span></div><div class="nav sel"><span class="cursor">▶</span><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg><span>隔空传送</span><span class="count"></span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 2h6v2H5zm10 0h4v2h-4zM5 10h6v2H5zm10 0h4v2h-4zm4-6h2v6h-2zm-8 0h2v6h-2zM3 4h2v6H3zM0 18h2v4H0zm14 0h2v4h-2zm8 0h2v4h-2zM4 14h8v2H4zm12 0h4v2h-4zM2 16h2v2H2zm10 0h2v2h-2zm8 0h2v2h-2z"/></svg><span>好友</span><span class="count"></span></div><div style="height:16px"></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2h2v4H1v-4h2v2Zm2-4h14V6h2v10H3V6h2v8Zm14-8H5V4h14v2Z"/></svg><span>设备</span><span class="count"></span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H13V24H11V22H6V20H18V22ZM4 22H2V20H4V22ZM22 22H20V20H22V22ZM6 20H4V18H6V20ZM20 20H18V18H20V20ZM4 18H2V13H0V11H2V6H4V18ZM8 18H6V16H8V18ZM22 11H24V13H22V18H20V13H16V16H8V8H16V11H20V6H22V11ZM10 10V14H14V10H10ZM8 8H6V6H8V8ZM6 6H4V4H6V6ZM20 6H18V4H20V6ZM4 4H2V2H4V4ZM13 2H18V4H6V2H11V0H13V2ZM22 4H20V2H22V4Z"/></svg><span>设置</span><span class="count"></span></div>
+    <div class="grow"></div><canvas class="camp" data-mode="dark"></canvas>
+    <div class="foot"><span class="dot"></span>2 台设备在线</div></aside>
+  <main class="main"><canvas class="scene" data-mode="dark"></canvas>
+    <div class="head"><div class="h1">隔空传送</div><div class="sub">把文件拖到一台设备上，直接发过去</div></div>
+    <div class="sendstage"><canvas class="radar"></canvas>
+          <div class="node me"><canvas class="sprite" data-art="laptop" data-scale="3"></canvas><span>这台 Mac</span></div>
+          <div class="node peer bounce"><canvas class="sprite" data-art="desktop" data-scale="3"></canvas><span>Windows 台式机</span><canvas class="burst"></canvas></div>
+          <div class="node peer2"><canvas class="sprite" data-art="phone" data-scale="3"></canvas><span>Pixel 8</span></div>
+          <canvas class="sprite plane" data-art="plane" data-scale="2"></canvas>
+        </div></main>
+</div></section>
+<section><h2>④ 插画（空状态、引导、出错）</h2><div class="gal" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--accent:#3DDC97;--onaccent:#0C0D0F;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--sep:#25282E"><div class="cell"><canvas class="art" data-art="clipboard" data-scale="4"></canvas><div class="m">复制记录 / 收藏为空</div></div><div class="cell"><canvas class="art" data-art="devices" data-scale="4"></canvas><div class="m">还没有配对的设备</div></div><div class="cell"><canvas class="art" data-art="plane" data-scale="4"></canvas><div class="m">隔空传送</div></div><div class="cell"><canvas class="art" data-art="chest" data-scale="4"></canvas><div class="m">传输完成</div></div><div class="cell"><canvas class="art" data-art="cloud" data-scale="4"></canvas><div class="m">连不上服务器</div></div><div class="cell"><canvas class="art" data-art="friends" data-scale="4"></canvas><div class="m">还没有好友</div></div></div></section>
+<section><h2>⑤ 动效</h2><p class="note">都按 4 到 8 帧跳变，不做平滑过渡；系统开了「减少动态效果」时全部停用。</p><div class="gal" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--accent:#3DDC97;--onaccent:#0C0D0F;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--sep:#25282E"><div class="cell fx" data-fx="cursor"><canvas class="fxc" data-fx="cursor"></canvas><div class="t">菜单光标</div><div class="m">选中项左边一个一闪一闪的 ▶，像游戏菜单</div></div><div class="cell fx" data-fx="spinner"><canvas class="fxc" data-fx="spinner"></canvas><div class="t">加载</div><div class="m">四个方格依次点亮，代替转圈</div></div><div class="cell fx" data-fx="burst"><canvas class="fxc" data-fx="burst"></canvas><div class="t">完成</div><div class="m">传送完成时从设备上迸出一圈像素星星</div></div><div class="cell fx" data-fx="bounce"><canvas class="fxc" data-fx="bounce"></canvas><div class="t">拖到设备上</div><div class="m">设备一格一格上下跳，等你松手</div></div><div class="cell fx" data-fx="twinkle"><canvas class="fxc" data-fx="twinkle"></canvas><div class="t">星星闪烁</div><div class="m">页眉夜景里的星星慢慢闪（每秒 2 帧）</div></div><div class="cell fx" data-fx="crt"><canvas class="fxc" data-fx="crt"></canvas><div class="t">扫描线（可选）</div><div class="m">整窗叠一层很淡的 CRT 扫描线，设置里开，默认关</div></div></div></section>
+<script>
+const U = 2;
+function css(el, name){return getComputedStyle(el).getPropertyValue(name).trim();}
+function rng(seed){let s=seed>>>0;return ()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
+const BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
+function setup(c,w,h){c.width=w;c.height=h;const x=c.getContext('2d');x.imageSmoothingEnabled=false;return x;}
+function rect(x,px,py,w,h,col,u=U){x.fillStyle=col;x.fillRect(px*u,py*u,w*u,h*u);}
+function circle(x,cx,cy,r,col,u=U){for(let y=-r;y<=r;y++)for(let k=-r;k<=r;k++)if(k*k+y*y<=r*r+r*0.8)rect(x,cx+k,cy+y,1,1,col,u);}
+
+// ── 页眉场景：夜里的远山、松树、月亮和星星（深色），白天的云和丘陵（浅色），底部用抖动渐隐到背景色 ──
+function scene(c, mode, t=0){
+  const W=Math.round(c.clientWidth/U), H=Math.round(c.clientHeight/U); const x=setup(c,W*U,H*U); const r=rng(7);
+  const night=mode==='dark';
+  const P=night?{sky:['#0E1014','#101318','#12161C','#151A21'],far:'#1B2131',mid:'#222A3B',near:'#29334A',tree:'#313D57',star:['#C9D1E0','#8C96A8','#3DDC97'],moon:'#E9E5D2',moon2:'#C8C3AE'}
+               :{sky:['#EEF3F4','#EAF0F2','#E5EDF0','#E0E9EC'],far:'#D3DFDC',mid:'#C2D3CA',near:'#B2C8BB',tree:'#9BB7A6',cloud:'#FFFFFF',cloud2:'#E3ECEE',sun:'#F3E3A6'};
+  const bg=css(c,'--bg');
+  for(let i=0;i<4;i++) rect(x,0,Math.floor(H*i/4*0.7),W,Math.ceil(H*0.7/4)+1,P.sky[i]);
+  rect(x,0,Math.floor(H*0.7),W,H,P.sky[3]);
+  if(night){
+    for(let i=0;i<60;i++){const sx=Math.floor(r()*W), sy=Math.floor(r()*H*0.55); const k=r(); const tw=((Math.floor(t*2)+i)%7===0);
+      const col=k<0.08?P.star[2]:(k<0.4?P.star[0]:P.star[1]); if(tw) continue; rect(x,sx,sy,1,1,col);
+      if(k>0.95){rect(x,sx-1,sy,3,1,col);rect(x,sx,sy-1,1,3,col);} }
+    const mx=Math.floor(W*0.82), my=Math.floor(H*0.28); circle(x,mx,my,7,P.moon); circle(x,mx+3,my-2,6,P.sky[1]);
+  } else {
+    const sx=Math.floor(W*0.82), sy=Math.floor(H*0.26); circle(x,sx,sy,7,P.sun);
+    const clouds=[[0.12,0.18,14],[0.42,0.1,10],[0.62,0.3,16]];
+    for(const [fx,fy,w] of clouds){const cx=Math.floor(W*fx), cy=Math.floor(H*fy);
+      rect(x,cx,cy+2,w,3,P.cloud);rect(x,cx+3,cy,w-6,2,P.cloud);rect(x,cx+5,cy-1,4,1,P.cloud);rect(x,cx+1,cy+5,w-2,1,P.cloud2);}
+  }
+  function ridge(base,amp,freq,col,seed){const rr=rng(seed);const ph=[rr()*10,rr()*10,rr()*10];
+    for(let i=0;i<W;i++){const h=base+amp*(Math.sin(i*freq+ph[0])*0.6+Math.sin(i*freq*2.3+ph[1])*0.3+Math.sin(i*freq*5.1+ph[2])*0.1);
+      rect(x,i,Math.floor(H-h),1,Math.ceil(h),col);} }
+  ridge(H*0.5,H*0.14,0.016,P.far,3); ridge(H*0.38,H*0.1,0.028,P.mid,5); ridge(H*0.26,H*0.06,0.05,P.near,9);
+  const tr=rng(11);
+  for(let i=0;i<W;i+=3+Math.floor(tr()*9)){ if(tr()<0.5) continue; const th=4+Math.floor(tr()*6); const ty=Math.floor(H-H*0.24-tr()*3);
+    for(let k=0;k<th;k++){const half=Math.floor((th-k)/2.2); rect(x,i-half,ty-k,half*2+1,1,P.tree);} rect(x,i,ty+1,1,2,P.tree);}
+  if(night){ for(let i=0;i<14;i++){ const fx=Math.floor(tr()*W), fy=Math.floor(H*0.6+tr()*H*0.25); if((Math.floor(t*2)+i)%3) rect(x,fx,fy,1,1,'#3DDC97'); } }
+  const fade=Math.floor(H*0.16), start=H-fade; x.fillStyle=bg;
+  for(let y=start;y<H;y++){const tt=(y-start)/fade; for(let i=0;i<W;i++){ if(BAYER[y%4][i%4]/16<tt) x.fillRect(i*U,y*U,U,U);} }
+}
+
+// ── 侧边栏底部：一小块草地、篝火（深色）或小花（浅色）──
+function camp(c, mode, t=0){
+  const W=Math.round(c.clientWidth/U), H=Math.round(c.clientHeight/U); const x=setup(c,W*U,H*U); const r=rng(21); const night=mode==='dark';
+  const sb=css(c,'--sidebar'); rect(x,0,0,W,H,sb);
+  const g=night?['#1D2A24','#22332B','#18231E']:['#CFDCCB','#C2D3BE','#B6CAB1'];
+  const d=night?['#1A1712','#211C16','#15120E']:['#D9CDB8','#CFC2AB','#E2D7C4'];
+  for(let i=0;i<W;i++){ const top=H-12+Math.floor(r()*2); for(let y=top;y<H;y++){ rect(x,i,y,1,1,(y<top+3?g:d)[Math.floor(r()*3)]);} }
+  for(let i=0;i<W;i+=2+Math.floor(r()*5)){ rect(x,i,H-13-Math.floor(r()*2),1,1+Math.floor(r()*2),g[1]); }
+  if(night){ const fx=Math.floor(W*0.62), fy=H-14; const f=Math.floor(t*4)%2;
+    rect(x,fx-3,fy+1,7,1,'#5A3A22');rect(x,fx-2,fy,5,1,'#6E4A2C');
+    const fl=[['#FFB547',[[0,-1],[1,-1],[-1,-1],[0,-2],[1,-2],[0,-3]]],['#FF6B3D',[[-1,0],[0,0],[1,0],[0,-1]]],['#FFE48A',[[0,-1]]]];
+    for(const [col,pts] of fl) for(const [dx,dy] of pts) rect(x,fx+dx+(f&&dy<-1?1:0),fy+dy,1,1,col);
+    for(let i=0;i<3;i++){ const sy=fy-5-((Math.floor(t*3)+i*3)%8); rect(x,fx+(i-1)*2,sy,1,1,'#FFB547'); }
+    // 小帐篷
+    const tx=Math.floor(W*0.25), ty=H-12; for(let k=0;k<8;k++) rect(x,tx-k,ty-8+k,2*k+1,1,k%2?'#2B3A52':'#33456A'); rect(x,tx,ty-4,1,4,'#141A26');
+  } else {
+    const fl=['#F2A7B5','#F6D06B','#9CC9F0']; for(let i=0;i<7;i++){ const fx=4+Math.floor(r()*(W-8)); rect(x,fx,H-14,1,2,'#7FA77A'); rect(x,fx,H-15,1,1,fl[i%3]); }
+    const tx=Math.floor(W*0.3), ty=H-12; // 小房子
+    rect(x,tx-6,ty-7,13,7,'#F1E6D3'); for(let k=0;k<5;k++) rect(x,tx-7+k,ty-8-k,15-2*k,1,'#C9785A'); rect(x,tx-1,ty-4,3,4,'#8C5A43'); rect(x,tx+3,ty-6,2,2,'#9CC9F0');
+  }
+}
+
+// ── 插画：用方块拼，k 是轮廓 ──
+function pal(el){return {k:css(el,'--strong')==='#1C1D20'?'#1C1D20':'#0A0B0D', a:css(el,'--accent'), on:css(el,'--onaccent'), s:css(el,'--surface'), t:css(el,'--text'), d:css(el,'--dim'), f:css(el,'--faint'), b:css(el,'--border'), w:'#F4F4F1', g:'#C9CCD2', y:'#F6C744', o:'#E8894A', br:'#8C6A4A'};}
+function outlined(x,X,Y,w,h,fill,k,u){rect(x,X,Y,w,h,k,u);rect(x,X+1,Y+1,w-2,h-2,fill,u);}
+const ART={
+  logo(x,p,u){ outlined(x,0,0,16,16,'#F2F2EF',p.k,u); outlined(x,2,2,7,10,'#FFFFFF','#2B2C30',u); rect(x,4,4,3,1,'#2B2C30',u);rect(x,4,6,2,1,'#2B2C30',u);
+    rect(x,6,6,7,7,p.a,u); rect(x,7,7,4,1,p.on,u);rect(x,7,9,3,1,p.on,u);rect(x,7,11,2,1,p.on,u); rect(x,7,13,7,1,'#C9C9C4',u); return [16,16]; },
+  check(x,p,u){ const pts=[[0,4],[1,5],[2,6],[3,5],[4,4],[5,3],[6,2],[7,1]]; for(const [a,b] of pts){rect(x,a,b,1,2,p.a,u);} return [8,8]; },
+  clipboard(x,p,u){ outlined(x,2,3,20,22,p.br,p.k,u); outlined(x,4,6,16,17,p.w,p.k,u);
+    outlined(x,8,1,8,5,p.g,p.k,u); rect(x,10,2,4,1,p.f,u);
+    rect(x,7,10,10,1,p.g,u);rect(x,7,13,8,1,p.g,u);rect(x,7,16,10,1,p.g,u);rect(x,7,19,5,1,p.g,u);
+    rect(x,20,15,1,3,p.a,u);rect(x,19,16,3,1,p.a,u); rect(x,22,9,1,1,p.y,u); return [24,26]; },
+  devices(x,p,u){ outlined(x,0,4,11,8,p.s,p.k,u); rect(x,2,6,7,4,p.d,u); rect(x,4,12,3,2,p.k,u); rect(x,2,14,7,1,p.k,u);
+    outlined(x,17,4,11,8,p.s,p.k,u); rect(x,19,6,7,4,p.d,u); rect(x,21,12,3,2,p.k,u); rect(x,19,14,7,1,p.k,u);
+    for(let i=12;i<17;i+=2) rect(x,i,8,1,1,p.a,u); rect(x,13,2,2,1,p.y,u);rect(x,13,1,1,1,p.y,u); return [28,16]; },
+  plane(x,p,u){ const body=[[0,6,14],[2,7,10],[5,8,6],[7,5,8],[9,4,6],[11,3,4],[13,2,2]];
+    for(const [X,Y,w] of body){}
+    const rows=['..............kk','...........kkkwk','........kkkwwwk.','.....kkkwwwwwk..','..kkkwwwwwwwk...','kkwwwwwwwaak....','..kkkwwwaak.....','.....kkaak......','.......kak......','........k.......'];
+    rows.forEach((s,yy)=>{for(let i=0;i<s.length;i++){const ch=s[i]; if(ch==='.') continue; rect(x,i+8,yy+2,1,1,ch==='k'?p.k:ch==='a'?p.a:p.w,u);} });
+    for(let i=0;i<8;i+=2) rect(x,i,9+(i>3?1:0),1,1,p.f,u); return [24,14]; },
+  chest(x,p,u){ outlined(x,2,8,20,12,p.br,p.k,u); outlined(x,2,4,20,6,'#A57E57',p.k,u); rect(x,3,9,18,1,p.k,u);
+    outlined(x,10,7,4,5,p.y,p.k,u); rect(x,11,9,2,1,p.k,u);
+    for(const [a,b] of [[1,1],[6,0],[18,0],[23,2],[0,5]]) rect(x,a,b,1,1,p.y,u); rect(x,12,0,1,2,p.a,u); return [24,20]; },
+  cloud(x,p,u){ rect(x,4,4,14,6,p.k,u); rect(x,2,6,20,6,p.k,u); rect(x,7,2,8,3,p.k,u);
+    rect(x,5,5,12,5,p.g,u); rect(x,3,7,18,4,p.g,u); rect(x,8,3,6,2,p.g,u);
+    const X=[[9,13],[10,14],[11,15],[12,14],[13,13],[11,13],[10,15],[12,15],[13,16]]; for(const [a,b] of [[9,13],[10,14],[11,15],[12,16],[13,17],[13,13],[12,14],[10,16],[9,17]]) rect(x,a,b,1,1,'#E5484D',u); return [24,18]; },
+  friends(x,p,u){ function person(X,c){ outlined(x,X+2,0,6,6,'#F2C9A0',p.k,u); rect(x,X+3,2,1,1,p.k,u);rect(x,X+6,2,1,1,p.k,u); outlined(x,X,6,10,8,c,p.k,u);}
+    person(0,p.a); person(13,'#7AA2F7'); rect(x,11,3,1,1,'#E5484D',u);rect(x,12,3,1,1,'#E5484D',u);rect(x,11,4,2,1,'#E5484D',u); return [23,14]; },
+  laptop(x,p,u){ outlined(x,2,0,14,10,p.s,p.k,u); rect(x,4,2,10,6,p.d,u); rect(x,0,10,18,2,p.k,u); rect(x,1,10,16,1,p.g,u); return [18,12]; },
+  desktop(x,p,u){ outlined(x,0,0,18,12,p.s,p.k,u); rect(x,2,2,14,8,p.d,u); rect(x,7,12,4,2,p.k,u); rect(x,5,14,8,1,p.k,u); return [18,15]; },
+  phone(x,p,u){ outlined(x,3,0,10,16,p.s,p.k,u); rect(x,5,2,6,10,p.d,u); rect(x,7,13,2,1,p.k,u); return [16,16]; },
+};
+function drawArt(c){ const name=c.dataset.art, s=+c.dataset.scale||2; const probe=setup(c,1,1); const p=pal(c);
+  const tmp=document.createElement('canvas'); const tx=tmp.getContext('2d'); tmp.width=200;tmp.height=200; const [w,h]=ART[name](tx,p,1);
+  const x=setup(c,w*s,h*s); x.drawImage(tmp,0,0,w,h,0,0,w*s,h*s); c.style.width=w*s+'px'; c.style.height=h*s+'px'; }
+
+function cells(c){ const x=setup(c,116,10); const v=+c.dataset.v; const n=Math.floor((116+2)/8); const a=css(c,'--accent'); x.fillStyle=a;
+  for(let i=0;i<Math.round(v*n);i++) x.fillRect(i*8,2,6,6); }
+
+function radar(c,t){ const W=c.clientWidth, H=c.clientHeight; const x=setup(c,W,H); const cx=W/2, cy=190; const col=css(c,'--border'), a=css(c,'--accent');
+  function oval(rx,ry,color,dashed,u=4){ const seen=new Set(); let k=0; const n=Math.ceil(Math.PI*(rx+ry)/(u/2)); for(let i=0;i<n;i++){const an=2*Math.PI*i/n; const gx=Math.floor((cx+rx*Math.cos(an))/u), gy=Math.floor((cy+ry*Math.sin(an))/u); const key=gx+','+gy; if(seen.has(key)) continue; seen.add(key); if(!dashed||k%2===0){x.fillStyle=color;x.fillRect(gx*u,gy*u,u,u);} k++;} }
+  oval(170,110,col,true); oval(330,180,col,true); const tt=(Math.floor(t*8)%8)/8; const k=1-Math.pow(1-tt,2); x.globalAlpha=0.6*(1-tt); oval(30+(330-30)*k,30+(180-30)*k,a,false); x.globalAlpha=1; }
+
+function burst(c,t){ const x=setup(c,120,120); const ph=(Math.floor(t*6)%12); if(ph>6) return; const a=css(c,'--accent'); const y=['#F6C744',a,'#F4F4F1'];
+  for(let i=0;i<8;i++){ const an=i*Math.PI/4; const d=12+ph*6; const px=Math.round((60+Math.cos(an)*d)/2)*2, py=Math.round((60+Math.sin(an)*d)/2)*2; x.fillStyle=y[i%3]; x.fillRect(px,py,4,4); if(ph<3){x.fillRect(px-2,py+1,8,2);x.fillRect(px+1,py-2,2,8);} } }
+
+function planeFly(c,t){ const ph=(t*0.5)%1; c.style.transform=`translate(${-Math.floor(ph*12)*16}px, ${-Math.floor(ph*12)*8}px) scaleX(-1)`; c.style.opacity= ph<0.85?1:0; }
+
+function fx(c,kind,t){ const x=setup(c,160,80); const a=css(c,'--accent'), tx=css(c,'--text'), d=css(c,'--dim');
+  if(kind==='cursor'){ if(Math.floor(t*2)%2===0){ x.fillStyle=a; for(let i=0;i<5;i++) x.fillRect(40+i*2,30+i*2,2,20-i*4);} x.fillStyle=tx; x.font='12px Pixel'; x.fillText('复制记录',60,45); }
+  if(kind==='spinner'){ const on=Math.floor(t*6)%4; const pos=[[64,24],[84,24],[84,44],[64,44]]; pos.forEach(([X,Y],i)=>{ x.fillStyle=i===on?a:d; x.globalAlpha=i===on?1:0.35; x.fillRect(X,Y,12,12); }); x.globalAlpha=1; }
+  if(kind==='burst'){ const ph=Math.floor(t*6)%10; x.fillStyle=css(c,'--surface'); x.fillRect(66,26,28,28); x.fillStyle=a; x.fillRect(64,24,32,2);x.fillRect(64,54,32,2);x.fillRect(64,24,2,32);x.fillRect(94,24,2,32);
+    if(ph<6){ for(let i=0;i<8;i++){const an=i*Math.PI/4, dd=22+ph*6; x.fillStyle=['#F6C744',a,'#F4F4F1'][i%3]; x.fillRect(Math.round((80+Math.cos(an)*dd)/2)*2,Math.round((40+Math.sin(an)*dd)/2)*2,4,4);} } }
+  if(kind==='bounce'){ const up=Math.floor(t*3)%2; x.fillStyle=css(c,'--surface'); x.fillRect(66,26-up*4,28,28); x.fillStyle=a; for(let i=0;i<4;i++){} x.fillRect(64,24-up*4,32,2);x.fillRect(64,54-up*4,32,2);x.fillRect(64,24-up*4,2,32);x.fillRect(94,24-up*4,2,32);
+    x.fillStyle=d; x.fillRect(64,62,32,2); }
+  if(kind==='twinkle'){ x.fillStyle='#0E1014'; x.fillRect(0,0,160,80); const r=rng(3); for(let i=0;i<24;i++){const sx=Math.floor(r()*80)*2, sy=Math.floor(r()*40)*2; if((Math.floor(t*2)+i)%5===0) continue; x.fillStyle=i%7?'#C9D1E0':a; x.fillRect(sx,sy,2,2);} }
+  if(kind==='crt'){ x.fillStyle=css(c,'--surface'); x.fillRect(0,0,160,80); x.fillStyle=tx; x.font='12px Pixel'; x.fillText('K7MP2X',52,46); x.fillStyle='rgba(0,0,0,0.18)'; for(let y=(Math.floor(t*8)%2);y<80;y+=2) x.fillRect(0,y,160,1); }
+}
+
+function frame(t){
+  document.querySelectorAll('canvas.scene').forEach(c=>scene(c,c.dataset.mode,t));
+  document.querySelectorAll('canvas.camp').forEach(c=>camp(c,c.dataset.mode,t));
+  document.querySelectorAll('canvas.radar').forEach(c=>radar(c,t));
+  document.querySelectorAll('canvas.burst').forEach(c=>burst(c,t));
+  document.querySelectorAll('canvas.plane').forEach(c=>planeFly(c,t));
+  document.querySelectorAll('canvas.fxc').forEach(c=>fx(c,c.dataset.fx,t));
+}
+document.fonts.ready.then(()=>{
+  document.querySelectorAll('canvas.sprite, canvas.art').forEach(drawArt);
+  document.querySelectorAll('canvas.cells').forEach(cells);
+  const t0=performance.now(); let last=-1;
+  function loop(now){ const t=(now-t0)/1000; const step=Math.floor(t*8); if(step!==last){last=step; frame(t);} requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+});
+</script></body></html>

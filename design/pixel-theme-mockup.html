@@ -1,0 +1,273 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>隔空贴 · 像素主题设计样稿</title>
+<style>
+@font-face{font-family:Pixel;src:url('../ui/assets/fonts/FusionPixel12.otf')}
+@font-face{font-family:PixelMono;src:url('../ui/assets/fonts/FusionPixel12Mono.otf')}
+*{box-sizing:border-box}
+body{margin:0;padding:32px 40px 60px;background:#202226;color:#ddd;font:14px/1.6 -apple-system,'PingFang SC',sans-serif}
+h1{font:24px/32px Pixel;margin:0 0 4px;color:#fff}
+.lead{color:#aaa;margin:0 0 28px}
+.frame-wrap{margin-bottom:44px}
+h2{font:24px/32px Pixel;color:#fff;margin:0}
+.note{color:#9aa;margin:4px 0 14px;font-size:13px}
+.app,.swatch,.types{font:12px/18px Pixel;color:var(--text);-webkit-font-smoothing:none}
+.app{display:flex;width:1100px;height:720px;background:var(--bg);position:relative;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.ic{width:16px;height:16px;flex:none;image-rendering:pixelated}
+.dim{color:var(--dim)} .faint{color:var(--faint)}
+.side{width:200px;background:var(--sidebar);display:flex;flex-direction:column;padding:20px 0 0;
+  border-right:2px solid var(--border)}
+.brand{display:flex;align-items:center;gap:8px;padding:8px 18px 18px}
+.logo{width:16px;height:16px;background:var(--accent);box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),inset 4px 4px 0 rgba(255,255,255,.25)}
+.nav{display:flex;align-items:center;gap:10px;height:30px;margin:1px 10px;padding:0 10px;color:var(--dim);position:relative}
+.nav span:first-of-type{flex:1;color:var(--text)}
+.nav .count{color:var(--faint);font-family:PixelMono}
+.nav.sel{background:var(--raised)}
+.nav.sel::before{content:'';position:absolute;left:-2px;top:6px;bottom:6px;width:4px;background:var(--accent)}
+.nav.sel .ic{color:var(--accent)}
+.nav.mini{display:inline-flex;margin:0;width:120px}
+.grow{flex:1}
+.foot{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:2px solid var(--border);color:var(--dim)}
+.dot{width:6px;height:6px;background:var(--online)}
+.main{flex:1;padding:28px 32px;position:relative}
+.head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.h1{font-size:24px;line-height:32px}
+.sub,.m{color:var(--dim)}
+.hbtns{display:flex;gap:14px}
+.btn{font:12px/18px Pixel;color:var(--text);background:var(--raised);border:0;padding:5px 12px;margin:2px;
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+  box-shadow:0 -2px 0 0 var(--strong),0 2px 0 0 var(--strong),-2px 0 0 0 var(--strong),2px 0 0 0 var(--strong),
+    inset 2px 2px 0 0 var(--hl),inset -2px -2px 0 0 var(--sh)}
+.btn.primary{background:var(--accent);color:var(--onaccent)}
+.btn.pressed{transform:translateY(2px);box-shadow:0 -2px 0 0 var(--strong),0 2px 0 0 var(--strong),-2px 0 0 0 var(--strong),2px 0 0 0 var(--strong),
+    inset 2px 2px 0 0 var(--sh),inset -2px -2px 0 0 var(--hl)}
+.btn.ghost{background:none;box-shadow:none;color:var(--dim)}
+.tools{display:flex;gap:16px;margin-bottom:20px}
+.input{flex:1;display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;margin:2px;background:var(--bg);
+  box-shadow:0 -2px 0 0 var(--accent),0 2px 0 0 var(--accent),-2px 0 0 0 var(--accent),2px 0 0 0 var(--accent),inset 2px 2px 0 0 var(--sh)}
+.ph{color:var(--faint)}
+.caret{width:6px;height:12px;background:var(--accent);margin-right:-4px;animation:b 1s steps(1) infinite}
+@keyframes b{50%{opacity:0}}
+.seg{display:flex;padding:3px;margin:2px;background:var(--bg);
+  box-shadow:0 -2px 0 0 var(--strong),0 2px 0 0 var(--strong),-2px 0 0 0 var(--strong),2px 0 0 0 var(--strong),inset 2px 2px 0 0 var(--sh)}
+.seg span{padding:3px 12px;color:var(--dim)}
+.seg .on{background:var(--raised);color:var(--text);box-shadow:inset 2px 2px 0 0 var(--hl),inset -2px -2px 0 0 var(--sh),0 0 0 2px var(--strong)}
+.group{background:var(--surface);margin:2px 2px 22px;
+  box-shadow:0 -2px 0 0 var(--border),0 2px 0 0 var(--border),-2px 0 0 0 var(--border),2px 0 0 0 var(--border)}
+.row{display:flex;align-items:center;gap:14px;padding:10px 16px;position:relative}
+.row.hover{background:var(--raised)}
+.row.sel::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:4px;background:var(--accent)}
+.rt{flex:1;min-width:0}
+.t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sep{height:2px;margin-left:46px;background:linear-gradient(to right,var(--border) 50%,transparent 50%);background-size:4px 2px}
+.acts{display:flex;align-items:center;gap:14px;color:var(--dim)}
+.link{color:var(--accent)}
+.prog{width:140px;height:10px;padding:2px;background:var(--bg);box-shadow:0 0 0 2px var(--strong)}
+.prog .fill{height:6px;background:repeating-linear-gradient(to right,var(--accent) 0 6px,transparent 6px 8px)}
+.label{color:var(--dim);margin:0 0 8px 2px}
+.label::first-letter{color:var(--accent)}
+.sw{display:inline-block;width:36px;height:20px;padding:4px;background:var(--bg);
+  box-shadow:0 -2px 0 0 var(--strong),0 2px 0 0 var(--strong),-2px 0 0 0 var(--strong),2px 0 0 0 var(--strong),inset 2px 2px 0 0 var(--sh)}
+.sw i{display:block;width:12px;height:12px;background:var(--dim);box-shadow:inset -2px -2px 0 0 var(--sh)}
+.sw.on{background:var(--accent)} .sw.on i{margin-left:12px;background:var(--onaccent)}
+.badge{display:inline-block;padding:0 5px;background:var(--accent);color:var(--onaccent);font-family:PixelMono}
+.dialog{position:absolute;right:48px;bottom:40px;width:340px;background:var(--surface);padding:16px 20px 18px;
+  box-shadow:0 -2px 0 0 var(--strong),0 2px 0 0 var(--strong),-2px 0 0 0 var(--strong),2px 0 0 0 var(--strong),
+    6px 8px 0 0 var(--drop),8px 6px 0 0 var(--drop)}
+.dt{display:flex;justify-content:space-between;align-items:center}
+.x{color:var(--dim)}
+.dsep{height:2px;margin:12px -20px 14px;background:linear-gradient(to right,var(--border) 50%,transparent 50%);background-size:4px 2px}
+.dc{text-align:center;color:var(--dim)}
+.code{font:24px/32px PixelMono;letter-spacing:12px;text-align:center;margin:10px 0;padding:10px 0 10px 12px;background:var(--bg);
+  box-shadow:inset 2px 2px 0 0 var(--sh),inset -2px -2px 0 0 var(--hl)}
+.dbtns{display:flex;justify-content:flex-end;gap:12px;margin-top:16px}
+.tip{position:absolute;left:470px;top:262px;background:var(--inverse);color:var(--oninverse);padding:3px 8px;
+  box-shadow:0 -2px 0 0 var(--inverse),0 2px 0 0 var(--inverse),-2px 0 0 0 var(--inverse),2px 0 0 0 var(--inverse)}
+.kbd{font-family:PixelMono;padding:0 4px;margin-left:4px;box-shadow:0 0 0 2px var(--oninverse)}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:1100px}
+.swatch{background:var(--bg);padding:16px;display:flex;flex-direction:column;gap:14px;align-items:flex-start;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.sname{color:var(--dim)}
+.types{display:flex;width:1100px;background:var(--bg);box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.tcol{flex:1;padding:24px 28px}
+.tcol+.tcol{border-left:2px solid var(--border)}
+.sys{font-family:-apple-system,'PingFang SC',sans-serif;font-size:13px;line-height:20px}
+.mono{font-family:PixelMono}
+</style><body>
+<h1>隔空贴 · 像素主题设计样稿</h1>
+<p class="lead">结构像素化，颜色现代化。说明见 design/pixel-theme.md。字体是 App 自带的缝合像素字体，请在仓库里直接打开本文件。</p>
+
+<section class="frame-wrap">
+  <h2>① 深色「石墨」+ 像素绿（推荐）</h2><p class="note">近黑的冷灰分三层；边框低对比，按钮与弹层才用强边框；选中用左侧竖条，不整块填色；只有弹层有投影。</p>
+  <div class="app" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--online:#4ADE80;--warning:#FBBF24;--danger:#F87171;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--inverse:#E6E8EB;--oninverse:#111215;--accent:#3DDC97;--onaccent:#0C0D0F">
+    <aside class="side">
+      <div class="brand"><span class="logo"></span>隔空贴</div>
+      <div class="nav sel"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span><span class="count">10</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span>收藏</span><span class="count">5</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg><span>隔空传送</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 2h6v2H5zm10 0h4v2h-4zM5 10h6v2H5zm10 0h4v2h-4zm4-6h2v6h-2zm-8 0h2v6h-2zM3 4h2v6H3zM0 18h2v4H0zm14 0h2v4h-2zm8 0h2v4h-2zM4 14h8v2H4zm12 0h4v2h-4zM2 16h2v2H2zm10 0h2v2h-2zm8 0h2v2h-2z"/></svg><span>好友</span></div><div style="height:16px"></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2h2v4H1v-4h2v2Zm2-4h14V6h2v10H3V6h2v8Zm14-8H5V4h14v2Z"/></svg><span>设备</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H13V24H11V22H6V20H18V22ZM4 22H2V20H4V22ZM22 22H20V20H22V22ZM6 20H4V18H6V20ZM20 20H18V18H20V20ZM4 18H2V13H0V11H2V6H4V18ZM8 18H6V16H8V18ZM22 11H24V13H22V18H20V13H16V16H8V8H16V11H20V6H22V11ZM10 10V14H14V10H10ZM8 8H6V6H8V8ZM6 6H4V4H6V6ZM20 6H18V4H20V6ZM4 4H2V2H4V4ZM13 2H18V4H6V2H11V0H13V2ZM22 4H20V2H22V4Z"/></svg><span>设置</span></div>
+      <div class="grow"></div>
+      <div class="foot"><span class="dot"></span>2 台设备在线</div>
+    </aside>
+    <main class="main">
+      <div class="head">
+        <div><div class="h1">复制记录</div><div class="sub">共 10 条，保留 3 天</div></div>
+        <div class="hbtns"><button class="btn"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M22 22h-2v-2h2v2Zm-2-2h-2v-2h2v2Zm-6-2H6v-2h8v2Zm4 0h-2v-2h2v2ZM6 16H4v-2h2v2Zm10 0h-2v-2h2v2ZM4 14H2V6h2v8Zm14 0h-2V6h2v8ZM6 6H4V4h2v2Zm10 0h-2V4h2v2Zm-2-2H6V2h8v2Z"/></svg>搜索附近设备</button><button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M13 11h7v2h-7v7h-2v-7H4v-2h7V4h2v7Z"/></svg>添加设备</button></div>
+      </div>
+      <div class="tools">
+        <div class="input"><svg class="ic faint" viewBox="0 0 24 24" fill="currentColor"><path d="M22 22h-2v-2h2v2Zm-2-2h-2v-2h2v2Zm-6-2H6v-2h8v2Zm4 0h-2v-2h2v2ZM6 16H4v-2h2v2Zm10 0h-2v-2h2v2ZM4 14H2V6h2v8Zm14 0h-2V6h2v8ZM6 6H4V4h2v2Zm10 0h-2V4h2v2Zm-2-2H6V2h8v2Z"/></svg><span class="caret"></span><span class="ph">搜索文字和文件名</span></div>
+        <div class="seg"><span class="on">全部</span><span>文本</span><span>链接</span><span>图片</span><span>文件</span></div>
+      </div>
+      <div class="group"><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M2 5h20v2H2zm0 6h12v2H2zm0 6h16v2H2z"/></svg><div class="rt"><div class="t">git push origin release/1.0 && gh release create v1.0.0</div><div class="m">本机 · 54 B · 刚刚</div></div></div><div class="sep"></div><div class="row sel"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M4 2h16v2H4zm0 18h16v2H4zM2 4h2v16H2zm18 0h2v16h-2zm-4 8h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2zm-8 0h2v2h-2zm2 2h2v2h-2zm2 2h2v2h-2z"/><path d="M20 16h2v2h-2zM8 16h2v2H8zm-2 2h2v2H6zM8 6h2v2H8zM6 8h2v2H6zm2 2h2v2H8zm2-2h2v2h-2z"/></svg><div class="rt"><div class="t">图片</div><div class="m">来自 MacBook Air · 2.4 MB · 2 分钟前</div></div></div><div class="sep"></div><div class="row hover"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">季度汇报-终版.key</div><div class="m">来自 MacBook Air · 38.2 MB · 9 分钟前</div></div><div class="acts"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span class="link">放入剪贴板</span><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H6V20H18V22ZM9 6H15V4H17V6H22V8H20V20H18V8H6V20H4V8H2V6H7V4H9V6ZM15 4H9V2H15V4Z"/></svg></div></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">发布演示录屏.mov</div><div class="m">来自 Mac mini · 1.3 GB · 14 分钟前</div></div><button class="btn">接收</button></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">合同扫描件.pdf</div><div class="m">来自 MacBook Air · 18.6 MB · 正在接收</div></div><div class="prog"><div class="fill" style="width:62%"></div></div></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h7v2H4zm0 10h7v2H4zM2 8h2v8H2zm18-2h-7v2h7zm0 10h-7v2h7zm2-8h-2v8h2zM7 11h10v2H7z"/></svg><div class="rt"><div class="t">https://github.com/baiyuze/pasteferry/releases</div><div class="m">本机 · 44 B · 3 小时前</div></div></div></div>
+      <div class="label">▪ 同步</div>
+      <div class="group" style="width:52%">
+        <div class="row"><div class="rt"><div class="t">实时同步</div><div class="m">复制后立即发到其他设备</div></div><span class="sw on"><i></i></span></div>
+        <div class="sep"></div>
+        <div class="row"><div class="rt"><div class="t">同步图片</div><div class="m">大于 20 MB 的只同步缩略图</div></div><span class="sw"><i></i></span></div>
+      </div>
+      <div class="dialog">
+        <div class="dt">添加设备 <span class="x"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M7 19H5V17H7V19ZM19 19H17V17H19V19ZM9 15V17H7V15H9ZM17 17H15V15H17V17ZM11 15H9V13H11V15ZM15 15H13V13H15V15ZM13 13H11V11H13V13ZM11 11H9V9H11V11ZM15 11H13V9H15V11ZM9 9H7V7H9V9ZM17 9H15V7H17V9ZM7 7H5V5H7V7ZM19 7H17V5H19V7Z"/></svg></span></div>
+        <div class="dsep"></div>
+        <div class="dc">在另一台设备上输入这个配对码</div>
+        <div class="code">K7MP2X</div>
+        <div class="dc faint">点击可拷贝，5 分钟内有效</div>
+        <div class="dbtns"><button class="btn ghost">取消</button><button class="btn pressed">已按下</button><button class="btn primary">完成</button></div>
+      </div>
+      <div class="tip">放入剪贴板 <span class="kbd">⌥1</span></div>
+    </main>
+  </div>
+</section>
+
+<section class="frame-wrap">
+  <h2>② 浅色「纸」+ 像素绿</h2><p class="note">暖白底，按钮、输入框、弹层描深色边——像素感最强的地方；容器边框很淡。</p>
+  <div class="app" style="--bg:#F5F5F2;--sidebar:#ECECE7;--surface:#FFFFFF;--raised:#FAFAF8;--border:#DCDCD5;--strong:#1C1D20;--text:#1C1D20;--dim:#5E626A;--faint:#9A9DA4;--online:#15803D;--warning:#B45309;--danger:#DC2626;--hl:rgba(255,255,255,.7);--sh:rgba(0,0,0,.18);--drop:rgba(28,29,32,.9);--inverse:#1C1D20;--oninverse:#F5F5F2;--accent:#0E9F6E;--onaccent:#FFFFFF">
+    <aside class="side">
+      <div class="brand"><span class="logo"></span>隔空贴</div>
+      <div class="nav sel"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span><span class="count">10</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span>收藏</span><span class="count">5</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg><span>隔空传送</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 2h6v2H5zm10 0h4v2h-4zM5 10h6v2H5zm10 0h4v2h-4zm4-6h2v6h-2zm-8 0h2v6h-2zM3 4h2v6H3zM0 18h2v4H0zm14 0h2v4h-2zm8 0h2v4h-2zM4 14h8v2H4zm12 0h4v2h-4zM2 16h2v2H2zm10 0h2v2h-2zm8 0h2v2h-2z"/></svg><span>好友</span></div><div style="height:16px"></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2h2v4H1v-4h2v2Zm2-4h14V6h2v10H3V6h2v8Zm14-8H5V4h14v2Z"/></svg><span>设备</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H13V24H11V22H6V20H18V22ZM4 22H2V20H4V22ZM22 22H20V20H22V22ZM6 20H4V18H6V20ZM20 20H18V18H20V20ZM4 18H2V13H0V11H2V6H4V18ZM8 18H6V16H8V18ZM22 11H24V13H22V18H20V13H16V16H8V8H16V11H20V6H22V11ZM10 10V14H14V10H10ZM8 8H6V6H8V8ZM6 6H4V4H6V6ZM20 6H18V4H20V6ZM4 4H2V2H4V4ZM13 2H18V4H6V2H11V0H13V2ZM22 4H20V2H22V4Z"/></svg><span>设置</span></div>
+      <div class="grow"></div>
+      <div class="foot"><span class="dot"></span>2 台设备在线</div>
+    </aside>
+    <main class="main">
+      <div class="head">
+        <div><div class="h1">复制记录</div><div class="sub">共 10 条，保留 3 天</div></div>
+        <div class="hbtns"><button class="btn"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M22 22h-2v-2h2v2Zm-2-2h-2v-2h2v2Zm-6-2H6v-2h8v2Zm4 0h-2v-2h2v2ZM6 16H4v-2h2v2Zm10 0h-2v-2h2v2ZM4 14H2V6h2v8Zm14 0h-2V6h2v8ZM6 6H4V4h2v2Zm10 0h-2V4h2v2Zm-2-2H6V2h8v2Z"/></svg>搜索附近设备</button><button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M13 11h7v2h-7v7h-2v-7H4v-2h7V4h2v7Z"/></svg>添加设备</button></div>
+      </div>
+      <div class="tools">
+        <div class="input"><svg class="ic faint" viewBox="0 0 24 24" fill="currentColor"><path d="M22 22h-2v-2h2v2Zm-2-2h-2v-2h2v2Zm-6-2H6v-2h8v2Zm4 0h-2v-2h2v2ZM6 16H4v-2h2v2Zm10 0h-2v-2h2v2ZM4 14H2V6h2v8Zm14 0h-2V6h2v8ZM6 6H4V4h2v2Zm10 0h-2V4h2v2Zm-2-2H6V2h8v2Z"/></svg><span class="caret"></span><span class="ph">搜索文字和文件名</span></div>
+        <div class="seg"><span class="on">全部</span><span>文本</span><span>链接</span><span>图片</span><span>文件</span></div>
+      </div>
+      <div class="group"><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M2 5h20v2H2zm0 6h12v2H2zm0 6h16v2H2z"/></svg><div class="rt"><div class="t">git push origin release/1.0 && gh release create v1.0.0</div><div class="m">本机 · 54 B · 刚刚</div></div></div><div class="sep"></div><div class="row sel"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M4 2h16v2H4zm0 18h16v2H4zM2 4h2v16H2zm18 0h2v16h-2zm-4 8h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2zm-8 0h2v2h-2zm2 2h2v2h-2zm2 2h2v2h-2z"/><path d="M20 16h2v2h-2zM8 16h2v2H8zm-2 2h2v2H6zM8 6h2v2H8zM6 8h2v2H6zm2 2h2v2H8zm2-2h2v2h-2z"/></svg><div class="rt"><div class="t">图片</div><div class="m">来自 MacBook Air · 2.4 MB · 2 分钟前</div></div></div><div class="sep"></div><div class="row hover"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">季度汇报-终版.key</div><div class="m">来自 MacBook Air · 38.2 MB · 9 分钟前</div></div><div class="acts"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span class="link">放入剪贴板</span><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H6V20H18V22ZM9 6H15V4H17V6H22V8H20V20H18V8H6V20H4V8H2V6H7V4H9V6ZM15 4H9V2H15V4Z"/></svg></div></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">发布演示录屏.mov</div><div class="m">来自 Mac mini · 1.3 GB · 14 分钟前</div></div><button class="btn">接收</button></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">合同扫描件.pdf</div><div class="m">来自 MacBook Air · 18.6 MB · 正在接收</div></div><div class="prog"><div class="fill" style="width:62%"></div></div></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h7v2H4zm0 10h7v2H4zM2 8h2v8H2zm18-2h-7v2h7zm0 10h-7v2h7zm2-8h-2v8h2zM7 11h10v2H7z"/></svg><div class="rt"><div class="t">https://github.com/baiyuze/pasteferry/releases</div><div class="m">本机 · 44 B · 3 小时前</div></div></div></div>
+      <div class="label">▪ 同步</div>
+      <div class="group" style="width:52%">
+        <div class="row"><div class="rt"><div class="t">实时同步</div><div class="m">复制后立即发到其他设备</div></div><span class="sw on"><i></i></span></div>
+        <div class="sep"></div>
+        <div class="row"><div class="rt"><div class="t">同步图片</div><div class="m">大于 20 MB 的只同步缩略图</div></div><span class="sw"><i></i></span></div>
+      </div>
+      <div class="dialog">
+        <div class="dt">添加设备 <span class="x"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M7 19H5V17H7V19ZM19 19H17V17H19V19ZM9 15V17H7V15H9ZM17 17H15V15H17V17ZM11 15H9V13H11V15ZM15 15H13V13H15V15ZM13 13H11V11H13V13ZM11 11H9V9H11V11ZM15 11H13V9H15V11ZM9 9H7V7H9V9ZM17 9H15V7H17V9ZM7 7H5V5H7V7ZM19 7H17V5H19V7Z"/></svg></span></div>
+        <div class="dsep"></div>
+        <div class="dc">在另一台设备上输入这个配对码</div>
+        <div class="code">K7MP2X</div>
+        <div class="dc faint">点击可拷贝，5 分钟内有效</div>
+        <div class="dbtns"><button class="btn ghost">取消</button><button class="btn pressed">已按下</button><button class="btn primary">完成</button></div>
+      </div>
+      <div class="tip">放入剪贴板 <span class="kbd">⌥1</span></div>
+    </main>
+  </div>
+</section>
+
+<section class="frame-wrap">
+  <h2>③ 备选：深色「深海」+ 电光蓝</h2><p class="note">底色带一点蓝，更像夜晚的游戏界面；强调色延续默认主题的蓝。</p>
+  <div class="app" style="--bg:#0E1320;--sidebar:#0A0E18;--surface:#141A2A;--raised:#1B2236;--border:#262E45;--strong:#39445F;--text:#E4E8F2;--dim:#95A0B8;--faint:#5B6680;--online:#4ADE80;--warning:#FBBF24;--danger:#F87171;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--inverse:#E4E8F2;--oninverse:#0E1320;--accent:#5B9DFF;--onaccent:#0C0D0F">
+    <aside class="side">
+      <div class="brand"><span class="logo"></span>隔空贴</div>
+      <div class="nav sel"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span><span class="count">10</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span>收藏</span><span class="count">5</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg><span>隔空传送</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 2h6v2H5zm10 0h4v2h-4zM5 10h6v2H5zm10 0h4v2h-4zm4-6h2v6h-2zm-8 0h2v6h-2zM3 4h2v6H3zM0 18h2v4H0zm14 0h2v4h-2zm8 0h2v4h-2zM4 14h8v2H4zm12 0h4v2h-4zM2 16h2v2H2zm10 0h2v2h-2zm8 0h2v2h-2z"/></svg><span>好友</span></div><div style="height:16px"></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2h2v4H1v-4h2v2Zm2-4h14V6h2v10H3V6h2v8Zm14-8H5V4h14v2Z"/></svg><span>设备</span></div><div class="nav"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H13V24H11V22H6V20H18V22ZM4 22H2V20H4V22ZM22 22H20V20H22V22ZM6 20H4V18H6V20ZM20 20H18V18H20V20ZM4 18H2V13H0V11H2V6H4V18ZM8 18H6V16H8V18ZM22 11H24V13H22V18H20V13H16V16H8V8H16V11H20V6H22V11ZM10 10V14H14V10H10ZM8 8H6V6H8V8ZM6 6H4V4H6V6ZM20 6H18V4H20V6ZM4 4H2V2H4V4ZM13 2H18V4H6V2H11V0H13V2ZM22 4H20V2H22V4Z"/></svg><span>设置</span></div>
+      <div class="grow"></div>
+      <div class="foot"><span class="dot"></span>2 台设备在线</div>
+    </aside>
+    <main class="main">
+      <div class="head">
+        <div><div class="h1">复制记录</div><div class="sub">共 10 条，保留 3 天</div></div>
+        <div class="hbtns"><button class="btn"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M22 22h-2v-2h2v2Zm-2-2h-2v-2h2v2Zm-6-2H6v-2h8v2Zm4 0h-2v-2h2v2ZM6 16H4v-2h2v2Zm10 0h-2v-2h2v2ZM4 14H2V6h2v8Zm14 0h-2V6h2v8ZM6 6H4V4h2v2Zm10 0h-2V4h2v2Zm-2-2H6V2h8v2Z"/></svg>搜索附近设备</button><button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M13 11h7v2h-7v7h-2v-7H4v-2h7V4h2v7Z"/></svg>添加设备</button></div>
+      </div>
+      <div class="tools">
+        <div class="input"><svg class="ic faint" viewBox="0 0 24 24" fill="currentColor"><path d="M22 22h-2v-2h2v2Zm-2-2h-2v-2h2v2Zm-6-2H6v-2h8v2Zm4 0h-2v-2h2v2ZM6 16H4v-2h2v2Zm10 0h-2v-2h2v2ZM4 14H2V6h2v8Zm14 0h-2V6h2v8ZM6 6H4V4h2v2Zm10 0h-2V4h2v2Zm-2-2H6V2h8v2Z"/></svg><span class="caret"></span><span class="ph">搜索文字和文件名</span></div>
+        <div class="seg"><span class="on">全部</span><span>文本</span><span>链接</span><span>图片</span><span>文件</span></div>
+      </div>
+      <div class="group"><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M2 5h20v2H2zm0 6h12v2H2zm0 6h16v2H2z"/></svg><div class="rt"><div class="t">git push origin release/1.0 && gh release create v1.0.0</div><div class="m">本机 · 54 B · 刚刚</div></div></div><div class="sep"></div><div class="row sel"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M4 2h16v2H4zm0 18h16v2H4zM2 4h2v16H2zm18 0h2v16h-2zm-4 8h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2zm-8 0h2v2h-2zm2 2h2v2h-2zm2 2h2v2h-2z"/><path d="M20 16h2v2h-2zM8 16h2v2H8zm-2 2h2v2H6zM8 6h2v2H8zM6 8h2v2H6zm2 2h2v2H8zm2-2h2v2h-2z"/></svg><div class="rt"><div class="t">图片</div><div class="m">来自 MacBook Air · 2.4 MB · 2 分钟前</div></div></div><div class="sep"></div><div class="row hover"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">季度汇报-终版.key</div><div class="m">来自 MacBook Air · 38.2 MB · 9 分钟前</div></div><div class="acts"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20H8V22H3V16H5V20ZM21 22H16V20H19V16H21V22ZM10 20H8V18H10V20ZM16 20H14V18H16V20ZM14 18H10V16H14V18ZM7 16H5V13H7V16ZM19 16H17V13H19V16ZM5 13H3V11H5V13ZM21 13H19V11H21V13ZM9 9H3V11H1V7H9V9ZM23 11H21V9H15V7H23V11ZM11 7H9V3H11V7ZM15 7H13V3H15V7ZM13 3H11V1H13V3Z"/></svg><span class="link">放入剪贴板</span><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22H6V20H18V22ZM9 6H15V4H17V6H22V8H20V20H18V8H6V20H4V8H2V6H7V4H9V6ZM15 4H9V2H15V4Z"/></svg></div></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">发布演示录屏.mov</div><div class="m">来自 Mac mini · 1.3 GB · 14 分钟前</div></div><button class="btn">接收</button></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z"/><path d="M12 8h6v2h-6z"/></svg><div class="rt"><div class="t">合同扫描件.pdf</div><div class="m">来自 MacBook Air · 18.6 MB · 正在接收</div></div><div class="prog"><div class="fill" style="width:62%"></div></div></div><div class="sep"></div><div class="row"><svg class="ic dim" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h7v2H4zm0 10h7v2H4zM2 8h2v8H2zm18-2h-7v2h7zm0 10h-7v2h7zm2-8h-2v8h2zM7 11h10v2H7z"/></svg><div class="rt"><div class="t">https://github.com/baiyuze/pasteferry/releases</div><div class="m">本机 · 44 B · 3 小时前</div></div></div></div>
+      <div class="label">▪ 同步</div>
+      <div class="group" style="width:52%">
+        <div class="row"><div class="rt"><div class="t">实时同步</div><div class="m">复制后立即发到其他设备</div></div><span class="sw on"><i></i></span></div>
+        <div class="sep"></div>
+        <div class="row"><div class="rt"><div class="t">同步图片</div><div class="m">大于 20 MB 的只同步缩略图</div></div><span class="sw"><i></i></span></div>
+      </div>
+      <div class="dialog">
+        <div class="dt">添加设备 <span class="x"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M7 19H5V17H7V19ZM19 19H17V17H19V19ZM9 15V17H7V15H9ZM17 17H15V15H17V17ZM11 15H9V13H11V15ZM15 15H13V13H15V15ZM13 13H11V11H13V13ZM11 11H9V9H11V11ZM15 11H13V9H15V11ZM9 9H7V7H9V9ZM17 9H15V7H17V9ZM7 7H5V5H7V7ZM19 7H17V5H19V7Z"/></svg></span></div>
+        <div class="dsep"></div>
+        <div class="dc">在另一台设备上输入这个配对码</div>
+        <div class="code">K7MP2X</div>
+        <div class="dc faint">点击可拷贝，5 分钟内有效</div>
+        <div class="dbtns"><button class="btn ghost">取消</button><button class="btn pressed">已按下</button><button class="btn primary">完成</button></div>
+      </div>
+      <div class="tip">放入剪贴板 <span class="kbd">⌥1</span></div>
+    </main>
+  </div>
+</section>
+<section class="frame-wrap"><h2>强调色备选</h2><p class="note">结构与底色不变，只换强调色。将来自定义主题时，换的主要就是这一个颜色。</p><div class="swatches"><div class="swatch" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--online:#4ADE80;--warning:#FBBF24;--danger:#F87171;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--inverse:#E6E8EB;--oninverse:#111215;--accent:#3DDC97;--onaccent:#0C0D0F">
+  <div class="sname">像素绿 · 深色</div>
+  <button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg>发送</button>
+  <span class="nav sel mini"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span></span>
+  <div class="prog"><div class="fill" style="width:70%"></div></div>
+  <span class="sw on"><i></i></span><span class="badge">3</span>
+</div><div class="swatch" style="--bg:#F5F5F2;--sidebar:#ECECE7;--surface:#FFFFFF;--raised:#FAFAF8;--border:#DCDCD5;--strong:#1C1D20;--text:#1C1D20;--dim:#5E626A;--faint:#9A9DA4;--online:#15803D;--warning:#B45309;--danger:#DC2626;--hl:rgba(255,255,255,.7);--sh:rgba(0,0,0,.18);--drop:rgba(28,29,32,.9);--inverse:#1C1D20;--oninverse:#F5F5F2;--accent:#0E9F6E;--onaccent:#FFFFFF">
+  <div class="sname">像素绿 · 浅色</div>
+  <button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg>发送</button>
+  <span class="nav sel mini"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span></span>
+  <div class="prog"><div class="fill" style="width:70%"></div></div>
+  <span class="sw on"><i></i></span><span class="badge">3</span>
+</div><div class="swatch" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--online:#4ADE80;--warning:#FBBF24;--danger:#F87171;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--inverse:#E6E8EB;--oninverse:#111215;--accent:#5B9DFF;--onaccent:#0C0D0F">
+  <div class="sname">电光蓝 · 深色</div>
+  <button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg>发送</button>
+  <span class="nav sel mini"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span></span>
+  <div class="prog"><div class="fill" style="width:70%"></div></div>
+  <span class="sw on"><i></i></span><span class="badge">3</span>
+</div><div class="swatch" style="--bg:#F5F5F2;--sidebar:#ECECE7;--surface:#FFFFFF;--raised:#FAFAF8;--border:#DCDCD5;--strong:#1C1D20;--text:#1C1D20;--dim:#5E626A;--faint:#9A9DA4;--online:#15803D;--warning:#B45309;--danger:#DC2626;--hl:rgba(255,255,255,.7);--sh:rgba(0,0,0,.18);--drop:rgba(28,29,32,.9);--inverse:#1C1D20;--oninverse:#F5F5F2;--accent:#2563EB;--onaccent:#FFFFFF">
+  <div class="sname">电光蓝 · 浅色</div>
+  <button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg>发送</button>
+  <span class="nav sel mini"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span></span>
+  <div class="prog"><div class="fill" style="width:70%"></div></div>
+  <span class="sw on"><i></i></span><span class="badge">3</span>
+</div><div class="swatch" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--online:#4ADE80;--warning:#FBBF24;--danger:#F87171;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--inverse:#E6E8EB;--oninverse:#111215;--accent:#A78BFA;--onaccent:#0C0D0F">
+  <div class="sname">像素紫 · 深色</div>
+  <button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg>发送</button>
+  <span class="nav sel mini"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span></span>
+  <div class="prog"><div class="fill" style="width:70%"></div></div>
+  <span class="sw on"><i></i></span><span class="badge">3</span>
+</div><div class="swatch" style="--bg:#F5F5F2;--sidebar:#ECECE7;--surface:#FFFFFF;--raised:#FAFAF8;--border:#DCDCD5;--strong:#1C1D20;--text:#1C1D20;--dim:#5E626A;--faint:#9A9DA4;--online:#15803D;--warning:#B45309;--danger:#DC2626;--hl:rgba(255,255,255,.7);--sh:rgba(0,0,0,.18);--drop:rgba(28,29,32,.9);--inverse:#1C1D20;--oninverse:#F5F5F2;--accent:#7C3AED;--onaccent:#FFFFFF">
+  <div class="sname">像素紫 · 浅色</div>
+  <button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg>发送</button>
+  <span class="nav sel mini"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span></span>
+  <div class="prog"><div class="fill" style="width:70%"></div></div>
+  <span class="sw on"><i></i></span><span class="badge">3</span>
+</div><div class="swatch" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--online:#4ADE80;--warning:#FBBF24;--danger:#F87171;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--inverse:#E6E8EB;--oninverse:#111215;--accent:#FF8A5B;--onaccent:#0C0D0F">
+  <div class="sname">珊瑚橙 · 深色</div>
+  <button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg>发送</button>
+  <span class="nav sel mini"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span></span>
+  <div class="prog"><div class="fill" style="width:70%"></div></div>
+  <span class="sw on"><i></i></span><span class="badge">3</span>
+</div><div class="swatch" style="--bg:#F5F5F2;--sidebar:#ECECE7;--surface:#FFFFFF;--raised:#FAFAF8;--border:#DCDCD5;--strong:#1C1D20;--text:#1C1D20;--dim:#5E626A;--faint:#9A9DA4;--online:#15803D;--warning:#B45309;--danger:#DC2626;--hl:rgba(255,255,255,.7);--sh:rgba(0,0,0,.18);--drop:rgba(28,29,32,.9);--inverse:#1C1D20;--oninverse:#F5F5F2;--accent:#EA580C;--onaccent:#FFFFFF">
+  <div class="sname">珊瑚橙 · 浅色</div>
+  <button class="btn primary"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h4v2H2v-8h2v6Zm8 0H8v-2h4v2Zm4-2h-4v-2h4v2Zm4-2h-4v-2h4v2Zm-10-2H4v-2h6v2Zm12 0h-2v-2h2v2ZM8 5H4v6H2V3h6v2Zm12 6h-4V9h4v2Zm-4-2h-4V7h4v2Zm-4-2H8V5h4v2Z"/></svg>发送</button>
+  <span class="nav sel mini"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v2H6zM2 6h2v12H2zm18 0h2v12h-2zm-2-2h2v2h-2zM4 4h2v2H4zm2 18h12v-2H6zm12-2h2v-2h-2zM4 20h2v-2H4zm7-14h2v7h-2zm2 7h2v2h-2zm2 2h2v2h-2z"/></svg><span>复制记录</span></span>
+  <div class="prog"><div class="fill" style="width:70%"></div></div>
+  <span class="sw on"><i></i></span><span class="badge">3</span>
+</div></div></section>
+<section class="frame-wrap"><h2>文字：全部像素字 vs 混排</h2>
+<p class="note">左：全部像素字（推荐）。右：标题、导航、按钮、数字用像素字，复制内容与说明用系统字体。</p>
+<div class="types" style="--bg:#111215;--sidebar:#0C0D0F;--surface:#17191D;--raised:#1F2227;--border:#2A2D34;--strong:#3C414B;--text:#E6E8EB;--dim:#9AA0AA;--faint:#5F6570;--online:#4ADE80;--warning:#FBBF24;--danger:#F87171;--hl:rgba(255,255,255,.08);--sh:rgba(0,0,0,.35);--drop:rgba(0,0,0,.5);--inverse:#E6E8EB;--oninverse:#111215;--accent:#3DDC97;--onaccent:#0C0D0F">
+  <div class="tcol"><div class="h1">隔空传送</div><div class="label">▪ 正在传送</div>
+    <div class="t">照片 2026-10 · 412 个文件 · 2.1 GB</div><div class="m">正在传：IMG_2041.HEIC（第 281 / 412 个）</div>
+    <div class="t" style="margin-top:12px">会议结论：周二灰度 10%，观察两天没问题周四全量；回滚预案见文档第 3 节</div>
+    <div class="m mono">指纹 R8NF-2WTC-QL5J · 192.168.1.20</div></div>
+  <div class="tcol mixed"><div class="h1">隔空传送</div><div class="label">▪ 正在传送</div>
+    <div class="t sys">照片 2026-10 · 412 个文件 · 2.1 GB</div><div class="m sys">正在传：IMG_2041.HEIC（第 281 / 412 个）</div>
+    <div class="t sys" style="margin-top:12px">会议结论：周二灰度 10%，观察两天没问题周四全量；回滚预案见文档第 3 节</div>
+    <div class="m mono">指纹 R8NF-2WTC-QL5J · 192.168.1.20</div></div>
+</div></section>
+</body></html>
