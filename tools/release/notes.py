@@ -40,7 +40,11 @@ RELEASES = [
               'AI でテーマ作成：`pasteferry-cli mcp` は MCP サーバーで、Claude や Cursor などの AI アプリがテーマ形式を読み、配色を考え、コントラストを確認して保存・適用できます。提供するのはテーマと背景画像の機能のみで、コピー履歴・デバイス・友だちは公開しません。',
               '讓 AI 做主題：`pasteferry-cli mcp` 是一個 MCP 服務，Claude、Cursor 等 AI 應用程式可以讀取主題格式、配色、檢查對比度，再儲存並套用主題。它只提供主題和背景圖相關的功能，不開放複製記錄、裝置和好友。',
               '讓 AI 做主題：`pasteferry-cli mcp` 是一個 MCP 服務，Claude、Cursor 等 AI 應用程式可以讀取主題格式、配色、檢查對比度，再儲存並套用主題。它只提供主題和背景圖相關的功能，不開放複製記錄、裝置和好友。')],
- 'fixes': []},
+ 'fixes': [('Malformed compressed data from another device can no longer crash the background service (compression library updated for GO-2026-6865).',
+            '其他设备发来损坏的压缩数据时，后台服务不会再崩溃（压缩库已更新，修复 GO-2026-6865）。',
+            'ほかのデバイスから壊れた圧縮データが届いても、バックグラウンドサービスが停止しないよう修正しました（圧縮ライブラリを更新、GO-2026-6865）。',
+            '其他裝置傳來損壞的壓縮資料時，背景服務不會再當機（壓縮函式庫已更新，修正 GO-2026-6865）。',
+            '其他裝置傳來損壞的壓縮資料時，背景服務不會再停止運作（壓縮程式庫已更新，修正 GO-2026-6865）。')]},
 {'version': '2.9.0',
  'date': '2026-11-04',
  'changes': [('The desktop CLI now reports its own version and provides read-only JSON queries for '

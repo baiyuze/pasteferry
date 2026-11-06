@@ -11,10 +11,14 @@ This release adds themes: a new Appearance setting with built-in and custom them
 - **Custom themes**: duplicate a built-in theme, import or export theme files, and delete themes you no longer need. Text contrast is checked when a theme is saved, and low-contrast colors are reported.
 - **AI-designed themes**: `pasteferry-cli mcp` runs an MCP server so AI apps such as Claude and Cursor can read the theme format, design a palette, check contrast, save and apply themes. It only provides theme and background tools, not clipboard history, devices or friends.
 
+### Fixes
+
+- Malformed compressed data from another device can no longer crash the background service (compression library updated for GO-2026-6865).
+
 ### Upgrade notes
 
-- **Mac, Windows and Linux apps**: optional; update to use themes. Existing pairings, friends, history and settings are preserved, and the default theme looks the same as before.
-- **Android**: optional; adds the Appearance setting.
+- **Mac, Windows and Linux apps**: recommended; update to use themes and to receive the compression fix. Existing pairings, friends, history and settings are preserved, and the default theme looks the same as before.
+- **Android**: recommended; adds the Appearance setting and includes the compression fix.
 - **Server**: no update needed.
 - The device-to-device protocol is unchanged and compatible with existing releases. Theme settings stay on each device.
 
