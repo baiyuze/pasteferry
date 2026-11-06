@@ -147,6 +147,25 @@ service DaemonService {
   rpc PasteFiles(Empty) returns (PasteFilesResponse);
   // 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
   rpc WatchStrangers(Empty) returns (stream Strangers);
+
+  // 主题与背景图（design/themes.md）。现在用哪一套在 Config.theme_id、theme_mode 里
+  // 内置主题与本机的自定义主题
+  rpc ListThemes(Empty) returns (ListThemesResponse);
+  // 一套主题的 JSON（格式见 design/themes.md 第 3 节）；resolved 时已合并 base，各项齐全
+  rpc GetTheme(GetThemeRequest) returns (ThemeJson);
+  // 校验并保存一套自定义主题。格式不对报 InvalidArgument；对比度不够照样保存，返回警告。
+  // dry_run 时只校验、不保存（AI 经 MCP 改主题前先试一遍，见 design/mcp.md）
+  rpc PutTheme(PutThemeRequest) returns (PutThemeResponse);
+  // 删掉一套自定义主题。正在用它时换回默认主题；被别的主题当作 base 时报 FailedPrecondition
+  rpc DeleteTheme(ThemeRef) returns (Empty);
+  // 导入一张背景图：重新编码（去掉 EXIF）、缩到长边 3840 以内、另存一份模糊版，并分析亮度与主色
+  rpc ImportBackground(ImportBackgroundRequest) returns (BackgroundInfo);
+  // 背景图的字节，界面显示用
+  rpc GetBackground(GetBackgroundRequest) returns (BackgroundImage);
+  // 删掉一张背景图；还有主题在用时报 FailedPrecondition
+  rpc DeleteBackground(BackgroundRef) returns (Empty);
+  // 已导入的背景图的分析结果（亮度、主色、建议的遮罩浓度），与 ImportBackground 返回的相同
+  rpc AnalyzeBackground(BackgroundRef) returns (BackgroundInfo);
 }
 
 message Empty {}
@@ -300,6 +319,8 @@ message Event {
     // 需要让用户知道、但和某条记录无关的一件小事（比如刚才复制的文件读不到，没有同步）。
     // kind 是固定代码，界面按它显示文案
     AppNotice notice = 19;
+    // 自定义主题保存或删除了（正在用哪一套的变化走 config_changed）
+    ThemesChanged themes_changed = 20;
   }
 }
 
@@ -672,6 +693,18 @@ message Config {
   string quick_paste_index_modifier = 33;
   // 手机上「发送记录」显示最近几天的发出内容（2.7.2）：0 或空表示默认 3 天
   int32 sent_retention_days = 34;
+  // 用哪套主题（design/themes.md）：空字符串表示默认主题，否则是 ListThemes 里的 id
+  string theme_id = 35;
+  ThemeMode theme_mode = 36;
+  // 像素主题的 CRT 扫描线效果，默认关
+  bool theme_scanlines = 37;
+}
+
+// 浅色还是深色
+enum ThemeMode {
+  THEME_MODE_UNSPECIFIED = 0; // 跟随系统
+  THEME_MODE_LIGHT = 1;
+  THEME_MODE_DARK = 2;
 }
 
 enum ServiceMode {
@@ -987,4 +1020,88 @@ message WebShareInviteRef {
 
 message WebSessionRef {
   string id = 1;
+}
+
+// ─────────────────────────── 主题与背景图 ───────────────────────────
+
+message ThemeInfo {
+  string id = 1;
+  // 界面语言（"zh-Hans"、"en" 等）到名字；没有当前语言时界面取 "en"，再没有就显示 id
+  map<string, string> name = 2;
+  bool builtin = 3;                 // 内置主题（default、pixel）不能修改、删除
+  string base = 4;                  // 自定义主题继承的主题
+}
+
+message ListThemesResponse {
+  repeated ThemeInfo themes = 1;    // 内置的在前，自定义的按 id 排
+}
+
+message GetThemeRequest {
+  string id = 1;                    // 空字符串表示默认主题
+  bool resolved = 2;                // 合并 base 之后的完整主题；否则是保存时的原样
+}
+
+message ThemeJson {
+  string json = 1;
+}
+
+message PutThemeRequest {
+  string json = 1;                  // 一套主题，id 不能是内置主题的
+  bool dry_run = 2;                 // 只校验、算对比度，不保存也不推送事件
+}
+
+// 一对颜色的对比度不够（design/themes.md 第 8 节）
+message ThemeWarning {
+  string mode = 1;                  // "light" 或 "dark"
+  string foreground = 2;            // 颜色角色名，如 "textDim"
+  string background = 3;            // 如 "surface"
+  double ratio = 4;                 // 实际的对比度
+  double minimum = 5;               // 要求的最低对比度
+}
+
+message PutThemeResponse {
+  string id = 1;
+  repeated ThemeWarning warnings = 2;
+}
+
+message ThemeRef {
+  string id = 1;
+}
+
+message ImportBackgroundRequest {
+  string path = 1;                  // 图片文件
+  bytes image = 2;                  // 或者直接给图片数据（拖入、粘贴时）
+}
+
+// 导入后的背景图。主题里写成 "user:" 加上 sha256 引用它
+message BackgroundInfo {
+  string sha256 = 1;                // 重新编码后的文件内容的 SHA-256，十六进制
+  int32 width = 2;
+  int32 height = 3;
+  string format = 4;                // "jpeg"；像素画这类小图保留 "png"
+  double luminance = 5;             // 平均相对亮度，0 到 1
+  double luminance_spread = 6;      // 亮度的标准差：越大越花，面板要更不透明
+  repeated string colors = 7;       // 3 到 5 个主色，"#RRGGBB"，占比大的在前
+  // 让白字在最亮的区域也达到 4.5:1，黑色遮罩至少要多浓（0 到 1）
+  double min_scrim_dark = 8;
+  // 让黑字在最暗的区域也达到 4.5:1，白色遮罩至少要多浓（0 到 1）
+  double min_scrim_light = 9;
+}
+
+message GetBackgroundRequest {
+  string sha256 = 1;
+  bool blurred = 2;                 // 模糊版：长边 960，主题的 blur 大于 0 时用它放大铺满
+}
+
+message BackgroundImage {
+  bytes data = 1;
+  string format = 2;                // "jpeg" 或 "png"
+}
+
+message BackgroundRef {
+  string sha256 = 1;
+}
+
+message ThemesChanged {
+  repeated string ids = 1;          // 保存或删除了的主题
 }

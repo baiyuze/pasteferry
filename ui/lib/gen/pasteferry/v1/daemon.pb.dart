@@ -808,6 +808,7 @@ enum Event_Payload {
   profileChanged,
   webShareChanged,
   notice,
+  themesChanged,
   notSet
 }
 
@@ -832,6 +833,7 @@ class Event extends $pb.GeneratedMessage {
     Profile? profileChanged,
     WebShareStatus? webShareChanged,
     AppNotice? notice,
+    ThemesChanged? themesChanged,
   }) {
     final result = Event._();
     if (clipAdded != null) result.clipAdded = clipAdded;
@@ -853,6 +855,7 @@ class Event extends $pb.GeneratedMessage {
     if (profileChanged != null) result.profileChanged = profileChanged;
     if (webShareChanged != null) result.webShareChanged = webShareChanged;
     if (notice != null) result.notice = notice;
+    if (themesChanged != null) result.themesChanged = themesChanged;
     return result;
   }
 
@@ -885,13 +888,15 @@ class Event extends $pb.GeneratedMessage {
     17: Event_Payload.profileChanged,
     18: Event_Payload.webShareChanged,
     19: Event_Payload.notice,
+    20: Event_Payload.themesChanged,
     0: Event_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Event',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
       createEmptyInstance: Event.$_createMessage)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+    ..oo(0,
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
     ..aOM<ClipRecord>(1, _omitFieldNames ? '' : 'clipAdded',
         subBuilder: ClipRecord.$_createMessage)
     ..aOM<ClipRecord>(2, _omitFieldNames ? '' : 'clipUpdated',
@@ -926,6 +931,8 @@ class Event extends $pb.GeneratedMessage {
         subBuilder: WebShareStatus.$_createMessage)
     ..aOM<AppNotice>(19, _omitFieldNames ? '' : 'notice',
         subBuilder: AppNotice.$_createMessage)
+    ..aOM<ThemesChanged>(20, _omitFieldNames ? '' : 'themesChanged',
+        subBuilder: ThemesChanged.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -967,6 +974,7 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(17)
   @$pb.TagNumber(18)
   @$pb.TagNumber(19)
+  @$pb.TagNumber(20)
   Event_Payload whichPayload() => _Event_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(1)
   @$pb.TagNumber(2)
@@ -987,6 +995,7 @@ class Event extends $pb.GeneratedMessage {
   @$pb.TagNumber(17)
   @$pb.TagNumber(18)
   @$pb.TagNumber(19)
+  @$pb.TagNumber(20)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -1196,6 +1205,18 @@ class Event extends $pb.GeneratedMessage {
   void clearNotice() => $_clearField(19);
   @$pb.TagNumber(19)
   AppNotice ensureNotice() => $_ensure(18);
+
+  /// 自定义主题保存或删除了（正在用哪一套的变化走 config_changed）
+  @$pb.TagNumber(20)
+  ThemesChanged get themesChanged => $_getN(19);
+  @$pb.TagNumber(20)
+  set themesChanged(ThemesChanged value) => $_setField(20, value);
+  @$pb.TagNumber(20)
+  $core.bool hasThemesChanged() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearThemesChanged() => $_clearField(20);
+  @$pb.TagNumber(20)
+  ThemesChanged ensureThemesChanged() => $_ensure(19);
 }
 
 /// AppNotice 是一条给用户看的提示，只带一个固定代码，文案由界面翻译。
@@ -4400,6 +4421,9 @@ class Config extends $pb.GeneratedMessage {
     $core.String? displayName,
     $core.String? quickPasteIndexModifier,
     $core.int? sentRetentionDays,
+    $core.String? themeId,
+    ThemeMode? themeMode,
+    $core.bool? themeScanlines,
   }) {
     final result = Config._();
     if (autoSyncThresholdBytes != null)
@@ -4446,6 +4470,9 @@ class Config extends $pb.GeneratedMessage {
     if (quickPasteIndexModifier != null)
       result.quickPasteIndexModifier = quickPasteIndexModifier;
     if (sentRetentionDays != null) result.sentRetentionDays = sentRetentionDays;
+    if (themeId != null) result.themeId = themeId;
+    if (themeMode != null) result.themeMode = themeMode;
+    if (themeScanlines != null) result.themeScanlines = themeScanlines;
     return result;
   }
 
@@ -4497,6 +4524,10 @@ class Config extends $pb.GeneratedMessage {
     ..aOS(32, _omitFieldNames ? '' : 'displayName')
     ..aOS(33, _omitFieldNames ? '' : 'quickPasteIndexModifier')
     ..aI(34, _omitFieldNames ? '' : 'sentRetentionDays')
+    ..aOS(35, _omitFieldNames ? '' : 'themeId')
+    ..aE<ThemeMode>(36, _omitFieldNames ? '' : 'themeMode',
+        enumValues: ThemeMode.values)
+    ..aOB(37, _omitFieldNames ? '' : 'themeScanlines')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4844,6 +4875,35 @@ class Config extends $pb.GeneratedMessage {
   $core.bool hasSentRetentionDays() => $_has(33);
   @$pb.TagNumber(34)
   void clearSentRetentionDays() => $_clearField(34);
+
+  /// 用哪套主题（design/themes.md）：空字符串表示默认主题，否则是 ListThemes 里的 id
+  @$pb.TagNumber(35)
+  $core.String get themeId => $_getSZ(34);
+  @$pb.TagNumber(35)
+  set themeId($core.String value) => $_setString(34, value);
+  @$pb.TagNumber(35)
+  $core.bool hasThemeId() => $_has(34);
+  @$pb.TagNumber(35)
+  void clearThemeId() => $_clearField(35);
+
+  @$pb.TagNumber(36)
+  ThemeMode get themeMode => $_getN(35);
+  @$pb.TagNumber(36)
+  set themeMode(ThemeMode value) => $_setField(36, value);
+  @$pb.TagNumber(36)
+  $core.bool hasThemeMode() => $_has(35);
+  @$pb.TagNumber(36)
+  void clearThemeMode() => $_clearField(36);
+
+  /// 像素主题的 CRT 扫描线效果，默认关
+  @$pb.TagNumber(37)
+  $core.bool get themeScanlines => $_getBF(36);
+  @$pb.TagNumber(37)
+  set themeScanlines($core.bool value) => $_setBool(36, value);
+  @$pb.TagNumber(37)
+  $core.bool hasThemeScanlines() => $_has(36);
+  @$pb.TagNumber(37)
+  void clearThemeScanlines() => $_clearField(37);
 }
 
 class OfficialUsage extends $pb.GeneratedMessage {
@@ -8212,6 +8272,1036 @@ class WebSessionRef extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => $_clearField(1);
+}
+
+class ThemeInfo extends $pb.GeneratedMessage {
+  factory ThemeInfo({
+    $core.String? id,
+    $core.Iterable<$core.MapEntry<$core.String, $core.String>>? name,
+    $core.bool? builtin,
+    $core.String? base,
+  }) {
+    final result = ThemeInfo._();
+    if (id != null) result.id = id;
+    if (name != null) result.name.addEntries(name);
+    if (builtin != null) result.builtin = builtin;
+    if (base != null) result.base = base;
+    return result;
+  }
+
+  ThemeInfo._();
+
+  factory ThemeInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemeInfo()..mergeFromBuffer(data, registry);
+  factory ThemeInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemeInfo()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ThemeInfo',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ThemeInfo.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..m<$core.String, $core.String>(2, _omitFieldNames ? '' : 'name',
+        entryClassName: 'ThemeInfo.NameEntry',
+        keyFieldType: $pb.PbFieldType.OS,
+        valueFieldType: $pb.PbFieldType.OS,
+        packageName: const $pb.PackageName('pasteferry.v1'))
+    ..aOB(3, _omitFieldNames ? '' : 'builtin')
+    ..aOS(4, _omitFieldNames ? '' : 'base')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemeInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemeInfo copyWith(void Function(ThemeInfo) updates) =>
+      super.copyWith((message) => updates(message as ThemeInfo)) as ThemeInfo;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ThemeInfo() / ThemeInfo.new instead')
+  static ThemeInfo create() => ThemeInfo._();
+  static $pb.GeneratedMessage $_createMessage() => ThemeInfo._();
+  @$core.override
+  ThemeInfo createEmptyInstance() => ThemeInfo._();
+  @$core.pragma('dart2js:noInline')
+  static ThemeInfo getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ThemeInfo>(ThemeInfo.$_createMessage);
+  static ThemeInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  /// 界面语言（"zh-Hans"、"en" 等）到名字；没有当前语言时界面取 "en"，再没有就显示 id
+  @$pb.TagNumber(2)
+  $pb.PbMap<$core.String, $core.String> get name => $_getMap(1);
+
+  @$pb.TagNumber(3)
+  $core.bool get builtin => $_getBF(2);
+  @$pb.TagNumber(3)
+  set builtin($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasBuiltin() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearBuiltin() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get base => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set base($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasBase() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBase() => $_clearField(4);
+}
+
+class ListThemesResponse extends $pb.GeneratedMessage {
+  factory ListThemesResponse({
+    $core.Iterable<ThemeInfo>? themes,
+  }) {
+    final result = ListThemesResponse._();
+    if (themes != null) result.themes.addAll(themes);
+    return result;
+  }
+
+  ListThemesResponse._();
+
+  factory ListThemesResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ListThemesResponse()..mergeFromBuffer(data, registry);
+  factory ListThemesResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ListThemesResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ListThemesResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ListThemesResponse.$_createMessage)
+    ..pPM<ThemeInfo>(1, _omitFieldNames ? '' : 'themes',
+        subBuilder: ThemeInfo.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListThemesResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListThemesResponse copyWith(void Function(ListThemesResponse) updates) =>
+      super.copyWith((message) => updates(message as ListThemesResponse))
+          as ListThemesResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ListThemesResponse() / ListThemesResponse.new instead')
+  static ListThemesResponse create() => ListThemesResponse._();
+  static $pb.GeneratedMessage $_createMessage() => ListThemesResponse._();
+  @$core.override
+  ListThemesResponse createEmptyInstance() => ListThemesResponse._();
+  @$core.pragma('dart2js:noInline')
+  static ListThemesResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListThemesResponse>(
+          ListThemesResponse.$_createMessage);
+  static ListThemesResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<ThemeInfo> get themes => $_getList(0);
+}
+
+class GetThemeRequest extends $pb.GeneratedMessage {
+  factory GetThemeRequest({
+    $core.String? id,
+    $core.bool? resolved,
+  }) {
+    final result = GetThemeRequest._();
+    if (id != null) result.id = id;
+    if (resolved != null) result.resolved = resolved;
+    return result;
+  }
+
+  GetThemeRequest._();
+
+  factory GetThemeRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetThemeRequest()..mergeFromBuffer(data, registry);
+  factory GetThemeRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetThemeRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetThemeRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: GetThemeRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOB(2, _omitFieldNames ? '' : 'resolved')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetThemeRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetThemeRequest copyWith(void Function(GetThemeRequest) updates) =>
+      super.copyWith((message) => updates(message as GetThemeRequest))
+          as GetThemeRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use GetThemeRequest() / GetThemeRequest.new instead')
+  static GetThemeRequest create() => GetThemeRequest._();
+  static $pb.GeneratedMessage $_createMessage() => GetThemeRequest._();
+  @$core.override
+  GetThemeRequest createEmptyInstance() => GetThemeRequest._();
+  @$core.pragma('dart2js:noInline')
+  static GetThemeRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetThemeRequest>(
+          GetThemeRequest.$_createMessage);
+  static GetThemeRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get resolved => $_getBF(1);
+  @$pb.TagNumber(2)
+  set resolved($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasResolved() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearResolved() => $_clearField(2);
+}
+
+class ThemeJson extends $pb.GeneratedMessage {
+  factory ThemeJson({
+    $core.String? json,
+  }) {
+    final result = ThemeJson._();
+    if (json != null) result.json = json;
+    return result;
+  }
+
+  ThemeJson._();
+
+  factory ThemeJson.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemeJson()..mergeFromBuffer(data, registry);
+  factory ThemeJson.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemeJson()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ThemeJson',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ThemeJson.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'json')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemeJson clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemeJson copyWith(void Function(ThemeJson) updates) =>
+      super.copyWith((message) => updates(message as ThemeJson)) as ThemeJson;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ThemeJson() / ThemeJson.new instead')
+  static ThemeJson create() => ThemeJson._();
+  static $pb.GeneratedMessage $_createMessage() => ThemeJson._();
+  @$core.override
+  ThemeJson createEmptyInstance() => ThemeJson._();
+  @$core.pragma('dart2js:noInline')
+  static ThemeJson getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ThemeJson>(ThemeJson.$_createMessage);
+  static ThemeJson? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get json => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set json($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasJson() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearJson() => $_clearField(1);
+}
+
+class PutThemeRequest extends $pb.GeneratedMessage {
+  factory PutThemeRequest({
+    $core.String? json,
+    $core.bool? dryRun,
+  }) {
+    final result = PutThemeRequest._();
+    if (json != null) result.json = json;
+    if (dryRun != null) result.dryRun = dryRun;
+    return result;
+  }
+
+  PutThemeRequest._();
+
+  factory PutThemeRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PutThemeRequest()..mergeFromBuffer(data, registry);
+  factory PutThemeRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PutThemeRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PutThemeRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: PutThemeRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'json')
+    ..aOB(2, _omitFieldNames ? '' : 'dryRun')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PutThemeRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PutThemeRequest copyWith(void Function(PutThemeRequest) updates) =>
+      super.copyWith((message) => updates(message as PutThemeRequest))
+          as PutThemeRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use PutThemeRequest() / PutThemeRequest.new instead')
+  static PutThemeRequest create() => PutThemeRequest._();
+  static $pb.GeneratedMessage $_createMessage() => PutThemeRequest._();
+  @$core.override
+  PutThemeRequest createEmptyInstance() => PutThemeRequest._();
+  @$core.pragma('dart2js:noInline')
+  static PutThemeRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PutThemeRequest>(
+          PutThemeRequest.$_createMessage);
+  static PutThemeRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get json => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set json($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasJson() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearJson() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get dryRun => $_getBF(1);
+  @$pb.TagNumber(2)
+  set dryRun($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasDryRun() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDryRun() => $_clearField(2);
+}
+
+/// 一对颜色的对比度不够（design/themes.md 第 8 节）
+class ThemeWarning extends $pb.GeneratedMessage {
+  factory ThemeWarning({
+    $core.String? mode,
+    $core.String? foreground,
+    $core.String? background,
+    $core.double? ratio,
+    $core.double? minimum,
+  }) {
+    final result = ThemeWarning._();
+    if (mode != null) result.mode = mode;
+    if (foreground != null) result.foreground = foreground;
+    if (background != null) result.background = background;
+    if (ratio != null) result.ratio = ratio;
+    if (minimum != null) result.minimum = minimum;
+    return result;
+  }
+
+  ThemeWarning._();
+
+  factory ThemeWarning.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemeWarning()..mergeFromBuffer(data, registry);
+  factory ThemeWarning.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemeWarning()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ThemeWarning',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ThemeWarning.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'mode')
+    ..aOS(2, _omitFieldNames ? '' : 'foreground')
+    ..aOS(3, _omitFieldNames ? '' : 'background')
+    ..aD(4, _omitFieldNames ? '' : 'ratio')
+    ..aD(5, _omitFieldNames ? '' : 'minimum')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemeWarning clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemeWarning copyWith(void Function(ThemeWarning) updates) =>
+      super.copyWith((message) => updates(message as ThemeWarning))
+          as ThemeWarning;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ThemeWarning() / ThemeWarning.new instead')
+  static ThemeWarning create() => ThemeWarning._();
+  static $pb.GeneratedMessage $_createMessage() => ThemeWarning._();
+  @$core.override
+  ThemeWarning createEmptyInstance() => ThemeWarning._();
+  @$core.pragma('dart2js:noInline')
+  static ThemeWarning getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ThemeWarning>(
+          ThemeWarning.$_createMessage);
+  static ThemeWarning? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get mode => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set mode($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasMode() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMode() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get foreground => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set foreground($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasForeground() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearForeground() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get background => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set background($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasBackground() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearBackground() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.double get ratio => $_getN(3);
+  @$pb.TagNumber(4)
+  set ratio($core.double value) => $_setDouble(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasRatio() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearRatio() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.double get minimum => $_getN(4);
+  @$pb.TagNumber(5)
+  set minimum($core.double value) => $_setDouble(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasMinimum() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearMinimum() => $_clearField(5);
+}
+
+class PutThemeResponse extends $pb.GeneratedMessage {
+  factory PutThemeResponse({
+    $core.String? id,
+    $core.Iterable<ThemeWarning>? warnings,
+  }) {
+    final result = PutThemeResponse._();
+    if (id != null) result.id = id;
+    if (warnings != null) result.warnings.addAll(warnings);
+    return result;
+  }
+
+  PutThemeResponse._();
+
+  factory PutThemeResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PutThemeResponse()..mergeFromBuffer(data, registry);
+  factory PutThemeResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PutThemeResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PutThemeResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: PutThemeResponse.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..pPM<ThemeWarning>(2, _omitFieldNames ? '' : 'warnings',
+        subBuilder: ThemeWarning.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PutThemeResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PutThemeResponse copyWith(void Function(PutThemeResponse) updates) =>
+      super.copyWith((message) => updates(message as PutThemeResponse))
+          as PutThemeResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use PutThemeResponse() / PutThemeResponse.new instead')
+  static PutThemeResponse create() => PutThemeResponse._();
+  static $pb.GeneratedMessage $_createMessage() => PutThemeResponse._();
+  @$core.override
+  PutThemeResponse createEmptyInstance() => PutThemeResponse._();
+  @$core.pragma('dart2js:noInline')
+  static PutThemeResponse getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PutThemeResponse>(
+          PutThemeResponse.$_createMessage);
+  static PutThemeResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<ThemeWarning> get warnings => $_getList(1);
+}
+
+class ThemeRef extends $pb.GeneratedMessage {
+  factory ThemeRef({
+    $core.String? id,
+  }) {
+    final result = ThemeRef._();
+    if (id != null) result.id = id;
+    return result;
+  }
+
+  ThemeRef._();
+
+  factory ThemeRef.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemeRef()..mergeFromBuffer(data, registry);
+  factory ThemeRef.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemeRef()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ThemeRef',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ThemeRef.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemeRef clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemeRef copyWith(void Function(ThemeRef) updates) =>
+      super.copyWith((message) => updates(message as ThemeRef)) as ThemeRef;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ThemeRef() / ThemeRef.new instead')
+  static ThemeRef create() => ThemeRef._();
+  static $pb.GeneratedMessage $_createMessage() => ThemeRef._();
+  @$core.override
+  ThemeRef createEmptyInstance() => ThemeRef._();
+  @$core.pragma('dart2js:noInline')
+  static ThemeRef getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ThemeRef>(ThemeRef.$_createMessage);
+  static ThemeRef? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+}
+
+class ImportBackgroundRequest extends $pb.GeneratedMessage {
+  factory ImportBackgroundRequest({
+    $core.String? path,
+    $core.List<$core.int>? image,
+  }) {
+    final result = ImportBackgroundRequest._();
+    if (path != null) result.path = path;
+    if (image != null) result.image = image;
+    return result;
+  }
+
+  ImportBackgroundRequest._();
+
+  factory ImportBackgroundRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ImportBackgroundRequest()..mergeFromBuffer(data, registry);
+  factory ImportBackgroundRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ImportBackgroundRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ImportBackgroundRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ImportBackgroundRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'path')
+    ..a<$core.List<$core.int>>(
+        2, _omitFieldNames ? '' : 'image', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ImportBackgroundRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ImportBackgroundRequest copyWith(
+          void Function(ImportBackgroundRequest) updates) =>
+      super.copyWith((message) => updates(message as ImportBackgroundRequest))
+          as ImportBackgroundRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use ImportBackgroundRequest() / ImportBackgroundRequest.new instead')
+  static ImportBackgroundRequest create() => ImportBackgroundRequest._();
+  static $pb.GeneratedMessage $_createMessage() => ImportBackgroundRequest._();
+  @$core.override
+  ImportBackgroundRequest createEmptyInstance() => ImportBackgroundRequest._();
+  @$core.pragma('dart2js:noInline')
+  static ImportBackgroundRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ImportBackgroundRequest>(
+          ImportBackgroundRequest.$_createMessage);
+  static ImportBackgroundRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get path => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set path($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasPath() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPath() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.int> get image => $_getN(1);
+  @$pb.TagNumber(2)
+  set image($core.List<$core.int> value) => $_setBytes(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasImage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearImage() => $_clearField(2);
+}
+
+/// 导入后的背景图。主题里写成 "user:" 加上 sha256 引用它
+class BackgroundInfo extends $pb.GeneratedMessage {
+  factory BackgroundInfo({
+    $core.String? sha256,
+    $core.int? width,
+    $core.int? height,
+    $core.String? format,
+    $core.double? luminance,
+    $core.double? luminanceSpread,
+    $core.Iterable<$core.String>? colors,
+    $core.double? minScrimDark,
+    $core.double? minScrimLight,
+  }) {
+    final result = BackgroundInfo._();
+    if (sha256 != null) result.sha256 = sha256;
+    if (width != null) result.width = width;
+    if (height != null) result.height = height;
+    if (format != null) result.format = format;
+    if (luminance != null) result.luminance = luminance;
+    if (luminanceSpread != null) result.luminanceSpread = luminanceSpread;
+    if (colors != null) result.colors.addAll(colors);
+    if (minScrimDark != null) result.minScrimDark = minScrimDark;
+    if (minScrimLight != null) result.minScrimLight = minScrimLight;
+    return result;
+  }
+
+  BackgroundInfo._();
+
+  factory BackgroundInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BackgroundInfo()..mergeFromBuffer(data, registry);
+  factory BackgroundInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BackgroundInfo()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BackgroundInfo',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: BackgroundInfo.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'sha256')
+    ..aI(2, _omitFieldNames ? '' : 'width')
+    ..aI(3, _omitFieldNames ? '' : 'height')
+    ..aOS(4, _omitFieldNames ? '' : 'format')
+    ..aD(5, _omitFieldNames ? '' : 'luminance')
+    ..aD(6, _omitFieldNames ? '' : 'luminanceSpread')
+    ..pPS(7, _omitFieldNames ? '' : 'colors')
+    ..aD(8, _omitFieldNames ? '' : 'minScrimDark')
+    ..aD(9, _omitFieldNames ? '' : 'minScrimLight')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BackgroundInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BackgroundInfo copyWith(void Function(BackgroundInfo) updates) =>
+      super.copyWith((message) => updates(message as BackgroundInfo))
+          as BackgroundInfo;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BackgroundInfo() / BackgroundInfo.new instead')
+  static BackgroundInfo create() => BackgroundInfo._();
+  static $pb.GeneratedMessage $_createMessage() => BackgroundInfo._();
+  @$core.override
+  BackgroundInfo createEmptyInstance() => BackgroundInfo._();
+  @$core.pragma('dart2js:noInline')
+  static BackgroundInfo getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BackgroundInfo>(
+          BackgroundInfo.$_createMessage);
+  static BackgroundInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get sha256 => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set sha256($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSha256() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSha256() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get width => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set width($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasWidth() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearWidth() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get height => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set height($core.int value) => $_setSignedInt32(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasHeight() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearHeight() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get format => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set format($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasFormat() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearFormat() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.double get luminance => $_getN(4);
+  @$pb.TagNumber(5)
+  set luminance($core.double value) => $_setDouble(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasLuminance() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearLuminance() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.double get luminanceSpread => $_getN(5);
+  @$pb.TagNumber(6)
+  set luminanceSpread($core.double value) => $_setDouble(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasLuminanceSpread() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearLuminanceSpread() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $pb.PbList<$core.String> get colors => $_getList(6);
+
+  /// 让白字在最亮的区域也达到 4.5:1，黑色遮罩至少要多浓（0 到 1）
+  @$pb.TagNumber(8)
+  $core.double get minScrimDark => $_getN(7);
+  @$pb.TagNumber(8)
+  set minScrimDark($core.double value) => $_setDouble(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasMinScrimDark() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearMinScrimDark() => $_clearField(8);
+
+  /// 让黑字在最暗的区域也达到 4.5:1，白色遮罩至少要多浓（0 到 1）
+  @$pb.TagNumber(9)
+  $core.double get minScrimLight => $_getN(8);
+  @$pb.TagNumber(9)
+  set minScrimLight($core.double value) => $_setDouble(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasMinScrimLight() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearMinScrimLight() => $_clearField(9);
+}
+
+class GetBackgroundRequest extends $pb.GeneratedMessage {
+  factory GetBackgroundRequest({
+    $core.String? sha256,
+    $core.bool? blurred,
+  }) {
+    final result = GetBackgroundRequest._();
+    if (sha256 != null) result.sha256 = sha256;
+    if (blurred != null) result.blurred = blurred;
+    return result;
+  }
+
+  GetBackgroundRequest._();
+
+  factory GetBackgroundRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetBackgroundRequest()..mergeFromBuffer(data, registry);
+  factory GetBackgroundRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetBackgroundRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetBackgroundRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: GetBackgroundRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'sha256')
+    ..aOB(2, _omitFieldNames ? '' : 'blurred')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetBackgroundRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetBackgroundRequest copyWith(void Function(GetBackgroundRequest) updates) =>
+      super.copyWith((message) => updates(message as GetBackgroundRequest))
+          as GetBackgroundRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use GetBackgroundRequest() / GetBackgroundRequest.new instead')
+  static GetBackgroundRequest create() => GetBackgroundRequest._();
+  static $pb.GeneratedMessage $_createMessage() => GetBackgroundRequest._();
+  @$core.override
+  GetBackgroundRequest createEmptyInstance() => GetBackgroundRequest._();
+  @$core.pragma('dart2js:noInline')
+  static GetBackgroundRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetBackgroundRequest>(
+          GetBackgroundRequest.$_createMessage);
+  static GetBackgroundRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get sha256 => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set sha256($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSha256() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSha256() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get blurred => $_getBF(1);
+  @$pb.TagNumber(2)
+  set blurred($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasBlurred() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearBlurred() => $_clearField(2);
+}
+
+class BackgroundImage extends $pb.GeneratedMessage {
+  factory BackgroundImage({
+    $core.List<$core.int>? data,
+    $core.String? format,
+  }) {
+    final result = BackgroundImage._();
+    if (data != null) result.data = data;
+    if (format != null) result.format = format;
+    return result;
+  }
+
+  BackgroundImage._();
+
+  factory BackgroundImage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BackgroundImage()..mergeFromBuffer(data, registry);
+  factory BackgroundImage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BackgroundImage()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BackgroundImage',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: BackgroundImage.$_createMessage)
+    ..a<$core.List<$core.int>>(
+        1, _omitFieldNames ? '' : 'data', $pb.PbFieldType.OY)
+    ..aOS(2, _omitFieldNames ? '' : 'format')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BackgroundImage clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BackgroundImage copyWith(void Function(BackgroundImage) updates) =>
+      super.copyWith((message) => updates(message as BackgroundImage))
+          as BackgroundImage;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BackgroundImage() / BackgroundImage.new instead')
+  static BackgroundImage create() => BackgroundImage._();
+  static $pb.GeneratedMessage $_createMessage() => BackgroundImage._();
+  @$core.override
+  BackgroundImage createEmptyInstance() => BackgroundImage._();
+  @$core.pragma('dart2js:noInline')
+  static BackgroundImage getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BackgroundImage>(
+          BackgroundImage.$_createMessage);
+  static BackgroundImage? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get data => $_getN(0);
+  @$pb.TagNumber(1)
+  set data($core.List<$core.int> value) => $_setBytes(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasData() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearData() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get format => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set format($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasFormat() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFormat() => $_clearField(2);
+}
+
+class BackgroundRef extends $pb.GeneratedMessage {
+  factory BackgroundRef({
+    $core.String? sha256,
+  }) {
+    final result = BackgroundRef._();
+    if (sha256 != null) result.sha256 = sha256;
+    return result;
+  }
+
+  BackgroundRef._();
+
+  factory BackgroundRef.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BackgroundRef()..mergeFromBuffer(data, registry);
+  factory BackgroundRef.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BackgroundRef()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BackgroundRef',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: BackgroundRef.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'sha256')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BackgroundRef clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BackgroundRef copyWith(void Function(BackgroundRef) updates) =>
+      super.copyWith((message) => updates(message as BackgroundRef))
+          as BackgroundRef;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BackgroundRef() / BackgroundRef.new instead')
+  static BackgroundRef create() => BackgroundRef._();
+  static $pb.GeneratedMessage $_createMessage() => BackgroundRef._();
+  @$core.override
+  BackgroundRef createEmptyInstance() => BackgroundRef._();
+  @$core.pragma('dart2js:noInline')
+  static BackgroundRef getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BackgroundRef>(
+          BackgroundRef.$_createMessage);
+  static BackgroundRef? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get sha256 => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set sha256($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSha256() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSha256() => $_clearField(1);
+}
+
+class ThemesChanged extends $pb.GeneratedMessage {
+  factory ThemesChanged({
+    $core.Iterable<$core.String>? ids,
+  }) {
+    final result = ThemesChanged._();
+    if (ids != null) result.ids.addAll(ids);
+    return result;
+  }
+
+  ThemesChanged._();
+
+  factory ThemesChanged.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemesChanged()..mergeFromBuffer(data, registry);
+  factory ThemesChanged.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ThemesChanged()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ThemesChanged',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'pasteferry.v1'),
+      createEmptyInstance: ThemesChanged.$_createMessage)
+    ..pPS(1, _omitFieldNames ? '' : 'ids')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemesChanged clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ThemesChanged copyWith(void Function(ThemesChanged) updates) =>
+      super.copyWith((message) => updates(message as ThemesChanged))
+          as ThemesChanged;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ThemesChanged() / ThemesChanged.new instead')
+  static ThemesChanged create() => ThemesChanged._();
+  static $pb.GeneratedMessage $_createMessage() => ThemesChanged._();
+  @$core.override
+  ThemesChanged createEmptyInstance() => ThemesChanged._();
+  @$core.pragma('dart2js:noInline')
+  static ThemesChanged getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ThemesChanged>(
+          ThemesChanged.$_createMessage);
+  static ThemesChanged? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<$core.String> get ids => $_getList(0);
 }
 
 const $core.bool _omitFieldNames =

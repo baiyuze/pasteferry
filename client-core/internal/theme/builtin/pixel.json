@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "pixel",
+  "name": { "zh-Hans": "像素", "zh-Hant-TW": "像素", "zh-Hant-HK": "像素", "en": "Pixel", "ja": "ピクセル" },
+  "modes": {
+    "light": {
+      "accent": "#08875B", "background": "#F5F5F2", "sidebar": "#ECECE7", "surface": "#FFFFFF",
+      "border": "#DCDCD5", "borderStrong": "#1C1D20", "separator": "#E2E2DC",
+      "text": "#1C1D20", "textDim": "#5E626A", "textFaint": "#9A9DA4",
+      "selection": "#FAFAF8", "hover": "#0A1C1D20", "fill": "#EFEFEA",
+      "online": "#15803D", "warning": "#B45309", "danger": "#DC2626",
+      "onAccent": "#FFFFFF", "inverse": "#1C1D20", "onInverse": "#F5F5F2",
+      "bevelLight": "#B3FFFFFF", "bevelDark": "#2E000000", "shadow": "#E61C1D20"
+    },
+    "dark": {
+      "accent": "#3DDC97", "background": "#111215", "sidebar": "#0C0D0F", "surface": "#17191D",
+      "border": "#2A2D34", "borderStrong": "#3C414B", "separator": "#25282E",
+      "text": "#E6E8EB", "textDim": "#9AA0AA", "textFaint": "#5F6570",
+      "selection": "#1F2227", "hover": "#0AFFFFFF", "fill": "#0D0E11",
+      "online": "#4ADE80", "warning": "#FBBF24", "danger": "#F87171",
+      "onAccent": "#0C0D0F", "inverse": "#E6E8EB", "onInverse": "#111215",
+      "bevelLight": "#14FFFFFF", "bevelDark": "#59000000", "shadow": "#80000000"
+    }
+  },
+  "typography": { "family": "FusionPixel", "mono": "FusionPixelMono", "sizes": [12, 24] },
+  "shape": { "radius": { "sm": 0, "md": 0, "lg": 0 }, "corner": "pixel", "borderWidth": 2, "unit": 2, "shadow": "hard" },
+  "motion": "stepped",
+  "icons": "pixel"
+}

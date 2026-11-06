@@ -98,7 +98,30 @@ func configToProto(c config.Config) *pb.Config {
 		ReceiveFrom:             receiveFromToProto(c),
 		EveryoneUntilUnix:       c.EveryoneUntil,
 		DisplayName:             c.DisplayName,
+		ThemeId:                 c.ThemeID,
+		ThemeMode:               themeModeToProto(c.ThemeMode),
+		ThemeScanlines:          c.ThemeScanlines,
 	}
+}
+
+func themeModeToProto(m string) pb.ThemeMode {
+	switch m {
+	case "light":
+		return pb.ThemeMode_THEME_MODE_LIGHT
+	case "dark":
+		return pb.ThemeMode_THEME_MODE_DARK
+	}
+	return pb.ThemeMode_THEME_MODE_UNSPECIFIED
+}
+
+func themeModeFromProto(m pb.ThemeMode) string {
+	switch m {
+	case pb.ThemeMode_THEME_MODE_LIGHT:
+		return "light"
+	case pb.ThemeMode_THEME_MODE_DARK:
+		return "dark"
+	}
+	return ""
 }
 
 // receiveFromToProto 报告此刻实际的接收范围：「所有人」到时间了就是「仅限好友」
@@ -183,6 +206,10 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	if d := in.GetSentRetentionDays(); d > 0 {
 		c.SentRetentionDays = int(d)
 	}
+	// 空字符串就是默认主题、跟随系统，与「没设置」同义，直接覆盖
+	c.ThemeID = in.GetThemeId()
+	c.ThemeMode = themeModeFromProto(in.GetThemeMode())
+	c.ThemeScanlines = in.GetThemeScanlines()
 	// 空字符串就是系统的「下载」文件夹
 	c.ReceiveDir = in.GetReceiveDir()
 	c.ReceiveDisabled = in.GetReceiveDisabled()

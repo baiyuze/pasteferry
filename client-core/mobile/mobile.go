@@ -39,6 +39,7 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/sendpeer"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
 	syncengine "github.com/baiyuze/pasteferry/client-core/internal/sync"
+	"github.com/baiyuze/pasteferry/client-core/internal/theme"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/p2p"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
@@ -392,6 +393,7 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 	}
 	srv := rpc.NewServer(rpc.Deps{
 		Store:              db,
+		Themes:             theme.NewStore(paths),
 		Paths:              paths,
 		Version:            version,
 		DeviceID:           id.DeviceID,

@@ -88,6 +88,14 @@ const (
 	DaemonService_RemoveWebSession_FullMethodName              = "/pasteferry.v1.DaemonService/RemoveWebSession"
 	DaemonService_PasteFiles_FullMethodName                    = "/pasteferry.v1.DaemonService/PasteFiles"
 	DaemonService_WatchStrangers_FullMethodName                = "/pasteferry.v1.DaemonService/WatchStrangers"
+	DaemonService_ListThemes_FullMethodName                    = "/pasteferry.v1.DaemonService/ListThemes"
+	DaemonService_GetTheme_FullMethodName                      = "/pasteferry.v1.DaemonService/GetTheme"
+	DaemonService_PutTheme_FullMethodName                      = "/pasteferry.v1.DaemonService/PutTheme"
+	DaemonService_DeleteTheme_FullMethodName                   = "/pasteferry.v1.DaemonService/DeleteTheme"
+	DaemonService_ImportBackground_FullMethodName              = "/pasteferry.v1.DaemonService/ImportBackground"
+	DaemonService_GetBackground_FullMethodName                 = "/pasteferry.v1.DaemonService/GetBackground"
+	DaemonService_DeleteBackground_FullMethodName              = "/pasteferry.v1.DaemonService/DeleteBackground"
+	DaemonService_AnalyzeBackground_FullMethodName             = "/pasteferry.v1.DaemonService/AnalyzeBackground"
 )
 
 // DaemonServiceClient is the client API for DaemonService service.
@@ -215,6 +223,24 @@ type DaemonServiceClient interface {
 	PasteFiles(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PasteFilesResponse, error)
 	// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
 	WatchStrangers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Strangers], error)
+	// 主题与背景图（design/themes.md）。现在用哪一套在 Config.theme_id、theme_mode 里
+	// 内置主题与本机的自定义主题
+	ListThemes(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListThemesResponse, error)
+	// 一套主题的 JSON（格式见 design/themes.md 第 3 节）；resolved 时已合并 base，各项齐全
+	GetTheme(ctx context.Context, in *GetThemeRequest, opts ...grpc.CallOption) (*ThemeJson, error)
+	// 校验并保存一套自定义主题。格式不对报 InvalidArgument；对比度不够照样保存，返回警告。
+	// dry_run 时只校验、不保存（AI 经 MCP 改主题前先试一遍，见 design/mcp.md）
+	PutTheme(ctx context.Context, in *PutThemeRequest, opts ...grpc.CallOption) (*PutThemeResponse, error)
+	// 删掉一套自定义主题。正在用它时换回默认主题；被别的主题当作 base 时报 FailedPrecondition
+	DeleteTheme(ctx context.Context, in *ThemeRef, opts ...grpc.CallOption) (*Empty, error)
+	// 导入一张背景图：重新编码（去掉 EXIF）、缩到长边 3840 以内、另存一份模糊版，并分析亮度与主色
+	ImportBackground(ctx context.Context, in *ImportBackgroundRequest, opts ...grpc.CallOption) (*BackgroundInfo, error)
+	// 背景图的字节，界面显示用
+	GetBackground(ctx context.Context, in *GetBackgroundRequest, opts ...grpc.CallOption) (*BackgroundImage, error)
+	// 删掉一张背景图；还有主题在用时报 FailedPrecondition
+	DeleteBackground(ctx context.Context, in *BackgroundRef, opts ...grpc.CallOption) (*Empty, error)
+	// 已导入的背景图的分析结果（亮度、主色、建议的遮罩浓度），与 ImportBackground 返回的相同
+	AnalyzeBackground(ctx context.Context, in *BackgroundRef, opts ...grpc.CallOption) (*BackgroundInfo, error)
 }
 
 type daemonServiceClient struct {
@@ -904,6 +930,86 @@ func (c *daemonServiceClient) WatchStrangers(ctx context.Context, in *Empty, opt
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type DaemonService_WatchStrangersClient = grpc.ServerStreamingClient[Strangers]
 
+func (c *daemonServiceClient) ListThemes(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListThemesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListThemesResponse)
+	err := c.cc.Invoke(ctx, DaemonService_ListThemes_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) GetTheme(ctx context.Context, in *GetThemeRequest, opts ...grpc.CallOption) (*ThemeJson, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ThemeJson)
+	err := c.cc.Invoke(ctx, DaemonService_GetTheme_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) PutTheme(ctx context.Context, in *PutThemeRequest, opts ...grpc.CallOption) (*PutThemeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PutThemeResponse)
+	err := c.cc.Invoke(ctx, DaemonService_PutTheme_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) DeleteTheme(ctx context.Context, in *ThemeRef, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_DeleteTheme_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) ImportBackground(ctx context.Context, in *ImportBackgroundRequest, opts ...grpc.CallOption) (*BackgroundInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BackgroundInfo)
+	err := c.cc.Invoke(ctx, DaemonService_ImportBackground_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) GetBackground(ctx context.Context, in *GetBackgroundRequest, opts ...grpc.CallOption) (*BackgroundImage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BackgroundImage)
+	err := c.cc.Invoke(ctx, DaemonService_GetBackground_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) DeleteBackground(ctx context.Context, in *BackgroundRef, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DaemonService_DeleteBackground_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) AnalyzeBackground(ctx context.Context, in *BackgroundRef, opts ...grpc.CallOption) (*BackgroundInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BackgroundInfo)
+	err := c.cc.Invoke(ctx, DaemonService_AnalyzeBackground_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DaemonServiceServer is the server API for DaemonService service.
 // All implementations must embed UnimplementedDaemonServiceServer
 // for forward compatibility.
@@ -1029,6 +1135,24 @@ type DaemonServiceServer interface {
 	PasteFiles(context.Context, *Empty) (*PasteFilesResponse, error)
 	// 隔空传送页打开期间保持这个调用：推送附近开着「所有人」的陌生设备（只在局域网里）
 	WatchStrangers(*Empty, grpc.ServerStreamingServer[Strangers]) error
+	// 主题与背景图（design/themes.md）。现在用哪一套在 Config.theme_id、theme_mode 里
+	// 内置主题与本机的自定义主题
+	ListThemes(context.Context, *Empty) (*ListThemesResponse, error)
+	// 一套主题的 JSON（格式见 design/themes.md 第 3 节）；resolved 时已合并 base，各项齐全
+	GetTheme(context.Context, *GetThemeRequest) (*ThemeJson, error)
+	// 校验并保存一套自定义主题。格式不对报 InvalidArgument；对比度不够照样保存，返回警告。
+	// dry_run 时只校验、不保存（AI 经 MCP 改主题前先试一遍，见 design/mcp.md）
+	PutTheme(context.Context, *PutThemeRequest) (*PutThemeResponse, error)
+	// 删掉一套自定义主题。正在用它时换回默认主题；被别的主题当作 base 时报 FailedPrecondition
+	DeleteTheme(context.Context, *ThemeRef) (*Empty, error)
+	// 导入一张背景图：重新编码（去掉 EXIF）、缩到长边 3840 以内、另存一份模糊版，并分析亮度与主色
+	ImportBackground(context.Context, *ImportBackgroundRequest) (*BackgroundInfo, error)
+	// 背景图的字节，界面显示用
+	GetBackground(context.Context, *GetBackgroundRequest) (*BackgroundImage, error)
+	// 删掉一张背景图；还有主题在用时报 FailedPrecondition
+	DeleteBackground(context.Context, *BackgroundRef) (*Empty, error)
+	// 已导入的背景图的分析结果（亮度、主色、建议的遮罩浓度），与 ImportBackground 返回的相同
+	AnalyzeBackground(context.Context, *BackgroundRef) (*BackgroundInfo, error)
 	mustEmbedUnimplementedDaemonServiceServer()
 }
 
@@ -1230,6 +1354,30 @@ func (UnimplementedDaemonServiceServer) PasteFiles(context.Context, *Empty) (*Pa
 }
 func (UnimplementedDaemonServiceServer) WatchStrangers(*Empty, grpc.ServerStreamingServer[Strangers]) error {
 	return status.Error(codes.Unimplemented, "method WatchStrangers not implemented")
+}
+func (UnimplementedDaemonServiceServer) ListThemes(context.Context, *Empty) (*ListThemesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListThemes not implemented")
+}
+func (UnimplementedDaemonServiceServer) GetTheme(context.Context, *GetThemeRequest) (*ThemeJson, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetTheme not implemented")
+}
+func (UnimplementedDaemonServiceServer) PutTheme(context.Context, *PutThemeRequest) (*PutThemeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method PutTheme not implemented")
+}
+func (UnimplementedDaemonServiceServer) DeleteTheme(context.Context, *ThemeRef) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteTheme not implemented")
+}
+func (UnimplementedDaemonServiceServer) ImportBackground(context.Context, *ImportBackgroundRequest) (*BackgroundInfo, error) {
+	return nil, status.Error(codes.Unimplemented, "method ImportBackground not implemented")
+}
+func (UnimplementedDaemonServiceServer) GetBackground(context.Context, *GetBackgroundRequest) (*BackgroundImage, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetBackground not implemented")
+}
+func (UnimplementedDaemonServiceServer) DeleteBackground(context.Context, *BackgroundRef) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteBackground not implemented")
+}
+func (UnimplementedDaemonServiceServer) AnalyzeBackground(context.Context, *BackgroundRef) (*BackgroundInfo, error) {
+	return nil, status.Error(codes.Unimplemented, "method AnalyzeBackground not implemented")
 }
 func (UnimplementedDaemonServiceServer) mustEmbedUnimplementedDaemonServiceServer() {}
 func (UnimplementedDaemonServiceServer) testEmbeddedByValue()                       {}
@@ -2365,6 +2513,150 @@ func _DaemonService_WatchStrangers_Handler(srv interface{}, stream grpc.ServerSt
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type DaemonService_WatchStrangersServer = grpc.ServerStreamingServer[Strangers]
 
+func _DaemonService_ListThemes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).ListThemes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_ListThemes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).ListThemes(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_GetTheme_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetThemeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).GetTheme(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_GetTheme_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).GetTheme(ctx, req.(*GetThemeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_PutTheme_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutThemeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).PutTheme(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_PutTheme_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).PutTheme(ctx, req.(*PutThemeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_DeleteTheme_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ThemeRef)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).DeleteTheme(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_DeleteTheme_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).DeleteTheme(ctx, req.(*ThemeRef))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_ImportBackground_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportBackgroundRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).ImportBackground(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_ImportBackground_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).ImportBackground(ctx, req.(*ImportBackgroundRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_GetBackground_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBackgroundRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).GetBackground(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_GetBackground_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).GetBackground(ctx, req.(*GetBackgroundRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_DeleteBackground_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BackgroundRef)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).DeleteBackground(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_DeleteBackground_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).DeleteBackground(ctx, req.(*BackgroundRef))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_AnalyzeBackground_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BackgroundRef)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).AnalyzeBackground(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_AnalyzeBackground_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).AnalyzeBackground(ctx, req.(*BackgroundRef))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DaemonService_ServiceDesc is the grpc.ServiceDesc for DaemonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -2607,6 +2899,38 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PasteFiles",
 			Handler:    _DaemonService_PasteFiles_Handler,
+		},
+		{
+			MethodName: "ListThemes",
+			Handler:    _DaemonService_ListThemes_Handler,
+		},
+		{
+			MethodName: "GetTheme",
+			Handler:    _DaemonService_GetTheme_Handler,
+		},
+		{
+			MethodName: "PutTheme",
+			Handler:    _DaemonService_PutTheme_Handler,
+		},
+		{
+			MethodName: "DeleteTheme",
+			Handler:    _DaemonService_DeleteTheme_Handler,
+		},
+		{
+			MethodName: "ImportBackground",
+			Handler:    _DaemonService_ImportBackground_Handler,
+		},
+		{
+			MethodName: "GetBackground",
+			Handler:    _DaemonService_GetBackground_Handler,
+		},
+		{
+			MethodName: "DeleteBackground",
+			Handler:    _DaemonService_DeleteBackground_Handler,
+		},
+		{
+			MethodName: "AnalyzeBackground",
+			Handler:    _DaemonService_AnalyzeBackground_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

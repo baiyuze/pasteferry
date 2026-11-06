@@ -22,6 +22,7 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/diag"
 	"github.com/baiyuze/pasteferry/client-core/internal/peers"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
+	"github.com/baiyuze/pasteferry/client-core/internal/theme"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/lan"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
@@ -106,6 +107,8 @@ type Deps struct {
 	SubmitText func(ctx context.Context, text string) (store.Clip, error)
 	// SubmitFiles 把发送页里选的照片和文件当成本机复制；为 nil 时返回 Unimplemented
 	SubmitFiles func(ctx context.Context, paths []string) (store.Clip, error)
+	// Themes 保存自定义主题与背景图（design/themes.md）；为空时主题相关的调用报 Unimplemented
+	Themes *theme.Store
 }
 
 func (s *Server) GetNotificationStatus(ctx context.Context, _ *pb.Empty) (*pb.NotificationStatus, error) {
@@ -407,6 +410,9 @@ func (s *Server) GetConfig(context.Context, *pb.Empty) (*pb.Config, error) {
 func (s *Server) UpdateConfig(_ context.Context, in *pb.Config) (*pb.Config, error) {
 	c := configFromProto(in, s.deps.LoadConfig())
 	c.Validate()
+	if c.ThemeID != "" && s.deps.Themes != nil && !s.deps.Themes.Exists(c.ThemeID) {
+		return nil, status.Errorf(codes.InvalidArgument, "没有主题 %q", c.ThemeID)
+	}
 	if err := s.deps.SaveConfig(c); err != nil {
 		return nil, status.Errorf(codes.Internal, "保存配置: %v", err)
 	}

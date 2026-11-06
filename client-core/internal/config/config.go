@@ -99,6 +99,13 @@ type Config struct {
 	EveryoneUntil int64 `json:"everyone_until,omitempty"`
 	// DisplayName 是好友看到的名字，空字符串表示系统的用户全名
 	DisplayName string `json:"display_name,omitempty"`
+
+	// ThemeID 是界面用的主题（design/themes.md）：空字符串表示默认主题，否则是内置或自定义主题的 id
+	ThemeID string `json:"theme_id,omitempty"`
+	// ThemeMode 是浅色还是深色："light"、"dark"；空字符串表示跟随系统
+	ThemeMode string `json:"theme_mode,omitempty"`
+	// ThemeScanlines 打开像素主题的 CRT 扫描线效果，默认关
+	ThemeScanlines bool `json:"theme_scanlines,omitempty"`
 }
 
 // 谁可以给我发文件
@@ -236,6 +243,27 @@ func (c *Config) Validate() {
 	if len(c.DisplayName) > 64 {
 		c.DisplayName = c.DisplayName[:64]
 	}
+	if !ValidThemeID(c.ThemeID) || c.ThemeID == "default" {
+		c.ThemeID = ""
+	}
+	switch c.ThemeMode {
+	case "", "light", "dark":
+	default:
+		c.ThemeMode = ""
+	}
+}
+
+// ValidThemeID 报告 id 能不能当主题的 id 用：小写字母、数字和连字符，最长 40 个字符。空字符串也算（默认主题）
+func ValidThemeID(id string) bool {
+	if len(id) > 40 {
+		return false
+	}
+	for _, r := range id {
+		if !(r >= 'a' && r <= 'z' || r >= '0' && r <= '9' || r == '-') {
+			return false
+		}
+	}
+	return true
 }
 
 // ─────────────────────────── 目录布局 ───────────────────────────
@@ -250,6 +278,9 @@ type Paths struct {
 	DB        string
 	// daemon 启动后把 gRPC 端口和一次性 token 写在这里，供 UI 发现
 	Endpoint string
+	// 自定义主题（<id>.json）与导入的背景图，见 design/themes.md
+	Themes      string
+	Backgrounds string
 }
 
 func DefaultPaths() (Paths, error) {
@@ -294,6 +325,9 @@ func pathsUnder(root string) Paths {
 		Config:    filepath.Join(root, "config.json"),
 		DB:        filepath.Join(root, "pasteferry.db"),
 		Endpoint:  filepath.Join(root, "daemon.json"),
+
+		Themes:      filepath.Join(root, "themes"),
+		Backgrounds: filepath.Join(root, "backgrounds"),
 	}
 }
 

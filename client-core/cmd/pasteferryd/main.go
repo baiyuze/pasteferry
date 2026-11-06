@@ -35,6 +35,7 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/sendpeer"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
 	syncengine "github.com/baiyuze/pasteferry/client-core/internal/sync"
+	"github.com/baiyuze/pasteferry/client-core/internal/theme"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/lan"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/p2p"
 	"github.com/baiyuze/pasteferry/client-core/internal/update"
@@ -600,6 +601,7 @@ func run(dataDir string) error {
 	})
 	deps := rpc.Deps{
 		Store:                    db,
+		Themes:                   theme.NewStore(paths),
 		Paths:                    paths,
 		Version:                  version,
 		DeviceID:                 id.DeviceID,

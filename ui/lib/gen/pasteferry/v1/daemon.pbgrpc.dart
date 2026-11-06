@@ -548,6 +548,72 @@ class DaemonServiceClient extends $grpc.Client {
         options: options);
   }
 
+  /// 主题与背景图（design/themes.md）。现在用哪一套在 Config.theme_id、theme_mode 里
+  /// 内置主题与本机的自定义主题
+  $grpc.ResponseFuture<$0.ListThemesResponse> listThemes(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listThemes, request, options: options);
+  }
+
+  /// 一套主题的 JSON（格式见 design/themes.md 第 3 节）；resolved 时已合并 base，各项齐全
+  $grpc.ResponseFuture<$0.ThemeJson> getTheme(
+    $0.GetThemeRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getTheme, request, options: options);
+  }
+
+  /// 校验并保存一套自定义主题。格式不对报 InvalidArgument；对比度不够照样保存，返回警告。
+  /// dry_run 时只校验、不保存（AI 经 MCP 改主题前先试一遍，见 design/mcp.md）
+  $grpc.ResponseFuture<$0.PutThemeResponse> putTheme(
+    $0.PutThemeRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$putTheme, request, options: options);
+  }
+
+  /// 删掉一套自定义主题。正在用它时换回默认主题；被别的主题当作 base 时报 FailedPrecondition
+  $grpc.ResponseFuture<$0.Empty> deleteTheme(
+    $0.ThemeRef request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$deleteTheme, request, options: options);
+  }
+
+  /// 导入一张背景图：重新编码（去掉 EXIF）、缩到长边 3840 以内、另存一份模糊版，并分析亮度与主色
+  $grpc.ResponseFuture<$0.BackgroundInfo> importBackground(
+    $0.ImportBackgroundRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$importBackground, request, options: options);
+  }
+
+  /// 背景图的字节，界面显示用
+  $grpc.ResponseFuture<$0.BackgroundImage> getBackground(
+    $0.GetBackgroundRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getBackground, request, options: options);
+  }
+
+  /// 删掉一张背景图；还有主题在用时报 FailedPrecondition
+  $grpc.ResponseFuture<$0.Empty> deleteBackground(
+    $0.BackgroundRef request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$deleteBackground, request, options: options);
+  }
+
+  /// 已导入的背景图的分析结果（亮度、主色、建议的遮罩浓度），与 ImportBackground 返回的相同
+  $grpc.ResponseFuture<$0.BackgroundInfo> analyzeBackground(
+    $0.BackgroundRef request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$analyzeBackground, request, options: options);
+  }
+
   // method descriptors
 
   static final _$subscribe = $grpc.ClientMethod<$0.SubscribeRequest, $0.Event>(
@@ -852,6 +918,45 @@ class DaemonServiceClient extends $grpc.Client {
       '/pasteferry.v1.DaemonService/WatchStrangers',
       ($0.Empty value) => value.writeToBuffer(),
       $0.Strangers.fromBuffer);
+  static final _$listThemes =
+      $grpc.ClientMethod<$0.Empty, $0.ListThemesResponse>(
+          '/pasteferry.v1.DaemonService/ListThemes',
+          ($0.Empty value) => value.writeToBuffer(),
+          $0.ListThemesResponse.fromBuffer);
+  static final _$getTheme =
+      $grpc.ClientMethod<$0.GetThemeRequest, $0.ThemeJson>(
+          '/pasteferry.v1.DaemonService/GetTheme',
+          ($0.GetThemeRequest value) => value.writeToBuffer(),
+          $0.ThemeJson.fromBuffer);
+  static final _$putTheme =
+      $grpc.ClientMethod<$0.PutThemeRequest, $0.PutThemeResponse>(
+          '/pasteferry.v1.DaemonService/PutTheme',
+          ($0.PutThemeRequest value) => value.writeToBuffer(),
+          $0.PutThemeResponse.fromBuffer);
+  static final _$deleteTheme = $grpc.ClientMethod<$0.ThemeRef, $0.Empty>(
+      '/pasteferry.v1.DaemonService/DeleteTheme',
+      ($0.ThemeRef value) => value.writeToBuffer(),
+      $0.Empty.fromBuffer);
+  static final _$importBackground =
+      $grpc.ClientMethod<$0.ImportBackgroundRequest, $0.BackgroundInfo>(
+          '/pasteferry.v1.DaemonService/ImportBackground',
+          ($0.ImportBackgroundRequest value) => value.writeToBuffer(),
+          $0.BackgroundInfo.fromBuffer);
+  static final _$getBackground =
+      $grpc.ClientMethod<$0.GetBackgroundRequest, $0.BackgroundImage>(
+          '/pasteferry.v1.DaemonService/GetBackground',
+          ($0.GetBackgroundRequest value) => value.writeToBuffer(),
+          $0.BackgroundImage.fromBuffer);
+  static final _$deleteBackground =
+      $grpc.ClientMethod<$0.BackgroundRef, $0.Empty>(
+          '/pasteferry.v1.DaemonService/DeleteBackground',
+          ($0.BackgroundRef value) => value.writeToBuffer(),
+          $0.Empty.fromBuffer);
+  static final _$analyzeBackground =
+      $grpc.ClientMethod<$0.BackgroundRef, $0.BackgroundInfo>(
+          '/pasteferry.v1.DaemonService/AnalyzeBackground',
+          ($0.BackgroundRef value) => value.writeToBuffer(),
+          $0.BackgroundInfo.fromBuffer);
 }
 
 @$pb.GrpcServiceName('pasteferry.v1.DaemonService')
@@ -1342,6 +1447,65 @@ abstract class DaemonServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.Strangers value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.ListThemesResponse>(
+        'ListThemes',
+        listThemes_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.ListThemesResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetThemeRequest, $0.ThemeJson>(
+        'GetTheme',
+        getTheme_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetThemeRequest.fromBuffer(value),
+        ($0.ThemeJson value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.PutThemeRequest, $0.PutThemeResponse>(
+        'PutTheme',
+        putTheme_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.PutThemeRequest.fromBuffer(value),
+        ($0.PutThemeResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ThemeRef, $0.Empty>(
+        'DeleteTheme',
+        deleteTheme_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.ThemeRef.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.ImportBackgroundRequest, $0.BackgroundInfo>(
+            'ImportBackground',
+            importBackground_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.ImportBackgroundRequest.fromBuffer(value),
+            ($0.BackgroundInfo value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetBackgroundRequest, $0.BackgroundImage>(
+        'GetBackground',
+        getBackground_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.GetBackgroundRequest.fromBuffer(value),
+        ($0.BackgroundImage value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.BackgroundRef, $0.Empty>(
+        'DeleteBackground',
+        deleteBackground_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.BackgroundRef.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.BackgroundRef, $0.BackgroundInfo>(
+        'AnalyzeBackground',
+        analyzeBackground_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.BackgroundRef.fromBuffer(value),
+        ($0.BackgroundInfo value) => value.writeToBuffer()));
   }
 
   $async.Stream<$0.Event> subscribe_Pre($grpc.ServiceCall $call,
@@ -1854,4 +2018,68 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Stream<$0.Strangers> watchStrangers(
       $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.ListThemesResponse> listThemes_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return listThemes($call, await $request);
+  }
+
+  $async.Future<$0.ListThemesResponse> listThemes(
+      $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.ThemeJson> getTheme_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.GetThemeRequest> $request) async {
+    return getTheme($call, await $request);
+  }
+
+  $async.Future<$0.ThemeJson> getTheme(
+      $grpc.ServiceCall call, $0.GetThemeRequest request);
+
+  $async.Future<$0.PutThemeResponse> putTheme_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.PutThemeRequest> $request) async {
+    return putTheme($call, await $request);
+  }
+
+  $async.Future<$0.PutThemeResponse> putTheme(
+      $grpc.ServiceCall call, $0.PutThemeRequest request);
+
+  $async.Future<$0.Empty> deleteTheme_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.ThemeRef> $request) async {
+    return deleteTheme($call, await $request);
+  }
+
+  $async.Future<$0.Empty> deleteTheme(
+      $grpc.ServiceCall call, $0.ThemeRef request);
+
+  $async.Future<$0.BackgroundInfo> importBackground_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.ImportBackgroundRequest> $request) async {
+    return importBackground($call, await $request);
+  }
+
+  $async.Future<$0.BackgroundInfo> importBackground(
+      $grpc.ServiceCall call, $0.ImportBackgroundRequest request);
+
+  $async.Future<$0.BackgroundImage> getBackground_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.GetBackgroundRequest> $request) async {
+    return getBackground($call, await $request);
+  }
+
+  $async.Future<$0.BackgroundImage> getBackground(
+      $grpc.ServiceCall call, $0.GetBackgroundRequest request);
+
+  $async.Future<$0.Empty> deleteBackground_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.BackgroundRef> $request) async {
+    return deleteBackground($call, await $request);
+  }
+
+  $async.Future<$0.Empty> deleteBackground(
+      $grpc.ServiceCall call, $0.BackgroundRef request);
+
+  $async.Future<$0.BackgroundInfo> analyzeBackground_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.BackgroundRef> $request) async {
+    return analyzeBackground($call, await $request);
+  }
+
+  $async.Future<$0.BackgroundInfo> analyzeBackground(
+      $grpc.ServiceCall call, $0.BackgroundRef request);
 }

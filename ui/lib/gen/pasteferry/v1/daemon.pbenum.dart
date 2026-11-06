@@ -167,6 +167,29 @@ class ClipboardWriteOutcome extends $pb.ProtobufEnum {
   const ClipboardWriteOutcome._(super.value, super.name);
 }
 
+/// 浅色还是深色
+class ThemeMode extends $pb.ProtobufEnum {
+  static const ThemeMode THEME_MODE_UNSPECIFIED =
+      ThemeMode._(0, _omitEnumNames ? '' : 'THEME_MODE_UNSPECIFIED');
+  static const ThemeMode THEME_MODE_LIGHT =
+      ThemeMode._(1, _omitEnumNames ? '' : 'THEME_MODE_LIGHT');
+  static const ThemeMode THEME_MODE_DARK =
+      ThemeMode._(2, _omitEnumNames ? '' : 'THEME_MODE_DARK');
+
+  static const $core.List<ThemeMode> values = <ThemeMode>[
+    THEME_MODE_UNSPECIFIED,
+    THEME_MODE_LIGHT,
+    THEME_MODE_DARK,
+  ];
+
+  static final $core.List<ThemeMode?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 2);
+  static ThemeMode? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const ThemeMode._(super.value, super.name);
+}
+
 class ServiceMode extends $pb.ProtobufEnum {
   static const ServiceMode SERVICE_MODE_UNSPECIFIED =
       ServiceMode._(0, _omitEnumNames ? '' : 'SERVICE_MODE_UNSPECIFIED');

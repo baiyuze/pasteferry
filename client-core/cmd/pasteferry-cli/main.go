@@ -17,6 +17,7 @@
 //	pasteferry-cli transfers [-v]      最近收到和发出的文件（-v 带上 ID）
 //	pasteferry-cli cancel ID           取消一批传输
 //	pasteferry-cli web [on|off|invite [ADDR]|remove ID]  手机网页传输
+//	pasteferry-cli mcp                 MCP 服务（stdio）：让 AI 读、改、应用主题，见 design/mcp.md
 package main
 
 import (
@@ -79,7 +80,7 @@ func main() {
 			reportError(errors.New("缺少命令：version、status、devices、history 或 config get"), 2)
 		}
 		fmt.Fprintln(os.Stderr,
-			"用法: pasteferry-cli [-json] [-data-dir DIR] <version|status|watch|history|config [get]|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]|web [on|off|invite [ADDR]|remove ID]>")
+			"用法: pasteferry-cli [-json] [-data-dir DIR] <version|status|watch|history|config [get]|devices|nat|pair|join CODE [ADDRESS]|nearby [NAME]|address DEVICE ADDR|send [-relay] [-note TEXT] DEVICE PATH...|transfers [-v]|cancel ID|friends|friend code|add|remove|auto|accept [ID] [always]|decline [ID]|name NAME|avatar PATH|reset|receive-from [off|friends|everyone]|web [on|off|invite [ADDR]|remove ID]|mcp>")
 		os.Exit(2)
 	}
 
@@ -110,6 +111,13 @@ func run(cmd, dataDir string) error {
 	paths, err := resolvePaths(dataDir)
 	if err != nil {
 		return err
+	}
+	// MCP 服务不要求后台服务已经在跑：每次调用工具时才去连
+	if cmd == "mcp" {
+		if flag.NArg() != 1 {
+			return errors.New("用法: pasteferry-cli mcp")
+		}
+		return serveMCP(os.Stdin, os.Stdout, os.Stderr, daemonDialer(paths))
 	}
 
 	ep, err := rpc.ReadEndpoint(paths.Endpoint)

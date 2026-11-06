@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "default",
+  "name": { "zh-Hans": "默认", "zh-Hant-TW": "預設", "zh-Hant-HK": "預設", "en": "Default", "ja": "デフォルト" },
+  "modes": {
+    "light": {
+      "accent": "#0A66D8", "background": "#F5F5F4", "sidebar": "#EBEBE9", "surface": "#FFFFFF",
+      "border": "#E0E0DD", "borderStrong": "#E0E0DD", "separator": "#ECECEA",
+      "text": "#1D1D1F", "textDim": "#6E6E73", "textFaint": "#A1A1A6",
+      "selection": "#DCDCD9", "hover": "#0A000000", "fill": "#EEEEEC",
+      "online": "#248A3D", "warning": "#B25000", "danger": "#D70015",
+      "onAccent": "#FFFFFF", "inverse": "#2C2C2E", "onInverse": "#FFFFFF",
+      "bevelLight": "#00000000", "bevelDark": "#00000000", "shadow": "#40000000"
+    },
+    "dark": {
+      "accent": "#3B8BEB", "background": "#1C1C1E", "sidebar": "#232325", "surface": "#2A2A2C",
+      "border": "#3A3A3C", "borderStrong": "#3A3A3C", "separator": "#333335",
+      "text": "#F5F5F7", "textDim": "#98989D", "textFaint": "#636366",
+      "selection": "#3A3A3C", "hover": "#0FFFFFFF", "fill": "#323234",
+      "online": "#32D74B", "warning": "#FF9F0A", "danger": "#FF453A",
+      "onAccent": "#FFFFFF", "inverse": "#3A3A3C", "onInverse": "#FFFFFF",
+      "bevelLight": "#00000000", "bevelDark": "#00000000", "shadow": "#40000000"
+    }
+  },
+  "typography": { "family": "system", "mono": "system", "sizes": [] },
+  "shape": { "radius": { "sm": 6, "md": 10, "lg": 14 }, "corner": "round", "borderWidth": 1, "unit": 2, "shadow": "soft" },
+  "motion": "smooth",
+  "icons": "system"
+}

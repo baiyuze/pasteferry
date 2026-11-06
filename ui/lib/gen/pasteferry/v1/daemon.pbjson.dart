@@ -109,6 +109,21 @@ final $typed_data.Uint8List clipboardWriteOutcomeDescriptor = $convert.base64Dec
     'QVJEX1dSSVRFX09VVENPTUVfUFJFU0VSVkVEEAISIgoeQ0xJUEJPQVJEX1dSSVRFX09VVENPTU'
     'VfRkFJTEVEEAM=');
 
+@$core.Deprecated('Use themeModeDescriptor instead')
+const ThemeMode$json = {
+  '1': 'ThemeMode',
+  '2': [
+    {'1': 'THEME_MODE_UNSPECIFIED', '2': 0},
+    {'1': 'THEME_MODE_LIGHT', '2': 1},
+    {'1': 'THEME_MODE_DARK', '2': 2},
+  ],
+};
+
+/// Descriptor for `ThemeMode`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List themeModeDescriptor = $convert.base64Decode(
+    'CglUaGVtZU1vZGUSGgoWVEhFTUVfTU9ERV9VTlNQRUNJRklFRBAAEhQKEFRIRU1FX01PREVfTE'
+    'lHSFQQARITCg9USEVNRV9NT0RFX0RBUksQAg==');
+
 @$core.Deprecated('Use serviceModeDescriptor instead')
 const ServiceMode$json = {
   '1': 'ServiceMode',
@@ -472,6 +487,15 @@ const Event$json = {
       '9': 0,
       '10': 'notice'
     },
+    {
+      '1': 'themes_changed',
+      '3': 20,
+      '4': 1,
+      '5': 11,
+      '6': '.pasteferry.v1.ThemesChanged',
+      '9': 0,
+      '10': 'themesChanged'
+    },
   ],
   '8': [
     {'1': 'payload'},
@@ -501,7 +525,8 @@ final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
     'D3Byb2ZpbGVfY2hhbmdlZBgRIAEoCzIWLnBhc3RlZmVycnkudjEuUHJvZmlsZUgAUg5wcm9maW'
     'xlQ2hhbmdlZBJLChF3ZWJfc2hhcmVfY2hhbmdlZBgSIAEoCzIdLnBhc3RlZmVycnkudjEuV2Vi'
     'U2hhcmVTdGF0dXNIAFIPd2ViU2hhcmVDaGFuZ2VkEjIKBm5vdGljZRgTIAEoCzIYLnBhc3RlZm'
-    'VycnkudjEuQXBwTm90aWNlSABSBm5vdGljZUIJCgdwYXlsb2Fk');
+    'VycnkudjEuQXBwTm90aWNlSABSBm5vdGljZRJFCg50aGVtZXNfY2hhbmdlZBgUIAEoCzIcLnBh'
+    'c3RlZmVycnkudjEuVGhlbWVzQ2hhbmdlZEgAUg10aGVtZXNDaGFuZ2VkQgkKB3BheWxvYWQ=');
 
 @$core.Deprecated('Use appNoticeDescriptor instead')
 const AppNotice$json = {
@@ -1365,6 +1390,16 @@ const Config$json = {
       '5': 5,
       '10': 'sentRetentionDays'
     },
+    {'1': 'theme_id', '3': 35, '4': 1, '5': 9, '10': 'themeId'},
+    {
+      '1': 'theme_mode',
+      '3': 36,
+      '4': 1,
+      '5': 14,
+      '6': '.pasteferry.v1.ThemeMode',
+      '10': 'themeMode'
+    },
+    {'1': 'theme_scanlines', '3': 37, '4': 1, '5': 8, '10': 'themeScanlines'},
   ],
 };
 
@@ -1396,7 +1431,10 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'VfZnJvbRgeIAEoCVILcmVjZWl2ZUZyb20SLgoTZXZlcnlvbmVfdW50aWxfdW5peBgfIAEoA1IR'
     'ZXZlcnlvbmVVbnRpbFVuaXgSIQoMZGlzcGxheV9uYW1lGCAgASgJUgtkaXNwbGF5TmFtZRI7Ch'
     'pxdWlja19wYXN0ZV9pbmRleF9tb2RpZmllchghIAEoCVIXcXVpY2tQYXN0ZUluZGV4TW9kaWZp'
-    'ZXISLgoTc2VudF9yZXRlbnRpb25fZGF5cxgiIAEoBVIRc2VudFJldGVudGlvbkRheXM=');
+    'ZXISLgoTc2VudF9yZXRlbnRpb25fZGF5cxgiIAEoBVIRc2VudFJldGVudGlvbkRheXMSGQoIdG'
+    'hlbWVfaWQYIyABKAlSB3RoZW1lSWQSNwoKdGhlbWVfbW9kZRgkIAEoDjIYLnBhc3RlZmVycnku'
+    'djEuVGhlbWVNb2RlUgl0aGVtZU1vZGUSJwoPdGhlbWVfc2NhbmxpbmVzGCUgASgIUg50aGVtZV'
+    'NjYW5saW5lcw==');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {
@@ -2134,3 +2172,242 @@ const WebSessionRef$json = {
 /// Descriptor for `WebSessionRef`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List webSessionRefDescriptor =
     $convert.base64Decode('Cg1XZWJTZXNzaW9uUmVmEg4KAmlkGAEgASgJUgJpZA==');
+
+@$core.Deprecated('Use themeInfoDescriptor instead')
+const ThemeInfo$json = {
+  '1': 'ThemeInfo',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {
+      '1': 'name',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.ThemeInfo.NameEntry',
+      '10': 'name'
+    },
+    {'1': 'builtin', '3': 3, '4': 1, '5': 8, '10': 'builtin'},
+    {'1': 'base', '3': 4, '4': 1, '5': 9, '10': 'base'},
+  ],
+  '3': [ThemeInfo_NameEntry$json],
+};
+
+@$core.Deprecated('Use themeInfoDescriptor instead')
+const ThemeInfo_NameEntry$json = {
+  '1': 'NameEntry',
+  '2': [
+    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    {'1': 'value', '3': 2, '4': 1, '5': 9, '10': 'value'},
+  ],
+  '7': {'7': true},
+};
+
+/// Descriptor for `ThemeInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List themeInfoDescriptor = $convert.base64Decode(
+    'CglUaGVtZUluZm8SDgoCaWQYASABKAlSAmlkEjYKBG5hbWUYAiADKAsyIi5wYXN0ZWZlcnJ5Ln'
+    'YxLlRoZW1lSW5mby5OYW1lRW50cnlSBG5hbWUSGAoHYnVpbHRpbhgDIAEoCFIHYnVpbHRpbhIS'
+    'CgRiYXNlGAQgASgJUgRiYXNlGjcKCU5hbWVFbnRyeRIQCgNrZXkYASABKAlSA2tleRIUCgV2YW'
+    'x1ZRgCIAEoCVIFdmFsdWU6AjgB');
+
+@$core.Deprecated('Use listThemesResponseDescriptor instead')
+const ListThemesResponse$json = {
+  '1': 'ListThemesResponse',
+  '2': [
+    {
+      '1': 'themes',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.ThemeInfo',
+      '10': 'themes'
+    },
+  ],
+};
+
+/// Descriptor for `ListThemesResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listThemesResponseDescriptor = $convert.base64Decode(
+    'ChJMaXN0VGhlbWVzUmVzcG9uc2USMAoGdGhlbWVzGAEgAygLMhgucGFzdGVmZXJyeS52MS5UaG'
+    'VtZUluZm9SBnRoZW1lcw==');
+
+@$core.Deprecated('Use getThemeRequestDescriptor instead')
+const GetThemeRequest$json = {
+  '1': 'GetThemeRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'resolved', '3': 2, '4': 1, '5': 8, '10': 'resolved'},
+  ],
+};
+
+/// Descriptor for `GetThemeRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getThemeRequestDescriptor = $convert.base64Decode(
+    'Cg9HZXRUaGVtZVJlcXVlc3QSDgoCaWQYASABKAlSAmlkEhoKCHJlc29sdmVkGAIgASgIUghyZX'
+    'NvbHZlZA==');
+
+@$core.Deprecated('Use themeJsonDescriptor instead')
+const ThemeJson$json = {
+  '1': 'ThemeJson',
+  '2': [
+    {'1': 'json', '3': 1, '4': 1, '5': 9, '10': 'json'},
+  ],
+};
+
+/// Descriptor for `ThemeJson`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List themeJsonDescriptor =
+    $convert.base64Decode('CglUaGVtZUpzb24SEgoEanNvbhgBIAEoCVIEanNvbg==');
+
+@$core.Deprecated('Use putThemeRequestDescriptor instead')
+const PutThemeRequest$json = {
+  '1': 'PutThemeRequest',
+  '2': [
+    {'1': 'json', '3': 1, '4': 1, '5': 9, '10': 'json'},
+    {'1': 'dry_run', '3': 2, '4': 1, '5': 8, '10': 'dryRun'},
+  ],
+};
+
+/// Descriptor for `PutThemeRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List putThemeRequestDescriptor = $convert.base64Decode(
+    'Cg9QdXRUaGVtZVJlcXVlc3QSEgoEanNvbhgBIAEoCVIEanNvbhIXCgdkcnlfcnVuGAIgASgIUg'
+    'ZkcnlSdW4=');
+
+@$core.Deprecated('Use themeWarningDescriptor instead')
+const ThemeWarning$json = {
+  '1': 'ThemeWarning',
+  '2': [
+    {'1': 'mode', '3': 1, '4': 1, '5': 9, '10': 'mode'},
+    {'1': 'foreground', '3': 2, '4': 1, '5': 9, '10': 'foreground'},
+    {'1': 'background', '3': 3, '4': 1, '5': 9, '10': 'background'},
+    {'1': 'ratio', '3': 4, '4': 1, '5': 1, '10': 'ratio'},
+    {'1': 'minimum', '3': 5, '4': 1, '5': 1, '10': 'minimum'},
+  ],
+};
+
+/// Descriptor for `ThemeWarning`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List themeWarningDescriptor = $convert.base64Decode(
+    'CgxUaGVtZVdhcm5pbmcSEgoEbW9kZRgBIAEoCVIEbW9kZRIeCgpmb3JlZ3JvdW5kGAIgASgJUg'
+    'pmb3JlZ3JvdW5kEh4KCmJhY2tncm91bmQYAyABKAlSCmJhY2tncm91bmQSFAoFcmF0aW8YBCAB'
+    'KAFSBXJhdGlvEhgKB21pbmltdW0YBSABKAFSB21pbmltdW0=');
+
+@$core.Deprecated('Use putThemeResponseDescriptor instead')
+const PutThemeResponse$json = {
+  '1': 'PutThemeResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {
+      '1': 'warnings',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.pasteferry.v1.ThemeWarning',
+      '10': 'warnings'
+    },
+  ],
+};
+
+/// Descriptor for `PutThemeResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List putThemeResponseDescriptor = $convert.base64Decode(
+    'ChBQdXRUaGVtZVJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBI3Cgh3YXJuaW5ncxgCIAMoCzIbLn'
+    'Bhc3RlZmVycnkudjEuVGhlbWVXYXJuaW5nUgh3YXJuaW5ncw==');
+
+@$core.Deprecated('Use themeRefDescriptor instead')
+const ThemeRef$json = {
+  '1': 'ThemeRef',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `ThemeRef`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List themeRefDescriptor =
+    $convert.base64Decode('CghUaGVtZVJlZhIOCgJpZBgBIAEoCVICaWQ=');
+
+@$core.Deprecated('Use importBackgroundRequestDescriptor instead')
+const ImportBackgroundRequest$json = {
+  '1': 'ImportBackgroundRequest',
+  '2': [
+    {'1': 'path', '3': 1, '4': 1, '5': 9, '10': 'path'},
+    {'1': 'image', '3': 2, '4': 1, '5': 12, '10': 'image'},
+  ],
+};
+
+/// Descriptor for `ImportBackgroundRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List importBackgroundRequestDescriptor =
+    $convert.base64Decode(
+        'ChdJbXBvcnRCYWNrZ3JvdW5kUmVxdWVzdBISCgRwYXRoGAEgASgJUgRwYXRoEhQKBWltYWdlGA'
+        'IgASgMUgVpbWFnZQ==');
+
+@$core.Deprecated('Use backgroundInfoDescriptor instead')
+const BackgroundInfo$json = {
+  '1': 'BackgroundInfo',
+  '2': [
+    {'1': 'sha256', '3': 1, '4': 1, '5': 9, '10': 'sha256'},
+    {'1': 'width', '3': 2, '4': 1, '5': 5, '10': 'width'},
+    {'1': 'height', '3': 3, '4': 1, '5': 5, '10': 'height'},
+    {'1': 'format', '3': 4, '4': 1, '5': 9, '10': 'format'},
+    {'1': 'luminance', '3': 5, '4': 1, '5': 1, '10': 'luminance'},
+    {'1': 'luminance_spread', '3': 6, '4': 1, '5': 1, '10': 'luminanceSpread'},
+    {'1': 'colors', '3': 7, '4': 3, '5': 9, '10': 'colors'},
+    {'1': 'min_scrim_dark', '3': 8, '4': 1, '5': 1, '10': 'minScrimDark'},
+    {'1': 'min_scrim_light', '3': 9, '4': 1, '5': 1, '10': 'minScrimLight'},
+  ],
+};
+
+/// Descriptor for `BackgroundInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List backgroundInfoDescriptor = $convert.base64Decode(
+    'Cg5CYWNrZ3JvdW5kSW5mbxIWCgZzaGEyNTYYASABKAlSBnNoYTI1NhIUCgV3aWR0aBgCIAEoBV'
+    'IFd2lkdGgSFgoGaGVpZ2h0GAMgASgFUgZoZWlnaHQSFgoGZm9ybWF0GAQgASgJUgZmb3JtYXQS'
+    'HAoJbHVtaW5hbmNlGAUgASgBUglsdW1pbmFuY2USKQoQbHVtaW5hbmNlX3NwcmVhZBgGIAEoAV'
+    'IPbHVtaW5hbmNlU3ByZWFkEhYKBmNvbG9ycxgHIAMoCVIGY29sb3JzEiQKDm1pbl9zY3JpbV9k'
+    'YXJrGAggASgBUgxtaW5TY3JpbURhcmsSJgoPbWluX3NjcmltX2xpZ2h0GAkgASgBUg1taW5TY3'
+    'JpbUxpZ2h0');
+
+@$core.Deprecated('Use getBackgroundRequestDescriptor instead')
+const GetBackgroundRequest$json = {
+  '1': 'GetBackgroundRequest',
+  '2': [
+    {'1': 'sha256', '3': 1, '4': 1, '5': 9, '10': 'sha256'},
+    {'1': 'blurred', '3': 2, '4': 1, '5': 8, '10': 'blurred'},
+  ],
+};
+
+/// Descriptor for `GetBackgroundRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getBackgroundRequestDescriptor = $convert.base64Decode(
+    'ChRHZXRCYWNrZ3JvdW5kUmVxdWVzdBIWCgZzaGEyNTYYASABKAlSBnNoYTI1NhIYCgdibHVycm'
+    'VkGAIgASgIUgdibHVycmVk');
+
+@$core.Deprecated('Use backgroundImageDescriptor instead')
+const BackgroundImage$json = {
+  '1': 'BackgroundImage',
+  '2': [
+    {'1': 'data', '3': 1, '4': 1, '5': 12, '10': 'data'},
+    {'1': 'format', '3': 2, '4': 1, '5': 9, '10': 'format'},
+  ],
+};
+
+/// Descriptor for `BackgroundImage`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List backgroundImageDescriptor = $convert.base64Decode(
+    'Cg9CYWNrZ3JvdW5kSW1hZ2USEgoEZGF0YRgBIAEoDFIEZGF0YRIWCgZmb3JtYXQYAiABKAlSBm'
+    'Zvcm1hdA==');
+
+@$core.Deprecated('Use backgroundRefDescriptor instead')
+const BackgroundRef$json = {
+  '1': 'BackgroundRef',
+  '2': [
+    {'1': 'sha256', '3': 1, '4': 1, '5': 9, '10': 'sha256'},
+  ],
+};
+
+/// Descriptor for `BackgroundRef`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List backgroundRefDescriptor = $convert
+    .base64Decode('Cg1CYWNrZ3JvdW5kUmVmEhYKBnNoYTI1NhgBIAEoCVIGc2hhMjU2');
+
+@$core.Deprecated('Use themesChangedDescriptor instead')
+const ThemesChanged$json = {
+  '1': 'ThemesChanged',
+  '2': [
+    {'1': 'ids', '3': 1, '4': 3, '5': 9, '10': 'ids'},
+  ],
+};
+
+/// Descriptor for `ThemesChanged`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List themesChangedDescriptor =
+    $convert.base64Decode('Cg1UaGVtZXNDaGFuZ2VkEhAKA2lkcxgBIAMoCVIDaWRz');
