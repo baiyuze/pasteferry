@@ -8,7 +8,7 @@ Name: PasteFerry in English, 隔空贴 in Chinese. Versions before 2.0.0 (Octobe
 
 Key facts:
 
-- Current version: 2.9.0, released 2026-11-04. Adds desktop CLI version reporting and read-only JSON queries for status, devices, recent history and settings, plus official Mac installation through the baiyuze/tap Homebrew cask. Existing pairings, friends, history and settings are preserved. The device protocol is unchanged; no server update is required.
+- Current version: 2.10.0, released 2026-11-06. Adds themes: Settings › Appearance with built-in and custom themes, a pixel-art theme, light/dark/system appearance, theme import and export with contrast checks, and `pasteferry-cli mcp`, an MCP server that lets AI apps design and apply themes. Themes stay on each device. The device protocol is unchanged; no server update is required.
 - Downloads: https://pasteferry.cc/download/ and GitHub Releases. For mainland China, the code and the installers of the latest two releases are mirrored at https://gitee.com/baiyuze/pasteferry/releases (same files; verify with SHA256SUMS).
 - Mac client: macOS 13 Ventura or later. Distributed as a DMG for Apple silicon (PasteFerry-mac-apple-silicon.dmg), one for Intel (PasteFerry-mac-intel.dmg), and a universal one (PasteFerry.dmg); not notarized by Apple, so the first launch needs "Open Anyway" in System Settings → Privacy & Security.
 - Windows client: Windows 10 and Windows 11, x64. Per-user installer (PasteFerry-Setup.exe, no admin rights) or portable zip; not code-signed, so SmartScreen needs "More info → Run anyway" once. Runs in the notification area; pasted files are real files usable in Explorer, WeChat and Office. Skips content that password managers mark as sensitive.

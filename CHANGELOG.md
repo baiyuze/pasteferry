@@ -1,5 +1,23 @@
 # 更新记录 / Changelog
 
+## 2.10.0 — 2026-11-06
+
+This release adds themes: a new Appearance setting with built-in and custom themes, a pixel-art theme, and an MCP server that lets AI apps design and apply themes.
+
+### Changes
+
+- **Themes**: Settings › Appearance lists the built-in themes and your custom themes, with light, dark or system appearance. Themes apply to the main window and Quick Paste on this device and are not synced to other devices. The Android app has its own Appearance setting.
+- **Pixel theme**: a built-in pixel-art theme with a bitmap font, notched borders, bevelled buttons, neutral graphite and paper palettes with a pixel-green accent, page-header scenes, pixel illustrations for empty pages, game-style menu cursors and loading squares, and optional CRT scanlines.
+- **Custom themes**: duplicate a built-in theme, import or export theme files, and delete themes you no longer need. Text contrast is checked when a theme is saved, and low-contrast colors are reported.
+- **AI-designed themes**: `pasteferry-cli mcp` runs an MCP server so AI apps such as Claude and Cursor can read the theme format, design a palette, check contrast, save and apply themes. It only provides theme and background tools, not clipboard history, devices or friends.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional; update to use themes. Existing pairings, friends, history and settings are preserved, and the default theme looks the same as before.
+- **Android**: optional; adds the Appearance setting.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases. Theme settings stay on each device.
+
 ## 2.9.0 — 2026-11-04
 
 This release adds script-friendly desktop CLI queries and an official Homebrew installation option for Mac, and fixes a pairing-purpose race.

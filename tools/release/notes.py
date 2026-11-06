@@ -11,6 +11,36 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.10.0',
+ 'date': '2026-11-06',
+ 'changes': [('Themes: Settings › Appearance lists the built-in themes and your custom themes, with light, dark '
+              'or system appearance. Themes apply to the main window and Quick Paste on this device and are not '
+              'synced to other devices. The Android app has its own Appearance setting.',
+              '主题：「设置 › 外观」列出软件自带的主题和你的自定义主题，可选浅色、深色或跟随系统。主题用于这台设备的主窗口和快捷粘贴窗口，不同步到其他设备；Android App 在自己的「外观」里设置。',
+              'テーマ：「設定 › 外観」で内蔵テーマとカスタムテーマを選べ、ライト・ダーク・システムに合わせるも設定できます。テーマはこのデバイスのメインウインドウとクイックペーストに適用され、他のデバイスには同期されません。Android アプリは独自の「外観」で設定します。',
+              '主題：「設定 › 外觀」列出內建主題和你的自訂主題，可選淺色、深色或跟隨系統。主題用於這台裝置的主視窗和快速貼上視窗，不會同步到其他裝置；Android App 在自己的「外觀」裡設定。',
+              '主題：「設定 › 外觀」列出內置主題和你的自訂主題，可選淺色、深色或跟隨系統。主題用於這部裝置的主視窗和快速貼上視窗，不會同步到其他裝置；Android App 在自己的「外觀」裏設定。'),
+             ('Pixel theme: a built-in pixel-art theme with a bitmap font, notched borders, bevelled buttons, '
+              'neutral graphite and paper palettes with a pixel-green accent, page-header scenes, pixel '
+              'illustrations, game-style menu cursors and loading squares, and optional CRT scanlines.',
+              '像素主题：自带的像素风主题，点阵字体、切角粗边、凸起的按钮，石墨与纸两套中性配色加像素绿；页眉有夜景和白天的场景，空页面有像素插画，还有游戏式的菜单光标、四格加载，可选 CRT 扫描线。',
+              'ピクセルテーマ：ドット文字、切り欠きの太枠、立体的なボタン、グラファイトとペーパーの落ち着いた配色にピクセルグリーンを合わせた内蔵テーマ。ページ上部の風景、ピクセルイラスト、ゲーム風のメニューカーソルと読み込み表示、任意の CRT 走査線も備えています。',
+              '像素主題：內建的像素風主題，點陣字型、切角粗邊、凸起的按鈕，石墨與紙兩套中性配色加像素綠；頁首有夜景和白天的場景，空頁面有像素插畫，還有遊戲式的選單游標、四格載入，可選 CRT 掃描線。',
+              '像素主題：內置的像素風主題，點陣字型、切角粗邊、凸起的按鈕，石墨與紙兩套中性配色加像素綠；頁首有夜景和白天的場景，空頁面有像素插畫，還有遊戲式的選單游標、四格載入，可選 CRT 掃描線。'),
+             ('Custom themes: duplicate a built-in theme, import or export theme files, and delete themes you no '
+              'longer need. Text contrast is checked when a theme is saved, and low-contrast colors are reported.',
+              '自定义主题：可以复制一份自带主题、导入或导出主题文件、删除不用的主题；保存时会检查文字对比度，看不清的颜色会提示出来。',
+              'カスタムテーマ：内蔵テーマの複製、テーマファイルの読み込みと書き出し、不要なテーマの削除ができます。保存時に文字のコントラストを確認し、読みにくい色を知らせます。',
+              '自訂主題：可以複製一份內建主題、匯入或匯出主題檔案、刪除不用的主題；儲存時會檢查文字對比度，看不清楚的顏色會提示出來。',
+              '自訂主題：可以複製一份內置主題、匯入或匯出主題檔案、刪除不用的主題；儲存時會檢查文字對比度，看不清楚的顏色會提示出來。'),
+             ('AI-designed themes: `pasteferry-cli mcp` runs an MCP server so AI apps such as Claude and Cursor can '
+              'read the theme format, design a palette, check contrast, save and apply themes. It only provides '
+              'theme and background tools, not clipboard history, devices or friends.',
+              '让 AI 做主题：`pasteferry-cli mcp` 是一个 MCP 服务，Claude、Cursor 等 AI 应用可以读取主题格式、配色、检查对比度，再保存并应用主题。它只提供主题和背景图相关的功能，不开放复制记录、设备和好友。',
+              'AI でテーマ作成：`pasteferry-cli mcp` は MCP サーバーで、Claude や Cursor などの AI アプリがテーマ形式を読み、配色を考え、コントラストを確認して保存・適用できます。提供するのはテーマと背景画像の機能のみで、コピー履歴・デバイス・友だちは公開しません。',
+              '讓 AI 做主題：`pasteferry-cli mcp` 是一個 MCP 服務，Claude、Cursor 等 AI 應用程式可以讀取主題格式、配色、檢查對比度，再儲存並套用主題。它只提供主題和背景圖相關的功能，不開放複製記錄、裝置和好友。',
+              '讓 AI 做主題：`pasteferry-cli mcp` 是一個 MCP 服務，Claude、Cursor 等 AI 應用程式可以讀取主題格式、配色、檢查對比度，再儲存並套用主題。它只提供主題和背景圖相關的功能，不開放複製記錄、裝置和好友。')],
+ 'fixes': []},
 {'version': '2.9.0',
  'date': '2026-11-04',
  'changes': [('The desktop CLI now reports its own version and provides read-only JSON queries for '
