@@ -1,9 +1,9 @@
 """Local Chinese narration and original synthesized music; no external service."""
-import json,subprocess,sys,wave
+import json,os,subprocess,sys,wave
 from pathlib import Path
 import numpy as np
 
-root=Path(__file__).resolve().parent
+root=Path(os.environ.get('FILM',Path(__file__).resolve().parent)).resolve()
 out=Path(sys.argv[1]).resolve();out.mkdir(parents=True,exist_ok=True)
 story=json.loads((root/'story.json').read_text())
 sr=48000;duration=story['duration'];voice=np.zeros(int(duration*sr));music=np.zeros_like(voice)
@@ -39,6 +39,6 @@ mix=voice+music
 mix*=np.minimum(1,np.arange(len(mix))/(sr*.03))*np.minimum(1,(len(mix)-np.arange(len(mix)))/(sr*.24))
 peak=np.max(np.abs(mix));mix=mix/min(1e6,max(1,peak/.88))
 with wave.open(str(out/'mix.wav'),'wb') as f:f.setnchannels(1);f.setsampwidth(2);f.setframerate(sr);f.writeframes((mix*32767).astype('<i2').tobytes())
-(out/'PasteFerry-2.1-douyin.srt').write_text('\n'.join(subtitles))
+(out/f"{story.get('name','PasteFerry-2.1-douyin')}.srt").write_text('\n'.join(subtitles))
 (out/'narration-timing.json').write_text(json.dumps(mixes,indent=2)+'\n')
 print('Narration, original soundtrack and captions generated')

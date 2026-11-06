@@ -1,0 +1,162 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>PasteFerry 2.10 themes — vertical film</title>
+<!--
+  隔空贴 2.10「主题」竖屏宣传片，1080×1920。画面由 seek(t) 按时间轴确定地画出来，render.js 逐帧截图。
+  界面截图来自 prepare.sh（演示数据，不是真实的复制记录），路径由 ?assets= 传入。
+  文字只放在上面和中间：底部约 400px 与右侧约 150px 留给抖音的标题、按钮。
+-->
+<style>
+@font-face{font-family:Pixel;src:url('../../../ui/assets/fonts/FusionPixel12.otf')}
+*{box-sizing:border-box}html,body{margin:0;background:#111215}
+#film{position:relative;width:1080px;height:1920px;overflow:hidden;background:#111215;color:#E6E8EB;font-family:Pixel;-webkit-font-smoothing:none}
+canvas{image-rendering:pixelated;display:block}
+#sky{position:absolute;inset:0}
+.brand{position:absolute;left:60px;top:120px;display:flex;align-items:center;gap:18px;font-size:36px;line-height:48px;color:#9AA0AA}
+.scene{position:absolute;inset:0;visibility:hidden}
+.kicker{position:absolute;left:60px;top:200px;font-size:36px;line-height:48px;color:#3DDC97}
+.head{position:absolute;left:60px;top:260px;font-size:96px;line-height:120px;color:#E6E8EB}
+.head em{font-style:normal;color:#3DDC97}
+.screen{position:absolute;left:60px;top:640px;width:960px;height:640px;background:#17191D;
+  box-shadow:0 -6px 0 0 #3C414B,0 6px 0 0 #3C414B,-6px 0 0 0 #3C414B,6px 0 0 0 #3C414B,18px 24px 0 0 #000,24px 18px 0 0 #000}
+.screen canvas{width:100%;height:100%}
+.label{position:absolute;font-size:36px;line-height:48px;padding:6px 18px;background:#0C0D0F;color:#E6E8EB;box-shadow:0 0 0 4px #3C414B}
+#caption{position:absolute;left:60px;top:1470px;max-width:840px;font-size:48px;line-height:60px;padding:18px 30px;background:#0C0D0F;color:#E6E8EB;
+  box-shadow:0 -6px 0 0 #3DDC97,0 6px 0 0 #3DDC97,-6px 0 0 0 #3DDC97,6px 0 0 0 #3DDC97}
+#wipe{position:absolute;inset:0;pointer-events:none}
+.chat{position:absolute;left:60px;top:480px;width:960px;height:340px;background:#17191D;padding:30px 36px;font-size:36px;line-height:54px;
+  box-shadow:0 -6px 0 0 #3C414B,0 6px 0 0 #3C414B,-6px 0 0 0 #3C414B,6px 0 0 0 #3C414B}
+.bubble{display:inline-block;background:#3DDC97;color:#0C0D0F;padding:6px 20px;margin-bottom:18px}
+.bubble i{display:inline-block;width:18px;height:36px;background:#0C0D0F;vertical-align:-6px;margin-left:4px}
+.tool{color:#9AA0AA}.tool b{font-weight:normal;color:#3DDC97}
+.end{text-align:center;position:absolute;left:0;right:0}
+.url{display:inline-block;font-size:72px;line-height:96px;padding:12px 36px;color:#0C0D0F;background:#3DDC97;
+  box-shadow:inset 6px 6px 0 0 rgba(255,255,255,.25),inset -6px -6px 0 0 rgba(0,0,0,.3),0 -6px 0 0 #0C0D0F,0 6px 0 0 #0C0D0F,-6px 0 0 0 #0C0D0F,6px 0 0 0 #0C0D0F}
+</style>
+<div id="film">
+  <canvas id="sky" width="540" height="960"></canvas>
+  <div class="brand"><canvas id="logo" width="48" height="48"></canvas>隔空贴 2.10</div>
+
+  <section class="scene" id="s0">
+    <div class="kicker">隔空贴 · 跨设备复制粘贴</div>
+    <div class="head">剪贴板<br>也能<em>换皮肤</em>？</div>
+    <div class="screen"><canvas id="c0" width="1920" height="1280"></canvas></div>
+  </section>
+
+  <section class="scene" id="s1">
+    <div class="kicker">新的自带主题</div>
+    <div class="head">一键切到<br><em>像素风</em></div>
+    <div class="screen"><canvas id="c1" width="1920" height="1280"></canvas></div>
+  </section>
+
+  <section class="scene" id="s2">
+    <div class="kicker">浅色 · 深色 · 跟随系统</div>
+    <div class="head">白天是<em>纸</em><br>夜里是<em>石墨</em></div>
+    <div class="screen"><canvas id="c2" width="1920" height="1280"></canvas></div>
+    <div class="label" style="left:90px;top:1300px">纸</div>
+    <div class="label" style="right:90px;top:1300px">石墨</div>
+  </section>
+
+  <section class="scene" id="s3">
+    <div class="kicker">隔空传送</div>
+    <div class="head">纸飞机送文件<br>到了<em>放烟花</em></div>
+    <div class="screen"><canvas id="c3" width="1920" height="1280"></canvas></div>
+  </section>
+
+  <section class="scene" id="s4">
+    <div class="kicker">设置 › 外观</div>
+    <div class="head">做你自己的<br><em>主题</em></div>
+    <div class="screen"><canvas id="c4" width="1920" height="1280"></canvas></div>
+  </section>
+
+  <section class="scene" id="s5">
+    <div class="kicker">MCP · 让 AI 帮你做主题</div>
+    <div class="head" style="top:240px;font-size:72px;line-height:96px">说一句话<br><em>AI 帮你配色</em></div>
+    <div class="chat"><div class="bubble" id="ask"></div><div id="tools"></div></div>
+    <div class="screen" style="left:120px;top:870px;width:840px;height:560px"><canvas id="c5" width="1920" height="1280"></canvas></div>
+  </section>
+
+  <section class="scene" id="s6">
+    <div class="end" style="top:520px"><canvas id="bigLogo" width="192" height="192" style="margin:0 auto"></canvas></div>
+    <div class="end" style="top:780px;font-size:96px;line-height:120px">隔空贴 2.10</div>
+    <div class="end" style="top:920px;font-size:72px;line-height:96px;color:#3DDC97">主题来了</div>
+    <div class="end" style="top:1080px"><span class="url">pasteferry.cc</span></div>
+    <div class="end" style="top:1250px;font-size:36px;line-height:48px;color:#9AA0AA">Mac · Windows · Linux · Android · 免费</div>
+  </section>
+
+  <div id="caption"></div>
+  <canvas id="wipe" width="1080" height="1920"></canvas>
+</div>
+<script>
+const story={segments:[]};
+const A=new URLSearchParams(location.search).get('assets')||'assets';
+const IMG={};
+function load(name){return new Promise((ok,bad)=>{const i=new Image();i.onload=()=>{IMG[name]=i;ok()};i.onerror=()=>bad(new Error('缺少截图 '+name));i.src='file://'+A+'/'+name+'.png'});}
+// render.js 把 story.json 传进来；直接在浏览器里打开预览时自己去读
+async function ready(given){
+  if(given)Object.assign(story,given);else Object.assign(story,await (await fetch('story.json')).json());
+  await Promise.all(['default-history','pixel-history','pixel-history-dark','pixel-send-dark','pixel-appearance-dark','sunset-history-dark'].map(load));
+  await document.fonts.load('48px Pixel');await document.fonts.ready;
+  sprite(document.getElementById('logo'),LOGO,3);sprite(document.getElementById('bigLogo'),LOGO,12);
+}
+
+// ── 小工具 ──
+const G='#3DDC97';
+function hash(n){n=(n^0x5bd1e995)>>>0;n=Math.imul(n^(n>>>15),0x2c1b3c6d)>>>0;n=Math.imul(n^(n>>>12),0x297a2d39)>>>0;return (n^(n>>>15))>>>0;}
+function rnd(n){return (hash(n)%10000)/10000;}
+function ctx(id){const c=document.getElementById(id);const x=c.getContext('2d');x.imageSmoothingEnabled=true;return [c,x];}
+function step(v,n){return Math.floor(Math.max(0,Math.min(1,v))*n)/n;}
+const LOGO=['.OOOOOOOOOOOOOO.','OTTTTTTTTTTTTTTO','OTKKKKKKKTTTTTTO','OTKWWWWWKTTTTTTO','OTKWKKKWKTTTTTTO','OTKWWWWWKTTTTTTO','OTKWKKAAAAAAATTO','OTKWWWAHHHHAATTO','OTKWKKAAAAAAATTO','OTKWWWAHHHAAATTO','OTKWWWAAAAAAATTO','OTKKKKAHHAAAATTO','OTTTTTAAAAAAATTO','OTTTTTTSSSSSSSTO','OTTTTTTTTTTTTTTO','.OOOOOOOOOOOOOO.'];
+const LOGO_C={O:'#3C414B',T:'#F2F2EF',S:'#C9C9C4',K:'#2B2C30',W:'#FFFFFF',A:G,H:'#0C0D0F'};
+function sprite(c,rows,u,colors=LOGO_C){const x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);rows.forEach((r,y)=>{for(let i=0;i<r.length;i++){const col=colors[r[i]];if(col){x.fillStyle=col;x.fillRect(i*u,y*u,u,u);}}});}
+const PLANE=['..............kk','...........kkkwk','........kkkwwwk.','.....kkkwwwwwk..','..kkkwwwwwwwk...','kkwwwwwwwaak....','..kkkwwwaak.....','.....kkaak......','.......kak......','........k.......'];
+function drawSprite(x,rows,ox,oy,u,colors){rows.forEach((r,y)=>{for(let i=0;i<r.length;i++){const col=colors[r[i]];if(col){x.fillStyle=col;x.fillRect(ox+i*u,oy+y*u,u,u);}}});}
+function cursor(x,ox,oy,u){x.fillStyle=G;for(let i=0;i<3;i++)x.fillRect(ox+i*u,oy+i*u,u,(5-2*i)*u);}
+function burst(x,cx,cy,p,u){if(p<0||p>=1)return;const s=Math.floor(p*6);const cols=['#F6C744',G,'#F4F4F1'];for(let i=0;i<8;i++){const a=i*Math.PI/4,d=40+s*28;const px=Math.round((cx+Math.cos(a)*d)/u)*u,py=Math.round((cy+Math.sin(a)*d)/u)*u;x.fillStyle=cols[i%3];x.fillRect(px,py,2*u,2*u);if(s<3){x.fillRect(px-u,py+u/2,4*u,u);x.fillRect(px+u/2,py-u,u,4*u);}}}
+
+// ── 背景：很淡的星空，星星每秒闪两下 ──
+function sky(t){const [c,x]=ctx('sky');x.imageSmoothingEnabled=false;x.fillStyle='#111215';x.fillRect(0,0,540,960);const f=Math.floor(t*2);
+  for(let i=0;i<70;i++){if((f+i)%7===0)continue;const sx=Math.floor(rnd(i*3+1)*540),sy=Math.floor(rnd(i*3+2)*960);x.fillStyle=rnd(i*3+3)<.1?G:(rnd(i*7)<.5?'#3A3F4A':'#262A31');x.fillRect(sx,sy,1,1);}}
+
+// ── 每一段 ──
+function s0(t){const [c,x]=ctx('c0');const p=step((t-1.4)/1.3,12);x.drawImage(IMG['default-history'],0,0,1920,1280);
+  if(p>0){const B=80;for(let by=0;by<16;by++)for(let bx=0;bx<24;bx++){if(rnd(bx*31+by*977)<p)x.drawImage(IMG['pixel-history-dark'],bx*B,by*B,B,B,bx*B,by*B,B,B);}}}
+function s1(t){const [c,x]=ctx('c1');const z=1+step((t-3.6)/4.6,8)*.45;const w=1920/z,h=1280/z;const sx=(1920-w)*.62,sy=0;
+  x.drawImage(IMG['pixel-history-dark'],sx,sy,w,h,0,0,1920,1280);x.imageSmoothingEnabled=false;const f=Math.floor(t*4);
+  for(let i=0;i<26;i++){if((f+i)%3)continue;const px=Math.floor(rnd(i*11+5)*1900),py=Math.floor(rnd(i*11+6)*300);x.fillStyle=i%5?'#C9D1E0':G;x.fillRect(px,py,8*z,8*z);}}
+function s2(t){const [c,x]=ctx('c2');const k=t<10.2?.2+step((t-8.8)/1.4,6)*.6:.8-step((t-10.2)/1.6,6)*.3;const cut=Math.round(1920*k/16)*16;
+  x.drawImage(IMG['pixel-history'],0,0,cut,1280,0,0,cut,1280);x.drawImage(IMG['pixel-history-dark'],cut,0,1920-cut,1280,cut,0,1920-cut,1280);
+  x.fillStyle=G;x.fillRect(cut-6,0,12,1280);cursor(x,cut+18,610,10);}
+// 只放大雷达那一块（原图 2360×1440 里的 300,160 起 1500×1000），设备看得清
+function s3(t){const [c,x]=ctx('c3');const S=1.28,ox=300,oy=160;x.imageSmoothingEnabled=true;x.drawImage(IMG['pixel-send-dark'],ox,oy,1500,1000,0,0,1920,1280);x.imageSmoothingEnabled=false;
+  const at=(px,py)=>[(px-ox)*S,(py-oy)*S];const me=at(0.397*2360,0.541*1440),to=at(0.223*2360,0.541*1440);
+  const hop=Math.floor(((t-13.6)/2.6)*10)/10;
+  if(t>=13.6&&t<16.2){const px=me[0]+(to[0]-me[0])*hop,py=me[1]-180*Math.sin(Math.PI*hop)-40;drawSprite(x,PLANE,px-48,py-30,6,{k:'#0A0B0D',w:'#F4F4F1',a:G});
+    for(let i=1;i<4;i++){const q=Math.max(0,hop-i*.08);x.fillStyle='#5F6570';x.fillRect(me[0]+(to[0]-me[0])*q-6,me[1]-180*Math.sin(Math.PI*q)-40+20,8,8);}}
+  burst(x,to[0],to[1]-40,(t-16.2)/1.1,8);
+  if(t>=16.2){x.strokeStyle=G;x.lineWidth=8;const b=Math.floor(t*4)%2?0:6;x.strokeRect(to[0]-110,to[1]-160-b,220,220);}}
+// 只放大主题卡片那一块（原图 1920×1280 里的 420,160 起 1050×700）
+function s4(t){const [c,x]=ctx('c4');x.drawImage(IMG['pixel-appearance-dark'],420,160,1050,700,0,0,1920,1280);x.imageSmoothingEnabled=false;
+  const S=1920/1050;const spots=[[440,310],[848,310],[440,760],[848,760]].map(([a,b])=>[(a-420)*S,(b-160)*S]);const i=Math.min(3,Math.floor((t-18.2)/0.7));const [sx,sy]=spots[Math.max(0,i)];
+  if(Math.floor(t*3)%2===0)cursor(x,Math.max(4,sx-40),sy,10);
+  if(t>20.9){const mx=1180,my=860;x.fillStyle='#000';x.fillRect(mx+14,my+14,380,272);x.fillStyle='#17191D';x.fillRect(mx,my,380,272);x.strokeStyle='#3C414B';x.lineWidth=6;x.strokeRect(mx+3,my+3,374,266);
+    x.font='36px Pixel';x.textBaseline='middle';const items=['使用','复制一份','导出…','删除主题'];const hi=Math.min(3,Math.floor((t-21.1)/0.4));
+    items.forEach((s,k)=>{if(k===hi%2+0&&k<2){x.fillStyle='#1F2227';x.fillRect(mx+12,my+16+k*62,356,56);x.fillStyle=G;x.fillRect(mx+12,my+16+k*62,8,56);}x.fillStyle='#E6E8EB';x.fillText(s,mx+40,my+44+k*62);});}}
+function s5(t){const ask='帮我做一套落日像素主题';const n=Math.max(0,Math.min(ask.length,Math.floor((t-23.1)/1.3*ask.length)));
+  document.getElementById('ask').innerHTML=ask.slice(0,n)+(n<ask.length&&Math.floor(t*4)%2?'<i></i>':'');
+  const lines=[[24.7,'读取主题格式'],[25.2,'配色，检查文字对比度'],[25.7,'已保存并应用「落日像素」']];
+  document.getElementById('tools').innerHTML=lines.filter(l=>t>=l[0]).map(l=>`<div class="tool"><b>✓</b> ${l[1]}</div>`).join('');
+  const [c,x]=ctx('c5');const p=step((t-26.0)/0.6,4);x.drawImage(IMG['pixel-history-dark'],0,0);
+  if(p>0){const h=Math.round(1280*p);x.drawImage(IMG['sunset-history-dark'],0,0,1920,h,0,0,1920,h);x.fillStyle='#FF8A5B';x.fillRect(0,h-8,1920,8);}}
+
+function wipe(t){const c=document.getElementById('wipe'),x=c.getContext('2d');x.clearRect(0,0,1080,1920);
+  for(const s of story.segments){const d=t-s.start;if(s.start>0&&d>-0.12&&d<0.12){const p=1-Math.abs(d)/0.12;x.fillStyle='#0C0D0F';
+    for(let by=0;by<16;by++)for(let bx=0;bx<9;bx++){if(rnd(bx*13+by*101+Math.round(s.start*10))<p)x.fillRect(bx*120,by*120,120,120);}}}}
+
+const DRAW=[s0,s1,s2,s3,s4,s5,()=>{}];
+function seek(t){sky(t);const i=story.segments.findIndex(s=>t>=s.start&&t<s.end);const k=i<0?story.segments.length-1:i;
+  document.querySelectorAll('.scene').forEach((e,j)=>e.style.visibility=j===k?'visible':'hidden');DRAW[k](t);
+  document.getElementById('caption').textContent=story.segments[k].caption;
+  document.getElementById('caption').style.visibility=k===6?'hidden':'visible';
+  document.querySelector('.brand').style.visibility=k===6?'hidden':'visible';wipe(t);}
+if(!location.search.includes('render')){ready().then(()=>{const t0=performance.now();(function loop(){seek(((performance.now()-t0)/1000)%story.duration);requestAnimationFrame(loop)})()});}
+</script>
+</html>

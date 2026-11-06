@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "sunset-pixel",
+  "name": { "zh-Hans": "落日像素", "zh-Hant-TW": "落日像素", "zh-Hant-HK": "落日像素", "en": "Sunset Pixel", "ja": "サンセット" },
+  "base": "pixel",
+  "modes": {
+    "dark": {
+      "accent": "#FF8A5B", "onAccent": "#16110F",
+      "background": "#16110F", "sidebar": "#100C0A", "surface": "#1E1714", "selection": "#2A201B",
+      "border": "#3A2D27", "borderStrong": "#56423A", "separator": "#2E241F", "fill": "#120E0C",
+      "text": "#F3E9E2", "textDim": "#B9A79B", "textFaint": "#7D6B60"
+    },
+    "light": { "accent": "#C2410C" }
+  }
+}
