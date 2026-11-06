@@ -52,7 +52,7 @@ require (
 	github.com/baiyuze/pasteferry/server v0.0.0
 	github.com/godbus/dbus/v5 v5.2.2
 	github.com/jezek/xgb v1.3.1
-	github.com/klauspost/compress v1.20.0
+	github.com/klauspost/compress v1.20.2
 	github.com/pion/ice/v4 v4.4.7
 	github.com/pion/logging v0.2.4
 	github.com/pion/mdns/v2 v2.2.2
