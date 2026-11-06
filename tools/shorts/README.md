@@ -40,4 +40,5 @@ terms before commercial use.
 Use `node tools/shorts/render.js /output/path stills` to inspect the key frames
 before rendering. `story.json` owns the narration, timings and captions. Visuals
 in `video.html` use the same deterministic timeline. Refresh both when editing.
-Build outputs stay outside the 14 release attachments.
+Build outputs stay outside the 15 release attachments, and outside `dist/`,
+which `scripts/build.sh` clears.
