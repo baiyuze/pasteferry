@@ -1,65 +1,126 @@
 {
   "schema": 1,
-  "latest": "2.9.0",
-  "date": "2026-11-04",
+  "latest": "2.10.0",
+  "date": "2026-11-06",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.9.0/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.10.0/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.9.0/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.10.0/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 26998487,
-      "sha256": "ec389ebf7b2a6ebea7f8e5e32a5e5193aaf974bbd846d409cac2fb8fd5c22a7e"
+      "size": 28325208,
+      "sha256": "df0cd75e1876f00a9dd5f37ea52f49b7a61599540c11be9c432d4615a8638a21"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 29159982,
-      "sha256": "8e28dd1b5dc0137af0778614092dd3c57d982434046879d42d9f3ad24d275a09"
+      "size": 30492625,
+      "sha256": "ac2619f68feae3812096dacce6ec61c4660ba08cd5622c263b946dc2fdf04213"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 54206196,
-      "sha256": "751169c921aedcc5703d355f5013d8bfcb128c0f420a85c01cbbafb465966ed2"
+      "size": 55751902,
+      "sha256": "dcebb2b674f02ce09e27f5731d3ec792d4a3e848948fc80db2eff7ec00a97a26"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 24109558,
-      "sha256": "a89469b9bdb22e8fef965717a970c2ffd634fa6fdf08277bd3af710b90c3a290"
+      "size": 24925441,
+      "sha256": "bd974b73a747b60d36145c7b8b421a56cbf1d682e58fe4ffe25781d1461decd2"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 30485889,
-      "sha256": "30034187e7e34ef235be5d3467d839c8dbf4eca81d94d829a978c022e563d29a"
+      "size": 31840961,
+      "sha256": "77f0d40dae42cb52036cdbfc625a828e8ab1b03925da8e3aeb8435c1c6d50abe"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 23297058,
-      "sha256": "8675f7f8b6b087794bd355dfb904be7413db8bde53222743f315d282a16a8bc6"
+      "size": 24297296,
+      "sha256": "de1f9ec1f476830a0c87a595bb258af16e5e3520048d49066a52ad69104e286f"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 21682188,
-      "sha256": "8df14cbe343233d516d52a839d482b0fa561332b9a2c47017561ea6b71e827d9"
+      "size": 22665434,
+      "sha256": "7a2653c8ec7905d77166aead4d7dcec005efcadd68b76eecc612195b205a8a16"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 28203864,
-      "sha256": "496f62bd05fbe15f89c73b135f50efcc8589c2e77439869bfb133a4bd7daefbb"
+      "size": 29565248,
+      "sha256": "a8bd6c34d54defee94aefc120a119b772241638f050295d74ac6656ae6655e51"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 26411790,
-      "sha256": "40fce21de5c21867a4307303620fcb11e80ff8e62921dfcb0c769f890d7b4377"
+      "size": 27759969,
+      "sha256": "d83c0095ce7cbdb8799b6d1ee22a539a763d75c9fa7fc68656104fdb7b8d3336"
     }
   },
   "releases": [
+    {
+      "version": "2.10.0",
+      "date": "2026-11-06",
+      "notes": {
+        "en": {
+          "changes": [
+            "Themes: Settings › Appearance lists the built-in themes and your custom themes, with light, dark or system appearance. Themes apply to the main window and Quick Paste on this device and are not synced to other devices. The Android app has its own Appearance setting.",
+            "Pixel theme: a built-in pixel-art theme with a bitmap font, notched borders, bevelled buttons, neutral graphite and paper palettes with a pixel-green accent, page-header scenes, pixel illustrations, game-style menu cursors and loading squares, and optional CRT scanlines.",
+            "Custom themes: duplicate a built-in theme, import or export theme files, and delete themes you no longer need. Text contrast is checked when a theme is saved, and low-contrast colors are reported.",
+            "AI-designed themes: `pasteferry-cli mcp` runs an MCP server so AI apps such as Claude and Cursor can read the theme format, design a palette, check contrast, save and apply themes. It only provides theme and background tools, not clipboard history, devices or friends."
+          ],
+          "fixes": [
+            "Malformed compressed data from another device can no longer crash the background service (compression library updated for GO-2026-6865)."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "主题：「设置 › 外观」列出软件自带的主题和你的自定义主题，可选浅色、深色或跟随系统。主题用于这台设备的主窗口和快捷粘贴窗口，不同步到其他设备；Android App 在自己的「外观」里设置。",
+            "像素主题：自带的像素风主题，点阵字体、切角粗边、凸起的按钮，石墨与纸两套中性配色加像素绿；页眉有夜景和白天的场景，空页面有像素插画，还有游戏式的菜单光标、四格加载，可选 CRT 扫描线。",
+            "自定义主题：可以复制一份自带主题、导入或导出主题文件、删除不用的主题；保存时会检查文字对比度，看不清的颜色会提示出来。",
+            "让 AI 做主题：`pasteferry-cli mcp` 是一个 MCP 服务，Claude、Cursor 等 AI 应用可以读取主题格式、配色、检查对比度，再保存并应用主题。它只提供主题和背景图相关的功能，不开放复制记录、设备和好友。"
+          ],
+          "fixes": [
+            "其他设备发来损坏的压缩数据时，后台服务不会再崩溃（压缩库已更新，修复 GO-2026-6865）。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "テーマ：「設定 › 外観」で内蔵テーマとカスタムテーマを選べ、ライト・ダーク・システムに合わせるも設定できます。テーマはこのデバイスのメインウインドウとクイックペーストに適用され、他のデバイスには同期されません。Android アプリは独自の「外観」で設定します。",
+            "ピクセルテーマ：ドット文字、切り欠きの太枠、立体的なボタン、グラファイトとペーパーの落ち着いた配色にピクセルグリーンを合わせた内蔵テーマ。ページ上部の風景、ピクセルイラスト、ゲーム風のメニューカーソルと読み込み表示、任意の CRT 走査線も備えています。",
+            "カスタムテーマ：内蔵テーマの複製、テーマファイルの読み込みと書き出し、不要なテーマの削除ができます。保存時に文字のコントラストを確認し、読みにくい色を知らせます。",
+            "AI でテーマ作成：`pasteferry-cli mcp` は MCP サーバーで、Claude や Cursor などの AI アプリがテーマ形式を読み、配色を考え、コントラストを確認して保存・適用できます。提供するのはテーマと背景画像の機能のみで、コピー履歴・デバイス・友だちは公開しません。"
+          ],
+          "fixes": [
+            "ほかのデバイスから壊れた圧縮データが届いても、バックグラウンドサービスが停止しないよう修正しました（圧縮ライブラリを更新、GO-2026-6865）。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "主題：「設定 › 外觀」列出內建主題和你的自訂主題，可選淺色、深色或跟隨系統。主題用於這台裝置的主視窗和快速貼上視窗，不會同步到其他裝置；Android App 在自己的「外觀」裡設定。",
+            "像素主題：內建的像素風主題，點陣字型、切角粗邊、凸起的按鈕，石墨與紙兩套中性配色加像素綠；頁首有夜景和白天的場景，空頁面有像素插畫，還有遊戲式的選單游標、四格載入，可選 CRT 掃描線。",
+            "自訂主題：可以複製一份內建主題、匯入或匯出主題檔案、刪除不用的主題；儲存時會檢查文字對比度，看不清楚的顏色會提示出來。",
+            "讓 AI 做主題：`pasteferry-cli mcp` 是一個 MCP 服務，Claude、Cursor 等 AI 應用程式可以讀取主題格式、配色、檢查對比度，再儲存並套用主題。它只提供主題和背景圖相關的功能，不開放複製記錄、裝置和好友。"
+          ],
+          "fixes": [
+            "其他裝置傳來損壞的壓縮資料時，背景服務不會再當機（壓縮函式庫已更新，修正 GO-2026-6865）。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "主題：「設定 › 外觀」列出內置主題和你的自訂主題，可選淺色、深色或跟隨系統。主題用於這部裝置的主視窗和快速貼上視窗，不會同步到其他裝置；Android App 在自己的「外觀」裏設定。",
+            "像素主題：內置的像素風主題，點陣字型、切角粗邊、凸起的按鈕，石墨與紙兩套中性配色加像素綠；頁首有夜景和白天的場景，空頁面有像素插畫，還有遊戲式的選單游標、四格載入，可選 CRT 掃描線。",
+            "自訂主題：可以複製一份內置主題、匯入或匯出主題檔案、刪除不用的主題；儲存時會檢查文字對比度，看不清楚的顏色會提示出來。",
+            "讓 AI 做主題：`pasteferry-cli mcp` 是一個 MCP 服務，Claude、Cursor 等 AI 應用程式可以讀取主題格式、配色、檢查對比度，再儲存並套用主題。它只提供主題和背景圖相關的功能，不開放複製記錄、裝置和好友。"
+          ],
+          "fixes": [
+            "其他裝置傳來損壞的壓縮資料時，背景服務不會再停止運作（壓縮程式庫已更新，修正 GO-2026-6865）。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.9.0",
       "date": "2026-11-04",
@@ -475,47 +536,6 @@
           ],
           "fixes": [
             "在手機網頁上按「複製」會把文字寫進那部電腦的剪貼簿，於是又被記成一項新記錄。現在同一段文字一分鐘內重複複製不再記錄，只更新剪貼簿。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.7.0",
-      "date": "2026-10-28",
-      "notes": {
-        "en": {
-          "changes": [
-            "Phone web transfer: Devices › Phone web transfer turns it on and shows a QR code. Scanning it opens a page in the phone browser, on the same local network, that lists the records from the computer: copy a text, look at a picture, download a file. Text, photos and files sent from the page arrive on the computer as a normal record and go into its clipboard. Contents are encrypted between the phone and the computer, a code registers one phone and expires after ten minutes, and the switch is off by default.",
-            "Records that came from the phone say so in the history, with the phone's name.",
-            "On the phone page, copying and sending report in place instead of over the list, and pressing and holding a record no longer opens the browser's own copy bar."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "手机网页传输：「设备 › 手机网页传输」打开后显示二维码，用手机扫一下就在手机浏览器里打开一个页面，列出电脑上的复制记录：复制文字、看图片、下载文件。手机上发出的文字、照片和文件会作为一条普通记录到电脑上，并放进电脑的剪贴板。手机和电脑之间的内容是加密的；一张码只登记一台手机，十分钟内有效；开关默认关闭。",
-            "手机发来的记录在记录列表里标明来自哪一台手机。",
-            "手机网页上，复制和发送的结果就地显示，不再浮在列表上面；长按记录也不会再弹出浏览器自带的选择工具条。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "スマホのウェブ転送：「デバイス › スマホのウェブ転送」をオンにすると QR コードが表示されます。スマホで読み取ると、同じ LAN 上のスマホのブラウザでページが開き、パソコンのコピー履歴が一覧できます。テキストのコピー、画像の表示、ファイルのダウンロードができ、スマホから送ったテキスト・写真・ファイルは通常の履歴としてパソコンに届き、クリップボードにも入ります。スマホとパソコンの間は暗号化され、コード 1 つにつき 1 台、有効期限は 10 分です。スイッチは初期状態でオフです。",
-            "スマホから届いた履歴には、どのスマホから来たかが表示されます。",
-            "スマホのページでは、コピーや送信の結果がその場に表示され、一覧の上に重なりません。履歴を長押ししてもブラウザ標準の選択バーは出ません。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "手機網頁傳輸：「裝置 › 手機網頁傳輸」打開後顯示 QR 碼，用手機掃一下就在手機瀏覽器裡打開一個頁面，列出電腦上的複製記錄：複製文字、看圖片、下載檔案。手機上送出的文字、照片和檔案會變成一筆普通記錄到電腦上，並放進電腦的剪貼簿。手機和電腦之間的內容是加密的；一個碼只登記一台手機，十分鐘內有效；開關預設關閉。",
-            "手機送來的記錄在記錄列表裡標明來自哪一台手機。",
-            "手機網頁上，複製和傳送的結果就地在原處顯示，不再浮在列表上面；長按記錄也不會再跳出瀏覽器自帶的選取工具列。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "手機網頁傳輸：「裝置 › 手機網頁傳輸」打開後顯示 QR 碼，用手機掃一下就在手機瀏覽器裏打開一個頁面，列出電腦上的複製記錄：複製文字、看圖片、下載檔案。手機上送出的文字、照片和檔案會變成一項普通記錄到電腦上，並放進電腦的剪貼簿。手機和電腦之間的內容是加密的；一個碼只登記一台手機，十分鐘內有效；開關預設關閉。",
-            "手機送來的記錄在記錄列表裏標明來自哪一部手機。",
-            "手機網頁上，複製和傳送的結果就地在原處顯示，不再浮在列表上面；長按記錄也不會再彈出瀏覽器自帶的選取工具列。"
           ]
         }
       }
