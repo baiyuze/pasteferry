@@ -93,6 +93,21 @@ With PasteFerry you pair two computers once. After that, copy on one and paste o
   </tr>
 </table>
 
+### Themes (new in 2.10)
+
+- **Settings → Appearance** lists the built-in themes (Default and Pixel) and your custom ones, with light, dark or match-the-system.
+- **Pixel** uses a bitmap font, notched blocks and bevelled buttons on a neutral graphite or paper palette with a pixel-green accent. A night or daytime scene sits in the header, a campfire or small house at the bottom of the sidebar, empty pages get pixel illustrations, and Send Files flies a paper plane and bursts into stars when it's done. CRT scanlines are optional.
+- **Custom themes**: duplicate a built-in theme, import or export `.pasteferry-theme.json` files, delete the ones you don't need. Saving checks text contrast and warns when something would be hard to read.
+- **Ask an AI to make one**: `pasteferry-cli mcp` lets Claude, Cursor and other MCP apps design, check and apply a theme (see [below](#make-a-theme-with-ai-mcp)).
+- A theme applies only to the device you set it on (on a computer, the main window and quick paste) and isn't synced. The Android app picks its own theme in its Settings → Appearance.
+
+<table>
+  <tr>
+    <td><img src="docs/assets/screenshots/en/pixel-history-dark.png" alt="History in the Pixel theme: night mountains and a moon in the header, a tent and campfire in the sidebar"></td>
+    <td><img src="docs/assets/screenshots/en/pixel-appearance-dark.png" alt="Settings → Appearance: built-in and custom themes, Import theme and Ask AI to make a theme"></td>
+  </tr>
+</table>
+
 ### And
 
 - Runs in the background, starts at login, recovers from crashes; checks for updates and installs them after you confirm.
@@ -199,13 +214,39 @@ History returns the latest 20 record summaries. Without `-json`, output remains 
 Use `-data-dir DIR` to select an existing running instance; the CLI does not start a service.
 See the [CLI JSON reference](design/cli-json.md) for the supported read-only queries and output format.
 
+### Make a theme with AI (MCP)
+
+`pasteferry-cli mcp` is an MCP server (2.10 and later). Add it to an AI app, then ask for a theme — for example "make me a cyberpunk theme". The AI reads the theme format, picks colors, checks contrast, saves the theme and applies it. It can only read and write themes and background images; it never sees your history, devices or contacts. Settings → Appearance → **Ask AI to make a theme** shows the configuration with this computer's path filled in.
+
+Claude Desktop and Cursor (`~/.cursor/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "pasteferry": {
+      "command": "/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+Claude Code:
+
+```sh
+claude mcp add pasteferry -- /Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli mcp
+```
+
+On Windows the command is `%LOCALAPPDATA%\Programs\PasteFerry\pasteferry-cli.exe`; with the Linux `.deb` it's `/usr/bin/pasteferry-cli`. The background service must be running. See [Make a theme with AI](guide/ai-themes.md) for the tools and more examples.
+
 ## Documentation
 
 - [How it works](guide/how-it-works.md): architecture, NAT traversal, security model, fallbacks, lessons learned
 - [Troubleshooting](guide/troubleshooting.md) and known limitations
+- [Make a theme with AI](guide/ai-themes.md) (MCP)
 - Guides with screenshots: [quick start](https://pasteferry.cc/en/start/) · [official service](https://pasteferry.cc/en/official/) · [same network](https://pasteferry.cc/en/lan/) · [public server](https://pasteferry.cc/en/cloud/) · [Tailscale](https://pasteferry.cc/en/tailscale/)
 - [Server deployment](server/deploy/README.md), [building from source](guide/building.md)
-- Design notes (Chinese): [NAT traversal on multi-uplink networks](design/nat-traversal.md), [local network mode](design/lan-mode.md), [quick paste and favorites](design/quick-paste-and-favorites.md), [Send Files](design/send-files.md), [Windows client](design/windows-client.md)
+- Design notes (Chinese): [NAT traversal on multi-uplink networks](design/nat-traversal.md), [local network mode](design/lan-mode.md), [quick paste and favorites](design/quick-paste-and-favorites.md), [Send Files](design/send-files.md), [Windows client](design/windows-client.md), [themes](design/themes.md), [pixel theme](design/pixel-theme.md), [MCP](design/mcp.md)
 - [Privacy](PRIVACY.md), [security](SECURITY.md), [official service protocol](design/official-gateway.md)
 - [Changelog](CHANGELOG.md)
 

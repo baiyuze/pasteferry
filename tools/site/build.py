@@ -602,6 +602,18 @@ def home(code: str) -> str:
       </div>
     </section>
 
+    <section class="section spotlight" id="themes" aria-labelledby="theme-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">{f["theme_kicker"]}</span></p>
+        <h2 id="theme-title">{f["home_theme_h2"]}</h2>
+        <p class="intro">{f["home_theme_intro"]}</p>
+        <figure class="spot wide" data-reveal>
+          <img src="{up}{shots}pixel-history-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(f["home_theme_alt"])}">
+        </figure>
+        <p class="more"><a href="{FEATURES}#themes">{f["home_theme_link"]}</a></p>
+      </div>
+    </section>
+
     <section class="section spotlight" id="friends" aria-labelledby="friends-title">
       <div class="wrap">
         <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
@@ -909,6 +921,25 @@ def features_page(code: str) -> str:
 {facts(f["phone_points"])}
         </ul>
         <p class="f-note">{f["phone_note"]}</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="themes" aria-labelledby="theme-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">{f["theme_kicker"]}</span></p>
+        <h2 class="f-h2" id="theme-title">{f["theme_h2"]}</h2>
+        <p class="f-intro">{f["theme_intro"]}</p>
+        <figure class="f-shot" data-reveal>
+          <img src="{shots}pixel-appearance-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(f["theme_alt"])}">
+        </figure>
+        <ul class="facts">
+{facts(f["theme_points"])}
+        </ul>
+        <div class="f-pair" data-reveal>
+          <img src="{shots}pixel-history.png" width="2112" height="1472" loading="lazy" alt="{esc(f["theme_alt_light"])}">
+          <img src="{shots}pixel-send-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["theme_alt_send"])}">
+        </div>
+        <p class="f-note">{f["theme_note"]}</p>
       </div>
     </section>
 

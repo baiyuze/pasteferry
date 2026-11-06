@@ -21,12 +21,14 @@ Key facts:
 - History keeps 3 days by default (adjustable 1 hour–30 days).
 - Pairing: 6-character code valid for 5 minutes (matched on the LAN, or through the server), plus a human check that both devices show the same two fingerprints (one per device's Ed25519 public key), which prevents man-in-the-middle attacks by the server.
 - Not supported: iPhone/iPad (iOS forbids background clipboard monitoring). The server stores nothing: while the other computer is unreachable, the latest 20 items are kept in memory and sent when it reconnects (added to its history, not its clipboard).
+- Themes (2.10 and later): Settings → Appearance lists built-in themes (Default and Pixel) and custom themes, with light, dark or match-the-system. The Pixel theme uses a bitmap font (Fusion Pixel), notched blocks, bevelled buttons, a neutral graphite/paper palette with a pixel-green accent, header scenes, pixel illustrations and stepped animations; CRT scanlines are optional. Custom themes can be duplicated from a built-in theme, imported or exported as `.pasteferry-theme.json`, and are checked for text contrast when saved. A theme applies only to the device it is set on (on a computer, the main window and quick paste) and is not synced; the Android app has its own Settings → Appearance.
+- AI theme editing (MCP): `pasteferry-cli mcp` is a stdio MCP server (protocol 2025-06-18 and 2025-03-26). Tools: theme_list, theme_get, theme_schema, theme_validate, theme_save, theme_apply, theme_delete, background_import, background_analyze; resources pasteferry://themes/schema and pasteferry://themes/{id}. It exposes only themes and background images, never history, devices or contacts, and needs the background service to be running. CLI paths: /Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli (Mac), %LOCALAPPDATA%\Programs\PasteFerry\pasteferry-cli.exe (Windows), /usr/bin/pasteferry-cli (Linux .deb).
 - Compared with Apple's Universal Clipboard: no same-Apple-ID or proximity requirement, keeps a history, handles large files and folders.
 
 ## Docs
 
 - [Website (English)](https://pasteferry.cc/en/), [简体中文](https://pasteferry.cc/), [繁體中文（台灣）](https://pasteferry.cc/zh-tw/), [繁體中文（香港）](https://pasteferry.cc/zh-hk/), [日本語](https://pasteferry.cc/ja/)
-- [Features](https://pasteferry.cc/en/features/): Send Files, sending to contacts, quick paste, favorites, history, files, cross-network sync ([中文](https://pasteferry.cc/features/), [日本語](https://pasteferry.cc/ja/features/))
+- [Features](https://pasteferry.cc/en/features/): Send Files, sending to contacts, themes, quick paste, favorites, history, files, cross-network sync ([中文](https://pasteferry.cc/features/), [日本語](https://pasteferry.cc/ja/features/))
 - [How it works](https://pasteferry.cc/en/how/), [Security](https://pasteferry.cc/en/security/), [FAQ](https://pasteferry.cc/en/faq/)
 - [Quick start](https://pasteferry.cc/en/start/): install the apps, pick a way to connect, and pair ([中文](https://pasteferry.cc/start/), [日本語](https://pasteferry.cc/ja/start/))
 - [On the same network](https://pasteferry.cc/en/lan/): no server; pairing across subnets, firewall and macOS permission notes ([中文](https://pasteferry.cc/lan/), [日本語](https://pasteferry.cc/ja/lan/))
@@ -37,6 +39,7 @@ Key facts:
 - [README (English)](https://github.com/baiyuze/pasteferry/blob/main/README.md): features and getting started ([中文](https://github.com/baiyuze/pasteferry/blob/main/README.zh-CN.md))
 - [How it works](https://github.com/baiyuze/pasteferry/blob/main/guide/how-it-works.md): architecture, NAT traversal, security model, fallbacks, lessons learned
 - [Troubleshooting](https://github.com/baiyuze/pasteferry/blob/main/guide/troubleshooting.md) and known limitations
+- [Make a theme with AI](https://github.com/baiyuze/pasteferry/blob/main/guide/ai-themes.md): configure `pasteferry-cli mcp` in Claude Desktop, Claude Code or Cursor ([中文](https://github.com/baiyuze/pasteferry/blob/main/guide/ai-themes.zh-CN.md))
 - [Server deployment](https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md): Windows, macOS, Linux (systemd), Docker and manual setup
 - [Licensing](https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md): AGPL-3.0 terms; versions 1.2.0 and earlier remain MIT
 - [Windows client design (中文)](https://pasteferry.cc/design/windows-client.html): clipboard formats, file-name compatibility, background process, installer

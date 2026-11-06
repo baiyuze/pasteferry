@@ -104,6 +104,21 @@
   width: 100%;
 }
 
+/* 两张截图并排（主题一节：浅色与深色），窄屏时上下排 */
+.f-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: center;
+  max-width: 68rem;
+  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
+}
+
+.f-pair img {
+  width: 100%;
+  height: auto;
+}
+
 .facts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));

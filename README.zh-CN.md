@@ -90,6 +90,21 @@
   </tr>
 </table>
 
+### 主题（2.10 新增）
+
+- **设置 › 外观**里分「软件自带」（默认、像素）与「自定义」两组，浅色、深色、跟随系统随你选。
+- **像素主题**：缝合像素字体、切角方块、按钮斜面，配色是中性的「石墨」与「纸」加像素绿。页眉是夜景或白天，侧边栏底下有篝火或小房子，空页面有像素插画；隔空传送时纸飞机飞过去，完成时迸出星星。还可以打开 CRT 扫描线。
+- **自定义主题**：复制一份自带主题，导入、导出 `.pasteferry-theme.json`，不要的删掉。保存时检查文字对比度，看不清会提醒。
+- **让 AI 帮你做主题**：`pasteferry-cli mcp` 让 Claude、Cursor 等支持 MCP 的应用配色、校验并应用主题（见[下文](#让-ai-帮你做主题mcp)）。
+- 主题只作用于这一台设备（电脑上包括主窗口和快捷粘贴窗口），不在设备之间同步；安卓 App 在自己的「设置 › 外观」里单独选。
+
+<table>
+  <tr>
+    <td><img src="docs/assets/screenshots/pixel-history-dark.png" alt="像素主题的复制记录：页眉是夜里的远山和月亮，侧边栏底下有帐篷和篝火"></td>
+    <td><img src="docs/assets/screenshots/pixel-appearance-dark.png" alt="设置 › 外观：软件自带与自定义主题、导入主题、让 AI 帮你做主题"></td>
+  </tr>
+</table>
+
 ### 其他
 
 - 后台常驻，开机自启，崩溃自动恢复；App 里检查更新，确认后自动安装。
@@ -188,13 +203,39 @@ pasteferry-cli -json config get
 不加 `-json` 时沿用文本输出。可用 `-data-dir DIR` 指定一个已经运行的实例的数据目录；CLI 本身不启动后台服务。
 JSON 模式支持上述只读查询，格式及示例见 [CLI JSON 接口](design/cli-json.md)。
 
+### 让 AI 帮你做主题（MCP）
+
+`pasteferry-cli mcp` 是一个 MCP 服务（2.10 起）。把它加到 AI 应用里，然后直接说「帮我做一套赛博朋克风的主题」：AI 会读取主题格式、配色、检查对比度，保存后应用。它只能读写主题和背景图，看不到复制记录、设备和好友。「设置 › 外观 › 让 AI 帮你做主题」里有填好本机路径的配置，可以直接复制。
+
+Claude Desktop 与 Cursor（`~/.cursor/mcp.json`）：
+
+```json
+{
+  "mcpServers": {
+    "pasteferry": {
+      "command": "/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+Claude Code：
+
+```sh
+claude mcp add pasteferry -- /Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli mcp
+```
+
+Windows 上命令是 `%LOCALAPPDATA%\Programs\PasteFerry\pasteferry-cli.exe`，Linux 的 `.deb` 包是 `/usr/bin/pasteferry-cli`。后台服务要在运行。工具清单与更多例子见[让 AI 帮你做主题](guide/ai-themes.zh-CN.md)。
+
 ## 文档
 
 - [工作原理](guide/how-it-works.zh-CN.md)：架构、NAT 打洞、安全模型、兜底、踩过的坑
 - [排障](guide/troubleshooting.zh-CN.md)与已知限制
+- [让 AI 帮你做主题](guide/ai-themes.zh-CN.md)（MCP）
 - 图文教程：[快速开始](https://pasteferry.cc/start/) · [服务](https://pasteferry.cc/official/) · [同一网络](https://pasteferry.cc/lan/) · [公网服务器](https://pasteferry.cc/cloud/) · [Tailscale](https://pasteferry.cc/tailscale/)
 - [服务器部署说明](server/deploy/README.md)、[从源码构建](guide/building.zh-CN.md)
-- 技术方案：[多出口网络的 NAT 打洞](design/nat-traversal.md)、[局域网直连](design/lan-mode.md)、[快捷粘贴与收藏](design/quick-paste-and-favorites.md)、[隔空传送](design/send-files.md)、[Windows 客户端](design/windows-client.md)
+- 技术方案：[多出口网络的 NAT 打洞](design/nat-traversal.md)、[局域网直连](design/lan-mode.md)、[快捷粘贴与收藏](design/quick-paste-and-favorites.md)、[隔空传送](design/send-files.md)、[Windows 客户端](design/windows-client.md)、[主题](design/themes.md)、[像素主题](design/pixel-theme.md)、[MCP](design/mcp.md)
 - [隐私说明](PRIVACY.md)、[安全说明](SECURITY.md)、[「服务」的公开协议](design/official-gateway.md)
 - [更新记录](CHANGELOG.md)
 

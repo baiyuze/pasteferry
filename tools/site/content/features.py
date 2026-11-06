@@ -30,11 +30,11 @@ COPY = {
 
     # ── 首页 ──
     # {version} 由官网 VERSION 生成；每次发版同步更新功能摘要。
-    "badge": ('{version} 新功能：命令行查询，支持 Homebrew 安装 →',
- '{version} 新功能：命令列查詢，支援 Homebrew 安裝 →',
- '{version} 新功能：命令列查詢，支援 Homebrew 安裝 →',
- 'New in {version}: CLI queries and Homebrew installation →',
- '{version} の新機能：CLI での状態確認と Homebrew インストール →'),
+    "badge": ('{version} 新功能：主题与像素风，AI 也能帮你做主题 →',
+ '{version} 新功能：主題與像素風，AI 也能幫你做主題 →',
+ '{version} 新功能：主題與像素風，AI 也能幫你做主題 →',
+ 'New in {version}: themes, a pixel look, and themes made by AI →',
+ '{version} の新機能：テーマとピクセル風、AI によるテーマ作成 →'),
     # 首页手机区块（2.7）
     "home_phone_h2": ("手机也能用了。", "手機也能用了。", "手機也能用了。", "Your phone joins in.", "スマホでも使える。"),
     "home_phone_intro": ('安卓 App 可与电脑双向隔空传送，照片和文件一次多选，收到后保存或分享。不想安装？扫码打开网页，查看复制记录、发送内容，也能独立收发文件。',
@@ -176,6 +176,80 @@ COPY = {
         "The Send Files page: a radar with this Mac in the middle and devices on the same network and elsewhere around it; on the right, received files, with a folder arriving and its progress and speed",
         "ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示",
     ),
+
+    # ── 主题（2.10） ──
+    "theme_kicker": ("2.10 新功能", "2.10 新功能", "2.10 新功能", "New in 2.10", "2.10 の新機能"),
+    "theme_h2": ("换个样子，<br>像素风也行。", "換個樣子，<br>像素風也行。", "換個樣子，<br>像素風也得。",
+                 "Make it yours.<br>Even in pixels.", "見た目も、<br>ピクセルでも。"),
+    "theme_intro": (
+        '在「设置 › 外观」里换主题：自带默认与像素两套，也能复制一份改成自己的，或者让 AI 帮你配一套。浅色、深色、跟随系统随你选。',
+        '在「設定 › 外觀」裡換主題：內建預設與像素兩套，也能複製一份改成自己的，或者讓 AI 幫你配一套。淺色、深色、跟隨系統隨你選。',
+        '在「設定 › 外觀」裏換主題：內置預設與像素兩套，也可以複製一份改成自己的，或者讓 AI 幫你配一套。淺色、深色、跟隨系統隨你揀。',
+        'Pick a theme in Settings › Appearance: Default and Pixel are built in. Duplicate one and make it yours, or ask an AI to design one. Light, dark or match the system.',
+        '「設定 › 外観」でテーマを切り替え。デフォルトとピクセルを内蔵し、複製して自分好みに変えたり、AI に作ってもらったりできます。ライト、ダーク、システムに合わせるも自由に。',
+    ),
+    "theme_points": (
+        [('像素主题', '点阵字体、切角方块、按钮斜面；页眉是夜景或白天，发送时纸飞机飞过去，完成时迸出星星。'),
+         ('自定义主题', '复制一份自带主题，导入、导出主题文件；文字颜色太淡看不清时会提醒。'),
+         ('让 AI 做主题', '把 <code>pasteferry-cli mcp</code> 加到 Claude、Cursor 等，说一句「做一套赛博朋克风」就能生成并应用。')],
+        [('像素主題', '點陣字型、切角方塊、按鈕斜面；頁首是夜景或白天，傳送時紙飛機飛過去，完成時迸出星星。'),
+         ('自訂主題', '複製一份內建主題，匯入、匯出主題檔案；文字顏色太淡看不清楚時會提醒。'),
+         ('讓 AI 做主題', '把 <code>pasteferry-cli mcp</code> 加到 Claude、Cursor 等，說一句「做一套賽博龐克風」就能產生並套用。')],
+        [('像素主題', '點陣字型、切角方塊、按鈕斜面；頁首是夜景或白天，傳送時紙飛機飛過去，完成時迸出星星。'),
+         ('自訂主題', '複製一份內置主題，匯入、匯出主題檔案；文字顏色太淡看不清楚時會提醒。'),
+         ('讓 AI 做主題', '把 <code>pasteferry-cli mcp</code> 加到 Claude、Cursor 等，講一句「做一套賽博朋克風」就可以產生並套用。')],
+        [('Pixel theme', 'Bitmap type, notched blocks and bevelled buttons. A night or daytime scene up top, a paper plane while sending and a burst of stars when it’s done.'),
+         ('Custom themes', 'Duplicate a built-in theme, import or export theme files. You’re warned when text would be hard to read.'),
+         ('Ask an AI', 'Add <code>pasteferry-cli mcp</code> to Claude, Cursor and others, then say “make me a cyberpunk theme”. It’s created and applied.')],
+        [('ピクセルテーマ', 'ドット文字、角を欠いたブロック、立体的なボタン。上部には夜景や昼の景色、送信中は紙飛行機、完了すると星がはじけます。'),
+         ('カスタムテーマ', '内蔵テーマを複製、テーマファイルの読み込みと書き出し。文字が読みにくい配色は知らせてくれます。'),
+         ('AI に作ってもらう', '<code>pasteferry-cli mcp</code> を Claude や Cursor などに追加して「サイバーパンク風のテーマを作って」と頼めば、作成して適用まで。')],
+    ),
+    "theme_note": (
+        '主题只作用于这一台设备（电脑上包括主窗口和快捷粘贴窗口），不在设备之间同步；安卓 App 在自己的「设置 › 外观」里单独选。像素主题还能打开 CRT 扫描线。AI 只能读写主题，看不到复制记录和设备。',
+        '主題只作用於這一台裝置（電腦上包括主視窗和快速貼上視窗），不在裝置之間同步；安卓 App 在自己的「設定 › 外觀」裡單獨選。像素主題還能開啟 CRT 掃描線。AI 只能讀寫主題，看不到複製記錄和裝置。',
+        '主題只作用於這一部裝置（電腦上包括主視窗和快速貼上視窗），不在裝置之間同步；安卓 App 在自己的「設定 › 外觀」裏單獨揀。像素主題還可以開啟 CRT 掃描線。AI 只能讀寫主題，看不到複製記錄和裝置。',
+        'Themes apply only to the device you set them on (on a computer, the main window and quick paste); they aren’t synced. The Android app has its own Settings › Appearance. Pixel themes can add CRT scanlines. The AI can only read and write themes, never your history or devices.',
+        'テーマは設定したデバイスだけに適用され（パソコンではメインウインドウとクイックペースト）、デバイス間で同期されません。Android アプリは自分の「設定 › 外観」で選びます。ピクセルテーマには CRT 走査線も。AI が扱えるのはテーマだけで、履歴やデバイスは見えません。',
+    ),
+    "theme_alt": (
+        "设置里的外观页（像素主题、深色）：自带的默认与像素主题、两套自定义主题的缩略图，下面是导入主题、让 AI 帮你做主题，以及浅色与深色、扫描线开关",
+        "設定裡的外觀頁（像素主題、深色）：內建的預設與像素主題、兩套自訂主題的縮圖，下面是匯入主題、讓 AI 幫你做主題，以及淺色與深色、掃描線開關",
+        "設定裏的外觀頁（像素主題、深色）：內置的預設與像素主題、兩套自訂主題的縮圖，下面是匯入主題、讓 AI 幫你做主題，以及淺色與深色、掃描線開關",
+        "The Appearance page in Settings (Pixel theme, dark): thumbnails of the built-in Default and Pixel themes and two custom themes, then Import theme, Ask AI to make a theme, light and dark, and scanlines",
+        "設定の外観ページ（ピクセルテーマ、ダーク）：内蔵のデフォルトとピクセル、2 つのカスタムテーマのサムネイル。その下にテーマの読み込み、AI にテーマを作ってもらう、ライトとダーク、走査線",
+    ),
+    "theme_alt_light": (
+        "像素主题的复制记录（浅色）：页眉是白天的云和丘陵，侧边栏底下有一间小房子",
+        "像素主題的複製記錄（淺色）：頁首是白天的雲和丘陵，側邊欄底下有一間小房子",
+        "像素主題的複製記錄（淺色）：頁首是白天的雲和丘陵，側邊欄底下有一間小屋",
+        "History in the Pixel theme (light): clouds and hills in the header, and a small house at the bottom of the sidebar",
+        "ピクセルテーマの履歴（ライト）：上部に昼の雲と丘、サイドバーの下に小さな家",
+    ),
+    "theme_alt_send": (
+        "像素主题的隔空传送页（深色）：页眉是夜里的远山和月亮，雷达是点阵圆圈，设备是像素小方块",
+        "像素主題的隔空傳送頁（深色）：頁首是夜裡的遠山和月亮，雷達是點陣圓圈，裝置是像素小方塊",
+        "像素主題的隔空傳送頁（深色）：頁首是夜裏的遠山和月亮，雷達是點陣圓圈，裝置是像素小方塊",
+        "Send Files in the Pixel theme (dark): night mountains and a moon in the header, a dotted radar and pixel-block devices",
+        "ピクセルテーマのファイル送信ページ（ダーク）：上部に夜の山と月、ドットのレーダー、ピクセルのブロックで描かれたデバイス",
+    ),
+    "home_theme_h2": ("换个样子，<br>像素风也行。", "換個樣子，<br>像素風也行。", "換個樣子，<br>像素風也得。",
+                      "Make it yours.<br>Even in pixels.", "見た目も、<br>ピクセルでも。"),
+    "home_theme_intro": (
+        '新增主题：自带像素风，也能自己做一套，或者让 AI 帮你配色。',
+        '新增主題：內建像素風，也能自己做一套，或者讓 AI 幫你配色。',
+        '新增主題：內置像素風，也可以自己做一套，或者讓 AI 幫你配色。',
+        'Themes are here: a built-in pixel look, your own themes, or one an AI designs for you.',
+        'テーマに対応：ピクセル風を内蔵。自分で作るのも、AI に配色してもらうのも。',
+    ),
+    "home_theme_alt": (
+        "像素主题的复制记录（深色）：页眉是夜里的远山、松树和月亮，侧边栏底下有帐篷和篝火，字是点阵字体",
+        "像素主題的複製記錄（深色）：頁首是夜裡的遠山、松樹和月亮，側邊欄底下有帳篷和營火，字是點陣字型",
+        "像素主題的複製記錄（深色）：頁首是夜裏的遠山、松樹和月亮，側邊欄底下有帳篷和營火，字是點陣字型",
+        "History in the Pixel theme (dark): night mountains, pines and a moon in the header, a tent and campfire at the bottom of the sidebar, and bitmap type",
+        "ピクセルテーマの履歴（ダーク）：上部に夜の山と松と月、サイドバーの下にテントとたき火、文字はドットフォント",
+    ),
+    "home_theme_link": ("了解主题 →", "了解主題 →", "了解主題 →", "More about themes →", "テーマについて →"),
 
     # ── 给好友发文件（2.6） ──
     "friends_h2": (
