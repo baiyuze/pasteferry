@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Themes guide — PasteFerry</title>
+  <meta name="description" content="Change themes in PasteFerry, switch light and dark, make your own theme, and let AI apps such as Claude and Cursor design and apply themes over MCP.">
+  <link rel="canonical" href="https://pasteferry.cc/en/themes/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/themes/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/themes/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/themes/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/themes/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/themes/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Themes guide — PasteFerry">
+  <meta property="og:description" content="Change themes in PasteFerry, switch light and dark, make your own theme, and let AI apps such as Claude and Cursor design and apply themes over MCP.">
+  <meta property="og:url" content="https://pasteferry.cc/en/themes/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../en/" aria-label="PasteFerry home"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Page">
+        <a href="../../en/features/">Features</a>
+        <a class="mid" href="../../en/start/">Quick start</a>
+        <a class="wide" href="../../en/start/#server">Ways to connect</a>
+        <a href="../../en/download/">Download</a>
+        <details class="menu">
+          <summary aria-label="More pages" class="current"><span>More</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../en/start/">Quick start</a></li>
+            <li class="narrow"><a href="../../en/start/#server">Ways to connect</a></li>
+            <li><a href="./" aria-current="page">Themes guide</a></li>
+            <li><a href="../../en/how/">How it works</a></li>
+            <li><a href="../../en/security/">Security</a></li>
+            <li><a href="../../en/faq/">FAQ</a></li>
+            <li><a href="../../en/feedback/">Discussion & feedback</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Changelog</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Star PasteFerry on GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang">
+          <summary aria-label="Language：English"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>English</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../themes/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/themes/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/themes/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/themes/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a></li>
+            <li><a href="../../ja/themes/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero"><div class="wrap">
+      <p class="crumb"><a href="../../en/">PasteFerry</a> / Themes guide</p>
+      <h1 class="display">Change it, make it,<br>or let an AI make it.</h1>
+      <p class="lede">From 2.10, PasteFerry has themes: Default and Pixel are built in, you can duplicate one and make it yours, or ask an AI to design one. A theme applies only to the device you set it on.</p>
+      <a class="button" href="../../en/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download 2.10</a>
+      <p class="more"><a href="#ai">Skip to themes made by AI ↓</a></p>
+    </div></section>
+    <section class="section" id="switch"><div class="wrap">
+      <h2>Change the theme</h2>
+      <div class="os-grid"><ol class="steps"><li>Open PasteFerry and go to <b>Settings › Appearance</b>.</li><li>Click a theme under Built in or Custom. The window changes right away, and so does Quick Paste.</li><li>Under Light and dark, choose <b>Match system</b>, <b>Light</b> or <b>Dark</b>.</li><li>With a pixel theme you can also turn on <b>Scanlines</b>, faint CRT lines over the whole window.</li><li>On Android, choose in the app’s own <b>Settings › Appearance</b>; computers and phones don’t affect each other.</li></ol>
+        <figure class="shot"><img src="../../assets/screenshots/en/pixel-appearance-dark.png?v=3f1dca08ee" width="2112" height="1472" alt="Settings › Appearance: the built-in Default and Pixel themes, two custom themes, Import theme, Ask AI to make a theme, light and dark, and scanlines"></figure>
+      </div>
+    </div></section>
+    <section class="section" id="builtin"><div class="wrap official-copy">
+      <h2>The two built-in themes</h2>
+      <ul><li><b>Default</b>: The quiet, system-style look PasteFerry has always had.</li><li><b>Pixel</b>: Bitmap type, notched borders and bevelled buttons, graphite and paper palettes with pixel green. A night or daytime scene up top, a paper plane while sending and a burst of stars when it arrives.</li></ul>
+      <div class="f-pair">
+        <img src="../../assets/screenshots/en/history.png?v=8c41b3d9ce" width="2112" height="1472" loading="lazy" alt="History in the Default theme (light)">
+        <img src="../../assets/screenshots/en/pixel-history-dark.png?v=aaa7f233a7" width="2112" height="1472" loading="lazy" alt="History in the Pixel theme (dark): mountains and a moon in the header, a tent and campfire at the bottom of the sidebar">
+      </div>
+    </div></section>
+    <section class="section" id="custom"><div class="wrap official-copy">
+      <h2>Make your own theme</h2>
+      <p class="intro">The easiest way is to duplicate a built-in theme and change it:</p>
+      <ol class="steps"><li>In <b>Settings › Appearance</b>, hover over a theme, click <b>⋯</b> and choose <b>Duplicate</b>. The copy appears under Custom.</li><li>In the copy’s <b>⋯</b> menu, choose <b>Export…</b> to save a <code>.pasteferry-theme.json</code> file.</li><li>Change the colors, name and so on in any text editor (the format is described below).</li><li>Back on the Appearance page, click <b>Import theme…</b> and choose the file. A theme with the same id is replaced, and the imported theme is applied.</li><li>To remove a custom theme, choose <b>Delete theme</b> in its <b>⋯</b> menu. Built-in themes can’t be deleted.</li></ol>
+      <p class="note">Text contrast is checked when a theme is saved. Hard-to-read colors are pointed out, but you can still save. Theme files can be shared: the other person just imports it.</p>
+    </div></section>
+    <section class="section" id="format"><div class="wrap official-copy">
+      <h2>What a theme file looks like</h2>
+      <p class="intro">A theme is a JSON file. Write only what you want to change; everything else comes from the theme named in <code>base</code>. This one starts from Pixel and changes the accent and a few backgrounds:</p>
+      <div class="code">
+                  <button class="copy" type="button" data-done="Copied">Copy</button>
+<pre><code>{
+  "schema": 1,
+  "id": "sunset-pixel",
+  "name": { "zh-Hans": "落日像素", "en": "Sunset Pixel" },
+  "base": "pixel",
+  "modes": {
+    "dark": { "accent": "#FF8A5B", "background": "#16110F", "surface": "#1E1714" },
+    "light": { "accent": "#C2410C" }
+  }
+}</code></pre>
+                </div>
+      <h3>Common fields</h3>
+      <dl class="fields"><dt><code>id</code></dt><dd>The theme’s identifier: lowercase letters, digits and <code>-</code>. It can’t be <code>default</code> or <code>pixel</code>.</dd><dt><code>name</code></dt><dd>The name in each language, such as <code>zh-Hans</code>, <code>zh-Hant-TW</code>, <code>zh-Hant-HK</code>, <code>en</code> and <code>ja</code>.</dd><dt><code>base</code></dt><dd>The theme to start from: <code>default</code>, <code>pixel</code> or another custom theme.</dd><dt><code>modes.light</code> / <code>modes.dark</code></dt><dd>Colors for light and dark, as <code>#RRGGBB</code> or <code>#AARRGGBB</code> with alpha. Common ones: <code>accent</code>, <code>background</code> (content area), <code>sidebar</code>, <code>surface</code> (groups and dialogs), <code>border</code>, <code>text</code>, <code>textDim</code>, <code>textFaint</code> and <code>onAccent</code> (text on the accent).</dd><dt><code>typography</code></dt><dd>Fonts: <code>family</code> is <code>system</code> or the built-in pixel font <code>FusionPixel</code>.</dd><dt><code>shape</code></dt><dd>Shapes: <code>corner</code> is <code>round</code> or <code>pixel</code> (notched), plus radii, border width and shadow style.</dd><dt><code>motion</code>, <code>icons</code></dt><dd>Motion <code>smooth</code> / <code>stepped</code> / <code>reduced</code>; icons <code>system</code> / <code>pixel</code>.</dd></dl>
+      <p class="note">The full format and where each color is used: <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">design/themes.md</a></p>
+    </div></section>
+    <section class="section" id="ai"><div class="wrap official-copy">
+      <h2>Let an AI make a theme</h2>
+      <p class="intro">PasteFerry includes an MCP server, <code>pasteferry-cli mcp</code>. Add it to an AI app that supports MCP, such as Claude Desktop, Claude Code or Cursor, and describe the look you want in one sentence. The AI reads the theme format, picks colors, checks contrast, then saves and applies the theme.</p>
+      <h3>1. Find pasteferry-cli</h3>
+      <dl class="fields"><dt>Mac</dt><dd><code>/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli</code> (with Homebrew, just <code>pasteferry-cli</code>)</dd><dt>Windows</dt><dd><code>%LOCALAPPDATA%\Programs\PasteFerry\pasteferry-cli.exe</code></dd><dt>Linux</dt><dd>deb: <code>/usr/bin/pasteferry-cli</code>; tar.gz: <code>PasteFerry/pasteferry-cli</code> in the extracted folder</dd></dl>
+      <p class="note">Or copy the ready-made configuration for this computer from <b>Settings › Appearance › Ask AI to make a theme</b>.</p>
+      <h3>2. Add it to your AI app</h3>
+      <p>Claude Desktop (Settings › Developer › Edit Config) and Cursor (<code>~/.cursor/mcp.json</code>) use the same configuration. On a Mac:</p>
+      <div class="code">
+                  <button class="copy" type="button" data-done="Copied">Copy</button>
+<pre><code>{
+  "mcpServers": {
+    "pasteferry": {
+      "command": "/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli",
+      "args": ["mcp"]
+    }
+  }
+}</code></pre>
+                </div>
+      <p>For Claude Code, run in a terminal:</p>
+      <div class="code">
+                  <button class="copy" type="button" data-done="Copied">Copy</button>
+<pre><code>claude mcp add pasteferry -- /Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli mcp</code></pre>
+                </div>
+      <p class="note">Restart the AI app after changing its configuration. Keep PasteFerry running: the AI changes themes through its background service on this computer.</p>
+      <h3>3. Say what you want</h3>
+      <ul class="prompts"><li>“Make me a cyberpunk theme with neon pink and deep purple, then apply it.”</li><li>“Start from the Pixel theme and make a sunset version with a warmer dark background.”</li><li>“The gray text in my current theme is hard to read. Make it lighter.”</li><li>“Export my theme so I can see it, then make a light version.”</li></ul>
+      <h3>What the AI can do</h3>
+      <ul><li>list themes and read a theme in full;</li><li>read the theme format: where each color is used and the contrast it needs;</li><li>check a theme without saving it, to find colors with too little contrast;</li><li>save, apply and delete custom themes, and switch light and dark;</li><li>import an image from this computer as a background and analyze its brightness and main colors.</li></ul>
+      <h3>What it can’t do</h3>
+      <p>The MCP server runs only on this computer and opens no network port. It can read and write themes and background images only: it can’t see your history, devices or friends, or change other settings. Background images must be local files; nothing is downloaded from the internet.</p>
+    </div></section>
+    <section class="section" id="faq"><div class="wrap official-copy">
+      <h2>Questions</h2>
+      <div class="faq"><details><summary>Are themes synced to my other devices?</summary><p>No. A theme applies only to the device you set it on. To use the same theme elsewhere, export it and import it there.</p></details><details><summary>The AI made a mess of my theme. How do I go back?</summary><p>Choose Default or Pixel in Settings › Appearance. Delete custom themes you don’t want.</p></details><details><summary>Importing says some text may be hard to read.</summary><p>Some text and background colors have low contrast. Lighten or darken those colors as suggested, or ask the AI to fix them.</p></details><details><summary>Do older versions support themes?</summary><p>You need 2.10 or later. The device protocol is unchanged, so old and new versions still work together.</p></details></div>
+      <p class="note">More：<a href="https://github.com/baiyuze/pasteferry/blob/main/guide/ai-themes.md">Let an AI make a theme (full guide)</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">Theme format and design</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/mcp.md">MCP tools</a></p>
+    </div></section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry is open source under the GNU AGPL-3.0.</p>
+      <nav aria-label="Footer">
+        <a href="https://github.com/baiyuze/pasteferry/releases">All releases</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Design notes (Chinese)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">License</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Report an issue</a>
+        <a href="../../en/privacy/">Privacy</a>
+        <a href="../../en/feedback/">Discussion & feedback</a>
+      </nav>
+      <nav aria-label="Language">
+        <a href="../../themes/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/themes/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/themes/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/themes/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a>
+        <a href="../../ja/themes/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=fb60f6e5ce" defer></script>
+  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

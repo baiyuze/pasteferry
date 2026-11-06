@@ -18,6 +18,7 @@ from pathlib import Path
 
 from content.tour import localized as tour_copy
 from content.privacy import COPY as PRIVACY_COPY
+from content.themes import COPY as THEMES_COPY, EXAMPLE as THEME_EXAMPLE, DESKTOP_CONFIG as THEME_DESKTOP, CLAUDE_CODE as THEME_CLAUDE_CODE
 from content.official import COPY as OFFICIAL_COPY
 from content.features import localized as features_copy
 from content.feedback import COPY as FEEDBACK_COPY
@@ -73,8 +74,9 @@ FEATURES = "features/"
 HOW = "how/"
 SECURITY = "security/"
 FAQ = "faq/"
+THEMES = "themes/"
 FEEDBACK = "feedback/"
-SUBPAGES = [FEATURES, START, OFFICIAL, LAN, CLOUD, GUIDE, TAILSCALE, DOWNLOAD, TOUR, PRIVACY, HOW, SECURITY, FAQ, FEEDBACK]
+SUBPAGES = [FEATURES, START, OFFICIAL, LAN, CLOUD, GUIDE, TAILSCALE, DOWNLOAD, TOUR, PRIVACY, HOW, SECURITY, FAQ, FEEDBACK, THEMES]
 DEPLOY_PAGES = [LAN, CLOUD, GUIDE, TAILSCALE]
 
 # 放到网站上的技术方案：文件名 → 网页名。其他 design/*.md 链接到 GitHub
@@ -313,6 +315,7 @@ def header(c: dict, code: str, up: str, sub: str = "") -> str:
     more = [
         f'<li class="narrow">{link(START, c["nav_start"])}</li>',
         f'<li class="narrow"><a href="{server}">{c["nav_server"]}</a></li>',
+        f'<li>{link(THEMES, THEMES_COPY[code]["name"])}</li>',
         f'<li>{link(HOW, c["nav_how"])}</li>',
         f'<li>{link(SECURITY, f["nav_security"])}</li>',
         f'<li>{link(FAQ, c["nav_faq"])}</li>',
@@ -321,7 +324,7 @@ def header(c: dict, code: str, up: str, sub: str = "") -> str:
         f'<li><a href="{REPO}/blob/main/CHANGELOG.md">{f["nav_changelog"]}</a></li>',
         f'<li class="narrow-gh"><a href="{REPO}">GitHub</a></li>',
     ]
-    in_more = sub in (HOW, SECURITY, FAQ, FEEDBACK)
+    in_more = sub in (THEMES, HOW, SECURITY, FAQ, FEEDBACK)
 
     return f"""  <header class="bar">
     <div class="wrap">
@@ -610,7 +613,7 @@ def home(code: str) -> str:
         <figure class="spot wide" data-reveal>
           <img src="{up}{shots}pixel-history-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(f["home_theme_alt"])}">
         </figure>
-        <p class="more"><a href="{FEATURES}#themes">{f["home_theme_link"]}</a></p>
+        <p class="more"><a href="{FEATURES}#themes">{f["home_theme_link"]}</a><a href="{THEMES}">{THEMES_COPY[code]["name"]} →</a></p>
       </div>
     </section>
 
@@ -940,6 +943,7 @@ def features_page(code: str) -> str:
           <img src="{shots}pixel-send-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["theme_alt_send"])}">
         </div>
         <p class="f-note">{f["theme_note"]}</p>
+        <p class="more"><a href="../{THEMES}">{THEMES_COPY[code]["name"]} →</a></p>
       </div>
     </section>
 
@@ -2945,6 +2949,85 @@ def privacy_page(code: str) -> str:
             + page_bottom(c, code, PRIVACY))
 
 
+def themes_page(code: str) -> str:
+    """主题教程：换主题、做自己的主题、主题文件格式、让 AI 通过 MCP 做主题。文案在 content/themes.py"""
+    c = load(code)
+    t = THEMES_COPY[code]
+    path = LANGS[code][0]
+    up = "../" * (path + THEMES).count("/")
+    base = up + path
+    shots = up + shots_dir(code)
+    ol = lambda xs: "".join(f"<li>{x}</li>" for x in xs)
+    dl = lambda rows: "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in rows)
+    builtin = "".join(f"<li><b>{esc(n)}</b>：{esc(d)}</li>" if code.startswith("zh") or code == "ja"
+                      else f"<li><b>{esc(n)}</b>: {esc(d)}</li>" for n, d in t["builtin"])
+    faq = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for q, a in t["faq"])
+    more = " · ".join(f'<a href="{REPO}/blob/main/{href}">{esc(label)}</a>' for label, href in t["more_links"])
+    return page_top(c, code, THEMES, t["title"], t["summary"]) + f"""
+  <main id="main">
+    <section class="hero guide-hero"><div class="wrap">
+      <p class="crumb"><a href="{base or './'}">{c['brand']}</a> / {esc(t['name'])}</p>
+      <h1 class="display">{t['fit']}</h1>
+      <p class="lede">{esc(t['lede'])}</p>
+      <a class="button" href="{base}{DOWNLOAD}">{DOWN}{esc(t['download'])}</a>
+      <p class="more"><a href="#ai">{esc(t['jump_ai'])}</a></p>
+    </div></section>
+    <section class="section" id="switch"><div class="wrap">
+      <h2>{esc(t['switch_title'])}</h2>
+      <div class="os-grid"><ol class="steps">{ol(t['switch_steps'])}</ol>
+        <figure class="shot"><img src="{shots}pixel-appearance-dark.png" width="2112" height="1472" alt="{esc(t['switch_alt'])}"></figure>
+      </div>
+    </div></section>
+    <section class="section" id="builtin"><div class="wrap official-copy">
+      <h2>{esc(t['builtin_title'])}</h2>
+      <ul>{builtin}</ul>
+      <div class="f-pair">
+        <img src="{shots}history.png" width="2112" height="1472" loading="lazy" alt="{esc(t['builtin_alt_default'])}">
+        <img src="{shots}pixel-history-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(t['builtin_alt_pixel'])}">
+      </div>
+    </div></section>
+    <section class="section" id="custom"><div class="wrap official-copy">
+      <h2>{esc(t['custom_title'])}</h2>
+      <p class="intro">{esc(t['custom_intro'])}</p>
+      <ol class="steps">{ol(t['custom_steps'])}</ol>
+      <p class="note">{esc(t['custom_note'])}</p>
+    </div></section>
+    <section class="section" id="format"><div class="wrap official-copy">
+      <h2>{esc(t['file_title'])}</h2>
+      <p class="intro">{t['file_intro']}</p>
+      {code_block(c, THEME_EXAMPLE)}
+      <h3>{esc(t['file_fields_title'])}</h3>
+      <dl class="fields">{dl(t['file_fields'])}</dl>
+      <p class="note">{esc(t['file_more'])} <a href="{REPO}/blob/main/design/themes.md">design/themes.md</a></p>
+    </div></section>
+    <section class="section" id="ai"><div class="wrap official-copy">
+      <h2>{esc(t['ai_title'])}</h2>
+      <p class="intro">{t['ai_intro']}</p>
+      <h3>{esc(t['ai_step1'])}</h3>
+      <dl class="fields">{dl([(esc(k), v) for k, v in t['ai_paths']])}</dl>
+      <p class="note">{t['ai_paths_note']}</p>
+      <h3>{esc(t['ai_step2'])}</h3>
+      <p>{t['ai_desktop']}</p>
+      {code_block(c, THEME_DESKTOP)}
+      <p>{esc(t['ai_code'])}</p>
+      {code_block(c, THEME_CLAUDE_CODE)}
+      <p class="note">{esc(t['ai_restart'])}</p>
+      <h3>{esc(t['ai_step3'])}</h3>
+      <ul class="prompts">{"".join(f"<li>“{esc(x)}”</li>" for x in t['ai_prompts'])}</ul>
+      <h3>{esc(t['ai_does_title'])}</h3>
+      <ul>{"".join(f"<li>{esc(x)}</li>" for x in t['ai_does'])}</ul>
+      <h3>{esc(t['ai_safe_title'])}</h3>
+      <p>{esc(t['ai_safe'])}</p>
+    </div></section>
+    <section class="section" id="faq"><div class="wrap official-copy">
+      <h2>{esc(t['faq_title'])}</h2>
+      <div class="faq">{faq}</div>
+      <p class="note">{esc(t['more_title'])}：{more}</p>
+    </div></section>
+  </main>
+""" + page_bottom(c, code, THEMES)
+
+
 def official_page(code: str) -> str:
     c = load(code)
     o = c["official"]
@@ -2995,6 +3078,7 @@ def main() -> None:
         write(DOCS / path / HOW / "index.html", how_page(code))
         write(DOCS / path / SECURITY / "index.html", security_page(code))
         write(DOCS / path / FAQ / "index.html", faq_page(code))
+        write(DOCS / path / THEMES / "index.html", themes_page(code))
         write(DOCS / path / FEEDBACK / "index.html", feedback_page(code))
     for md_name, page in DESIGN_DOCS.items():
         write(DOCS / "design" / f"{page}.html", design_page(md_name, page))

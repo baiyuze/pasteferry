@@ -682,6 +682,51 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/feedback/"/>
   </url>
   <url>
+    <loc>https://pasteferry.cc/themes/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/themes/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/themes/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/themes/"/>
+  </url>
+  <url>
+    <loc>https://pasteferry.cc/zh-tw/themes/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/themes/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/themes/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/themes/"/>
+  </url>
+  <url>
+    <loc>https://pasteferry.cc/zh-hk/themes/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/themes/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/themes/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/themes/"/>
+  </url>
+  <url>
+    <loc>https://pasteferry.cc/en/themes/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/themes/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/themes/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/themes/"/>
+  </url>
+  <url>
+    <loc>https://pasteferry.cc/ja/themes/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/themes/"/>
+    <xhtml:link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/themes/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/themes/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/themes/"/>
+  </url>
+  <url>
     <loc>https://pasteferry.cc/design/nat-traversal.html</loc>
     <lastmod>2026-11-04</lastmod>
   </url>

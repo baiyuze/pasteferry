@@ -39,6 +39,7 @@ Key facts:
 - [README (English)](https://github.com/baiyuze/pasteferry/blob/main/README.md): features and getting started ([中文](https://github.com/baiyuze/pasteferry/blob/main/README.zh-CN.md))
 - [How it works](https://github.com/baiyuze/pasteferry/blob/main/guide/how-it-works.md): architecture, NAT traversal, security model, fallbacks, lessons learned
 - [Troubleshooting](https://github.com/baiyuze/pasteferry/blob/main/guide/troubleshooting.md) and known limitations
+- [Themes guide](https://pasteferry.cc/en/themes/): change themes, light and dark, make your own theme, the theme file format, and AI-made themes over MCP ([中文](https://pasteferry.cc/themes/), [日本語](https://pasteferry.cc/ja/themes/))
 - [Make a theme with AI](https://github.com/baiyuze/pasteferry/blob/main/guide/ai-themes.md): configure `pasteferry-cli mcp` in Claude Desktop, Claude Code or Cursor ([中文](https://github.com/baiyuze/pasteferry/blob/main/guide/ai-themes.zh-CN.md))
 - [Server deployment](https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md): Windows, macOS, Linux (systemd), Docker and manual setup
 - [Licensing](https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md): AGPL-3.0 terms; versions 1.2.0 and earlier remain MIT

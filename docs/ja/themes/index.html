@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>テーマガイド — PasteFerry</title>
+  <meta name="description" content="PasteFerry でテーマを変える、ライトとダークを切り替える、自分のテーマを作る、Claude や Cursor などの AI に MCP でテーマを作って適用してもらう方法。">
+  <link rel="canonical" href="https://pasteferry.cc/ja/themes/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/themes/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/themes/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/themes/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/themes/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/themes/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="テーマガイド — PasteFerry">
+  <meta property="og:description" content="PasteFerry でテーマを変える、ライトとダークを切り替える、自分のテーマを作る、Claude や Cursor などの AI に MCP でテーマを作って適用してもらう方法。">
+  <meta property="og:url" content="https://pasteferry.cc/ja/themes/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">本文へ移動</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ja/" aria-label="PasteFerry ホーム"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="ページ内の移動">
+        <a href="../../ja/features/">機能</a>
+        <a class="mid" href="../../ja/start/">はじめかた</a>
+        <a class="wide" href="../../ja/start/#server">接続方法</a>
+        <a href="../../ja/download/">ダウンロード</a>
+        <details class="menu">
+          <summary aria-label="その他のページ" class="current"><span>その他</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../ja/start/">はじめかた</a></li>
+            <li class="narrow"><a href="../../ja/start/#server">接続方法</a></li>
+            <li><a href="./" aria-current="page">テーマガイド</a></li>
+            <li><a href="../../ja/how/">しくみ</a></li>
+            <li><a href="../../ja/security/">セキュリティ</a></li>
+            <li><a href="../../ja/faq/">よくある質問</a></li>
+            <li><a href="../../ja/feedback/">ディスカッションとフィードバック</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub で PasteFerry にスターを付ける"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang">
+          <summary aria-label="言語：日本語"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>日本語</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../themes/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/themes/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/themes/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/themes/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/themes/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero"><div class="wrap">
+      <p class="crumb"><a href="../../ja/">PasteFerry</a> / テーマガイド</p>
+      <h1 class="display">変える、作る、<br>AI に作ってもらう。</h1>
+      <p class="lede">PasteFerry 2.10 からテーマに対応しました。デフォルトとピクセルの 2 つを内蔵し、複製して自分好みにしたり、AI に作ってもらったりできます。テーマは設定したデバイスにだけ適用されます。</p>
+      <a class="button" href="../../ja/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>2.10 をダウンロード</a>
+      <p class="more"><a href="#ai">AI でテーマを作る方法へ ↓</a></p>
+    </div></section>
+    <section class="section" id="switch"><div class="wrap">
+      <h2>テーマを変える</h2>
+      <div class="os-grid"><ol class="steps"><li>PasteFerry を開き、<b>設定 › 外観</b> に進みます。</li><li>「内蔵」か「カスタム」のテーマをクリックすると、すぐに切り替わります。クイックペーストも同じテーマになります。</li><li>「ライトとダーク」で <b>システムに合わせる</b>、<b>ライト</b>、<b>ダーク</b> から選びます。</li><li>ピクセルテーマでは <b>走査線</b> もオンにでき、ウインドウ全体に薄い CRT 走査線を重ねます。</li><li>Android ではアプリの <b>設定 › 外観</b> で個別に選びます。パソコンとスマートフォンは互いに影響しません。</li></ol>
+        <figure class="shot"><img src="../../assets/screenshots/ja/pixel-appearance-dark.png?v=d5bec0d64c" width="2112" height="1472" alt="設定 › 外観：内蔵のデフォルトとピクセル、2 つのカスタムテーマ、テーマを読み込む、AI にテーマを作ってもらう、ライトとダーク、走査線"></figure>
+      </div>
+    </div></section>
+    <section class="section" id="builtin"><div class="wrap official-copy">
+      <h2>内蔵の 2 つのテーマ</h2>
+      <ul><li><b>デフォルト</b>：これまでの PasteFerry と同じ、落ち着いたシステム風の見た目です。</li><li><b>ピクセル</b>：ドット文字、切り欠きの太枠、立体的なボタン。グラファイトとペーパーの配色にピクセルグリーン。上部には夜や昼の風景、送信中は紙飛行機が飛び、届くと星がはじけます。</li></ul>
+      <div class="f-pair">
+        <img src="../../assets/screenshots/ja/history.png?v=f0f7f7d9f2" width="2112" height="1472" loading="lazy" alt="デフォルトテーマ（ライト）の履歴">
+        <img src="../../assets/screenshots/ja/pixel-history-dark.png?v=06bddfa070" width="2112" height="1472" loading="lazy" alt="ピクセルテーマ（ダーク）の履歴：上部に夜の山と月、サイドバーの下にテントとたき火">
+      </div>
+    </div></section>
+    <section class="section" id="custom"><div class="wrap official-copy">
+      <h2>自分のテーマを作る</h2>
+      <p class="intro">いちばん簡単なのは、内蔵テーマを複製して変える方法です。</p>
+      <ol class="steps"><li><b>設定 › 外観</b> でテーマにポインタを合わせ、<b>⋯</b> から <b>複製</b> を選びます。複製は「カスタム」に表示されます。</li><li>複製の <b>⋯</b> から <b>書き出す…</b> を選び、<code>.pasteferry-theme.json</code> ファイルを保存します。</li><li>テキストエディタで色や名前などを変えます（形式は次の節を参照）。</li><li>外観のページに戻り、<b>テーマを読み込む…</b> でファイルを選びます。同じ id のテーマは置き換えられ、読み込んだテーマが適用されます。</li><li>不要なカスタムテーマは <b>⋯</b> から <b>テーマを削除</b> を選びます。内蔵テーマは削除できません。</li></ol>
+      <p class="note">保存時に文字のコントラストを確認し、読みにくい色を知らせます（そのまま保存もできます）。テーマファイルは共有でき、相手は読み込むだけで使えます。</p>
+    </div></section>
+    <section class="section" id="format"><div class="wrap official-copy">
+      <h2>テーマファイルの中身</h2>
+      <p class="intro">テーマは JSON ファイルです。変えたいところだけ書けば、残りは <code>base</code> のテーマから補われます。次の例はピクセルをもとに、アクセントといくつかの背景色だけを変えています。</p>
+      <div class="code">
+                  <button class="copy" type="button" data-done="コピーしました">コピー</button>
+<pre><code>{
+  "schema": 1,
+  "id": "sunset-pixel",
+  "name": { "zh-Hans": "落日像素", "en": "Sunset Pixel" },
+  "base": "pixel",
+  "modes": {
+    "dark": { "accent": "#FF8A5B", "background": "#16110F", "surface": "#1E1714" },
+    "light": { "accent": "#C2410C" }
+  }
+}</code></pre>
+                </div>
+      <h3>よく使う項目</h3>
+      <dl class="fields"><dt><code>id</code></dt><dd>テーマの識別子。小文字、数字、<code>-</code> のみで、<code>default</code> と <code>pixel</code> は使えません。</dd><dt><code>name</code></dt><dd>各言語の名前。<code>zh-Hans</code>、<code>zh-Hant-TW</code>、<code>zh-Hant-HK</code>、<code>en</code>、<code>ja</code> など。</dd><dt><code>base</code></dt><dd>もとにするテーマ：<code>default</code>、<code>pixel</code>、またはほかのカスタムテーマ。</dd><dt><code>modes.light</code> / <code>modes.dark</code></dt><dd>ライトとダークの色。<code>#RRGGBB</code> か透明度付きの <code>#AARRGGBB</code>。よく使うのは <code>accent</code>、<code>background</code>（内容の背景）、<code>sidebar</code>、<code>surface</code>（グループとダイアログ）、<code>border</code>、<code>text</code>、<code>textDim</code>、<code>textFaint</code>、<code>onAccent</code>（アクセント上の文字）。</dd><dt><code>typography</code></dt><dd>フォント：<code>family</code> は <code>system</code> か内蔵のピクセルフォント <code>FusionPixel</code>。</dd><dt><code>shape</code></dt><dd>形：<code>corner</code> は <code>round</code>（角丸）か <code>pixel</code>（切り欠き）。角の大きさ、枠の太さ、影の種類も指定できます。</dd><dt><code>motion</code>、<code>icons</code></dt><dd>動き <code>smooth</code> / <code>stepped</code> / <code>reduced</code>、アイコン <code>system</code> / <code>pixel</code>。</dd></dl>
+      <p class="note">完全な形式と各色の使われる場所： <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">design/themes.md</a></p>
+    </div></section>
+    <section class="section" id="ai"><div class="wrap official-copy">
+      <h2>AI にテーマを作ってもらう</h2>
+      <p class="intro">PasteFerry には MCP サーバー <code>pasteferry-cli mcp</code> が付いています。Claude Desktop、Claude Code、Cursor など MCP に対応した AI アプリに追加し、ほしい見た目をひとことで伝えてください。AI がテーマの形式を読み、配色を考え、コントラストを確認して保存・適用します。</p>
+      <h3>1. pasteferry-cli の場所</h3>
+      <dl class="fields"><dt>Mac</dt><dd><code>/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli</code>（Homebrew の場合は <code>pasteferry-cli</code> だけで可）</dd><dt>Windows</dt><dd><code>%LOCALAPPDATA%\Programs\PasteFerry\pasteferry-cli.exe</code></dd><dt>Linux</dt><dd>deb：<code>/usr/bin/pasteferry-cli</code>、tar.gz：展開したフォルダの <code>PasteFerry/pasteferry-cli</code></dd></dl>
+      <p class="note"><b>設定 › 外観 › AI にテーマを作ってもらう</b> から、このパソコン用の設定をそのままコピーすることもできます。</p>
+      <h3>2. AI アプリに追加する</h3>
+      <p>Claude Desktop（設定 › 開発者 › 構成を編集）と Cursor（<code>~/.cursor/mcp.json</code>）は同じ設定です。Mac の例：</p>
+      <div class="code">
+                  <button class="copy" type="button" data-done="コピーしました">コピー</button>
+<pre><code>{
+  "mcpServers": {
+    "pasteferry": {
+      "command": "/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli",
+      "args": ["mcp"]
+    }
+  }
+}</code></pre>
+                </div>
+      <p>Claude Code ではターミナルで実行します。</p>
+      <div class="code">
+                  <button class="copy" type="button" data-done="コピーしました">コピー</button>
+<pre><code>claude mcp add pasteferry -- /Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli mcp</code></pre>
+                </div>
+      <p class="note">設定を変えたら AI アプリを再起動します。PasteFerry は起動したままにしてください。AI はこのパソコンのバックグラウンドサービスを通じてテーマを変えます。</p>
+      <h3>3. ほしいものを伝える</h3>
+      <ul class="prompts"><li>“ネオンピンクと深い紫のサイバーパンク風テーマを作って、適用して。”</li><li>“ピクセルテーマをもとに夕焼け色のテーマを作って。ダークは暖かい背景色にして。”</li><li>“今のテーマの灰色の文字が読みにくいので、明るくして。”</li><li>“今のテーマを書き出して見せて。それからライト版も作って。”</li></ul>
+      <h3>AI ができること</h3>
+      <ul><li>テーマの一覧と、テーマの完全な内容の読み取り</li><li>テーマ形式の説明（各色の使われる場所と必要なコントラスト）の読み取り</li><li>保存せずに確認し、コントラストが足りない色を見つける</li><li>カスタムテーマの保存・適用・削除、ライトとダークの切り替え</li><li>このパソコンの画像を背景として読み込み、明るさと主な色を分析</li></ul>
+      <h3>できないこと</h3>
+      <p>MCP サーバーはこのパソコンの中だけで動き、ネットワークのポートは開きません。扱えるのはテーマと背景画像だけで、履歴、デバイス、友だちは見えず、ほかの設定も変えられません。背景画像はローカルのファイルのみで、インターネットからは取得しません。</p>
+    </div></section>
+    <section class="section" id="faq"><div class="wrap official-copy">
+      <h2>よくある質問</h2>
+      <div class="faq"><details><summary>テーマはほかのデバイスに同期されますか？</summary><p>されません。テーマは設定したデバイスだけに適用されます。別のパソコンで使うときは、書き出して読み込んでください。</p></details><details><summary>AI がテーマを崩してしまいました。</summary><p>設定 › 外観 でデフォルトかピクセルを選べば戻ります。不要なカスタムテーマは削除できます。</p></details><details><summary>読み込み時に「読みにくい」と表示されます。</summary><p>文字と背景のコントラストが低いところがあります。表示に従って色を明るく・暗くするか、AI に直してもらってください。</p></details><details><summary>古いバージョンでもテーマは使えますか？</summary><p>2.10 以降が必要です。デバイス間のプロトコルは変わっていないので、新旧のバージョンは引き続き連携できます。</p></details></div>
+      <p class="note">さらに詳しく：<a href="https://github.com/baiyuze/pasteferry/blob/main/guide/ai-themes.md">AI でテーマを作る（詳しいガイド）</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">テーマの形式と設計</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/mcp.md">MCP ツール</a></p>
+    </div></section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry は GNU AGPL-3.0 のオープンソースです。</p>
+      <nav aria-label="フッターのリンク">
+        <a href="https://github.com/baiyuze/pasteferry/releases">すべてのリリース</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新履歴</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技術資料（中国語）</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">ライセンス</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">問題を報告</a>
+        <a href="../../ja/privacy/">プライバシー</a>
+        <a href="../../ja/feedback/">ディスカッションとフィードバック</a>
+      </nav>
+      <nav aria-label="言語">
+        <a href="../../themes/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/themes/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/themes/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/themes/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/themes/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=fb60f6e5ce" defer></script>
+  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

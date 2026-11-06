@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>主題與換膚教學 — 隔空貼</title>
+  <meta name="description" content="在隔空貼裡換主題、切換淺色深色、做自己的主題，以及讓 Claude、Cursor 等 AI 透過 MCP 幫你設計並套用主題。">
+  <link rel="canonical" href="https://pasteferry.cc/zh-tw/themes/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/themes/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/themes/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/themes/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/themes/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/themes/">
+  <meta name="theme-color" content="#141416">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="隔空貼">
+  <meta property="og:title" content="主題與換膚教學 — 隔空貼">
+  <meta property="og:description" content="在隔空貼裡換主題、切換淺色深色、做自己的主題，以及讓 Claude、Cursor 等 AI 透過 MCP 幫你設計並套用主題。">
+  <meta property="og:url" content="https://pasteferry.cc/zh-tw/themes/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-zh-hant.png">
+  <meta property="og:locale" content="zh_TW">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要內容</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../zh-tw/" aria-label="隔空貼首頁"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">隔空貼</a>
+      <nav aria-label="頁面導覽">
+        <a href="../../zh-tw/features/">功能</a>
+        <a class="mid" href="../../zh-tw/start/">快速入門</a>
+        <a class="wide" href="../../zh-tw/start/#server">連線方式</a>
+        <a href="../../zh-tw/download/">下載</a>
+        <details class="menu">
+          <summary aria-label="更多頁面" class="current"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="narrow"><a href="../../zh-tw/start/">快速入門</a></li>
+            <li class="narrow"><a href="../../zh-tw/start/#server">連線方式</a></li>
+            <li><a href="./" aria-current="page">主題教學</a></li>
+            <li><a href="../../zh-tw/how/">運作原理</a></li>
+            <li><a href="../../zh-tw/security/">安全與隱私</a></li>
+            <li><a href="../../zh-tw/faq/">常見問題</a></li>
+            <li><a href="../../zh-tw/feedback/">討論與回饋</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新記錄</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="在 GitHub 上給隔空貼點 Star"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang">
+          <summary aria-label="語言：繁體中文（台灣）"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>繁體中文（台灣）</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../themes/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/themes/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw" aria-current="page">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/themes/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/themes/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/themes/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero"><div class="wrap">
+      <p class="crumb"><a href="../../zh-tw/">隔空貼</a> / 主題教學</p>
+      <h1 class="display">換主題，<br>做主題，讓 AI 幫你做。</h1>
+      <p class="lede">隔空貼 2.10 起支援主題：內建預設和像素兩套，也可以複製一份改成自己的，或者讓 AI 幫你配一套。主題只用於設定它的那台裝置。</p>
+      <a class="button" href="../../zh-tw/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載 2.10</a>
+      <p class="more"><a href="#ai">直接看 AI 怎麼做主題 ↓</a></p>
+    </div></section>
+    <section class="section" id="switch"><div class="wrap">
+      <h2>換一個主題</h2>
+      <div class="os-grid"><ol class="steps"><li>打開隔空貼，進入 <b>設定 › 外觀</b>。</li><li>在「內建」或「自訂」裡點一張主題卡片，介面馬上換好；快速貼上視窗也跟著換。</li><li>在「淺色與深色」裡選 <b>跟隨系統</b>、<b>淺色</b> 或 <b>深色</b>。</li><li>用像素主題時，還可以打開 <b>掃描線</b>，整個視窗疊一層很淡的 CRT 掃描線。</li><li>手機（Android）上在 <b>設定 › 外觀</b> 裡單獨選，電腦和手機互不影響。</li></ol>
+        <figure class="shot"><img src="../../assets/screenshots/zh-tw/pixel-appearance-dark.png?v=15888aa7b9" width="2112" height="1472" alt="設定 › 外觀：內建的預設、像素兩套主題，兩套自訂主題，匯入主題、讓 AI 幫你做主題，淺色與深色，掃描線"></figure>
+      </div>
+    </div></section>
+    <section class="section" id="builtin"><div class="wrap official-copy">
+      <h2>內建的兩套主題</h2>
+      <ul><li><b>預設</b>：安靜的系統風格，和以前的隔空貼一樣。</li><li><b>像素</b>：點陣字、切角粗邊、凸起的按鈕，石墨與紙兩套配色加像素綠；頁首有夜景或白天的場景，傳檔案時紙飛機飛過去，送達迸出星星。</li></ul>
+      <div class="f-pair">
+        <img src="../../assets/screenshots/zh-tw/history.png?v=bb5b4ab8cc" width="2112" height="1472" loading="lazy" alt="預設主題（淺色）的複製記錄">
+        <img src="../../assets/screenshots/zh-tw/pixel-history-dark.png?v=7e8c234d01" width="2112" height="1472" loading="lazy" alt="像素主題（深色）的複製記錄：頁首是夜裡的遠山和月亮，側邊欄底下是帳篷和營火">
+      </div>
+    </div></section>
+    <section class="section" id="custom"><div class="wrap official-copy">
+      <h2>做自己的主題</h2>
+      <p class="intro">最簡單的辦法是複製一份內建主題再改：</p>
+      <ol class="steps"><li>在 <b>設定 › 外觀</b> 裡，滑鼠移到一張主題卡片上，點右下角的 <b>⋯</b>，選 <b>複製一份</b>。新主題出現在「自訂」裡。</li><li>在副本的 <b>⋯</b> 裡選 <b>匯出…</b>，得到一個 <code>.pasteferry-theme.json</code> 檔案。</li><li>用任何文字編輯器修改裡面的顏色、名稱等（格式見下一節）。</li><li>回到外觀頁，點 <b>匯入主題…</b> 選這個檔案。同一個 id 會覆蓋原來那份，匯入後自動套用。</li><li>不要的自訂主題，在 <b>⋯</b> 裡選 <b>刪除主題</b>。內建主題不能刪除。</li></ol>
+      <p class="note">儲存時會檢查文字和背景的對比度。看不清楚的顏色會提示出來，但仍然可以儲存。主題檔案可以傳給朋友，對方匯入即可。</p>
+    </div></section>
+    <section class="section" id="format"><div class="wrap official-copy">
+      <h2>主題檔案長什麼樣</h2>
+      <p class="intro">主題是一份 JSON。只寫想改的地方就好，沒寫的從 <code>base</code> 指定的主題補齊。下面這份以像素主題為底，只換了強調色和幾處底色：</p>
+      <div class="code">
+                  <button class="copy" type="button" data-done="已複製">複製</button>
+<pre><code>{
+  "schema": 1,
+  "id": "sunset-pixel",
+  "name": { "zh-Hans": "落日像素", "en": "Sunset Pixel" },
+  "base": "pixel",
+  "modes": {
+    "dark": { "accent": "#FF8A5B", "background": "#16110F", "surface": "#1E1714" },
+    "light": { "accent": "#C2410C" }
+  }
+}</code></pre>
+                </div>
+      <h3>常用欄位</h3>
+      <dl class="fields"><dt><code>id</code></dt><dd>主題的識別碼，只能用小寫字母、數字和 <code>-</code>；不能是 <code>default</code>、<code>pixel</code>。</dd><dt><code>name</code></dt><dd>各語言的名稱，例如 <code>zh-Hans</code>、<code>zh-Hant-TW</code>、<code>zh-Hant-HK</code>、<code>en</code>、<code>ja</code>。</dd><dt><code>base</code></dt><dd>以哪套主題為底：<code>default</code>、<code>pixel</code> 或另一套自訂主題。</dd><dt><code>modes.light</code> / <code>modes.dark</code></dt><dd>淺色、深色兩套顏色，寫成 <code>#RRGGBB</code> 或帶透明度的 <code>#AARRGGBB</code>。常用的有 <code>accent</code>（強調色）、<code>background</code>（內容區底色）、<code>sidebar</code>、<code>surface</code>（分組與對話框）、<code>border</code>、<code>text</code>、<code>textDim</code>、<code>textFaint</code>、<code>onAccent</code>（強調色上的文字）。</dd><dt><code>typography</code></dt><dd>字型：<code>family</code> 可選 <code>system</code> 或內建的像素字型 <code>FusionPixel</code>。</dd><dt><code>shape</code></dt><dd>形狀：<code>corner</code> 是 <code>round</code>（圓角）或 <code>pixel</code>（像素切角），還有圓角大小、邊框粗細、陰影樣式。</dd><dt><code>motion</code>、<code>icons</code></dt><dd>動態 <code>smooth</code> / <code>stepped</code> / <code>reduced</code>；圖示 <code>system</code> / <code>pixel</code>。</dd></dl>
+      <p class="note">完整的格式與每個顏色用在哪裡： <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">design/themes.md</a></p>
+    </div></section>
+    <section class="section" id="ai"><div class="wrap official-copy">
+      <h2>讓 AI 幫你做主題</h2>
+      <p class="intro">隔空貼內建一個 MCP 服務 <code>pasteferry-cli mcp</code>。把它加到 Claude Desktop、Claude Code、Cursor 等支援 MCP 的 AI 應用程式裡，直接用一句話描述你想要的樣子，AI 會讀取主題格式、配色、檢查對比度，再儲存並套用。</p>
+      <h3>1. 找到 pasteferry-cli</h3>
+      <dl class="fields"><dt>Mac</dt><dd><code>/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli</code>（用 Homebrew 安裝的可以直接寫 <code>pasteferry-cli</code>）</dd><dt>Windows</dt><dd><code>%LOCALAPPDATA%\Programs\PasteFerry\pasteferry-cli.exe</code></dd><dt>Linux</dt><dd>deb 套件：<code>/usr/bin/pasteferry-cli</code>；tar.gz：解壓目錄裡的 <code>PasteFerry/pasteferry-cli</code></dd></dl>
+      <p class="note">也可以在 <b>設定 › 外觀 › 讓 AI 幫你做主題</b> 裡直接複製本機的完整設定，路徑已經填好。</p>
+      <h3>2. 加到 AI 應用程式裡</h3>
+      <p>Claude Desktop（設定 › 開發者 › 編輯設定）和 Cursor（<code>~/.cursor/mcp.json</code>）的設定相同，以 Mac 為例：</p>
+      <div class="code">
+                  <button class="copy" type="button" data-done="已複製">複製</button>
+<pre><code>{
+  "mcpServers": {
+    "pasteferry": {
+      "command": "/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli",
+      "args": ["mcp"]
+    }
+  }
+}</code></pre>
+                </div>
+      <p>Claude Code 在終端機裡執行：</p>
+      <div class="code">
+                  <button class="copy" type="button" data-done="已複製">複製</button>
+<pre><code>claude mcp add pasteferry -- /Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli mcp</code></pre>
+                </div>
+      <p class="note">改完設定後重新啟動 AI 應用程式。隔空貼要保持執行，AI 透過它在本機的背景服務修改主題。</p>
+      <h3>3. 直接說你想要什麼</h3>
+      <ul class="prompts"><li>“幫我做一套賽博龐克風的主題，霓虹粉配深紫，然後套用上。”</li><li>“以像素主題為底，做一套落日色調的，深色模式用暖一點的底色。”</li><li>“現在這套主題的灰色文字看不清楚，幫我調亮一點。”</li><li>“把我的主題匯出給我看看，再做一個淺色版本。”</li></ul>
+      <h3>AI 能做什麼</h3>
+      <ul><li>列出主題、讀取某套主題的完整內容；</li><li>讀取主題格式說明：每個顏色用在哪裡、要和誰達到多少對比度；</li><li>只檢查不儲存，看看哪對顏色對比度不夠；</li><li>儲存、套用、刪除自訂主題，切換淺色深色；</li><li>匯入本機的一張圖片作為背景，並分析亮度和主色。</li></ul>
+      <h3>安全範圍</h3>
+      <p>MCP 服務只在本機執行，不開網路連接埠。它只能讀寫主題和背景圖，看不到複製記錄、裝置和好友，也不能改其他設定；背景圖只接受本機檔案，不會去網路上下載。</p>
+    </div></section>
+    <section class="section" id="faq"><div class="wrap official-copy">
+      <h2>常見問題</h2>
+      <div class="faq"><details><summary>主題會同步到我的其他裝置嗎？</summary><p>不會。主題只用於設定它的那台裝置。想在別台電腦上用同一套，匯出再匯入即可。</p></details><details><summary>AI 把主題改亂了怎麼辦？</summary><p>在 設定 › 外觀 裡點回 預設 或 像素 就恢復了；不要的自訂主題可以刪除。</p></details><details><summary>匯入時提示文字可能看不清楚？</summary><p>代表有幾處文字和底色的對比度偏低。可以照提示把對應的顏色調亮或調暗，也可以直接讓 AI 幫你調。</p></details><details><summary>舊版本能用主題嗎？</summary><p>需要 2.10 或更新的版本。裝置之間的協定沒有變化，新舊版本照常互傳。</p></details></div>
+      <p class="note">更多：<a href="https://github.com/baiyuze/pasteferry/blob/main/guide/ai-themes.zh-CN.md">讓 AI 幫你做主題（詳細說明）</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">主題格式與設計</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/mcp.md">MCP 工具說明</a></p>
+    </div></section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>隔空貼以 GNU AGPL-3.0 授權開源。</p>
+      <nav aria-label="頁尾連結">
+        <a href="https://github.com/baiyuze/pasteferry/releases">所有版本</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">更新記錄</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">技術說明</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">授權說明</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">回報問題</a>
+        <a href="../../zh-tw/privacy/">隱私權說明</a>
+        <a href="../../zh-tw/feedback/">討論與回饋</a>
+      </nav>
+      <nav aria-label="語言">
+        <a href="../../themes/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/themes/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw" aria-current="page">繁體中文（台灣）</a>
+        <a href="../../zh-hk/themes/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/themes/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/themes/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=fb60f6e5ce" defer></script>
+  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>
