@@ -37,7 +37,9 @@ var mcpVersions = []string{"2025-06-18", "2025-03-26"}
 
 const mcpInstructions = `PasteFerry themes. A theme is a JSON document (call theme_schema for the format and what every color role is used for). ` +
 	`Typical flow: theme_list → theme_get a built-in theme with resolved=true as a starting point → write a new theme with your own id and "base" set to that theme, overriding only what you change → theme_validate → fix any contrast warnings → theme_save → theme_apply. ` +
-	`Built-in themes ("default", "pixel") cannot be overwritten. Background images must be imported first with background_import, then referenced as "user:<sha256>".`
+	`Built-in themes ("default", "pixel") cannot be overwritten. Background images must be imported first with background_import, then referenced as "user:<sha256>"; ` +
+	`the image fills the whole window behind the pages, and the scenery is hidden while it shows. ` +
+	`To replace only the scenery (the strip behind the page header and the picture at the bottom of the sidebar, pixel art in the pixel theme), import pictures the same way and set scene.header / scene.sidebar.`
 
 // themeClient 是 MCP 用到的那几个 RPC；测试里换成假的
 type themeClient interface {
@@ -460,7 +462,7 @@ func mcpTools() []any {
 		map[string]any{
 			"name":        "background_import",
 			"title":       "Import a background image",
-			"description": "Import a background image from a file on this computer or from base64 data (no URLs). The image is re-encoded without metadata (EXIF/GPS removed) and analyzed. Reference it in a theme as background.image = \"user:<sha256>\". The analysis gives average luminance, how busy it is, its main colors (good accent candidates) and the minimum scrim opacity that keeps text readable.",
+			"description": "Import an image from a file on this computer or from base64 data (no URLs), for a window background or the scenery. The image is re-encoded without metadata (EXIF/GPS removed) and analyzed. Reference it in a theme as background.image, scene.header or scene.sidebar = \"user:<sha256>\". The analysis gives average luminance, how busy it is, its main colors (good accent candidates) and the minimum scrim opacity that keeps text readable.",
 			"inputSchema": obj(map[string]any{
 				"path":   map[string]any{"type": "string", "description": "Path of a PNG, JPEG or GIF file on this computer."},
 				"base64": map[string]any{"type": "string", "description": "Image bytes as base64 (a data: URI prefix is allowed). Use instead of path."},

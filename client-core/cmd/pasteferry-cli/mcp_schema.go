@@ -105,21 +105,28 @@ func themeSchema() map[string]any {
 				"unit":        num(1, 8, "Size of one pixel step for the pixel corner style (notch, bevel, hard shadow offset). Default 2."),
 				"shadow":      enum("soft: blurred shadows. hard: solid offset shadows under floating layers only (pixel look). none: flat.", "soft", "hard", "none"),
 			}),
-			"motion": enum("Animation style: smooth transitions, stepped (frame-by-frame, pixel look) or reduced (no animation).", "smooth", "stepped", "reduced"),
-			"icons":  enum("Icon set: system (macOS/Fluent style) or pixel (Pixelarticons).", "system", "pixel"),
-			"background": strictObj("Optional background image behind the pages. Import images with background_import first.", map[string]any{
-				"image":     map[string]any{"type": "string", "pattern": "^(asset:[a-z0-9-]{1,40}|user:[0-9a-f]{64})$", "description": "\"user:<sha256>\" from background_import, or \"asset:<name>\" for a bundled image."},
-				"imageDark": map[string]any{"type": "string", "pattern": "^(asset:[a-z0-9-]{1,40}|user:[0-9a-f]{64})$", "description": "Different image for dark mode; omit to use image in both modes."},
+			"motion":  enum("Animation style: smooth transitions, stepped (frame-by-frame, pixel look) or reduced (no animation).", "smooth", "stepped", "reduced"),
+			"icons":   enum("Icon set: system (macOS/Fluent style) or pixel (Pixelarticons).", "system", "pixel"),
+			"scenery": map[string]any{"type": "boolean", "description": "Scenery on/off: the strip behind the page header and the picture at the bottom of the sidebar. With the pixel corner style it is pixel art (a landscape and a small camp) unless scene replaces it; set false for a plainer look. Always hidden while a background image shows."},
+			"scene": strictObj("Replace the scenery with your own pictures (any corner style). Import images with background_import first. Wide images suit the header (about 900×180 visible, cropped to fill; the bottom fades into the page and the page title sits on it, so a scrim is added automatically); the sidebar picture is 200×96 at the bottom of the sidebar, its top fades into the sidebar.", map[string]any{
+				"header":      map[string]any{"type": "string", "pattern": "^user:[0-9a-f]{64}$", "description": "\"user:<sha256>\" shown behind the page header."},
+				"headerDark":  map[string]any{"type": "string", "pattern": "^user:[0-9a-f]{64}$", "description": "Different header picture for dark mode; omit to use header in both modes."},
+				"sidebar":     map[string]any{"type": "string", "pattern": "^user:[0-9a-f]{64}$", "description": "\"user:<sha256>\" shown at the bottom of the sidebar."},
+				"sidebarDark": map[string]any{"type": "string", "pattern": "^user:[0-9a-f]{64}$", "description": "Different sidebar picture for dark mode; omit to use sidebar in both modes."},
+			}),
+			"background": strictObj("Optional background image filling the window behind the sidebar and pages (desktop main window and the phone app by default). Import images with background_import first. While it shows, the page background is transparent, a scrim keeps text readable and panels become translucent.", map[string]any{
+				"image":     map[string]any{"type": "string", "pattern": "^user:[0-9a-f]{64}$", "description": "\"user:<sha256>\" from background_import."},
+				"imageDark": map[string]any{"type": "string", "pattern": "^user:[0-9a-f]{64}$", "description": "Different image for dark mode; omit to use image in both modes."},
 				"fit":       enum("How the image fills the window. tile repeats it (for small pixel-art patterns).", "cover", "contain", "tile"),
 				"align":     enum("Which part stays visible when cropped.", "center", "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight"),
-				"blur":      num(0, 40, "Blur radius; higher keeps text more readable over busy photos."),
-				"scrim": strictObj("Color laid over the image so text stays readable. Use at least the min_scrim value from the image analysis.", map[string]any{
+				"blur":      num(0, 40, "Blur, 0 to 40 (0 = sharp, 20 or more = fully blurred); higher keeps text more readable over busy photos."),
+				"scrim": strictObj("Color laid over the image so text stays readable. Defaults to the theme's background color. The app never shows it lighter than the theme's text and textDim need for 4.5:1 over this image (it measures that itself; the analysis' min_scrim_dark / min_scrim_light are the minimums for pure white / black text).", map[string]any{
 					"color":   color("Scrim color: usually black for dark themes and white for light ones."),
-					"opacity": num(0, 1, "Scrim opacity."),
+					"opacity": num(0, 1, "Scrim opacity. Default: the minimum the text needs; set higher for a calmer look."),
 				}),
-				"surfaceOpacity":  num(0.6, 1, "Opacity of panels over the image; lower shows more of the image. Raise it when the image is busy (high luminance_spread)."),
+				"surfaceOpacity":  num(0.6, 1, "Opacity of the sidebar and panels over the image; lower shows more of the image. Default 0.85. Raise it when the image is busy (high luminance_spread)."),
 				"scope":           map[string]any{"type": "array", "items": enum("Where to show the image.", "main", "picker", "mobile"), "description": "Windows that show the image; default main and mobile."},
-				"accentFromImage": map[string]any{"type": "boolean", "description": "Use the image's main color as accent."},
+				"accentFromImage": map[string]any{"type": "boolean", "description": "Use the image's main color as accent (onAccent becomes black or white, whichever reads better)."},
 			}),
 		},
 	}

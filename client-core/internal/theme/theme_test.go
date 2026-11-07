@@ -88,6 +88,7 @@ func TestValidate(t *testing.T) {
 func TestMergeWithBase(t *testing.T) {
 	s := newStore(t)
 	put(t, s, `{"schema":1,"id":"mint","name":{"zh-Hans":"薄荷"},"base":"pixel","modes":{"dark":{"accent":"#7CF2C2"}}}`)
+	put(t, s, `{"schema":1,"id":"mint-photo","base":"mint","scenery":false}`)
 
 	raw, err := s.Get("mint", false)
 	if err != nil {
@@ -116,6 +117,21 @@ func TestMergeWithBase(t *testing.T) {
 	}
 	if r.Name["zh-Hans"] != "薄荷" || r.Base != "pixel" {
 		t.Errorf("名字、base 不对：%v %s", r.Name, r.Base)
+	}
+
+	data, err = s.Get("mint-photo", true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var photo Theme
+	if err := json.Unmarshal(data, &photo); err != nil {
+		t.Fatal(err)
+	}
+	if photo.Scenery == nil || *photo.Scenery || photo.Modes["dark"]["accent"] != "#7CF2C2" {
+		t.Errorf("scenery 应当保留，颜色沿用 mint：%s", data)
+	}
+	if err := s.Delete("mint-photo"); err != nil {
+		t.Fatal(err)
 	}
 
 	infos, err := s.List()
@@ -354,5 +370,37 @@ func TestAnalyzeBackground(t *testing.T) {
 	}
 	if _, err := s.AnalyzeBackground(strings.Repeat("0", 64)); !errors.Is(err, ErrNotFound) {
 		t.Errorf("没有这张图：%v", err)
+	}
+}
+
+func TestSceneImages(t *testing.T) {
+	s := newStore(t)
+	var buf bytes.Buffer
+	png.Encode(&buf, solid(8, 8, color.RGBA{200, 120, 60, 255}))
+	info, err := s.ImportBackground(buf.Bytes(), "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, _, err := s.Put([]byte(`{"schema":1,"id":"x","scene":{"header":"user:` + strings.Repeat("c", 64) + `"}}`)); err == nil {
+		t.Error("没导入的图不能写进 scene")
+	}
+	if _, _, err := s.Put([]byte(`{"schema":1,"id":"x","scene":{"sidebar":"asset:camp"}}`)); err == nil {
+		t.Error("scene 只接受 user: 图片")
+	}
+	put(t, s, `{"schema":1,"id":"camp","base":"pixel","scene":{"header":"user:`+info.SHA256+`"}}`)
+	put(t, s, `{"schema":1,"id":"camp2","base":"camp","scene":{"sidebar":"user:`+info.SHA256+`"}}`)
+	data, err := s.Get("camp2", true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var r Theme
+	if err := json.Unmarshal(data, &r); err != nil {
+		t.Fatal(err)
+	}
+	if r.Scene == nil || r.Scene.Header != "user:"+info.SHA256 || r.Scene.Sidebar != "user:"+info.SHA256 {
+		t.Errorf("scene 应当逐项合并：%s", data)
+	}
+	if err := s.DeleteBackground(info.SHA256); !errors.Is(err, ErrInUse) {
+		t.Errorf("scene 还在用的图不能删：%v", err)
 	}
 }

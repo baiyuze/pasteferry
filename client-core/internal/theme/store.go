@@ -287,11 +287,12 @@ func (s *Store) Delete(id string) error {
 
 // userImages 是主题 t 自己引用的导入背景图的 sha256
 func (s *Store) userImages(t Theme) []string {
-	if t.Background == nil {
-		return nil
+	refs := t.Scene.images()
+	if t.Background != nil {
+		refs = append(refs, t.Background.Image, t.Background.ImageDark)
 	}
 	var out []string
-	for _, img := range []string{t.Background.Image, t.Background.ImageDark} {
+	for _, img := range refs {
 		if sha, ok := strings.CutPrefix(img, "user:"); ok {
 			out = append(out, sha)
 		}

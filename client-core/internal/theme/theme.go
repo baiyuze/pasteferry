@@ -60,7 +60,11 @@ type Theme struct {
 	Shape      *Shape                       `json:"shape,omitempty"`
 	Motion     string                       `json:"motion,omitempty"` // smooth、stepped、reduced
 	Icons      string                       `json:"icons,omitempty"`  // system、pixel
-	Background *Background                  `json:"background,omitempty"`
+	// 页面顶部的风景与侧边栏底部的小图：像素边角的主题默认画像素风景，Scene 可以换成自己的图；
+	// false 时都不画。显示整窗背景图时总是不画
+	Scenery    *bool       `json:"scenery,omitempty"`
+	Scene      *Scene      `json:"scene,omitempty"`
+	Background *Background `json:"background,omitempty"`
 }
 
 type Typography struct {
@@ -87,6 +91,22 @@ type Shape struct {
 type Scrim struct {
 	Color   string   `json:"color,omitempty"`
 	Opacity *float64 `json:"opacity,omitempty"`
+}
+
+// Scene 把风景换成导入的图（design/themes.md 第 7.6 节）：Header 铺在页面标题后面，
+// Sidebar 在侧边栏底部。都写成 "user:<sha256>"；*Dark 是深色模式另用的一张
+type Scene struct {
+	Header      string `json:"header,omitempty"`
+	HeaderDark  string `json:"headerDark,omitempty"`
+	Sidebar     string `json:"sidebar,omitempty"`
+	SidebarDark string `json:"sidebarDark,omitempty"`
+}
+
+func (c *Scene) images() []string {
+	if c == nil {
+		return nil
+	}
+	return []string{c.Header, c.HeaderDark, c.Sidebar, c.SidebarDark}
 }
 
 // Background 是背景图，见 design/themes.md 第 7 节
@@ -249,6 +269,11 @@ func validate(t Theme) error {
 	if t.Icons != "" && !oneOf(t.Icons, "system", "pixel") {
 		return invalid("icons 只能是 system 或 pixel，不能是 %q", t.Icons)
 	}
+	for _, img := range t.Scene.images() {
+		if img != "" && !userRef.MatchString(img) {
+			return invalid("scene 里的图片要写成 user:<sha256>（先用 background_import 导入），不能是 %q", img)
+		}
+	}
 	if b := t.Background; b != nil {
 		for _, img := range []string{b.Image, b.ImageDark} {
 			if img != "" && !assetRef.MatchString(img) && !userRef.MatchString(img) {
@@ -400,6 +425,26 @@ func merge(base, child Theme) Theme {
 	}
 	if child.Icons != "" {
 		out.Icons = child.Icons
+	}
+	if child.Scenery != nil {
+		out.Scenery = child.Scenery
+	}
+	if c := child.Scene; c != nil {
+		sc := Scene{}
+		if base.Scene != nil {
+			sc = *base.Scene
+		}
+		for _, f := range []struct {
+			dst *string
+			src string
+		}{
+			{&sc.Header, c.Header}, {&sc.HeaderDark, c.HeaderDark}, {&sc.Sidebar, c.Sidebar}, {&sc.SidebarDark, c.SidebarDark},
+		} {
+			if f.src != "" {
+				*f.dst = f.src
+			}
+		}
+		out.Scene = &sc
 	}
 	if c := child.Background; c != nil {
 		b := Background{}
