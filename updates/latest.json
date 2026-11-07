@@ -1,65 +1,126 @@
 {
   "schema": 1,
-  "latest": "2.10.0",
-  "date": "2026-11-06",
+  "latest": "2.10.1",
+  "date": "2026-11-07",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.10.0/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.10.1/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.10.0/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.10.1/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 28325208,
-      "sha256": "df0cd75e1876f00a9dd5f37ea52f49b7a61599540c11be9c432d4615a8638a21"
+      "size": 28365223,
+      "sha256": "c2a509a316ea61b67834c253a5a7c75ada1f26c30eb644d611a9f6111dd137a0"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 30492625,
-      "sha256": "ac2619f68feae3812096dacce6ec61c4660ba08cd5622c263b946dc2fdf04213"
+      "size": 30545055,
+      "sha256": "7c83685e8fbe6c8d0be3bcd6c4538332aec5d1345ae1532f3b0baaefa913ee9d"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 55751902,
-      "sha256": "dcebb2b674f02ce09e27f5731d3ec792d4a3e848948fc80db2eff7ec00a97a26"
+      "size": 55849394,
+      "sha256": "7512db74802c049624919baedf7042723b554b75b33344bee2201aeb0cd02bb8"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 24925441,
-      "sha256": "bd974b73a747b60d36145c7b8b421a56cbf1d682e58fe4ffe25781d1461decd2"
+      "size": 24956805,
+      "sha256": "afa157515564b3220c1f8a898999b368feccb417a5a776b59924fddb3df1c444"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 31840961,
-      "sha256": "77f0d40dae42cb52036cdbfc625a828e8ab1b03925da8e3aeb8435c1c6d50abe"
+      "size": 31881808,
+      "sha256": "2b15002e3fd91d4e27c7bd58d2a0e26aed52a4872e4f8446eb0c60e4a61a88ed"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 24297296,
-      "sha256": "de1f9ec1f476830a0c87a595bb258af16e5e3520048d49066a52ad69104e286f"
+      "size": 24334806,
+      "sha256": "16bf04d74c0d3c8c62f8e364a8e53c7a17f1ab099236b5fdb19ca18e20204879"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 22665434,
-      "sha256": "7a2653c8ec7905d77166aead4d7dcec005efcadd68b76eecc612195b205a8a16"
+      "size": 22699002,
+      "sha256": "9ba8f2b18b00e1f39dd0cef90dd9fdf676f94fc9e8f57e8161097d25b4738fab"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 29565248,
-      "sha256": "a8bd6c34d54defee94aefc120a119b772241638f050295d74ac6656ae6655e51"
+      "size": 29606376,
+      "sha256": "1de1db574d6b973f022e5f31a011ad4cc3b966caaa75333484a5aea23c366c4b"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 27759969,
-      "sha256": "d83c0095ce7cbdb8799b6d1ee22a539a763d75c9fa7fc68656104fdb7b8d3336"
+      "size": 27803117,
+      "sha256": "76a5ea7d81ec04ff9ce90d8013802832b8aceaa917faa2cdc37daec7cce5bde1"
     }
   },
   "releases": [
+    {
+      "version": "2.10.1",
+      "date": "2026-11-07",
+      "notes": {
+        "en": {
+          "changes": [
+            "Background images: Settings › Appearance › Background image fills the window behind the sidebar and pages with a picture. The sidebar and lists become translucent, and blur, scrim and panel opacity have three steps each. Use image colors takes the accent from the picture. It can also show in Quick Paste, and the Android app can pick a background photo.",
+            "Custom scenery: Settings › Appearance › Scenery replaces the picture behind the page header and the one at the bottom of the sidebar with your own, in any theme; in the pixel theme these are the pixel landscape and camp. Scenery can also be turned off.",
+            "AI: the MCP theme format now describes background, scenery and scene, so AI apps can set a background image or replace the scenery with pictures imported through background_import."
+          ],
+          "fixes": [
+            "Background images saved in a theme, including by AI through MCP, were accepted but never shown. They now appear in the app.",
+            "The minimum scrim for readable text was calculated too light. It is now measured the way the app draws it, against the theme's own text colors, and text on a background image or header picture always reaches 4.5:1."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "背景图：「设置 › 外观 › 背景图」用一张图铺满侧边栏和页面后面，侧边栏和列表底板变成半透明；模糊、遮罩、面板各有三档，「用图片配色」用图片的主色作强调色。也可以在快捷粘贴窗口显示，Android App 可以选一张照片作背景。",
+            "自定义风景：「设置 › 外观 › 风景」把页面顶部和侧边栏底部的图换成你自己的，任何主题都能用；像素主题里这两处是像素风景和小营地。也可以关掉风景。",
+            "AI：MCP 的主题格式加入了 background、scenery、scene 的说明，AI 应用可以设置背景图，或用 background_import 导入的图换掉风景。"
+          ],
+          "fixes": [
+            "主题里的背景图（包括 AI 通过 MCP 设置的）以前保存了却不显示，现在会显示出来。",
+            "文字看得清所需的遮罩浓度以前算得偏淡；现在按界面实际的画法、用主题自己的文字颜色来算，背景图和页眉图上的文字都达到 4.5:1。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "背景画像：「設定 › 外観 › 背景画像」でサイドバーとページの後ろに画像を敷けます。サイドバーとリストは半透明になり、ぼかし・スクリム・パネルはそれぞれ 3 段階。「画像の色を使う」で画像の主な色をアクセントにします。クイックペーストにも表示でき、Android アプリでは写真を背景にできます。",
+            "カスタム風景：「設定 › 外観 › 風景」でページ上部とサイドバー下部の画像を自分の画像に変えられます（どのテーマでも可）。ピクセルテーマではここがピクセルの風景とキャンプです。風景をオフにもできます。",
+            "AI：MCP のテーマ形式に background、scenery、scene の説明を追加しました。AI アプリが背景画像を設定したり、background_import で読み込んだ画像で風景を置き換えたりできます。"
+          ],
+          "fixes": [
+            "テーマに保存した背景画像（MCP 経由で AI が設定したものを含む）が表示されていなかった問題を修正しました。",
+            "文字を読みやすくするためのスクリムの濃さが薄く計算されていました。実際の描画方法とテーマの文字色で計算するようにし、背景画像やページ上部の画像の上の文字は常に 4.5:1 以上になります。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "背景圖：「設定 › 外觀 › 背景圖」用一張圖鋪滿側邊欄和頁面後面，側邊欄和列表底板變成半透明；模糊、遮罩、面板各有三檔，「用圖片配色」用圖片的主色作為強調色。也可以在快速貼上視窗顯示，Android App 可以選一張照片作背景。",
+            "自訂風景：「設定 › 外觀 › 風景」把頁面頂部和側邊欄底部的圖換成你自己的，任何主題都能用；像素主題裡這兩處是像素風景和小營地。也可以關掉風景。",
+            "AI：MCP 的主題格式加入了 background、scenery、scene 的說明，AI 應用程式可以設定背景圖，或用 background_import 匯入的圖換掉風景。"
+          ],
+          "fixes": [
+            "主題裡的背景圖（包括 AI 透過 MCP 設定的）以前儲存了卻不顯示，現在會顯示出來。",
+            "文字看得清楚所需的遮罩濃度以前算得偏淡；現在按介面實際的畫法、用主題自己的文字顏色來算，背景圖和頁首圖上的文字都達到 4.5:1。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "背景圖：「設定 › 外觀 › 背景圖」用一張圖鋪滿側邊欄和頁面後面，側邊欄和列表底板變成半透明；模糊、遮罩、面板各有三檔，「用圖片配色」用圖片的主色作強調色。亦可以在快速貼上視窗顯示，Android App 可以揀一張相片做背景。",
+            "自訂風景：「設定 › 外觀 › 風景」把頁面頂部和側邊欄底部的圖換成你自己的，任何主題都可以用；像素主題裏這兩處是像素風景和小營地。亦可以關掉風景。",
+            "AI：MCP 的主題格式加入了 background、scenery、scene 的說明，AI 應用程式可以設定背景圖，或用 background_import 匯入的圖換掉風景。"
+          ],
+          "fixes": [
+            "主題裏的背景圖（包括 AI 透過 MCP 設定的）以前儲存了卻不顯示，現在會顯示出來。",
+            "文字看得清楚所需的遮罩濃度以前計得偏淡；現在按介面實際的畫法、用主題自己的文字顏色來計，背景圖和頁首圖上的文字都達到 4.5:1。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.10.0",
       "date": "2026-11-06",
@@ -490,52 +551,6 @@
         "zh-Hant-HK": {
           "changes": [
             "安卓：設定裏的「傳送記錄保留」可以選傳送頁的「傳送記錄」顯示最近幾天：1、3、7 或 30 天，不設時是 3 天。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.7.1",
-      "date": "2026-10-28",
-      "notes": {
-        "en": {
-          "changes": [
-            "Android: picking photos or files first shows every file with its size, and nothing is sent until Send is tapped; multi-select works. The send page lists what this phone sent in the last three days, with View all and Clear. Settings has Check for updates, which opens the APK link when a newer version exists."
-          ],
-          "fixes": [
-            "Tapping Copy in the phone page wrote the text into the clipboard of the computer running it, and the app then kept it as another record. The same text is now ignored for a minute, so copying the same record again only updates the clipboard."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "安卓：选完照片或文件先列出每个文件和大小，点「发送」才真的发；支持多选。发送页底部列出这台手机最近三天发出去的内容，可以「查看全部」和清除。设置里有「检查更新」，有新版本时打开 APK 下载链接。"
-          ],
-          "fixes": [
-            "在手机网页上点「复制」会把文字写进那台电脑的剪贴板，于是又被记成一条新记录。现在同一段文字一分钟内重复复制不再记录，只更新剪贴板。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "Android：写真やファイルを選ぶと、まず各ファイルとサイズの一覧が出て、「送信」を押すまで送られません。複数選択にも対応。送信ページの下部に、このスマホが過去 3 日に送った内容が並び、「すべて見る」と消去ができます。設定に「アップデートを確認」があり、新しい版があれば APK のリンクを開きます。"
-          ],
-          "fixes": [
-            "スマホのページで「コピー」を押すと、そのパソコンのクリップボードに書き込まれ、もう 1 件の履歴として残っていました。同じテキストは 1 分間は記録せず、クリップボードだけ更新します。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "安卓：選完照片或檔案先列出每個檔案和大小，點「傳送」才真的送出；支援多選。傳送頁底部列出這台手機最近三天送出的內容，可以「查看全部」和清除。設定裡有「檢查更新」，有新版本時開啟 APK 下載連結。"
-          ],
-          "fixes": [
-            "在手機網頁上點「複製」會把文字寫進那台電腦的剪貼簿，於是又被記成一筆新記錄。現在同一段文字一分鐘內重複複製不再記錄，只更新剪貼簿。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "安卓：選完照片或檔案先列出每個檔案和大小，按「傳送」才真的送出；支援多選。傳送頁底部列出這部手機最近三日送出的內容，可以「查看全部」和清除。設定裏有「檢查更新」，有新版本時開啟 APK 下載連結。"
-          ],
-          "fixes": [
-            "在手機網頁上按「複製」會把文字寫進那部電腦的剪貼簿，於是又被記成一項新記錄。現在同一段文字一分鐘內重複複製不再記錄，只更新剪貼簿。"
           ]
         }
       }
