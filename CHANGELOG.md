@@ -1,6 +1,6 @@
 # 更新记录 / Changelog
 
-## 2.11.0 — 2026-11-07
+## 2.10.1 — 2026-11-07
 
 This release makes background images work and lets you replace the theme scenery with your own pictures, yourself or through AI.
 

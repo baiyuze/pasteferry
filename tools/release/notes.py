@@ -11,7 +11,7 @@
 MAX_RELEASES = 10
 
 RELEASES = [
-{'version': '2.11.0',
+{'version': '2.10.1',
  'date': '2026-11-07',
  'changes': [('Background images: Settings › Appearance › Background image fills the window behind the sidebar and '
               'pages with a picture. The sidebar and lists become translucent, and blur, scrim and panel opacity '
