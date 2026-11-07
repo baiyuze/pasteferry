@@ -472,6 +472,7 @@ func analyze(img *image.RGBA) BackgroundInfo {
 	w, h := fitInside(img.Rect.Dx(), img.Rect.Dy(), 64)
 	small := onWhite(scale(img, w, h))
 	lums := make([]float64, 0, w*h)
+	pixels := make([]RGBA, 0, w*h)
 	var sum float64
 	type bucket struct {
 		r, g, b, n int
@@ -482,6 +483,7 @@ func analyze(img *image.RGBA) BackgroundInfo {
 			c := small.RGBAAt(x, y)
 			l := RGBA{c.R, c.G, c.B, 255}.Luminance()
 			lums = append(lums, l)
+			pixels = append(pixels, RGBA{c.R, c.G, c.B, 255})
 			sum += l
 			// 每个通道分 8 档，同一档的颜色算一种
 			key := int(c.R>>5)<<6 | int(c.G>>5)<<3 | int(c.B>>5)
@@ -499,8 +501,6 @@ func analyze(img *image.RGBA) BackgroundInfo {
 	for _, l := range lums {
 		variance += (l - mean) * (l - mean)
 	}
-	sort.Float64s(lums)
-	p10, p90 := lums[int(0.1*(n-1))], lums[int(0.9*(n-1))]
 
 	list := make([]*bucket, 0, len(buckets))
 	for _, b := range buckets {
@@ -541,27 +541,38 @@ func analyze(img *image.RGBA) BackgroundInfo {
 		Luminance:       round3(mean),
 		LuminanceSpread: round3(math.Sqrt(variance / n)),
 		Colors:          colors,
-		MinScrimDark:    round3(scrimForWhiteText(p90)),
-		MinScrimLight:   round3(scrimForBlackText(p10)),
+		MinScrimDark:    round3(minScrim(pixels, RGBA{0, 0, 0, 255}, RGBA{255, 255, 255, 255})),
+		MinScrimLight:   round3(minScrim(pixels, RGBA{255, 255, 255, 255}, RGBA{0, 0, 0, 255})),
 	}
 }
 
-// scrimForWhiteText：黑色遮罩浓度 a 让亮度 l 降到 l·(1−a)，白字要达到 4.5:1，即 l·(1−a) ≤ 1.05/4.5 − 0.05
-func scrimForWhiteText(l float64) float64 {
-	limit := 1.05/4.5 - 0.05
-	if l <= limit {
-		return 0
+// minScrim 是遮罩至少多浓，text 颜色的字在 90% 的区域达到 4.5:1（最亮、最暗的零星小块不算）。
+// 界面按 sRGB 数值把遮罩叠在图上，这里也一样算，不能按线性亮度混合：那样算出的遮罩偏淡
+func minScrim(pixels []RGBA, scrim, text RGBA) float64 {
+	need := make([]float64, len(pixels))
+	for i, p := range pixels {
+		lo, hi := 0.0, 1.0
+		if Contrast(text, p) >= 4.5 {
+			hi = 0
+		}
+		for k := 0; k < 14 && hi > 0; k++ {
+			mid := (lo + hi) / 2
+			if Contrast(text, mix(p, scrim, mid)) >= 4.5 {
+				hi = mid
+			} else {
+				lo = mid
+			}
+		}
+		need[i] = hi
 	}
-	return 1 - limit/l
+	sort.Float64s(need)
+	return need[int(0.9*float64(len(need)-1))]
 }
 
-// scrimForBlackText：白色遮罩浓度 a 让亮度变成 l + (1−l)·a，黑字要达到 4.5:1，即至少 4.5·0.05 − 0.05
-func scrimForBlackText(l float64) float64 {
-	limit := 4.5*0.05 - 0.05
-	if l >= limit {
-		return 0
-	}
-	return (limit - l) / (1 - l)
+// mix 按 sRGB 数值把 b 以 a 的浓度叠在 p 上
+func mix(p, b RGBA, a float64) RGBA {
+	m := func(x, y uint8) uint8 { return uint8(math.Round(float64(x)*(1-a) + float64(y)*a)) }
+	return RGBA{m(p.R, b.R), m(p.G, b.G), m(p.B, b.B), 255}
 }
 
 func colorDistance(a, b RGBA) float64 {

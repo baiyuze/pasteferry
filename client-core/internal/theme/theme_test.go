@@ -9,6 +9,7 @@ import (
 	"image/color"
 	"image/jpeg"
 	"image/png"
+	"math"
 	"os"
 	"strings"
 	"testing"
@@ -254,7 +255,8 @@ func TestImportBackgroundStripsExifAndRotates(t *testing.T) {
 	if blurred, _, err := s.Background(info.SHA256, true); err != nil || len(blurred) == 0 {
 		t.Errorf("应当有模糊版：%v", err)
 	}
-	if info.Luminance < 0.9 || info.MinScrimDark < 0.7 || info.MinScrimLight != 0 {
+	// 按 sRGB 叠加：#FAFAFA 要压到 #767676 左右白字才达到 4.5:1，黑遮罩约 0.53
+	if info.Luminance < 0.9 || math.Abs(info.MinScrimDark-0.53) > 0.02 || info.MinScrimLight != 0 {
 		t.Errorf("近白的图：亮度高，白字要很浓的黑遮罩，黑字不用遮罩：%+v", info)
 	}
 	if len(info.Colors) < 1 || len(info.Colors) > 5 {
