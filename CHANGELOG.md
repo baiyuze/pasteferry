@@ -1,5 +1,27 @@
 # 更新记录 / Changelog
 
+## 2.11.0 — 2026-11-07
+
+This release makes background images work and lets you replace the theme scenery with your own pictures, yourself or through AI.
+
+### Changes
+
+- **Background images**: Settings › Appearance › Background image fills the window behind the sidebar and pages with a picture. The sidebar and lists become translucent, and blur, scrim and panel opacity have three steps each. Use image colors takes the accent from the picture. It can also show in Quick Paste, and the Android app can pick a background photo.
+- **Custom scenery**: Settings › Appearance › Scenery replaces the picture behind the page header and the one at the bottom of the sidebar with your own, in any theme; in the pixel theme these are the pixel landscape and camp. Scenery can also be turned off.
+- **AI**: the MCP theme format now describes `background`, `scenery` and `scene`, so AI apps can set a background image or replace the scenery with pictures imported through `background_import`.
+
+### Fixes
+
+- Background images saved in a theme, including by AI through MCP, were accepted but never shown. They now appear in the app.
+- The minimum scrim for readable text was calculated too light. It is now measured the way the app draws it, against the theme's own text colors, and text on a background image or header picture always reaches 4.5:1.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional; update to use background images and custom scenery. Existing themes, pairings, friends, history and settings are preserved, and themes without pictures look the same as before.
+- **Android**: optional; adds the background photo setting.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases. Themes and their pictures stay on each device.
+
 ## 2.10.0 — 2026-11-06
 
 This release adds themes: a new Appearance setting with built-in and custom themes, a pixel-art theme, and an MCP server that lets AI apps design and apply themes.

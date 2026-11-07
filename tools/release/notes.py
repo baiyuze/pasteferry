@@ -11,6 +11,40 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.11.0',
+ 'date': '2026-11-07',
+ 'changes': [('Background images: Settings › Appearance › Background image fills the window behind the sidebar and '
+              'pages with a picture. The sidebar and lists become translucent, and blur, scrim and panel opacity '
+              'have three steps each. Use image colors takes the accent from the picture. It can also show in '
+              'Quick Paste, and the Android app can pick a background photo.',
+              '背景图：「设置 › 外观 › 背景图」用一张图铺满侧边栏和页面后面，侧边栏和列表底板变成半透明；模糊、遮罩、面板各有三档，「用图片配色」用图片的主色作强调色。也可以在快捷粘贴窗口显示，Android App 可以选一张照片作背景。',
+              '背景画像：「設定 › 外観 › 背景画像」でサイドバーとページの後ろに画像を敷けます。サイドバーとリストは半透明になり、ぼかし・スクリム・パネルはそれぞれ 3 段階。「画像の色を使う」で画像の主な色をアクセントにします。クイックペーストにも表示でき、Android アプリでは写真を背景にできます。',
+              '背景圖：「設定 › 外觀 › 背景圖」用一張圖鋪滿側邊欄和頁面後面，側邊欄和列表底板變成半透明；模糊、遮罩、面板各有三檔，「用圖片配色」用圖片的主色作為強調色。也可以在快速貼上視窗顯示，Android App 可以選一張照片作背景。',
+              '背景圖：「設定 › 外觀 › 背景圖」用一張圖鋪滿側邊欄和頁面後面，側邊欄和列表底板變成半透明；模糊、遮罩、面板各有三檔，「用圖片配色」用圖片的主色作強調色。亦可以在快速貼上視窗顯示，Android App 可以揀一張相片做背景。'),
+             ('Custom scenery: Settings › Appearance › Scenery replaces the picture behind the page header and the '
+              'one at the bottom of the sidebar with your own, in any theme; in the pixel theme these are the pixel '
+              'landscape and camp. Scenery can also be turned off.',
+              '自定义风景：「设置 › 外观 › 风景」把页面顶部和侧边栏底部的图换成你自己的，任何主题都能用；像素主题里这两处是像素风景和小营地。也可以关掉风景。',
+              'カスタム風景：「設定 › 外観 › 風景」でページ上部とサイドバー下部の画像を自分の画像に変えられます（どのテーマでも可）。ピクセルテーマではここがピクセルの風景とキャンプです。風景をオフにもできます。',
+              '自訂風景：「設定 › 外觀 › 風景」把頁面頂部和側邊欄底部的圖換成你自己的，任何主題都能用；像素主題裡這兩處是像素風景和小營地。也可以關掉風景。',
+              '自訂風景：「設定 › 外觀 › 風景」把頁面頂部和側邊欄底部的圖換成你自己的，任何主題都可以用；像素主題裏這兩處是像素風景和小營地。亦可以關掉風景。'),
+             ('AI: the MCP theme format now describes background, scenery and scene, so AI apps can set a background '
+              'image or replace the scenery with pictures imported through background_import.',
+              'AI：MCP 的主题格式加入了 background、scenery、scene 的说明，AI 应用可以设置背景图，或用 background_import 导入的图换掉风景。',
+              'AI：MCP のテーマ形式に background、scenery、scene の説明を追加しました。AI アプリが背景画像を設定したり、background_import で読み込んだ画像で風景を置き換えたりできます。',
+              'AI：MCP 的主題格式加入了 background、scenery、scene 的說明，AI 應用程式可以設定背景圖，或用 background_import 匯入的圖換掉風景。',
+              'AI：MCP 的主題格式加入了 background、scenery、scene 的說明，AI 應用程式可以設定背景圖，或用 background_import 匯入的圖換掉風景。')],
+ 'fixes': [('Background images saved in a theme, including by AI through MCP, were accepted but never shown. They now appear in the app.',
+            '主题里的背景图（包括 AI 通过 MCP 设置的）以前保存了却不显示，现在会显示出来。',
+            'テーマに保存した背景画像（MCP 経由で AI が設定したものを含む）が表示されていなかった問題を修正しました。',
+            '主題裡的背景圖（包括 AI 透過 MCP 設定的）以前儲存了卻不顯示，現在會顯示出來。',
+            '主題裏的背景圖（包括 AI 透過 MCP 設定的）以前儲存了卻不顯示，現在會顯示出來。'),
+           ('The minimum scrim for readable text was calculated too light. It is now measured the way the app draws it, '
+            "against the theme's own text colors, and text on a background image or header picture always reaches 4.5:1.",
+            '文字看得清所需的遮罩浓度以前算得偏淡；现在按界面实际的画法、用主题自己的文字颜色来算，背景图和页眉图上的文字都达到 4.5:1。',
+            '文字を読みやすくするためのスクリムの濃さが薄く計算されていました。実際の描画方法とテーマの文字色で計算するようにし、背景画像やページ上部の画像の上の文字は常に 4.5:1 以上になります。',
+            '文字看得清楚所需的遮罩濃度以前算得偏淡；現在按介面實際的畫法、用主題自己的文字顏色來算，背景圖和頁首圖上的文字都達到 4.5:1。',
+            '文字看得清楚所需的遮罩濃度以前計得偏淡；現在按介面實際的畫法、用主題自己的文字顏色來計，背景圖和頁首圖上的文字都達到 4.5:1。')]},
 {'version': '2.10.0',
  'date': '2026-11-06',
  'changes': [('Themes: Settings › Appearance lists the built-in themes and your custom themes, with light, dark '
