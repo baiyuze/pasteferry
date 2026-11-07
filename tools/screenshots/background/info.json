@@ -1,0 +1,17 @@
+{
+  "SHA256": "85bb7c7be92c5092a0fa31d8506384bb4a63886f0571574a271e07dca900d3ed",
+  "Width": 1920,
+  "Height": 1200,
+  "Format": "jpeg",
+  "Luminance": 0.094,
+  "LuminanceSpread": 0.12,
+  "Colors": [
+    "#683070",
+    "#2E1C4B",
+    "#AC4677",
+    "#D66469",
+    "#EF915D"
+  ],
+  "MinScrimDark": 0.107,
+  "MinScrimLight": 0.389
+}

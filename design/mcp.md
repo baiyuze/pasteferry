@@ -32,7 +32,7 @@
 | `theme_save` | `theme` | 保存：`saved`、`id`、`warnings[]` |
 | `theme_apply` | `id`，`mode`（可选：system、light、dark） | `current`、`mode`。主窗口、快捷粘贴窗口、手机 App 立即换 |
 | `theme_delete` | `id` | `deleted`。删的是正在用的主题时换回默认主题 |
-| `background_import` | `path` 或 `base64`（二选一） | `sha256`、`reference`（`user:<sha256>`，写进主题的 `background.image`）、宽高、格式、`luminance`、`luminance_spread`、`colors[]`、`min_scrim_dark`、`min_scrim_light` |
+| `background_import` | `path` 或 `base64`（二选一） | `sha256`、`reference`（`user:<sha256>`，写进主题的 `background.image`，或风景的 `scene.header`、`scene.sidebar`）、宽高、格式、`luminance`、`luminance_spread`、`colors[]`、`min_scrim_dark`、`min_scrim_light` |
 | `background_analyze` | `sha256`（可带 `user:` 前缀） | 与上面相同的分析结果 |
 
 - 工具的说明与参数说明都用英文写，写清每个字段的用途，模型照着就能用。

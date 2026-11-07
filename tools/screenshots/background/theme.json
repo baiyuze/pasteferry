@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "pixel-sunset-photo",
+  "name": {
+    "zh-Hans": "落日山景",
+    "zh-Hant-TW": "落日山景",
+    "zh-Hant-HK": "落日山景",
+    "en": "Sunset Hills",
+    "ja": "夕焼けの山"
+  },
+  "base": "pixel",
+  "background": {
+    "image": "user:85bb7c7be92c5092a0fa31d8506384bb4a63886f0571574a271e07dca900d3ed",
+    "fit": "cover",
+    "align": "bottom",
+    "blur": 0
+  }
+}

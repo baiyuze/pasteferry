@@ -63,6 +63,8 @@ Add this to `~/.cursor/mcp.json` (all projects) or `.cursor/mcp.json` in a proje
 - "Make a matcha green theme based on the default one, light and dark, with readable text."
 - "Change the pixel theme's accent to coral, save it as a new theme and use it."
 - "Use ~/Pictures/beach.jpg as the background and match the colors to the photo."
+- "Replace the pixel theme's header landscape with ~/Pictures/mountains.png and put ~/Pictures/cat.png at the bottom of the sidebar."
+- "The background is too busy: blur it a little and make the panels less see-through."
 - "Delete the theme you just made."
 
 Themes made by AI appear in Settings → Appearance next to the built-in ones, so you can switch back at any time.
@@ -74,6 +76,12 @@ Open PasteFerry (or check in Settings that the background service is running), t
 
 **The AI reports low contrast**
 PasteFerry checks that body and secondary text reach 4.5:1 against the background, hint text 3:1, and button text 4.5:1 against the button. Ask the AI to adjust those colors. The theme saves anyway, but that text may be hard to read.
+
+**Background image or scenery?**
+A background image (`background`) fills the whole window, and the sidebar and lists become translucent so it shows through. Scenery (`scene`) only replaces the wide picture at the top of pages and the small one at the bottom of the sidebar, where the pixel theme draws its landscape and camp; nothing else changes. Scenery is hidden while a background image shows. You can change both yourself in Settings → Appearance, without AI.
+
+**Will text stay readable on my picture?**
+Yes. PasteFerry works out how strong the scrim over the picture must be for the theme's text colors and never shows it lighter; the AI or you can only make it stronger. Dark pictures with dark mode, and light pictures with light mode, let more of the picture show.
 
 **Can I use an image from the web?**
 Not by URL. Download the image first, then give the AI the file. The image is re-encoded on import, so location data from photos is not kept.

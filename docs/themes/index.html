@@ -104,6 +104,21 @@
       <ol class="steps"><li>在 <b>设置 › 外观</b> 里，鼠标移到一张主题卡片上，点右下角的 <b>⋯</b>，选 <b>复制一份</b>。新主题出现在「自定义」里。</li><li>在副本的 <b>⋯</b> 里选 <b>导出…</b>，得到一个 <code>.pasteferry-theme.json</code> 文件。</li><li>用任意文本编辑器改里面的颜色、名字等（格式见下一节）。</li><li>回到外观页，点 <b>导入主题…</b> 选这个文件。同一个 id 会覆盖原来那份，导入后自动应用。</li><li>不要的自定义主题，在 <b>⋯</b> 里选 <b>删除主题</b>。自带主题不能删除。</li></ol>
       <p class="note">保存时会检查文字和背景的对比度。看不清的颜色会提示出来，但仍然可以保存。主题文件可以发给朋友，对方导入即可。</p>
     </div></section>
+    <section class="section" id="background"><div class="wrap official-copy">
+      <h2>换背景图</h2>
+      <ol class="steps"><li>进入 <b>设置 › 外观</b>，滚到 <b>背景图</b>，点 <b>选择图片…</b>，选一张 JPEG、PNG 或 GIF。</li><li>图片铺满侧边栏和页面后面，侧边栏和列表底板变成半透明。正在用自带主题时，会先复制一份再改，自带主题本身不变。</li><li><b>模糊</b>、<b>遮罩</b>、<b>面板</b> 各有三档；<b>用图片配色</b> 把强调色换成图片的主色；也可以让 <b>快捷粘贴窗口也显示</b>。</li><li>不想要了点 <b>移除</b>。手机上在 <b>设置 › 外观 › 背景图</b> 里选照片。</li></ol>
+      <p class="note">文字始终看得清：隔空贴按主题的文字颜色和这张图，算出遮罩至少要多浓，只会比它更浓。深色的图配深色模式、浅色的图配浅色模式，图露得最多。</p>
+      <div class="f-pair">
+        <img src="../assets/screenshots/bg-history-dark.png?v=43710a00b1" width="2112" height="1472" loading="lazy" alt="像素主题深色模式铺了一张落日山景的背景图：侧边栏和列表半透明，图从后面透出来">
+        <img src="../assets/screenshots/bg-appearance-background-dark.png?v=56d20aff81" width="2112" height="1472" loading="lazy" alt="设置 › 外观 › 背景图：更换、移除，模糊、遮罩、面板三档，用图片配色，快捷粘贴窗口也显示">
+      </div>
+    </div></section>
+    <section class="section" id="scenery"><div class="wrap">
+      <h2>换风景</h2>
+      <div class="os-grid"><ol class="steps"><li>风景是页面顶部那条宽图和侧边栏底部的小图。像素主题这里默认画像素风景和小营地，其他主题默认没有。</li><li>在 <b>设置 › 外观 › 风景</b> 里，<b>页面顶部</b>、<b>侧边栏底部</b> 各点 <b>选择图片…</b> 换成自己的图，任何主题都能用。页面标题会自动盖一层遮罩，字照样看得清。</li><li><b>恢复默认</b> 换回原来的样子；关掉 <b>显示风景</b> 两处都不画。设置了整窗背景图时不显示风景。</li></ol>
+        <figure class="shot"><img src="../assets/screenshots/bg-scene-history-dark.png?v=981f8af26c" width="2112" height="1472" loading="lazy" alt="像素主题深色模式：页面顶部和侧边栏底部换成了落日山景的图"></figure>
+      </div>
+    </div></section>
     <section class="section" id="format"><div class="wrap official-copy">
       <h2>主题文件长什么样</h2>
       <p class="intro">主题是一份 JSON。只写想改的地方就行，没写的从 <code>base</code> 指定的主题补齐。下面这份以像素主题为底，只换了强调色和几处底色：</p>
@@ -121,7 +136,7 @@
 }</code></pre>
                 </div>
       <h3>常用字段</h3>
-      <dl class="fields"><dt><code>id</code></dt><dd>主题的标识，只能用小写字母、数字和 <code>-</code>；不能是 <code>default</code>、<code>pixel</code>。</dd><dt><code>name</code></dt><dd>各语言的名字，比如 <code>zh-Hans</code>、<code>zh-Hant-TW</code>、<code>zh-Hant-HK</code>、<code>en</code>、<code>ja</code>。</dd><dt><code>base</code></dt><dd>以哪套主题为底：<code>default</code>、<code>pixel</code> 或另一套自定义主题。</dd><dt><code>modes.light</code> / <code>modes.dark</code></dt><dd>浅色、深色两套颜色，写成 <code>#RRGGBB</code> 或带透明度的 <code>#AARRGGBB</code>。常用的有 <code>accent</code>（强调色）、<code>background</code>（内容区底色）、<code>sidebar</code>、<code>surface</code>（分组与对话框）、<code>border</code>、<code>text</code>、<code>textDim</code>、<code>textFaint</code>、<code>onAccent</code>（强调色上的文字）。</dd><dt><code>typography</code></dt><dd>字体：<code>family</code> 可选 <code>system</code> 或自带的像素字体 <code>FusionPixel</code>。</dd><dt><code>shape</code></dt><dd>形状：<code>corner</code> 是 <code>round</code>（圆角）或 <code>pixel</code>（像素切角），还有圆角大小、边框粗细、投影样式。</dd><dt><code>motion</code>、<code>icons</code></dt><dd>动效 <code>smooth</code> / <code>stepped</code> / <code>reduced</code>；图标 <code>system</code> / <code>pixel</code>。</dd></dl>
+      <dl class="fields"><dt><code>id</code></dt><dd>主题的标识，只能用小写字母、数字和 <code>-</code>；不能是 <code>default</code>、<code>pixel</code>。</dd><dt><code>name</code></dt><dd>各语言的名字，比如 <code>zh-Hans</code>、<code>zh-Hant-TW</code>、<code>zh-Hant-HK</code>、<code>en</code>、<code>ja</code>。</dd><dt><code>base</code></dt><dd>以哪套主题为底：<code>default</code>、<code>pixel</code> 或另一套自定义主题。</dd><dt><code>modes.light</code> / <code>modes.dark</code></dt><dd>浅色、深色两套颜色，写成 <code>#RRGGBB</code> 或带透明度的 <code>#AARRGGBB</code>。常用的有 <code>accent</code>（强调色）、<code>background</code>（内容区底色）、<code>sidebar</code>、<code>surface</code>（分组与对话框）、<code>border</code>、<code>text</code>、<code>textDim</code>、<code>textFaint</code>、<code>onAccent</code>（强调色上的文字）。</dd><dt><code>typography</code></dt><dd>字体：<code>family</code> 可选 <code>system</code> 或自带的像素字体 <code>FusionPixel</code>。</dd><dt><code>shape</code></dt><dd>形状：<code>corner</code> 是 <code>round</code>（圆角）或 <code>pixel</code>（像素切角），还有圆角大小、边框粗细、投影样式。</dd><dt><code>motion</code>、<code>icons</code></dt><dd>动效 <code>smooth</code> / <code>stepped</code> / <code>reduced</code>；图标 <code>system</code> / <code>pixel</code>。</dd><dt><code>background</code></dt><dd>整窗背景图：<code>image</code>（导入后的 <code>user:&lt;sha256&gt;</code>）、<code>blur</code>、<code>scrim</code>（遮罩）、<code>surfaceOpacity</code>（面板不透明度）、<code>scope</code>（哪些窗口显示）、<code>accentFromImage</code>。</dd><dt><code>scenery</code>、<code>scene</code></dt><dd>风景开关，以及换成自己的图：<code>scene.header</code>（页面顶部）、<code>scene.sidebar</code>（侧边栏底部），深色模式可另配 <code>headerDark</code>、<code>sidebarDark</code>。</dd></dl>
       <p class="note">完整的格式与每个颜色用在哪里： <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">design/themes.md</a></p>
     </div></section>
     <section class="section" id="ai"><div class="wrap official-copy">
@@ -150,15 +165,15 @@
                 </div>
       <p class="note">改完配置后重启 AI 应用。隔空贴要保持运行，AI 通过它在本机的后台服务改主题。</p>
       <h3>3. 直接说你想要什么</h3>
-      <ul class="prompts"><li>“帮我做一套赛博朋克风的主题，霓虹粉配深紫，然后应用上。”</li><li>“以像素主题为底，做一套落日色调的，深色模式用暖一点的底色。”</li><li>“现在这套主题的灰色文字看不清，帮我调亮一点。”</li><li>“把我的主题导出给我看看，再做一个浅色版本。”</li></ul>
+      <ul class="prompts"><li>“帮我做一套赛博朋克风的主题，霓虹粉配深紫，然后应用上。”</li><li>“以像素主题为底，做一套落日色调的，深色模式用暖一点的底色。”</li><li>“现在这套主题的灰色文字看不清，帮我调亮一点。”</li><li>“把我的主题导出给我看看，再做一个浅色版本。”</li><li>“用 ~/Pictures/海边.jpg 当背景，按照片的颜色配一套主题。”</li><li>“把像素主题顶部的风景换成 ~/Pictures/雪山.png。”</li></ul>
       <h3>AI 能做什么</h3>
-      <ul><li>列出主题、读取某套主题的完整内容；</li><li>读取主题格式说明：每个颜色用在哪里、要和谁达到多少对比度；</li><li>只校验不保存，看看哪对颜色对比度不够；</li><li>保存、应用、删除自定义主题，切换浅色深色；</li><li>导入本机的一张图片作为背景，并分析亮度和主色。</li></ul>
+      <ul><li>列出主题、读取某套主题的完整内容；</li><li>读取主题格式说明：每个颜色用在哪里、要和谁达到多少对比度；</li><li>只校验不保存，看看哪对颜色对比度不够；</li><li>保存、应用、删除自定义主题，切换浅色深色；</li><li>导入本机的图片，设为整窗背景图或换掉风景，并分析亮度和主色。</li></ul>
       <h3>安全范围</h3>
       <p>MCP 服务只在本机运行，不开网络端口。它只能读写主题和背景图，看不到复制记录、设备和好友，也不能改其他设置；背景图只接受本机文件，不会去网上下载。</p>
     </div></section>
     <section class="section" id="faq"><div class="wrap official-copy">
       <h2>常见问题</h2>
-      <div class="faq"><details><summary>主题会同步到我的其他设备吗？</summary><p>不会。主题只用于设置它的那台设备。想在别的电脑上用同一套，导出再导入即可。</p></details><details><summary>AI 把主题改乱了怎么办？</summary><p>在 设置 › 外观 里点回 默认 或 像素 就恢复了；不要的自定义主题可以删除。</p></details><details><summary>导入时提示文字可能看不清？</summary><p>说明有几处文字和底色的对比度偏低。可以照提示改亮或改暗对应的颜色，也可以直接让 AI 帮你调。</p></details><details><summary>旧版本能用主题吗？</summary><p>需要 2.10 或更新的版本。设备之间的协议没有变化，新旧版本照常互传。</p></details></div>
+      <div class="faq"><details><summary>主题会同步到我的其他设备吗？</summary><p>不会。主题只用于设置它的那台设备。想在别的电脑上用同一套，导出再导入即可。</p></details><details><summary>AI 把主题改乱了怎么办？</summary><p>在 设置 › 外观 里点回 默认 或 像素 就恢复了；不要的自定义主题可以删除。</p></details><details><summary>导入时提示文字可能看不清？</summary><p>说明有几处文字和底色的对比度偏低。可以照提示改亮或改暗对应的颜色，也可以直接让 AI 帮你调。</p></details><details><summary>旧版本能用主题吗？</summary><p>需要 2.10 或更新的版本。设备之间的协议没有变化，新旧版本照常互传。</p></details><details><summary>图放上去字会看不清吗？</summary><p>不会。遮罩浓度按主题的文字颜色算，只会比需要的更浓。图太花可以调高模糊或面板不透明度。</p></details></div>
       <p class="note">更多：<a href="https://github.com/baiyuze/pasteferry/blob/main/guide/ai-themes.zh-CN.md">让 AI 帮你做主题（详细说明）</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">主题格式与设计</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/mcp.md">MCP 工具说明</a></p>
     </div></section>
   </main>

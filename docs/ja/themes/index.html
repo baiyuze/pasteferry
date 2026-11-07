@@ -104,6 +104,21 @@
       <ol class="steps"><li><b>設定 › 外観</b> でテーマにポインタを合わせ、<b>⋯</b> から <b>複製</b> を選びます。複製は「カスタム」に表示されます。</li><li>複製の <b>⋯</b> から <b>書き出す…</b> を選び、<code>.pasteferry-theme.json</code> ファイルを保存します。</li><li>テキストエディタで色や名前などを変えます（形式は次の節を参照）。</li><li>外観のページに戻り、<b>テーマを読み込む…</b> でファイルを選びます。同じ id のテーマは置き換えられ、読み込んだテーマが適用されます。</li><li>不要なカスタムテーマは <b>⋯</b> から <b>テーマを削除</b> を選びます。内蔵テーマは削除できません。</li></ol>
       <p class="note">保存時に文字のコントラストを確認し、読みにくい色を知らせます（そのまま保存もできます）。テーマファイルは共有でき、相手は読み込むだけで使えます。</p>
     </div></section>
+    <section class="section" id="background"><div class="wrap official-copy">
+      <h2>背景画像を使う</h2>
+      <ol class="steps"><li><b>設定 › 外観</b> を開き、<b>背景画像</b> までスクロールして <b>画像を選択…</b> を押し、JPEG、PNG、GIF を選びます。</li><li>画像がサイドバーとページの後ろに敷かれ、サイドバーとリストの下地は半透明になります。内蔵テーマを使っているときは、先に複製してから変更します（内蔵テーマ自体は変わりません）。</li><li><b>ぼかし</b>、<b>スクリム</b>、<b>パネル</b> はそれぞれ 3 段階。<b>画像の色を使う</b> でアクセントカラーを画像の主な色に、<b>クイックペーストにも表示</b> でそちらにも表示します。</li><li>やめるときは <b>削除</b>。Android では <b>設定 › 外観 › 背景画像</b> で写真を選びます。</li></ol>
+      <p class="note">文字は常に読みやすいまま：テーマの文字色とこの画像から必要なスクリムの濃さを計算し、それより薄くはしません。暗い画像はダークモード、明るい画像はライトモードと組み合わせると画像がよく見えます。</p>
+      <div class="f-pair">
+        <img src="../../assets/screenshots/ja/bg-history-dark.png?v=7dd6b082b3" width="2112" height="1472" loading="lazy" alt="ダークモードのピクセルテーマに夕焼けの山の背景画像：サイドバーとリストが半透明で、画像が透けて見える">
+        <img src="../../assets/screenshots/ja/bg-appearance-background-dark.png?v=2060fbb4ee" width="2112" height="1472" loading="lazy" alt="設定 › 外観 › 背景画像：変更、削除、ぼかし・スクリム・パネルの 3 段階、画像の色を使う、クイックペーストにも表示">
+      </div>
+    </div></section>
+    <section class="section" id="scenery"><div class="wrap">
+      <h2>風景を変える</h2>
+      <div class="os-grid"><ol class="steps"><li>風景とは、ページ上部の横長の画像とサイドバー下部の小さな画像です。ピクセルテーマではピクセルの風景と小さなキャンプを描き、ほかのテーマにはありません。</li><li><b>設定 › 外観 › 風景</b> で <b>ページ上部</b>、<b>サイドバー下部</b> の <b>画像を選択…</b> を押すと自分の画像に変えられます（どのテーマでも可）。ページタイトルが読めるようにスクリムを自動で重ねます。</li><li><b>元に戻す</b> で元の絵に、<b>風景を表示</b> をオフにすると両方とも消えます。ウインドウ全体の背景画像があるときは風景を表示しません。</li></ol>
+        <figure class="shot"><img src="../../assets/screenshots/ja/bg-scene-history-dark.png?v=61a2dacfce" width="2112" height="1472" loading="lazy" alt="ダークモードのピクセルテーマ：ページ上部とサイドバー下部を夕焼けの山の画像に変えたところ"></figure>
+      </div>
+    </div></section>
     <section class="section" id="format"><div class="wrap official-copy">
       <h2>テーマファイルの中身</h2>
       <p class="intro">テーマは JSON ファイルです。変えたいところだけ書けば、残りは <code>base</code> のテーマから補われます。次の例はピクセルをもとに、アクセントといくつかの背景色だけを変えています。</p>
@@ -121,7 +136,7 @@
 }</code></pre>
                 </div>
       <h3>よく使う項目</h3>
-      <dl class="fields"><dt><code>id</code></dt><dd>テーマの識別子。小文字、数字、<code>-</code> のみで、<code>default</code> と <code>pixel</code> は使えません。</dd><dt><code>name</code></dt><dd>各言語の名前。<code>zh-Hans</code>、<code>zh-Hant-TW</code>、<code>zh-Hant-HK</code>、<code>en</code>、<code>ja</code> など。</dd><dt><code>base</code></dt><dd>もとにするテーマ：<code>default</code>、<code>pixel</code>、またはほかのカスタムテーマ。</dd><dt><code>modes.light</code> / <code>modes.dark</code></dt><dd>ライトとダークの色。<code>#RRGGBB</code> か透明度付きの <code>#AARRGGBB</code>。よく使うのは <code>accent</code>、<code>background</code>（内容の背景）、<code>sidebar</code>、<code>surface</code>（グループとダイアログ）、<code>border</code>、<code>text</code>、<code>textDim</code>、<code>textFaint</code>、<code>onAccent</code>（アクセント上の文字）。</dd><dt><code>typography</code></dt><dd>フォント：<code>family</code> は <code>system</code> か内蔵のピクセルフォント <code>FusionPixel</code>。</dd><dt><code>shape</code></dt><dd>形：<code>corner</code> は <code>round</code>（角丸）か <code>pixel</code>（切り欠き）。角の大きさ、枠の太さ、影の種類も指定できます。</dd><dt><code>motion</code>、<code>icons</code></dt><dd>動き <code>smooth</code> / <code>stepped</code> / <code>reduced</code>、アイコン <code>system</code> / <code>pixel</code>。</dd></dl>
+      <dl class="fields"><dt><code>id</code></dt><dd>テーマの識別子。小文字、数字、<code>-</code> のみで、<code>default</code> と <code>pixel</code> は使えません。</dd><dt><code>name</code></dt><dd>各言語の名前。<code>zh-Hans</code>、<code>zh-Hant-TW</code>、<code>zh-Hant-HK</code>、<code>en</code>、<code>ja</code> など。</dd><dt><code>base</code></dt><dd>もとにするテーマ：<code>default</code>、<code>pixel</code>、またはほかのカスタムテーマ。</dd><dt><code>modes.light</code> / <code>modes.dark</code></dt><dd>ライトとダークの色。<code>#RRGGBB</code> か透明度付きの <code>#AARRGGBB</code>。よく使うのは <code>accent</code>、<code>background</code>（内容の背景）、<code>sidebar</code>、<code>surface</code>（グループとダイアログ）、<code>border</code>、<code>text</code>、<code>textDim</code>、<code>textFaint</code>、<code>onAccent</code>（アクセント上の文字）。</dd><dt><code>typography</code></dt><dd>フォント：<code>family</code> は <code>system</code> か内蔵のピクセルフォント <code>FusionPixel</code>。</dd><dt><code>shape</code></dt><dd>形：<code>corner</code> は <code>round</code>（角丸）か <code>pixel</code>（切り欠き）。角の大きさ、枠の太さ、影の種類も指定できます。</dd><dt><code>motion</code>、<code>icons</code></dt><dd>動き <code>smooth</code> / <code>stepped</code> / <code>reduced</code>、アイコン <code>system</code> / <code>pixel</code>。</dd><dt><code>background</code></dt><dd>ウインドウ全体の背景画像：<code>image</code>（読み込み後の <code>user:&lt;sha256&gt;</code>）、<code>blur</code>、<code>scrim</code>、<code>surfaceOpacity</code>（パネルの不透明度）、<code>scope</code>（表示するウインドウ）、<code>accentFromImage</code>。</dd><dt><code>scenery</code>、<code>scene</code></dt><dd>風景のオン・オフと自分の画像：<code>scene.header</code>（ページ上部）、<code>scene.sidebar</code>（サイドバー下部）。ダークモード用に <code>headerDark</code>、<code>sidebarDark</code> も指定できます。</dd></dl>
       <p class="note">完全な形式と各色の使われる場所： <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">design/themes.md</a></p>
     </div></section>
     <section class="section" id="ai"><div class="wrap official-copy">
@@ -150,15 +165,15 @@
                 </div>
       <p class="note">設定を変えたら AI アプリを再起動します。PasteFerry は起動したままにしてください。AI はこのパソコンのバックグラウンドサービスを通じてテーマを変えます。</p>
       <h3>3. ほしいものを伝える</h3>
-      <ul class="prompts"><li>“ネオンピンクと深い紫のサイバーパンク風テーマを作って、適用して。”</li><li>“ピクセルテーマをもとに夕焼け色のテーマを作って。ダークは暖かい背景色にして。”</li><li>“今のテーマの灰色の文字が読みにくいので、明るくして。”</li><li>“今のテーマを書き出して見せて。それからライト版も作って。”</li></ul>
+      <ul class="prompts"><li>“ネオンピンクと深い紫のサイバーパンク風テーマを作って、適用して。”</li><li>“ピクセルテーマをもとに夕焼け色のテーマを作って。ダークは暖かい背景色にして。”</li><li>“今のテーマの灰色の文字が読みにくいので、明るくして。”</li><li>“今のテーマを書き出して見せて。それからライト版も作って。”</li><li>“~/Pictures/beach.jpg を背景にして、写真の色に合わせたテーマを作って。”</li><li>“ピクセルテーマの上部の風景を ~/Pictures/mountains.png に変えて。”</li></ul>
       <h3>AI ができること</h3>
-      <ul><li>テーマの一覧と、テーマの完全な内容の読み取り</li><li>テーマ形式の説明（各色の使われる場所と必要なコントラスト）の読み取り</li><li>保存せずに確認し、コントラストが足りない色を見つける</li><li>カスタムテーマの保存・適用・削除、ライトとダークの切り替え</li><li>このパソコンの画像を背景として読み込み、明るさと主な色を分析</li></ul>
+      <ul><li>テーマの一覧と、テーマの完全な内容の読み取り</li><li>テーマ形式の説明（各色の使われる場所と必要なコントラスト）の読み取り</li><li>保存せずに確認し、コントラストが足りない色を見つける</li><li>カスタムテーマの保存・適用・削除、ライトとダークの切り替え</li><li>このコンピュータの画像を読み込み、ウインドウの背景や風景に設定し、明るさと主な色を分析する。</li></ul>
       <h3>できないこと</h3>
       <p>MCP サーバーはこのパソコンの中だけで動き、ネットワークのポートは開きません。扱えるのはテーマと背景画像だけで、履歴、デバイス、友だちは見えず、ほかの設定も変えられません。背景画像はローカルのファイルのみで、インターネットからは取得しません。</p>
     </div></section>
     <section class="section" id="faq"><div class="wrap official-copy">
       <h2>よくある質問</h2>
-      <div class="faq"><details><summary>テーマはほかのデバイスに同期されますか？</summary><p>されません。テーマは設定したデバイスだけに適用されます。別のパソコンで使うときは、書き出して読み込んでください。</p></details><details><summary>AI がテーマを崩してしまいました。</summary><p>設定 › 外観 でデフォルトかピクセルを選べば戻ります。不要なカスタムテーマは削除できます。</p></details><details><summary>読み込み時に「読みにくい」と表示されます。</summary><p>文字と背景のコントラストが低いところがあります。表示に従って色を明るく・暗くするか、AI に直してもらってください。</p></details><details><summary>古いバージョンでもテーマは使えますか？</summary><p>2.10 以降が必要です。デバイス間のプロトコルは変わっていないので、新旧のバージョンは引き続き連携できます。</p></details></div>
+      <div class="faq"><details><summary>テーマはほかのデバイスに同期されますか？</summary><p>されません。テーマは設定したデバイスだけに適用されます。別のパソコンで使うときは、書き出して読み込んでください。</p></details><details><summary>AI がテーマを崩してしまいました。</summary><p>設定 › 外観 でデフォルトかピクセルを選べば戻ります。不要なカスタムテーマは削除できます。</p></details><details><summary>読み込み時に「読みにくい」と表示されます。</summary><p>文字と背景のコントラストが低いところがあります。表示に従って色を明るく・暗くするか、AI に直してもらってください。</p></details><details><summary>古いバージョンでもテーマは使えますか？</summary><p>2.10 以降が必要です。デバイス間のプロトコルは変わっていないので、新旧のバージョンは引き続き連携できます。</p></details><details><summary>画像の上で文字が読みにくくならない？</summary><p>なりません。スクリムの濃さはテーマの文字色から計算し、必要より薄くはしません。にぎやかな画像なら、ぼかしやパネルの不透明度を上げてください。</p></details></div>
       <p class="note">さらに詳しく：<a href="https://github.com/baiyuze/pasteferry/blob/main/guide/ai-themes.md">AI でテーマを作る（詳しいガイド）</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/themes.md">テーマの形式と設計</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/mcp.md">MCP ツール</a></p>
     </div></section>
   </main>

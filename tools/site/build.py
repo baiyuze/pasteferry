@@ -2950,7 +2950,7 @@ def privacy_page(code: str) -> str:
 
 
 def themes_page(code: str) -> str:
-    """主题教程：换主题、做自己的主题、主题文件格式、让 AI 通过 MCP 做主题。文案在 content/themes.py"""
+    """主题教程：换主题、做自己的主题、背景图与风景、主题文件格式、让 AI 通过 MCP 做主题。文案在 content/themes.py"""
     c = load(code)
     t = THEMES_COPY[code]
     path = LANGS[code][0]
@@ -2991,6 +2991,21 @@ def themes_page(code: str) -> str:
       <p class="intro">{esc(t['custom_intro'])}</p>
       <ol class="steps">{ol(t['custom_steps'])}</ol>
       <p class="note">{esc(t['custom_note'])}</p>
+    </div></section>
+    <section class="section" id="background"><div class="wrap official-copy">
+      <h2>{esc(t['bg_title'])}</h2>
+      <ol class="steps">{ol(t['bg_steps'])}</ol>
+      <p class="note">{esc(t['bg_note'])}</p>
+      <div class="f-pair">
+        <img src="{shots}bg-history-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(t['bg_alt'])}">
+        <img src="{shots}bg-appearance-background-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(t['bg_alt2'])}">
+      </div>
+    </div></section>
+    <section class="section" id="scenery"><div class="wrap">
+      <h2>{esc(t['scene_title'])}</h2>
+      <div class="os-grid"><ol class="steps">{ol(t['scene_steps'])}</ol>
+        <figure class="shot"><img src="{shots}bg-scene-history-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(t['scene_alt'])}"></figure>
+      </div>
     </div></section>
     <section class="section" id="format"><div class="wrap official-copy">
       <h2>{esc(t['file_title'])}</h2>

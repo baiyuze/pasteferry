@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "pixel-sunset-scene",
+  "name": {
+    "zh-Hans": "落日营地",
+    "zh-Hant-TW": "落日營地",
+    "zh-Hant-HK": "落日營地",
+    "en": "Sunset Camp",
+    "ja": "夕焼けキャンプ"
+  },
+  "base": "pixel",
+  "scene": {
+    "header": "user:85bb7c7be92c5092a0fa31d8506384bb4a63886f0571574a271e07dca900d3ed",
+    "sidebar": "user:85bb7c7be92c5092a0fa31d8506384bb4a63886f0571574a271e07dca900d3ed"
+  }
+}
