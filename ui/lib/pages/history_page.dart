@@ -17,6 +17,7 @@ import '../icons.dart';
 import '../platform.dart';
 import '../pixel_theme.dart';
 import '../pixel_art.dart';
+import '../widgets/backdrop.dart';
 
 export '../records.dart' show kindIcon, recordTitle, highlightMatches;
 
@@ -137,7 +138,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       padding: const EdgeInsets.fromLTRB(Insets.xl, 0, Insets.xl, Insets.xl),
                       sliver: DecoratedSliver(
                         decoration: BoxDecoration(
-                          color: context.palette.surface,
+                          color: context.panel(context.palette.surface),
                           borderRadius: BorderRadius.circular(context.shape.md),
                           border: Border.all(color: context.palette.border),
                         ),

@@ -67,8 +67,73 @@ AppThemeSpec parseTheme(Object json, {AppThemeSpec? base}) {
       steps: (motionMap['steps'] as num?)?.toInt() ?? b.motion.steps,
     ),
     pixelIcons: m.containsKey('icons') ? m['icons'] == 'pixel' : b.pixelIcons,
+    scenery: m['scenery'] as bool? ?? b.scenery,
+    scene: m.containsKey('scene') ? _scene(m['scene']) : b.scene,
+    background: m.containsKey('background') ? _background(m['background']) : b.background,
   );
 }
+
+const _alignments = {
+  'center': Alignment.center,
+  'top': Alignment.topCenter,
+  'bottom': Alignment.bottomCenter,
+  'left': Alignment.centerLeft,
+  'right': Alignment.centerRight,
+  'topLeft': Alignment.topLeft,
+  'topRight': Alignment.topRight,
+  'bottomLeft': Alignment.bottomLeft,
+  'bottomRight': Alignment.bottomRight,
+};
+
+/// `background` 字段；没有图片时为 null
+ThemeBackground? _background(Object? json) {
+  final m = (json as Map?)?.cast<String, dynamic>();
+  if (m == null || (m['image'] == null && m['imageDark'] == null)) return null;
+  final scrim = (m['scrim'] as Map?)?.cast<String, dynamic>() ?? const {};
+  final align = m['align'] as String? ?? 'center';
+  return ThemeBackground(
+    image: m['image'] as String?,
+    imageDark: m['imageDark'] as String?,
+    fit: BackgroundFit.values.where((f) => f.name == m['fit']).firstOrNull ?? BackgroundFit.cover,
+    align: _alignments[align] ?? Alignment.center,
+    alignName: _alignments.containsKey(align) ? align : 'center',
+    blur: ((m['blur'] as num?)?.toDouble() ?? 0).clamp(0, 40),
+    scrimColor: scrim['color'] == null ? null : parseColor(scrim['color'] as String),
+    scrimOpacity: (scrim['opacity'] as num?)?.toDouble().clamp(0, 1),
+    surfaceOpacity:
+        ((m['surfaceOpacity'] as num?)?.toDouble() ?? ThemeBackground.defaultSurfaceOpacity).clamp(0.6, 1),
+    scope: (m['scope'] as List?)?.cast<String>().toSet() ?? const {'main', 'mobile'},
+    accentFromImage: m['accentFromImage'] as bool? ?? false,
+  );
+}
+
+ThemeScene? _scene(Object? json) {
+  final m = (json as Map?)?.cast<String, dynamic>() ?? const {};
+  final s = ThemeScene(
+    header: m['header'] as String?,
+    headerDark: m['headerDark'] as String?,
+    sidebar: m['sidebar'] as String?,
+    sidebarDark: m['sidebarDark'] as String?,
+  );
+  return s.isEmpty ? null : s;
+}
+
+/// [themeToJson] 里的 `background`
+Map<String, Object?> backgroundToJson(ThemeBackground b) => {
+      if (b.image != null) 'image': b.image,
+      if (b.imageDark != null) 'imageDark': b.imageDark,
+      'fit': b.fit.name,
+      'align': b.alignName,
+      'blur': b.blur,
+      if (b.scrimColor != null || b.scrimOpacity != null)
+        'scrim': {
+          if (b.scrimColor != null) 'color': formatColor(b.scrimColor!),
+          if (b.scrimOpacity != null) 'opacity': b.scrimOpacity,
+        },
+      'surfaceOpacity': b.surfaceOpacity,
+      'scope': b.scope.toList(),
+      'accentFromImage': b.accentFromImage,
+    };
 
 /// 只写了部分颜色时，其余取 [base]
 AppPalette _palette(Object? json, AppPalette base) {
@@ -164,5 +229,14 @@ Map<String, Object?> themeToJson(AppThemeSpec s, {Map<String, String> name = con
     },
     'motion': s.motion.style.name,
     'icons': s.pixelIcons ? 'pixel' : 'system',
+    'scenery': s.scenery,
+    if (s.scene != null)
+      'scene': {
+        if (s.scene!.header != null) 'header': s.scene!.header,
+        if (s.scene!.headerDark != null) 'headerDark': s.scene!.headerDark,
+        if (s.scene!.sidebar != null) 'sidebar': s.scene!.sidebar,
+        if (s.scene!.sidebarDark != null) 'sidebarDark': s.scene!.sidebarDark,
+      },
+    if (s.background != null) 'background': backgroundToJson(s.background!),
   };
 }

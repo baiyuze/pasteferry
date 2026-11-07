@@ -10,6 +10,7 @@ import '../icons.dart';
 import '../main.dart' show AppScope;
 import '../notices.dart';
 import '../theme.dart';
+import '../widgets/backdrop.dart';
 import '../widgets/common.dart';
 import '../widgets/incoming_dialog.dart';
 import '../widgets/pairing_dialog.dart';
@@ -103,7 +104,12 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
             localeListResolutionCallback: (preferred, _) => resolveLocale(preferred),
             builder: (context, child) {
               appL10n = context.l10n;
-              return ThemeTextScale(child: ToastScope(top: true, child: child!));
+              return ThemeTextScale(
+                child: ToastScope(
+                  top: true,
+                  child: ThemedBackdrop(controller: _state.theme, window: 'mobile', child: child!),
+                ),
+              );
             },
             home: MobileShell(startError: _startError, onRetry: _start),
           );

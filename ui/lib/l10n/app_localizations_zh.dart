@@ -2557,6 +2557,109 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get themeScanlinesDesc => '整个窗口叠一层很淡的 CRT 扫描线，只在像素主题里有效';
+
+  @override
+  String get themeBackground => '背景图';
+
+  @override
+  String get themeBackgroundDesc => '铺满侧边栏和页面后面。图上盖一层遮罩，文字照样看得清。';
+
+  @override
+  String get themeBackgroundChoose => '选择图片…';
+
+  @override
+  String get themeBackgroundChange => '更换…';
+
+  @override
+  String get themeBackgroundRemove => '移除';
+
+  @override
+  String get themeBlur => '模糊';
+
+  @override
+  String get themeBlurNone => '不模糊';
+
+  @override
+  String get themeBlurLight => '轻微';
+
+  @override
+  String get themeBlurStrong => '很强';
+
+  @override
+  String get themeScrim => '遮罩';
+
+  @override
+  String get themeScrimDesc => '盖在图上的一层颜色，保证文字看得清，不会比需要的更淡。';
+
+  @override
+  String get themeScrimAuto => '自动';
+
+  @override
+  String get themeScrimMore => '更浓';
+
+  @override
+  String get themeScrimMost => '很浓';
+
+  @override
+  String get themePanels => '面板';
+
+  @override
+  String get themePanelsDesc => '侧边栏和列表底板透出多少背景。';
+
+  @override
+  String get themePanelsClear => '通透';
+
+  @override
+  String get themePanelsMedium => '适中';
+
+  @override
+  String get themePanelsSolid => '不透明';
+
+  @override
+  String get themeAccentFromImage => '用图片配色';
+
+  @override
+  String get themeAccentFromImageDesc => '用图片的主色作强调色。';
+
+  @override
+  String get themeBackgroundPicker => '快捷粘贴窗口也显示';
+
+  @override
+  String get themeScenery => '显示风景';
+
+  @override
+  String get themeSceneryDesc => '页面顶部和侧边栏底部的图。';
+
+  @override
+  String themeCopiedForEdit(String name) {
+    return '自带主题不能改，已复制为「$name」并换上';
+  }
+
+  @override
+  String get themeBackgroundFootnote =>
+      '背景图属于当前主题。自带主题不能改，第一次修改时会复制一份。图片只存在这台设备上，支持 JPEG、PNG、GIF。';
+
+  @override
+  String get themeSceneGroup => '风景';
+
+  @override
+  String get themeSceneHeader => '页面顶部';
+
+  @override
+  String get themeSceneHeaderDesc => '铺在页面标题后面的一条宽图，底部渐隐进页面。像素主题这里是像素风景。';
+
+  @override
+  String get themeSceneSidebar => '侧边栏底部';
+
+  @override
+  String get themeSceneSidebarDesc => '侧边栏底部的一小幅图。像素主题这里是小营地。';
+
+  @override
+  String get themeSceneReset => '恢复默认';
+
+  @override
+  String get themeSceneFootnote =>
+      '任何主题都可以在这里放自己的图，页面标题上会自动盖遮罩保证看得清。设置了整窗背景图时不显示风景。';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -5112,6 +5215,109 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get themeScanlinesDesc => '整個視窗疊一層很淡的 CRT 掃描線，只在像素主題裏有效';
+
+  @override
+  String get themeBackground => '背景圖';
+
+  @override
+  String get themeBackgroundDesc => '鋪滿側邊欄和頁面後面。圖上蓋一層遮罩，文字照樣看得清楚。';
+
+  @override
+  String get themeBackgroundChoose => '選擇圖片…';
+
+  @override
+  String get themeBackgroundChange => '更換…';
+
+  @override
+  String get themeBackgroundRemove => '移除';
+
+  @override
+  String get themeBlur => '模糊';
+
+  @override
+  String get themeBlurNone => '不模糊';
+
+  @override
+  String get themeBlurLight => '輕微';
+
+  @override
+  String get themeBlurStrong => '很強';
+
+  @override
+  String get themeScrim => '遮罩';
+
+  @override
+  String get themeScrimDesc => '蓋在圖上的一層顏色，確保文字看得清楚，不會比需要的更淡。';
+
+  @override
+  String get themeScrimAuto => '自動';
+
+  @override
+  String get themeScrimMore => '更濃';
+
+  @override
+  String get themeScrimMost => '很濃';
+
+  @override
+  String get themePanels => '面板';
+
+  @override
+  String get themePanelsDesc => '側邊欄和列表底板透出多少背景。';
+
+  @override
+  String get themePanelsClear => '通透';
+
+  @override
+  String get themePanelsMedium => '適中';
+
+  @override
+  String get themePanelsSolid => '不透明';
+
+  @override
+  String get themeAccentFromImage => '用圖片配色';
+
+  @override
+  String get themeAccentFromImageDesc => '用圖片的主色作強調色。';
+
+  @override
+  String get themeBackgroundPicker => '快速貼上視窗也顯示';
+
+  @override
+  String get themeScenery => '顯示風景';
+
+  @override
+  String get themeSceneryDesc => '頁面頂部和側邊欄底部的圖。';
+
+  @override
+  String themeCopiedForEdit(String name) {
+    return '內置主題不能修改，已複製為「$name」並套用';
+  }
+
+  @override
+  String get themeBackgroundFootnote =>
+      '背景圖屬於目前的主題。內置主題不能修改，第一次修改時會複製一份。圖片只存在這部裝置上，支援 JPEG、PNG、GIF。';
+
+  @override
+  String get themeSceneGroup => '風景';
+
+  @override
+  String get themeSceneHeader => '頁面頂部';
+
+  @override
+  String get themeSceneHeaderDesc => '鋪在頁面標題後面的一條闊圖，底部漸隱進頁面。像素主題這裏是像素風景。';
+
+  @override
+  String get themeSceneSidebar => '側邊欄底部';
+
+  @override
+  String get themeSceneSidebarDesc => '側邊欄底部的一小幅圖。像素主題這裏是小營地。';
+
+  @override
+  String get themeSceneReset => '恢復預設';
+
+  @override
+  String get themeSceneFootnote =>
+      '任何主題都可以在這裏放自己的圖，頁面標題上會自動蓋遮罩確保看得清楚。設定了整個視窗的背景圖時不顯示風景。';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -7667,4 +7873,107 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get themeScanlinesDesc => '整個視窗疊一層很淡的 CRT 掃描線，只在像素主題裡有效';
+
+  @override
+  String get themeBackground => '背景圖';
+
+  @override
+  String get themeBackgroundDesc => '鋪滿側邊欄和頁面後面。圖上蓋一層遮罩，文字照樣看得清楚。';
+
+  @override
+  String get themeBackgroundChoose => '選擇圖片…';
+
+  @override
+  String get themeBackgroundChange => '更換…';
+
+  @override
+  String get themeBackgroundRemove => '移除';
+
+  @override
+  String get themeBlur => '模糊';
+
+  @override
+  String get themeBlurNone => '不模糊';
+
+  @override
+  String get themeBlurLight => '輕微';
+
+  @override
+  String get themeBlurStrong => '很強';
+
+  @override
+  String get themeScrim => '遮罩';
+
+  @override
+  String get themeScrimDesc => '蓋在圖上的一層顏色，確保文字看得清楚，不會比需要的更淡。';
+
+  @override
+  String get themeScrimAuto => '自動';
+
+  @override
+  String get themeScrimMore => '更濃';
+
+  @override
+  String get themeScrimMost => '很濃';
+
+  @override
+  String get themePanels => '面板';
+
+  @override
+  String get themePanelsDesc => '側邊欄和列表底板透出多少背景。';
+
+  @override
+  String get themePanelsClear => '通透';
+
+  @override
+  String get themePanelsMedium => '適中';
+
+  @override
+  String get themePanelsSolid => '不透明';
+
+  @override
+  String get themeAccentFromImage => '用圖片配色';
+
+  @override
+  String get themeAccentFromImageDesc => '用圖片的主色作為強調色。';
+
+  @override
+  String get themeBackgroundPicker => '快速貼上視窗也顯示';
+
+  @override
+  String get themeScenery => '顯示風景';
+
+  @override
+  String get themeSceneryDesc => '頁面頂部和側邊欄底部的圖。';
+
+  @override
+  String themeCopiedForEdit(String name) {
+    return '內建主題不能修改，已複製為「$name」並套用';
+  }
+
+  @override
+  String get themeBackgroundFootnote =>
+      '背景圖屬於目前的主題。內建主題不能修改，第一次修改時會複製一份。圖片只存在這台裝置上，支援 JPEG、PNG、GIF。';
+
+  @override
+  String get themeSceneGroup => '風景';
+
+  @override
+  String get themeSceneHeader => '頁面頂部';
+
+  @override
+  String get themeSceneHeaderDesc => '鋪在頁面標題後面的一條寬圖，底部漸隱進頁面。像素主題這裡是像素風景。';
+
+  @override
+  String get themeSceneSidebar => '側邊欄底部';
+
+  @override
+  String get themeSceneSidebarDesc => '側邊欄底部的一小幅圖。像素主題這裡是小營地。';
+
+  @override
+  String get themeSceneReset => '恢復預設';
+
+  @override
+  String get themeSceneFootnote =>
+      '任何主題都可以在這裡放自己的圖，頁面標題上會自動蓋遮罩確保看得清楚。設定了整個視窗的背景圖時不顯示風景。';
 }

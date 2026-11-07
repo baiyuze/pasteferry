@@ -13,6 +13,7 @@ import '../widgets/common.dart';
 import '../pixel_theme.dart';
 import 'ui.dart';
 import 'record_actions.dart';
+import '../widgets/backdrop.dart';
 
 /// 复制记录（design/phone-sync.md 3.2.4 节）：搜索、按类型筛选、列表；点开看详情，长按删除。
 class RecordsTab extends StatefulWidget {
@@ -77,7 +78,7 @@ class _RecordsTabState extends State<RecordsTab> {
               padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.xl),
               sliver: DecoratedSliver(
                 decoration: BoxDecoration(
-                  color: p.surface,
+                  color: context.panel(p.surface),
                   borderRadius: BorderRadius.circular(context.shape.lg),
                   border: Border.all(color: p.border),
                 ),
@@ -466,7 +467,7 @@ class _MediaBody extends StatelessWidget {
         Container(
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: p.surface,
+            color: context.panel(p.surface),
             borderRadius: BorderRadius.circular(context.shape.lg),
             border: Border.all(color: p.border),
           ),

@@ -190,6 +190,28 @@ class _SettingsTabState extends State<SettingsTab> with WidgetsBindingObserver {
                       theme.setMode,
                     ),
                   ),
+                  // 背景图：选一张照片铺在底下。自带主题不能改，第一次设置时复制一份
+                  MobileTile(
+                    title: l.themeBackground,
+                    subtitle: l.themeBackgroundDesc,
+                    trailing: Icon(Icons.chevron_right, color: p.textFaint),
+                    onTap: () => _pick<String>(
+                      context,
+                      l.themeBackground,
+                      [
+                        ('choose', theme.background == null ? l.themeBackgroundChoose : l.themeBackgroundChange),
+                        if (theme.background != null) ('remove', l.themeBackgroundRemove),
+                      ],
+                      '',
+                      (v) async {
+                        if (v == 'remove') return theme.removeBackground();
+                        final files = await Host.pickFiles(photos: true);
+                        if (files.isEmpty) return;
+                        final copied = await theme.setBackgroundImage(files.first.path, l);
+                        if (copied != null && context.mounted) showToast(context, l.themeCopiedForEdit(copied));
+                      },
+                    ),
+                  ),
                 ],
               );
             },

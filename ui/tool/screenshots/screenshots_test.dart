@@ -6,6 +6,7 @@
 // 放在 tool/ 而非 test/：它依赖本机字体，不该随 flutter test 在 CI 上跑。
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' show ImageByteFormat;
 
@@ -22,6 +23,7 @@ import 'package:pasteferry_ui/theme.dart';
 import 'package:pasteferry_ui/theme_controller.dart';
 import 'package:pasteferry_ui/theme_json.dart';
 import 'package:pasteferry_ui/widgets/avatar.dart';
+import 'package:pasteferry_ui/widgets/backdrop.dart';
 import 'package:pasteferry_ui/widgets/friend_send_dialog.dart';
 import 'package:pasteferry_ui/widgets/friends_dialog.dart';
 import 'package:pasteferry_ui/widgets/nearby_dialog.dart';
@@ -48,6 +50,29 @@ final AppThemeSpec _spec = switch (Platform.environment['SCREENSHOT_THEME_FILE']
   final String file => parseTheme(File(file).readAsStringSync()),
   null => AppThemeSpec.byId(Platform.environment['SCREENSHOT_THEME'] ?? ''),
 };
+
+/// 背景图：SCREENSHOT_BACKGROUND 指向一个目录，里面是后台服务导入后的 sharp.img、blur.img
+/// 与分析结果 info.json；主题（SCREENSHOT_THEME_FILE）里的 background.image 要写它的 sha256
+Future<void> _seedBackground(ThemeController theme) async {
+  final dir = Platform.environment['SCREENSHOT_BACKGROUND'];
+  if (dir == null) return;
+  final info = jsonDecode(File('$dir/info.json').readAsStringSync()) as Map<String, dynamic>;
+  if (!theme.themes.any((t) => t.id == _spec.id)) {
+    theme.debugSeed(themes: [...theme.themes, ThemeChoice(id: _spec.id, names: const {}, builtin: false, spec: _spec)]);
+  }
+  theme.debugSeed(id: _spec.id);
+  await theme.debugSeedBackground(
+    info['SHA256'] as String,
+    File('$dir/sharp.img').readAsBytesSync(),
+    BackgroundInfo(
+      sha256: info['SHA256'] as String,
+      colors: (info['Colors'] as List).cast<String>(),
+      minScrimDark: (info['MinScrimDark'] as num).toDouble(),
+      minScrimLight: (info['MinScrimLight'] as num).toDouble(),
+    ),
+    blurred: File('$dir/blur.img').readAsBytesSync(),
+  );
+}
 
 ThemeData _theme(Brightness brightness) =>
     buildTheme(brightness, spec: _spec, fontFamily: 'SF', fontFamilyFallback: _cjk);
@@ -459,6 +484,8 @@ Future<void> _render(
   required bool settle,
 }) async {
 
+  // 背景图要真的解码、取样（算遮罩浓度），在测试的假时钟外面做
+  await tester.runAsync(() => _seedBackground(state.theme));
   final theme = _theme(brightness);
   await tester.pumpWidget(RepaintBoundary(
     key: _boundary,
@@ -466,7 +493,8 @@ Future<void> _render(
       state: state,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        builder: _textScale,
+        builder: (context, child) =>
+            _textScale(context, ThemedBackdrop(controller: state.theme, window: 'main', child: child!)),
         theme: theme,
         locale: _locale,
         supportedLocales: supportedLocales,
@@ -816,6 +844,19 @@ void main() {
   testWidgets('appearance', (tester) async {
     await _shoot(tester, 'appearance', state: appearanceDemo(), section: Section.settings);
   });
+
+  // 「背景图」一节在外观页最下面；配合 SCREENSHOT_BACKGROUND 看设置了背景图的样子
+  for (final dark in [false, true]) {
+    testWidgets(dark ? 'appearance-background-dark' : 'appearance-background', (tester) async {
+      await _shoot(tester, dark ? 'appearance-background-dark' : 'appearance-background',
+          state: appearanceDemo(),
+          section: Section.settings,
+          brightness: dark ? Brightness.dark : Brightness.light, arrange: () async {
+        await tester.ensureVisible(find.text(_t('背景图', 'Background image', '背景画像', tw: '背景圖', hk: '背景圖')).first);
+        await tester.pump();
+      });
+    });
+  }
 
   testWidgets('appearance-dark', (tester) async {
     await _shoot(tester, 'appearance-dark', state: appearanceDemo(), section: Section.settings, brightness: Brightness.dark);

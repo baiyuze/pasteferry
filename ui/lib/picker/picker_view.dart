@@ -11,6 +11,7 @@ import '../icons.dart';
 import '../records.dart';
 import '../theme.dart';
 import '../widgets/common.dart' show committedText, humanBytes, relativeTime;
+import '../widgets/backdrop.dart';
 import '../widgets/record_hover.dart';
 import '../pixel_theme.dart';
 import 'picker_state.dart';
@@ -232,18 +233,23 @@ class _PickerViewState extends State<PickerView> {
                   borderRadius: _mac ? BorderRadius.circular(context.shape.lg) : null,
                   border: Border.all(color: p.border),
                 ),
-          child: ListenableBuilder(
-            listenable: s,
-            builder: (context, _) => Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _searchBar(context),
-                _tabs(context),
-                Divider(height: 1, color: p.separator),
-                Expanded(child: _list(context)),
-                Divider(height: 1, color: p.separator),
-                _footer(context),
-              ],
+          // 主题的背景图只有 scope 里写了 picker 才显示：窗口小，主要用来快速认字
+          child: ThemedBackdrop(
+            controller: s.theme,
+            window: 'picker',
+            child: ListenableBuilder(
+              listenable: s,
+              builder: (context, _) => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _searchBar(context),
+                  _tabs(context),
+                  Divider(height: 1, color: p.separator),
+                  Expanded(child: _list(context)),
+                  Divider(height: 1, color: p.separator),
+                  _footer(context),
+                ],
+              ),
             ),
           ),
         ),

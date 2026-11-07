@@ -24,6 +24,47 @@ void main() {
     }
   });
 
+  test('背景图与像素风景：读进来、导出再读回来不变', () {
+    final sha = 'a' * 64;
+    final s = parseTheme({
+      'schema': 1,
+      'id': 'photo',
+      'base': 'pixel',
+      'scenery': false,
+      'background': {
+        'image': 'user:$sha',
+        'fit': 'tile',
+        'align': 'bottomLeft',
+        'blur': 50,
+        'scrim': {'color': '#000000', 'opacity': 0.4},
+        'surfaceOpacity': 0.7,
+        'scope': ['main', 'picker'],
+        'accentFromImage': true,
+      },
+    });
+    final bg = s.background!;
+    expect(s.scenery, isFalse);
+    expect(bg.shaFor(Brightness.light), sha);
+    expect(bg.shaFor(Brightness.dark), sha, reason: '没有 imageDark 时深色也用同一张');
+    expect(bg.fit, BackgroundFit.tile);
+    expect(bg.align, Alignment.bottomLeft);
+    expect(bg.blur, 40, reason: '超出范围按 40 算');
+    expect(bg.scrimColor, const Color(0xFF000000));
+    expect(bg.scope, {'main', 'picker'});
+    expect(bg.accentFromImage, isTrue);
+
+    final back = parseTheme(jsonEncode(themeToJson(s)), base: AppThemeSpec.standard);
+    expect(back.scenery, isFalse);
+    expect(back.background!.image, 'user:$sha');
+    expect(back.background!.alignName, 'bottomLeft');
+    expect(back.background!.scrimOpacity, 0.4);
+    expect(back.background!.surfaceOpacity, 0.7);
+
+    expect(parseTheme({'schema': 1, 'id': 'x', 'background': {'fit': 'cover'}}).background, isNull,
+        reason: '没写图片就是没有背景图');
+    expect(pixelTheme.scenery, isTrue);
+  });
+
   test('只改强调色：其余从 base 补齐', () {
     final s = parseTheme({
       'schema': 1,

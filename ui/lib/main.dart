@@ -23,6 +23,7 @@ import 'widgets/common.dart';
 import 'widgets/pairing_dialog.dart';
 import 'widgets/friends_dialog.dart';
 import 'widgets/incoming_dialog.dart';
+import 'widgets/backdrop.dart';
 import 'widgets/update_dialog.dart';
 import 'icons.dart';
 import 'notices.dart';
@@ -112,7 +113,12 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
                 resolveLocale(preferred),
             builder: (context, child) {
               appL10n = context.l10n;
-              return ThemeTextScale(child: PixelScanlinesLayer(on: theme.scanlines, child: child!));
+              return ThemeTextScale(
+                child: PixelScanlinesLayer(
+                  on: theme.scanlines,
+                  child: ThemedBackdrop(controller: theme, window: 'main', child: child!),
+                ),
+              );
             },
             home: const Shell(),
           );
@@ -361,7 +367,8 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
             // 像素主题：页面顶部垫一块场景（夜里的远山、白天的云），其他主题不画
             child: Stack(
               children: [
-                if (context.shape.pixel) const Positioned(left: 0, right: 0, top: 0, child: PixelScene()),
+                if (context.showScenery)
+                  Positioned(left: 0, right: 0, top: 0, child: SceneHeader(controller: state.theme)),
                 Positioned.fill(
                   child: needsService
                       ? const ServicePage()
@@ -399,7 +406,7 @@ class _Sidebar extends StatelessWidget {
     return Container(
       width: 200,
       decoration: BoxDecoration(
-        color: p.sidebar,
+        color: context.panel(p.sidebar),
         border: Border(right: BorderSide(color: p.border)),
       ),
       child: Column(
@@ -482,7 +489,7 @@ class _Sidebar extends StatelessWidget {
           const Spacer(),
           const _UpdateHint(),
           // 像素主题：底下一小块营地（深色是帐篷与篝火，浅色是小房子与花）
-          if (context.shape.pixel) const PixelCamp(),
+          if (context.showScenery) SceneSidebar(controller: state.theme),
           const _ConnectionFooter(),
         ],
       ),

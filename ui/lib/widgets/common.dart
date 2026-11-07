@@ -8,6 +8,7 @@ import '../theme.dart';
 import '../i18n.dart';
 import '../icons.dart';
 import '../pixel_art.dart';
+import 'backdrop.dart';
 
 /// 页面统一的标题区。保证各页视觉节奏一致。
 class PageHeader extends StatelessWidget {
@@ -102,7 +103,7 @@ class GroupBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       clipBehavior: Clip.antiAlias,
-      decoration: context.shape.box(color: context.palette.surface, border: context.palette.border),
+      decoration: context.shape.box(color: context.panel(context.palette.surface), border: context.palette.border),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -516,7 +517,7 @@ class Notice extends StatelessWidget {
     final icon = this.icon ?? AppIcons.exclamationmarkCircle;
     return Container(
       padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.md, Insets.md),
-      decoration: context.shape.box(color: p.surface, border: p.border),
+      decoration: context.shape.box(color: context.panel(p.surface), border: p.border),
       child: Row(
         children: [
           Icon(icon, size: 18, color: iconColor ?? p.warning),

@@ -15,6 +15,7 @@ import 'file_picker.dart';
 import 'records_tab.dart' show showRecordSheet;
 import 'ui.dart';
 import '../pixel_art.dart';
+import '../widgets/backdrop.dart';
 
 /// 发送页（design/phone-sync.md 3.2.3 节）：手机上的文字发给在线的设备。
 ///
@@ -272,7 +273,7 @@ class _SentRecords extends StatelessWidget {
         ),
         DecoratedBox(
           decoration: BoxDecoration(
-            color: p.surface,
+            color: context.panel(p.surface),
             borderRadius: BorderRadius.circular(context.shape.lg),
             border: Border.all(color: p.border),
           ),

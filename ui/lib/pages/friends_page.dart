@@ -11,6 +11,7 @@ import '../widgets/common.dart';
 import '../widgets/friends_dialog.dart';
 import '../widgets/send_dialog.dart';
 import 'send_page.dart';
+import '../widgets/backdrop.dart';
 
 /// 侧边栏的「好友」：左边是好友列表，右边是选中好友的状态、发送与传输记录。
 /// 底部是「允许这些人给我发文件」和本机显示的名字、头像。
@@ -111,7 +112,7 @@ class _FriendsPageState extends State<FriendsPage> {
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: p.surface,
+                            color: context.panel(p.surface),
                             borderRadius: BorderRadius.circular(context.shape.md),
                             border: Border.all(color: p.border),
                           ),

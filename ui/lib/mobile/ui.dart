@@ -9,6 +9,7 @@ import '../main.dart' show AppScope;
 import '../theme.dart';
 import '../pixel_theme.dart';
 import 'host.dart';
+import '../widgets/backdrop.dart';
 
 /// 手机 App 的界面部件。样子与手机网页传输（web/phone/src/ui.tsx、App.tsx）一一对应，
 /// 配色、圆角、间距用桌面的设计系统（theme.dart）：两边只是功能多少不同，看起来是同一个产品。
@@ -281,7 +282,7 @@ class MobileGroup extends StatelessWidget {
           Container(
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              color: p.surface,
+              color: context.panel(p.surface),
               borderRadius: BorderRadius.circular(context.shape.lg),
               border: Border.all(color: p.border),
             ),
@@ -457,7 +458,7 @@ class _LanNoticeState extends State<LanNotice> with WidgetsBindingObserver {
       child: Container(
         padding: const EdgeInsets.all(Insets.lg),
         decoration: BoxDecoration(
-          color: p.surface,
+          color: context.panel(p.surface),
           borderRadius: BorderRadius.circular(context.shape.lg),
           border: Border.all(color: p.border),
         ),

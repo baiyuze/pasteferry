@@ -2586,4 +2586,108 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get themeScanlinesDesc => 'ウインドウ全体に薄い CRT 走査線を重ねます。ピクセルテーマのみ';
+
+  @override
+  String get themeBackground => '背景画像';
+
+  @override
+  String get themeBackgroundDesc => 'サイドバーとページの後ろに敷きます。上に重ねるスクリムで文字は読みやすいままです。';
+
+  @override
+  String get themeBackgroundChoose => '画像を選択…';
+
+  @override
+  String get themeBackgroundChange => '変更…';
+
+  @override
+  String get themeBackgroundRemove => '削除';
+
+  @override
+  String get themeBlur => 'ぼかし';
+
+  @override
+  String get themeBlurNone => 'なし';
+
+  @override
+  String get themeBlurLight => '弱';
+
+  @override
+  String get themeBlurStrong => '強';
+
+  @override
+  String get themeScrim => 'スクリム';
+
+  @override
+  String get themeScrimDesc => '画像の上に重ねる色。文字を読みやすく保ち、必要より薄くはなりません。';
+
+  @override
+  String get themeScrimAuto => '自動';
+
+  @override
+  String get themeScrimMore => '濃く';
+
+  @override
+  String get themeScrimMost => '最も濃く';
+
+  @override
+  String get themePanels => 'パネル';
+
+  @override
+  String get themePanelsDesc => 'サイドバーとリストの下地から背景がどれだけ透けるか。';
+
+  @override
+  String get themePanelsClear => '透明';
+
+  @override
+  String get themePanelsMedium => '普通';
+
+  @override
+  String get themePanelsSolid => '不透明';
+
+  @override
+  String get themeAccentFromImage => '画像の色を使う';
+
+  @override
+  String get themeAccentFromImageDesc => '画像の主な色をアクセントカラーにします。';
+
+  @override
+  String get themeBackgroundPicker => 'クイックペーストにも表示';
+
+  @override
+  String get themeScenery => '風景を表示';
+
+  @override
+  String get themeSceneryDesc => 'ページ上部とサイドバー下部の画像。';
+
+  @override
+  String themeCopiedForEdit(String name) {
+    return '内蔵テーマは変更できないため、「$name」として複製して適用しました';
+  }
+
+  @override
+  String get themeBackgroundFootnote =>
+      '背景は現在のテーマに属します。内蔵テーマは変更できないため、最初の変更で複製されます。画像はこのデバイスにのみ保存されます。JPEG、PNG、GIF に対応。';
+
+  @override
+  String get themeSceneGroup => '風景';
+
+  @override
+  String get themeSceneHeader => 'ページ上部';
+
+  @override
+  String get themeSceneHeaderDesc =>
+      'ページタイトルの後ろに敷く横長の画像。下端はページに溶け込みます。ピクセルテーマではピクセルの風景です。';
+
+  @override
+  String get themeSceneSidebar => 'サイドバー下部';
+
+  @override
+  String get themeSceneSidebarDesc => 'サイドバー下部の小さな画像。ピクセルテーマでは小さなキャンプです。';
+
+  @override
+  String get themeSceneReset => '元に戻す';
+
+  @override
+  String get themeSceneFootnote =>
+      'どのテーマでも自分の画像を置けます。ページタイトルが読めるようにスクリムを自動で重ねます。ウインドウ全体の背景画像があるときは風景を表示しません。';
 }

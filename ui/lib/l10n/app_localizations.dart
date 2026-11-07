@@ -4555,6 +4555,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Overlay faint CRT scanlines on the window. Pixel themes only.'**
   String get themeScanlinesDesc;
+
+  /// No description provided for @themeBackground.
+  ///
+  /// In en, this message translates to:
+  /// **'Background image'**
+  String get themeBackground;
+
+  /// No description provided for @themeBackgroundDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Fills the window behind the sidebar and pages. A scrim on top keeps text readable.'**
+  String get themeBackgroundDesc;
+
+  /// No description provided for @themeBackgroundChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Image…'**
+  String get themeBackgroundChoose;
+
+  /// No description provided for @themeBackgroundChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change…'**
+  String get themeBackgroundChange;
+
+  /// No description provided for @themeBackgroundRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get themeBackgroundRemove;
+
+  /// No description provided for @themeBlur.
+  ///
+  /// In en, this message translates to:
+  /// **'Blur'**
+  String get themeBlur;
+
+  /// No description provided for @themeBlurNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get themeBlurNone;
+
+  /// No description provided for @themeBlurLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeBlurLight;
+
+  /// No description provided for @themeBlurStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get themeBlurStrong;
+
+  /// No description provided for @themeScrim.
+  ///
+  /// In en, this message translates to:
+  /// **'Scrim'**
+  String get themeScrim;
+
+  /// No description provided for @themeScrimDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A color laid over the image so text stays readable. It is never lighter than the image needs.'**
+  String get themeScrimDesc;
+
+  /// No description provided for @themeScrimAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get themeScrimAuto;
+
+  /// No description provided for @themeScrimMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Thicker'**
+  String get themeScrimMore;
+
+  /// No description provided for @themeScrimMost.
+  ///
+  /// In en, this message translates to:
+  /// **'Thickest'**
+  String get themeScrimMost;
+
+  /// No description provided for @themePanels.
+  ///
+  /// In en, this message translates to:
+  /// **'Panels'**
+  String get themePanels;
+
+  /// No description provided for @themePanelsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'How much of the image shows through the sidebar and lists.'**
+  String get themePanelsDesc;
+
+  /// No description provided for @themePanelsClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get themePanelsClear;
+
+  /// No description provided for @themePanelsMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get themePanelsMedium;
+
+  /// No description provided for @themePanelsSolid.
+  ///
+  /// In en, this message translates to:
+  /// **'Solid'**
+  String get themePanelsSolid;
+
+  /// No description provided for @themeAccentFromImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Use image colors'**
+  String get themeAccentFromImage;
+
+  /// No description provided for @themeAccentFromImageDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the accent color from the image.'**
+  String get themeAccentFromImageDesc;
+
+  /// No description provided for @themeBackgroundPicker.
+  ///
+  /// In en, this message translates to:
+  /// **'Also show in Quick Paste'**
+  String get themeBackgroundPicker;
+
+  /// No description provided for @themeScenery.
+  ///
+  /// In en, this message translates to:
+  /// **'Show scenery'**
+  String get themeScenery;
+
+  /// No description provided for @themeSceneryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The pictures at the top of pages and the bottom of the sidebar.'**
+  String get themeSceneryDesc;
+
+  /// No description provided for @themeCopiedForEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in themes can\'t be changed, so a copy named “{name}” was made and applied'**
+  String themeCopiedForEdit(String name);
+
+  /// No description provided for @themeBackgroundFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'The background belongs to the current theme. Built-in themes can\'t be changed: the first change makes a copy. Images stay on this device; JPEG, PNG and GIF are supported.'**
+  String get themeBackgroundFootnote;
+
+  /// No description provided for @themeSceneGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenery'**
+  String get themeSceneGroup;
+
+  /// No description provided for @themeSceneHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Page header'**
+  String get themeSceneHeader;
+
+  /// No description provided for @themeSceneHeaderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A wide picture behind the page titles; its bottom fades into the page. The pixel theme draws a pixel landscape here.'**
+  String get themeSceneHeaderDesc;
+
+  /// No description provided for @themeSceneSidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'Sidebar bottom'**
+  String get themeSceneSidebar;
+
+  /// No description provided for @themeSceneSidebarDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A small picture at the bottom of the sidebar. The pixel theme draws a small camp here.'**
+  String get themeSceneSidebarDesc;
+
+  /// No description provided for @themeSceneReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get themeSceneReset;
+
+  /// No description provided for @themeSceneFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Any theme can show your own pictures here. A scrim keeps the page title readable. Scenery is hidden while a background image fills the window.'**
+  String get themeSceneFootnote;
 }
 
 class _AppLocalizationsDelegate

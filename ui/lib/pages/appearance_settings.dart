@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +105,8 @@ class AppearanceSection extends StatelessWidget {
                 ],
               ),
             ),
+            _SceneSection(theme: theme),
+            _BackgroundSection(theme: theme),
           ],
         );
       },
@@ -138,6 +141,242 @@ Future<void> _run(BuildContext context, Future<void> Function() action) async {
     await action();
   } catch (e) {
     if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+  }
+}
+
+/// 「风景」：页面顶部的宽图与侧边栏底部的小图换成自己的图（design/themes.md 第 7.6 节），
+/// 像素主题默认是像素风景与营地；也可以整个关掉
+class _SceneSection extends StatelessWidget {
+  const _SceneSection({required this.theme});
+
+  final ThemeController theme;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final brightness = Theme.of(context).brightness;
+    final scene = theme.spec.scene;
+
+    Widget row(String part, String title, String description) {
+      final bytes = theme.sceneImage(part, brightness);
+      final set = scene?.shaFor(part, brightness) != null;
+      return SettingRow(
+        title: title,
+        description: description,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (bytes != null)
+              Padding(
+                padding: const EdgeInsets.only(right: Insets.md),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(context.shape.pixel ? 0 : context.shape.sm),
+                  child: Image.memory(bytes, width: 64, height: 40, fit: BoxFit.cover, cacheWidth: 128, gaplessPlayback: true),
+                ),
+              ),
+            OutlinedButton(
+              onPressed: () => _choose(context, part),
+              child: Text(set ? l.themeBackgroundChange : l.themeBackgroundChoose),
+            ),
+            if (set) ...[
+              const SizedBox(width: Insets.sm),
+              TextButton(
+                onPressed: () => _run(context, () => theme.resetSceneImage(part)),
+                child: Text(l.themeSceneReset),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    return GroupSection(
+      title: l.themeSceneGroup,
+      footnote: l.themeSceneFootnote,
+      child: GroupBox(
+        children: [
+          SettingRow(
+            title: l.themeScenery,
+            description: l.themeSceneryDesc,
+            child: SmallSwitch(
+              value: theme.spec.scenery,
+              onChanged: (v) => _run(context, () async {
+                final copied = await theme.setScenery(v, l);
+                if (copied != null && context.mounted) showToast(context, l.themeCopiedForEdit(copied));
+              }),
+            ),
+          ),
+          if (theme.spec.scenery) ...[
+            row('header', l.themeSceneHeader, l.themeSceneHeaderDesc),
+            row('sidebar', l.themeSceneSidebar, l.themeSceneSidebarDesc),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Future<void> _choose(BuildContext context, String part) async {
+    final l = context.l10n;
+    final file = await openFile(acceptedTypeGroups: const [
+      XTypeGroup(label: 'images', extensions: ['jpg', 'jpeg', 'png', 'gif']),
+    ]);
+    if (file == null || !context.mounted) return;
+    await _run(context, () async {
+      final copied = await theme.setSceneImage(part, file.path, l);
+      if (copied != null && context.mounted) showToast(context, l.themeCopiedForEdit(copied));
+    });
+  }
+}
+
+/// 「背景图」：给当前主题选一张图铺在窗口底下，调模糊、遮罩、面板透明度（design/themes.md 第 7 节）。
+/// 档位是几个固定值；AI 通过 MCP 可以写任意值，这里显示最接近的一档
+class _BackgroundSection extends StatelessWidget {
+  const _BackgroundSection({required this.theme});
+
+  final ThemeController theme;
+
+  static const _blurs = [0.0, 8.0, 24.0];
+  static const _panels = [0.7, ThemeBackground.defaultSurfaceOpacity, 1.0];
+
+  static double _nearest(List<double> options, double v) =>
+      options.reduce((a, b) => (a - v).abs() <= (b - v).abs() ? a : b);
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final p = context.palette;
+    final bg = theme.background;
+    final brightness = Theme.of(context).brightness;
+    final thumb = theme.backdrop(brightness, 'main', p) ?? theme.backdrop(brightness, 'picker', p);
+
+    // 遮罩「自动」是文字看得清所需的最低浓度，「更浓」「很浓」在它上面加
+    final auto = thumb?.minScrim ?? 0.0;
+    final scrimLevel = switch ((bg?.scrimOpacity ?? auto) - auto) {
+      < 0.075 => 0,
+      < 0.225 => 1,
+      _ => 2,
+    };
+
+    Future<void> edit(void Function(Map<String, dynamic> bg) f) => _run(context, () => theme.editBackground(f));
+
+    return GroupSection(
+      title: l.themeBackground,
+      footnote: l.themeBackgroundFootnote,
+      child: GroupBox(
+        children: [
+          SettingRow(
+            title: l.themeBackground,
+            description: l.themeBackgroundDesc,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (thumb != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: Insets.md),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(context.shape.pixel ? 0 : context.shape.sm),
+                      child: Image.memory(
+                        thumb.sharp ?? thumb.blurred!,
+                        width: 64,
+                        height: 40,
+                        fit: BoxFit.cover,
+                        cacheWidth: 128,
+                        gaplessPlayback: true,
+                      ),
+                    ),
+                  ),
+                OutlinedButton(
+                  onPressed: () => _choose(context),
+                  child: Text(bg == null ? l.themeBackgroundChoose : l.themeBackgroundChange),
+                ),
+                if (bg != null) ...[
+                  const SizedBox(width: Insets.sm),
+                  TextButton(
+                    onPressed: () => _run(context, theme.removeBackground),
+                    child: Text(l.themeBackgroundRemove),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          if (bg != null) ...[
+            SettingRow(
+              title: l.themeBlur,
+              child: Segmented<double>(
+                value: _nearest(_blurs, bg.blur),
+                segments: [(_blurs[0], l.themeBlurNone), (_blurs[1], l.themeBlurLight), (_blurs[2], l.themeBlurStrong)],
+                onChanged: (v) => edit((b) => b['blur'] = v),
+              ),
+            ),
+            SettingRow(
+              title: l.themeScrim,
+              description: l.themeScrimDesc,
+              child: Segmented<int>(
+                value: scrimLevel,
+                segments: [(0, l.themeScrimAuto), (1, l.themeScrimMore), (2, l.themeScrimMost)],
+                onChanged: (v) => edit((b) {
+                  final scrim = (b['scrim'] as Map?)?.cast<String, dynamic>() ?? <String, dynamic>{};
+                  if (v == 0) {
+                    scrim.remove('opacity');
+                  } else {
+                    scrim['opacity'] = double.parse(math.min(1.0, auto + 0.15 * v).toStringAsFixed(2));
+                  }
+                  if (scrim.isEmpty) {
+                    b.remove('scrim');
+                  } else {
+                    b['scrim'] = scrim;
+                  }
+                }),
+              ),
+            ),
+            SettingRow(
+              title: l.themePanels,
+              description: l.themePanelsDesc,
+              child: Segmented<double>(
+                value: _nearest(_panels, bg.surfaceOpacity),
+                segments: [
+                  (_panels[0], l.themePanelsClear),
+                  (_panels[1], l.themePanelsMedium),
+                  (_panels[2], l.themePanelsSolid),
+                ],
+                onChanged: (v) => edit((b) => b['surfaceOpacity'] = v),
+              ),
+            ),
+            SettingRow(
+              title: l.themeAccentFromImage,
+              description: l.themeAccentFromImageDesc,
+              child: SmallSwitch(
+                value: bg.accentFromImage,
+                onChanged: (v) => edit((b) => b['accentFromImage'] = v),
+              ),
+            ),
+            SettingRow(
+              title: l.themeBackgroundPicker,
+              child: SmallSwitch(
+                value: bg.scope.contains('picker'),
+                onChanged: (v) => edit((b) {
+                  final scope = {...bg.scope};
+                  v ? scope.add('picker') : scope.remove('picker');
+                  b['scope'] = scope.toList();
+                }),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Future<void> _choose(BuildContext context) async {
+    final l = context.l10n;
+    final file = await openFile(acceptedTypeGroups: const [
+      XTypeGroup(label: 'images', extensions: ['jpg', 'jpeg', 'png', 'gif']),
+    ]);
+    if (file == null || !context.mounted) return;
+    await _run(context, () async {
+      final copied = await theme.setBackgroundImage(file.path, l);
+      if (copied != null && context.mounted) showToast(context, l.themeCopiedForEdit(copied));
+    });
   }
 }
 

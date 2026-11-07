@@ -50,6 +50,9 @@ class AppThemeSpec {
     this.typography = AppTypography.standard,
     this.motion = AppMotion.standard,
     this.pixelIcons = false,
+    this.scenery = true,
+    this.scene,
+    this.background,
   });
 
   final String id;
@@ -62,6 +65,15 @@ class AppThemeSpec {
   /// 用像素图标（[AppIcons] 里的 Pixelarticons），而不是系统风格的图标
   final bool pixelIcons;
 
+  /// 页面顶部的风景与侧边栏底部的小图（像素主题默认是像素风景与营地）；显示背景图时总是不画
+  final bool scenery;
+
+  /// 换成导入的图的风景；null 时像素主题画像素风景，其他主题不画
+  final ThemeScene? scene;
+
+  /// 铺在窗口最底下的背景图（design/themes.md 第 7 节）；null 表示没有
+  final ThemeBackground? background;
+
   AppPalette palette(Brightness brightness) => brightness == Brightness.dark ? dark : light;
 
   static const standard = AppThemeSpec(id: 'default', light: AppPalette.light, dark: AppPalette.dark);
@@ -73,6 +85,80 @@ class AppThemeSpec {
 
   /// 内置主题，按 id 取；不认识的 id 用默认主题
   static AppThemeSpec byId(String id) => builtins[id] ?? standard;
+}
+
+/// 风景换成的图（design/themes.md 第 7.6 节），都写成 `user:<sha256>`
+@immutable
+class ThemeScene {
+  const ThemeScene({this.header, this.headerDark, this.sidebar, this.sidebarDark});
+
+  final String? header;
+  final String? headerDark;
+  final String? sidebar;
+  final String? sidebarDark;
+
+  bool get isEmpty => header == null && headerDark == null && sidebar == null && sidebarDark == null;
+
+  /// [part] 是 header 或 sidebar；这个模式下用的图的 sha256，没有时为 null
+  String? shaFor(String part, Brightness b) {
+    final light = part == 'header' ? header : sidebar;
+    final dark = part == 'header' ? headerDark : sidebarDark;
+    final ref = b == Brightness.dark ? (dark ?? light) : light;
+    return ref != null && ref.startsWith('user:') ? ref.substring(5) : null;
+  }
+}
+
+/// 背景图怎么铺满窗口
+enum BackgroundFit { cover, contain, tile }
+
+/// 主题里的背景图（design/themes.md 第 7.1 节）。图片存在后台服务里，[image] 写成 `user:<sha256>`。
+@immutable
+class ThemeBackground {
+  const ThemeBackground({
+    this.image,
+    this.imageDark,
+    this.fit = BackgroundFit.cover,
+    this.align = Alignment.center,
+    this.alignName = 'center',
+    this.blur = 0,
+    this.scrimColor,
+    this.scrimOpacity,
+    this.surfaceOpacity = defaultSurfaceOpacity,
+    this.scope = const {'main', 'mobile'},
+    this.accentFromImage = false,
+  });
+
+  static const defaultSurfaceOpacity = 0.85;
+
+  final String? image;
+  final String? imageDark;
+  final BackgroundFit fit;
+  final Alignment align;
+  final String alignName;
+
+  /// 0 到 40；0 是原图，20 及以上全用后台服务预先算好的模糊版
+  final double blur;
+
+  /// 遮罩颜色，null 时用主题的 background
+  final Color? scrimColor;
+
+  /// 遮罩浓度，null 时取图片分析给出的下限（至少 0.3）；比下限淡时按下限显示
+  final double? scrimOpacity;
+
+  /// 侧边栏与分组面板的不透明度，0.6 到 1
+  final double surfaceOpacity;
+
+  /// 哪些窗口显示：main（主窗口）、picker（快捷粘贴）、mobile（手机）
+  final Set<String> scope;
+
+  /// 用图片的主色作强调色
+  final bool accentFromImage;
+
+  /// 这个模式下用的图（`user:<sha256>` 里的 sha256），没有时为 null
+  String? shaFor(Brightness b) {
+    final ref = b == Brightness.dark ? (imageDark ?? image) : image;
+    return ref != null && ref.startsWith('user:') ? ref.substring(5) : null;
+  }
 }
 
 /// 语义化的颜色角色。页面代码只用这些名字，不判断亮暗模式。
@@ -170,6 +256,32 @@ class AppPalette extends ThemeExtension<AppPalette> {
 
   @override
   AppPalette copyWith() => this;
+
+  /// 换掉强调色与它上面的文字色，其余不变（「用图片配色」）
+  AppPalette withAccent(Color accent, Color onAccent) => AppPalette(
+        accent: accent,
+        onAccent: onAccent,
+        background: background,
+        sidebar: sidebar,
+        surface: surface,
+        border: border,
+        separator: separator,
+        text: text,
+        textDim: textDim,
+        textFaint: textFaint,
+        selection: selection,
+        hover: hover,
+        fill: fill,
+        online: online,
+        warning: warning,
+        danger: danger,
+        inverse: inverse,
+        onInverse: onInverse,
+        borderStrong: _borderStrong,
+        bevelLight: bevelLight,
+        bevelDark: bevelDark,
+        shadow: shadow,
+      );
 
   @override
   AppPalette lerp(AppPalette? other, double t) {

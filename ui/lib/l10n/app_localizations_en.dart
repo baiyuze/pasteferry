@@ -2777,4 +2777,114 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get themeScanlinesDesc =>
       'Overlay faint CRT scanlines on the window. Pixel themes only.';
+
+  @override
+  String get themeBackground => 'Background image';
+
+  @override
+  String get themeBackgroundDesc =>
+      'Fills the window behind the sidebar and pages. A scrim on top keeps text readable.';
+
+  @override
+  String get themeBackgroundChoose => 'Choose Image…';
+
+  @override
+  String get themeBackgroundChange => 'Change…';
+
+  @override
+  String get themeBackgroundRemove => 'Remove';
+
+  @override
+  String get themeBlur => 'Blur';
+
+  @override
+  String get themeBlurNone => 'None';
+
+  @override
+  String get themeBlurLight => 'Light';
+
+  @override
+  String get themeBlurStrong => 'Strong';
+
+  @override
+  String get themeScrim => 'Scrim';
+
+  @override
+  String get themeScrimDesc =>
+      'A color laid over the image so text stays readable. It is never lighter than the image needs.';
+
+  @override
+  String get themeScrimAuto => 'Auto';
+
+  @override
+  String get themeScrimMore => 'Thicker';
+
+  @override
+  String get themeScrimMost => 'Thickest';
+
+  @override
+  String get themePanels => 'Panels';
+
+  @override
+  String get themePanelsDesc =>
+      'How much of the image shows through the sidebar and lists.';
+
+  @override
+  String get themePanelsClear => 'Clear';
+
+  @override
+  String get themePanelsMedium => 'Medium';
+
+  @override
+  String get themePanelsSolid => 'Solid';
+
+  @override
+  String get themeAccentFromImage => 'Use image colors';
+
+  @override
+  String get themeAccentFromImageDesc =>
+      'Take the accent color from the image.';
+
+  @override
+  String get themeBackgroundPicker => 'Also show in Quick Paste';
+
+  @override
+  String get themeScenery => 'Show scenery';
+
+  @override
+  String get themeSceneryDesc =>
+      'The pictures at the top of pages and the bottom of the sidebar.';
+
+  @override
+  String themeCopiedForEdit(String name) {
+    return 'Built-in themes can\'t be changed, so a copy named “$name” was made and applied';
+  }
+
+  @override
+  String get themeBackgroundFootnote =>
+      'The background belongs to the current theme. Built-in themes can\'t be changed: the first change makes a copy. Images stay on this device; JPEG, PNG and GIF are supported.';
+
+  @override
+  String get themeSceneGroup => 'Scenery';
+
+  @override
+  String get themeSceneHeader => 'Page header';
+
+  @override
+  String get themeSceneHeaderDesc =>
+      'A wide picture behind the page titles; its bottom fades into the page. The pixel theme draws a pixel landscape here.';
+
+  @override
+  String get themeSceneSidebar => 'Sidebar bottom';
+
+  @override
+  String get themeSceneSidebarDesc =>
+      'A small picture at the bottom of the sidebar. The pixel theme draws a small camp here.';
+
+  @override
+  String get themeSceneReset => 'Reset';
+
+  @override
+  String get themeSceneFootnote =>
+      'Any theme can show your own pictures here. A scrim keeps the page title readable. Scenery is hidden while a background image fills the window.';
 }

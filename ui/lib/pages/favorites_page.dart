@@ -16,6 +16,7 @@ import '../widgets/image_preview_dialog.dart';
 import '../widgets/record_hover.dart';
 import '../pixel_theme.dart';
 import '../pixel_art.dart';
+import '../widgets/backdrop.dart';
 
 /// 收藏：另存的一份，不会被自动清理。见 design/quick-paste-and-favorites.md 第 3 节。
 ///
@@ -113,7 +114,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               padding: const EdgeInsets.fromLTRB(Insets.xl, 0, Insets.xl, Insets.xl),
                               sliver: DecoratedSliver(
                                 decoration: BoxDecoration(
-                                  color: context.palette.surface,
+                                  color: context.panel(context.palette.surface),
                                   borderRadius: BorderRadius.circular(context.shape.md),
                                   border: Border.all(color: context.palette.border),
                                 ),
