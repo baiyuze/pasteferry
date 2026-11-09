@@ -1,65 +1,96 @@
 {
   "schema": 1,
-  "latest": "2.10.1",
-  "date": "2026-11-07",
+  "latest": "2.10.2",
+  "date": "2026-11-09",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.10.1/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.10.2/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.10.1/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.10.2/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 28365223,
-      "sha256": "c2a509a316ea61b67834c253a5a7c75ada1f26c30eb644d611a9f6111dd137a0"
+      "size": 28364231,
+      "sha256": "80d862a3b5df6f725858518f4f86ea5dd05107f9dbcb2d115d7eeeb281b910cc"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 30545055,
-      "sha256": "7c83685e8fbe6c8d0be3bcd6c4538332aec5d1345ae1532f3b0baaefa913ee9d"
+      "size": 30545532,
+      "sha256": "8798711b438246cc27ba2beeb36a95ac923056a914a8f0981e3326bc9321db3b"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 55849394,
-      "sha256": "7512db74802c049624919baedf7042723b554b75b33344bee2201aeb0cd02bb8"
+      "size": 55865837,
+      "sha256": "dd8a948208fb34f6e60258197fbae398ddb52654b9af3bdfe437fa54cbcfd96c"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 24956805,
-      "sha256": "afa157515564b3220c1f8a898999b368feccb417a5a776b59924fddb3df1c444"
+      "size": 24957072,
+      "sha256": "d354ad99087807d0742347de69076782782c11223c5f6d43307aa20997a04158"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 31881808,
-      "sha256": "2b15002e3fd91d4e27c7bd58d2a0e26aed52a4872e4f8446eb0c60e4a61a88ed"
+      "size": 31889440,
+      "sha256": "0516c75d75e4e3ed244f7581861ee805fad9a85d48c8b4ae3a9882943869b579"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 24334806,
-      "sha256": "16bf04d74c0d3c8c62f8e364a8e53c7a17f1ab099236b5fdb19ca18e20204879"
+      "size": 24355898,
+      "sha256": "15400c671928d35200a921ecb1f196fb27f69e68019abd71a26b1b3ed6959176"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 22699002,
-      "sha256": "9ba8f2b18b00e1f39dd0cef90dd9fdf676f94fc9e8f57e8161097d25b4738fab"
+      "size": 22708878,
+      "sha256": "c7fb53a90aef7722a5f9597aab79f7147c5b52d614287d06867d4f5298888c57"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 29606376,
-      "sha256": "1de1db574d6b973f022e5f31a011ad4cc3b966caaa75333484a5aea23c366c4b"
+      "size": 29612256,
+      "sha256": "fd87cecb1b4d1bca11dcea125ec0a22c0393dc4bb306ec3675f06268e45f66c4"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 27803117,
-      "sha256": "76a5ea7d81ec04ff9ce90d8013802832b8aceaa917faa2cdc37daec7cce5bde1"
+      "size": 27808828,
+      "sha256": "b7b6e3162f54702415aeb317f6f3e1c81775b6dcc6951fbcc457b2c3af1f2c47"
     }
   },
   "releases": [
+    {
+      "version": "2.10.2",
+      "date": "2026-11-09",
+      "notes": {
+        "en": {
+          "changes": [
+            "GitHub star prompt: after you have used the app for 3 days and synced 20 items, a small banner above the history list asks how you like PasteFerry and invites you to star it on GitHub. Later shows it once more after 7 days; Star on GitHub or × hides it for good. Settings › About keeps a permanent star link. The counters stay on this device and are never reported."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "GitHub Star 邀请：用满 3 天、同步过 20 条以后，复制记录列表上方会出现一条小横幅，问你觉得隔空贴好不好用，喜欢的话可以到 GitHub 点个 Star。「以后再说」7 天后再出现一次，「去点 Star」或 × 之后不再出现。「设置 › 关于」里一直有点 Star 的入口。计数只存在本机，不上报。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "GitHub スターのお願い：3 日以上使い、20 件以上同期すると、履歴リストの上に小さなバナーが表示され、PasteFerry を気に入っていただけたら GitHub でスターを付けてほしいとお願いします。「あとで」を選ぶと 7 日後にもう一度だけ表示され、「GitHub でスター」か × で二度と表示されません。「設定 › このアプリについて」にはいつでもスターのリンクがあります。カウントはこのデバイスにだけ保存され、送信されません。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "GitHub Star 邀請：用滿 3 天、同步過 20 筆以後，複製記錄列表上方會出現一條小橫幅，問你覺得隔空貼好不好用，喜歡的話可以到 GitHub 點個 Star。「以後再說」7 天後再出現一次，「去點 Star」或 × 之後不再出現。「設定 › 關於」裡一直有點 Star 的入口。計數只存在本機，不會上傳。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "GitHub Star 邀請：用滿 3 日、同步過 20 項以後，複製記錄列表上方會出現一條小橫額，問你覺得隔空貼好不好用，喜歡的話可以到 GitHub 點個 Star。「以後再說」7 日後再出現一次，「去點 Star」或 × 之後不再出現。「設定 › 關於」裏一直有點 Star 的入口。計數只存在本機，不會上傳。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.10.1",
       "date": "2026-11-07",
@@ -520,37 +551,6 @@
           ],
           "fixes": [
             "Windows 上開啟手機二維碼時會自動檢查防火牆，需要時要求管理員授權。取消或失敗會顯示原因和重試按鈕，確認允許連線規則後才提示成功；已允許時不重複彈出視窗。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.7.2",
-      "date": "2026-10-28",
-      "notes": {
-        "en": {
-          "changes": [
-            "Android: Settings › Keep sent records sets how many days the Sent list on the send page covers: 1, 3, 7 or 30 days, three when unset."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "安卓：设置里的「发送记录保留」可以选发送页的「发送记录」显示最近几天：1、3、7 或 30 天，不设时是 3 天。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "Android：設定の「送信履歴の保持」で、送信ページの「送信履歴」が直近何日分を表示するか選べます（1、3、7、30 日。未設定は 3 日）。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "安卓：設定裡的「傳送記錄保留」可以選傳送頁的「傳送記錄」顯示最近幾天：1、3、7 或 30 天，不設時是 3 天。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "安卓：設定裏的「傳送記錄保留」可以選傳送頁的「傳送記錄」顯示最近幾天：1、3、7 或 30 天，不設時是 3 天。"
           ]
         }
       }
