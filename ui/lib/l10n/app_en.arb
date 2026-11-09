@@ -1835,5 +1835,10 @@
   "themeSceneSidebar": "Sidebar bottom",
   "themeSceneSidebarDesc": "A small picture at the bottom of the sidebar. The pixel theme draws a small camp here.",
   "themeSceneReset": "Reset",
-  "themeSceneFootnote": "Any theme can show your own pictures here. A scrim keeps the page title readable. Scenery is hidden while a background image fills the window."
+  "themeSceneFootnote": "Any theme can show your own pictures here. A scrim keeps the page title readable. Scenery is hidden while a background image fills the window.",
+  "starTitle": "How do you like PasteFerry?",
+  "starBody": "If you enjoy it, a star on GitHub would mean a lot.",
+  "starAction": "Star on GitHub",
+  "starLater": "Later",
+  "starDismiss": "Don't show again"
 }

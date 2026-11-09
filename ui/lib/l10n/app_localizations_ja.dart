@@ -2690,4 +2690,19 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get themeSceneFootnote =>
       'どのテーマでも自分の画像を置けます。ページタイトルが読めるようにスクリムを自動で重ねます。ウインドウ全体の背景画像があるときは風景を表示しません。';
+
+  @override
+  String get starTitle => 'PasteFerry の使い心地はいかがですか？';
+
+  @override
+  String get starBody => '気に入っていただけたら、GitHub でスターを付けて応援してください。';
+
+  @override
+  String get starAction => 'GitHub でスター';
+
+  @override
+  String get starLater => 'あとで';
+
+  @override
+  String get starDismiss => '今後表示しない';
 }

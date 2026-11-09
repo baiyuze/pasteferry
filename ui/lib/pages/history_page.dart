@@ -13,6 +13,7 @@ import '../widgets/common.dart';
 import '../widgets/favorite_actions.dart';
 import '../widgets/image_preview_dialog.dart';
 import '../widgets/record_hover.dart';
+import '../widgets/star_banner.dart';
 import '../icons.dart';
 import '../platform.dart';
 import '../pixel_theme.dart';
@@ -113,6 +114,10 @@ class _HistoryPageState extends State<HistoryPage> {
             padding: const EdgeInsets.fromLTRB(Insets.xl, 0, Insets.xl, Insets.md),
             child: _PermissionNotice(permission: state.status!.clipboardPermission),
           ),
+        const StarBanner(
+          openUrl: openUrl,
+          padding: EdgeInsets.fromLTRB(Insets.xl, 0, Insets.xl, Insets.md),
+        ),
         Expanded(
           child: records == null
               ? const SizedBox.shrink()

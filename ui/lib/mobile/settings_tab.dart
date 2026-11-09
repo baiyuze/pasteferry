@@ -5,6 +5,8 @@ import 'package:protobuf/protobuf.dart';
 import '../app_state.dart';
 import '../i18n.dart';
 import '../main.dart' show AppScope;
+import '../icons.dart';
+import '../star_prompt.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 import 'host.dart';
@@ -264,6 +266,11 @@ class _SettingsTabState extends State<SettingsTab> with WidgetsBindingObserver {
                 Text(l.mVersion(state.status?.version ?? ''), style: context.text.bodySmall),
                 const SizedBox(height: Insets.md),
                 _UpdateTile(current: state.status?.version ?? ''),
+                TextButton.icon(
+                  onPressed: () => Host.openUrl(StarPrompt.url),
+                  icon: Icon(AppIcons.star, size: 18),
+                  label: Text(l.starAction),
+                ),
                 Text(l.aboutDesc, style: context.text.bodySmall),
               ],
             ),

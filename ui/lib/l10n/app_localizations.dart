@@ -4753,6 +4753,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Any theme can show your own pictures here. A scrim keeps the page title readable. Scenery is hidden while a background image fills the window.'**
   String get themeSceneFootnote;
+
+  /// No description provided for @starTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you like PasteFerry?'**
+  String get starTitle;
+
+  /// No description provided for @starBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you enjoy it, a star on GitHub would mean a lot.'**
+  String get starBody;
+
+  /// No description provided for @starAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Star on GitHub'**
+  String get starAction;
+
+  /// No description provided for @starLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get starLater;
+
+  /// No description provided for @starDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t show again'**
+  String get starDismiss;
 }
 
 class _AppLocalizationsDelegate

@@ -773,5 +773,10 @@
   "themeSceneSidebar": "サイドバー下部",
   "themeSceneSidebarDesc": "サイドバー下部の小さな画像。ピクセルテーマでは小さなキャンプです。",
   "themeSceneReset": "元に戻す",
-  "themeSceneFootnote": "どのテーマでも自分の画像を置けます。ページタイトルが読めるようにスクリムを自動で重ねます。ウインドウ全体の背景画像があるときは風景を表示しません。"
+  "themeSceneFootnote": "どのテーマでも自分の画像を置けます。ページタイトルが読めるようにスクリムを自動で重ねます。ウインドウ全体の背景画像があるときは風景を表示しません。",
+  "starTitle": "PasteFerry の使い心地はいかがですか？",
+  "starBody": "気に入っていただけたら、GitHub でスターを付けて応援してください。",
+  "starAction": "GitHub でスター",
+  "starLater": "あとで",
+  "starDismiss": "今後表示しない"
 }

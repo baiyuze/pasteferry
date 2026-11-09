@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' show pid;
+import 'dart:io' show Platform, pid;
 
 import 'package:flutter/foundation.dart';
 import 'package:grpc/grpc.dart';
@@ -8,6 +8,7 @@ import 'background_service.dart';
 import 'daemon_client.dart';
 import 'i18n.dart';
 import 'quick_paste_service.dart';
+import 'star_prompt.dart';
 import 'theme_controller.dart';
 import 'gen/pasteferry/v1/daemon.pb.dart';
 import 'gen/pasteferry/v1/daemon.pbgrpc.dart' show DaemonServiceClient;
@@ -53,10 +54,18 @@ enum PairingFailure {
 /// 这样断线重连、事件合并这些琐事集中在一处，页面代码保持干净。
 class AppState extends ChangeNotifier implements RecordDetails {
   AppState({BackgroundService? service, QuickPasteService? quickPasteService,
-    Future<DaemonConnection> Function()? connectDaemon})
+    Future<DaemonConnection> Function()? connectDaemon, StarPrompt? starPrompt})
     : service = service ?? BackgroundService(),
       quickPasteService = quickPasteService ?? QuickPasteService(),
-      _connectDaemon = connectDaemon ?? DaemonConnection.connect;
+      _connectDaemon = connectDaemon ?? DaemonConnection.connect {
+    this.starPrompt = (starPrompt ??
+        // 跑测试时不读写真实数据目录里的文件
+        (Platform.environment.containsKey('FLUTTER_TEST') ? StarPrompt.memory() : StarPrompt()))
+      ..onChanged = notifyListeners;
+  }
+
+  /// 请用户去 GitHub 点 Star 的小横幅，见 star_prompt.dart
+  late final StarPrompt starPrompt;
 
   final BackgroundService service;
 
@@ -395,6 +404,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
     if (_quitting) return;
     _retry?.cancel();
     _setLink(LinkState.connecting, null);
+    unawaited(starPrompt.load());
     await _replaceLegacyService();
 
     try {
@@ -725,6 +735,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
       // 同一条记录会被推送多次（开始接收时一次、接收完成时一次），一律按 id 合并，
       // 否则界面上会出现两行，其中「接收中」那行的进度条永远停不下来
       case Event_Payload.clipAdded:
+        _countSync(ev.clipAdded);
         _upsert(ev.clipAdded);
         // 新记录该不该出现在搜索结果里，只有后台服务知道
         final search = ev.clipAdded.favorite ? _favoriteSearch : _historySearch;
@@ -823,6 +834,17 @@ class AppState extends ChangeNotifier implements RecordDetails {
     }
     notifyListeners();
   }
+
+  /// 算作一次同步：从别的设备收到的新记录，或本机复制时有设备在线、发了出去的。
+  /// 同一条记录会推送多次，按 id 只算一次；收藏不算。
+  void _countSync(ClipRecord r) {
+    if (r.favorite || r.status == ClipStatus.CLIP_STATUS_FAILED) return;
+    if (r.outgoing && onlinePeerCount == 0) return;
+    if (!_countedSyncs.add(r.id)) return;
+    starPrompt.recordSync();
+  }
+
+  final _countedSyncs = <String>{};
 
   void _upsert(ClipRecord r) {
     if (r.status == ClipStatus.CLIP_STATUS_FETCHING) {

@@ -2887,4 +2887,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get themeSceneFootnote =>
       'Any theme can show your own pictures here. A scrim keeps the page title readable. Scenery is hidden while a background image fills the window.';
+
+  @override
+  String get starTitle => 'How do you like PasteFerry?';
+
+  @override
+  String get starBody => 'If you enjoy it, a star on GitHub would mean a lot.';
+
+  @override
+  String get starAction => 'Star on GitHub';
+
+  @override
+  String get starLater => 'Later';
+
+  @override
+  String get starDismiss => 'Don\'t show again';
 }

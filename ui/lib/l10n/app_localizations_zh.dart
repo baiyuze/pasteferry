@@ -2660,6 +2660,21 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get themeSceneFootnote =>
       '任何主题都可以在这里放自己的图，页面标题上会自动盖遮罩保证看得清。设置了整窗背景图时不显示风景。';
+
+  @override
+  String get starTitle => '觉得隔空贴好用吗？';
+
+  @override
+  String get starBody => '如果喜欢，欢迎到 GitHub 点个 Star 支持一下。';
+
+  @override
+  String get starAction => '去点 Star';
+
+  @override
+  String get starLater => '以后再说';
+
+  @override
+  String get starDismiss => '不再提示';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -5318,6 +5333,21 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   @override
   String get themeSceneFootnote =>
       '任何主題都可以在這裏放自己的圖，頁面標題上會自動蓋遮罩確保看得清楚。設定了整個視窗的背景圖時不顯示風景。';
+
+  @override
+  String get starTitle => '覺得隔空貼好用嗎？';
+
+  @override
+  String get starBody => '如果喜歡，歡迎到 GitHub 點個 Star 支持一下。';
+
+  @override
+  String get starAction => '去點 Star';
+
+  @override
+  String get starLater => '以後再說';
+
+  @override
+  String get starDismiss => '不再提示';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -7976,4 +8006,19 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
   @override
   String get themeSceneFootnote =>
       '任何主題都可以在這裡放自己的圖，頁面標題上會自動蓋遮罩確保看得清楚。設定了整個視窗的背景圖時不顯示風景。';
+
+  @override
+  String get starTitle => '覺得隔空貼好用嗎？';
+
+  @override
+  String get starBody => '如果喜歡，歡迎到 GitHub 點個 Star 支持一下。';
+
+  @override
+  String get starAction => '去點 Star';
+
+  @override
+  String get starLater => '以後再說';
+
+  @override
+  String get starDismiss => '不再提示';
 }

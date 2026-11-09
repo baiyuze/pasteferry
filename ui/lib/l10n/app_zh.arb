@@ -773,5 +773,10 @@
   "themeSceneSidebar": "侧边栏底部",
   "themeSceneSidebarDesc": "侧边栏底部的一小幅图。像素主题这里是小营地。",
   "themeSceneReset": "恢复默认",
-  "themeSceneFootnote": "任何主题都可以在这里放自己的图，页面标题上会自动盖遮罩保证看得清。设置了整窗背景图时不显示风景。"
+  "themeSceneFootnote": "任何主题都可以在这里放自己的图，页面标题上会自动盖遮罩保证看得清。设置了整窗背景图时不显示风景。",
+  "starTitle": "觉得隔空贴好用吗？",
+  "starBody": "如果喜欢，欢迎到 GitHub 点个 Star 支持一下。",
+  "starAction": "去点 Star",
+  "starLater": "以后再说",
+  "starDismiss": "不再提示"
 }

@@ -10,6 +10,7 @@ import '../background_service.dart';
 import '../gen/pasteferry/v1/daemon.pb.dart';
 import '../i18n.dart';
 import '../main.dart';
+import '../star_prompt.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/feedback_dialog.dart';
@@ -514,6 +515,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: Text(l.feedback),
                     ),
                   ],
+                ),
+              ),
+              SettingRow(
+                title: l.starTitle,
+                description: l.starBody,
+                child: TextButton(
+                  onPressed: () => _openUrl(StarPrompt.url),
+                  child: Text(l.starAction),
                 ),
               ),
               SettingRow(

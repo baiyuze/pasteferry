@@ -773,5 +773,10 @@
   "themeSceneSidebar": "側邊欄底部",
   "themeSceneSidebarDesc": "側邊欄底部的一小幅圖。像素主題這裏是小營地。",
   "themeSceneReset": "恢復預設",
-  "themeSceneFootnote": "任何主題都可以在這裏放自己的圖，頁面標題上會自動蓋遮罩確保看得清楚。設定了整個視窗的背景圖時不顯示風景。"
+  "themeSceneFootnote": "任何主題都可以在這裏放自己的圖，頁面標題上會自動蓋遮罩確保看得清楚。設定了整個視窗的背景圖時不顯示風景。",
+  "starTitle": "覺得隔空貼好用嗎？",
+  "starBody": "如果喜歡，歡迎到 GitHub 點個 Star 支持一下。",
+  "starAction": "去點 Star",
+  "starLater": "以後再說",
+  "starDismiss": "不再提示"
 }

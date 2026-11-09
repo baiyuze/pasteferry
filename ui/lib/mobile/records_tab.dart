@@ -11,7 +11,9 @@ import '../records.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 import '../pixel_theme.dart';
+import 'host.dart';
 import 'ui.dart';
+import '../widgets/star_banner.dart';
 import 'record_actions.dart';
 import '../widgets/backdrop.dart';
 
@@ -57,6 +59,12 @@ class _RecordsTabState extends State<RecordsTab> {
             ),
           ),
           const SliverToBoxAdapter(child: LanNotice()),
+          SliverToBoxAdapter(
+            child: StarBanner(
+              openUrl: Host.openUrl,
+              padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.md),
+            ),
+          ),
           if (records.isEmpty)
             SliverFillRemaining(
               hasScrollBody: false,
