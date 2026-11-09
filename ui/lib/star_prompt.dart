@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
+
 import 'daemon_client.dart';
 
 /// 请用户去 GitHub 点 Star 的小横幅该不该出现。
@@ -117,6 +119,10 @@ class StarPrompt {
   Future<void> _saving = Future.value();
 
   Future<void> _save() => _saving = _saving.then((_) => _write());
+
+  /// 等排队的写盘都做完
+  @visibleForTesting
+  Future<void> flushed() => _saving;
 
   Future<void> _write() async {
     final file = _file;

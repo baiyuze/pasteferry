@@ -80,8 +80,7 @@ void main() {
     }
     now = now.add(const Duration(days: 3));
     a.later();
-    // 等排队的写盘做完
-    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await a.flushed();
 
     final b = StarPrompt(path: path, now: clock);
     await b.load();
