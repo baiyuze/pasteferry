@@ -1,5 +1,20 @@
 # 更新记录 / Changelog
 
+## 2.10.2 — 2026-11-09
+
+This release adds a gentle, dismissible invitation to star PasteFerry on GitHub.
+
+### Changes
+
+- **GitHub star prompt**: after you have used the app for 3 days and synced 20 items, a small banner above the history list asks how you like PasteFerry and invites you to star it on GitHub. Later shows it once more after 7 days; Star on GitHub or × hides it for good. Settings › About keeps a permanent star link. The counters stay on this device and are never reported.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional. Pairings, friends, history, themes and settings are preserved.
+- **Android**: optional; the banner and the About link are also in the Android app.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.10.1 — 2026-11-07
 
 This release makes background images work and lets you replace the theme scenery with your own pictures, yourself or through AI.

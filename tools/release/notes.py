@@ -11,6 +11,17 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.10.2',
+ 'date': '2026-11-09',
+ 'changes': [('GitHub star prompt: after you have used the app for 3 days and synced 20 items, a small banner above '
+              'the history list asks how you like PasteFerry and invites you to star it on GitHub. Later shows it '
+              'once more after 7 days; Star on GitHub or × hides it for good. Settings › About keeps a permanent '
+              'star link. The counters stay on this device and are never reported.',
+              'GitHub Star 邀请：用满 3 天、同步过 20 条以后，复制记录列表上方会出现一条小横幅，问你觉得隔空贴好不好用，喜欢的话可以到 GitHub 点个 Star。「以后再说」7 天后再出现一次，「去点 Star」或 × 之后不再出现。「设置 › 关于」里一直有点 Star 的入口。计数只存在本机，不上报。',
+              'GitHub スターのお願い：3 日以上使い、20 件以上同期すると、履歴リストの上に小さなバナーが表示され、PasteFerry を気に入っていただけたら GitHub でスターを付けてほしいとお願いします。「あとで」を選ぶと 7 日後にもう一度だけ表示され、「GitHub でスター」か × で二度と表示されません。「設定 › このアプリについて」にはいつでもスターのリンクがあります。カウントはこのデバイスにだけ保存され、送信されません。',
+              'GitHub Star 邀請：用滿 3 天、同步過 20 筆以後，複製記錄列表上方會出現一條小橫幅，問你覺得隔空貼好不好用，喜歡的話可以到 GitHub 點個 Star。「以後再說」7 天後再出現一次，「去點 Star」或 × 之後不再出現。「設定 › 關於」裡一直有點 Star 的入口。計數只存在本機，不會上傳。',
+              'GitHub Star 邀請：用滿 3 日、同步過 20 項以後，複製記錄列表上方會出現一條小橫額，問你覺得隔空貼好不好用，喜歡的話可以到 GitHub 點個 Star。「以後再說」7 日後再出現一次，「去點 Star」或 × 之後不再出現。「設定 › 關於」裏一直有點 Star 的入口。計數只存在本機，不會上傳。')],
+ 'fixes': []},
 {'version': '2.10.1',
  'date': '2026-11-07',
  'changes': [('Background images: Settings › Appearance › Background image fills the window behind the sidebar and '
