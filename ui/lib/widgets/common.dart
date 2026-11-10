@@ -749,9 +749,9 @@ class _IconActionState extends State<IconAction> {
   }
 }
 
-/// 字节数的可读形式。
+/// 字节数的可读形式。从右到左的界面里隔离成一段从左到右的文字，见 [ltrInRtl]
 String humanBytes(int n) {
-  if (n < 1024) return '$n B';
+  if (n < 1024) return ltrInRtl('$n B');
   const units = ['KB', 'MB', 'GB', 'TB'];
   var v = n / 1024;
   var i = 0;
@@ -759,7 +759,7 @@ String humanBytes(int n) {
     v /= 1024;
     i++;
   }
-  return '${v.toStringAsFixed(v >= 100 ? 0 : 1)} ${units[i]}';
+  return ltrInRtl('${v.toStringAsFixed(v >= 100 ? 0 : 1)} ${units[i]}');
 }
 
 /// 时长：整天的按天说，否则按小时。

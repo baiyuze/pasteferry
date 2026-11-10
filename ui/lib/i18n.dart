@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart' show Bidi;
 
 import 'l10n/app_localizations.dart';
 
@@ -99,6 +100,12 @@ AppLocalizations appL10n = lookupAppLocalizations(resolveLocale(PlatformDispatch
 /// 把一段按从左到右排的文字（快捷键 ⌃⌥⇧⌘V、⌥1）隔离出来：放进阿拉伯语这类从右到左的界面里，
 /// ⌘、⇧ 这些没有方向的符号不会被排反。前后加的是 Unicode 的 LRI 与 PDI，看不见。
 String ltr(String s) => '\u2066$s\u2069';
+
+/// 当前界面语言是不是从右到左写（阿拉伯语）。跟着 [appL10n] 变
+bool get rtlInterface => Bidi.isRtlLanguage(appL10n.localeName);
+
+/// 只在从右到左的界面里用 [ltr] 隔离：「54 B」夹在两段阿拉伯文中间时，数字和单位会被排反成「B 54」
+String ltrInRtl(String s) => rtlInterface ? ltr(s) : s;
 
 extension L10nContext on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
