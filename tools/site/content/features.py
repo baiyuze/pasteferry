@@ -30,11 +30,11 @@ COPY = {
 
     # ── 首页 ──
     # {version} 由官网 VERSION 生成；每次发版同步更新功能摘要。
-    "badge": ('{version} 新功能：主题与像素风，AI 也能帮你做主题 →',
- '{version} 新功能：主題與像素風，AI 也能幫你做主題 →',
- '{version} 新功能：主題與像素風，AI 也能幫你做主題 →',
- 'New in {version}: themes, a pixel look, and themes made by AI →',
- '{version} の新機能：テーマとピクセル風、AI によるテーマ作成 →'),
+    "badge": ('{version} 新功能：界面支持 18 种语言，阿拉伯文从右到左 →',
+ '{version} 新功能：介面支援 18 種語言，阿拉伯文由右至左 →',
+ '{version} 新功能：介面支援 18 種語言，阿拉伯文由右至左 →',
+ 'New in {version}: 18 interface languages, with right-to-left Arabic →',
+ '{version} の新機能：18 言語に対応、アラビア語は右から左のレイアウト →'),
     # 首页手机区块（2.7）
     "home_phone_h2": ("手机也能用了。", "手機也能用了。", "手機也能用了。", "Your phone joins in.", "スマホでも使える。"),
     "home_phone_intro": ('安卓 App 可与电脑双向隔空传送，照片和文件一次多选，收到后保存或分享。不想安装？扫码打开网页，查看复制记录、发送内容，也能独立收发文件。',
