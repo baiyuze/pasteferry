@@ -1,10 +1,14 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/baiyuze/pasteferry/client-core/internal/lang"
+)
 
 func TestTrayLabels(t *testing.T) {
 	cases := map[string]string{"zh-Hans": "打开 PasteFerry", "zh-Hant-TW": "開啟 PasteFerry", "zh-Hant-HK": "開啟 PasteFerry",
-		"en": "Open PasteFerry", "ja": "PasteFerry を開く"}
+		"en": "Open PasteFerry", "ja": "PasteFerry を開く", "de-DE": "PasteFerry öffnen", "pt-PT": "Abrir PasteFerry", "nl": "Open PasteFerry"}
 	for lang, want := range cases {
 		if open, _ := trayLabels(lang); open != want {
 			t.Errorf("trayLabels(%q) = %q，应为 %q", lang, open, want)
@@ -21,6 +25,16 @@ func TestTrayWebShareLabel(t *testing.T) {
 	for lang, want := range cases {
 		if got := trayWebShareLabel(lang); got != want {
 			t.Errorf("trayWebShareLabel(%q) = %q，应为 %q", lang, got, want)
+		}
+	}
+}
+
+// 每种界面语言都有托盘文字，三项都不空
+func TestTrayTextCoversEveryLanguage(t *testing.T) {
+	for _, l := range lang.Supported {
+		text, ok := trayText[l]
+		if !ok || text[0] == "" || text[1] == "" || text[2] == "" {
+			t.Errorf("托盘缺 %s 的文字：%q", l, text)
 		}
 	}
 }

@@ -167,7 +167,7 @@ func TestOnlyParamSourceCarriesParams(t *testing.T) {
 }
 
 func TestLangCodeAndPackage(t *testing.T) {
-	for in, want := range map[string]string{"zh-Hans": "zh-Hans", "zh": "zh-Hans", "zh-Hant-TW": "zh-Hant-TW", "zh-Hant-HK": "zh-Hant-HK", "ja": "ja", "en": "en", "fr": "other"} {
+	for in, want := range map[string]string{"zh-Hans": "zh-Hans", "zh": "zh-Hans", "zh-Hant-TW": "zh-Hant-TW", "zh-Hant-HK": "zh-Hant-HK", "ja": "ja", "en": "en", "fr": "fr", "pt-PT": "pt-BR", "nl": "other"} {
 		if got := langCode(in); got != want {
 			t.Errorf("%s → %s", in, got)
 		}

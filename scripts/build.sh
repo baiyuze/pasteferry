@@ -112,6 +112,35 @@ localize zh-HK "PasteFerry 會在區域網絡中尋找你的其他電腦，直�
     "隔空貼要讀取你傳給其他電腦的檔案，並儲存它們傳給你的檔案。"
 localize ja "PasteFerry はこのネットワーク上のほかのコンピューターを見つけ、クリップボードを直接同期します。" \
     "PasteFerry は、ほかのコンピューターに送るファイルを読み取り、送られてきたファイルを保存します。"
+# 其他语言（2.11.0 起）。葡萄牙语按巴西的写法，pt 与 pt-BR 各放一份：葡萄牙的系统也用它
+localize ar "يبحث PasteFerry عن أجهزة الكمبيوتر الأخرى لديك على هذه الشبكة ويزامن الحافظة معها مباشرةً." \
+    "يقرأ PasteFerry الملفات التي ترسلها إلى أجهزة الكمبيوتر الأخرى، ويحفظ الملفات التي ترسلها إليك."
+localize de "PasteFerry sucht Ihre anderen Computer in diesem Netzwerk und gleicht die Zwischenablage direkt mit ihnen ab." \
+    "PasteFerry liest die Dateien, die Sie an andere Computer senden, und speichert die Dateien, die diese Ihnen senden."
+localize es "PasteFerry busca tus otras computadoras en esta red y sincroniza el portapapeles directamente con ellas." \
+    "PasteFerry lee los archivos que envías a otras computadoras y guarda los que ellas te envían."
+localize fr "PasteFerry recherche vos autres ordinateurs sur ce réseau et synchronise directement le presse-papiers avec eux." \
+    "PasteFerry lit les fichiers que vous envoyez à vos autres ordinateurs et enregistre ceux qu’ils vous envoient."
+localize id "PasteFerry mencari komputer Anda yang lain di jaringan ini dan menyinkronkan papan klip langsung dengannya." \
+    "PasteFerry membaca file yang Anda kirim ke komputer lain dan menyimpan file yang dikirim kepada Anda."
+localize it "PasteFerry trova gli altri tuoi computer su questa rete e sincronizza direttamente gli appunti con loro." \
+    "PasteFerry legge i file che invii agli altri computer e salva quelli che ti inviano."
+localize ko "PasteFerry가 이 네트워크에서 다른 컴퓨터를 찾아 클립보드를 직접 동기화합니다." \
+    "PasteFerry가 다른 컴퓨터로 보내는 파일을 읽고, 다른 컴퓨터에서 받은 파일을 저장합니다."
+localize pl "PasteFerry wyszukuje Twoje inne komputery w tej sieci i synchronizuje z nimi schowek bezpośrednio." \
+    "PasteFerry odczytuje pliki wysyłane na inne komputery i zapisuje pliki, które one do Ciebie wysyłają."
+localize pt-BR "O PasteFerry procura seus outros computadores nesta rede e sincroniza a área de transferência diretamente com eles." \
+    "O PasteFerry lê os arquivos que você envia para outros computadores e salva os que eles enviam para você."
+localize pt "O PasteFerry procura seus outros computadores nesta rede e sincroniza a área de transferência diretamente com eles." \
+    "O PasteFerry lê os arquivos que você envia para outros computadores e salva os que eles enviam para você."
+localize ru "PasteFerry находит другие ваши компьютеры в этой сети и синхронизирует с ними буфер обмена напрямую." \
+    "PasteFerry читает файлы, которые вы отправляете на другие компьютеры, и сохраняет файлы, которые они отправляют вам."
+localize tr "PasteFerry bu ağdaki diğer bilgisayarlarınızı bulur ve panoyu onlarla doğrudan eşzamanlar." \
+    "PasteFerry, diğer bilgisayarlara gönderdiğiniz dosyaları okur ve size gönderilen dosyaları kaydeder."
+localize uk "PasteFerry знаходить інші ваші комп’ютери в цій мережі й синхронізує з ними буфер обміну напряму." \
+    "PasteFerry читає файли, які ви надсилаєте на інші комп’ютери, і зберігає файли, які вони надсилають вам."
+localize vi "PasteFerry tìm các máy tính khác của bạn trong mạng này và đồng bộ bảng nhớ tạm trực tiếp với chúng." \
+    "PasteFerry đọc các tệp bạn gửi đến máy tính khác và lưu các tệp được gửi đến bạn."
 sign "$APP"
 echo "  ✓ $APP"
 

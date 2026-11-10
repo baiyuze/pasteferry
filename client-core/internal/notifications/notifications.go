@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/baiyuze/pasteferry/client-core/internal/clipboard"
+	"github.com/baiyuze/pasteferry/client-core/internal/lang"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
@@ -336,20 +337,9 @@ var catalog = func() map[string]map[string]string {
 // SystemLanguage 是系统界面语言，如 zh-Hans、en。
 func SystemLanguage() string { return systemLanguage() }
 
-func translate(lang, key string) string {
-	switch {
-	case strings.HasPrefix(lang, "zh-Hant-HK") || strings.HasPrefix(lang, "zh-HK"):
-		lang = "zh-Hant-HK"
-	case strings.HasPrefix(lang, "zh-Hant") || strings.HasPrefix(lang, "zh-TW"):
-		lang = "zh-Hant-TW"
-	case strings.HasPrefix(lang, "zh"):
-		lang = "zh-Hans"
-	case strings.HasPrefix(lang, "ja"):
-		lang = "ja"
-	default:
-		lang = "en"
-	}
-	if value := catalog[lang][key]; value != "" {
+// translate 取通知文案。language 是设置里的语言或系统报的语言代码，对不上任何一种时用英文。
+func translate(language, key string) string {
+	if value := catalog[lang.Match(language)][key]; value != "" {
 		return value
 	}
 	return catalog["en"][key]

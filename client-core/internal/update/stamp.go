@@ -5,9 +5,10 @@ import (
 	"net/url"
 	"os"
 	"runtime"
-	"strings"
 	"sync"
 	"time"
+
+	"github.com/baiyuze/pasteferry/client-core/internal/lang"
 )
 
 // Stamp 记着上次检查更新的日期，生成请求官网服务器时附带的参数。
@@ -166,18 +167,10 @@ func packageKind(t Target) string {
 	return "other"
 }
 
+// langCode 是统计用的界面语言：界面支持的语言之一，其他的都记作 other。
 func langCode(l string) string {
-	switch {
-	case strings.HasPrefix(l, "zh-Hant-HK") || strings.HasPrefix(l, "zh-HK"):
-		return "zh-Hant-HK"
-	case strings.HasPrefix(l, "zh-Hant") || strings.HasPrefix(l, "zh-TW"):
-		return "zh-Hant-TW"
-	case strings.HasPrefix(l, "zh"):
-		return "zh-Hans"
-	case strings.HasPrefix(l, "ja"):
-		return "ja"
-	case strings.HasPrefix(l, "en"):
-		return "en"
+	if code := lang.Match(l); code != "" {
+		return code
 	}
 	return "other"
 }

@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/baiyuze/pasteferry/client-core/internal/lang"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
@@ -75,16 +76,16 @@ func TestNotificationActionsAndClipboardOutcomes(t *testing.T) {
 }
 
 func TestNativeCatalogHasEveryLocaleAndPlaceholder(t *testing.T) {
-	for _, lang := range []string{"en", "zh-Hans", "ja", "zh-Hant-TW", "zh-Hant-HK"} {
+	for _, code := range lang.Supported {
 		for key := range catalog["en"] {
-			if catalog[lang][key] == "" {
-				t.Fatalf("missing %s/%s", lang, key)
+			if catalog[code][key] == "" {
+				t.Fatalf("missing %s/%s", code, key)
 			}
 		}
 		for _, key := range []string{"notifyPendingBody", "notifyReceivingBody", "notifyReadyBody", "notifyReceivedBody", "notifyFailedBody", "notifyClipboardFailedBody"} {
-			text := strings.NewReplacer("{device}", "PC", "{name}", "file.bin", "{size}", "80 MB", "{error}", "offline").Replace(translate(lang, key))
+			text := strings.NewReplacer("{device}", "PC", "{name}", "file.bin", "{size}", "80 MB", "{error}", "offline").Replace(translate(code, key))
 			if strings.ContainsAny(text, "{}") || strings.Contains(text, `\n`) {
-				t.Fatalf("unexpanded %s/%s: %q", lang, key, text)
+				t.Fatalf("unexpanded %s/%s: %q", code, key, text)
 			}
 		}
 	}
