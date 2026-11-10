@@ -111,7 +111,7 @@ With PasteFerry you pair two computers once. After that, copy on one and paste o
 ### And
 
 - Runs in the background, starts at login, recovers from crashes; checks for updates and installs them after you confirm.
-- English, Simplified Chinese, Traditional Chinese (Taiwan and Hong Kong) and Japanese.
+- 18 interface languages: English, Simplified Chinese, Traditional Chinese (Taiwan and Hong Kong), Japanese, Korean, Arabic (right to left), German, French, Spanish, Portuguese (Brazil), Italian, Russian, Ukrainian, Polish, Turkish, Vietnamese and Indonesian.
 
 ## At its core: direct connections
 

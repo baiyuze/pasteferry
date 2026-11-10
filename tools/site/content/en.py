@@ -193,7 +193,7 @@ C = {
         ("Linux app", "x64 and ARM64; .deb (Debian, Ubuntu and similar) or tar.gz (other distributions), about 22 MB; "
                       "needs an X11 desktop, or a Wayland desktop with XWayland (GNOME, KDE and others include it by default); GTK 3"),
         ("Server", 'Not needed with Service or on the same network. To run your own: Linux x86_64/ARM64, macOS, or Windows 10/11 x64.'),
-        ("Languages", "English, Simplified Chinese, Traditional Chinese (Taiwan and Hong Kong) and Japanese; follows the system by default, switchable in Settings"),
+        ("Languages", "18 languages: English, Simplified and Traditional Chinese (Taiwan and Hong Kong), Japanese, Korean, Arabic (right to left), German, French, Spanish, Portuguese (Brazil), Italian, Russian, Ukrainian, Polish, Turkish, Vietnamese and Indonesian; follows the system by default, switchable in Settings"),
         ("Content", "Plain text, rich text, images and screenshots, files, folders; each type can be turned off"),
         ("Transport", "WebRTC data channels, direct first with TURN relay fallback; on the same network, mDNS discovery and connection details over UDP 8788; every uplink probed on multi-uplink networks; files streamed as tar + zstd"),
         ("Encryption and identity", "End-to-end DTLS; Ed25519 device keys; every signaling message signed"),
@@ -949,6 +949,6 @@ C = {
         "End-to-end DTLS encryption with human-verified fingerprints at pairing",
         "Items under 50 MB pushed on copy, larger files pulled on demand",
         "History of the last 3 days, with image previews",
-        "Interface in English, Simplified Chinese, Traditional Chinese and Japanese",
+        "Interface in 18 languages, including Arabic (right to left)",
     ],
 }
