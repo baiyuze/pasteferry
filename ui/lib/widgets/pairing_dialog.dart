@@ -54,7 +54,7 @@ class _PairingDialogState extends State<PairingDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(Insets.xl, Insets.lg, Insets.md, 0),
               child: Row(
                 children: [
                   Expanded(child: Text(l.addDevice, style: context.text.titleMedium)),
@@ -518,7 +518,7 @@ class _PairingConfirmDialogState extends State<PairingConfirmDialog> {
                             Expanded(
                               child: Text(
                                 name,
-                                textAlign: TextAlign.right,
+                                textAlign: TextAlign.end,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: context.text.bodySmall,

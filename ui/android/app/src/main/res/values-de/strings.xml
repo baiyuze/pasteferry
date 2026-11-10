@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">Hintergrundverbindung</string>
+    <string name="channel_sync_desc">Hält PasteFerry verbunden, damit auf Ihrem Computer kopierter Text auf dieses Smartphone gelangt.</string>
+    <string name="notif_online">Verbunden mit %1$s</string>
+    <string name="notif_none">Keine Geräte online</string>
+    <string name="notif_last_text">Zuletzt: Text von %1$s</string>
+    <string name="notif_last_image">Zuletzt: Bild von %1$s</string>
+    <string name="notif_last_file">Zuletzt: Datei von %1$s</string>
+    <string name="share_title">Teilen</string>
+    <string name="save_storage_permission">Erlauben Sie den Speicherzugriff, um Fotos und Dateien zu speichern. Tippen Sie dann erneut auf „Speichern“.</string>
+    <string name="save_permission_pending">Schließen Sie zuerst die laufende Anfrage zur Speicherberechtigung ab.</string>
+    <string name="media_share_failed">Teilen ist für dieses Bild bzw. diese Datei nicht möglich. Speichern Sie es zuerst.</string>
+</resources>

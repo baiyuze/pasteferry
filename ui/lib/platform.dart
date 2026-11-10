@@ -15,7 +15,7 @@ abstract final class Wording {
 
   /// 用在句子中间。中日文里「Mac」后面紧跟汉字，文案里已带好空格
   static String get thisDeviceInText => Platform.isAndroid
-      ? appL10n.mThisPhone
+      ? appL10n.mThisPhoneInText
       : _win
       ? appL10n.thisPcInText
       : appL10n.thisMacInText;

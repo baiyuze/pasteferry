@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">Arka plan bağlantısı</string>
+    <string name="channel_sync_desc">Bilgisayarınızda kopyaladığınız metnin bu telefona ulaşması için PasteFerry bağlantısını açık tutar.</string>
+    <string name="notif_online">Bağlı: %1$s</string>
+    <string name="notif_none">Çevrimiçi cihaz yok</string>
+    <string name="notif_last_text">Son: %1$s cihazından metin</string>
+    <string name="notif_last_image">Son: %1$s cihazından görsel</string>
+    <string name="notif_last_file">Son: %1$s cihazından dosya</string>
+    <string name="share_title">Paylaş</string>
+    <string name="save_storage_permission">Fotoğrafları ve dosyaları kaydetmek için depolama erişimine izin verin. Yeniden denemek için Kaydet düğmesine tekrar dokunun.</string>
+    <string name="save_permission_pending">Lütfen önce mevcut depolama izni isteğini tamamlayın.</string>
+    <string name="media_share_failed">Bu görsel veya dosya için paylaşım açılamadı. Önce kaydetmeyi deneyin.</string>
+</resources>

@@ -89,18 +89,19 @@ class _HistoryPageState extends State<HistoryPage> {
         if (state.records.isNotEmpty || searching)
           Padding(
             padding: const EdgeInsets.fromLTRB(Insets.xl, 0, Insets.xl, Insets.md),
-            child: Row(
+            // 类型筛选在窄窗口里放不下时（文字长的语言）换到搜索框下面
+            child: AdaptiveRow(
+              alignEnd: false,
+              gap: Insets.md,
+              runGap: Insets.sm,
               children: [
-                Expanded(
-                  child: SearchField(
-                    controller: _search,
-                    focusNode: _searchFocus,
-                    hint: l.searchHint,
-                    clearTooltip: l.searchClear,
-                    onChanged: state.search,
-                  ),
+                SearchField(
+                  controller: _search,
+                  focusNode: _searchFocus,
+                  hint: l.searchHint,
+                  clearTooltip: l.searchClear,
+                  onChanged: state.search,
                 ),
-                const SizedBox(width: Insets.md),
                 Segmented<RecordFilter>(
                   value: _filter,
                   segments: [for (final f in RecordFilter.values) (f, f.label(l))],

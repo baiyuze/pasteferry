@@ -642,6 +642,7 @@
   "mTabRecords": "履歴",
   "mTabSend": "送信",
   "mThisPhone": "このスマホ",
+  "mThisPhoneInText": "このスマホ",
   "mThisPhoneName": "このスマホ：{name}",
   "mSendTitle": "パソコンへ送る",
   "mSendHint": "テキストを入力または貼り付け",

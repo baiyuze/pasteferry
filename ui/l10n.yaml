@@ -1,4 +1,4 @@
-# 界面文案的多语言。英文为模板，中文、日文各一份。
+# 界面文案的多语言。英文为模板，其他语言各一份（中文分简体、台湾繁体、香港繁体）。
 # flutter pub get 或 flutter gen-l10n 时生成 lib/l10n/app_localizations*.dart。
 arb-dir: lib/l10n
 template-arb-file: app_en.arb

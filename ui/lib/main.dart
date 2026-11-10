@@ -407,7 +407,7 @@ class _Sidebar extends StatelessWidget {
       width: 200,
       decoration: BoxDecoration(
         color: context.panel(p.sidebar),
-        border: Border(right: BorderSide(color: p.border)),
+        border: BorderDirectional(end: BorderSide(color: p.border)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -536,9 +536,9 @@ class _NavItemState extends State<_NavItem> {
         onExit: (_) => setState(() => _hovered = false),
         child: GestureDetector(
           onTap: widget.onTap,
-          // 像素主题：选中项左边一个一闪一闪的 ▶，像游戏菜单的光标
+          // 像素主题：选中项左边一个一闪一闪的 ▶，像游戏菜单的光标（从右到左时在右边，朝左）
           child: bar
-              ? Stack(clipBehavior: Clip.none, children: [_navBox(context, p, selected, bar), const Positioned(left: -9, top: 10, child: PixelCursor())])
+              ? Stack(clipBehavior: Clip.none, children: [_navBox(context, p, selected, bar), const PositionedDirectional(start: -9, top: 10, child: PixelCursor())])
               : _navBox(context, p, selected, bar),
         ),
       ),
@@ -548,11 +548,11 @@ class _NavItemState extends State<_NavItem> {
   Widget _navBox(BuildContext context, AppPalette p, bool selected, bool bar) {
     return Container(
       height: 30,
-      padding: EdgeInsets.only(left: bar ? 6 : 10, right: 10),
+      padding: EdgeInsetsDirectional.only(start: bar ? 6 : 10, end: 10),
       decoration: bar
           ? BoxDecoration(
               color: p.selection,
-              border: Border(left: BorderSide(color: p.accent, width: 4)),
+              border: BorderDirectional(start: BorderSide(color: p.accent, width: 4)),
             )
           : context.shape.box(
               color: selected
@@ -639,7 +639,7 @@ class _UpdateHint extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(Insets.sm, 0, Insets.sm, Insets.xs),
       child: TextButton.icon(
         style: TextButton.styleFrom(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           foregroundColor: p.accent,
           padding: const EdgeInsets.symmetric(horizontal: 10),
         ),

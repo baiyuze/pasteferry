@@ -109,7 +109,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(Insets.xl, Insets.lg, Insets.md, 0),
               child: Row(
                 children: [
                   Expanded(child: Text(l.feedback, style: context.text.titleMedium)),
@@ -142,9 +142,9 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
                       child: Stack(
                         children: [
                           Positioned.fill(child: _reportView(context)),
-                          Positioned(
+                          PositionedDirectional(
                             top: 4,
-                            right: 4,
+                            end: 4,
                             child: IconAction(icon: AppIcons.arrowClockwise, tooltip: l.diagRefresh, onTap: _load),
                           ),
                         ],
@@ -218,7 +218,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
     }
     return Scrollbar(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(Insets.md, Insets.sm, 36, Insets.sm),
+        padding: const EdgeInsetsDirectional.fromSTEB(Insets.md, Insets.sm, 36, Insets.sm),
         child: SelectableText(
           _report!,
           style: context.text.bodySmall?.copyWith(fontFamily: context.typography.mono, fontSize: 11, height: 1.45, color: context.palette.text),

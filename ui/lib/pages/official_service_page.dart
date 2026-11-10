@@ -86,7 +86,7 @@ class OfficialServicePage extends StatelessWidget {
                 child: GroupBox(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.sm, Insets.sm, Insets.sm),
+                      padding: const EdgeInsetsDirectional.fromSTEB(Insets.lg, Insets.sm, Insets.sm, Insets.sm),
                       child: Row(
                         children: [
                           Expanded(

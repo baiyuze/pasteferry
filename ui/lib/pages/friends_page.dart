@@ -116,7 +116,7 @@ class _FriendsPageState extends State<FriendsPage> {
                             borderRadius: BorderRadius.circular(context.shape.md),
                             border: Border.all(color: p.border),
                           ),
-                          padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.md),
+                          padding: const EdgeInsetsDirectional.fromSTEB(Insets.xl, Insets.lg, Insets.md, Insets.md),
                           child: selected == null
                               ? Center(child: Text(l.friendsPick, style: context.text.bodySmall))
                               : _DropToFriend(

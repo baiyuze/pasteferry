@@ -156,7 +156,7 @@ class _NearbyDialogState extends State<NearbyDialog> with SingleTickerProviderSt
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(Insets.xl, Insets.lg, Insets.md, 0),
               child: Row(
                 children: [
                   Expanded(child: Text(l.nearbyTitle, style: context.text.titleMedium)),

@@ -97,7 +97,7 @@ class FriendsDialog extends StatelessWidget {
       child: SizedBox(
         width: 480,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.lg),
+          padding: const EdgeInsetsDirectional.fromSTEB(Insets.xl, Insets.lg, Insets.md, Insets.lg),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -116,7 +116,7 @@ class FriendsDialog extends StatelessWidget {
               const SizedBox(height: Insets.md),
               if (friends.isEmpty)
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, Insets.xl, Insets.md, Insets.xl),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, Insets.xl, Insets.md, Insets.xl),
                   child: Column(
                     children: [
                       Text(l.friendsEmpty, style: context.text.titleSmall),
@@ -130,7 +130,7 @@ class FriendsDialog extends StatelessWidget {
                   constraints: const BoxConstraints(maxHeight: 420),
                   child: ListView.separated(
                     shrinkWrap: true,
-                    padding: const EdgeInsets.only(right: Insets.md),
+                    padding: const EdgeInsetsDirectional.only(end: Insets.md),
                     itemCount: friends.length,
                     separatorBuilder: (_, _) => ThemedDivider(height: 1, color: p.separator),
                     itemBuilder: (_, i) => _FriendRow(friend: friends[i]),
@@ -372,7 +372,7 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
       child: SizedBox(
         width: 440,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.xl),
+          padding: const EdgeInsetsDirectional.fromSTEB(Insets.xl, Insets.lg, Insets.md, Insets.xl),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -384,7 +384,7 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(right: Insets.md),
+                padding: const EdgeInsetsDirectional.only(end: Insets.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -584,7 +584,7 @@ class _FriendConfirmDialogState extends State<FriendConfirmDialog> {
                 onTap: () => setState(() => _showCode = !_showCode),
                 child: Row(
                   children: [
-                    Icon(_showCode ? AppIcons.chevronDown : AppIcons.chevronRight, size: 14, color: p.textDim),
+                    DirectionalIcon(_showCode ? AppIcons.chevronDown : AppIcons.chevronRight, size: 14, color: p.textDim),
                     const SizedBox(width: Insets.xs),
                     Text(l.friendSafetyCode, style: context.text.bodySmall),
                   ],
@@ -644,7 +644,7 @@ Future<void> showFriendHistory(BuildContext context, Friend f) => showDialog<voi
     child: SizedBox(
       width: 520,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.lg),
+        padding: const EdgeInsetsDirectional.fromSTEB(Insets.xl, Insets.lg, Insets.md, Insets.lg),
         child: FriendDetail(friendId: f.id, inDialog: true),
       ),
     ),
@@ -690,7 +690,7 @@ class FriendDetail extends StatelessWidget {
           )
         : ListView.separated(
             shrinkWrap: inDialog,
-            padding: const EdgeInsets.only(right: Insets.md),
+            padding: const EdgeInsetsDirectional.only(end: Insets.md),
             itemCount: list.length,
             separatorBuilder: (_, _) => ThemedDivider(height: 1, color: p.separator),
             itemBuilder: (_, i) => _HistoryRow(key: ValueKey(list[i].id), transfer: list[i]),
@@ -731,7 +731,7 @@ class FriendDetail extends StatelessWidget {
         ),
         const SizedBox(height: Insets.md),
         Padding(
-          padding: const EdgeInsets.only(right: Insets.md),
+          padding: const EdgeInsetsDirectional.only(end: Insets.md),
           child: Row(
             children: [
               Expanded(child: Text(l.friendAutoAccept, style: context.text.bodyMedium)),

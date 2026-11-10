@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:pasteferry_ui/gen/pasteferry/v1/daemon.pb.dart';
+import 'package:pasteferry_ui/i18n.dart' show ltr;
 import 'package:pasteferry_ui/picker/picker_host.dart';
 import 'package:pasteferry_ui/picker/picker_state.dart';
 import 'package:pasteferry_ui/picker/picker_view.dart';
@@ -16,7 +17,7 @@ const _channel = MethodChannel('pasteferry/picker');
 // 快捷窗口的按键跟着平台走：Mac 上是 ⌘，Windows 与 Linux 上是 Ctrl（序号默认是 ⌥ / Alt 加数字）
 final _mac = Platform.isMacOS;
 final _cmdKey = _mac ? LogicalKeyboardKey.metaLeft : LogicalKeyboardKey.controlLeft;
-final _n1 = _mac ? '⌥1' : 'Alt+1';
+final _n1 = ltr(_mac ? '⌥1' : 'Alt+1');
 
 /// 按住 [modifier]（默认 ⌥ / Alt）再按数字：选那一行
 Future<void> _pressIndex(WidgetTester tester, LogicalKeyboardKey digit,
@@ -130,7 +131,7 @@ void main() {
   testWidgets('前 9 条标序号，按 ⌥ 或 Alt 加数字粘贴那一条', (tester) async {
     final s = await open(tester);
     expect(find.text(_n1), findsOneWidget);
-    expect(find.text(_mac ? '⌥4' : 'Alt+4'), findsOneWidget);
+    expect(find.text(ltr(_mac ? '⌥4' : 'Alt+4')), findsOneWidget);
     // 「收藏」既是页签，也是底栏 ⌘D 的说明
     for (final t in ['全部', '文本', '链接', '图片', '文件', '收藏']) {
       expect(find.text(t), findsWidgets, reason: t);
@@ -146,7 +147,7 @@ void main() {
     final m = _mac ? 'meta' : 'ctrl';
     final key = _mac ? LogicalKeyboardKey.metaLeft : LogicalKeyboardKey.controlLeft;
     final s = await open(tester, config: Config(language: 'zh-Hans', quickPasteIndexModifier: m));
-    expect(find.text(_mac ? '⌘1' : 'Ctrl+1'), findsOneWidget);
+    expect(find.text(ltr(_mac ? '⌘1' : 'Ctrl+1')), findsOneWidget);
     await _pressIndex(tester, LogicalKeyboardKey.digit2);
     await tester.pump();
     expect(s.applied, isEmpty);

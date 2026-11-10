@@ -52,7 +52,7 @@ class QuickPasteSection extends StatelessWidget {
             SettingRow(
               title: l.quickPasteShortcut,
               description: l.quickPastePortalKey,
-              child: _KeyCap(text: qp!.hotkey.isEmpty ? '—' : (Hotkey.parse(qp.hotkey)?.display() ?? qp.hotkey)),
+              child: _KeyCap(text: qp!.hotkey.isEmpty ? '—' : ltr(Hotkey.parse(qp.hotkey)?.display() ?? qp.hotkey)),
             )
           else if (enabled)
             _ShortcutRow(
@@ -77,7 +77,7 @@ class QuickPasteSection extends StatelessWidget {
               description: l.quickPasteIndexKeyDesc,
               child: Segmented<String>(
                 value: IndexModifier.of(config.quickPasteIndexModifier),
-                segments: [for (final m in IndexModifier.choices) (m, '${IndexModifier.label(m)}1–9')],
+                segments: [for (final m in IndexModifier.choices) (m, ltr('${IndexModifier.label(m)}1–9'))],
                 onChanged: (m) => onUpdate(config.deepCopy()..quickPasteIndexModifier = m),
               ),
             ),
@@ -108,8 +108,8 @@ class QuickPasteSection extends StatelessWidget {
     if (err.isEmpty || qp?.running != true) return null;
     // 快捷窗口报的是它实际在用的那个；设置刚改过、它还没重新注册时不显示旧的错误
     if (qp!.hotkey.isNotEmpty && qp.hotkey != hotkey.canonical) return null;
-    if (err == 'in_use') return l.quickPasteInUse(hotkey.display());
-    return l.quickPasteHotkeyFailed(hotkey.display(), err);
+    if (err == 'in_use') return l.quickPasteInUse(ltr(hotkey.display()));
+    return l.quickPasteHotkeyFailed(ltr(hotkey.display()), err);
   }
 }
 
@@ -233,7 +233,7 @@ class _ShortcutRowState extends State<_ShortcutRow> {
               child: GestureDetector(
                 onTap: _recording ? null : _start,
                 child: _KeyCap(
-                  text: _recording ? '…' : widget.hotkey.display(),
+                  text: _recording ? '…' : ltr(widget.hotkey.display()),
                   active: _recording || message != null,
                 ),
               ),
@@ -268,7 +268,7 @@ class _SystemShortcutRow extends StatelessWidget {
         onPressed: () async {
           try {
             await GnomeShortcut.install(hotkey);
-            if (context.mounted) showToast(context, l.quickPasteShortcutAdded(hotkey.display()));
+            if (context.mounted) showToast(context, l.quickPasteShortcutAdded(ltr(hotkey.display())));
           } catch (e) {
             if (context.mounted) showToast(context, AppState.describeError(e), error: true);
           }

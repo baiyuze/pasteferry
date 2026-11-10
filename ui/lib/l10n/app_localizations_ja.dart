@@ -2249,6 +2249,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mThisPhone => 'このスマホ';
 
   @override
+  String get mThisPhoneInText => 'このスマホ';
+
+  @override
   String mThisPhoneName(String name) {
     return 'このスマホ：$name';
   }

@@ -73,18 +73,19 @@ class _FavoritesPageState extends State<FavoritesPage> {
         if (all.isNotEmpty || searching)
           Padding(
             padding: const EdgeInsets.fromLTRB(Insets.xl, 0, Insets.xl, Insets.md),
-            child: Row(
+            // 类型筛选在窄窗口里放不下时（文字长的语言）换到搜索框下面
+            child: AdaptiveRow(
+              alignEnd: false,
+              gap: Insets.md,
+              runGap: Insets.sm,
               children: [
-                Expanded(
-                  child: SearchField(
-                    controller: _search,
-                    focusNode: _searchFocus,
-                    hint: l.favoritesSearchHint,
-                    clearTooltip: l.searchClear,
-                    onChanged: state.searchFavorites,
-                  ),
+                SearchField(
+                  controller: _search,
+                  focusNode: _searchFocus,
+                  hint: l.favoritesSearchHint,
+                  clearTooltip: l.searchClear,
+                  onChanged: state.searchFavorites,
                 ),
-                const SizedBox(width: Insets.md),
                 Segmented<RecordFilter>(
                   value: _filter,
                   segments: [for (final f in RecordFilter.values) (f, f.label(l))],

@@ -95,9 +95,24 @@ AppState _demo(String language, {LinkState link = LinkState.online, ServiceState
 void main() {
   test('按系统的语言偏好取第一个支持的，都不支持时用英文', () {
     expect(resolveLocale(const [Locale('ja', 'JP')]), const Locale('ja'));
-    expect(resolveLocale(const [Locale('fr'), Locale('ja')]), const Locale('ja'));
-    expect(resolveLocale(const [Locale('fr')]), const Locale('en'));
+    expect(resolveLocale(const [Locale('nl'), Locale('ja')]), const Locale('ja'));
+    expect(resolveLocale(const [Locale('nl')]), const Locale('en'));
     expect(resolveLocale(null), const Locale('en'));
+    expect(resolveLocale(const [Locale('fr', 'CA')]), const Locale('fr'));
+    expect(resolveLocale(const [Locale('ar', 'EG')]), const Locale('ar'));
+    // 葡萄牙语只有一份（巴西的写法），葡萄牙的系统也用它
+    expect(resolveLocale(const [Locale('pt', 'BR')]), const Locale('pt'));
+    expect(resolveLocale(const [Locale('pt', 'PT')]), const Locale('pt'));
+  });
+
+  test('每种语言都有文案，设置里的写法与界面语言来回一致', () {
+    expect(languageNames.length, supportedLocales.length);
+    for (final setting in languageNames.keys) {
+      final locale = localeFromSetting(setting);
+      expect(locale, isNotNull, reason: setting);
+      expect(settingFromLocale(locale!), setting);
+      expect(lookupAppLocalizations(locale).navHistory, isNotEmpty);
+    }
   });
 
   // macOS 报 zh-Hant-TW，Windows 报 zh-TW，Linux 报 zh_TW；香港、澳门用香港的繁体
@@ -124,6 +139,22 @@ void main() {
     expect(localeFromSetting('zh-Hant-HK'), zhHantHK);
     expect(localeFromSetting('en'), const Locale('en'));
     expect(localeFromSetting('ja'), const Locale('ja'));
+    expect(localeFromSetting('ar'), const Locale('ar'));
+    expect(localeFromSetting('pt-BR'), const Locale('pt'));
+    // 不认识的（拼错的、以后版本新增的）当作跟随系统
+    expect(localeFromSetting('pt'), isNull);
+    expect(localeFromSetting('nl'), isNull);
+  });
+
+  testWidgets('阿拉伯语界面从右到左', (tester) async {
+    await tester.pumpWidget(PasteFerryApp(state: _demo('ar')));
+    await tester.pump();
+    final shell = tester.element(find.byType(Shell));
+    expect(Directionality.of(shell), TextDirection.rtl);
+    expect(find.text(lookupAppLocalizations(const Locale('ar')).navHistory), findsWidgets);
+    // 侧边栏在右边
+    final nav = tester.getCenter(find.text(lookupAppLocalizations(const Locale('ar')).navSettings).first);
+    expect(nav.dx, greaterThan(tester.view.physicalSize.width / tester.view.devicePixelRatio / 2));
   });
 
   testWidgets('设置里选的语言优先于系统语言', (tester) async {
@@ -162,8 +193,9 @@ void main() {
     expect(find.textContaining('图片'), findsNothing);
   });
 
-  // 英文、日文通常比中文长：在最小窗口尺寸下把每一页、每个对话框都打开一遍，确认没有文字溢出
-  for (final language in ['en', 'ja', 'zh-Hans', 'zh-Hant-TW', 'zh-Hant-HK']) {
+  // 英文、德文、俄文等通常比中文长：在最小窗口尺寸下把每一页、每个对话框都打开一遍，确认没有文字溢出。
+  // 阿拉伯语顺带检查从右到左的布局
+  for (final language in languageNames.keys) {
     group('最小窗口下的 $language 界面', () {
       setUp(() {
         final view = TestWidgetsFlutterBinding.instance.platformDispatcher.views.first;

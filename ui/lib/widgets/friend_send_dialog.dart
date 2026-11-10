@@ -162,7 +162,7 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
           child: SizedBox(
             width: 540,
             child: SingleChildScrollView(child: Padding(
-              padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.xl),
+              padding: const EdgeInsetsDirectional.fromSTEB(Insets.xl, Insets.lg, Insets.md, Insets.xl),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -190,7 +190,7 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: Insets.md),
+                    padding: const EdgeInsetsDirectional.only(end: Insets.md),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -291,7 +291,7 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
                             ),
                             if (_staged.isNotEmpty)
                               Padding(
-                                padding: const EdgeInsets.only(right: Insets.md),
+                                padding: const EdgeInsetsDirectional.only(end: Insets.md),
                                 child: Text(
                                   l.sendItemsSummary('${_staged.length}', humanBytes(total)),
                                   style: context.text.bodySmall,

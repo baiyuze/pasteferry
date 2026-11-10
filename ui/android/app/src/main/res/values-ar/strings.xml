@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">الاتصال في الخلفية</string>
+    <string name="channel_sync_desc">يبقي PasteFerry متصلًا حتى يصل النص المنسوخ على الكمبيوتر إلى هذا الهاتف.</string>
+    <string name="notif_online">متصل بـ %1$s</string>
+    <string name="notif_none">لا توجد أجهزة متصلة</string>
+    <string name="notif_last_text">الأحدث: نص من %1$s</string>
+    <string name="notif_last_image">الأحدث: صورة من %1$s</string>
+    <string name="notif_last_file">الأحدث: ملف من %1$s</string>
+    <string name="share_title">مشاركة</string>
+    <string name="save_storage_permission">اسمح بالوصول إلى التخزين لحفظ الصور والملفات. انقر على «حفظ» مرة أخرى لإعادة المحاولة.</string>
+    <string name="save_permission_pending">يرجى إنهاء طلب إذن التخزين الحالي أولًا.</string>
+    <string name="media_share_failed">تعذر فتح المشاركة لهذه الصورة أو الملف. حاول حفظه أولًا.</string>
+</resources>

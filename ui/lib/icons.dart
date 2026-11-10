@@ -54,6 +54,7 @@ abstract final class AppIcons {
   static IconData get docOnClipboard =>
       _pick(CupertinoIcons.doc_on_clipboard, FluentIcons.clipboard_paste_24_regular, PixelIcons.clipboardNote);
   static IconData get doc => _pick(CupertinoIcons.doc, FluentIcons.document_24_regular, PixelIcons.file);
+  /// 左右箭头是「返回」「前进」的意思，从右到左的语言里要镜像：用 [DirectionalIcon] 画
   static IconData get chevronLeft => _pick(CupertinoIcons.chevron_left, FluentIcons.chevron_left_24_regular, PixelIcons.chevronLeft);
   static IconData get chevronRight => _pick(CupertinoIcons.chevron_right, FluentIcons.chevron_right_24_regular, PixelIcons.chevronRight);
   static IconData get chevronDown => _pick(CupertinoIcons.chevron_down, FluentIcons.chevron_down_24_regular, PixelIcons.chevronDown);
@@ -150,4 +151,20 @@ abstract final class PixelIcons {
   static const users = IconData(0xede1, fontFamily: _family);
   static const warningDiamond = IconData(0xedf6, fontFamily: _family);
   static const xSolid = IconData(0xee05, fontFamily: _family);
+}
+
+/// 有方向的图标（「返回」「前进」的箭头）：从右到左的语言里左右镜像。
+/// 不用 IconData.matchTextDirection：那要另造非常量的 IconData，发布构建时图标字体就没法裁剪了。
+class DirectionalIcon extends StatelessWidget {
+  const DirectionalIcon(this.icon, {super.key, this.size, this.color});
+
+  final IconData icon;
+  final double? size;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) => Transform.flip(
+        flipX: Directionality.of(context) == TextDirection.rtl,
+        child: Icon(icon, size: size, color: color),
+      );
 }

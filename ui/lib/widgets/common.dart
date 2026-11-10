@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import '../pixel_theme.dart';
@@ -35,27 +36,138 @@ class PageHeader extends StatelessWidget {
     return Padding(
       // 顶部留出 macOS 红绿灯所在的标题栏高度；二级页的返回链接占掉其中一部分
       padding: EdgeInsets.fromLTRB(Insets.xl, back ? 18 : 44, Insets.xl, Insets.lg),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      child: AdaptiveRow(
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (back) _BackLink(label: backLabel ?? '', onTap: onBack!),
-                Text(title, style: context.text.headlineSmall),
-                if (subtitle != null) ...[
-                  const SizedBox(height: 2),
-                  Text(subtitle!, style: context.text.bodySmall),
-                ],
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (back) _BackLink(label: backLabel ?? '', onTap: onBack!),
+              Text(title, style: context.text.headlineSmall),
+              if (subtitle != null) ...[
+                const SizedBox(height: 2),
+                Text(subtitle!, style: context.text.bodySmall),
               ],
-            ),
+            ],
           ),
-          for (final a in actions) ...[const SizedBox(width: Insets.sm), a],
+          Wrap(spacing: Insets.sm, runSpacing: Insets.sm, children: actions),
         ],
       ),
     );
   }
+}
+
+/// 一行里的两部分：前面的（标题、搜索框）占去剩下的宽度，后面的（按钮、筛选、开关）按自身宽度放在行尾。
+/// 放得下时与 Row 一样；德文、法文这类文字长的语言在窄窗口里放不下（前面的不到 [minLead] 宽）时，
+/// 后面的换到下一行行首。从右到左的语言左右镜像。
+class AdaptiveRow extends MultiChildRenderObjectWidget {
+  const AdaptiveRow({
+    super.key,
+    this.minLead = 180,
+    this.gap = Insets.sm,
+    this.runGap = Insets.md,
+    this.alignEnd = true,
+    required super.children,
+  }) : assert(children.length == 2);
+
+  /// 前面的部分至少留这么宽，再窄就换行
+  final double minLead;
+
+  /// 同一行时两部分之间的距离；换行后上下之间的距离
+  final double gap, runGap;
+
+  /// 同一行时两部分底部对齐（页头），否则垂直居中（设置项）
+  final bool alignEnd;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) => RenderAdaptiveRow(this, Directionality.of(context));
+
+  @override
+  void updateRenderObject(BuildContext context, RenderAdaptiveRow renderObject) =>
+      renderObject.update(this, Directionality.of(context));
+}
+
+class _AdaptiveRowParentData extends ContainerBoxParentData<RenderBox> {}
+
+class RenderAdaptiveRow extends RenderBox
+    with
+        ContainerRenderObjectMixin<RenderBox, _AdaptiveRowParentData>,
+        RenderBoxContainerDefaultsMixin<RenderBox, _AdaptiveRowParentData> {
+  RenderAdaptiveRow(AdaptiveRow w, this._textDirection)
+      : _minLead = w.minLead,
+        _gap = w.gap,
+        _runGap = w.runGap,
+        _alignEnd = w.alignEnd;
+
+  double _minLead, _gap, _runGap;
+  bool _alignEnd;
+  TextDirection _textDirection;
+
+  void update(AdaptiveRow w, TextDirection textDirection) {
+    if (w.minLead == _minLead && w.gap == _gap && w.runGap == _runGap && w.alignEnd == _alignEnd &&
+        textDirection == _textDirection) {
+      return;
+    }
+    _minLead = w.minLead;
+    _gap = w.gap;
+    _runGap = w.runGap;
+    _alignEnd = w.alignEnd;
+    _textDirection = textDirection;
+    markNeedsLayout();
+  }
+
+  @override
+  void setupParentData(RenderBox child) {
+    if (child.parentData is! _AdaptiveRowParentData) child.parentData = _AdaptiveRowParentData();
+  }
+
+  /// 按 [layout] 排出两个孩子的大小与位置，返回整体大小。dry 时只量不排
+  Size _arrange(BoxConstraints constraints, {required bool dry}) {
+    final lead = firstChild!;
+    final trailing = childAfter(lead)!;
+    final width = constraints.maxWidth;
+    Size measure(RenderBox child, BoxConstraints c) {
+      if (dry) return child.getDryLayout(c);
+      child.layout(c, parentUsesSize: true);
+      return child.size;
+    }
+
+    final t = measure(trailing, BoxConstraints(maxWidth: width));
+    final rtl = _textDirection == TextDirection.rtl;
+    final sideBySide = t.width == 0 || width - t.width - _gap >= _minLead;
+    final leadWidth = sideBySide && t.width > 0 ? width - t.width - _gap : width;
+    final l = measure(lead, BoxConstraints.tightFor(width: leadWidth));
+    final Size size;
+    Offset leadAt, trailingAt;
+    if (sideBySide) {
+      size = constraints.constrain(Size(width, l.height > t.height ? l.height : t.height));
+      final height = size.height; // 父级要求的最小高度可能比两部分都高
+      double y(double h) => _alignEnd ? height - h : (height - h) / 2;
+      leadAt = Offset(rtl ? width - l.width : 0, y(l.height));
+      trailingAt = Offset(rtl ? 0 : width - t.width, y(t.height));
+    } else {
+      size = constraints.constrain(Size(width, l.height + _runGap + t.height));
+      leadAt = Offset.zero;
+      trailingAt = Offset(rtl ? width - t.width : 0, l.height + _runGap);
+    }
+    if (!dry) {
+      (lead.parentData! as _AdaptiveRowParentData).offset = leadAt;
+      (trailing.parentData! as _AdaptiveRowParentData).offset = trailingAt;
+    }
+    return size;
+  }
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) => _arrange(constraints, dry: true);
+
+  @override
+  void performLayout() => size = _arrange(constraints, dry: false);
+
+  @override
+  void paint(PaintingContext context, Offset offset) => defaultPaint(context, offset);
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) =>
+      defaultHitTestChildren(result, position: position);
 }
 
 class _BackLink extends StatelessWidget {
@@ -79,7 +191,7 @@ class _BackLink extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(AppIcons.chevronLeft, size: 13, color: color),
+                DirectionalIcon(AppIcons.chevronLeft, size: 13, color: color),
                 const SizedBox(width: 2),
                 Text(label, style: context.text.bodyMedium?.copyWith(color: color)),
               ],
@@ -134,7 +246,7 @@ class GroupSection extends StatelessWidget {
         children: [
           if (title.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.only(left: 2, bottom: Insets.sm),
+              padding: const EdgeInsetsDirectional.only(start: 2, bottom: Insets.sm),
               // 像素主题：像游戏菜单的小标题，前面一个强调色小方块，字用次要色
               child: context.shape.pixel
                   ? Row(children: [
@@ -147,7 +259,7 @@ class GroupSection extends StatelessWidget {
           child,
           if (footnote != null)
             Padding(
-              padding: const EdgeInsets.only(left: 2, top: Insets.sm, right: Insets.xl),
+              padding: const EdgeInsetsDirectional.only(start: 2, top: Insets.sm, end: Insets.xl),
               child: Text(footnote!, style: context.text.bodySmall),
             ),
         ],
@@ -173,22 +285,24 @@ class SettingRow extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 48),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: 10),
-        child: Row(
+        // 右边的控件放不下时（文字长的语言、窄窗口）换到标题下面
+        child: AdaptiveRow(
+          minLead: 160,
+          gap: Insets.lg,
+          runGap: Insets.sm,
+          alignEnd: false,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(title, style: context.text.labelLarge),
-                  if (description != null) ...[
-                    const SizedBox(height: 2),
-                    Text(description!, style: context.text.bodySmall?.copyWith(color: descriptionColor)),
-                  ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(title, style: context.text.labelLarge),
+                if (description != null) ...[
+                  const SizedBox(height: 2),
+                  Text(description!, style: context.text.bodySmall?.copyWith(color: descriptionColor)),
                 ],
-              ),
+              ],
             ),
-            const SizedBox(width: Insets.lg),
             child,
           ],
         ),
@@ -238,7 +352,7 @@ class _PixelSwitch extends StatelessWidget {
             width: 36,
             height: 20,
             padding: const EdgeInsets.all(4),
-            alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+            alignment: value ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
             decoration: s.box(color: value ? p.accent : p.fill, border: p.borderStrong, bevel: (p.bevelDark, p.bevelLight)),
             child: Container(
               width: 12,
@@ -268,6 +382,15 @@ class Segmented<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    // 文字长的语言在窄窗口里整排放不下时，整体等比缩小一点，不溢出
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: AlignmentDirectional.centerStart,
+      child: _track(context, p),
+    );
+  }
+
+  Widget _track(BuildContext context, AppPalette p) {
     return Container(
       padding: const EdgeInsets.all(2),
       // 像素主题：凹下去的槽，选中的一段是凸起的按键
@@ -516,7 +639,7 @@ class Notice extends StatelessWidget {
     final p = context.palette;
     final icon = this.icon ?? AppIcons.exclamationmarkCircle;
     return Container(
-      padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.md, Insets.md),
+      padding: const EdgeInsetsDirectional.fromSTEB(Insets.lg, Insets.md, Insets.md, Insets.md),
       decoration: context.shape.box(color: context.panel(p.surface), border: p.border),
       child: Row(
         children: [
@@ -792,7 +915,7 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
                   maxWidth: widget.top ? 320 : 360,
                 ),
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(
+                  padding: EdgeInsetsDirectional.fromSTEB(
                     16,
                     widget.top ? 10 : 14,
                     widget.actionLabel == null ? 16 : 8,

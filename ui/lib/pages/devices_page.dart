@@ -125,7 +125,7 @@ class _DeviceRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
+      padding: const EdgeInsetsDirectional.fromSTEB(
         Insets.lg,
         Insets.md,
         Insets.sm,
@@ -186,7 +186,7 @@ class _DeviceRow extends StatelessWidget {
           ],
           if (isSelf)
             Padding(
-              padding: const EdgeInsets.only(right: Insets.sm),
+              padding: const EdgeInsetsDirectional.only(end: Insets.sm),
               child: Text(
                 context.l10n.thisDeviceShort,
                 style: context.text.bodySmall,

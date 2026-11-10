@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">Kết nối nền</string>
+    <string name="channel_sync_desc">Giữ PasteFerry luôn kết nối để văn bản sao chép trên máy tính được chuyển tới điện thoại này.</string>
+    <string name="notif_online">Đã kết nối với %1$s</string>
+    <string name="notif_none">Không có thiết bị nào trực tuyến</string>
+    <string name="notif_last_text">Mới nhất: văn bản từ %1$s</string>
+    <string name="notif_last_image">Mới nhất: hình ảnh từ %1$s</string>
+    <string name="notif_last_file">Mới nhất: tệp từ %1$s</string>
+    <string name="share_title">Chia sẻ</string>
+    <string name="save_storage_permission">Hãy cho phép truy cập bộ nhớ để lưu ảnh và tệp. Nhấn Lưu lần nữa để thử lại.</string>
+    <string name="save_permission_pending">Vui lòng hoàn tất yêu cầu quyền truy cập bộ nhớ hiện tại trước.</string>
+    <string name="media_share_failed">Không thể mở chia sẻ cho hình ảnh hoặc tệp này. Hãy thử lưu trước.</string>
+</resources>

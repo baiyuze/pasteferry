@@ -2223,6 +2223,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mThisPhone => '这台手机';
 
   @override
+  String get mThisPhoneInText => '这台手机';
+
+  @override
   String mThisPhoneName(String name) {
     return '这台手机：$name';
   }
@@ -4896,6 +4899,9 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get mThisPhone => '這部手機';
 
   @override
+  String get mThisPhoneInText => '這部手機';
+
+  @override
   String mThisPhoneName(String name) {
     return '這部手機：$name';
   }
@@ -7567,6 +7573,9 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get mThisPhone => '這支手機';
+
+  @override
+  String get mThisPhoneInText => '這支手機';
 
   @override
   String mThisPhoneName(String name) {

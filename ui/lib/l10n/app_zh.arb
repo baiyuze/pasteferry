@@ -642,6 +642,7 @@
   "mTabRecords": "记录",
   "mTabSend": "发送",
   "mThisPhone": "这台手机",
+  "mThisPhoneInText": "这台手机",
   "mThisPhoneName": "这台手机：{name}",
   "mSendTitle": "发给电脑",
   "mSendHint": "输入或粘贴文字",

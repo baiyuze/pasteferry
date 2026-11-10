@@ -186,14 +186,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: _Dropdown<String>(
                   value: cfg.language,
                   // 语言名用各自的写法，选错了语言的人也认得出自己的
-                  items: [
-                    MapEntry('', l.languageSystem),
-                    const MapEntry('zh-Hans', '简体中文'),
-                    const MapEntry('zh-Hant-TW', '繁體中文（台灣）'),
-                    const MapEntry('zh-Hant-HK', '繁體中文（香港）'),
-                    const MapEntry('en', 'English'),
-                    const MapEntry('ja', '日本語'),
-                  ],
+                  items: [MapEntry('', l.languageSystem), ...languageNames.entries],
                   onChanged: (v) => _update(state, cfg..language = v),
                 ),
               ),
@@ -828,7 +821,7 @@ class _Dropdown<T> extends StatelessWidget {
           PopupMenuItem(value: e.key, height: 32, child: Text(e.value)),
       ],
       child: Container(
-        padding: const EdgeInsets.fromLTRB(10, 5, 8, 5),
+        padding: const EdgeInsetsDirectional.fromSTEB(10, 5, 8, 5),
         decoration: BoxDecoration(
           color: p.surface,
           borderRadius: BorderRadius.circular(context.shape.sm),
@@ -1009,7 +1002,7 @@ class _CategoryRow extends StatelessWidget {
                   trailing!,
                 ],
                 const SizedBox(width: Insets.sm),
-                Icon(AppIcons.chevronRight, size: 13, color: p.textFaint),
+                DirectionalIcon(AppIcons.chevronRight, size: 13, color: p.textFaint),
               ],
             ),
           ),

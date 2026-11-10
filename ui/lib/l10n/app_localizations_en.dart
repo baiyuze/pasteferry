@@ -2422,6 +2422,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mThisPhone => 'This phone';
 
   @override
+  String get mThisPhoneInText => 'this phone';
+
+  @override
   String mThisPhoneName(String name) {
     return 'This phone: $name';
   }

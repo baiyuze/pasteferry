@@ -90,16 +90,25 @@ class _RecordHoverState extends State<RecordHover> {
     final below = screen.height - (top.dy + box.size.height) >= estimatedHeight + margin ||
         top.dy < screen.height / 2;
     final width = (screen.width - margin * 2).clamp(200.0, 460.0);
-    // 左边和这一行的文字对齐（让开类型图标），右边不出窗口
-    final dx = math.min(math.max(32.0, margin - top.dx), screen.width - margin - width - top.dx);
+    // 开始一边和这一行的文字对齐（让开类型图标），另一边不出窗口。从右到左时反过来，按右边对齐
+    final rtl = Directionality.of(context) == TextDirection.rtl;
+    final double dx;
+    if (rtl) {
+      final right = top.dx + box.size.width;
+      dx = math.max(math.min(-32.0, screen.width - margin - right), margin + width - right);
+    } else {
+      dx = math.min(math.max(32.0, margin - top.dx), screen.width - margin - width - top.dx);
+    }
+    final targetEdge = below ? (rtl ? Alignment.bottomRight : Alignment.bottomLeft) : (rtl ? Alignment.topRight : Alignment.topLeft);
+    final followerEdge = below ? (rtl ? Alignment.topRight : Alignment.topLeft) : (rtl ? Alignment.bottomRight : Alignment.bottomLeft);
     return CompositedTransformFollower(
       link: _link,
       showWhenUnlinked: false,
-      targetAnchor: below ? Alignment.bottomLeft : Alignment.topLeft,
-      followerAnchor: below ? Alignment.topLeft : Alignment.bottomLeft,
+      targetAnchor: targetEdge,
+      followerAnchor: followerEdge,
       offset: Offset(dx, below ? 2 : -2),
       child: Align(
-        alignment: below ? Alignment.topLeft : Alignment.bottomLeft,
+        alignment: followerEdge,
         child: IgnorePointer(
           child: ConstrainedBox(
             constraints: BoxConstraints(

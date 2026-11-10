@@ -136,7 +136,7 @@ class _RecordRow extends StatelessWidget {
       onTap: () => showRecordSheet(context, r),
       onLongPress: () => confirmDelete(context, r),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.sm, Insets.md),
+        padding: const EdgeInsetsDirectional.fromSTEB(Insets.lg, Insets.md, Insets.sm, Insets.md),
         child: Row(
           children: [
             Align(alignment: Alignment.topCenter, child: RecordThumb(record: r)),
@@ -192,8 +192,8 @@ class _RecordRow extends StatelessWidget {
             const SizedBox(width: Insets.xs),
             if (media)
               Padding(
-                padding: const EdgeInsets.only(right: Insets.xs),
-                child: Icon(AppIcons.chevronRight, size: 20, color: p.textFaint),
+                padding: const EdgeInsetsDirectional.only(end: Insets.xs),
+                child: DirectionalIcon(AppIcons.chevronRight, size: 20, color: p.textFaint),
               )
             else
               TextButton(

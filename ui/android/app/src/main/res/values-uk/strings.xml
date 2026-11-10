@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">Фонове з’єднання</string>
+    <string name="channel_sync_desc">Підтримує з’єднання PasteFerry, щоб текст, скопійований на комп’ютері, надходив на цей телефон.</string>
+    <string name="notif_online">Підключено до %1$s</string>
+    <string name="notif_none">Немає пристроїв у мережі</string>
+    <string name="notif_last_text">Останнє: текст від %1$s</string>
+    <string name="notif_last_image">Останнє: зображення від %1$s</string>
+    <string name="notif_last_file">Останнє: файл від %1$s</string>
+    <string name="share_title">Поділитися</string>
+    <string name="save_storage_permission">Дозвольте доступ до пам’яті, щоб зберігати фото й файли. Потім знову натисніть «Зберегти».</string>
+    <string name="save_permission_pending">Спершу завершіть поточний запит дозволу на доступ до пам’яті.</string>
+    <string name="media_share_failed">Не вдалося відкрити меню «Поділитися» для цього зображення або файлу. Спершу спробуйте зберегти.</string>
+</resources>

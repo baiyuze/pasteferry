@@ -547,7 +547,12 @@ class _PixelCursorState extends State<PixelCursor> with SingleTickerProviderStat
       builder: (_, f, _) => SizedBox(
         width: 6,
         height: 10,
-        child: f.isOdd ? null : CustomPaint(painter: _ArrowPainter(color)),
+        child: f.isOdd
+            ? null
+            : Transform.flip(
+                flipX: Directionality.of(context) == TextDirection.rtl,
+                child: CustomPaint(painter: _ArrowPainter(color)),
+              ),
       ),
     );
   }

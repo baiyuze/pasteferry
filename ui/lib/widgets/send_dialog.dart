@@ -270,7 +270,7 @@ class _SendDialogState extends State<SendDialog> {
       child: SizedBox(
         width: 540,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(Insets.xl, Insets.lg, Insets.md, Insets.xl),
+          padding: const EdgeInsetsDirectional.fromSTEB(Insets.xl, Insets.lg, Insets.md, Insets.xl),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -283,7 +283,7 @@ class _SendDialogState extends State<SendDialog> {
               ),
               Text(route, style: context.text.bodySmall),
               Padding(
-                padding: const EdgeInsets.only(right: Insets.md),
+                padding: const EdgeInsetsDirectional.only(end: Insets.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -452,7 +452,7 @@ class TransferBatchRow extends StatelessWidget {
           ),
           if (canCancelTransfer(t))
             Padding(
-              padding: const EdgeInsets.only(left: Insets.sm),
+              padding: const EdgeInsetsDirectional.only(start: Insets.sm),
               child: TransferCancelButton(key: ValueKey(t.id), transfer: t),
             ),
         ],

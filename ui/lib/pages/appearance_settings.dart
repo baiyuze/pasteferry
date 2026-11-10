@@ -168,7 +168,7 @@ class _SceneSection extends StatelessWidget {
           children: [
             if (bytes != null)
               Padding(
-                padding: const EdgeInsets.only(right: Insets.md),
+                padding: const EdgeInsetsDirectional.only(end: Insets.md),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(context.shape.pixel ? 0 : context.shape.sm),
                   child: Image.memory(bytes, width: 64, height: 40, fit: BoxFit.cover, cacheWidth: 128, gaplessPlayback: true),
@@ -272,7 +272,7 @@ class _BackgroundSection extends StatelessWidget {
               children: [
                 if (thumb != null)
                   Padding(
-                    padding: const EdgeInsets.only(right: Insets.md),
+                    padding: const EdgeInsetsDirectional.only(end: Insets.md),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(context.shape.pixel ? 0 : context.shape.sm),
                       child: Image.memory(
@@ -615,8 +615,8 @@ class ThemePreview extends StatelessWidget {
                           Container(
                             height: 10,
                             decoration: s.box(color: p.selection, radius: s.sm),
-                            padding: const EdgeInsets.only(left: 3),
-                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsetsDirectional.only(start: 3),
+                            alignment: AlignmentDirectional.centerStart,
                             child: line(width / 11, p.accent),
                           ),
                           const SizedBox(height: 6),
@@ -648,7 +648,7 @@ class ThemePreview extends StatelessWidget {
                                     line(width / 4.4, p.textDim),
                                     const Spacer(),
                                     Align(
-                                      alignment: Alignment.bottomRight,
+                                      alignment: AlignmentDirectional.bottomEnd,
                                       child: Container(
                                         width: 34,
                                         height: 12,

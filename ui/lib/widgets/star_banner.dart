@@ -75,7 +75,7 @@ class StarBanner extends StatelessWidget {
     return Padding(
       padding: padding,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.xs, Insets.md),
+        padding: const EdgeInsetsDirectional.fromSTEB(Insets.lg, Insets.md, Insets.xs, Insets.md),
         decoration: BoxDecoration(
           color: context.panel(p.surface),
           borderRadius: BorderRadius.circular(context.shape.lg),

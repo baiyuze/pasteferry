@@ -157,7 +157,7 @@ class _SessionRowState extends State<_SessionRow> {
       session.lastSeenUnix.toInt() * 1000,
     );
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
+      padding: const EdgeInsetsDirectional.fromSTEB(
         52,
         Insets.sm + 2,
         Insets.sm,
@@ -335,7 +335,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
         width: 420,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(
+            padding: const EdgeInsetsDirectional.fromSTEB(
               Insets.xl,
               Insets.lg,
               Insets.md,
@@ -361,7 +361,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: Insets.md),
+                  padding: const EdgeInsetsDirectional.only(end: Insets.md),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -393,7 +393,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
                         ],
                         if (!_preparingFirewall)
                           Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: AlignmentDirectional.centerStart,
                             child: OutlinedButton(
                               onPressed: _prepareFirewall,
                               child: Text(l.webShareFirewallAllow),

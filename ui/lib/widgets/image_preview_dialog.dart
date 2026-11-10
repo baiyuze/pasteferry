@@ -102,7 +102,7 @@ class _ImagePreviewDialogState extends State<ImagePreviewDialog> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(
+              padding: const EdgeInsetsDirectional.fromSTEB(
                 Insets.xl,
                 Insets.md,
                 Insets.md,
@@ -122,13 +122,13 @@ class _ImagePreviewDialogState extends State<ImagePreviewDialog> {
                     IconButton(
                       tooltip: l.previousImage,
                       onPressed: () => _go(-1),
-                      icon: Icon(AppIcons.chevronLeft, size: 16),
+                      icon: DirectionalIcon(AppIcons.chevronLeft, size: 16),
                     ),
                     Text('${_index + 1} / $_count', style: context.text.bodySmall),
                     IconButton(
                       tooltip: l.nextImage,
                       onPressed: () => _go(1),
-                      icon: Icon(AppIcons.chevronRight, size: 16),
+                      icon: DirectionalIcon(AppIcons.chevronRight, size: 16),
                     ),
                     const SizedBox(width: Insets.sm),
                   ],
@@ -168,11 +168,12 @@ class _ImagePreviewDialogState extends State<ImagePreviewDialog> {
         ),
       ),
     );
-    // 左右方向键翻看上一张、下一张
+    // 左右方向键翻看上一张、下一张；从右到左时反过来，和按钮的位置一致
+    final back = Directionality.of(context) == TextDirection.rtl ? 1 : -1;
     return CallbackShortcuts(
       bindings: {
-        const SingleActivator(LogicalKeyboardKey.arrowLeft): () => _go(-1),
-        const SingleActivator(LogicalKeyboardKey.arrowRight): () => _go(1),
+        SingleActivator(LogicalKeyboardKey.arrowLeft): () => _go(back),
+        SingleActivator(LogicalKeyboardKey.arrowRight): () => _go(-back),
       },
       child: Focus(autofocus: true, child: dialog),
     );

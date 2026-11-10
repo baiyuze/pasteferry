@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">Koneksi latar belakang</string>
+    <string name="channel_sync_desc">Menjaga PasteFerry tetap terhubung agar teks yang disalin di komputer Anda sampai ke ponsel ini.</string>
+    <string name="notif_online">Terhubung ke %1$s</string>
+    <string name="notif_none">Tidak ada perangkat online</string>
+    <string name="notif_last_text">Terbaru: teks dari %1$s</string>
+    <string name="notif_last_image">Terbaru: gambar dari %1$s</string>
+    <string name="notif_last_file">Terbaru: file dari %1$s</string>
+    <string name="share_title">Bagikan</string>
+    <string name="save_storage_permission">Izinkan akses penyimpanan untuk menyimpan foto dan file. Ketuk Simpan sekali lagi untuk mencoba lagi.</string>
+    <string name="save_permission_pending">Selesaikan dulu permintaan izin penyimpanan yang sedang berlangsung.</string>
+    <string name="media_share_failed">Tidak dapat membuka berbagi untuk gambar atau file ini. Coba simpan terlebih dahulu.</string>
+</resources>

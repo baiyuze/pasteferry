@@ -240,7 +240,7 @@ class ThemedDivider extends StatelessWidget {
       height: math.max(height ?? s.borderWidth, s.borderWidth),
       child: Center(
         child: Padding(
-          padding: EdgeInsets.only(left: indent ?? 0, right: endIndent ?? 0),
+          padding: EdgeInsetsDirectional.only(start: indent ?? 0, end: endIndent ?? 0),
           child: SizedBox(
             height: s.borderWidth,
             width: double.infinity,

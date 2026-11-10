@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">Połączenie w tle</string>
+    <string name="channel_sync_desc">Utrzymuje połączenie PasteFerry, aby tekst skopiowany na komputerze trafiał na ten telefon.</string>
+    <string name="notif_online">Połączono: %1$s</string>
+    <string name="notif_none">Brak urządzeń online</string>
+    <string name="notif_last_text">Ostatnio: tekst z urządzenia %1$s</string>
+    <string name="notif_last_image">Ostatnio: obraz z urządzenia %1$s</string>
+    <string name="notif_last_file">Ostatnio: plik z urządzenia %1$s</string>
+    <string name="share_title">Udostępnij</string>
+    <string name="save_storage_permission">Zezwól na dostęp do pamięci, aby zapisywać zdjęcia i pliki. Następnie dotknij „Zapisz” ponownie.</string>
+    <string name="save_permission_pending">Najpierw dokończ bieżące żądanie dostępu do pamięci.</string>
+    <string name="media_share_failed">Nie można udostępnić tego obrazu lub pliku. Spróbuj go najpierw zapisać.</string>
+</resources>

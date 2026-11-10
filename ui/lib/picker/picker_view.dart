@@ -359,7 +359,7 @@ class _PickerViewState extends State<PickerView> {
         record: list[i],
         index: i,
         selected: i == s.selected,
-        number: i < 9 ? '${IndexModifier.label(s.indexModifier)}${i + 1}' : null,
+        number: i < 9 ? ltr('${IndexModifier.label(s.indexModifier)}${i + 1}') : null,
         favoritesTab: s.tab == PickerTab.favorites,
         dim: p.textFaint,
       ),
@@ -435,7 +435,7 @@ class _PickerViewState extends State<PickerView> {
       height: 30,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Insets.md),
-        child: Align(alignment: Alignment.centerLeft, child: content),
+        child: Align(alignment: AlignmentDirectional.centerStart, child: content),
       ),
     );
   }
@@ -463,7 +463,7 @@ class _KeyHint extends StatelessWidget {
     final p = context.palette;
     final capStyle = context.text.labelSmall?.copyWith(color: p.textDim, fontSize: 10.5, height: 1.0);
     return Padding(
-      padding: const EdgeInsets.only(right: Insets.md),
+      padding: const EdgeInsetsDirectional.only(end: Insets.md),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -471,7 +471,7 @@ class _KeyHint extends StatelessWidget {
             Container(
               height: 16,
               constraints: const BoxConstraints(minWidth: 16),
-              margin: const EdgeInsets.only(right: 2),
+              margin: const EdgeInsetsDirectional.only(end: 2),
               padding: const EdgeInsets.symmetric(horizontal: 4),
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -544,7 +544,7 @@ class _PickerRow extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: Insets.xs),
             padding: const EdgeInsets.symmetric(horizontal: Insets.sm),
             decoration: bar
-                ? BoxDecoration(color: p.selection, border: Border(left: BorderSide(color: p.accent, width: 4)))
+                ? BoxDecoration(color: p.selection, border: BorderDirectional(start: BorderSide(color: p.accent, width: 4)))
                 : BoxDecoration(
                     color: onAccent ? p.accent : (selected ? p.hover : Colors.transparent),
                     borderRadius: BorderRadius.circular(context.shape.sm),

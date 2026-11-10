@@ -166,7 +166,7 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
                   ),
                   if (_clipboardHasText)
                     Align(
-                      alignment: Alignment.centerRight,
+                      alignment: AlignmentDirectional.centerEnd,
                       child: TextButton.icon(
                         style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: Insets.xs)),
                         onPressed: _paste,
@@ -204,7 +204,7 @@ class _SendTabState extends State<SendTab> with WidgetsBindingObserver {
                   const SizedBox(height: Insets.md),
                   if (state.peers.isEmpty)
                     Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: AlignmentDirectional.centerStart,
                       child: TextButton(
                         style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: Insets.xs)),
                         onPressed: widget.onPair,
@@ -313,7 +313,7 @@ Future<void> showSentRecordsSheet(BuildContext context, List<ClipRecord> sent) {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.sm, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(Insets.lg, Insets.md, Insets.sm, 0),
             child: Row(
               children: [
                 Text(l.mSentRecords, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),

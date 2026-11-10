@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PasteFerry</string>
+    <string name="channel_sync">Connexion en arrière-plan</string>
+    <string name="channel_sync_desc">Garde PasteFerry connecté pour que le texte copié sur votre ordinateur arrive sur ce téléphone.</string>
+    <string name="notif_online">Connecté à %1$s</string>
+    <string name="notif_none">Aucun appareil en ligne</string>
+    <string name="notif_last_text">Dernier élément : texte de %1$s</string>
+    <string name="notif_last_image">Dernier élément : image de %1$s</string>
+    <string name="notif_last_file">Dernier élément : fichier de %1$s</string>
+    <string name="share_title">Partager</string>
+    <string name="save_storage_permission">Autorisez l’accès au stockage pour enregistrer photos et fichiers. Touchez de nouveau Enregistrer pour réessayer.</string>
+    <string name="save_permission_pending">Terminez d’abord la demande d’autorisation de stockage en cours.</string>
+    <string name="media_share_failed">Impossible d’ouvrir le partage pour cette image ou ce fichier. Essayez de l’enregistrer d’abord.</string>
+</resources>

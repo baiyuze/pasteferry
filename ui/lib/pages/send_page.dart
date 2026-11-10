@@ -794,8 +794,8 @@ class _SendNodeState extends State<_SendNode> {
                       child: ThemedSpinner(strokeWidth: 2, value: widget.progress),
                     ),
                   if (widget.dot != null)
-                    Positioned(
-                      right: 2,
+                    PositionedDirectional(
+                      end: 2,
                       bottom: 2,
                       child: Container(
                         width: 12,
@@ -863,7 +863,7 @@ class _TransferList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(
+          padding: EdgeInsetsDirectional.fromSTEB(
               narrow ? Insets.md : (compact ? Insets.lg : Insets.xl), Insets.sm, narrow ? Insets.md : Insets.xl, Insets.sm),
           child: Row(
             children: [
