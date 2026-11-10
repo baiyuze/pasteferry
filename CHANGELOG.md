@@ -1,5 +1,27 @@
 # 更新记录 / Changelog
 
+## 2.11.0 — 2026-11-10
+
+This release brings PasteFerry to 18 interface languages, with a right-to-left layout for Arabic.
+
+### Changes
+
+- **13 new interface languages**: Arabic, German, Spanish, French, Indonesian, Italian, Korean, Polish, Portuguese (Brazil), Russian, Turkish, Ukrainian and Vietnamese, for 18 in all. The app follows the system language, or pick one in Settings › General › Language. Notifications, the Windows tray menu and the Android notification use the same language. Update notes and the website stay in English for the new languages.
+- **Right-to-left layout for Arabic**: the main window, the quick paste window and dialogs are mirrored, back and forward arrows point the right way, and shortcuts, file sizes and file names keep their own direction.
+- **Arabic search**: searching history ignores Arabic diacritics (tashkeel) and tatweel and treats أ, إ and آ as ا, so «محمد» also finds «مُحَمَّد».
+- **Narrow windows**: when a translation is long, page header buttons, the history filters and settings controls move below their titles instead of running out of the window.
+
+### Fixes
+
+- On Android, “this phone” in the middle of a sentence was shown with a capital letter; it is now lower case.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional; update to use the new languages. Pairings, friends, history, themes and settings are preserved. If you pick a new language and later go back to an older version, it falls back to the system language.
+- **Android**: optional; the new languages are also in the Android app.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.10.2 — 2026-11-09
 
 This release adds a gentle, dismissible invitation to star PasteFerry on GitHub.

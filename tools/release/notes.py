@@ -11,6 +11,42 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.11.0',
+ 'date': '2026-11-10',
+ 'changes': [('13 new interface languages: Arabic, German, Spanish, French, Indonesian, Italian, Korean, Polish, '
+              'Portuguese (Brazil), Russian, Turkish, Ukrainian and Vietnamese, for 18 in all. The app follows the '
+              'system language, or pick one in Settings › General › Language. Notifications, the Windows tray menu and '
+              'the Android notification use the same language. Update notes and the website stay in English for the new '
+              'languages.',
+              '新增 13 种界面语言：阿拉伯文、德文、西班牙文、法文、印尼文、意大利文、韩文、波兰文、葡萄牙文（巴西）、俄文、土耳其文、乌克兰文和越南文，加上原有的共 18 种。默认跟随系统语言，也可以在「设置 › 通用 › 语言」里选。通知、Windows 托盘菜单和安卓通知用同一种语言。新语言的更新日志和官网仍是英文。',
+              '13 の表示言語を追加しました：アラビア語、ドイツ語、スペイン語、フランス語、インドネシア語、イタリア語、韓国語、ポーランド語、ポルトガル語（ブラジル）、ロシア語、トルコ語、ウクライナ語、ベトナム語。これまでの言語と合わせて 18 言語です。初期設定ではシステムの言語に合わせ、「設定 › 一般 › 言語」で選ぶこともできます。通知、Windows のトレイメニュー、Android の通知も同じ言語になります。新しい言語では、更新内容と公式サイトは英語のままです。',
+              '新增 13 種介面語言：阿拉伯文、德文、西班牙文、法文、印尼文、義大利文、韓文、波蘭文、葡萄牙文（巴西）、俄文、土耳其文、烏克蘭文和越南文，加上原有的共 18 種。預設跟隨系統語言，也可以在「設定 › 一般 › 語言」裡選。通知、Windows 系統匣選單和安卓通知用同一種語言。新語言的更新說明和官網仍是英文。',
+              '新增 13 種介面語言：阿拉伯文、德文、西班牙文、法文、印尼文、意大利文、韓文、波蘭文、葡萄牙文（巴西）、俄文、土耳其文、烏克蘭文和越南文，加上原有的共 18 種。預設跟隨系統語言，也可以在「設定 › 一般 › 語言」裏選。通知、Windows 系統匣選單和安卓通知用同一種語言。新語言的更新說明和官網仍是英文。'),
+             ('Right-to-left layout for Arabic: the main window, the quick paste window and dialogs are mirrored, '
+              'back and forward arrows point the right way, and shortcuts, file sizes and file names keep their own '
+              'direction.',
+              '阿拉伯文从右到左：主窗口、快捷粘贴窗口和对话框整体镜像，前进、返回的箭头方向随之调整，快捷键、文件大小和文件名保持原来的方向。',
+              'アラビア語は右から左のレイアウト：メインウインドウ、クイックペーストウインドウ、ダイアログが左右反転し、戻る・進む矢印の向きも変わります。ショートカット、ファイルサイズ、ファイル名は元の向きのままです。',
+              '阿拉伯文由右至左：主視窗、快速貼上視窗和對話框整體鏡像，前進、返回的箭頭方向隨之調整，快捷鍵、檔案大小和檔名保持原本的方向。',
+              '阿拉伯文由右至左：主視窗、快速貼上視窗和對話框整體鏡像，前進、返回的箭嘴方向隨之調整，快捷鍵、檔案大小和檔案名稱保持原本的方向。'),
+             ('Arabic search: searching history ignores Arabic diacritics (tashkeel) and tatweel and treats أ, إ and آ as '
+              'ا, so «محمد» also finds «مُحَمَّد».',
+              '阿拉伯文搜索：搜索复制记录时不看阿拉伯文的变音符号（tashkeel）和延长线（tatweel），أ、إ、آ 当作 ا，搜「محمد」也能找到「مُحَمَّد」。',
+              'アラビア語の検索：履歴を検索するとき、アラビア語の発音記号（タシュキール）と延長線（タトウィール）を無視し、أ・إ・آ を ا として扱います。「محمد」で「مُحَمَّد」も見つかります。',
+              '阿拉伯文搜尋：搜尋複製記錄時不看阿拉伯文的變音符號（tashkeel）和延長線（tatweel），أ、إ、آ 視為 ا，搜「محمد」也能找到「مُحَمَّد」。',
+              '阿拉伯文搜尋：搜尋複製記錄時不看阿拉伯文的變音符號（tashkeel）和延長線（tatweel），أ、إ、آ 視為 ا，搜「محمد」也能找到「مُحَمَّد」。'),
+             ('Narrow windows: when a translation is long, page header buttons, the history filters and settings '
+              'controls move below their titles instead of running out of the window.',
+              '窄窗口：译文较长时，页头的按钮、复制记录的类型筛选和设置项右侧的控件会换到标题下面，不再超出窗口。',
+              '狭いウインドウ：翻訳が長いとき、ページ見出しのボタン、履歴の種類フィルター、設定項目のコントロールはタイトルの下に移り、ウインドウからはみ出さなくなりました。',
+              '窄視窗：譯文較長時，頁首的按鈕、複製記錄的類型篩選和設定項右側的控制項會換到標題下方，不再超出視窗。',
+              '窄視窗：譯文較長時，頁首的按鈕、複製記錄的類型篩選和設定項右側的控制項會換到標題下面，不再超出視窗。')],
+ 'fixes': [('On Android, “this phone” in the middle of a sentence was shown with a capital letter; it is now lower '
+            'case.',
+            '安卓上句子中间的「This phone」原来首字母大写，现在是小写。',
+            'Android で、文の途中の「This phone」が大文字で始まっていたのを小文字にしました。',
+            '安卓上句子中間的「This phone」原本首字母大寫，現在是小寫。',
+            '安卓上句子中間的「This phone」原本首字母大寫，現在是小寫。')]},
 {'version': '2.10.2',
  'date': '2026-11-09',
  'changes': [('GitHub star prompt: after you have used the app for 3 days and synced 20 items, a small banner above '
