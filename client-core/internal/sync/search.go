@@ -10,7 +10,7 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
 )
 
-// 按拼音搜时最多看最近这么多条记录：数据库没法按拼音粗筛，只能逐条核对
+// 按拼音或阿拉伯文搜时最多看最近这么多条记录：数据库没法按拼音粗筛，也不会忽略阿拉伯文的变音符号，只能逐条核对
 const pinyinScan = 2000
 
 // 每条文字只看开头这么多个字有没有拼音匹配，超长的文字不拖慢搜索
@@ -26,9 +26,12 @@ const pinyinText = 5000
 // 比如 huiyi 或 hy 都能找到「会议」。按拼音找到的只在最近 pinyinScan 条里找，和按原文找到的合在一起，
 // 仍按时间排序。
 //
+// 阿拉伯文不看变音符号与延长线，带 hamza 的 alef 当作 ا（见 foldRune），搜「محمد」能找到「مُحَمَّد」。
+// 数据库的粗筛做不到这一点，搜索词里有阿拉伯字母时，再像拼音一样在最近 pinyinScan 条里逐条核对。
+//
 // f 选定在复制记录还是收藏里搜、只搜哪一类，见 store.Filter。
 func (e *Engine) SearchHistory(query string, limit int, f store.Filter) ([]store.Clip, error) {
-	q := []rune(strings.Map(unicode.ToLower, strings.TrimSpace(query)))
+	q := foldQuery(strings.TrimSpace(query))
 	if len(q) == 0 {
 		return nil, nil
 	}
@@ -61,11 +64,15 @@ func (e *Engine) SearchHistory(query string, limit int, f store.Filter) ([]store
 		}
 		out = append(out, c)
 	}
-	py := pinyin.Query(query)
-	if py == "" {
+	var index func(string) int
+	if py := pinyin.Query(query); py != "" {
+		index = func(s string) int { return pinyin.Index(s, py) }
+	} else if hasArabic(q) {
+		index = func(s string) int { return indexFold(s, q) }
+	} else {
 		return out, nil
 	}
-	more, err := e.searchPinyin(py, f, out)
+	more, err := e.searchScan(index, f, out)
 	if err != nil {
 		return nil, err
 	}
@@ -85,8 +92,9 @@ func (e *Engine) SearchHistory(query string, limit int, f store.Filter) ([]store
 	return out, nil
 }
 
-// searchPinyin 在最近 pinyinScan 条记录里，找按原文没搜到、按拼音 py 能匹配的。
-func (e *Engine) searchPinyin(py string, f store.Filter, found []store.Clip) ([]store.Clip, error) {
+// searchScan 在最近 pinyinScan 条记录里，找 found 里没有、按 index 能匹配的。
+// index 返回匹配处在文字里的位置（按 rune 计），不匹配时返回 -1：按拼音搜，或忽略变音符号搜阿拉伯文。
+func (e *Engine) searchScan(index func(string) int, f store.Filter, found []store.Clip) ([]store.Clip, error) {
 	seen := make(map[string]bool, len(found))
 	for _, c := range found {
 		seen[c.ID] = true
@@ -102,12 +110,12 @@ func (e *Engine) searchPinyin(py string, f store.Filter, found []store.Clip) ([]
 			if seen[c.ID] {
 				continue
 			}
-			if c.Favorite && pinyin.Index(c.Alias, py) >= 0 {
+			if c.Favorite && index(c.Alias) >= 0 {
 				out = append(out, c)
 				continue
 			}
 			if c.Kind != store.KindImage && slices.ContainsFunc(c.Items, func(it store.Item) bool {
-				return pinyin.Index(it.Name, py) >= 0
+				return index(it.Name) >= 0
 			}) {
 				out = append(out, c)
 				continue
@@ -119,11 +127,11 @@ func (e *Engine) searchPinyin(py string, f store.Filter, found []store.Clip) ([]
 			if r := []rune(text); len(r) > pinyinText {
 				text = string(r[:pinyinText])
 			}
-			at := pinyin.Index(text, py)
+			at := index(text)
 			if at < 0 {
 				continue
 			}
-			if pinyin.Index(c.TextPreview, py) < 0 {
+			if index(c.TextPreview) < 0 {
 				c.TextPreview = snippet(text, at)
 			}
 			out = append(out, c)
@@ -138,12 +146,48 @@ func (e *Engine) searchPinyin(py string, f store.Filter, found []store.Clip) ([]
 	return out, nil
 }
 
-// indexFold 返回 q（已转小写）在 s 里第一次出现的位置，按 rune 计，不分大小写；找不到返回 -1。
+// foldRune 把搜索时不区分的写法归成一种：转小写；阿拉伯文的变音符号（tashkeel、上标 alef）与延长线（tatweel）
+// 不参与比对，返回 0；带 hamza 或 madda 的 alef（أ إ آ ٱ）当作 ا。
+func foldRune(r rune) rune {
+	switch {
+	case r >= 0x064B && r <= 0x065F, r == 0x0670, r == 0x0640:
+		return 0
+	case r == 'أ', r == 'إ', r == 'آ', r == 'ٱ':
+		return 'ا'
+	}
+	return unicode.ToLower(r)
+}
+
+// foldQuery 按 foldRune 处理搜索词。
+func foldQuery(s string) []rune {
+	out := make([]rune, 0, len(s))
+	for _, r := range s {
+		if f := foldRune(r); f != 0 {
+			out = append(out, f)
+		}
+	}
+	return out
+}
+
+// hasArabic 报告 q 里有没有阿拉伯字母。
+func hasArabic(q []rune) bool {
+	return slices.ContainsFunc(q, func(r rune) bool { return unicode.Is(unicode.Arabic, r) })
+}
+
+// indexFold 返回 q（已经过 foldQuery）在 s 里第一次出现的位置，按原文的 rune 计，不分大小写，
+// 不看阿拉伯文的变音符号；找不到返回 -1。
 func indexFold(s string, q []rune) int {
-	r := []rune(strings.Map(unicode.ToLower, s)) // 逐个 rune 转换，位置与原文一一对应
+	var r []rune
+	var pos []int // r 里每个字在原文里的位置
+	for i, c := range []rune(s) {
+		if f := foldRune(c); f != 0 {
+			r = append(r, f)
+			pos = append(pos, i)
+		}
+	}
 	for i := 0; i+len(q) <= len(r); i++ {
 		if slices.Equal(r[i:i+len(q)], q) {
-			return i
+			return pos[i]
 		}
 	}
 	return -1

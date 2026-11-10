@@ -144,3 +144,55 @@ func TestIndexFold(t *testing.T) {
 		t.Errorf("找不到时应为 -1，得到 %d", i)
 	}
 }
+
+// 阿拉伯文不看变音符号与延长线，带 hamza 的 alef 当作 ا；位置按原文计
+func TestIndexFoldArabic(t *testing.T) {
+	cases := []struct {
+		text, query string
+		want        int
+	}{
+		{"اسمي مُحَمَّد", "محمد", 5},
+		{"اسمي محمد", "مُحَمَّد", 5},
+		{"مـحـمـد", "محمد", 0},
+		{"قال أحمد", "احمد", 4},
+		{"قال احمد", "إحمد", 4},
+		{"كتاب", "كتب", -1},
+	}
+	for _, c := range cases {
+		if got := indexFold(c.text, foldQuery(c.query)); got != c.want {
+			t.Errorf("indexFold(%q, %q) = %d，应为 %d", c.text, c.query, got, c.want)
+		}
+	}
+}
+
+// 数据库粗筛按原文匹配，找不到带变音符号的记录；搜阿拉伯文时要逐条再找一遍
+func TestSearchHistoryArabicIgnoresDiacritics(t *testing.T) {
+	e := newBacklogEngine(t, &fakePeers{})
+	now := time.Now().Truncate(time.Second)
+	for i, c := range []store.Clip{
+		{ID: "voweled", Kind: store.KindText, TextContent: "مرحبا يا مُحَمَّد", TextPreview: "مرحبا يا مُحَمَّد"},
+		{ID: "hamza", Kind: store.KindText, TextContent: "رسالة من أحمد", TextPreview: "رسالة من أحمد"},
+		{ID: "file", Kind: store.KindFile, Items: []store.Item{{Name: "تَقْرِير.pdf"}}, TextPreview: "تَقْرِير.pdf"},
+		{ID: "other", Kind: store.KindText, TextContent: "كتاب جديد", TextPreview: "كتاب جديد"},
+	} {
+		c.Status = store.StatusReady
+		c.CreatedAt = now.Add(time.Duration(i) * time.Minute)
+		c.ExpiresAt = c.CreatedAt.Add(time.Hour)
+		if err := e.store.PutClip(c); err != nil {
+			t.Fatal(err)
+		}
+	}
+	for query, want := range map[string]string{"محمد": "voweled", "احمد": "hamza", "تقرير": "file", "مُحَمَّد": "voweled"} {
+		got, err := e.SearchHistory(query, 50, store.Filter{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(got) != 1 || got[0].ID != want {
+			ids := []string{}
+			for _, c := range got {
+				ids = append(ids, c.ID)
+			}
+			t.Errorf("搜 %q 得到 %v，应为 [%s]", query, ids, want)
+		}
+	}
+}
