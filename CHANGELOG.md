@@ -1,5 +1,20 @@
 # 更新记录 / Changelog
 
+## 2.11.1 — 2026-11-10
+
+This release makes the back link on Settings pages reliably clickable.
+
+### Fixes
+
+- The ‹ back link at the top of Settings pages often ignored clicks on Mac: its upper half sat in the window’s title bar, where a click moves the window. It now sits below the title bar, and the area around the text also responds to clicks.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended on Mac; optional on Windows and Linux, where the link only gets a larger click area. Pairings, friends, history, themes and settings are preserved.
+- **Android**: no update needed; nothing changes on Android.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.11.0 — 2026-11-10
 
 This release brings PasteFerry to 18 interface languages, with a right-to-left layout for Arabic.

@@ -11,6 +11,16 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.11.1',
+ 'date': '2026-11-10',
+ 'changes': [],
+ 'fixes': [('The ‹ back link at the top of Settings pages often ignored clicks on Mac: its upper half sat in the '
+            'window’s title bar, where a click moves the window. It now sits below the title bar, and the area around '
+            'the text also responds to clicks.',
+            '设置二级页顶部的「‹ 设置」返回链接在 Mac 上经常点了没反应：它的上半截落在窗口标题栏里，在那里点击会拖动窗口。现在它移到了标题栏下面，文字周围一圈也能点。',
+            '設定の各ページ上部にある「‹ 設定」の戻るリンクが、Mac ではクリックしても反応しないことがよくありました。上半分がウインドウのタイトルバーに重なり、そこでのクリックはウインドウの移動になっていたためです。タイトルバーの下に移し、文字のまわりもクリックできるようにしました。',
+            '設定二級頁面頂部的「‹ 設定」返回連結在 Mac 上常常點了沒反應：它的上半截落在視窗標題列裡，在那裡點按會拖動視窗。現在它移到了標題列下方，文字周圍一圈也能點。',
+            '設定二級頁面頂部的「‹ 設定」返回連結在 Mac 上經常按了沒反應：它的上半截落在視窗標題列裏，在那裏按下會拖動視窗。現在它移到了標題列下面，文字周圍一圈也能按。')]},
 {'version': '2.11.0',
  'date': '2026-11-10',
  'changes': [('13 new interface languages: Arabic, German, Spanish, French, Indonesian, Italian, Korean, Polish, '
