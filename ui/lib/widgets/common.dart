@@ -33,15 +33,14 @@ class PageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final back = onBack != null;
-    return Padding(
-      // 顶部留出 macOS 红绿灯所在的标题栏高度；二级页的返回链接占掉其中一部分
-      padding: EdgeInsets.fromLTRB(Insets.xl, back ? 18 : 44, Insets.xl, Insets.lg),
+    final header = Padding(
+      // 顶部留出 macOS 红绿灯所在的标题栏高度；二级页的这段高度由上面的返回链接占去
+      padding: EdgeInsets.fromLTRB(Insets.xl, back ? 0 : 44, Insets.xl, Insets.lg),
       child: AdaptiveRow(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (back) _BackLink(label: backLabel ?? '', onTap: onBack!),
               Text(title, style: context.text.headlineSmall),
               if (subtitle != null) ...[
                 const SizedBox(height: 2),
@@ -52,6 +51,24 @@ class PageHeader extends StatelessWidget {
           Wrap(spacing: Insets.sm, runSpacing: Insets.sm, children: actions),
         ],
       ),
+    );
+    if (!back) return header;
+    // 返回链接紧贴在标题栏下面：标题栏透明、内容铺到了窗口顶部，但最上面 [titleBarHeight] 这一条
+    // 仍归系统，在那里按下鼠标是拖动窗口，点不到界面。
+    // 它单独占一行、少缩进 [_BackLink.slop]：多出的可点范围要落在父级的范围里才点得到
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(top: titleBarHeight, start: Insets.xl - _BackLink.slop),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: _BackLink(label: backLabel ?? '', onTap: onBack!),
+          ),
+        ),
+        header,
+      ],
     );
   }
 }
@@ -170,32 +187,37 @@ class RenderAdaptiveRow extends RenderBox
       defaultHitTestChildren(result, position: position);
 }
 
+/// macOS 窗口顶部归系统的标题栏高度：这里按下鼠标是拖动窗口（双击是缩放），界面收不到点击
+const titleBarHeight = 28.0;
+
+/// 二级页标题上方的「‹ 上一级」。可点的范围比看得见的文字大：上下撑满 [_height]，左右各多出 [slop]
 class _BackLink extends StatelessWidget {
   const _BackLink({required this.label, required this.onTap});
 
   final String label;
   final VoidCallback onTap;
 
+  static const _height = 30.0;
+  static const slop = 8.0;
+
   @override
   Widget build(BuildContext context) {
     final color = context.palette.accent;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: onTap,
-          child: SizedBox(
-            height: 22,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DirectionalIcon(AppIcons.chevronLeft, size: 13, color: color),
-                const SizedBox(width: 2),
-                Text(label, style: context.text.bodyMedium?.copyWith(color: color)),
-              ],
-            ),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: Container(
+          height: _height,
+          padding: const EdgeInsets.symmetric(horizontal: slop),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DirectionalIcon(AppIcons.chevronLeft, size: 13, color: color),
+              const SizedBox(width: 2),
+              Text(label, style: context.text.bodyMedium?.copyWith(color: color)),
+            ],
           ),
         ),
       ),
