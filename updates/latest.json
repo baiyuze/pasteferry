@@ -1,65 +1,96 @@
 {
   "schema": 1,
-  "latest": "2.11.0",
+  "latest": "2.11.1",
   "date": "2026-11-10",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.11.0/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.11.1/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.11.0/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.11.1/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 28944973,
-      "sha256": "2f04da2cf79f4b923ecc8555bc9b38ea90d5f2a45ebba9e2e353f7c7cd7a2cf9"
+      "size": 28944073,
+      "sha256": "689553300e7ad50fb48ead0c6a3a86f0b68023f5e1d59192762b4a39fba08431"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 31108585,
-      "sha256": "6bbafca11154e6fa0b6cc737d6f839e74a80b14125ac783b5a52b980b69eb19b"
+      "size": 31108790,
+      "sha256": "76b05886166c6fe7fb60f7b4c9fb5b7eec74b5466e2678002417587e8ba910cd"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 56973726,
-      "sha256": "3b0e1b066756127fc996ab0c3e8a439953aa4003a7f003aad02c8a6a882a947a"
+      "size": 56973062,
+      "sha256": "52c212acc88e08020d8296374d7093683bd4b602a708a0fedd8772d66cb0da72"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 25269722,
-      "sha256": "2abc278127886de48863e0657c9bbf6ba35a3b127a0327c5d2130d2379eb63a1"
+      "size": 25274475,
+      "sha256": "4c2e8ad372b1ae4b32aaaeca18252f64494778ea1aa72d119b30c9d110dab7d9"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 32442923,
-      "sha256": "47e1ce40f92cc64571793f12befbe40646f769ca182171c0aa6103c87cc749f3"
+      "size": 32442855,
+      "sha256": "ed541ca506c3fc6f72e940878b5a2d71e9ce552aff6cfe8e8913736670d514d8"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 24726670,
-      "sha256": "cd672150cc16841f8de77b5d35878cb8abb566fff3ff479a6cf1365437be4f11"
+      "size": 24724652,
+      "sha256": "4ee978732422db46d3c90c3a6c31255ccf629eebf11c0243300369753f807961"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 23093906,
-      "sha256": "8586fddbf504c30107e72629539019ce7a36857cc0cd31a90584c5dee1bd05f9"
+      "size": 23095188,
+      "sha256": "f636b3ab9dac671854d5c32abf3b78c22897429a1ee6c694b37c6a55c635a36f"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 30159578,
-      "sha256": "a12900d59a7e5729d26b5f2ad05fcd3d34c95ea739dd26110d101a7ebe9def57"
+      "size": 30159372,
+      "sha256": "5f55b5089e229153413144f9facc283301cd81120bbdae3d8fe30dd6db5cd4cc"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 28368794,
-      "sha256": "5cfebe0e9d6a808aaee4990d56d1cb6e22a289ed3e2049f3d791c887598a541d"
+      "size": 28368738,
+      "sha256": "f7b64fa479cfad30efc9cfc5670ace706b9bf587281bb32852c5fc383561a776"
     }
   },
   "releases": [
+    {
+      "version": "2.11.1",
+      "date": "2026-11-10",
+      "notes": {
+        "en": {
+          "fixes": [
+            "The ‹ back link at the top of Settings pages often ignored clicks on Mac: its upper half sat in the window’s title bar, where a click moves the window. It now sits below the title bar, and the area around the text also responds to clicks."
+          ]
+        },
+        "zh-Hans": {
+          "fixes": [
+            "设置二级页顶部的「‹ 设置」返回链接在 Mac 上经常点了没反应：它的上半截落在窗口标题栏里，在那里点击会拖动窗口。现在它移到了标题栏下面，文字周围一圈也能点。"
+          ]
+        },
+        "ja": {
+          "fixes": [
+            "設定の各ページ上部にある「‹ 設定」の戻るリンクが、Mac ではクリックしても反応しないことがよくありました。上半分がウインドウのタイトルバーに重なり、そこでのクリックはウインドウの移動になっていたためです。タイトルバーの下に移し、文字のまわりもクリックできるようにしました。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "fixes": [
+            "設定二級頁面頂部的「‹ 設定」返回連結在 Mac 上常常點了沒反應：它的上半截落在視窗標題列裡，在那裡點按會拖動視窗。現在它移到了標題列下方，文字周圍一圈也能點。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "fixes": [
+            "設定二級頁面頂部的「‹ 設定」返回連結在 Mac 上經常按了沒反應：它的上半截落在視窗標題列裏，在那裏按下會拖動視窗。現在它移到了標題列下面，文字周圍一圈也能按。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.11.0",
       "date": "2026-11-10",
@@ -530,42 +561,6 @@
             "電腦傳檔案給手機時，會先等 30 秒，之後每次重新連線都失敗。原因是安卓端宣告了自己沒有的能力；現在手機真的支援了，電腦也不會再把舊版安卓當成能接收檔案。",
             "收到的內容下載超時後只被標為失敗、日誌裏沒有任何記錄；已通知對方的內容推送失敗後就永久遺失；對方沒有回應時只顯示「中斷」；診斷報告看不到各裝置的版本和能不能接收檔案。這四處都已修好。",
             "複製的檔案讀不到時以前完全沒有提示，現在會說明沒有同步。手機網頁的提示條以前是白底壓在接近白色的頁面上、幾乎看不見，現在改成深色底淺色字。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.7.4",
-      "date": "2026-10-29",
-      "notes": {
-        "en": {
-          "fixes": [
-            "On Android, copying or sharing an image picked from the phone failed because its temporary cache path was not configured for sharing. These images and files now use valid content URIs, and sharing grants the receiving app read access.",
-            "All toast messages in the Android app and phone web page now appear at the top, below the system safe area, instead of covering bottom controls. Media actions show a short explanation if they fail, rather than a raw exception and stack trace."
-          ]
-        },
-        "zh-Hans": {
-          "fixes": [
-            "安卓上复制或分享从手机选出的图片时，因临时缓存路径未配置而失败。现在图片和文件会使用有效的内容地址，分享时同时授予接收 App 读取权限。",
-            "Android App 和手机网页的所有 toast 提示统一显示在顶部安全区下方，不再遮挡底部操作。图片和文件操作失败时显示简短说明，不再展示原始异常和堆栈。"
-          ]
-        },
-        "ja": {
-          "fixes": [
-            "Android でスマホから選んだ画像をコピー・共有すると、一時キャッシュのパスが未設定のため失敗していました。画像やファイルに有効なコンテンツ URI を使い、共有先アプリに読み取り権限を渡すよう修正しました。",
-            "Android アプリとスマホのウェブページのすべてのトースト通知を、システムのセーフエリア下の画面上部に表示し、下部の操作を覆わないようにしました。画像やファイルの操作失敗時は例外やスタックトレースではなく短い説明を表示します。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "fixes": [
-            "安卓上複製或分享從手機選取的圖片時，因暫存路徑未設定而失敗。現在圖片和檔案會使用有效的內容位址，分享時同時授予接收 App 讀取權限。",
-            "Android App 和手機網頁的所有 toast 提示統一顯示在頂部安全區下方，不再遮住底部操作。圖片和檔案操作失敗時顯示簡短說明，不再展示原始例外和堆疊。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "fixes": [
-            "安卓上複製或分享從手機選取的圖片時，因暫存路徑未設定而失敗。現在圖片和檔案會使用有效的內容地址，分享時同時授予接收 App 讀取權限。",
-            "Android App 和手機網頁的所有 toast 提示統一顯示在頂部安全區下方，不再遮擋底部操作。圖片和檔案操作失敗時顯示簡短說明，不再展示原始例外和堆疊。"
           ]
         }
       }
