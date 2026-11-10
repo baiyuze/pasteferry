@@ -1,65 +1,126 @@
 {
   "schema": 1,
-  "latest": "2.10.2",
-  "date": "2026-11-09",
+  "latest": "2.11.0",
+  "date": "2026-11-10",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.10.2/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.11.0/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.10.2/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.11.0/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 28364231,
-      "sha256": "80d862a3b5df6f725858518f4f86ea5dd05107f9dbcb2d115d7eeeb281b910cc"
+      "size": 28944973,
+      "sha256": "2f04da2cf79f4b923ecc8555bc9b38ea90d5f2a45ebba9e2e353f7c7cd7a2cf9"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 30545532,
-      "sha256": "8798711b438246cc27ba2beeb36a95ac923056a914a8f0981e3326bc9321db3b"
+      "size": 31108585,
+      "sha256": "6bbafca11154e6fa0b6cc737d6f839e74a80b14125ac783b5a52b980b69eb19b"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 55865837,
-      "sha256": "dd8a948208fb34f6e60258197fbae398ddb52654b9af3bdfe437fa54cbcfd96c"
+      "size": 56973726,
+      "sha256": "3b0e1b066756127fc996ab0c3e8a439953aa4003a7f003aad02c8a6a882a947a"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 24957072,
-      "sha256": "d354ad99087807d0742347de69076782782c11223c5f6d43307aa20997a04158"
+      "size": 25269722,
+      "sha256": "2abc278127886de48863e0657c9bbf6ba35a3b127a0327c5d2130d2379eb63a1"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 31889440,
-      "sha256": "0516c75d75e4e3ed244f7581861ee805fad9a85d48c8b4ae3a9882943869b579"
+      "size": 32442923,
+      "sha256": "47e1ce40f92cc64571793f12befbe40646f769ca182171c0aa6103c87cc749f3"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 24355898,
-      "sha256": "15400c671928d35200a921ecb1f196fb27f69e68019abd71a26b1b3ed6959176"
+      "size": 24726670,
+      "sha256": "cd672150cc16841f8de77b5d35878cb8abb566fff3ff479a6cf1365437be4f11"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 22708878,
-      "sha256": "c7fb53a90aef7722a5f9597aab79f7147c5b52d614287d06867d4f5298888c57"
+      "size": 23093906,
+      "sha256": "8586fddbf504c30107e72629539019ce7a36857cc0cd31a90584c5dee1bd05f9"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 29612256,
-      "sha256": "fd87cecb1b4d1bca11dcea125ec0a22c0393dc4bb306ec3675f06268e45f66c4"
+      "size": 30159578,
+      "sha256": "a12900d59a7e5729d26b5f2ad05fcd3d34c95ea739dd26110d101a7ebe9def57"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 27808828,
-      "sha256": "b7b6e3162f54702415aeb317f6f3e1c81775b6dcc6951fbcc457b2c3af1f2c47"
+      "size": 28368794,
+      "sha256": "5cfebe0e9d6a808aaee4990d56d1cb6e22a289ed3e2049f3d791c887598a541d"
     }
   },
   "releases": [
+    {
+      "version": "2.11.0",
+      "date": "2026-11-10",
+      "notes": {
+        "en": {
+          "changes": [
+            "13 new interface languages: Arabic, German, Spanish, French, Indonesian, Italian, Korean, Polish, Portuguese (Brazil), Russian, Turkish, Ukrainian and Vietnamese, for 18 in all. The app follows the system language, or pick one in Settings › General › Language. Notifications, the Windows tray menu and the Android notification use the same language. Update notes and the website stay in English for the new languages.",
+            "Right-to-left layout for Arabic: the main window, the quick paste window and dialogs are mirrored, back and forward arrows point the right way, and shortcuts, file sizes and file names keep their own direction.",
+            "Arabic search: searching history ignores Arabic diacritics (tashkeel) and tatweel and treats أ, إ and آ as ا, so «محمد» also finds «مُحَمَّد».",
+            "Narrow windows: when a translation is long, page header buttons, the history filters and settings controls move below their titles instead of running out of the window."
+          ],
+          "fixes": [
+            "On Android, “this phone” in the middle of a sentence was shown with a capital letter; it is now lower case."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "新增 13 种界面语言：阿拉伯文、德文、西班牙文、法文、印尼文、意大利文、韩文、波兰文、葡萄牙文（巴西）、俄文、土耳其文、乌克兰文和越南文，加上原有的共 18 种。默认跟随系统语言，也可以在「设置 › 通用 › 语言」里选。通知、Windows 托盘菜单和安卓通知用同一种语言。新语言的更新日志和官网仍是英文。",
+            "阿拉伯文从右到左：主窗口、快捷粘贴窗口和对话框整体镜像，前进、返回的箭头方向随之调整，快捷键、文件大小和文件名保持原来的方向。",
+            "阿拉伯文搜索：搜索复制记录时不看阿拉伯文的变音符号（tashkeel）和延长线（tatweel），أ、إ、آ 当作 ا，搜「محمد」也能找到「مُحَمَّد」。",
+            "窄窗口：译文较长时，页头的按钮、复制记录的类型筛选和设置项右侧的控件会换到标题下面，不再超出窗口。"
+          ],
+          "fixes": [
+            "安卓上句子中间的「This phone」原来首字母大写，现在是小写。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "13 の表示言語を追加しました：アラビア語、ドイツ語、スペイン語、フランス語、インドネシア語、イタリア語、韓国語、ポーランド語、ポルトガル語（ブラジル）、ロシア語、トルコ語、ウクライナ語、ベトナム語。これまでの言語と合わせて 18 言語です。初期設定ではシステムの言語に合わせ、「設定 › 一般 › 言語」で選ぶこともできます。通知、Windows のトレイメニュー、Android の通知も同じ言語になります。新しい言語では、更新内容と公式サイトは英語のままです。",
+            "アラビア語は右から左のレイアウト：メインウインドウ、クイックペーストウインドウ、ダイアログが左右反転し、戻る・進む矢印の向きも変わります。ショートカット、ファイルサイズ、ファイル名は元の向きのままです。",
+            "アラビア語の検索：履歴を検索するとき、アラビア語の発音記号（タシュキール）と延長線（タトウィール）を無視し、أ・إ・آ を ا として扱います。「محمد」で「مُحَمَّد」も見つかります。",
+            "狭いウインドウ：翻訳が長いとき、ページ見出しのボタン、履歴の種類フィルター、設定項目のコントロールはタイトルの下に移り、ウインドウからはみ出さなくなりました。"
+          ],
+          "fixes": [
+            "Android で、文の途中の「This phone」が大文字で始まっていたのを小文字にしました。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "新增 13 種介面語言：阿拉伯文、德文、西班牙文、法文、印尼文、義大利文、韓文、波蘭文、葡萄牙文（巴西）、俄文、土耳其文、烏克蘭文和越南文，加上原有的共 18 種。預設跟隨系統語言，也可以在「設定 › 一般 › 語言」裡選。通知、Windows 系統匣選單和安卓通知用同一種語言。新語言的更新說明和官網仍是英文。",
+            "阿拉伯文由右至左：主視窗、快速貼上視窗和對話框整體鏡像，前進、返回的箭頭方向隨之調整，快捷鍵、檔案大小和檔名保持原本的方向。",
+            "阿拉伯文搜尋：搜尋複製記錄時不看阿拉伯文的變音符號（tashkeel）和延長線（tatweel），أ、إ、آ 視為 ا，搜「محمد」也能找到「مُحَمَّد」。",
+            "窄視窗：譯文較長時，頁首的按鈕、複製記錄的類型篩選和設定項右側的控制項會換到標題下方，不再超出視窗。"
+          ],
+          "fixes": [
+            "安卓上句子中間的「This phone」原本首字母大寫，現在是小寫。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "新增 13 種介面語言：阿拉伯文、德文、西班牙文、法文、印尼文、意大利文、韓文、波蘭文、葡萄牙文（巴西）、俄文、土耳其文、烏克蘭文和越南文，加上原有的共 18 種。預設跟隨系統語言，也可以在「設定 › 一般 › 語言」裏選。通知、Windows 系統匣選單和安卓通知用同一種語言。新語言的更新說明和官網仍是英文。",
+            "阿拉伯文由右至左：主視窗、快速貼上視窗和對話框整體鏡像，前進、返回的箭嘴方向隨之調整，快捷鍵、檔案大小和檔案名稱保持原本的方向。",
+            "阿拉伯文搜尋：搜尋複製記錄時不看阿拉伯文的變音符號（tashkeel）和延長線（tatweel），أ、إ、آ 視為 ا，搜「محمد」也能找到「مُحَمَّد」。",
+            "窄視窗：譯文較長時，頁首的按鈕、複製記錄的類型篩選和設定項右側的控制項會換到標題下面，不再超出視窗。"
+          ],
+          "fixes": [
+            "安卓上句子中間的「This phone」原本首字母大寫，現在是小寫。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.10.2",
       "date": "2026-11-09",
@@ -505,52 +566,6 @@
           "fixes": [
             "安卓上複製或分享從手機選取的圖片時，因暫存路徑未設定而失敗。現在圖片和檔案會使用有效的內容地址，分享時同時授予接收 App 讀取權限。",
             "Android App 和手機網頁的所有 toast 提示統一顯示在頂部安全區下方，不再遮擋底部操作。圖片和檔案操作失敗時顯示簡短說明，不再展示原始例外和堆疊。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.7.3",
-      "date": "2026-10-28",
-      "notes": {
-        "en": {
-          "changes": [
-            "Android: the same arm64 APK now supports Android 9 (API 28) and later. Saving photos and files asks for storage access only on Android 9; Android 10 and later keep using MediaStore without that permission."
-          ],
-          "fixes": [
-            "On Windows, opening the phone QR code now checks firewall access and requests administrator approval when needed. Cancelled or failed setup stays visible with a retry button, and success is shown only after the rules are verified. Existing access does not prompt again."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "安卓：同一个 arm64 APK 现支持 Android 9（API 28）及以上。仅在 Android 9 点击保存图片或文件时申请存储权限；Android 10 及以上继续使用 MediaStore，无需这项权限。"
-          ],
-          "fixes": [
-            "Windows 上打开手机二维码时会自动检查防火墙，需要时弹出管理员授权。取消或失败会显示原因和重试按钮，核对放行规则后才提示成功；已放行时不重复弹窗。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "Android：同じ arm64 APK で Android 9（API 28）以降に対応しました。写真やファイルの保存時にストレージの許可を求めるのは Android 9 のみで、Android 10 以降は引き続き許可不要の MediaStore を使います。"
-          ],
-          "fixes": [
-            "Windows でスマホ用 QR コードを開くとファイアウォールを確認し、必要な場合だけ管理者の承認を求めます。キャンセルや失敗は理由と再試行ボタンを表示し、ルールの確認後にだけ成功と表示します。許可済みなら再度確認しません。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "安卓：同一個 arm64 APK 現支援 Android 9（API 28）以上。僅在 Android 9 點選儲存圖片或檔案時要求儲存空間權限；Android 10 以上繼續使用 MediaStore，無需這項權限。"
-          ],
-          "fixes": [
-            "Windows 上開啟手機 QR 碼時會自動檢查防火牆，需要時要求系統管理員授權。取消或失敗會顯示原因和重試按鈕，確認允許連入規則後才提示成功；已允許時不重複彈出視窗。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "安卓：同一個 arm64 APK 現支援 Android 9（API 28）或以上。只在 Android 9 按儲存圖片或檔案時要求儲存空間權限；Android 10 或以上繼續使用 MediaStore，無需這項權限。"
-          ],
-          "fixes": [
-            "Windows 上開啟手機二維碼時會自動檢查防火牆，需要時要求管理員授權。取消或失敗會顯示原因和重試按鈕，確認允許連線規則後才提示成功；已允許時不重複彈出視窗。"
           ]
         }
       }
