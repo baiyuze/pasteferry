@@ -27,7 +27,7 @@ android {
 
     buildTypes {
         release {
-            // 发版签名密钥还没生成（phone-task.md C6），先用调试密钥，只给内测
+            // 发版签名密钥还没生成，先用调试密钥，只给内测
             signingConfig = signingConfigs.getByName("debug")
         }
     }

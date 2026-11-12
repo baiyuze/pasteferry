@@ -14,7 +14,7 @@
 # 需要 Android SDK 与 NDK（ANDROID_HOME，默认 /usr/local/share/android-commandlinetools）和 JDK 17 以上。
 # gomobile、gobind 的版本由 client-core/go.mod 的 tool 一节固定。
 #
-# 还没有发版签名密钥（phone-task.md C6），APK 用调试密钥签名，只能给内测用。
+# 还没有发版签名密钥，APK 用调试密钥签名，只能给内测用。
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
