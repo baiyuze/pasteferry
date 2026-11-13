@@ -34,6 +34,7 @@ class _WebShareState extends AppState {
   int firewallRequests = 0;
   Future<void> Function()? firewallPermission;
   var _serial = 0;
+  String defaultHost = '192.168.1.5';
 
   @override
   Future<void> requestLocalNetworkPermission() async {
@@ -54,7 +55,7 @@ class _WebShareState extends AppState {
   Future<WebShareInvite> newWebShareInvite(String address) async {
     invites.add(address);
     _serial++;
-    final host = address.isEmpty ? '192.168.1.5' : address;
+    final host = address.isEmpty ? defaultHost : address;
     return WebShareInvite(
       id: 'inv$_serial',
       url: 'http://$host:8790/#i=inv$_serial&k=key',
@@ -298,6 +299,54 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(WebShareDialog), findsNothing);
     expect(state.closed, ['inv2', 'inv3']);
+  });
+
+  testWidgets('旧地址状态不会让新 IP 的二维码循环换码', (tester) async {
+    final state = _demo()..defaultHost = '192.168.3.19';
+    final l = await openDevices(tester, state);
+    await tester.tap(find.text(l.webShareShowQr));
+    await tester.pumpAndSettle();
+    for (var frame = 0; frame < 15; frame++) {
+      await tester.pump(const Duration(milliseconds: 16));
+    }
+    expect(state.invites, ['']);
+    expect(state.closed, isEmpty);
+    expect(find.text('http://192.168.3.19:8790/'), findsOneWidget);
+
+    // 无关事件及内容相同的新状态对象都不能触发换码。
+    state.debugEvent(Event(webShareChanged: state._status(true)));
+    await tester.pumpAndSettle();
+    expect(state.invites, ['']);
+    await tester.tap(find.byTooltip(l.close));
+    await tester.pumpAndSettle();
+    expect(state.closed, ['inv1']);
+  });
+
+  testWidgets('实际换网时只更新一次，随后稳定显示并保留新码', (tester) async {
+    final state = _demo();
+    final l = await openDevices(tester, state);
+    await tester.tap(find.text(l.webShareShowQr));
+    await tester.pumpAndSettle();
+    state.defaultHost = '192.168.3.19';
+    state.debugEvent(
+      Event(
+        webShareChanged: WebShareStatus(
+          enabled: true,
+          listening: true,
+          port: 8790,
+          addresses: ['192.168.3.19'],
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(state.invites, ['', '']);
+    expect(state.closed, ['inv1']);
+    expect(find.text('http://192.168.3.19:8790/'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 10));
+    expect(state.invites, ['', '']);
+    await tester.tap(find.byTooltip(l.close));
+    await tester.pumpAndSettle();
+    expect(state.closed, ['inv1', 'inv2']);
   });
 
   testWidgets('旧版后台服务没有网页传输时不显示', (tester) async {

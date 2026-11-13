@@ -54,6 +54,22 @@ class _Daemon extends DaemonServiceBase {
   Stream<Event> subscribe(ServiceCall call, SubscribeRequest request) =>
       events.stream;
 
+  List<String> addresses = ['192.168.1.5'];
+  final inviteAddresses = <String>[];
+
+  @override
+  Future<WebShareStatus> getWebShare(ServiceCall call, Empty request) async =>
+      WebShareStatus(enabled: true, listening: true, addresses: addresses);
+
+  @override
+  Future<WebShareInvite> newWebShareInvite(
+    ServiceCall call,
+    NewWebShareInviteRequest request,
+  ) async {
+    inviteAddresses.add(request.address);
+    return WebShareInvite(id: 'new');
+  }
+
   @override
   dynamic noSuchMethod(Invocation invocation) =>
       throw const GrpcError.unimplemented();
@@ -93,7 +109,10 @@ void main() {
   test(
     'settings config appears while status is stalled; timeout permits reconnect',
     () async {
-      final state = AppState(service: _Service(), connectDaemon: () => connect());
+      final state = AppState(
+        service: _Service(),
+        connectDaemon: () => connect(),
+      );
       addTearDown(state.dispose);
       final configReady = Completer<void>();
       state.addListener(() {
@@ -116,7 +135,9 @@ void main() {
   );
 
   test('unary calls time out but event streams stay open', () async {
-    final conn = await connect(requestTimeout: const Duration(milliseconds: 300));
+    final conn = await connect(
+      requestTimeout: const Duration(milliseconds: 300),
+    );
     addTearDown(conn.close);
     final subscription = conn.client.subscribe(SubscribeRequest());
     final event = subscription.first;
@@ -142,7 +163,10 @@ void main() {
   test(
     'settings edited during startup are retained when status arrives',
     () async {
-      final state = AppState(service: _Service(), connectDaemon: () => connect());
+      final state = AppState(
+        service: _Service(),
+        connectDaemon: () => connect(),
+      );
       addTearDown(state.dispose);
       final configReady = Completer<void>();
       state.addListener(() {
@@ -162,8 +186,30 @@ void main() {
     },
   );
 
+  test(
+    'invites reload network addresses and discard a vanished selection',
+    () async {
+      daemon.statusResult.complete(Status(deviceId: 'self'));
+      final state = AppState(
+        service: _Service(),
+        connectDaemon: () => connect(),
+      );
+      addTearDown(state.dispose);
+      await state.connect();
+      expect(state.webShare?.addresses, ['192.168.1.5']);
+      daemon.addresses = ['192.168.3.19'];
+      await state.newWebShareInvite('192.168.1.5');
+      expect(state.webShare?.addresses, ['192.168.3.19']);
+      expect(daemon.inviteAddresses, ['']);
+      await state.newWebShareInvite('192.168.3.19');
+      expect(daemon.inviteAddresses, ['', '192.168.3.19']);
+    },
+  );
+
   test('explicit deadlines override the default timeout', () async {
-    final conn = await connect(requestTimeout: const Duration(milliseconds: 300));
+    final conn = await connect(
+      requestTimeout: const Duration(milliseconds: 300),
+    );
     addTearDown(conn.close);
     final response = conn.client.getStatus(
       Empty(),

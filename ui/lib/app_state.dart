@@ -675,8 +675,17 @@ class AppState extends ChangeNotifier implements RecordDetails {
   }
 
   /// 生成一张新的二维码；[address] 为空时用默认地址
-  Future<WebShareInvite> newWebShareInvite(String address) =>
-      _client.newWebShareInvite(NewWebShareInviteRequest(address: address));
+  Future<WebShareInvite> newWebShareInvite(String address) async {
+    // 网卡变化不一定伴随网页会话事件；打开或轮换二维码时重新读取地址，
+    // 避免弹窗仍用启动时的地址列表判断新二维码是否有效。
+    _webShare = await _client.getWebShare(Empty());
+    notifyListeners();
+    return _client.newWebShareInvite(
+      NewWebShareInviteRequest(
+        address: _webShare!.addresses.contains(address) ? address : '',
+      ),
+    );
+  }
 
   /// 二维码窗口关闭：作废还没被用过的二维码
   Future<void> closeWebShareInvite(String id) async {

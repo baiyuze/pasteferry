@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:file_selector/file_selector.dart';
 
 import '../app_state.dart';
@@ -230,6 +231,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
   bool _preparingFirewall = false;
   String? _firewallError;
   Timer? _expiry;
+  List<String>? _addresses;
   StreamSubscription<String>? _used;
   late final AppState _state = AppScope.read(context);
 
@@ -282,7 +284,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
   }
 
   Future<void> _refresh({bool closeOld = true}) async {
-    if (_refreshing) return;
+    if (!mounted || _refreshing) return;
     _refreshing = true;
     final old = _invite?.id;
     try {
@@ -315,20 +317,33 @@ class _WebShareDialogState extends State<WebShareDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final st = AppScope.of(context).webShare;
-    final l = context.l10n;
-    final p = context.palette;
-    final addresses = st?.addresses ?? const <String>[];
-    // 地址变了（换了 Wi-Fi）：当前二维码里的地址不在了，换一张
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final addresses =
+        AppScope.of(context).webShare?.addresses ?? const <String>[];
+    if (listEquals(_addresses, addresses)) return;
+    final hadAddresses = _addresses != null;
+    _addresses = List<String>.of(addresses);
+    // 只响应地址列表实际变化。新邀请可能已使用新 IP，而缓存的状态仍是旧 IP；
+    // 不能在 build 中反复据此换码，否则每次 setState 都会再生成一张。
     final current = _invite == null ? null : Uri.tryParse(_invite!.url)?.host;
-    if (current != null &&
+    if (hadAddresses &&
+        current != null &&
         addresses.isNotEmpty &&
         !addresses.contains(current) &&
         !_refreshing) {
       _address = '';
       WidgetsBinding.instance.addPostFrameCallback((_) => _refresh());
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final st = AppScope.of(context).webShare;
+    final l = context.l10n;
+    final p = context.palette;
+    final addresses = st?.addresses ?? const <String>[];
+    final current = _invite == null ? null : Uri.tryParse(_invite!.url)?.host;
 
     return Dialog(
       child: SizedBox(
@@ -409,7 +424,9 @@ class _WebShareDialogState extends State<WebShareDialog> {
                           // 二维码一律深色画在白底上：深色模式下也是，反色的码很多扫码器认不出
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(context.shape.lg),
+                            borderRadius: BorderRadius.circular(
+                              context.shape.lg,
+                            ),
                             border: Border.all(color: p.border),
                           ),
                           child: _invite == null
@@ -418,9 +435,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
                                       ? const SizedBox(
                                           width: 20,
                                           height: 20,
-                                          child: ThemedSpinner(
-                                            strokeWidth: 2,
-                                          ),
+                                          child: ThemedSpinner(strokeWidth: 2),
                                         )
                                       : Text(
                                           _error!,
