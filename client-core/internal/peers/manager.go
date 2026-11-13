@@ -505,6 +505,7 @@ const (
 	FeatureSendFilesOff = "send_files_off" // 能接收隔空传送，但用户关掉了
 	// 隔空传送能走局域网 TCP 快速通道（2.5.1），见 internal/transport/lantcp
 	FeatureSendFilesTCP = "send_files_tcp_v1"
+	FeatureSendParallel = "send_files_parallel_v1"
 	// 真的实现了隔空传送的接收端（2.7.5）。手机端一期没有这个功能，但 2.7.4 及更早的
 	// 安卓包会照抄桌面端的功能声明，所以手机平台只声明 send_files_v1 不算数，见 mobilePlatform
 	FeatureSendFilesRecv = "send_files_recv_v1"

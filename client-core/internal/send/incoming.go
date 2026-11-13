@@ -20,6 +20,7 @@ import (
 	"github.com/baiyuze/pasteferry/client-core/internal/pack"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/p2p"
+	"github.com/baiyuze/pasteferry/client-core/internal/transport/striped"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
@@ -43,8 +44,10 @@ type incoming struct {
 	done     chan struct{}
 	active   atomic.Int64 // 最近一次收到数据的时间（UnixNano），看门狗用
 
-	mu     sync.Mutex
-	stream io.ReadCloser
+	mu        sync.Mutex
+	stream    io.ReadCloser
+	parallel  *striped.Pipe
+	auxiliary int
 }
 
 func (in *incoming) abort(cause error) {
@@ -365,7 +368,68 @@ func (e *Engine) resumePoint(in *incoming) error {
 
 // HandleStream 接管对端为隔空传送新开的数据通道。
 func (e *Engine) HandleStream(from, label string, st *p2p.Stream) {
+	parts := strings.Split(strings.TrimPrefix(label, streamPrefix), ":")
+	if len(parts) >= 3 {
+		e.handleParallelStream(from, parts, st)
+		return
+	}
 	e.deliverStream(from, label, newDCStream(st))
+}
+
+func (e *Engine) handleParallelStream(from string, parts []string, st *p2p.Stream) {
+	n, err := strconv.ParseUint(parts[1], 10, 32)
+	e.mu.Lock()
+	in := e.in[parts[0]]
+	e.mu.Unlock()
+	if err != nil || in == nil || in.device != from || uint32(n) != in.attempt || parts[2] != "striped" || e.opts.AcceptIndependent == nil || !e.opts.Peer(from).Parallel {
+		_ = st.Close()
+		return
+	}
+	in.mu.Lock()
+	if len(parts) == 3 && in.parallel == nil && in.stream == nil {
+		p := striped.NewReceiver(in.ctx, p2p.DuplexStream(st))
+		in.parallel = p
+		in.mu.Unlock()
+		e.deliverStream(from, fmt.Sprintf("%s%s:%d", streamPrefix, in.id, in.attempt), p)
+		return
+	}
+	if len(parts) != 5 || parts[3] != "aux" || len(parts[4]) != 32 || in.parallel == nil || in.auxiliary >= 3 || in.ctx.Err() != nil {
+		in.mu.Unlock()
+		_ = st.Close()
+		return
+	}
+	p := in.parallel
+	in.auxiliary++
+	in.mu.Unlock()
+	e.wg.Add(1)
+	go func() {
+		defer e.wg.Done()
+		c, err := e.opts.AcceptIndependent(in.ctx, from, st)
+		if err == nil {
+			c = &auxiliaryStream{ReadWriteCloser: c, release: func() { in.mu.Lock(); in.auxiliary--; in.mu.Unlock() }}
+			if err = p.Add(c); err != nil {
+				_ = c.Close()
+				return
+			}
+		}
+		if err != nil {
+			in.mu.Lock()
+			in.auxiliary--
+			in.mu.Unlock()
+		}
+	}()
+}
+
+type auxiliaryStream struct {
+	io.ReadWriteCloser
+	once    sync.Once
+	release func()
+}
+
+func (s *auxiliaryStream) Close() error {
+	err := s.ReadWriteCloser.Close()
+	s.once.Do(s.release)
+	return err
 }
 
 // deliverStream 把一条数据流（数据通道或局域网 TCP）交给对应的那一批。
@@ -391,6 +455,7 @@ func (e *Engine) deliverStream(from, label string, st io.ReadCloser) {
 // runIncoming 等数据流到来，收完整批，再按结果收尾。
 func (e *Engine) runIncoming(in *incoming, t store.Transfer) {
 	defer close(in.done)
+	defer in.cancel(nil)
 	defer func() {
 		e.mu.Lock()
 		if e.in[in.id] == in {
@@ -525,6 +590,14 @@ func (e *Engine) receive(in *incoming, t store.Transfer, st io.Reader) error {
 		in.active.Store(time.Now().UnixNano())
 		switch p := f.GetPayload().(type) {
 		case *pb.SendFrame_End:
+			in.mu.Lock()
+			parallel := in.parallel != nil
+			in.mu.Unlock()
+			if parallel {
+				if _, err := io.Copy(io.Discard, st); err != nil {
+					return err
+				}
+			}
 			return e.finalize(in, t)
 		case *pb.SendFrame_File:
 			fs := p.File

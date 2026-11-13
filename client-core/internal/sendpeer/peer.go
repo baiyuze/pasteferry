@@ -25,7 +25,8 @@ func Peer(peerMgr *peers.Manager, deviceID string) send.Peer {
 					Connected: connected, Relayed: relayed,
 					Connecting: !connected || !d.GetFeaturesKnown(),
 					Supported:  d.GetReceivesFiles(), Disabled: d.GetReceiveDisabled(),
-					Ask: peerMgr.HasFeature(deviceID, peers.FeatureSendAsk),
+					Ask:      peerMgr.HasFeature(deviceID, peers.FeatureSendAsk),
+					Parallel: peerMgr.HasFeature(deviceID, peers.FeatureSendParallel),
 				}
 			}
 		}
@@ -40,7 +41,8 @@ func Peer(peerMgr *peers.Manager, deviceID string) send.Peer {
 				Connected: connected, Relayed: relayed,
 				Connecting: !connected || !fr.GetFeaturesKnown(),
 				Supported:  fr.GetReceivesFiles() || fr.GetReceiveDisabled(), Disabled: fr.GetReceiveDisabled(),
-				Ask: peerMgr.HasFeature(deviceID, peers.FeatureSendAsk),
+				Ask:      peerMgr.HasFeature(deviceID, peers.FeatureSendAsk),
+				Parallel: peerMgr.HasFeature(deviceID, peers.FeatureSendParallel),
 			}
 		}
 	case peers.RoleStranger:
@@ -52,6 +54,7 @@ func Peer(peerMgr *peers.Manager, deviceID string) send.Peer {
 				Supported:  peerMgr.HasFeature(deviceID, peers.FeatureSendFiles) || peerMgr.HasFeature(deviceID, peers.FeatureSendFilesOff),
 				Disabled:   peerMgr.HasFeature(deviceID, peers.FeatureSendFilesOff),
 				Ask:        peerMgr.HasFeature(deviceID, peers.FeatureSendAsk),
+				Parallel:   peerMgr.HasFeature(deviceID, peers.FeatureSendParallel),
 			}
 		}
 	}

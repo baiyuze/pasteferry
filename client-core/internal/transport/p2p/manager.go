@@ -37,6 +37,8 @@ type Manager struct {
 	peers      map[string]*Peer
 	iceServers []webrtc.ICEServer
 	forceRelay bool
+	bulkMu     sync.Mutex
+	bulkSlots  map[string]int // All file transfers share three extra connections per device.
 
 	// 打洞共用的那一个本地 UDP 端口，所有连接都从它收发。
 	// 只有共用一个端口，各台探测服务器问到的公网地址才对同一个端口成立（见 egress.go）。

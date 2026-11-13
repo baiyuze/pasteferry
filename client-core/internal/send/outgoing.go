@@ -404,7 +404,14 @@ func (e *Engine) runOutgoing(t store.Transfer) {
 // stream 开这次尝试的管道（局域网 TCP 或数据通道），从第 index 个条目的 offset 处开始发帧流。
 func (e *Engine) stream(ctx context.Context, o *outgoing, t store.Transfer, index, offset, filesBefore int64, lanAddr string) error {
 	label := fmt.Sprintf("%s%s:%d", streamPrefix, t.ID, t.Attempt)
-	p, err := e.openPipe(ctx, sendTarget{id: t.ID, device: t.DeviceID, label: label}, lanAddr)
+	peer := e.opts.Peer(t.DeviceID)
+	parallel := lanAddr == "" && peer.Parallel && !peer.Relayed && e.opts.OpenIndependent != nil && e.opts.AcceptIndependent != nil
+	if parallel {
+		label += ":striped"
+	}
+	m := e.meterFor(t)
+	p, err := e.openPipe(ctx, sendTarget{id: t.ID, device: t.DeviceID, label: label, parallel: parallel,
+		remaining: func() int64 { return max(0, t.TotalBytes-m.doneBytes()) }}, lanAddr)
 	if err != nil {
 		if ctx.Err() != nil {
 			return ctx.Err()
@@ -417,7 +424,6 @@ func (e *Engine) stream(ctx context.Context, o *outgoing, t store.Transfer, inde
 	// Keep the stream alive until the receiver acknowledges the end frame.
 	// An empty local send buffer alone does not confirm remote consumption.
 
-	m := e.meterFor(t)
 	m.start(t.DoneBytes)
 	fw, err := pack.NewFrameWriter(p, m.add)
 	if err != nil {

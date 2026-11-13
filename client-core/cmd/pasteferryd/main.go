@@ -440,14 +440,16 @@ func run(dataDir string) error {
 	// ── 隔空传送 ──
 	listenLAN, dialLAN := sendpeer.LANHooks(id, peerMgr)
 	sender = send.New(send.Options{
-		Store:      db,
-		LoadConfig: loadCfg,
-		Send:       peerMgr.P2P().Send,
-		OpenStream: peerMgr.P2P().OpenStream,
-		ListenLAN:  listenLAN,
-		DialLAN:    dialLAN,
-		Peer:       func(deviceID string) send.Peer { return sendpeer.Peer(peerMgr, deviceID) },
-		Admit:      func(deviceID string) send.Admission { return sendpeer.Admit(peerMgr, db, deviceID) },
+		Store:             db,
+		LoadConfig:        loadCfg,
+		Send:              peerMgr.P2P().Send,
+		OpenStream:        peerMgr.P2P().OpenStream,
+		OpenIndependent:   peerMgr.P2P().OpenIndependentStream,
+		AcceptIndependent: peerMgr.P2P().AcceptIndependentStream,
+		ListenLAN:         listenLAN,
+		DialLAN:           dialLAN,
+		Peer:              func(deviceID string) send.Peer { return sendpeer.Peer(peerMgr, deviceID) },
+		Admit:             func(deviceID string) send.Admission { return sendpeer.Admit(peerMgr, db, deviceID) },
 		Connect: func(deviceID string) {
 			peerMgr.ConnectFriend(deviceID)
 		},

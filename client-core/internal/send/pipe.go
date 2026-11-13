@@ -10,6 +10,7 @@ import (
 	"github.com/pion/webrtc/v4"
 
 	"github.com/baiyuze/pasteferry/client-core/internal/transport/p2p"
+	"github.com/baiyuze/pasteferry/client-core/internal/transport/striped"
 )
 
 // 文件数据走的管道有两种：WebRTC 数据通道（一直都有），和局域网 TCP 快速通道（2.5.1，见 lantcp）。
@@ -77,6 +78,8 @@ func (e *Engine) openPipe(ctx context.Context, t sendTarget, lanAddr string) (se
 // sendTarget 是开管道需要的信息。
 type sendTarget struct {
 	id, device, label string
+	parallel          bool
+	remaining         func() int64
 }
 
 // openDataChannel 开一条数据通道并等它打开。
@@ -100,8 +103,29 @@ func (e *Engine) openDataChannel(ctx context.Context, t sendTarget) (sendPipe, e
 		_ = dc.Close()
 		return nil, errors.New("数据流打开超时")
 	}
+	if t.parallel {
+		primary := p2p.DuplexStream(p2p.NewStream(dc))
+		p := striped.NewSender(ctx, primary, func(ctx context.Context) (io.ReadWriteCloser, error) {
+			peer := e.opts.Peer(t.device)
+			if !peer.Connected || peer.Relayed || !peer.Parallel {
+				return nil, errors.New("parallel transfer no longer direct")
+			}
+			c, err := e.opts.OpenIndependent(ctx, t.device, t.label+":aux:"+newID())
+			if err != nil {
+				e.log.Debug("独立 WebRTC 数据连接未能建立，继续现有传输", "transfer", t.id, "err", err)
+			} else {
+				e.log.Info("独立 WebRTC 数据连接已建立", "transfer", t.id, "peer", t.device)
+			}
+			return c, err
+		}, t.remaining, e.opts.ParallelPolicy)
+		return &stripedPipe{p}, nil
+	}
 	return &dcPipe{dc: dc, cw: p2p.NewChunkWriter(dc, nil)}, nil
 }
+
+type stripedPipe struct{ *striped.Pipe }
+
+func (p *stripedPipe) finish(ctx context.Context) error { return p.Finish(ctx) }
 
 // dcStream 把收到的数据通道包成接收方要的读取接口。
 type dcStream struct {

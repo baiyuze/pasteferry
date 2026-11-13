@@ -326,13 +326,15 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 	// 与桌面同一套引擎；手机端只走局域网，没有好友和官方中转
 	listenLAN, dialLAN := sendpeer.LANHooks(id, peerMgr)
 	sender = send.New(send.Options{
-		Store:      db,
-		LoadConfig: loadCfg,
-		Send:       peerMgr.P2P().Send,
-		OpenStream: peerMgr.P2P().OpenStream,
-		ListenLAN:  listenLAN,
-		DialLAN:    dialLAN,
-		Peer:       func(deviceID string) send.Peer { return sendpeer.Peer(peerMgr, deviceID) },
+		Store:             db,
+		LoadConfig:        loadCfg,
+		Send:              peerMgr.P2P().Send,
+		OpenStream:        peerMgr.P2P().OpenStream,
+		OpenIndependent:   peerMgr.P2P().OpenIndependentStream,
+		AcceptIndependent: peerMgr.P2P().AcceptIndependentStream,
+		ListenLAN:         listenLAN,
+		DialLAN:           dialLAN,
+		Peer:              func(deviceID string) send.Peer { return sendpeer.Peer(peerMgr, deviceID) },
 		// 好友、陌生设备发来的要问用户（界面弹确认）；自己的设备自动接收
 		Admit: func(deviceID string) send.Admission { return sendpeer.Admit(peerMgr, db, deviceID) },
 		OnChange: func(t *pb.Transfer) {

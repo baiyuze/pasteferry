@@ -47,14 +47,19 @@ func (s *side) config() config.Config {
 }
 
 type pair struct {
-	a, b *side
-	mu   sync.Mutex
-	mgrs map[string]*p2p.Manager
+	a, b      *side
+	mu        sync.Mutex
+	mgrs      map[string]*p2p.Manager
+	configure func(*side, *Options)
 }
 
 func newPair(t *testing.T) *pair {
+	return newPairWith(t, nil)
+}
+
+func newPairWith(t *testing.T, configure func(*side, *Options)) *pair {
 	t.Helper()
-	p := &pair{mgrs: map[string]*p2p.Manager{}}
+	p := &pair{mgrs: map[string]*p2p.Manager{}, configure: configure}
 	p.a = p.newSide(t, "alice", "bob")
 	p.b = p.newSide(t, "bob", "alice")
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -122,7 +127,7 @@ func (p *pair) newSide(t *testing.T, id, peer string) *side {
 	p.mu.Unlock()
 	t.Cleanup(s.mgr.Close)
 
-	s.eng = New(Options{
+	opts := Options{
 		Store:      db,
 		LoadConfig: s.config,
 		Send: func(to string, msg *pb.PeerMessage) error {
@@ -170,7 +175,11 @@ func (p *pair) newSide(t *testing.T, id, peer string) *side {
 		},
 		AnswerTimeout: 10 * time.Second,
 		AskTimeout:    2 * time.Second,
-	})
+	}
+	if p.configure != nil {
+		p.configure(s, &opts)
+	}
+	s.eng = New(opts)
 	s.eng.Start()
 	t.Cleanup(s.eng.Close)
 	return s

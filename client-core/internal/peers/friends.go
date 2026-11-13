@@ -204,7 +204,7 @@ func (m *Manager) featuresFor(role string) *pb.PeerMessage {
 				f = []string{FeatureSendFilesOff}
 			}
 		}
-		f = append(f, FeatureSendFilesTCP, FeatureSendFilesRecv, FeatureSendAsk)
+		f = append(f, FeatureSendFilesTCP, FeatureSendFilesRecv, FeatureSendAsk, FeatureSendParallel)
 	}
 	f = append(f, FeatureFriends)
 	return &pb.PeerMessage{Payload: &pb.PeerMessage_Features{Features: &pb.PeerFeatures{Features: f, AppVersion: m.appVersion}}}

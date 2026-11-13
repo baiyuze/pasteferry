@@ -25,6 +25,8 @@ import (
 
 	"github.com/baiyuze/pasteferry/client-core/internal/config"
 	"github.com/baiyuze/pasteferry/client-core/internal/store"
+	"github.com/baiyuze/pasteferry/client-core/internal/transport/p2p"
+	"github.com/baiyuze/pasteferry/client-core/internal/transport/striped"
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
 )
 
@@ -97,6 +99,7 @@ type Peer struct {
 	Relayed    bool // 连接经中转
 	Supported  bool // 对方声明能接收隔空传送
 	Disabled   bool // 对方关闭了接收
+	Parallel   bool // 对方明确声明 send_files_parallel_v1；未知或旧版为 false
 }
 
 // NoticeKind 是要发给用户的系统通知。
@@ -126,6 +129,10 @@ type Options struct {
 	Send       func(deviceID string, msg *pb.PeerMessage) error
 	OpenStream func(deviceID, label string) (*webrtc.DataChannel, error)
 	Peer       func(deviceID string) Peer
+	// Independent bulk connections, negotiated over the authenticated primary.
+	OpenIndependent   func(context.Context, string, string) (io.ReadWriteCloser, error)
+	AcceptIndependent func(context.Context, string, *p2p.Stream) (io.ReadWriteCloser, error)
+	ParallelPolicy    striped.Policy
 	// RelayQuotaExhausted 表示官方服务今天的中转额度用完了（经官方中转的传输断了时据此暂停）
 	RelayQuotaExhausted func() bool
 	// Inhibit 阻止系统空闲睡眠，返回解除的函数。有传输在进行时持有
