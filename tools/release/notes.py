@@ -11,6 +11,17 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.11.2',
+ 'date': '2026-11-13',
+ 'changes': [],
+ 'fixes': [('The phone web transfer QR code could keep changing and flickering after a network address '
+            'change. It now stays stable, reloads the current addresses when generating an invitation, and '
+            'only replaces the code when needed.',
+            '手机网页传输的二维码在网络地址变化后可能不断换码、闪烁。现在生成邀请时会重新读取当前地址，二维码保持稳定，只在需要时更换。',
+            'ネットワークアドレスの変更後、スマホの Web 転送用 QR '
+            'コードが次々に切り替わり、ちらつくことがありました。招待の生成時に現在のアドレスを読み直し、必要なときだけコードを更新するようにしました。',
+            '手機網頁傳輸的 QR Code 在網路位址變更後可能不斷更換、閃爍。現在產生邀請時會重新讀取目前位址，QR Code 保持穩定，只在需要時更換。',
+            '手機網頁傳輸的二維碼在網絡地址變更後可能不斷更換、閃爍。現在產生邀請時會重新讀取目前地址，二維碼保持穩定，只在需要時更換。')]},
 {'version': '2.11.1',
  'date': '2026-11-10',
  'changes': [],
