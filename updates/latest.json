@@ -1,65 +1,101 @@
 {
   "schema": 1,
-  "latest": "2.11.2",
-  "date": "2026-11-13",
+  "latest": "2.12.0",
+  "date": "2026-11-14",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.11.2/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.12.0/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.11.2/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.12.0/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 28941964,
-      "sha256": "0e48e869c03dff7e27f98f995feebc5a95b017940bf109f93893077b15fcb667"
+      "size": 28959636,
+      "sha256": "b95974eb7a87332a8b7e8a767dd332e71100c5c21b34138572561d5d633d905c"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 31105833,
-      "sha256": "7fc11740938f05175723bcaf6544664442fc49356642c0a1ede5c718317a0182"
+      "size": 31135808,
+      "sha256": "ba8f396501115c49e91629fda44f52646736bf6a544dd7b41f8a8d55405203e8"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 56969199,
-      "sha256": "d9b2485d2a016e0a4a6b310bf1ba07aeca1f4b19c6b1c1d4be837aebeee047be"
+      "size": 57032994,
+      "sha256": "a85ee69790323cad89f31b53f6d5b700bbbe1136e945aa8f1091a7d261caaada"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 27103269,
-      "sha256": "0a0c5121bf2202821e4474075d65313b43f8b767c7ff0d1742933cf97b32d8a9"
+      "size": 27142589,
+      "sha256": "351aa0a893204c93218d6ea5ed675060eea5047f8a0db8846d2001ba4d0dd6ab"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 35013974,
-      "sha256": "9b97af1ac80cff49fb52ce456982d0e20a2f20b5693ae81222ed7b298e98c2e3"
+      "size": 35044554,
+      "sha256": "873ddb93c3ba8f26b31c634d185f5e02a69daefe2b16b3d58d31e3e0a0c9aee8"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 26596780,
-      "sha256": "8bb497da6fc5a15b3c09e5149caaccf75bb46a86954e7a3d74fb849f19ecfd3d"
+      "size": 26623332,
+      "sha256": "d16f93dd84955b354393fd65698c42fc0abce191c5558e63c40b144c3a95eb4c"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 24967950,
-      "sha256": "7c7e85b6ef277a87a7ad6b34ed9e7e91e3c062afdc744457a45f90a5bb9bba01"
+      "size": 24975518,
+      "sha256": "fd14592d31cacfcc4d4f84f2519036299059ec9fca7f3d12d7bea035d6adbedb"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 32601869,
-      "sha256": "770065c11edf90d0dd2ffc1b79eb6fa945e5f935a688a054ef974ee92c8a2cd0"
+      "size": 32629165,
+      "sha256": "dd79b7dccc2b9c34e17fc61aea9a934690112e9a96d6723412b89a006b61dbbf"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 30789603,
-      "sha256": "f15a31a4bcdc758923ed4f4ae528ba7b0a403dc4b9ed05cde0713f2c3ed53e9e"
+      "size": 30821656,
+      "sha256": "96fdc0ed61f4754361c04b86a09031c34a69e0f19cb862d453e87bd5efb4d268"
     }
   },
   "releases": [
+    {
+      "version": "2.12.0",
+      "date": "2026-11-14",
+      "notes": {
+        "en": {
+          "changes": [
+            "Adaptive direct file transfers: Slow direct WebRTC transfers can try up to four independent connections, keep extra connections only when throughput improves, and replay unacknowledged blocks if an extra connection fails.",
+            "Transfer integrity: Parallel blocks are verified and reassembled in order before the existing whole-file verification; interrupted transfers retain their existing file checkpoints."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "自适应直连传输：WebRTC 直连传文件持续较慢时，可逐步尝试最多四条独立连接，只有实际提速才保留；额外连接失败后会补发尚未确认的数据块。",
+            "传输完整性：并行数据块会逐块校验并按顺序重组，再进行原有的整文件校验；中断后保留原有文件断点继续传输。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "適応型の直接ファイル転送：WebRTC の直接転送が低速な状態が続くと、独立した接続を最大 4 本まで段階的に試し、速度が向上した接続のみ維持します。追加接続が切断された場合は未確認のブロックを再送します。",
+            "転送の完全性：並列ブロックを個別に検証して順番どおりに組み立てた後、従来どおりファイル全体を検証します。中断時も既存のチェックポイントから再開できます。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "自適應直連傳輸：WebRTC 直接傳送檔案持續較慢時，可逐步嘗試最多四條獨立連線，只有實際提速才保留；額外連線失敗後會補傳尚未確認的資料區塊。",
+            "傳輸完整性：並行資料區塊會逐塊驗證並依序重組，再進行原有的整個檔案驗證；中斷後保留原有檔案斷點繼續傳輸。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "自適應直連傳輸：WebRTC 直接傳送檔案持續較慢時，可逐步嘗試最多四條獨立連線，只有實際提速才保留；額外連線失敗後會補傳尚未確認的資料區塊。",
+            "傳輸完整性：並行資料區塊會逐塊驗證並按順序重組，再進行原有的完整檔案驗證；中斷後保留原有檔案斷點繼續傳輸。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.11.2",
       "date": "2026-11-13",
@@ -480,67 +516,6 @@
           "fixes": [
             "網頁傳給電腦的檔案現在會立即出現在電腦「收到」列表；電腦傳給網頁的檔案也會顯示在「傳出」列表，支援逐一檔案的完成狀態、取消和即時更新。",
             "升級後會一次補入 2.8.1 仍保留的網頁傳輸記錄；重試和重新啟動不會重複記錄或還原已刪除的歷史。移除網頁裝置會取消待傳工作，並保留已收到的檔案。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.8.1",
-      "date": "2026-10-30",
-      "notes": {
-        "en": {
-          "changes": [
-            "Phone web transfers now have a separate Send Files page with batch uploads, encrypted downloads, progress and persistent records. Computers can queue files for a registered browser from Devices. These transfers do not enter clipboard history or change the clipboard.",
-            "Android photo and file pickers accept multiple items in one selection for both Send and Send Files, with batch confirmation and an optional Add More action.",
-            "The website and project introduction now describe clipboard sync, searchable history and file transfer across computers and phones, and highlight the Android file transfer features introduced in 2.8."
-          ],
-          "fixes": [
-            "Android and phone web transfer lists use compact rows with actions on the right, readable filenames and metadata, and the same bidirectional transfer icon. Secondary Android actions are available from the row menu.",
-            "Android and phone web toasts now fit their content, stay horizontally centered and use the existing theme, with wrapping for longer messages."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "手机网页新增独立「隔空传送」页，支持批量上传、加密下载、进度和持久记录；电脑可从「设备」向已登记的网页发送文件。这些传输不进入复制记录，也不改动剪贴板。",
-            "安卓「发送」和「隔空传送」的照片、文件选择器均支持一次多选，发送前确认整批内容，也可继续添加。",
-            "官网和项目介绍更新为跨电脑与手机的剪贴板同步、历史检索及文件传送，并突出 2.8 新增的安卓文件传送能力。"
-          ],
-          "fixes": [
-            "安卓和手机网页传输列表改为紧凑行布局，操作位于右侧，保留清晰的文件名、信息及统一的双向传送图标；安卓次要操作可从行内菜单打开。",
-            "安卓和手机网页提示条改为随内容收缩、水平居中并沿用现有主题，较长内容自动换行。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "スマホWeb版に独立した「ファイル転送」ページを追加。複数ファイルのアップロード、暗号化ダウンロード、進捗、永続履歴に対応。パソコンの「デバイス」から登録済みブラウザへ送信でき、コピー履歴やクリップボードは変更しません。",
-            "Androidの「送信」と「ファイル転送」で写真・ファイルを一度に複数選択できます。送信前の一括確認と追加選択にも対応しました。",
-            "公式サイトとプロジェクト紹介を、パソコンとスマホのクリップボード同期・履歴検索・ファイル転送に合わせて更新し、2.8で追加したAndroidの転送機能を紹介します。"
-          ],
-          "fixes": [
-            "AndroidとスマホWebの転送一覧をコンパクトにし、操作を右側に配置。ファイル名と詳細を読みやすく保ち、双方向アイコンを統一。Androidの追加操作は行メニューから使えます。",
-            "AndroidとスマホWeb版の通知幅を内容に合わせ、中央配置と既存テーマに統一。長いメッセージは折り返します。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "手機網頁新增獨立「隔空傳送」頁，支援批次上傳、加密下載、進度和持續保留的記錄；電腦可從「裝置」向已登記的網頁傳送檔案。這些傳輸不進入複製記錄，也不更動剪貼簿。",
-            "安卓「傳送」和「隔空傳送」的照片、檔案選擇器均支援一次多選，傳送前確認整批內容，也可繼續新增。",
-            "官網和專案介紹更新為跨電腦與手機的剪貼簿同步、記錄搜尋及檔案傳送，並介紹 2.8 新增的安卓檔案傳送功能。"
-          ],
-          "fixes": [
-            "安卓和手機網頁傳輸清單改為緊湊列版面，操作位於右側，保留清楚的檔名、資訊及一致的雙向傳送圖示；安卓次要操作可從列內選單開啟。",
-            "安卓和手機網頁提示條改為依內容縮放、水平置中並沿用現有主題，較長內容自動換行。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "手機網頁新增獨立「隔空傳送」頁，支援批次上傳、加密下載、進度和持續保留的記錄；電腦可從「裝置」向已登記的網頁傳送檔案。這些傳輸不進入複製記錄，也不更動剪貼簿。",
-            "安卓「傳送」和「隔空傳送」的相片、檔案選擇器均支援一次多選，傳送前確認整批內容，也可繼續新增。",
-            "官網和專案介紹更新為跨電腦與手機的剪貼簿同步、記錄搜尋及檔案傳送，並介紹 2.8 新增的安卓檔案傳送功能。"
-          ],
-          "fixes": [
-            "安卓和手機網頁傳輸清單改為緊湊列版面，操作位於右側，保留清楚的檔名、資訊及一致的雙向傳送圖示；安卓次要操作可從列內選單開啟。",
-            "安卓和手機網頁提示條改為隨內容收縮、水平置中並沿用現有主題，較長內容自動換行。"
           ]
         }
       }
