@@ -1,65 +1,101 @@
 {
   "schema": 1,
-  "latest": "2.11.1",
-  "date": "2026-11-10",
+  "latest": "2.11.2",
+  "date": "2026-11-13",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.11.1/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.11.2/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.11.1/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.11.2/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 28944073,
-      "sha256": "689553300e7ad50fb48ead0c6a3a86f0b68023f5e1d59192762b4a39fba08431"
+      "size": 28941964,
+      "sha256": "0e48e869c03dff7e27f98f995feebc5a95b017940bf109f93893077b15fcb667"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 31108790,
-      "sha256": "76b05886166c6fe7fb60f7b4c9fb5b7eec74b5466e2678002417587e8ba910cd"
+      "size": 31105833,
+      "sha256": "7fc11740938f05175723bcaf6544664442fc49356642c0a1ede5c718317a0182"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 56973062,
-      "sha256": "52c212acc88e08020d8296374d7093683bd4b602a708a0fedd8772d66cb0da72"
+      "size": 56969199,
+      "sha256": "d9b2485d2a016e0a4a6b310bf1ba07aeca1f4b19c6b1c1d4be837aebeee047be"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 25274475,
-      "sha256": "4c2e8ad372b1ae4b32aaaeca18252f64494778ea1aa72d119b30c9d110dab7d9"
+      "size": 27103269,
+      "sha256": "0a0c5121bf2202821e4474075d65313b43f8b767c7ff0d1742933cf97b32d8a9"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 32442855,
-      "sha256": "ed541ca506c3fc6f72e940878b5a2d71e9ce552aff6cfe8e8913736670d514d8"
+      "size": 35013974,
+      "sha256": "9b97af1ac80cff49fb52ce456982d0e20a2f20b5693ae81222ed7b298e98c2e3"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 24724652,
-      "sha256": "4ee978732422db46d3c90c3a6c31255ccf629eebf11c0243300369753f807961"
+      "size": 26596780,
+      "sha256": "8bb497da6fc5a15b3c09e5149caaccf75bb46a86954e7a3d74fb849f19ecfd3d"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 23095188,
-      "sha256": "f636b3ab9dac671854d5c32abf3b78c22897429a1ee6c694b37c6a55c635a36f"
+      "size": 24967950,
+      "sha256": "7c7e85b6ef277a87a7ad6b34ed9e7e91e3c062afdc744457a45f90a5bb9bba01"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 30159372,
-      "sha256": "5f55b5089e229153413144f9facc283301cd81120bbdae3d8fe30dd6db5cd4cc"
+      "size": 32601869,
+      "sha256": "770065c11edf90d0dd2ffc1b79eb6fa945e5f935a688a054ef974ee92c8a2cd0"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 28368738,
-      "sha256": "f7b64fa479cfad30efc9cfc5670ace706b9bf587281bb32852c5fc383561a776"
+      "size": 30789603,
+      "sha256": "f15a31a4bcdc758923ed4f4ae528ba7b0a403dc4b9ed05cde0713f2c3ed53e9e"
     }
   },
   "releases": [
+    {
+      "version": "2.11.2",
+      "date": "2026-11-13",
+      "notes": {
+        "en": {
+          "fixes": [
+            "The phone web transfer QR code could keep changing and flickering after a network address change. It now stays stable, reloads the current addresses when generating an invitation, and only replaces the code when needed.",
+            "Update the bundled Go runtime to 1.26.11 to fix GO-2026-6859, an HTTP/1 server crash vulnerability."
+          ]
+        },
+        "zh-Hans": {
+          "fixes": [
+            "手机网页传输的二维码在网络地址变化后可能不断换码、闪烁。现在生成邀请时会重新读取当前地址，二维码保持稳定，只在需要时更换。",
+            "内置 Go 运行时升级到 1.26.11，修复可能导致 HTTP/1 服务崩溃的漏洞 GO-2026-6859。"
+          ]
+        },
+        "ja": {
+          "fixes": [
+            "ネットワークアドレスの変更後、スマホの Web 転送用 QR コードが次々に切り替わり、ちらつくことがありました。招待の生成時に現在のアドレスを読み直し、必要なときだけコードを更新するようにしました。",
+            "内蔵 Go ランタイムを 1.26.11 に更新し、HTTP/1 サーバーがクラッシュする脆弱性 GO-2026-6859 を修正しました。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "fixes": [
+            "手機網頁傳輸的 QR Code 在網路位址變更後可能不斷更換、閃爍。現在產生邀請時會重新讀取目前位址，QR Code 保持穩定，只在需要時更換。",
+            "內建 Go 執行環境升級至 1.26.11，修正可能導致 HTTP/1 服務崩潰的漏洞 GO-2026-6859。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "fixes": [
+            "手機網頁傳輸的二維碼在網絡地址變更後可能不斷更換、閃爍。現在產生邀請時會重新讀取目前地址，二維碼保持穩定，只在需要時更換。",
+            "內置 Go 執行環境升級至 1.26.11，修正可能導致 HTTP/1 服務崩潰的漏洞 GO-2026-6859。"
+          ]
+        }
+      }
+    },
     {
       "version": "2.11.1",
       "date": "2026-11-10",
@@ -505,62 +541,6 @@
           "fixes": [
             "安卓和手機網頁傳輸清單改為緊湊列版面，操作位於右側，保留清楚的檔名、資訊及一致的雙向傳送圖示；安卓次要操作可從列內選單開啟。",
             "安卓和手機網頁提示條改為隨內容收縮、水平置中並沿用現有主題，較長內容自動換行。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.8.0",
-      "date": "2026-10-30",
-      "notes": {
-        "en": {
-          "changes": [
-            "Android can now send and receive files with Send Files: pick a device, choose files or folders, follow the progress, save what you receive to Downloads or share it, and continue an interrupted transfer. On the same local network it uses the same encrypted TCP fast link as the computers, and a phone and a computer can send to each other in both directions."
-          ],
-          "fixes": [
-            "Sending a file from a computer to a phone waited 30 seconds and then failed on every reconnect. The Android app announced support it did not have; it now really supports it, and computers no longer treat an older Android build as able to receive files.",
-            "A clipboard item whose download timed out was marked failed without any log entry, a push that failed after the offer was delivered was dropped for good, an unanswered transfer said only \"Interrupted\", and the diagnostics report did not show each device version or whether it can receive files. All four are fixed.",
-            "Copying files that cannot be read failed silently; the app now says nothing was synced. The phone web page showed its toast on a white surface over a near-white page, so the message was hard to see; it is now dark with light text."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "安卓现在也能用隔空传送收发文件：选一台设备、挑文件或文件夹、看进度，收到的文件可以保存到「下载」或分享，传输断了能接着传。同一局域网里走和电脑一样的加密 TCP 快速通道，手机和电脑可以互相发。"
-          ],
-          "fixes": [
-            "电脑发文件给手机时，会先等 30 秒、之后每次重连都失败。原因是安卓端声明了自己没有的能力；现在手机真的支持了，电脑也不会再把旧版安卓当成能收文件。",
-            "收到的内容下载超时后只被标为失败、日志里没有任何记录；已经通知对方的内容推送失败后就永久丢失；对方没有应答时只显示「中断」；诊断报告看不到各设备的版本和能不能收文件。这四处都已修好。",
-            "复制的文件读不到时以前完全没有提示，现在会说明没有同步。手机网页的提示条以前是白底压在接近白色的页面上、几乎看不见，现在改成深色底浅色字。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "Android でも「ファイル送信」でファイルの送受信ができるようになりました。送信先を選び、ファイルやフォルダを選んで進捗を確認でき、受け取ったファイルは「ダウンロード」に保存したり共有したりできます。中断した転送は続きから再開します。同じ LAN では PC と同じ暗号化された TCP 高速経路を使い、スマホと PC のどちらからでも送れます。"
-          ],
-          "fixes": [
-            "PC からスマホへファイルを送ると 30 秒待って失敗し、再接続のたびに同じことが起きていました。原因は Android 側が実際には無い機能を宣言していたことで、現在は本当に対応し、PC も古い Android を「受け取れる」とは見なしません。",
-            "受信した内容のダウンロードがタイムアウトしても、ログを残さず失敗として扱われていました。通知済みの内容のプッシュが失敗するとそのまま失われ、応答がない転送は「中断」とだけ表示され、診断レポートには各端末のバージョンや受信可否が出ていませんでした。いずれも修正しました。",
-            "読み取れないファイルをコピーしても何も表示されませんでしたが、同期していないことを伝えるようにしました。スマホのウェブページではトーストが白地に白っぽい背景で見づらかったため、濃い背景に明るい文字へ変更しました。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "安卓現在也能用隔空傳送收發檔案：選一台裝置、挑檔案或資料夾、看進度，收到的檔案可以儲存到「下載」或分享，傳輸中斷後能接著傳。同一個區域網路裡走和電腦一樣的加密 TCP 快速通道，手機和電腦可以互相傳送。"
-          ],
-          "fixes": [
-            "電腦傳檔案給手機時，會先等 30 秒，之後每次重新連線都失敗。原因是安卓端宣告了自己沒有的能力；現在手機真的支援了，電腦也不會再把舊版安卓當成能收檔案。",
-            "收到的內容下載逾時後只被標為失敗、日誌裡沒有任何記錄；已通知對方的內容推送失敗後就永久遺失；對方沒有回應時只顯示「中斷」；診斷報告看不到各裝置的版本和能不能收檔案。這四處都已修好。",
-            "複製的檔案讀不到時以前完全沒有提示，現在會說明沒有同步。手機網頁的提示條以前是白底壓在接近白色的頁面上、幾乎看不見，現在改成深色底淺色字。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "安卓現在也能用隔空傳送收發檔案：選一部裝置、挑檔案或資料夾、看進度，收到的檔案可以儲存到「下載」或分享，傳輸中斷後可繼續傳。同一個局域網內使用和電腦一樣的加密 TCP 快速通道，手機和電腦可以互相傳送。"
-          ],
-          "fixes": [
-            "電腦傳檔案給手機時，會先等 30 秒，之後每次重新連線都失敗。原因是安卓端宣告了自己沒有的能力；現在手機真的支援了，電腦也不會再把舊版安卓當成能接收檔案。",
-            "收到的內容下載超時後只被標為失敗、日誌裏沒有任何記錄；已通知對方的內容推送失敗後就永久遺失；對方沒有回應時只顯示「中斷」；診斷報告看不到各裝置的版本和能不能接收檔案。這四處都已修好。",
-            "複製的檔案讀不到時以前完全沒有提示，現在會說明沒有同步。手機網頁的提示條以前是白底壓在接近白色的頁面上、幾乎看不見，現在改成深色底淺色字。"
           ]
         }
       }
