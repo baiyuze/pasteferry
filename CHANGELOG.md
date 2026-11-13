@@ -2,17 +2,19 @@
 
 ## 2.11.2 — 2026-11-13
 
-This release keeps the phone web transfer QR code stable after network changes.
+This release keeps the phone web transfer QR code stable after network changes and includes a Go runtime security update.
 
 ### Fixes
 
 - The phone web transfer QR code could keep changing and flickering after a network address change. It now stays stable, reloads the current addresses when generating an invitation, and only replaces the code when needed.
 
+- Update the bundled Go runtime to 1.26.11 to fix GO-2026-6859, an HTTP/1 server crash vulnerability.
+
 ### Upgrade notes
 
-- **Mac, Windows and Linux apps**: recommended if you use phone web transfers, especially after switching networks. Pairings, friends, history, themes and settings are preserved.
-- **Android**: no update needed; nothing changes on Android.
-- **Server**: no update needed.
+- **Mac, Windows and Linux apps**: recommended for the QR code fix and the Go runtime security update. Pairings, friends, history, themes and settings are preserved.
+- **Android**: recommended for the Go runtime security update.
+- **Server**: recommended for the Go runtime security update; configuration is unchanged.
 - The device-to-device protocol is unchanged and compatible with existing releases.
 
 ## 2.11.1 — 2026-11-10

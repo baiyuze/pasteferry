@@ -8,7 +8,7 @@ Name: PasteFerry in English, 隔空贴 in Chinese. Versions before 2.0.0 (Octobe
 
 Key facts:
 
-- Current version: 2.11.2, released 2026-11-13. It fixes phone web transfer QR codes that kept changing and flickering after a network address change. The interface supports 18 languages. The device protocol is unchanged; no Android or server update is required.
+- Current version: 2.11.2, released 2026-11-13. It fixes phone web transfer QR codes that kept changing and flickering after a network address change. The interface supports 18 languages. It also updates Go to 1.26.11 to fix the HTTP/1 server crash vulnerability GO-2026-6859. Updating apps and self-hosted servers is recommended. The device protocol is unchanged.
 - Downloads: https://pasteferry.cc/download/ and GitHub Releases. For mainland China, the code and the installers of the latest two releases are mirrored at https://gitee.com/baiyuze/pasteferry/releases (same files; verify with SHA256SUMS).
 - Mac client: macOS 13 Ventura or later. Distributed as a DMG for Apple silicon (PasteFerry-mac-apple-silicon.dmg), one for Intel (PasteFerry-mac-intel.dmg), and a universal one (PasteFerry.dmg); not notarized by Apple, so the first launch needs "Open Anyway" in System Settings → Privacy & Security.
 - Windows client: Windows 10 and Windows 11, x64. Per-user installer (PasteFerry-Setup.exe, no admin rights) or portable zip; not code-signed, so SmartScreen needs "More info → Run anyway" once. Runs in the notification area; pasted files are real files usable in Explorer, WeChat and Office. Skips content that password managers mark as sensitive.
