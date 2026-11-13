@@ -11,6 +11,23 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.12.0',
+ 'date': '2026-11-14',
+ 'changes': [('Adaptive direct file transfers: Slow direct WebRTC transfers can try up to four independent '
+              'connections, keep extra connections only when throughput improves, and replay unacknowledged '
+              'blocks if an extra connection fails.',
+              '自适应直连传输：WebRTC 直连传文件持续较慢时，可逐步尝试最多四条独立连接，只有实际提速才保留；额外连接失败后会补发尚未确认的数据块。',
+              '適応型の直接ファイル転送：WebRTC の直接転送が低速な状態が続くと、独立した接続を最大 4 '
+              '本まで段階的に試し、速度が向上した接続のみ維持します。追加接続が切断された場合は未確認のブロックを再送します。',
+              '自適應直連傳輸：WebRTC 直接傳送檔案持續較慢時，可逐步嘗試最多四條獨立連線，只有實際提速才保留；額外連線失敗後會補傳尚未確認的資料區塊。',
+              '自適應直連傳輸：WebRTC 直接傳送檔案持續較慢時，可逐步嘗試最多四條獨立連線，只有實際提速才保留；額外連線失敗後會補傳尚未確認的資料區塊。'),
+             ('Transfer integrity: Parallel blocks are verified and reassembled in order before the existing '
+              'whole-file verification; interrupted transfers retain their existing file checkpoints.',
+              '传输完整性：并行数据块会逐块校验并按顺序重组，再进行原有的整文件校验；中断后保留原有文件断点继续传输。',
+              '転送の完全性：並列ブロックを個別に検証して順番どおりに組み立てた後、従来どおりファイル全体を検証します。中断時も既存のチェックポイントから再開できます。',
+              '傳輸完整性：並行資料區塊會逐塊驗證並依序重組，再進行原有的整個檔案驗證；中斷後保留原有檔案斷點繼續傳輸。',
+              '傳輸完整性：並行資料區塊會逐塊驗證並按順序重組，再進行原有的完整檔案驗證；中斷後保留原有檔案斷點繼續傳輸。')],
+ 'fixes': []},
 {'version': '2.11.2',
  'date': '2026-11-13',
  'changes': [],

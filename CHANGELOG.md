@@ -1,5 +1,21 @@
 # 更新记录 / Changelog
 
+## 2.12.0 — 2026-11-14
+
+This release adds adaptive parallel connections for slow direct file transfers while preserving file transfers with older clients.
+
+### Changes
+
+- Adaptive direct file transfers: Slow direct WebRTC transfers can try up to four independent connections, keep extra connections only when throughput improves, and replay unacknowledged blocks if an extra connection fails.
+- Transfer integrity: Parallel blocks are verified and reassembled in order before the existing whole-file verification; interrupted transfers retain their existing file checkpoints.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional; update both devices to enable adaptive parallel transfers. Updating only one device preserves transfers with older clients. Pairings, friends, history, themes and settings are preserved.
+- **Android**: optional; existing LAN file transfers remain compatible with older clients.
+- **Server**: no update needed.
+- The existing device-to-device protocol remains compatible. Parallel bulk transport is capability-negotiated and used only between supporting clients.
+
 ## 2.11.2 — 2026-11-13
 
 This release keeps the phone web transfer QR code stable after network changes and includes a Go runtime security update.

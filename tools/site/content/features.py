@@ -30,11 +30,7 @@ COPY = {
 
     # ── 首页 ──
     # {version} 由官网 VERSION 生成；每次发版同步更新功能摘要。
-    "badge": ('{version}：修复手机扫码二维码持续闪烁 →',
- '{version}：修正手機掃碼 QR Code 持續閃爍 →',
- '{version}：修正手機掃碼二維碼持續閃爍 →',
- '{version}: fix flickering phone QR codes →',
- '{version}：スマホ用 QR コードのちらつきを修正 →'),
+    "badge": ('{version}：慢速直连自动尝试多路文件传输 →', '{version}：慢速直連自動嘗試多路檔案傳輸 →', '{version}：慢速直連自動嘗試多路檔案傳輸 →', '{version}: adaptive parallel file transfers →', '{version}：低速な直接転送を並列化 →'),
     # 首页手机区块（2.7）
     "home_phone_h2": ("手机也能用了。", "手機也能用了。", "手機也能用了。", "Your phone joins in.", "スマホでも使える。"),
     "home_phone_intro": ('安卓 App 可与电脑双向隔空传送，照片和文件一次多选，收到后保存或分享。不想安装？扫码打开网页，查看复制记录、发送内容，也能独立收发文件。',
