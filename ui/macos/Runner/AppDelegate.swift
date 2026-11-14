@@ -6,7 +6,8 @@ class AppDelegate: FlutterAppDelegate {
   var lifecycleChannel: FlutterMethodChannel?
 
   override func applicationDidFinishLaunching(_ notification: Notification) {
-    super.applicationDidFinishLaunching(notification)
+    // FlutterAppDelegate does not implement this optional Cocoa callback.
+    // Sending it to super raises an Objective-C exception before registration.
     NSApp.servicesProvider = self
     NSUpdateDynamicServices()
   }
