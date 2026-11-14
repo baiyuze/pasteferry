@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#include "share_menu_names.h"
 
 #include <atomic>
 #include <chrono>
@@ -26,22 +27,22 @@ const wchar_t* Title() {
   const LANGID language = GetUserDefaultUILanguage();
   switch (PRIMARYLANGID(language)) {
     case LANG_CHINESE: return language == 0x0404 || language == 0x0c04 || language == 0x1404
-      ? L"透過 PasteFerry 傳送" : L"通过 PasteFerry 发送";
-    case LANG_JAPANESE: return L"PasteFerry で送信";
-    case LANG_KOREAN: return L"PasteFerry로 보내기";
-    case LANG_GERMAN: return L"Mit PasteFerry senden";
-    case LANG_FRENCH: return L"Envoyer avec PasteFerry";
-    case LANG_SPANISH: return L"Enviar con PasteFerry";
-    case LANG_PORTUGUESE: return L"Enviar com PasteFerry";
-    case LANG_ITALIAN: return L"Invia con PasteFerry";
-    case LANG_RUSSIAN: return L"Отправить через PasteFerry";
-    case LANG_UKRAINIAN: return L"Надіслати через PasteFerry";
-    case LANG_POLISH: return L"Wyślij przez PasteFerry";
-    case LANG_TURKISH: return L"PasteFerry ile gönder";
-    case LANG_VIETNAMESE: return L"Gửi bằng PasteFerry";
-    case LANG_INDONESIAN: return L"Kirim dengan PasteFerry";
-    case LANG_ARABIC: return L"إرسال عبر PasteFerry";
-    default: return L"Send with PasteFerry";
+      ? share_menu_names::zh_Hant : share_menu_names::zh_Hans;
+    case LANG_JAPANESE: return share_menu_names::ja;
+    case LANG_KOREAN: return share_menu_names::ko;
+    case LANG_GERMAN: return share_menu_names::de;
+    case LANG_FRENCH: return share_menu_names::fr;
+    case LANG_SPANISH: return share_menu_names::es;
+    case LANG_PORTUGUESE: return share_menu_names::pt_BR;
+    case LANG_ITALIAN: return share_menu_names::it;
+    case LANG_RUSSIAN: return share_menu_names::ru;
+    case LANG_UKRAINIAN: return share_menu_names::uk;
+    case LANG_POLISH: return share_menu_names::pl;
+    case LANG_TURKISH: return share_menu_names::tr;
+    case LANG_VIETNAMESE: return share_menu_names::vi;
+    case LANG_INDONESIAN: return share_menu_names::id;
+    case LANG_ARABIC: return share_menu_names::ar;
+    default: return share_menu_names::en;
   }
 }
 

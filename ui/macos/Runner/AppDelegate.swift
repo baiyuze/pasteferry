@@ -21,7 +21,10 @@ class AppDelegate: FlutterAppDelegate {
     let legacy = pasteboard.propertyList(forType: NSPasteboard.PasteboardType("NSFilenamesPboardType")) as? [String] ?? []
     let paths = urls.isEmpty ? legacy : urls.filter { $0.isFileURL }.map { $0.path }
     guard !paths.isEmpty, paths.count <= 10000 else {
-      error.pointee = "Select local files or folders to send."; return
+      error.pointee = Bundle.main.localizedString(forKey: "shareFilesOnly",
+        value: "Share files, photos or videos. Text and links are not supported yet.",
+        table: "ServicesMenu") as NSString
+      return
     }
     do {
       let home = ProcessInfo.processInfo.environment["HOME"] ?? NSHomeDirectory()

@@ -68,7 +68,9 @@ void main() {
         await root.delete(recursive: true);
         break;
       } on FileSystemException catch (e) {
-        if (!Platform.isWindows || e.osError?.errorCode != 32 || attempt == 19) {
+        if (!Platform.isWindows ||
+            e.osError?.errorCode != 32 ||
+            attempt == 19) {
           rethrow;
         }
         await Future<void>.delayed(const Duration(milliseconds: 25));
@@ -228,4 +230,74 @@ void main() {
       state.dispose();
     },
   );
+
+  for (final locale in supportedLocales) {
+    testWidgets('sharing confirmation fits narrow screens in $locale', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(360, 780);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.runAsync(() => incoming('batch-0001'));
+      final state = _State()
+        ..debugSeed(
+          status: Status(),
+          config: Config(),
+          self: Device(id: 'self', name: 'This device'),
+          peers: [
+            Device(
+              id: 'target',
+              name: 'Receiving device',
+              online: true,
+              receivesFiles: true,
+            ),
+          ],
+        );
+      final l = await AppLocalizations.delegate.load(locale);
+      await tester.pumpWidget(
+        AppScope(
+          state: state,
+          child: MaterialApp(
+            navigatorKey: appNavigatorKey,
+            locale: locale,
+            supportedLocales: supportedLocales,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: TextScaler.linear(1.3)),
+              child: child!,
+            ),
+            home: ExternalShareHost(
+              shares: shares,
+              state: state,
+              child: const Scaffold(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text(l.shareConfirmTitle), findsOneWidget);
+      expect(find.text(l.shareChooseDevice), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, l.sendAction), findsOneWidget);
+      expect(
+        Directionality.of(tester.element(find.byType(AlertDialog))),
+        locale.languageCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
+      );
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.widgetWithText(TextButton, l.cancel));
+      await tester.pumpAndSettle();
+      for (var i = 0; i < 100 && shares.pending.isNotEmpty; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)),
+        );
+        await tester.pump();
+      }
+      expect(shares.pending, isEmpty);
+      expect(state.sent, isEmpty);
+      await tester.pumpWidget(const SizedBox());
+      state.dispose();
+    });
+  }
 }

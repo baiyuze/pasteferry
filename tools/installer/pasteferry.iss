@@ -61,7 +61,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Type: filesandordirs; Name: "{localappdata}\Programs\CopySync"
 
 [Tasks]
-Name: "sharemenu"; Description: "Add Send with PasteFerry to the file context menu"; Flags: checkedonce
+Name: "sharemenu"; Description: "{code:ShareMenuTaskDescription}"; Flags: checkedonce
 
 [Files]
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Excludes: "PasteFerryShare.dll"; Flags: recursesubdirs ignoreversion
@@ -100,6 +100,8 @@ Filename: "{sys}\taskkill.exe"; Parameters: "/F /T /IM pasteferryd.exe"; Flags: 
 Filename: "{sys}\taskkill.exe"; Parameters: "/F /IM PasteFerry.exe"; Flags: runhidden; RunOnceId: "StopUI"
 
 [Code]
+#include "share_menu_i18n.iss"
+
 function AutostartRegistered: Boolean;
 begin
   Result := RegValueExists(HKEY_CURRENT_USER, 'Software\Microsoft\Windows\CurrentVersion\Run', 'PasteFerry');
@@ -115,9 +117,9 @@ var
   RunKey: String;
 begin
   Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM pasteferryd.exe', '', SW_HIDE, ewWaitUntilTerminated, Code);
+  Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM PasteFerry.exe', '', SW_HIDE, ewWaitUntilTerminated, Code);
   Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM copysyncd.exe', '', SW_HIDE, ewWaitUntilTerminated, Code);
   Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM CopySync.exe', '', SW_HIDE, ewWaitUntilTerminated, Code);
-  Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM PasteFerry.exe', '', SW_HIDE, ewWaitUntilTerminated, Code);
   RunKey := 'Software\Microsoft\Windows\CurrentVersion\Run';
   if RegValueExists(HKEY_CURRENT_USER, RunKey, 'CopySync') then
   begin
