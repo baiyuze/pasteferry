@@ -42,6 +42,10 @@ add_dependencies(${BINARY_NAME} flutter_assemble)
 
 add_library(PasteFerryShare SHARED "share_menu.cpp" "share_menu.def")
 apply_standard_settings(PasteFerryShare)
+# Explorer must not load and lock the app's adjacent VC++ runtime DLLs.
+# Keep the shell extension self-contained so app upgrades can replace them.
+set_property(TARGET PasteFerryShare PROPERTY
+  MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 target_compile_definitions(PasteFerryShare PRIVATE UNICODE _UNICODE NOMINMAX)
 target_compile_options(PasteFerryShare PRIVATE /utf-8)
 target_link_libraries(PasteFerryShare PRIVATE shlwapi shell32 ole32 uuid)

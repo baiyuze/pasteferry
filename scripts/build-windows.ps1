@@ -67,6 +67,19 @@ foreach ($dll in 'msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll') {
 }
 Write-Host "  $($crt.FullName)"
 
+# The in-process Explorer extension must never depend on our app-local CRT.
+# Such dependencies lock the GUI runtime files even after the GUI is stopped.
+$toolchain = Get-ChildItem "$vs\VC\Tools\MSVC" -Directory |
+    Where-Object { $_.Name -as [version] } |
+    Sort-Object { $_.Name -as [version] } -Descending | Select-Object -First 1
+$dumpbin = Join-Path $toolchain.FullName 'bin\Hostx64\x64\dumpbin.exe'
+if (-not (Test-Path $dumpbin)) { throw 'Cannot inspect shell extension dependencies' }
+$shareDependencies = & $dumpbin /NOLOGO /DEPENDENTS (Join-Path $app 'PasteFerryShare.dll')
+if ($LASTEXITCODE -ne 0) { throw 'Cannot read shell extension imports' }
+if ($shareDependencies -match '(?i)(msvcp\d|vcruntime\d|ucrtbase|api-ms-win-crt-).*\.dll') {
+    throw 'Shell extension must statically link the VC++ runtime'
+}
+
 Write-Host '▶ 打包'
 Compress-Archive -Path $app -DestinationPath (Join-Path $out 'PasteFerry-windows-x64.zip')
 
