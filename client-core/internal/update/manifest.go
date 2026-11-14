@@ -14,6 +14,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/baiyuze/pasteferry/client-core/internal/lang"
 )
 
 // Schema 是清单格式的版本。不认识的格式一律当作没有更新，不去猜。
@@ -46,7 +48,7 @@ type Asset struct {
 type Release struct {
 	Version string `json:"version"`
 	Date    string `json:"date"`
-	// Notes 的键是界面语言：en、zh-Hans、zh-Hant-TW、zh-Hant-HK、ja
+	// Notes uses interface language codes; older releases may contain only five.
 	Notes map[string]Notes `json:"notes"`
 }
 
@@ -55,8 +57,8 @@ type Notes struct {
 	Fixes   []string `json:"fixes,omitempty"`
 }
 
-// Languages 是更新日志必须齐全的语言，与界面支持的语言一致。
-var Languages = []string{"en", "zh-Hans", "zh-Hant-TW", "zh-Hant-HK", "ja"}
+// Languages lists all interface languages supported by current release notes.
+var Languages = append([]string(nil), lang.Supported...)
 
 // fallback 是缺某种语言时依次尝试的语言：香港用台湾的繁体，繁体都没有时用简体，最后用英文。
 var fallback = map[string][]string{
@@ -68,10 +70,11 @@ var fallback = map[string][]string{
 }
 
 // Localized 按界面语言挑出这一版的更新日志。
-func (r Release) Localized(lang string) Notes {
-	order, ok := fallback[lang]
+func (r Release) Localized(language string) Notes {
+	code := lang.Match(language)
+	order, ok := fallback[code]
 	if !ok {
-		order = fallback["en"]
+		order = []string{code, "en"}
 	}
 	for _, l := range order {
 		if n, ok := r.Notes[l]; ok && (len(n.Changes) > 0 || len(n.Fixes) > 0) {

@@ -111,8 +111,8 @@ extension L10nContext on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
 }
 
-/// 界面语言 → Config.language 的写法，也是更新日志的语言代码（更新日志只写了 en、zh-Hans、zh-Hant-TW、
-/// zh-Hant-HK、ja 五种，其他语言由后台服务退回英文）。
+/// 界面语言 → Config.language 的写法，也是更新日志的语言代码。
+/// 最新日志覆盖全部界面语言；旧日志缺少当前语言时由后台服务回退英文。
 String settingFromLocale(Locale l) {
   if (l.languageCode == 'zh') {
     if (l.countryCode == 'HK' || l.countryCode == 'MO') return 'zh-Hant-HK';

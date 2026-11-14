@@ -63,6 +63,35 @@ func TestLocalizedFallsBackByScript(t *testing.T) {
 	}
 }
 
+func TestLocalizedUsesEveryInterfaceLanguage(t *testing.T) {
+	r := Release{Notes: map[string]Notes{}}
+	for _, language := range Languages {
+		r.Notes[language] = Notes{Changes: []string{"translated:" + language}}
+	}
+	for _, language := range Languages {
+		if got := r.Localized(language); len(got.Changes) != 1 || got.Changes[0] != "translated:"+language {
+			t.Errorf("%s selected %v", language, got)
+		}
+	}
+	for input, want := range map[string]string{
+		"fr-FR": "fr", "de_DE.UTF-8": "de", "pt-PT": "pt-BR",
+		"zh-TW": "zh-Hant-TW", "zh-MO": "zh-Hant-HK", "unknown": "en",
+	} {
+		if got := r.Localized(input); len(got.Changes) != 1 || got.Changes[0] != "translated:"+want {
+			t.Errorf("%s selected %v; want %s", input, got, want)
+		}
+	}
+	// Empty translations fall back; a fixes-only translation is still valid.
+	r.Notes["fr"] = Notes{}
+	if got := r.Localized("fr"); got.Changes[0] != "translated:en" {
+		t.Fatalf("empty translation did not fall back: %v", got)
+	}
+	r.Notes["fr"] = Notes{Fixes: []string{"correctif"}}
+	if got := r.Localized("fr"); len(got.Fixes) != 1 || got.Fixes[0] != "correctif" {
+		t.Fatalf("fixes-only translation was ignored: %v", got)
+	}
+}
+
 // fixture 建一个签过名的清单与对应的安装包。
 type fixture struct {
 	pub     ed25519.PublicKey
