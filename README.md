@@ -77,6 +77,8 @@ With PasteFerry you pair two computers once. After that, copy on one and paste o
 
 ### Share files from other apps (new in 2.12.2)
 
+System menus use the system language; confirmation screens use the app language. All 18 interface languages are covered.
+
 Select files, choose **PasteFerry**, review the batch and pick one paired receiving device. Sharing uses Send Files and does not add the files to clipboard sync.
 
 - **Android 9+**: choose PasteFerry in the system share sheet. Files, photos and videos are supported; text and links are not included yet. Transfers use the local network.

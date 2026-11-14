@@ -9,9 +9,13 @@ Share files from system menus and recover failed Mac quick paste startup.
 - System file sharing: Send files from Android's share sheet, Finder's Services menu and Windows' classic context menu (Show more options on Windows 11). On Linux, install Nautilus and Dolphin entries in Settings > Send Files.
 - Send confirmation: Review shared files and choose one paired receiving device before sending. Pending batches survive reopening the app, and imported attachments remain available for paused transfers.
 
+- Localized sharing: Sharing menus follow the system language, and confirmation screens follow the app language across all 18 supported languages.
+
 ### Fixes
 
 - Mac quick paste recovery: Registered helpers that fail to start are no longer treated as ready. PasteFerry waits for the helper session, limits automatic retries and offers a manual repair action with error details.
+
+- Windows installers now close a running app correctly instead of hiding its window and aborting an upgrade.
 
 ### Upgrade notes
 
