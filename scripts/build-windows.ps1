@@ -79,7 +79,9 @@ if (-not $iscc) {
     ) | Where-Object { Test-Path $_ } | Select-Object -First 1
 }
 if ($iscc) {
-    Invoke-Checked { & $iscc /Qp "/DAppVersion=$Version" "/DSourceDir=$app" "/DOutputDir=$out" tools\installer\pasteferry.iss } 'Inno Setup'
+    $shareExtensionHash = (Get-FileHash (Join-Path $app 'PasteFerryShare.dll') -Algorithm SHA256).Hash.ToLowerInvariant()
+    $shareExtensionName = "PasteFerryShare-$Version-$shareExtensionHash.dll"
+    Invoke-Checked { & $iscc /Qp "/DAppVersion=$Version" "/DShareExtensionName=$shareExtensionName" "/DSourceDir=$app" "/DOutputDir=$out" tools\installer\pasteferry.iss } 'Inno Setup'
 } else {
     Write-Warning '没有找到 Inno Setup 6，跳过安装程序，只出便携版 zip'
 }

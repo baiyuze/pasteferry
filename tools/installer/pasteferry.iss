@@ -1,6 +1,6 @@
 ﻿; PasteFerry 的 Windows 安装程序（Inno Setup 6）。由 scripts\build-windows.ps1 调用：
 ;
-;   iscc /DAppVersion=1.3.2 /DSourceDir=<构建好的目录> /DOutputDir=<输出目录> tools\installer\pasteferry.iss
+;   scripts\build-windows.ps1 supplies the version, extension hash and paths.
 ;
 ; 按用户安装：装到 %LOCALAPPDATA%\Programs\PasteFerry，不需要管理员权限、不弹 UAC。
 ; 数据目录 %LOCALAPPDATA%\PasteFerry 与安装目录分开，升级、重装都不受影响。
@@ -13,6 +13,9 @@
 #endif
 #ifndef OutputDir
   #define OutputDir "..\..\dist\windows"
+#endif
+#ifndef ShareExtensionName
+  #error ShareExtensionName must contain the extension SHA-256 from build-windows.ps1
 #endif
 
 [Setup]
@@ -44,6 +47,9 @@ UninstallDisplayIcon={app}\PasteFerry.exe
 UninstallDisplayName=PasteFerry
 ; PrepareToInstall also stops the UI: older apps hide on a close request.
 CloseApplications=yes
+; Never ask Restart Manager to close Explorer for our in-process extension.
+; Hash-addressed files are immutable and can coexist with a loaded older DLL.
+CloseApplicationsFilterExcludes=PasteFerryShare-*.dll
 RestartApplications=no
 ShowLanguageDialog=no
 
@@ -65,8 +71,8 @@ Name: "sharemenu"; Description: "{code:ShareMenuTaskDescription}"; Flags: checke
 
 [Files]
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Excludes: "PasteFerryShare.dll"; Flags: recursesubdirs ignoreversion
-; Explorer can keep an old extension loaded. Use a new path on each upgrade.
-Source: "{#SourceDir}\PasteFerryShare.dll"; DestDir: "{app}"; DestName: "PasteFerryShare-{#AppVersion}.dll"; Flags: ignoreversion uninsrestartdelete; Tasks: sharemenu
+; Identical reinstalls reuse the DLL; changed builds always use a new path.
+Source: "{#SourceDir}\PasteFerryShare.dll"; DestDir: "{app}"; DestName: "{#ShareExtensionName}"; Flags: onlyifdoesntexist uninsrestartdelete; Tasks: sharemenu
 
 [Icons]
 Name: "{autoprograms}\PasteFerry"; Filename: "{app}\PasteFerry.exe"
@@ -78,7 +84,7 @@ Root: HKCU; Subkey: "Software\Classes\*\shell\PasteFerry"; ValueType: none; Flag
 Root: HKCU; Subkey: "Software\Classes\Directory\shell\PasteFerry"; ValueType: none; Flags: deletekey; Tasks: not sharemenu
 Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; ValueType: none; Flags: deletekey; Tasks: not sharemenu
 Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; ValueType: none; Flags: uninsdeletekey; Tasks: sharemenu
-Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}\InprocServer32"; ValueType: string; ValueData: "{app}\PasteFerryShare-{#AppVersion}.dll"; Flags: uninsdeletekey; Tasks: sharemenu
+Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}\InprocServer32"; ValueType: string; ValueData: "{app}\{#ShareExtensionName}"; Flags: uninsdeletekey; Tasks: sharemenu
 Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}\InprocServer32"; ValueType: string; ValueName: "ThreadingModel"; ValueData: "Apartment"; Tasks: sharemenu
 Root: HKCU; Subkey: "Software\Classes\*\shell\PasteFerry"; ValueType: string; ValueName: "ExplorerCommandHandler"; ValueData: "{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; Flags: uninsdeletekey; Tasks: sharemenu
 Root: HKCU; Subkey: "Software\Classes\*\shell\PasteFerry"; ValueType: string; ValueName: "MultiSelectModel"; ValueData: "Player"; Tasks: sharemenu
