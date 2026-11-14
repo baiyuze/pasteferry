@@ -61,7 +61,19 @@ void main() {
   tearDown(() async {
     await shares.close();
     shares.dispose();
-    await root.delete(recursive: true);
+    // Windows closes the native watch handle on a later event-loop turn even
+    // after subscription cancellation, particularly after a widget test zone.
+    for (var attempt = 0; ; attempt++) {
+      try {
+        await root.delete(recursive: true);
+        break;
+      } on FileSystemException catch (e) {
+        if (!Platform.isWindows || e.osError?.errorCode != 32 || attempt == 19) {
+          rethrow;
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 25));
+      }
+    }
   });
 
   test(
@@ -205,6 +217,7 @@ void main() {
       expect(state.sent.single.$2, [source.path]);
       await tester.pumpWidget(const SizedBox());
       state.dispose();
+      await tester.runAsync(shares.close);
     },
   );
 }
