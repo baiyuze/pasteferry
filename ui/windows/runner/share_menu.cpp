@@ -180,10 +180,10 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID) {
   if (reason == DLL_PROCESS_ATTACH) { module = instance; DisableThreadLibraryCalls(instance); }
   return TRUE;
 }
-extern "C" __declspec(dllexport) HRESULT WINAPI DllCanUnloadNow() {
+STDAPI DllCanUnloadNow() {
   return objects == 0 && locks == 0 ? S_OK : S_FALSE;
 }
-extern "C" __declspec(dllexport) HRESULT WINAPI DllGetClassObject(REFCLSID clsid, REFIID iid, void** value) {
+STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, void** value) {
   if (clsid != kShareClass) return CLASS_E_CLASSNOTAVAILABLE;
   auto* factory = new ShareFactory();
   const HRESULT result = factory->QueryInterface(iid, value);

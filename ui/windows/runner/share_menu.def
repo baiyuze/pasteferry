@@ -1,0 +1,4 @@
+LIBRARY PasteFerryShare
+EXPORTS
+  DllCanUnloadNow PRIVATE
+  DllGetClassObject PRIVATE

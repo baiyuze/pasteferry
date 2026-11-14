@@ -40,7 +40,7 @@ target_include_directories(${BINARY_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 # Run the Flutter tool portions of the build. This must not be removed.
 add_dependencies(${BINARY_NAME} flutter_assemble)
 
-add_library(PasteFerryShare SHARED "share_menu.cpp")
+add_library(PasteFerryShare SHARED "share_menu.cpp" "share_menu.def")
 apply_standard_settings(PasteFerryShare)
 target_compile_definitions(PasteFerryShare PRIVATE UNICODE _UNICODE NOMINMAX)
 target_compile_options(PasteFerryShare PRIVATE /utf-8)
