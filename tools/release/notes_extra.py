@@ -18,8 +18,8 @@ EXTRA_NOTES = {
         'fixes': ['إصلاح اللصق السريع على Mac: لا يعني تسجيل المساعد أنه جاهز. ينتظر التطبيق '
                   'اتصاله، ويحدّ المحاولات التلقائية، ويعرض إصلاحًا يدويًا وتفاصيل الخطأ عند '
                   'الفشل.',
-                  'تُغلق أدوات تثبيت Windows التطبيق الجاري بصورة صحيحة بدل إخفاء نافذته وإلغاء '
-                  'الترقية.']},
+                  ('تُغلق أدوات تثبيت Windows التطبيق الجاري بصورة صحيحة بدل إخفاء نافذته وإلغاء الترقية. '
+                   'تستمر إعادة التثبيت دون إغلاق مستكشف Windows حتى عند تحميل إضافة المشاركة.')]},
  'de': {'changes': ['Dateien über Androids Teilen-Menü, Finder-Dienste und das klassische '
                     'Windows-Kontextmenü senden (Weitere Optionen anzeigen unter Windows 11). '
                     'Nautilus- und Dolphin-Menüs unter Einstellungen > Dateien senden '
@@ -33,8 +33,9 @@ EXTRA_NOTES = {
         'fixes': ['Mac-Schnelleinfügen: Registrierte, nicht gestartete Helfer gelten nicht mehr '
                   'als bereit. Begrenzte automatische Wiederholungen, Sitzungsprüfung und manuelle '
                   'Reparatur mit Fehlerdetails.',
-                  'Windows-Installer beenden eine laufende App korrekt, statt ihr Fenster '
-                  'auszublenden und das Upgrade abzubrechen.']},
+                  ('Windows-Installer beenden eine laufende App korrekt, statt ihr Fenster auszublenden und '
+                   'das Upgrade abzubrechen. Auch bei geladenem Freigabe-Plugin bleibt Windows Explorer '
+                   'während einer erneuten Installation geöffnet.')]},
  'es': {'changes': ['Envía archivos desde Compartir de Android, Servicios de Finder y el menú '
                     'clásico de Windows (Mostrar más opciones en Windows 11). Instala los menús de '
                     'Nautilus y Dolphin en Ajustes > Enviar archivos.',
@@ -47,8 +48,9 @@ EXTRA_NOTES = {
         'fixes': ['Pegado rápido en Mac: un auxiliar registrado que no arranca ya no se considera '
                   'listo. Se espera su sesión, se limitan los reintentos y se ofrece reparación '
                   'manual con detalles del error.',
-                  'El instalador de Windows cierra correctamente la aplicación abierta en lugar de '
-                  'ocultar su ventana y cancelar la actualización.']},
+                  ('El instalador de Windows cierra correctamente la aplicación abierta en lugar de ocultar '
+                   'su ventana y cancelar la actualización. La reinstalación mantiene abierto el Explorador '
+                   'de Windows aunque haya cargado la extensión para compartir.')]},
  'fr': {'changes': ['Envoyez depuis le partage Android, les Services du Finder et le menu '
                     'classique Windows (Afficher plus d’options sous Windows 11). Installez les '
                     'menus Nautilus et Dolphin dans Réglages > Envoi de fichiers.',
@@ -60,8 +62,9 @@ EXTRA_NOTES = {
         'fixes': ['Collage rapide sur Mac : un auxiliaire enregistré mais non démarré n’est plus '
                   'considéré comme prêt. Attente de sa session, tentatives limitées et réparation '
                   'manuelle avec détails de l’erreur.',
-                  'Le programme d’installation Windows ferme correctement l’application ouverte au '
-                  'lieu de masquer sa fenêtre et d’annuler la mise à niveau.']},
+                  ('Le programme d’installation Windows ferme correctement l’application ouverte au lieu de '
+                   'masquer sa fenêtre et d’annuler la mise à niveau. La réinstallation laisse aussi '
+                   'l’Explorateur Windows ouvert lorsque l’extension de partage est chargée.')]},
  'id': {'changes': ['Kirim berkas dari lembar berbagi Android, Layanan Finder, dan menu klasik '
                     'Windows (Tampilkan opsi lainnya di Windows 11). Pasang menu Nautilus dan '
                     'Dolphin di Pengaturan > Kirim Berkas.',
@@ -73,8 +76,9 @@ EXTRA_NOTES = {
         'fixes': ['Tempel cepat Mac: pembantu yang terdaftar tetapi gagal dimulai tidak lagi '
                   'dianggap siap. Aplikasi menunggu sesi, membatasi percobaan otomatis, dan '
                   'menyediakan perbaikan manual beserta detail kesalahan.',
-                  'Pemasang Windows kini menutup aplikasi yang berjalan dengan benar, bukan '
-                  'menyembunyikan jendelanya dan membatalkan pembaruan.']},
+                  ('Pemasang Windows kini menutup aplikasi yang berjalan dengan benar, bukan menyembunyikan '
+                   'jendelanya dan membatalkan pembaruan. Pemasangan ulang juga membiarkan Windows Explorer '
+                   'tetap berjalan saat ekstensi berbagi dimuat.')]},
  'it': {'changes': ['Invia dal menu Condividi di Android, dai Servizi del Finder e dal menu '
                     'classico Windows (Mostra altre opzioni in Windows 11). Installa i menu '
                     'Nautilus e Dolphin in Impostazioni > Invio file.',
@@ -86,8 +90,9 @@ EXTRA_NOTES = {
         'fixes': ['Incolla rapido su Mac: un helper registrato che non si avvia non è più '
                   'considerato pronto. Attesa della sessione, tentativi limitati e riparazione '
                   'manuale con dettagli errore.',
-                  'Il programma di installazione Windows chiude correttamente l’app in esecuzione '
-                  'invece di nasconderne la finestra e interrompere l’aggiornamento.']},
+                  ('Il programma di installazione Windows chiude correttamente l’app in esecuzione invece di '
+                   'nasconderne la finestra e interrompere l’aggiornamento. La reinstallazione lascia aperto '
+                   'Esplora file anche quando l’estensione di condivisione è caricata.')]},
  'ko': {'changes': ['Android 공유 패널, Finder 서비스, Windows 기본 오른쪽 클릭 메뉴에서 파일을 보냅니다. Windows 11은 더 많은 '
                     '옵션 표시를 선택합니다. Linux에서는 설정 > 파일 보내기에서 Nautilus와 Dolphin 메뉴를 설치합니다.',
                     '공유 파일을 확인하고 페어링된 받는 기기 한 대를 선택한 뒤 전송을 확인합니다. 앱을 다시 열어도 대기 목록이 유지되고 일시 중지한 전송의 '
@@ -95,7 +100,8 @@ EXTRA_NOTES = {
                     '다국어 공유: 공유 메뉴는 시스템 언어를, 확인 화면은 앱 언어를 따르며 지원하는 18개 언어를 모두 제공합니다.'],
         'fixes': ['Mac 빠른 붙여넣기: 등록되었지만 시작하지 못한 도우미를 준비 완료로 간주하지 않습니다. 세션을 기다리고 자동 재시도를 제한하며 수동 복구와 '
                   '오류 세부 정보를 제공합니다.',
-                  'Windows 설치 프로그램이 실행 중인 앱을 올바르게 종료하므로 창만 숨겨져 업그레이드가 취소되지 않습니다.']},
+                  ('Windows 설치 프로그램이 실행 중인 앱을 올바르게 종료하므로 창만 숨겨져 업그레이드가 취소되지 않습니다. 공유 확장 기능이 로드되어 있어도 파일 탐색기를 '
+                   '종료하지 않고 다시 설치할 수 있습니다.')]},
  'pl': {'changes': ['Wysyłaj z panelu udostępniania Androida, Usług Findera i klasycznego menu '
                     'Windows (Pokaż więcej opcji w Windows 11). Menu Nautilusa i Dolphina '
                     'zainstalujesz w Ustawienia > Wysyłanie plików.',
@@ -107,8 +113,9 @@ EXTRA_NOTES = {
         'fixes': ['Szybkie wklejanie na Macu: zarejestrowany, nieuruchomiony pomocnik nie jest już '
                   'uznawany za gotowy. Oczekiwanie na sesję, ograniczone próby i ręczna naprawa ze '
                   'szczegółami błędu.',
-                  'Instalator Windows prawidłowo zamyka uruchomioną aplikację zamiast ukrywać jej '
-                  'okno i przerywać aktualizację.']},
+                  ('Instalator Windows prawidłowo zamyka uruchomioną aplikację zamiast ukrywać jej okno i '
+                   'przerywać aktualizację. Ponowna instalacja pozostawia Eksplorator Windows uruchomiony '
+                   'również po załadowaniu rozszerzenia udostępniania.')]},
  'pt-BR': {'changes': ['Envie pelo compartilhamento do Android, Serviços do Finder e menu clássico '
                        'do Windows (Mostrar mais opções no Windows 11). Instale os menus do '
                        'Nautilus e Dolphin em Configurações > Enviar arquivos.',
@@ -120,8 +127,9 @@ EXTRA_NOTES = {
            'fixes': ['Colagem rápida no Mac: um auxiliar registrado que falha ao iniciar não é '
                      'mais considerado pronto. O app espera a sessão, limita as tentativas e '
                      'oferece reparo manual com detalhes do erro.',
-                     'O instalador do Windows agora fecha corretamente o aplicativo aberto, em vez '
-                     'de ocultar a janela e cancelar a atualização.']},
+                     ('O instalador do Windows agora fecha corretamente o aplicativo aberto, em vez de ocultar '
+                      'a janela e cancelar a atualização. A reinstalação também mantém o Explorador de Arquivos '
+                      'aberto quando a extensão de compartilhamento está carregada.')]},
  'ru': {'changes': ['Отправляйте через меню Android, Службы Finder и классическое меню Windows '
                     '(Показать дополнительные параметры в Windows 11). Меню Nautilus и Dolphin '
                     'устанавливаются в Настройки > Отправка файлов.',
@@ -133,8 +141,9 @@ EXTRA_NOTES = {
         'fixes': ['Быстрая вставка на Mac: зарегистрированный, но не запущенный помощник больше не '
                   'считается готовым. Ожидание сеанса, ограниченные повторы и ручное '
                   'восстановление со сведениями об ошибке.',
-                  'Установщик Windows корректно завершает работающую программу, а не скрывает её '
-                  'окно и прерывает обновление.']},
+                  ('Установщик Windows корректно завершает работающую программу, а не скрывает её окно и '
+                   'прерывает обновление. Повторная установка также не закрывает Проводник Windows, если в '
+                   'нём загружено расширение отправки файлов.')]},
  'tr': {'changes': ['Android paylaşım paneli, Finder Servisleri ve Windows klasik menüsünden dosya '
                     'gönderin (Windows 11: Daha fazla seçenek göster). Nautilus ve Dolphin '
                     'menülerini Ayarlar > Dosya Gönder bölümünden kurun.',
@@ -146,8 +155,9 @@ EXTRA_NOTES = {
         'fixes': ['Mac hızlı yapıştırma: kayıtlı olup başlatılamayan yardımcı artık hazır '
                   'sayılmaz. Oturum beklenir, otomatik denemeler sınırlandırılır ve hata '
                   'ayrıntılarıyla manuel onarım sunulur.',
-                  'Windows yükleyicisi artık pencereyi gizleyip yükseltmeyi iptal etmek yerine '
-                  'çalışan uygulamayı doğru biçimde kapatır.']},
+                  ('Windows yükleyicisi artık pencereyi gizleyip yükseltmeyi iptal etmek yerine çalışan '
+                   'uygulamayı doğru biçimde kapatır. Paylaşım uzantısı yüklü olsa bile yeniden kurulum '
+                   'sırasında Windows Gezgini açık kalır.')]},
  'uk': {'changes': ['Надсилайте через панель Android, Служби Finder і класичне меню Windows '
                     '(Показати додаткові параметри у Windows 11). Меню Nautilus і Dolphin '
                     'встановлюються в Налаштування > Надсилання файлів.',
@@ -159,8 +169,9 @@ EXTRA_NOTES = {
         'fixes': ['Швидке вставлення на Mac: зареєстрований, але не запущений помічник більше не '
                   'вважається готовим. Очікування сеансу, обмежені повтори й ручне відновлення з '
                   'відомостями про помилку.',
-                  'Інсталятор Windows належно завершує запущену програму, а не приховує її вікно '
-                  'та скасовує оновлення.']},
+                  ('Інсталятор Windows належно завершує запущену програму, а не приховує її вікно та '
+                   'скасовує оновлення. Повторне встановлення також не закриває Провідник Windows, якщо в '
+                   'ньому завантажено розширення надсилання файлів.')]},
  'vi': {'changes': ['Gửi từ bảng chia sẻ Android, Dịch vụ Finder và menu cổ điển Windows (Hiển thị '
                     'thêm tùy chọn trên Windows 11). Cài menu Nautilus và Dolphin trong Cài đặt > '
                     'Gửi tệp.',
@@ -171,8 +182,8 @@ EXTRA_NOTES = {
         'fixes': ['Dán nhanh trên Mac: trình trợ giúp đã đăng ký nhưng không khởi động không còn '
                   'được coi là sẵn sàng. Chờ phiên kết nối, giới hạn thử lại và cung cấp sửa thủ '
                   'công cùng chi tiết lỗi.',
-                  'Trình cài đặt Windows nay đóng đúng ứng dụng đang chạy, thay vì ẩn cửa sổ và '
-                  'hủy nâng cấp.']}},
+                  ('Trình cài đặt Windows nay đóng đúng ứng dụng đang chạy, thay vì ẩn cửa sổ và hủy nâng '
+                   'cấp. Cài đặt lại vẫn giữ Windows Explorer hoạt động ngay cả khi đã tải tiện ích chia sẻ.')]}},
     "2.12.1": {'ar': {'changes': ['سبعة سمات مدمجة جديدة: اختر أسطوانات الجاز أو عصر الفضاء أو ممفيس أو مستقبل الألفية أو '
                     'الطباعة الأمريكية القديمة أو ألعاب البكسل أو سطح المكتب الكلاسيكي من الإعدادات > '
                     'المظهر. لكل سمة ألوان فاتحة وداكنة وخطوط عناوين وأشكال عناصر تحكم ورسومات زخرفية '

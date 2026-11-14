@@ -15,7 +15,7 @@ Share files from system menus and recover failed Mac quick paste startup.
 
 - Mac quick paste recovery: Registered helpers that fail to start are no longer treated as ready. PasteFerry waits for the helper session, limits automatic retries and offers a manual repair action with error details.
 
-- Windows installers now close a running app correctly instead of hiding its window and aborting an upgrade.
+- Windows installers now close a running app correctly instead of hiding its window and aborting an upgrade. Repeat installations also leave Windows Explorer running when it has loaded the sharing extension.
 
 ### Upgrade notes
 

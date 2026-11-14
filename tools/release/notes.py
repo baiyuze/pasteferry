@@ -46,12 +46,14 @@ RELEASES = [
             'のクイックペーストを復旧：登録済みでも起動に失敗したヘルパーを準備完了と判定しなくなりました。セッションの接続を待ち、自動再試行の回数を制限します。復旧しない場合は手動修復とエラー詳細を表示します。',
             'Mac 快捷視窗復原：已登記但啟動失敗的輔助程式不再被視為就緒。應用程式會等待視窗工作階段，限制自動重試次數；仍失敗時提供手動修復入口和錯誤詳情。',
             'Mac 快捷視窗復原：已登記但啟動失敗的輔助程式不再被視為就緒。應用程式會等待視窗連線，限制自動重試次數；仍失敗時提供手動修復入口和錯誤詳情。'),
-           ('Windows installers now close a running app correctly instead of hiding its window and '
-            'aborting an upgrade.',
-            'Windows 安装程序现在能正确退出正在运行的应用，不再因窗口被隐藏而取消升级。',
-            'Windows のインストーラーが実行中のアプリを正しく終了し、ウィンドウが非表示になって更新が中止される問題を修正しました。',
-            'Windows 安裝程式現在能正確結束執行中的應用程式，不再因視窗被隱藏而取消升級。',
-            'Windows 安裝程式現在能正確結束執行中的應用程式，不再因視窗被隱藏而取消升級。')]},
+           (('Windows installers now close a running app correctly instead of hiding its window and '
+             'aborting an upgrade. Repeat installations also leave Windows Explorer running when it '
+             'has loaded the sharing extension.'),
+            'Windows 安装程序现在能正确退出正在运行的应用，不再因窗口被隐藏而取消升级。 重复安装时，即使资源管理器已加载分享插件，也会保持其运行并完成安装。',
+            ('Windows のインストーラーが実行中のアプリを正しく終了し、ウィンドウが非表示になって更新が中止される問題を修正しました。 '
+             '共有拡張機能が読み込まれていても、エクスプローラーを終了せずに再インストールできます。'),
+            'Windows 安裝程式現在能正確結束執行中的應用程式，不再因視窗被隱藏而取消升級。 重複安裝時，即使檔案總管已載入分享擴充功能，也會保持其執行並完成安裝。',
+            'Windows 安裝程式現在能正確結束執行中的應用程式，不再因視窗被隱藏而取消升級。 重複安裝時，即使檔案總管已載入分享擴充功能，也會保持其執行並完成安裝。')]},
 {'version': '2.12.1',
  'date': '2026-11-14',
  'changes': [('Seven new built-in themes: Choose Jazz Records, Space Age, Memphis, Y2K Future, Vintage '
