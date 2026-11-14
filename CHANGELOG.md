@@ -23,6 +23,7 @@ Share files from system menus and recover failed Mac quick paste startup.
 - **Android**: optional, to receive files from other apps through the system share sheet. Transfers remain limited to the local network.
 - **Server**: no update needed.
 - The device-to-device protocol is unchanged and compatible with existing releases.
+- **Earlier 2.12.2 test builds**: reinstall the final package; automatic updates do not replace builds with the same version.
 
 ## 2.12.1 — 2026-11-14
 
