@@ -215,6 +215,15 @@ void main() {
       await tester.pumpAndSettle();
       expect(state.sent.single.$1, 'target');
       expect(state.sent.single.$2, [source.path]);
+      // The RPC return precedes the durable draft update. Drive both real file
+      // I/O and Flutter's microtasks before destroying the widget test zone.
+      for (var i = 0; i < 100 && shares.pending.isNotEmpty; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)),
+        );
+        await tester.pump();
+      }
+      expect(shares.pending, isEmpty);
       await tester.pumpWidget(const SizedBox());
       state.dispose();
     },
