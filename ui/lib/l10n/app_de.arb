@@ -783,5 +783,15 @@
   "quickPasteRepair": "Schnelleinfügen reparieren",
   "quickPasteStarting": "Wird gestartet…",
   "quickPasteStartupFailed": "Das Schnelleinfügefenster konnte nicht starten. Automatische Versuche wurden beendet.",
-  "quickPasteFailureDetails": "Fehlerdetails"
+  "quickPasteFailureDetails": "Fehlerdetails",
+  "shareConfirmTitle": "Geteilte Dateien senden",
+  "shareChooseDevice": "Empfangsgerät auswählen",
+  "shareImporting": "Geteilte Dateien werden importiert…",
+  "shareFilesOnly": "Dateien, Fotos oder Videos teilen. Text und Links werden noch nicht unterstützt.",
+  "shareStarted": "Zu Datei senden hinzugefügt",
+  "shareMenuTitle": "Dateimanager-Menüs",
+  "shareMenuDescription": "Sendeaktion zu Nautilus-Skripten und Dolphin hinzufügen.",
+  "shareInstallMenu": "Menüs installieren",
+  "shareRemoveMenu": "Menüs entfernen",
+  "shareMenuDone": "Dateimanager-Menüs aktualisiert."
 }

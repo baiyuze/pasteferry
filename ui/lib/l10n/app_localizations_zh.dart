@@ -2690,6 +2690,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get quickPasteFailureDetails => '错误详情';
+
+  @override
+  String get shareConfirmTitle => '发送分享的文件';
+
+  @override
+  String get shareChooseDevice => '选择接收设备';
+
+  @override
+  String get shareImporting => '正在导入分享的文件…';
+
+  @override
+  String get shareFilesOnly => '请分享文件、图片或视频，暂不支持纯文字和链接。';
+
+  @override
+  String get shareStarted => '已加入隔空传送';
+
+  @override
+  String get shareMenuTitle => '文件管理器菜单';
+
+  @override
+  String get shareMenuDescription => '为 Nautilus 的“脚本”和 Dolphin 添加发送入口。';
+
+  @override
+  String get shareInstallMenu => '安装菜单';
+
+  @override
+  String get shareRemoveMenu => '移除菜单';
+
+  @override
+  String get shareMenuDone => '文件管理器菜单已更新。';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -5378,6 +5408,36 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get quickPasteFailureDetails => '錯誤詳情';
+
+  @override
+  String get shareConfirmTitle => '傳送分享的檔案';
+
+  @override
+  String get shareChooseDevice => '選擇接收裝置';
+
+  @override
+  String get shareImporting => '正在匯入分享的檔案…';
+
+  @override
+  String get shareFilesOnly => '請分享檔案、圖片或影片，暫不支援純文字和連結。';
+
+  @override
+  String get shareStarted => '已加入隔空傳送';
+
+  @override
+  String get shareMenuTitle => '檔案管理員選單';
+
+  @override
+  String get shareMenuDescription => '為 Nautilus 的「指令碼」和 Dolphin 新增傳送入口。';
+
+  @override
+  String get shareInstallMenu => '安裝選單';
+
+  @override
+  String get shareRemoveMenu => '移除選單';
+
+  @override
+  String get shareMenuDone => '檔案管理員選單已更新。';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -8066,4 +8126,34 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get quickPasteFailureDetails => '錯誤詳情';
+
+  @override
+  String get shareConfirmTitle => '傳送分享的檔案';
+
+  @override
+  String get shareChooseDevice => '選擇接收裝置';
+
+  @override
+  String get shareImporting => '正在匯入分享的檔案…';
+
+  @override
+  String get shareFilesOnly => '請分享檔案、圖片或影片，暫不支援純文字和連結。';
+
+  @override
+  String get shareStarted => '已加入隔空傳送';
+
+  @override
+  String get shareMenuTitle => '檔案管理員選單';
+
+  @override
+  String get shareMenuDescription => '為 Nautilus 的「指令稿」和 Dolphin 新增傳送入口。';
+
+  @override
+  String get shareInstallMenu => '安裝選單';
+
+  @override
+  String get shareRemoveMenu => '移除選單';
+
+  @override
+  String get shareMenuDone => '檔案管理員選單已更新。';
 }

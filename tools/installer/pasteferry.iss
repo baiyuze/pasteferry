@@ -60,6 +60,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [InstallDelete]
 Type: filesandordirs; Name: "{localappdata}\Programs\CopySync"
 
+[Tasks]
+Name: "sharemenu"; Description: "Add Send with PasteFerry to the file context menu"; Flags: checkedonce
+
 [Files]
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
@@ -68,6 +71,13 @@ Name: "{autoprograms}\PasteFerry"; Filename: "{app}\PasteFerry.exe"
 Name: "{autodesktop}\PasteFerry"; Filename: "{app}\PasteFerry.exe"
 
 [Registry]
+Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; ValueType: none; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}\InprocServer32"; ValueType: string; ValueData: "{app}\PasteFerryShare.dll"; Flags: uninsdeletekey; Tasks: sharemenu
+Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}\InprocServer32"; ValueType: string; ValueName: "ThreadingModel"; ValueData: "Apartment"; Tasks: sharemenu
+Root: HKCU; Subkey: "Software\Classes\*\shell\PasteFerry"; ValueType: string; ValueName: "ExplorerCommandHandler"; ValueData: "{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; Flags: uninsdeletekey; Tasks: sharemenu
+Root: HKCU; Subkey: "Software\Classes\*\shell\PasteFerry"; ValueType: string; ValueName: "MultiSelectModel"; ValueData: "Player"; Tasks: sharemenu
+Root: HKCU; Subkey: "Software\Classes\Directory\shell\PasteFerry"; ValueType: string; ValueName: "ExplorerCommandHandler"; ValueData: "{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; Flags: uninsdeletekey; Tasks: sharemenu
+Root: HKCU; Subkey: "Software\Classes\Directory\shell\PasteFerry"; ValueType: string; ValueName: "MultiSelectModel"; ValueData: "Player"; Tasks: sharemenu
 ; 卸载时删掉开机自启项与窗口位置记录。ValueType: none 表示安装时不写，只在卸载时删
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueName: "PasteFerry"; ValueType: none; Flags: uninsdeletevalue
 Root: HKCU; Subkey: "Software\PasteFerry"; ValueType: none; Flags: uninsdeletekey

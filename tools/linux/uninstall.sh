@@ -4,6 +4,8 @@
 set -euo pipefail
 data=${XDG_DATA_HOME:-$HOME/.local/share}
 config=${XDG_CONFIG_HOME:-$HOME/.config}
+here=$(cd "$(dirname "$0")" && pwd)
+"$here/pasteferry-cli" share-menu remove
 
 pkill -u "$(id -u)" -x pasteferryd 2>/dev/null || true
 rm -f "$config/autostart/pasteferry-daemon.desktop" \

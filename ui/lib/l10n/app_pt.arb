@@ -783,5 +783,15 @@
   "quickPasteRepair": "Reparar colagem rápida",
   "quickPasteStarting": "Iniciando…",
   "quickPasteStartupFailed": "A janela de colagem rápida não iniciou. As tentativas automáticas foram interrompidas.",
-  "quickPasteFailureDetails": "Detalhes do erro"
+  "quickPasteFailureDetails": "Detalhes do erro",
+  "shareConfirmTitle": "Enviar arquivos compartilhados",
+  "shareChooseDevice": "Escolher dispositivo de destino",
+  "shareImporting": "Importando arquivos compartilhados…",
+  "shareFilesOnly": "Compartilhe arquivos, fotos ou vídeos. Textos e links ainda não são compatíveis.",
+  "shareStarted": "Adicionado ao envio de arquivos",
+  "shareMenuTitle": "Menus do gerenciador de arquivos",
+  "shareMenuDescription": "Adicionar uma ação de envio aos scripts do Nautilus e ao Dolphin.",
+  "shareInstallMenu": "Instalar menus",
+  "shareRemoveMenu": "Remover menus",
+  "shareMenuDone": "Menus do gerenciador de arquivos atualizados."
 }

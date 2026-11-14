@@ -2911,4 +2911,36 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get quickPasteFailureDetails => 'Hata ayrıntıları';
+
+  @override
+  String get shareConfirmTitle => 'Paylaşılan dosyaları gönder';
+
+  @override
+  String get shareChooseDevice => 'Alıcı cihazı seçin';
+
+  @override
+  String get shareImporting => 'Paylaşılan dosyalar içe aktarılıyor…';
+
+  @override
+  String get shareFilesOnly =>
+      'Dosya, fotoğraf veya video paylaşın. Metin ve bağlantılar henüz desteklenmiyor.';
+
+  @override
+  String get shareStarted => 'Dosya gönderimine eklendi';
+
+  @override
+  String get shareMenuTitle => 'Dosya yöneticisi menüleri';
+
+  @override
+  String get shareMenuDescription =>
+      'Nautilus betiklerine ve Dolphin’e gönderme eylemi ekleyin.';
+
+  @override
+  String get shareInstallMenu => 'Menüleri yükle';
+
+  @override
+  String get shareRemoveMenu => 'Menüleri kaldır';
+
+  @override
+  String get shareMenuDone => 'Dosya yöneticisi menüleri güncellendi.';
 }

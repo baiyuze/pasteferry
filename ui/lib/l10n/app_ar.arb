@@ -783,5 +783,15 @@
   "quickPasteRepair": "إصلاح اللصق السريع",
   "quickPasteStarting": "جارٍ البدء…",
   "quickPasteStartupFailed": "تعذر بدء نافذة اللصق السريع. توقفت المحاولات التلقائية.",
-  "quickPasteFailureDetails": "تفاصيل الخطأ"
+  "quickPasteFailureDetails": "تفاصيل الخطأ",
+  "shareConfirmTitle": "إرسال الملفات المشتركة",
+  "shareChooseDevice": "اختر الجهاز المستلم",
+  "shareImporting": "جارٍ استيراد الملفات المشتركة…",
+  "shareFilesOnly": "شارك ملفات أو صورًا أو مقاطع فيديو. النصوص والروابط غير مدعومة بعد.",
+  "shareStarted": "تمت الإضافة إلى إرسال الملفات",
+  "shareMenuTitle": "قوائم مدير الملفات",
+  "shareMenuDescription": "إضافة إجراء إرسال إلى نصوص Nautilus وDolphin.",
+  "shareInstallMenu": "تثبيت القوائم",
+  "shareRemoveMenu": "إزالة القوائم",
+  "shareMenuDone": "تم تحديث قوائم مدير الملفات."
 }

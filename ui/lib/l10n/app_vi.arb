@@ -783,5 +783,15 @@
   "quickPasteRepair": "Sửa dán nhanh",
   "quickPasteStarting": "Đang khởi động…",
   "quickPasteStartupFailed": "Không thể khởi động cửa sổ dán nhanh. Đã dừng tự động thử lại.",
-  "quickPasteFailureDetails": "Chi tiết lỗi"
+  "quickPasteFailureDetails": "Chi tiết lỗi",
+  "shareConfirmTitle": "Gửi tệp được chia sẻ",
+  "shareChooseDevice": "Chọn thiết bị nhận",
+  "shareImporting": "Đang nhập tệp được chia sẻ…",
+  "shareFilesOnly": "Hãy chia sẻ tệp, ảnh hoặc video. Chưa hỗ trợ văn bản và liên kết.",
+  "shareStarted": "Đã thêm vào gửi tệp",
+  "shareMenuTitle": "Menu trình quản lý tệp",
+  "shareMenuDescription": "Thêm thao tác gửi vào Scripts của Nautilus và Dolphin.",
+  "shareInstallMenu": "Cài menu",
+  "shareRemoveMenu": "Gỡ menu",
+  "shareMenuDone": "Đã cập nhật menu trình quản lý tệp."
 }

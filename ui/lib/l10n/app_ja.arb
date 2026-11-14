@@ -783,5 +783,15 @@
   "quickPasteRepair": "クイック貼り付けを修復",
   "quickPasteStarting": "起動中…",
   "quickPasteStartupFailed": "クイック貼り付けウィンドウを起動できませんでした。自動再試行を停止しました。",
-  "quickPasteFailureDetails": "エラーの詳細"
+  "quickPasteFailureDetails": "エラーの詳細",
+  "shareConfirmTitle": "共有されたファイルを送信",
+  "shareChooseDevice": "送信先のデバイスを選択",
+  "shareImporting": "共有ファイルを読み込み中…",
+  "shareFilesOnly": "ファイル、写真、動画を共有してください。テキストとリンクにはまだ対応していません。",
+  "shareStarted": "ファイル送信に追加しました",
+  "shareMenuTitle": "ファイルマネージャーのメニュー",
+  "shareMenuDescription": "Nautilus のスクリプトと Dolphin に送信操作を追加します。",
+  "shareInstallMenu": "メニューを追加",
+  "shareRemoveMenu": "メニューを削除",
+  "shareMenuDone": "ファイルマネージャーのメニューを更新しました。"
 }

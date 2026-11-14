@@ -3040,4 +3040,36 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get quickPasteFailureDetails => 'تفاصيل الخطأ';
+
+  @override
+  String get shareConfirmTitle => 'إرسال الملفات المشتركة';
+
+  @override
+  String get shareChooseDevice => 'اختر الجهاز المستلم';
+
+  @override
+  String get shareImporting => 'جارٍ استيراد الملفات المشتركة…';
+
+  @override
+  String get shareFilesOnly =>
+      'شارك ملفات أو صورًا أو مقاطع فيديو. النصوص والروابط غير مدعومة بعد.';
+
+  @override
+  String get shareStarted => 'تمت الإضافة إلى إرسال الملفات';
+
+  @override
+  String get shareMenuTitle => 'قوائم مدير الملفات';
+
+  @override
+  String get shareMenuDescription =>
+      'إضافة إجراء إرسال إلى نصوص Nautilus وDolphin.';
+
+  @override
+  String get shareInstallMenu => 'تثبيت القوائم';
+
+  @override
+  String get shareRemoveMenu => 'إزالة القوائم';
+
+  @override
+  String get shareMenuDone => 'تم تحديث قوائم مدير الملفات.';
 }

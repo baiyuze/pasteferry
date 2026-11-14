@@ -9,6 +9,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
@@ -28,6 +29,29 @@ class MainActivity : FlutterActivity() {
     private var pendingNotification: MethodChannel.Result? = null
     private var pendingSave: Pair<List<String>, MethodChannel.Result>? = null
     private var pendingPick: MethodChannel.Result? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val incoming = IncomingShare(this)
+        incoming.recoverInterrupted()
+        receiveShare(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        receiveShare(intent)
+    }
+
+    private fun receiveShare(shared: Intent) {
+        if (shared.action != Intent.ACTION_SEND && shared.action != Intent.ACTION_SEND_MULTIPLE) return
+        if (shared.getBooleanExtra("com.pasteferry.app.SHARE_HANDLED", false)) return
+        shared.putExtra("com.pasteferry.app.SHARE_HANDLED", true)
+        setIntent(Intent(Intent.ACTION_MAIN))
+        io.execute {
+            try { IncomingShare(this).receive(shared) }
+            catch (e: Exception) { Log.w("PasteFerry", "Cannot import shared files", e) }
+        }
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

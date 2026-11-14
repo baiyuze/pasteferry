@@ -2812,4 +2812,36 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get quickPasteFailureDetails => 'Chi tiết lỗi';
+
+  @override
+  String get shareConfirmTitle => 'Gửi tệp được chia sẻ';
+
+  @override
+  String get shareChooseDevice => 'Chọn thiết bị nhận';
+
+  @override
+  String get shareImporting => 'Đang nhập tệp được chia sẻ…';
+
+  @override
+  String get shareFilesOnly =>
+      'Hãy chia sẻ tệp, ảnh hoặc video. Chưa hỗ trợ văn bản và liên kết.';
+
+  @override
+  String get shareStarted => 'Đã thêm vào gửi tệp';
+
+  @override
+  String get shareMenuTitle => 'Menu trình quản lý tệp';
+
+  @override
+  String get shareMenuDescription =>
+      'Thêm thao tác gửi vào Scripts của Nautilus và Dolphin.';
+
+  @override
+  String get shareInstallMenu => 'Cài menu';
+
+  @override
+  String get shareRemoveMenu => 'Gỡ menu';
+
+  @override
+  String get shareMenuDone => 'Đã cập nhật menu trình quản lý tệp.';
 }

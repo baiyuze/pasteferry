@@ -33,7 +33,10 @@ class BatchPicker(private val context: Context) {
         val uris = data.clipData?.let { clip ->
             (0 until clip.itemCount).map { clip.getItemAt(it).uri }
         } ?: listOfNotNull(data.data)
-        val directory = File(context.cacheDir, "picked/${UUID.randomUUID()}")
+        return importUris(uris, File(context.cacheDir, "picked/${UUID.randomUUID()}"))
+    }
+
+    fun importUris(uris: List<Uri>, directory: File, cancelled: () -> Boolean = { false }): List<Map<String, Any>> {
         try {
             return uris.distinct().mapIndexed { index, uri ->
                 val name = displayName(uri)
@@ -41,7 +44,16 @@ class BatchPicker(private val context: Context) {
                 check(target.parentFile!!.mkdirs())
                 context.contentResolver.openInputStream(uri).use { input ->
                     requireNotNull(input) { "Cannot read selected file" }
-                    target.outputStream().use { output -> input.copyTo(output) }
+                    target.outputStream().use { output ->
+                        val buffer = ByteArray(1024 * 1024)
+                        while (true) {
+                            if (cancelled()) throw java.util.concurrent.CancellationException()
+                            val count = input.read(buffer)
+                            if (count < 0) break
+                            check(directory.usableSpace > 32L * 1024 * 1024) { "Not enough free space to import shared files" }
+                            output.write(buffer, 0, count)
+                        }
+                    }
                 }
                 mapOf("path" to target.path, "name" to name, "size" to target.length(), "id" to uri.toString())
             }

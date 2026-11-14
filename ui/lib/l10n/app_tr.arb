@@ -783,5 +783,15 @@
   "quickPasteRepair": "Hızlı yapıştırmayı onar",
   "quickPasteStarting": "Başlatılıyor…",
   "quickPasteStartupFailed": "Hızlı yapıştırma penceresi başlatılamadı. Otomatik denemeler durduruldu.",
-  "quickPasteFailureDetails": "Hata ayrıntıları"
+  "quickPasteFailureDetails": "Hata ayrıntıları",
+  "shareConfirmTitle": "Paylaşılan dosyaları gönder",
+  "shareChooseDevice": "Alıcı cihazı seçin",
+  "shareImporting": "Paylaşılan dosyalar içe aktarılıyor…",
+  "shareFilesOnly": "Dosya, fotoğraf veya video paylaşın. Metin ve bağlantılar henüz desteklenmiyor.",
+  "shareStarted": "Dosya gönderimine eklendi",
+  "shareMenuTitle": "Dosya yöneticisi menüleri",
+  "shareMenuDescription": "Nautilus betiklerine ve Dolphin’e gönderme eylemi ekleyin.",
+  "shareInstallMenu": "Menüleri yükle",
+  "shareRemoveMenu": "Menüleri kaldır",
+  "shareMenuDone": "Dosya yöneticisi menüleri güncellendi."
 }

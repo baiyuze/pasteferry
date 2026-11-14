@@ -15,5 +15,6 @@ cp "$here/share/com.pasteferry.app-256.png" "$data/icons/hicolor/256x256/apps/co
 cp "$here/share/com.pasteferry.app-512.png" "$data/icons/hicolor/512x512/apps/com.pasteferry.app.png"
 command -v update-desktop-database >/dev/null && update-desktop-database -q "$data/applications" || true
 command -v gtk-update-icon-cache >/dev/null && gtk-update-icon-cache -q -t "$data/icons/hicolor" || true
+"$here/pasteferry-cli" share-menu install
 
 echo "已把 PasteFerry 加进应用菜单。也可以直接运行：$here/pasteferry"

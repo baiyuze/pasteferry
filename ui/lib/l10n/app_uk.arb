@@ -783,5 +783,15 @@
   "quickPasteRepair": "Відновити швидке вставлення",
   "quickPasteStarting": "Запуск…",
   "quickPasteStartupFailed": "Не вдалося запустити вікно швидкого вставлення. Автоматичні спроби зупинено.",
-  "quickPasteFailureDetails": "Відомості про помилку"
+  "quickPasteFailureDetails": "Відомості про помилку",
+  "shareConfirmTitle": "Надіслати отримані файли",
+  "shareChooseDevice": "Виберіть пристрій-одержувач",
+  "shareImporting": "Імпорт файлів…",
+  "shareFilesOnly": "Поділіться файлами, фото чи відео. Текст і посилання поки не підтримуються.",
+  "shareStarted": "Додано до надсилання файлів",
+  "shareMenuTitle": "Меню файлового менеджера",
+  "shareMenuDescription": "Додати надсилання до сценаріїв Nautilus і Dolphin.",
+  "shareInstallMenu": "Установити меню",
+  "shareRemoveMenu": "Видалити меню",
+  "shareMenuDone": "Меню файлового менеджера оновлено."
 }

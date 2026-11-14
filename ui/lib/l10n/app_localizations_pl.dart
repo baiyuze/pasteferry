@@ -2997,4 +2997,36 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get quickPasteFailureDetails => 'Szczegóły błędu';
+
+  @override
+  String get shareConfirmTitle => 'Wyślij udostępnione pliki';
+
+  @override
+  String get shareChooseDevice => 'Wybierz urządzenie odbierające';
+
+  @override
+  String get shareImporting => 'Importowanie udostępnionych plików…';
+
+  @override
+  String get shareFilesOnly =>
+      'Udostępnij pliki, zdjęcia lub filmy. Tekst i łącza nie są jeszcze obsługiwane.';
+
+  @override
+  String get shareStarted => 'Dodano do wysyłania plików';
+
+  @override
+  String get shareMenuTitle => 'Menu menedżera plików';
+
+  @override
+  String get shareMenuDescription =>
+      'Dodaj wysyłanie do skryptów Nautilusa i Dolphina.';
+
+  @override
+  String get shareInstallMenu => 'Zainstaluj menu';
+
+  @override
+  String get shareRemoveMenu => 'Usuń menu';
+
+  @override
+  String get shareMenuDone => 'Zaktualizowano menu menedżera plików.';
 }

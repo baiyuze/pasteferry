@@ -783,5 +783,15 @@
   "quickPasteRepair": "Ripara incolla rapido",
   "quickPasteStarting": "Avvio…",
   "quickPasteStartupFailed": "Impossibile avviare la finestra di incolla rapido. I tentativi automatici sono stati interrotti.",
-  "quickPasteFailureDetails": "Dettagli errore"
+  "quickPasteFailureDetails": "Dettagli errore",
+  "shareConfirmTitle": "Invia file condivisi",
+  "shareChooseDevice": "Scegli il dispositivo ricevente",
+  "shareImporting": "Importazione dei file condivisi…",
+  "shareFilesOnly": "Condividi file, foto o video. Testo e link non sono ancora supportati.",
+  "shareStarted": "Aggiunto all’invio file",
+  "shareMenuTitle": "Menu del gestore file",
+  "shareMenuDescription": "Aggiungi un’azione di invio agli script Nautilus e a Dolphin.",
+  "shareInstallMenu": "Installa menu",
+  "shareRemoveMenu": "Rimuovi menu",
+  "shareMenuDone": "Menu del gestore file aggiornati."
 }

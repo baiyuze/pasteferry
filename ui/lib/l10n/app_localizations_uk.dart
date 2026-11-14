@@ -2992,4 +2992,36 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get quickPasteFailureDetails => 'Відомості про помилку';
+
+  @override
+  String get shareConfirmTitle => 'Надіслати отримані файли';
+
+  @override
+  String get shareChooseDevice => 'Виберіть пристрій-одержувач';
+
+  @override
+  String get shareImporting => 'Імпорт файлів…';
+
+  @override
+  String get shareFilesOnly =>
+      'Поділіться файлами, фото чи відео. Текст і посилання поки не підтримуються.';
+
+  @override
+  String get shareStarted => 'Додано до надсилання файлів';
+
+  @override
+  String get shareMenuTitle => 'Меню файлового менеджера';
+
+  @override
+  String get shareMenuDescription =>
+      'Додати надсилання до сценаріїв Nautilus і Dolphin.';
+
+  @override
+  String get shareInstallMenu => 'Установити меню';
+
+  @override
+  String get shareRemoveMenu => 'Видалити меню';
+
+  @override
+  String get shareMenuDone => 'Меню файлового менеджера оновлено.';
 }

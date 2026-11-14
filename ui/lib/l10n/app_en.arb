@@ -1878,5 +1878,15 @@
   "quickPasteRepair": "Repair quick paste",
   "quickPasteStarting": "Starting…",
   "quickPasteStartupFailed": "The quick paste window could not start. Automatic retries have stopped.",
-  "quickPasteFailureDetails": "Error details"
+  "quickPasteFailureDetails": "Error details",
+  "shareConfirmTitle": "Send shared files",
+  "shareChooseDevice": "Choose a receiving device",
+  "shareImporting": "Importing shared files…",
+  "shareFilesOnly": "Share files, photos or videos. Text and links are not supported yet.",
+  "shareStarted": "Added to Send Files",
+  "shareMenuTitle": "File manager menus",
+  "shareMenuDescription": "Add a send action to Nautilus Scripts and Dolphin.",
+  "shareInstallMenu": "Install menus",
+  "shareRemoveMenu": "Remove menus",
+  "shareMenuDone": "File manager menus updated."
 }

@@ -202,6 +202,8 @@ for loc in zh-Hans zh-Hant zh-HK; do
         > "$PICKER/Contents/Resources/$loc.lproj/InfoPlist.strings"
 done
 
+python3 tools/mac-services.py "$UI/Contents/Resources"
+
 # 签名由内向外：先签内置的组件，最后签外层 App。
 # Flutter 增量构建在 Dart 代码变化后会重新生成 App.framework 却不重签，
 # 留下失效签名，Apple Silicon 上会直接拒绝运行，这里一并重签。

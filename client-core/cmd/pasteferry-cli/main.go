@@ -15,6 +15,8 @@
 //	pasteferry-cli address DEVICE ADDR 手动指定某台设备的地址
 //	pasteferry-cli send [-relay] DEVICE PATH...  隔空传送：把文件或文件夹发给一台设备
 //	pasteferry-cli transfers [-v]      最近收到和发出的文件（-v 带上 ID）
+//	pasteferry-cli share PATH...       打开分享确认窗口（不修改剪贴板）
+//	pasteferry-cli share-menu install|remove  Linux 文件管理器入口
 //	pasteferry-cli cancel ID           取消一批传输
 //	pasteferry-cli web [on|off|invite [ADDR]|remove ID]  手机网页传输
 //	pasteferry-cli mcp                 MCP 服务（stdio）：让 AI 读、改、应用主题，见 design/mcp.md
@@ -113,6 +115,12 @@ func run(cmd, dataDir string) error {
 		return err
 	}
 	// MCP 服务不要求后台服务已经在跑：每次调用工具时才去连
+	if cmd == "share" {
+		return shareFiles(paths.Root, flag.Args()[1:])
+	}
+	if cmd == "share-menu" {
+		return shareMenuCommand(flag.Args()[1:])
+	}
 	if cmd == "mcp" {
 		if flag.NArg() != 1 {
 			return errors.New("用法: pasteferry-cli mcp")

@@ -75,6 +75,15 @@ With PasteFerry you pair two computers once. After that, copy on one and paste o
 - **You decide who can send**: no one, contacts only (default), or everyone on the local network for 10 minutes.
 - Contacts only exchange files and images. They never see your clipboard, history or other devices. On different networks, both sides turn on the service. Both computers need 2.6 or later.
 
+### Share files from other apps (new in 2.12.2)
+
+Select files, choose **PasteFerry**, review the batch and pick one paired receiving device. Sharing uses Send Files and does not add the files to clipboard sync.
+
+- **Android 9+**: choose PasteFerry in the system share sheet. Files, photos and videos are supported; text and links are not included yet. Transfers use the local network.
+- **Mac**: in Finder, right-click the files and choose **Services → Send with PasteFerry**. Enable the service in the system’s Services settings if hidden.
+- **Windows**: use **Send with PasteFerry** in the classic right-click menu. On Windows 11, open **Show more options** first. The installer has an optional menu task; portable builds do not register it automatically.
+- **Linux**: open **Settings → Send Files → Install menus** for Nautilus Scripts and Dolphin. The tarball’s `install.sh` also installs these entries; use **Remove menus** before uninstalling a manually installed entry.
+
 ### Quick paste
 
 - Press <kbd>⌥V</kbd> (<kbd>Alt</kbd>+<kbd>V</kbd> on Windows and Linux) in any app and your history appears in the middle of the screen.

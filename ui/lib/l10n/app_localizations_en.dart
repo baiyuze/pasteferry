@@ -2918,4 +2918,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quickPasteFailureDetails => 'Error details';
+
+  @override
+  String get shareConfirmTitle => 'Send shared files';
+
+  @override
+  String get shareChooseDevice => 'Choose a receiving device';
+
+  @override
+  String get shareImporting => 'Importing shared files…';
+
+  @override
+  String get shareFilesOnly =>
+      'Share files, photos or videos. Text and links are not supported yet.';
+
+  @override
+  String get shareStarted => 'Added to Send Files';
+
+  @override
+  String get shareMenuTitle => 'File manager menus';
+
+  @override
+  String get shareMenuDescription =>
+      'Add a send action to Nautilus Scripts and Dolphin.';
+
+  @override
+  String get shareInstallMenu => 'Install menus';
+
+  @override
+  String get shareRemoveMenu => 'Remove menus';
+
+  @override
+  String get shareMenuDone => 'File manager menus updated.';
 }

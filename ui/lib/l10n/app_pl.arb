@@ -783,5 +783,15 @@
   "quickPasteRepair": "Napraw szybkie wklejanie",
   "quickPasteStarting": "Uruchamianie…",
   "quickPasteStartupFailed": "Nie udało się uruchomić okna szybkiego wklejania. Zatrzymano automatyczne próby.",
-  "quickPasteFailureDetails": "Szczegóły błędu"
+  "quickPasteFailureDetails": "Szczegóły błędu",
+  "shareConfirmTitle": "Wyślij udostępnione pliki",
+  "shareChooseDevice": "Wybierz urządzenie odbierające",
+  "shareImporting": "Importowanie udostępnionych plików…",
+  "shareFilesOnly": "Udostępnij pliki, zdjęcia lub filmy. Tekst i łącza nie są jeszcze obsługiwane.",
+  "shareStarted": "Dodano do wysyłania plików",
+  "shareMenuTitle": "Menu menedżera plików",
+  "shareMenuDescription": "Dodaj wysyłanie do skryptów Nautilusa i Dolphina.",
+  "shareInstallMenu": "Zainstaluj menu",
+  "shareRemoveMenu": "Usuń menu",
+  "shareMenuDone": "Zaktualizowano menu menedżera plików."
 }

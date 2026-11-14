@@ -2919,4 +2919,36 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get quickPasteFailureDetails => 'Detail kesalahan';
+
+  @override
+  String get shareConfirmTitle => 'Kirim berkas yang dibagikan';
+
+  @override
+  String get shareChooseDevice => 'Pilih perangkat penerima';
+
+  @override
+  String get shareImporting => 'Mengimpor berkas yang dibagikan…';
+
+  @override
+  String get shareFilesOnly =>
+      'Bagikan berkas, foto, atau video. Teks dan tautan belum didukung.';
+
+  @override
+  String get shareStarted => 'Ditambahkan ke pengiriman berkas';
+
+  @override
+  String get shareMenuTitle => 'Menu pengelola berkas';
+
+  @override
+  String get shareMenuDescription =>
+      'Tambahkan tindakan kirim ke skrip Nautilus dan Dolphin.';
+
+  @override
+  String get shareInstallMenu => 'Pasang menu';
+
+  @override
+  String get shareRemoveMenu => 'Hapus menu';
+
+  @override
+  String get shareMenuDone => 'Menu pengelola berkas diperbarui.';
 }

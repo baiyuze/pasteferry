@@ -783,5 +783,15 @@
   "quickPasteRepair": "Réparer le collage rapide",
   "quickPasteStarting": "Démarrage…",
   "quickPasteStartupFailed": "La fenêtre de collage rapide n’a pas démarré. Les tentatives automatiques sont arrêtées.",
-  "quickPasteFailureDetails": "Détails de l’erreur"
+  "quickPasteFailureDetails": "Détails de l’erreur",
+  "shareConfirmTitle": "Envoyer les fichiers partagés",
+  "shareChooseDevice": "Choisir l’appareil destinataire",
+  "shareImporting": "Importation des fichiers partagés…",
+  "shareFilesOnly": "Partagez des fichiers, photos ou vidéos. Le texte et les liens ne sont pas encore pris en charge.",
+  "shareStarted": "Ajouté à l’envoi de fichiers",
+  "shareMenuTitle": "Menus du gestionnaire de fichiers",
+  "shareMenuDescription": "Ajouter une action d’envoi aux scripts Nautilus et à Dolphin.",
+  "shareInstallMenu": "Installer les menus",
+  "shareRemoveMenu": "Supprimer les menus",
+  "shareMenuDone": "Menus du gestionnaire de fichiers mis à jour."
 }

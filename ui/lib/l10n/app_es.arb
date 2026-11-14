@@ -783,5 +783,15 @@
   "quickPasteRepair": "Reparar pegado rápido",
   "quickPasteStarting": "Iniciando…",
   "quickPasteStartupFailed": "No se pudo iniciar la ventana de pegado rápido. Se detuvieron los reintentos automáticos.",
-  "quickPasteFailureDetails": "Detalles del error"
+  "quickPasteFailureDetails": "Detalles del error",
+  "shareConfirmTitle": "Enviar archivos compartidos",
+  "shareChooseDevice": "Elegir dispositivo receptor",
+  "shareImporting": "Importando archivos compartidos…",
+  "shareFilesOnly": "Comparte archivos, fotos o vídeos. El texto y los enlaces aún no son compatibles.",
+  "shareStarted": "Añadido al envío de archivos",
+  "shareMenuTitle": "Menús del gestor de archivos",
+  "shareMenuDescription": "Añadir una acción de envío a los scripts de Nautilus y a Dolphin.",
+  "shareInstallMenu": "Instalar menús",
+  "shareRemoveMenu": "Eliminar menús",
+  "shareMenuDone": "Menús del gestor de archivos actualizados."
 }

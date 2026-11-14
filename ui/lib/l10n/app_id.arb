@@ -783,5 +783,15 @@
   "quickPasteRepair": "Perbaiki tempel cepat",
   "quickPasteStarting": "Memulai…",
   "quickPasteStartupFailed": "Jendela tempel cepat tidak dapat dimulai. Percobaan otomatis dihentikan.",
-  "quickPasteFailureDetails": "Detail kesalahan"
+  "quickPasteFailureDetails": "Detail kesalahan",
+  "shareConfirmTitle": "Kirim berkas yang dibagikan",
+  "shareChooseDevice": "Pilih perangkat penerima",
+  "shareImporting": "Mengimpor berkas yang dibagikan…",
+  "shareFilesOnly": "Bagikan berkas, foto, atau video. Teks dan tautan belum didukung.",
+  "shareStarted": "Ditambahkan ke pengiriman berkas",
+  "shareMenuTitle": "Menu pengelola berkas",
+  "shareMenuDescription": "Tambahkan tindakan kirim ke skrip Nautilus dan Dolphin.",
+  "shareInstallMenu": "Pasang menu",
+  "shareRemoveMenu": "Hapus menu",
+  "shareMenuDone": "Menu pengelola berkas diperbarui."
 }

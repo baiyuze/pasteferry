@@ -783,5 +783,15 @@
   "quickPasteRepair": "빠른 붙여넣기 복구",
   "quickPasteStarting": "시작 중…",
   "quickPasteStartupFailed": "빠른 붙여넣기 창을 시작하지 못했습니다. 자동 재시도를 중지했습니다.",
-  "quickPasteFailureDetails": "오류 세부 정보"
+  "quickPasteFailureDetails": "오류 세부 정보",
+  "shareConfirmTitle": "공유된 파일 보내기",
+  "shareChooseDevice": "받는 기기 선택",
+  "shareImporting": "공유된 파일 가져오는 중…",
+  "shareFilesOnly": "파일, 사진 또는 동영상을 공유하세요. 텍스트와 링크는 아직 지원하지 않습니다.",
+  "shareStarted": "파일 보내기에 추가됨",
+  "shareMenuTitle": "파일 관리자 메뉴",
+  "shareMenuDescription": "Nautilus 스크립트와 Dolphin에 보내기 작업을 추가합니다.",
+  "shareInstallMenu": "메뉴 설치",
+  "shareRemoveMenu": "메뉴 제거",
+  "shareMenuDone": "파일 관리자 메뉴가 업데이트되었습니다."
 }

@@ -4839,6 +4839,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error details'**
   String get quickPasteFailureDetails;
+
+  /// No description provided for @shareConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send shared files'**
+  String get shareConfirmTitle;
+
+  /// No description provided for @shareChooseDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a receiving device'**
+  String get shareChooseDevice;
+
+  /// No description provided for @shareImporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing shared files…'**
+  String get shareImporting;
+
+  /// No description provided for @shareFilesOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Share files, photos or videos. Text and links are not supported yet.'**
+  String get shareFilesOnly;
+
+  /// No description provided for @shareStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to Send Files'**
+  String get shareStarted;
+
+  /// No description provided for @shareMenuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'File manager menus'**
+  String get shareMenuTitle;
+
+  /// No description provided for @shareMenuDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a send action to Nautilus Scripts and Dolphin.'**
+  String get shareMenuDescription;
+
+  /// No description provided for @shareInstallMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Install menus'**
+  String get shareInstallMenu;
+
+  /// No description provided for @shareRemoveMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove menus'**
+  String get shareRemoveMenu;
+
+  /// No description provided for @shareMenuDone.
+  ///
+  /// In en, this message translates to:
+  /// **'File manager menus updated.'**
+  String get shareMenuDone;
 }
 
 class _AppLocalizationsDelegate

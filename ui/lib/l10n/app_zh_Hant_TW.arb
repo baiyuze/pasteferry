@@ -783,5 +783,15 @@
   "quickPasteRepair": "修復快捷視窗",
   "quickPasteStarting": "正在啟動…",
   "quickPasteStartupFailed": "快捷視窗無法啟動，已停止自動重試。",
-  "quickPasteFailureDetails": "錯誤詳情"
+  "quickPasteFailureDetails": "錯誤詳情",
+  "shareConfirmTitle": "傳送分享的檔案",
+  "shareChooseDevice": "選擇接收裝置",
+  "shareImporting": "正在匯入分享的檔案…",
+  "shareFilesOnly": "請分享檔案、圖片或影片，暫不支援純文字和連結。",
+  "shareStarted": "已加入隔空傳送",
+  "shareMenuTitle": "檔案管理員選單",
+  "shareMenuDescription": "為 Nautilus 的「指令稿」和 Dolphin 新增傳送入口。",
+  "shareInstallMenu": "安裝選單",
+  "shareRemoveMenu": "移除選單",
+  "shareMenuDone": "檔案管理員選單已更新。"
 }

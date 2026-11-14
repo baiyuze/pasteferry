@@ -783,5 +783,15 @@
   "quickPasteRepair": "修复快捷窗口",
   "quickPasteStarting": "正在启动…",
   "quickPasteStartupFailed": "快捷窗口未能启动，已停止自动重试。",
-  "quickPasteFailureDetails": "错误详情"
+  "quickPasteFailureDetails": "错误详情",
+  "shareConfirmTitle": "发送分享的文件",
+  "shareChooseDevice": "选择接收设备",
+  "shareImporting": "正在导入分享的文件…",
+  "shareFilesOnly": "请分享文件、图片或视频，暂不支持纯文字和链接。",
+  "shareStarted": "已加入隔空传送",
+  "shareMenuTitle": "文件管理器菜单",
+  "shareMenuDescription": "为 Nautilus 的“脚本”和 Dolphin 添加发送入口。",
+  "shareInstallMenu": "安装菜单",
+  "shareRemoveMenu": "移除菜单",
+  "shareMenuDone": "文件管理器菜单已更新。"
 }

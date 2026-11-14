@@ -2741,4 +2741,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get quickPasteFailureDetails => '오류 세부 정보';
+
+  @override
+  String get shareConfirmTitle => '공유된 파일 보내기';
+
+  @override
+  String get shareChooseDevice => '받는 기기 선택';
+
+  @override
+  String get shareImporting => '공유된 파일 가져오는 중…';
+
+  @override
+  String get shareFilesOnly => '파일, 사진 또는 동영상을 공유하세요. 텍스트와 링크는 아직 지원하지 않습니다.';
+
+  @override
+  String get shareStarted => '파일 보내기에 추가됨';
+
+  @override
+  String get shareMenuTitle => '파일 관리자 메뉴';
+
+  @override
+  String get shareMenuDescription => 'Nautilus 스크립트와 Dolphin에 보내기 작업을 추가합니다.';
+
+  @override
+  String get shareInstallMenu => '메뉴 설치';
+
+  @override
+  String get shareRemoveMenu => '메뉴 제거';
+
+  @override
+  String get shareMenuDone => '파일 관리자 메뉴가 업데이트되었습니다.';
 }

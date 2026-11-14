@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ import 'widgets/update_dialog.dart';
 import 'icons.dart';
 import 'notices.dart';
 import 'pixel_art.dart';
+import 'external_share.dart';
+import 'widgets/external_share_host.dart';
 
 /// 带 --picker 启动的是快捷粘贴窗口进程，见 picker/picker_main.dart。
 void main(List<String> args) {
@@ -55,6 +58,7 @@ class PasteFerryApp extends StatefulWidget {
 
 class _PasteFerryAppState extends State<PasteFerryApp> {
   late final AppState _state;
+  final _shares = ExternalShares();
 
   /// 按界面语言缓存的浅色、深色主题：Windows 上中文和日文的汉字用不同的字体
   final _themes = <String, (ThemeData, ThemeData)>{};
@@ -64,10 +68,18 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
     super.initState();
     _state = widget.state ?? (AppState()..connect());
     if (widget.state == null) installApplicationLifecycle(_state);
+    if (widget.state == null) {
+      unawaited(
+        _shares.start().catchError((Object e) {
+          debugPrint('Share startup: $e');
+        }),
+      );
+    }
   }
 
   @override
   void dispose() {
+    _shares.dispose();
     if (widget.state == null) _state.dispose();
     super.dispose();
   }
@@ -116,7 +128,15 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
               return ThemeTextScale(
                 child: PixelScanlinesLayer(
                   on: theme.scanlines,
-                  child: ThemedBackdrop(controller: theme, window: 'main', child: child!),
+                  child: ExternalShareHost(
+                    shares: _shares,
+                    state: _state,
+                    child: ThemedBackdrop(
+                      controller: theme,
+                      window: 'main',
+                      child: child!,
+                    ),
+                  ),
                 ),
               );
             },
@@ -212,7 +232,8 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
       if (state.pageRequest == 'friends') _section = Section.friends;
       if (state.pageRequest == 'settings') _section = Section.settings;
       // Windows 托盘的「手机扫码连接」：切到设备页并打开二维码窗口
-      if (state.pageRequest == 'webshare' && (state.webShare?.listening ?? false)) {
+      if (state.pageRequest == 'webshare' &&
+          (state.webShare?.listening ?? false)) {
         _section = Section.devices;
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) showWebShareDialog(context);
@@ -239,7 +260,10 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
     }
     // 有人兑换了本机的好友码：弹出确认框
     final friendRequest = state.pendingFriendRequest;
-    if (friendRequest != null && pending == null && !_pairingDialogOpen && !_friendDialogOpen) {
+    if (friendRequest != null &&
+        pending == null &&
+        !_pairingDialogOpen &&
+        !_friendDialogOpen) {
       _friendDialogOpen = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
@@ -256,7 +280,11 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
     }
     // 好友或附近的陌生设备发来文件，等用户接受
     final asking = state.askingIncoming.firstOrNull;
-    if (asking != null && pending == null && !_pairingDialogOpen && !_friendDialogOpen && !_incomingDialogOpen) {
+    if (asking != null &&
+        pending == null &&
+        !_pairingDialogOpen &&
+        !_friendDialogOpen &&
+        !_incomingDialogOpen) {
       _incomingDialogOpen = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
@@ -341,8 +369,8 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
             updated.ok
                 ? l.updatedTo(updated.toVersion)
                 : updated.error.isEmpty
-                    ? l.updateNotFinished(updated.fromVersion)
-                    : l.updateNotFinishedWhy(updated.fromVersion, updated.error),
+                ? l.updateNotFinished(updated.fromVersion)
+                : l.updateNotFinishedWhy(updated.fromVersion, updated.error),
             error: !updated.ok,
           );
         });
@@ -368,7 +396,12 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
             child: Stack(
               children: [
                 if (context.showScenery)
-                  Positioned(left: 0, right: 0, top: 0, child: SceneHeader(controller: state.theme)),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    child: SceneHeader(controller: state.theme),
+                  ),
                 Positioned.fill(
                   child: needsService
                       ? const ServicePage()
@@ -460,7 +493,9 @@ class _Sidebar extends StatelessWidget {
             selected: current == Section.friends,
             // 好友发来、等你接受的文件
             trailing: () {
-              final n = state.askingIncoming.where((t) => t.peerRole == 'friend').length;
+              final n = state.askingIncoming
+                  .where((t) => t.peerRole == 'friend')
+                  .length;
               return n == 0 ? null : '$n';
             }(),
             onTap: () => onSelect(Section.friends),
@@ -538,7 +573,17 @@ class _NavItemState extends State<_NavItem> {
           onTap: widget.onTap,
           // 像素主题：选中项左边一个一闪一闪的 ▶，像游戏菜单的光标（从右到左时在右边，朝左）
           child: bar
-              ? Stack(clipBehavior: Clip.none, children: [_navBox(context, p, selected, bar), const PositionedDirectional(start: -9, top: 10, child: PixelCursor())])
+              ? Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    _navBox(context, p, selected, bar),
+                    const PositionedDirectional(
+                      start: -9,
+                      top: 10,
+                      child: PixelCursor(),
+                    ),
+                  ],
+                )
               : _navBox(context, p, selected, bar),
         ),
       ),
@@ -552,7 +597,9 @@ class _NavItemState extends State<_NavItem> {
       decoration: bar
           ? BoxDecoration(
               color: p.selection,
-              border: BorderDirectional(start: BorderSide(color: p.accent, width: 4)),
+              border: BorderDirectional(
+                start: BorderSide(color: p.accent, width: 4),
+              ),
             )
           : context.shape.box(
               color: selected
@@ -562,11 +609,7 @@ class _NavItemState extends State<_NavItem> {
             ),
       child: Row(
         children: [
-          Icon(
-            widget.icon,
-            size: 16,
-            color: selected ? p.accent : p.textDim,
-          ),
+          Icon(widget.icon, size: 16, color: selected ? p.accent : p.textDim),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -617,10 +660,7 @@ class _SendBadge extends StatelessWidget {
       message: lines.join('\n'),
       child: SizedBox.square(
         dimension: 12,
-        child: ThemedSpinner(
-          strokeWidth: 1.6,
-          value: state.transferProgress,
-        ),
+        child: ThemedSpinner(strokeWidth: 1.6, value: state.transferProgress),
       ),
     );
   }

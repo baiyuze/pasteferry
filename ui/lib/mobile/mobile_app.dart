@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +24,8 @@ import 'settings_tab.dart';
 import 'transfers_tab.dart';
 import 'ui.dart';
 import '../pixel_art.dart';
+import '../external_share.dart';
+import '../widgets/external_share_host.dart';
 
 /// Android 的入口：先让宿主拉起 Go 核心、告诉界面数据目录，再像桌面一样经 gRPC 连上去。
 void runMobile() {
@@ -41,6 +45,7 @@ class MobileApp extends StatefulWidget {
 
 class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
   late final AppState _state = widget.state ?? AppState();
+  final _shares = ExternalShares();
   final _themes = <String, (ThemeData, ThemeData)>{};
   String? _startError;
 
@@ -56,6 +61,11 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
   Future<void> _start() async {
     try {
       DaemonEndpoint.androidDataDir = await Host.start();
+      unawaited(
+        _shares.start().catchError((Object e) {
+          debugPrint('Share startup: $e');
+        }),
+      );
       if (mounted) setState(() => _startError = null);
       await _state.connect();
     } catch (e) {
@@ -71,6 +81,7 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _shares.dispose();
     WidgetsBinding.instance.removeObserver(this);
     if (widget.state == null) _state.dispose();
     super.dispose();
@@ -85,11 +96,18 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
         builder: (context, _) {
           final locale = localeFromSetting(_state.config?.language ?? '');
           final language =
-              (locale ?? resolveLocale(WidgetsBinding.instance.platformDispatcher.locales)).toLanguageTag();
+              (locale ??
+                      resolveLocale(
+                        WidgetsBinding.instance.platformDispatcher.locales,
+                      ))
+                  .toLanguageTag();
           final spec = _state.theme.spec;
           final (light, dark) = _themes.putIfAbsent(
             '$language#${_state.theme.revision}',
-            () => (buildMobileTheme(Brightness.light, spec: spec), buildMobileTheme(Brightness.dark, spec: spec)),
+            () => (
+              buildMobileTheme(Brightness.light, spec: spec),
+              buildMobileTheme(Brightness.dark, spec: spec),
+            ),
           );
           return MaterialApp(
             title: 'PasteFerry',
@@ -101,13 +119,22 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
             locale: locale,
             supportedLocales: supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
-            localeListResolutionCallback: (preferred, _) => resolveLocale(preferred),
+            localeListResolutionCallback: (preferred, _) =>
+                resolveLocale(preferred),
             builder: (context, child) {
               appL10n = context.l10n;
               return ThemeTextScale(
                 child: ToastScope(
                   top: true,
-                  child: ThemedBackdrop(controller: _state.theme, window: 'mobile', child: child!),
+                  child: ExternalShareHost(
+                    shares: _shares,
+                    state: _state,
+                    child: ThemedBackdrop(
+                      controller: _state.theme,
+                      window: 'mobile',
+                      child: child!,
+                    ),
+                  ),
                 ),
               );
             },
@@ -121,33 +148,83 @@ class _MobileAppState extends State<MobileApp> with WidgetsBindingObserver {
 
 /// 手机上的字号与触控尺寸：配色、圆角沿用桌面的设计系统（theme.dart），
 /// 字号放大一档、控件高 48，和网页传输的页面（web/phone）一致。
-ThemeData buildMobileTheme(Brightness brightness, {AppThemeSpec spec = AppThemeSpec.standard}) {
+ThemeData buildMobileTheme(
+  Brightness brightness, {
+  AppThemeSpec spec = AppThemeSpec.standard,
+}) {
   final base = buildTheme(brightness, spec: spec);
   final p = spec.palette(brightness);
   final r = spec.shape;
   var text = TextTheme(
-    headlineMedium: TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: p.text, letterSpacing: -0.6),
-    headlineSmall: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: p.text, letterSpacing: -0.4),
-    titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: p.text, letterSpacing: -0.3),
-    titleMedium: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: p.text, letterSpacing: -0.2),
-    titleSmall: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: p.text),
+    headlineMedium: TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.w700,
+      color: p.text,
+      letterSpacing: -0.6,
+    ),
+    headlineSmall: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+      color: p.text,
+      letterSpacing: -0.4,
+    ),
+    titleLarge: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      color: p.text,
+      letterSpacing: -0.3,
+    ),
+    titleMedium: TextStyle(
+      fontSize: 17,
+      fontWeight: FontWeight.w600,
+      color: p.text,
+      letterSpacing: -0.2,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+      color: p.text,
+    ),
     bodyLarge: TextStyle(fontSize: 16, color: p.text, height: 1.45),
     bodyMedium: TextStyle(fontSize: 15, color: p.text, height: 1.45),
     bodySmall: TextStyle(fontSize: 13, color: p.textDim, height: 1.4),
-    labelLarge: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: p.text),
-    labelMedium: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: p.textDim),
-    labelSmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: p.textDim),
+    labelLarge: TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w500,
+      color: p.text,
+    ),
+    labelMedium: TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.w500,
+      color: p.textDim,
+    ),
+    labelSmall: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+      color: p.textDim,
+    ),
   );
   // 主题自带字体（像素字体）时换上它；字号由 ThemeTextScale 吸附到点阵字号
   final family = spec.typography.family;
   if (family != null) text = text.apply(fontFamily: family);
   if (spec.typography.heading case final String heading) {
-    TextStyle? display(TextStyle? style) => style?.copyWith(fontFamily: heading);
-    text = text.copyWith(headlineMedium: display(text.headlineMedium), headlineSmall: display(text.headlineSmall),
-        titleLarge: display(text.titleLarge), titleMedium: display(text.titleMedium), titleSmall: display(text.titleSmall));
+    TextStyle? display(TextStyle? style) =>
+        style?.copyWith(fontFamily: heading);
+    text = text.copyWith(
+      headlineMedium: display(text.headlineMedium),
+      headlineSmall: display(text.headlineSmall),
+      titleLarge: display(text.titleLarge),
+      titleMedium: display(text.titleMedium),
+      titleSmall: display(text.titleSmall),
+    );
   }
-  final shape = r.outline(radius: r.md, side: r.beveled ? BorderSide(color: p.borderStrong, width: r.borderWidth) : BorderSide.none,
-      bevel: (p.bevelLight, p.bevelDark));
+  final shape = r.outline(
+    radius: r.md,
+    side: r.beveled
+        ? BorderSide(color: p.borderStrong, width: r.borderWidth)
+        : BorderSide.none,
+    bevel: (p.bevelLight, p.bevelDark),
+  );
   const padding = EdgeInsets.symmetric(horizontal: 18, vertical: 12);
   return base.copyWith(
     textTheme: text,
@@ -194,24 +271,40 @@ ThemeData buildMobileTheme(Brightness brightness, {AppThemeSpec spec = AppThemeS
       isDense: false,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       hintStyle: text.bodyLarge?.copyWith(color: p.textFaint),
-      border: r.beveled ? base.inputDecorationTheme.border : OutlineInputBorder(borderRadius: BorderRadius.circular(r.md), borderSide: BorderSide(color: p.border)),
-      enabledBorder: r.beveled ? base.inputDecorationTheme.enabledBorder : OutlineInputBorder(
-        borderRadius: BorderRadius.circular(r.md),
-        borderSide: BorderSide(color: p.border),
-      ),
-      focusedBorder: r.beveled ? base.inputDecorationTheme.focusedBorder : OutlineInputBorder(
-        borderRadius: BorderRadius.circular(r.md),
-        borderSide: BorderSide(color: p.accent, width: 1.5),
-      ),
+      border: r.beveled
+          ? base.inputDecorationTheme.border
+          : OutlineInputBorder(
+              borderRadius: BorderRadius.circular(r.md),
+              borderSide: BorderSide(color: p.border),
+            ),
+      enabledBorder: r.beveled
+          ? base.inputDecorationTheme.enabledBorder
+          : OutlineInputBorder(
+              borderRadius: BorderRadius.circular(r.md),
+              borderSide: BorderSide(color: p.border),
+            ),
+      focusedBorder: r.beveled
+          ? base.inputDecorationTheme.focusedBorder
+          : OutlineInputBorder(
+              borderRadius: BorderRadius.circular(r.md),
+              borderSide: BorderSide(color: p.accent, width: 1.5),
+            ),
     ),
-    switchTheme: base.switchTheme.copyWith(materialTapTargetSize: MaterialTapTargetSize.padded),
-    dialogTheme: base.dialogTheme.copyWith(titleTextStyle: text.titleMedium, contentTextStyle: text.bodyMedium?.copyWith(color: p.textDim)),
+    switchTheme: base.switchTheme.copyWith(
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+    ),
+    dialogTheme: base.dialogTheme.copyWith(
+      titleTextStyle: text.titleMedium,
+      contentTextStyle: text.bodyMedium?.copyWith(color: p.textDim),
+    ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: p.surface,
       surfaceTintColor: Colors.transparent,
       showDragHandle: true,
       dragHandleColor: p.border,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(r.lg))),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(r.lg)),
+      ),
     ),
   );
 }
@@ -219,7 +312,12 @@ ThemeData buildMobileTheme(Brightness brightness, {AppThemeSpec spec = AppThemeS
 enum MobileTab { records, send, transfers, devices, settings }
 
 class MobileShell extends StatefulWidget {
-  const MobileShell({super.key, this.startError, this.onRetry, this.initialTab = MobileTab.records});
+  const MobileShell({
+    super.key,
+    this.startError,
+    this.onRetry,
+    this.initialTab = MobileTab.records,
+  });
 
   /// Go 核心没能启动的原因
   final String? startError;
@@ -300,18 +398,40 @@ class _MobileShellState extends State<MobileShell> {
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: Theme.of(context).brightness == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      value: Theme.of(context).brightness == Brightness.dark
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
       child: Scaffold(
         body: body,
         bottomNavigationBar: MobileTabBar(
           index: _tab.index,
           onSelect: (i) => select(MobileTab.values[i]),
           items: [
-            (FluentIcons.history_24_regular, FluentIcons.history_24_filled, l.mTabRecords),
-            (FluentIcons.send_24_regular, FluentIcons.send_24_filled, l.mTabSend),
-            (FluentIcons.arrow_swap_24_regular, FluentIcons.arrow_swap_24_filled, l.navSend),
-            (FluentIcons.laptop_24_regular, FluentIcons.laptop_24_filled, l.navDevices),
-            (FluentIcons.settings_24_regular, FluentIcons.settings_24_filled, l.navSettings),
+            (
+              FluentIcons.history_24_regular,
+              FluentIcons.history_24_filled,
+              l.mTabRecords,
+            ),
+            (
+              FluentIcons.send_24_regular,
+              FluentIcons.send_24_filled,
+              l.mTabSend,
+            ),
+            (
+              FluentIcons.arrow_swap_24_regular,
+              FluentIcons.arrow_swap_24_filled,
+              l.navSend,
+            ),
+            (
+              FluentIcons.laptop_24_regular,
+              FluentIcons.laptop_24_filled,
+              l.navDevices,
+            ),
+            (
+              FluentIcons.settings_24_regular,
+              FluentIcons.settings_24_filled,
+              l.navSettings,
+            ),
           ],
         ),
       ),
