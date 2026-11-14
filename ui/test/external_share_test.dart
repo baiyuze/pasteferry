@@ -217,7 +217,6 @@ void main() {
       expect(state.sent.single.$2, [source.path]);
       await tester.pumpWidget(const SizedBox());
       state.dispose();
-      await tester.runAsync(shares.close);
     },
   );
 }
