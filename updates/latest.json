@@ -1,65 +1,161 @@
 {
   "schema": 1,
-  "latest": "2.12.0",
+  "latest": "2.12.1",
   "date": "2026-11-14",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.12.0/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.12.1/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.12.0/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.12.1/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 28959636,
-      "sha256": "b95974eb7a87332a8b7e8a767dd332e71100c5c21b34138572561d5d633d905c"
+      "size": 29143363,
+      "sha256": "7c5ac3247fc4bb9a19a827966edbc6f0231ac435655bdf8d7654f7988827a497"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 31135808,
-      "sha256": "ba8f396501115c49e91629fda44f52646736bf6a544dd7b41f8a8d55405203e8"
+      "size": 31316268,
+      "sha256": "ec030d23b13fe9d7d7971344b49bfb1496f5564387ad50d861f1226c7ce4ed3a"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 57032994,
-      "sha256": "a85ee69790323cad89f31b53f6d5b700bbbe1136e945aa8f1091a7d261caaada"
+      "size": 57242658,
+      "sha256": "05c82fc4508af3cf8661820c28fcc71d95cdd0cfd3e69bc1b7004cf18e07cf0a"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 27142589,
-      "sha256": "351aa0a893204c93218d6ea5ed675060eea5047f8a0db8846d2001ba4d0dd6ab"
+      "size": 27280900,
+      "sha256": "32136afbce1d56e1e52e8f455725e8c96e7b6ac70dcb25024899d1e97f1ff5ea"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 35044554,
-      "sha256": "873ddb93c3ba8f26b31c634d185f5e02a69daefe2b16b3d58d31e3e0a0c9aee8"
+      "size": 35230251,
+      "sha256": "f29105c81b4ceab53b6f0424bf00ad50daff6dc7188854a5f42b9012f7bbd116"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 26623332,
-      "sha256": "d16f93dd84955b354393fd65698c42fc0abce191c5558e63c40b144c3a95eb4c"
+      "size": 26788064,
+      "sha256": "4566d39f481e11c7eebad662c08d2c93458ee24bce28f73a7602438b4a568f50"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 24975518,
-      "sha256": "fd14592d31cacfcc4d4f84f2519036299059ec9fca7f3d12d7bea035d6adbedb"
+      "size": 25139856,
+      "sha256": "7e6f17224529f28753c4b8649d777adeccf161091ce65a7456c94b8f001fc638"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 32629165,
-      "sha256": "dd79b7dccc2b9c34e17fc61aea9a934690112e9a96d6723412b89a006b61dbbf"
+      "size": 32821777,
+      "sha256": "ee3f1cd3b40de6a075512d52ed87de70aeff63348bd018e3d9c7950930540da9"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 30821656,
-      "sha256": "96fdc0ed61f4754361c04b86a09031c34a69e0f19cb862d453e87bd5efb4d268"
+      "size": 31007059,
+      "sha256": "52fc880b7f8b42a1d2b5b715127013c902c9eda870b667363c11cb69346be149"
     }
   },
   "releases": [
+    {
+      "version": "2.12.1",
+      "date": "2026-11-14",
+      "notes": {
+        "en": {
+          "changes": [
+            "Seven new built-in themes: Choose Jazz Records, Space Age, Memphis, Y2K Future, Vintage Print, Pixel Arcade or Retro Desktop in Settings > Appearance. Each has light and dark palettes, matching heading fonts, control shapes and decorative artwork. Default and Pixel remain available; copy any new theme to customize it."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "新增七套内置主题：在「设置 > 外观」中选择爵士唱片、太空时代、孟菲斯、Y2K 千禧、美式复古印刷、像素街机或复古桌面。每套都有深浅配色、对应的标题字体、控件形状与装饰图形。默认和原有像素主题保留，也可以复制新主题再修改。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "内蔵テーマを7種類追加しました。「設定 > 外観」でジャズレコード、スペースエイジ、メンフィス、Y2Kフューチャー、アメリカン・レトロプリント、ピクセルアーケード、レトロデスクトップを選べます。それぞれ明暗の配色、見出し書体、コントロールの形、装飾を備えています。従来のデフォルトとピクセルも引き続き使え、新テーマを複製して編集できます。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "新增七套內建主題：在「設定 > 外觀」選擇爵士唱片、太空時代、孟菲斯、Y2K 千禧、美式復古印刷、像素街機或復古桌面。每套都有深淺配色、對應的標題字型、控制項形狀與裝飾圖形。預設與原有像素主題保留，也可以複製新主題再修改。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "新增七套內置主題：在「設定 > 外觀」選擇爵士唱片、太空時代、孟菲斯、Y2K 千禧、美式復古印刷、像素街機或復古桌面。每套都有深淺配色、對應的標題字體、控制項形狀與裝飾圖形。預設與原有像素主題保留，亦可複製新主題再修改。"
+          ]
+        },
+        "ar": {
+          "changes": [
+            "سبعة سمات مدمجة جديدة: اختر أسطوانات الجاز أو عصر الفضاء أو ممفيس أو مستقبل الألفية أو الطباعة الأمريكية القديمة أو ألعاب البكسل أو سطح المكتب الكلاسيكي من الإعدادات > المظهر. لكل سمة ألوان فاتحة وداكنة وخطوط عناوين وأشكال عناصر تحكم ورسومات زخرفية متناسقة. تبقى السمتان الافتراضية وبكسل متاحتين، ويمكن نسخ أي سمة جديدة وتخصيصها."
+          ]
+        },
+        "de": {
+          "changes": [
+            "Sieben neue integrierte Designs: Wähle Jazzplatten, Raumfahrtära, Memphis, Y2K-Zukunft, Retro-Druck, Pixel-Arcade oder Retro-Desktop unter Einstellungen > Erscheinungsbild. Jedes bietet helle und dunkle Farben, passende Überschriftenschriften, Steuerelementformen und Illustrationen. Standard und Pixel bleiben verfügbar; neue Designs lassen sich zum Anpassen kopieren."
+          ]
+        },
+        "es": {
+          "changes": [
+            "Siete temas integrados nuevos: elige Discos de jazz, Era espacial, Memphis, Futuro Y2K, Impresión retro, Arcade de píxeles o Escritorio retro en Ajustes > Apariencia. Cada uno incluye colores claros y oscuros, tipografías de títulos, formas de controles e ilustraciones a juego. Los temas Predeterminado y Píxel siguen disponibles; puedes copiar cualquier tema nuevo para personalizarlo."
+          ]
+        },
+        "fr": {
+          "changes": [
+            "Sept nouveaux thèmes intégrés : choisissez Disques de jazz, Ère spatiale, Memphis, Futur Y2K, Impression rétro, Arcade pixel ou Bureau rétro dans Réglages > Apparence. Chacun propose des couleurs claires et sombres, des polices de titres, des formes de contrôles et des illustrations assorties. Les thèmes Par défaut et Pixel restent disponibles ; copiez un nouveau thème pour le personnaliser."
+          ]
+        },
+        "id": {
+          "changes": [
+            "Tujuh tema bawaan baru: pilih Rekaman Jazz, Era Antariksa, Memphis, Masa Depan Y2K, Cetakan Retro Amerika, Arkade Piksel, atau Desktop Retro di Pengaturan > Tampilan. Masing-masing memiliki warna terang dan gelap, font judul, bentuk kontrol, dan ilustrasi yang serasi. Tema Default dan Piksel tetap tersedia; salin tema baru untuk menyesuaikannya."
+          ]
+        },
+        "it": {
+          "changes": [
+            "Sette nuovi temi integrati: scegli Dischi jazz, Era spaziale, Memphis, Futuro Y2K, Stampa rétro, Arcade pixel o Desktop rétro in Impostazioni > Aspetto. Ognuno include colori chiari e scuri, caratteri per i titoli, forme dei controlli e illustrazioni coordinati. I temi Predefinito e Pixel restano disponibili; copia un nuovo tema per personalizzarlo."
+          ]
+        },
+        "ko": {
+          "changes": [
+            "새 기본 테마 7종: 설정 > 모양에서 재즈 레코드, 스페이스 에이지, 멤피스, Y2K 퓨처, 아메리칸 빈티지 인쇄, 픽셀 아케이드, 레트로 데스크톱을 선택하세요. 각 테마는 밝고 어두운 색상, 어울리는 제목 글꼴, 컨트롤 모양과 장식 그림을 제공합니다. 기존 기본 및 픽셀 테마도 유지되며, 새 테마를 복사해 원하는 대로 바꿀 수 있습니다."
+          ]
+        },
+        "pl": {
+          "changes": [
+            "Siedem nowych wbudowanych motywów: wybierz Płyty jazzowe, Erę kosmiczną, Memphis, Przyszłość Y2K, Druk retro, Pikselowe arcade lub Pulpit retro w Ustawienia > Wygląd. Każdy ma jasne i ciemne kolory, dopasowane czcionki nagłówków, kształty kontrolek i ilustracje. Motywy Domyślny i Pikselowy pozostają dostępne; skopiuj nowy motyw, aby go dostosować."
+          ]
+        },
+        "pt-BR": {
+          "changes": [
+            "Sete novos temas integrados: escolha Discos de jazz, Era espacial, Memphis, Futuro Y2K, Impressão retrô, Arcade pixel ou Área de trabalho retrô em Configurações > Aparência. Cada tema inclui cores claras e escuras, fontes de títulos, formas de controles e ilustrações combinando. Os temas Padrão e Pixel continuam disponíveis; copie um novo tema para personalizá-lo."
+          ]
+        },
+        "ru": {
+          "changes": [
+            "Семь новых встроенных тем: выберите «Джазовые пластинки», «Космическая эра», «Мемфис», «Будущее Y2K», «Винтажная печать», «Пиксельная аркада» или «Ретро-рабочий стол» в разделе Настройки > Оформление. У каждой темы есть светлая и тёмная палитры, подходящие шрифты заголовков, формы элементов и иллюстрации. Темы «Стандартная» и «Пиксельная» сохранены; любую новую тему можно скопировать и изменить."
+          ]
+        },
+        "tr": {
+          "changes": [
+            "Yedi yeni yerleşik tema: Ayarlar > Görünüm bölümünden Caz Plakları, Uzay Çağı, Memphis, Y2K Geleceği, Retro Baskı, Piksel Atari veya Retro Masaüstü seçin. Her tema açık ve koyu renkler, uyumlu başlık yazı tipleri, kontrol biçimleri ve süslemeler içerir. Varsayılan ve Piksel temaları korunur; yeni bir temayı kopyalayıp özelleştirebilirsiniz."
+          ]
+        },
+        "uk": {
+          "changes": [
+            "Сім нових вбудованих тем: виберіть «Джазові платівки», «Космічна ера», «Мемфіс», «Майбутнє Y2K», «Вінтажний друк», «Піксельна аркада» або «Ретро-стільниця» у Налаштування > Вигляд. Кожна тема має світлу й темну палітри, відповідні шрифти заголовків, форми елементів та ілюстрації. Теми «Типова» й «Піксельна» залишаються; нові теми можна копіювати та змінювати."
+          ]
+        },
+        "vi": {
+          "changes": [
+            "Bảy chủ đề tích hợp mới: chọn Đĩa nhạc jazz, Kỷ nguyên vũ trụ, Memphis, Tương lai Y2K, In ấn cổ điển Mỹ, Arcade điểm ảnh hoặc Máy tính để bàn cổ điển trong Cài đặt > Giao diện. Mỗi chủ đề có màu sáng và tối, phông tiêu đề, hình dạng điều khiển và hình trang trí đồng bộ. Chủ đề Mặc định và Pixel vẫn được giữ; bạn có thể sao chép chủ đề mới để tùy chỉnh."
+          ]
+        }
+      }
+    },
     {
       "version": "2.12.0",
       "date": "2026-11-14",
@@ -576,42 +672,6 @@
             "傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。",
             "檔案傳輸通道會保持到接收端確認完成；取消傳輸後，下一批檔案也能正常傳送。",
             "新增好友時，即使首次交握回覆早於配對工作階段準備完成，亦能透過重試恢復。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.8.2",
-      "date": "2026-10-30",
-      "notes": {
-        "en": {
-          "fixes": [
-            "Browser-to-computer file transfers now appear immediately in the computer's Received list. Computer-to-browser transfers also appear in Sent, with per-file completion, cancellation and live updates.",
-            "Retained browser transfer records from 2.8.1 are imported into desktop history once. Retries and restarts do not duplicate records or restore deleted history; removing a browser cancels its waiting transfers without deleting received files."
-          ]
-        },
-        "zh-Hans": {
-          "fixes": [
-            "网页发给电脑的文件现在会立即出现在电脑「收到」列表；电脑发给网页的文件也会显示在「发出」列表，支持逐文件完成状态、取消和实时刷新。",
-            "升级后会一次性补入 2.8.1 仍保留的网页传输记录；重试和重启不会重复记录或恢复已删除的历史。移除网页设备会取消待传任务，并保留已收到的文件。"
-          ]
-        },
-        "ja": {
-          "fixes": [
-            "ブラウザからパソコンへ送ったファイルが「受信済み」にすぐ表示されるよう修正しました。逆方向も「送信済み」に表示され、ファイルごとの完了状態、キャンセル、即時更新に対応します。",
-            "2.8.1で保持されているブラウザ転送履歴を一度だけパソコンに取り込みます。再試行や再起動で履歴が重複したり削除済み履歴が復活したりしません。ブラウザの登録解除は待機中の転送をキャンセルし、受信済みファイルは保持します。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "fixes": [
-            "網頁傳給電腦的檔案現在會立即出現在電腦「收到」清單；電腦傳給網頁的檔案也會顯示在「傳出」清單，支援逐一檔案的完成狀態、取消和即時更新。",
-            "升級後會一次補入 2.8.1 仍保留的網頁傳輸記錄；重試和重新啟動不會重複記錄或還原已刪除的歷史。移除網頁裝置會取消待傳工作，並保留已收到的檔案。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "fixes": [
-            "網頁傳給電腦的檔案現在會立即出現在電腦「收到」列表；電腦傳給網頁的檔案也會顯示在「傳出」列表，支援逐一檔案的完成狀態、取消和即時更新。",
-            "升級後會一次補入 2.8.1 仍保留的網頁傳輸記錄；重試和重新啟動不會重複記錄或還原已刪除的歷史。移除網頁裝置會取消待傳工作，並保留已收到的檔案。"
           ]
         }
       }
