@@ -66,31 +66,36 @@
       "notes": {
         "en": {
           "changes": [
-            "Adaptive direct file transfers: Slow direct WebRTC transfers can try up to four independent connections, keep extra connections only when throughput improves, and replay unacknowledged blocks if an extra connection fails.",
+            "Recommended for all users: Upgrade to 2.12.0 for faster direct file transfers between remote computers. Update both computers to enable the speedup. Older versions can still send and receive files.",
+            "Faster remote direct transfers: When a direct transfer between different networks stays slow, PasteFerry automatically tries parallel connections and keeps them only when they improve speed. No extra setup is needed; the actual improvement depends on your network.",
             "Transfer integrity: Parallel blocks are verified and reassembled in order before the existing whole-file verification; interrupted transfers retain their existing file checkpoints."
           ]
         },
         "zh-Hans": {
           "changes": [
-            "自适应直连传输：WebRTC 直连传文件持续较慢时，可逐步尝试最多四条独立连接，只有实际提速才保留；额外连接失败后会补发尚未确认的数据块。",
+            "建议所有用户升级到 2.12.0：本次重点是远程直连传文件提速。发送和接收的电脑都升级后，即可启用提速；与旧版本仍可正常互相收发文件。",
+            "远程直连提速：不同网络之间直连传文件持续较慢时，会自动尝试多路并行传输，只有实际提速才保留，无需额外设置。具体提速幅度取决于网络。",
             "传输完整性：并行数据块会逐块校验并按顺序重组，再进行原有的整文件校验；中断后保留原有文件断点继续传输。"
           ]
         },
         "ja": {
           "changes": [
-            "適応型の直接ファイル転送：WebRTC の直接転送が低速な状態が続くと、独立した接続を最大 4 本まで段階的に試し、速度が向上した接続のみ維持します。追加接続が切断された場合は未確認のブロックを再送します。",
+            "すべてのユーザーに更新をおすすめします。2.12.0 は離れた場所のパソコン同士で直接ファイルを送る際の高速化が中心です。送信側と受信側の両方を更新すると高速化を利用できます。旧バージョンとも引き続き送受信できます。",
+            "遠隔地との直接転送を高速化：異なるネットワーク間で直接転送が低速な状態が続くと、並列接続を自動で試し、速度が向上した場合にのみ維持します。追加設定は不要で、効果はネットワーク環境によって異なります。",
             "転送の完全性：並列ブロックを個別に検証して順番どおりに組み立てた後、従来どおりファイル全体を検証します。中断時も既存のチェックポイントから再開できます。"
           ]
         },
         "zh-Hant-TW": {
           "changes": [
-            "自適應直連傳輸：WebRTC 直接傳送檔案持續較慢時，可逐步嘗試最多四條獨立連線，只有實際提速才保留；額外連線失敗後會補傳尚未確認的資料區塊。",
+            "建議所有使用者升級至 2.12.0：本次重點是遠端直連傳檔提速。傳送和接收的電腦都升級後，即可啟用提速；與舊版本仍可正常互相收發檔案。",
+            "遠端直連提速：不同網路之間直接傳送檔案持續較慢時，會自動嘗試多路並行傳輸，只有實際提速才保留，無須額外設定。實際提速幅度取決於網路。",
             "傳輸完整性：並行資料區塊會逐塊驗證並依序重組，再進行原有的整個檔案驗證；中斷後保留原有檔案斷點繼續傳輸。"
           ]
         },
         "zh-Hant-HK": {
           "changes": [
-            "自適應直連傳輸：WebRTC 直接傳送檔案持續較慢時，可逐步嘗試最多四條獨立連線，只有實際提速才保留；額外連線失敗後會補傳尚未確認的資料區塊。",
+            "建議所有用戶升級至 2.12.0：今次重點是遠端直連傳檔提速。傳送和接收的電腦都升級後，即可啟用提速；與舊版本仍可正常互相收發檔案。",
+            "遠端直連提速：不同網絡之間直接傳送檔案持續較慢時，會自動嘗試多路並行傳輸，只有實際提速才保留，毋須額外設定。實際提速幅度視乎網絡。",
             "傳輸完整性：並行資料區塊會逐塊驗證並按順序重組，再進行原有的完整檔案驗證；中斷後保留原有檔案斷點繼續傳輸。"
           ]
         }
