@@ -2,17 +2,18 @@
 
 ## 2.12.0 — 2026-11-14
 
-This release adds adaptive parallel connections for slow direct file transfers while preserving file transfers with older clients.
+Recommended for all users: PasteFerry 2.12.0 focuses on speeding up direct file transfers between remote computers. Update both computers to enable the speedup; transfers with older versions continue to work.
 
 ### Changes
 
-- Adaptive direct file transfers: Slow direct WebRTC transfers can try up to four independent connections, keep extra connections only when throughput improves, and replay unacknowledged blocks if an extra connection fails.
+- Recommended for all users: Upgrade to 2.12.0 for faster direct file transfers between remote computers. Update both computers to enable the speedup. Older versions can still send and receive files.
+- Faster remote direct transfers: When a direct transfer between different networks stays slow, PasteFerry automatically tries parallel connections and keeps them only when they improve speed. No extra setup is needed; the actual improvement depends on your network.
 - Transfer integrity: Parallel blocks are verified and reassembled in order before the existing whole-file verification; interrupted transfers retain their existing file checkpoints.
 
 ### Upgrade notes
 
-- **Mac, Windows and Linux apps**: optional; update both devices to enable adaptive parallel transfers. Updating only one device preserves transfers with older clients. Pairings, friends, history, themes and settings are preserved.
-- **Android**: optional; existing LAN file transfers remain compatible with older clients.
+- **Mac, Windows and Linux apps**: recommended for all users. Update both the sending and receiving computers to enable faster remote direct transfers. Pairings, friends, history, themes and settings are preserved.
+- **Android**: recommended to stay on the latest release. This speedup is for remote computer-to-computer direct transfers; Android LAN transfers remain compatible with older clients.
 - **Server**: no update needed.
 - The existing device-to-device protocol remains compatible. Parallel bulk transport is capability-negotiated and used only between supporting clients.
 

@@ -27,7 +27,7 @@ C = {
     "dl_mac": "Mac 版をダウンロード",
     "dl_win": "Windows 版をダウンロード",
     "dl_linux": "Linux 版をダウンロード",
-    "dl_note": 'バージョン 2.12.0、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。 Android 9以降。スマホはWeb版も利用可能。',
+    "dl_note": 'バージョン 2.12.0、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）。 Android 9以降。スマホはWeb版も利用可能。 すべてのユーザーに更新を推奨。両方のパソコンを更新すると、遠隔地との直接ファイル転送の高速化を利用できます。',
     "start_link": "はじめての方は、3 ステップで設定 →",
     "stage_label": "デモ：MacBook で Command C を押すと、ファイルが一枚の紙になって直接接続で Windows ノートへ飛び、そこで Ctrl V を押して貼り付けます",
     "stage_file": "四半期報告_最終版.pptx",

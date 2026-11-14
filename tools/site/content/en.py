@@ -27,7 +27,7 @@ C = {
     "dl_mac": "Download for Mac",
     "dl_win": "Download for Windows",
     "dl_linux": "Download for Linux",
-    "dl_note": 'Version 2.12.0, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64). Android 9 or later; phones can also use the web page.',
+    "dl_note": 'Version 2.12.0, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64). Android 9 or later; phones can also use the web page. Recommended for all users; update both computers to enable faster remote direct file transfers.',
     "start_link": "New here? Set it up in three steps →",
     "stage_label": "Demo: Command C on a MacBook turns a file into a sheet that flies over a direct connection to a Windows "
                    "laptop, where Ctrl V pastes it",

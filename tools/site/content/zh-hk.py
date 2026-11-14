@@ -27,7 +27,7 @@ C = {
     "dl_mac": "下載 Mac 版",
     "dl_win": "下載 Windows 版",
     "dl_linux": "下載 Linux 版",
-    "dl_note": '版本 2.12.0，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）。 支援安卓 9 或以上；手機可掃碼使用網頁。',
+    "dl_note": '版本 2.12.0，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）。 支援安卓 9 或以上；手機可掃碼使用網頁。 建議所有用戶升級；電腦兩端都升級後，可啟用遠端直連傳檔提速。',
     "start_link": "第一次用？三步設定好 →",
     "stage_label": "示範：在 MacBook 上按下 Command C，檔案化成一張紙，經直連飛到 Windows 手提電腦，在那裏按下 Ctrl V 貼上",
     "stage_file": "季度報告-最終版.pptx",
