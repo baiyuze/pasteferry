@@ -12,6 +12,34 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.12.2',
+ 'date': '2026-11-15',
+ 'changes': [("System file sharing: Send files from Android's share sheet, Finder's Services menu and "
+              "Windows' classic context menu (Show more options on Windows 11). On Linux, install Nautilus "
+              'and Dolphin entries in Settings > Send Files.',
+              '系统文件分享：从安卓分享面板、Finder 的“服务”和 Windows 经典右键菜单发送文件；Windows 11 请先点“显示更多选项”。Linux 在“设置 > 隔空传送”中安装 '
+              'Nautilus 和 Dolphin 菜单入口。',
+              'システムからファイルを共有：Android の共有シート、Finder の「サービス」、Windows の従来の右クリックメニューから送信できます。Windows 11 '
+              'は「その他のオプションを表示」から開きます。Linux は「設定 > ファイル送信」で Nautilus と Dolphin のメニューを追加できます。',
+              '系統檔案分享：從安卓分享面板、Finder 的「服務」和 Windows 傳統右鍵選單傳送檔案；Windows 11 請先點「顯示其他選項」。Linux 在「設定 > 隔空傳送」中安裝 '
+              'Nautilus 和 Dolphin 選單入口。',
+              '系統檔案分享：從安卓分享面板、Finder 的「服務」和 Windows 傳統右鍵選單傳送檔案；Windows 11 請先按「顯示更多選項」。Linux 在「設定 > 隔空傳送」中安裝 '
+              'Nautilus 和 Dolphin 選單入口。'),
+             ('Send confirmation: Review shared files and choose one paired receiving device before sending. '
+              'Pending batches survive reopening the app, and imported attachments remain available for '
+              'paused transfers.',
+              '发送确认：先核对分享的文件，选择一台已配对的接收设备，再确认发送。重新打开应用后仍可处理待发送的批次，已导入的附件在传输暂停时也会保留。',
+              '送信前の確認：共有ファイルを確認し、ペアリング済みの送信先を1台選んでから送信します。アプリを開き直しても未送信のファイルは残り、一時停止した転送用の添付ファイルも保持されます。',
+              '傳送確認：先核對分享的檔案，選擇一台已配對的接收裝置，再確認傳送。重新開啟應用程式後仍可處理待傳送的批次，已匯入的附件在傳輸暫停時也會保留。',
+              '傳送確認：先核對分享的檔案，選擇一部已配對的接收裝置，再確認傳送。重新開啟應用程式後仍可處理待傳送的批次，已匯入的附件在傳輸暫停時也會保留。')],
+ 'fixes': [('Mac quick paste recovery: Registered helpers that fail to start are no longer treated as ready. '
+            'PasteFerry waits for the helper session, limits automatic retries and offers a manual repair '
+            'action with error details.',
+            'Mac 快捷窗口恢复：已登记但启动失败的辅助程序不再被当作就绪。应用会等待窗口会话，限制自动重试次数；仍失败时提供手动修复入口和错误详情。',
+            'Mac '
+            'のクイックペーストを復旧：登録済みでも起動に失敗したヘルパーを準備完了と判定しなくなりました。セッションの接続を待ち、自動再試行の回数を制限します。復旧しない場合は手動修復とエラー詳細を表示します。',
+            'Mac 快捷視窗復原：已登記但啟動失敗的輔助程式不再被視為就緒。應用程式會等待視窗工作階段，限制自動重試次數；仍失敗時提供手動修復入口和錯誤詳情。',
+            'Mac 快捷視窗復原：已登記但啟動失敗的輔助程式不再被視為就緒。應用程式會等待視窗連線，限制自動重試次數；仍失敗時提供手動修復入口和錯誤詳情。')]},
 {'version': '2.12.1',
  'date': '2026-11-14',
  'changes': [('Seven new built-in themes: Choose Jazz Records, Space Age, Memphis, Y2K Future, Vintage '

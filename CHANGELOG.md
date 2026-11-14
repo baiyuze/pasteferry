@@ -1,5 +1,25 @@
 # 更新记录 / Changelog
 
+## 2.12.2 — 2026-11-15
+
+Share files from system menus and recover failed Mac quick paste startup.
+
+### Changes
+
+- System file sharing: Send files from Android's share sheet, Finder's Services menu and Windows' classic context menu (Show more options on Windows 11). On Linux, install Nautilus and Dolphin entries in Settings > Send Files.
+- Send confirmation: Review shared files and choose one paired receiving device before sending. Pending batches survive reopening the app, and imported attachments remain available for paused transfers.
+
+### Fixes
+
+- Mac quick paste recovery: Registered helpers that fail to start are no longer treated as ready. PasteFerry waits for the helper session, limits automatic retries and offers a manual repair action with error details.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended on Mac for quick paste recovery; optional on Windows and Linux for the new sharing entries. Only the sending app needs this update; existing file receivers remain compatible.
+- **Android**: optional, to receive files from other apps through the system share sheet. Transfers remain limited to the local network.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.12.1 — 2026-11-14
 
 Seven new visual styles for your clipboard, with coordinated colors, typography, controls and artwork.

@@ -8,6 +8,114 @@ Older releases without these translations continue to fall back to English.
 EXTRA_LANGS = ["ar", "de", "es", "fr", "id", "it", "ko", "pl", "pt-BR", "ru", "tr", "uk", "vi"]
 
 EXTRA_NOTES = {
+    "2.12.2": {'ar': {'changes': ['مشاركة الملفات من لوحة Android وخدمات Finder والقائمة التقليدية في Windows؛ في Windows '
+                    '11 اختر إظهار المزيد من الخيارات. ثبّت قوائم Nautilus وDolphin من الإعدادات > إرسال '
+                    'الملفات.',
+                    'راجع الملفات واختر جهازًا مقترنًا واحدًا ثم أكّد الإرسال. تبقى الدفعات المعلقة بعد '
+                    'إعادة فتح التطبيق، وتُحفظ المرفقات للتحويلات المتوقفة.'],
+        'fixes': ['إصلاح اللصق السريع على Mac: لا يعني تسجيل المساعد أنه جاهز. ينتظر التطبيق اتصاله، ويحدّ '
+                  'المحاولات التلقائية، ويعرض إصلاحًا يدويًا وتفاصيل الخطأ عند الفشل.']},
+ 'de': {'changes': ['Dateien über Androids Teilen-Menü, Finder-Dienste und das klassische '
+                    'Windows-Kontextmenü senden (Weitere Optionen anzeigen unter Windows 11). Nautilus- und '
+                    'Dolphin-Menüs unter Einstellungen > Dateien senden installieren.',
+                    'Geteilte Dateien prüfen, ein gekoppeltes Empfangsgerät wählen und das Senden '
+                    'bestätigen. Ausstehende Stapel bleiben nach erneutem Öffnen erhalten, importierte '
+                    'Anhänge für pausierte Übertragungen verfügbar.'],
+        'fixes': ['Mac-Schnelleinfügen: Registrierte, nicht gestartete Helfer gelten nicht mehr als bereit. '
+                  'Begrenzte automatische Wiederholungen, Sitzungsprüfung und manuelle Reparatur mit '
+                  'Fehlerdetails.']},
+ 'es': {'changes': ['Envía archivos desde Compartir de Android, Servicios de Finder y el menú clásico de '
+                    'Windows (Mostrar más opciones en Windows 11). Instala los menús de Nautilus y Dolphin '
+                    'en Ajustes > Enviar archivos.',
+                    'Revisa los archivos, elige un único dispositivo vinculado y confirma el envío. Los '
+                    'lotes pendientes se conservan al reabrir la aplicación y los adjuntos importados siguen '
+                    'disponibles para transferencias pausadas.'],
+        'fixes': ['Pegado rápido en Mac: un auxiliar registrado que no arranca ya no se considera listo. Se '
+                  'espera su sesión, se limitan los reintentos y se ofrece reparación manual con detalles '
+                  'del error.']},
+ 'fr': {'changes': ['Envoyez depuis le partage Android, les Services du Finder et le menu classique Windows '
+                    '(Afficher plus d’options sous Windows 11). Installez les menus Nautilus et Dolphin dans '
+                    'Réglages > Envoi de fichiers.',
+                    'Vérifiez les fichiers, choisissez un seul appareil jumelé et confirmez. Les lots en '
+                    'attente restent après réouverture, et les pièces importées sont conservées pour les '
+                    'transferts en pause.'],
+        'fixes': ['Collage rapide sur Mac : un auxiliaire enregistré mais non démarré n’est plus considéré '
+                  'comme prêt. Attente de sa session, tentatives limitées et réparation manuelle avec '
+                  'détails de l’erreur.']},
+ 'id': {'changes': ['Kirim berkas dari lembar berbagi Android, Layanan Finder, dan menu klasik Windows '
+                    '(Tampilkan opsi lainnya di Windows 11). Pasang menu Nautilus dan Dolphin di Pengaturan '
+                    '> Kirim Berkas.',
+                    'Periksa berkas, pilih satu perangkat yang dipasangkan, lalu konfirmasi. Antrean tetap '
+                    'ada setelah aplikasi dibuka kembali, dan lampiran disimpan untuk transfer yang dijeda.'],
+        'fixes': ['Tempel cepat Mac: pembantu yang terdaftar tetapi gagal dimulai tidak lagi dianggap siap. '
+                  'Aplikasi menunggu sesi, membatasi percobaan otomatis, dan menyediakan perbaikan manual '
+                  'beserta detail kesalahan.']},
+ 'it': {'changes': ['Invia dal menu Condividi di Android, dai Servizi del Finder e dal menu classico Windows '
+                    '(Mostra altre opzioni in Windows 11). Installa i menu Nautilus e Dolphin in '
+                    'Impostazioni > Invio file.',
+                    'Controlla i file, scegli un solo dispositivo abbinato e conferma. I lotti in attesa '
+                    'restano dopo la riapertura e gli allegati importati vengono conservati per i '
+                    'trasferimenti in pausa.'],
+        'fixes': ['Incolla rapido su Mac: un helper registrato che non si avvia non è più considerato '
+                  'pronto. Attesa della sessione, tentativi limitati e riparazione manuale con dettagli '
+                  'errore.']},
+ 'ko': {'changes': ['Android 공유 패널, Finder 서비스, Windows 기본 오른쪽 클릭 메뉴에서 파일을 보냅니다. Windows 11은 더 많은 옵션 표시를 '
+                    '선택합니다. Linux에서는 설정 > 파일 보내기에서 Nautilus와 Dolphin 메뉴를 설치합니다.',
+                    '공유 파일을 확인하고 페어링된 받는 기기 한 대를 선택한 뒤 전송을 확인합니다. 앱을 다시 열어도 대기 목록이 유지되고 일시 중지한 전송의 첨부 파일도 '
+                    '보관됩니다.'],
+        'fixes': ['Mac 빠른 붙여넣기: 등록되었지만 시작하지 못한 도우미를 준비 완료로 간주하지 않습니다. 세션을 기다리고 자동 재시도를 제한하며 수동 복구와 오류 세부 정보를 '
+                  '제공합니다.']},
+ 'pl': {'changes': ['Wysyłaj z panelu udostępniania Androida, Usług Findera i klasycznego menu Windows '
+                    '(Pokaż więcej opcji w Windows 11). Menu Nautilusa i Dolphina zainstalujesz w Ustawienia '
+                    '> Wysyłanie plików.',
+                    'Sprawdź pliki, wybierz jedno sparowane urządzenie i potwierdź. Oczekujące partie '
+                    'pozostają po ponownym otwarciu aplikacji, a załączniki są zachowywane dla wstrzymanych '
+                    'transferów.'],
+        'fixes': ['Szybkie wklejanie na Macu: zarejestrowany, nieuruchomiony pomocnik nie jest już uznawany '
+                  'za gotowy. Oczekiwanie na sesję, ograniczone próby i ręczna naprawa ze szczegółami '
+                  'błędu.']},
+ 'pt-BR': {'changes': ['Envie pelo compartilhamento do Android, Serviços do Finder e menu clássico do '
+                       'Windows (Mostrar mais opções no Windows 11). Instale os menus do Nautilus e Dolphin '
+                       'em Configurações > Enviar arquivos.',
+                       'Confira os arquivos, escolha um único dispositivo pareado e confirme. Os lotes '
+                       'pendentes permanecem após reabrir o app e os anexos são mantidos para transferências '
+                       'pausadas.'],
+           'fixes': ['Colagem rápida no Mac: um auxiliar registrado que falha ao iniciar não é mais '
+                     'considerado pronto. O app espera a sessão, limita as tentativas e oferece reparo '
+                     'manual com detalhes do erro.']},
+ 'ru': {'changes': ['Отправляйте через меню Android, Службы Finder и классическое меню Windows (Показать '
+                    'дополнительные параметры в Windows 11). Меню Nautilus и Dolphin устанавливаются в '
+                    'Настройки > Отправка файлов.',
+                    'Проверьте файлы, выберите одно сопряжённое устройство и подтвердите отправку. Очередь '
+                    'сохраняется при повторном открытии приложения, вложения остаются для приостановленных '
+                    'передач.'],
+        'fixes': ['Быстрая вставка на Mac: зарегистрированный, но не запущенный помощник больше не считается '
+                  'готовым. Ожидание сеанса, ограниченные повторы и ручное восстановление со сведениями об '
+                  'ошибке.']},
+ 'tr': {'changes': ['Android paylaşım paneli, Finder Servisleri ve Windows klasik menüsünden dosya gönderin '
+                    '(Windows 11: Daha fazla seçenek göster). Nautilus ve Dolphin menülerini Ayarlar > Dosya '
+                    'Gönder bölümünden kurun.',
+                    'Dosyaları inceleyin, eşleştirilmiş bir alıcı seçin ve onaylayın. Uygulama yeniden '
+                    'açıldığında bekleyen gruplar korunur; içe aktarılan ekler duraklatılan aktarımlar için '
+                    'saklanır.'],
+        'fixes': ['Mac hızlı yapıştırma: kayıtlı olup başlatılamayan yardımcı artık hazır sayılmaz. Oturum '
+                  'beklenir, otomatik denemeler sınırlandırılır ve hata ayrıntılarıyla manuel onarım '
+                  'sunulur.']},
+ 'uk': {'changes': ['Надсилайте через панель Android, Служби Finder і класичне меню Windows (Показати '
+                    'додаткові параметри у Windows 11). Меню Nautilus і Dolphin встановлюються в '
+                    'Налаштування > Надсилання файлів.',
+                    'Перевірте файли, виберіть один спарений пристрій і підтвердьте. Черга зберігається '
+                    'після повторного відкриття, вкладення залишаються для призупинених передач.'],
+        'fixes': ['Швидке вставлення на Mac: зареєстрований, але не запущений помічник більше не вважається '
+                  'готовим. Очікування сеансу, обмежені повтори й ручне відновлення з відомостями про '
+                  'помилку.']},
+ 'vi': {'changes': ['Gửi từ bảng chia sẻ Android, Dịch vụ Finder và menu cổ điển Windows (Hiển thị thêm tùy '
+                    'chọn trên Windows 11). Cài menu Nautilus và Dolphin trong Cài đặt > Gửi tệp.',
+                    'Kiểm tra tệp, chọn một thiết bị đã ghép đôi rồi xác nhận. Các lô đang chờ vẫn còn khi '
+                    'mở lại ứng dụng; tệp đính kèm được giữ cho việc truyền đang tạm dừng.'],
+        'fixes': ['Dán nhanh trên Mac: trình trợ giúp đã đăng ký nhưng không khởi động không còn được coi là '
+                  'sẵn sàng. Chờ phiên kết nối, giới hạn thử lại và cung cấp sửa thủ công cùng chi tiết '
+                  'lỗi.']}},
     "2.12.1": {'ar': {'changes': ['سبعة سمات مدمجة جديدة: اختر أسطوانات الجاز أو عصر الفضاء أو ممفيس أو مستقبل الألفية أو '
                     'الطباعة الأمريكية القديمة أو ألعاب البكسل أو سطح المكتب الكلاسيكي من الإعدادات > '
                     'المظهر. لكل سمة ألوان فاتحة وداكنة وخطوط عناوين وأشكال عناصر تحكم ورسومات زخرفية '

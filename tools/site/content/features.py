@@ -30,7 +30,7 @@ COPY = {
 
     # ── 首页 ──
     # {version} 由官网 VERSION 生成；每次发版同步更新功能摘要。
-    "badge": ('{version}：七套新主题，让灵感换个风格 →', '{version}：七套新主題，讓靈感換個風格 →', '{version}：七套新主題，讓靈感換個風格 →', '{version}: seven new themes for your clipboard →', '{version}：7つの新テーマで、アイデアに新しい表情を →'),
+    "badge": ('{version}：从系统菜单分享文件，修复快捷窗口启动 →', '{version}：從系統選單分享檔案，修復快捷視窗啟動 →', '{version}：從系統選單分享檔案，修復快捷視窗啟動 →', '{version}: share files from system menus and recover quick paste →', '{version}：システムからファイル共有、クイックペーストを復旧 →'),
     # 首页手机区块（2.7）
     "home_phone_h2": ("手机也能用了。", "手機也能用了。", "手機也能用了。", "Your phone joins in.", "スマホでも使える。"),
     "home_phone_intro": ('安卓 App 可与电脑双向隔空传送，照片和文件一次多选，收到后保存或分享。不想安装？扫码打开网页，查看复制记录、发送内容，也能独立收发文件。',
