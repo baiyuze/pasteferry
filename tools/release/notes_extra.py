@@ -8,6 +8,81 @@ Older releases without these translations continue to fall back to English.
 EXTRA_LANGS = ["ar", "de", "es", "fr", "id", "it", "ko", "pl", "pt-BR", "ru", "tr", "uk", "vi"]
 
 EXTRA_NOTES = {
+    "2.12.1": {'ar': {'changes': ['سبعة سمات مدمجة جديدة: اختر أسطوانات الجاز أو عصر الفضاء أو ممفيس أو مستقبل الألفية أو '
+                    'الطباعة الأمريكية القديمة أو ألعاب البكسل أو سطح المكتب الكلاسيكي من الإعدادات > '
+                    'المظهر. لكل سمة ألوان فاتحة وداكنة وخطوط عناوين وأشكال عناصر تحكم ورسومات زخرفية '
+                    'متناسقة. تبقى السمتان الافتراضية وبكسل متاحتين، ويمكن نسخ أي سمة جديدة وتخصيصها.'],
+        'fixes': []},
+ 'de': {'changes': ['Sieben neue integrierte Designs: Wähle Jazzplatten, Raumfahrtära, Memphis, Y2K-Zukunft, '
+                    'Retro-Druck, Pixel-Arcade oder Retro-Desktop unter Einstellungen > Erscheinungsbild. '
+                    'Jedes bietet helle und dunkle Farben, passende Überschriftenschriften, '
+                    'Steuerelementformen und Illustrationen. Standard und Pixel bleiben verfügbar; neue '
+                    'Designs lassen sich zum Anpassen kopieren.'],
+        'fixes': []},
+ 'es': {'changes': ['Siete temas integrados nuevos: elige Discos de jazz, Era espacial, Memphis, Futuro Y2K, '
+                    'Impresión retro, Arcade de píxeles o Escritorio retro en Ajustes > Apariencia. Cada uno '
+                    'incluye colores claros y oscuros, tipografías de títulos, formas de controles e '
+                    'ilustraciones a juego. Los temas Predeterminado y Píxel siguen disponibles; puedes '
+                    'copiar cualquier tema nuevo para personalizarlo.'],
+        'fixes': []},
+ 'fr': {'changes': ['Sept nouveaux thèmes intégrés : choisissez Disques de jazz, Ère spatiale, Memphis, '
+                    'Futur Y2K, Impression rétro, Arcade pixel ou Bureau rétro dans Réglages > Apparence. '
+                    'Chacun propose des couleurs claires et sombres, des polices de titres, des formes de '
+                    'contrôles et des illustrations assorties. Les thèmes Par défaut et Pixel restent '
+                    'disponibles ; copiez un nouveau thème pour le personnaliser.'],
+        'fixes': []},
+ 'id': {'changes': ['Tujuh tema bawaan baru: pilih Rekaman Jazz, Era Antariksa, Memphis, Masa Depan Y2K, '
+                    'Cetakan Retro Amerika, Arkade Piksel, atau Desktop Retro di Pengaturan > Tampilan. '
+                    'Masing-masing memiliki warna terang dan gelap, font judul, bentuk kontrol, dan '
+                    'ilustrasi yang serasi. Tema Default dan Piksel tetap tersedia; salin tema baru untuk '
+                    'menyesuaikannya.'],
+        'fixes': []},
+ 'it': {'changes': ['Sette nuovi temi integrati: scegli Dischi jazz, Era spaziale, Memphis, Futuro Y2K, '
+                    'Stampa rétro, Arcade pixel o Desktop rétro in Impostazioni > Aspetto. Ognuno include '
+                    'colori chiari e scuri, caratteri per i titoli, forme dei controlli e illustrazioni '
+                    'coordinati. I temi Predefinito e Pixel restano disponibili; copia un nuovo tema per '
+                    'personalizzarlo.'],
+        'fixes': []},
+ 'ko': {'changes': ['새 기본 테마 7종: 설정 > 모양에서 재즈 레코드, 스페이스 에이지, 멤피스, Y2K 퓨처, 아메리칸 빈티지 인쇄, 픽셀 아케이드, 레트로 데스크톱을 '
+                    '선택하세요. 각 테마는 밝고 어두운 색상, 어울리는 제목 글꼴, 컨트롤 모양과 장식 그림을 제공합니다. 기존 기본 및 픽셀 테마도 유지되며, 새 테마를 '
+                    '복사해 원하는 대로 바꿀 수 있습니다.'],
+        'fixes': []},
+ 'pl': {'changes': ['Siedem nowych wbudowanych motywów: wybierz Płyty jazzowe, Erę kosmiczną, Memphis, '
+                    'Przyszłość Y2K, Druk retro, Pikselowe arcade lub Pulpit retro w Ustawienia > Wygląd. '
+                    'Każdy ma jasne i ciemne kolory, dopasowane czcionki nagłówków, kształty kontrolek i '
+                    'ilustracje. Motywy Domyślny i Pikselowy pozostają dostępne; skopiuj nowy motyw, aby go '
+                    'dostosować.'],
+        'fixes': []},
+ 'pt-BR': {'changes': ['Sete novos temas integrados: escolha Discos de jazz, Era espacial, Memphis, Futuro '
+                       'Y2K, Impressão retrô, Arcade pixel ou Área de trabalho retrô em Configurações > '
+                       'Aparência. Cada tema inclui cores claras e escuras, fontes de títulos, formas de '
+                       'controles e ilustrações combinando. Os temas Padrão e Pixel continuam disponíveis; '
+                       'copie um novo tema para personalizá-lo.'],
+           'fixes': []},
+ 'ru': {'changes': ['Семь новых встроенных тем: выберите «Джазовые пластинки», «Космическая эра», «Мемфис», '
+                    '«Будущее Y2K», «Винтажная печать», «Пиксельная аркада» или «Ретро-рабочий стол» в '
+                    'разделе Настройки > Оформление. У каждой темы есть светлая и тёмная палитры, подходящие '
+                    'шрифты заголовков, формы элементов и иллюстрации. Темы «Стандартная» и «Пиксельная» '
+                    'сохранены; любую новую тему можно скопировать и изменить.'],
+        'fixes': []},
+ 'tr': {'changes': ['Yedi yeni yerleşik tema: Ayarlar > Görünüm bölümünden Caz Plakları, Uzay Çağı, Memphis, '
+                    'Y2K Geleceği, Retro Baskı, Piksel Atari veya Retro Masaüstü seçin. Her tema açık ve '
+                    'koyu renkler, uyumlu başlık yazı tipleri, kontrol biçimleri ve süslemeler içerir. '
+                    'Varsayılan ve Piksel temaları korunur; yeni bir temayı kopyalayıp '
+                    'özelleştirebilirsiniz.'],
+        'fixes': []},
+ 'uk': {'changes': ['Сім нових вбудованих тем: виберіть «Джазові платівки», «Космічна ера», «Мемфіс», '
+                    '«Майбутнє Y2K», «Вінтажний друк», «Піксельна аркада» або «Ретро-стільниця» у '
+                    'Налаштування > Вигляд. Кожна тема має світлу й темну палітри, відповідні шрифти '
+                    'заголовків, форми елементів та ілюстрації. Теми «Типова» й «Піксельна» залишаються; '
+                    'нові теми можна копіювати та змінювати.'],
+        'fixes': []},
+ 'vi': {'changes': ['Bảy chủ đề tích hợp mới: chọn Đĩa nhạc jazz, Kỷ nguyên vũ trụ, Memphis, Tương lai Y2K, '
+                    'In ấn cổ điển Mỹ, Arcade điểm ảnh hoặc Máy tính để bàn cổ điển trong Cài đặt > Giao '
+                    'diện. Mỗi chủ đề có màu sáng và tối, phông tiêu đề, hình dạng điều khiển và hình trang '
+                    'trí đồng bộ. Chủ đề Mặc định và Pixel vẫn được giữ; bạn có thể sao chép chủ đề mới để '
+                    'tùy chỉnh.'],
+        'fixes': []}},
     "2.12.0": {
         "ar": {
             "changes": [

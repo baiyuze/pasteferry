@@ -1,5 +1,20 @@
 # 更新记录 / Changelog
 
+## 2.12.1 — 2026-11-14
+
+Seven new visual styles for your clipboard, with coordinated colors, typography, controls and artwork.
+
+### Changes
+
+- Seven new built-in themes: Choose Jazz Records, Space Age, Memphis, Y2K Future, Vintage Print, Pixel Arcade or Retro Desktop in Settings > Appearance. Each has light and dark palettes, matching heading fonts, control shapes and decorative artwork. Default and Pixel remain available; copy any new theme to customize it.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional, to use the new themes. Pairings, friends, history, existing themes and settings are preserved.
+- **Android**: optional, to use the new themes. Theme selection stays local to each device.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.12.0 — 2026-11-14
 
 Recommended for all users: PasteFerry 2.12.0 focuses on speeding up direct file transfers between remote computers. Update both computers to enable the speedup; transfers with older versions continue to work.

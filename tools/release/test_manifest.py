@@ -24,7 +24,8 @@ class ReleaseNotesTests(unittest.TestCase):
         self.assertEqual(set(re.findall(r'"([^"]+)"', codes[1])), set(manifest.ALL_LANGS))
 
     def test_historical_release_keeps_original_five(self):
-        result = manifest.release_entry(manifest.RELEASES[1])
+        historical = next(r for r in manifest.RELEASES if r['version'] not in manifest.EXTRA_NOTES)
+        result = manifest.release_entry(historical)
         self.assertEqual(set(result["notes"]), set(manifest.LANGS))
 
     def test_missing_language_is_rejected(self):
@@ -34,7 +35,8 @@ class ReleaseNotesTests(unittest.TestCase):
             manifest.release_entry(manifest.RELEASES[0])
 
     def test_empty_or_misaligned_translation_is_rejected(self):
-        for broken in ([""], ["one item"], None):
+        wrong_count = ["translated item"] * (len(manifest.RELEASES[0]["changes"]) + 1)
+        for broken in ([""], wrong_count, None):
             with self.subTest(broken=broken):
                 extra = copy.deepcopy(manifest.EXTRA_NOTES)
                 extra[manifest.RELEASES[0]["version"]]["fr"]["changes"] = broken

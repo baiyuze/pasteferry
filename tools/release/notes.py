@@ -12,6 +12,21 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.12.1',
+ 'date': '2026-11-14',
+ 'changes': [('Seven new built-in themes: Choose Jazz Records, Space Age, Memphis, Y2K Future, Vintage '
+              'Print, Pixel Arcade or Retro Desktop in Settings > Appearance. Each has light and dark '
+              'palettes, matching heading fonts, control shapes and decorative artwork. Default and Pixel '
+              'remain available; copy any new theme to customize it.',
+              '新增七套内置主题：在「设置 > 外观」中选择爵士唱片、太空时代、孟菲斯、Y2K '
+              '千禧、美式复古印刷、像素街机或复古桌面。每套都有深浅配色、对应的标题字体、控件形状与装饰图形。默认和原有像素主题保留，也可以复制新主题再修改。',
+              '内蔵テーマを7種類追加しました。「設定 > '
+              '外観」でジャズレコード、スペースエイジ、メンフィス、Y2Kフューチャー、アメリカン・レトロプリント、ピクセルアーケード、レトロデスクトップを選べます。それぞれ明暗の配色、見出し書体、コントロールの形、装飾を備えています。従来のデフォルトとピクセルも引き続き使え、新テーマを複製して編集できます。',
+              '新增七套內建主題：在「設定 > 外觀」選擇爵士唱片、太空時代、孟菲斯、Y2K '
+              '千禧、美式復古印刷、像素街機或復古桌面。每套都有深淺配色、對應的標題字型、控制項形狀與裝飾圖形。預設與原有像素主題保留，也可以複製新主題再修改。',
+              '新增七套內置主題：在「設定 > 外觀」選擇爵士唱片、太空時代、孟菲斯、Y2K '
+              '千禧、美式復古印刷、像素街機或復古桌面。每套都有深淺配色、對應的標題字體、控制項形狀與裝飾圖形。預設與原有像素主題保留，亦可複製新主題再修改。')],
+ 'fixes': []},
 {'version': '2.12.0',
  'date': '2026-11-14',
  'changes': [('Recommended for all users: Upgrade to 2.12.0 for faster direct file transfers between remote '
