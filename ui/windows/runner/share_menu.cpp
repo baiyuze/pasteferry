@@ -72,7 +72,10 @@ HRESULT Queue(IShellItemArray* items) {
   wchar_t wide_id[39];
   StringFromGUID2(guid, wide_id, ARRAYSIZE(wide_id));
   const std::wstring id(wide_id + 1, 36);
-  std::string json = "{\"id\":\"" + std::string(id.begin(), id.end()) + "\",\"paths\":[";
+  // StringFromGUID2 only emits ASCII digits, hex letters and separators.
+  std::string ascii_id;
+  for (const wchar_t c : id) ascii_id += static_cast<char>(c);
+  std::string json = "{\"id\":\"" + ascii_id + "\",\"paths\":[";
   for (DWORD i = 0; i < count; ++i) {
     IShellItem* item = nullptr;
     result = items->GetItemAt(i, &item);
