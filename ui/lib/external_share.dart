@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as path;
 
 import 'daemon_client.dart';
 import 'gen/pasteferry/v1/daemon.pb.dart';
@@ -44,6 +45,7 @@ class ExternalShares extends ChangeNotifier {
   StreamSubscription<FileSystemEvent>? _watch;
   Timer? _poll;
   Future<void>? _starting;
+  Future<void>? _scanning, _closing;
   bool _disposed = false;
   bool importing = false;
   static final _id = RegExp(r'^[a-zA-Z0-9-]{8,64}$');
@@ -123,7 +125,7 @@ class ExternalShares extends ChangeNotifier {
     final data = _dataDir ?? DaemonEndpoint.defaultDataDir();
     final owned = value['ownedDirectory'] as String? ?? '';
     final expected = '$data/share-staging/$id';
-    if (owned.isNotEmpty && owned != expected) {
+    if (owned.isNotEmpty && !path.equals(owned, expected)) {
       throw const FormatException('Invalid staging directory');
     }
     return ShareDraft(
@@ -139,7 +141,10 @@ class ExternalShares extends ChangeNotifier {
     );
   }
 
-  Future<void> scan() async {
+  Future<void> scan() =>
+      _scanning ??= _scan().whenComplete(() => _scanning = null);
+
+  Future<void> _scan() async {
     if (_disposed) return;
     try {
       var foundImport = false;
@@ -252,9 +257,19 @@ class ExternalShares extends ChangeNotifier {
 
   @override
   void dispose() {
+    unawaited(close());
+    super.dispose();
+  }
+
+  /// Wait for native directory watches and in-flight reads before removing or
+  /// replacing an inbox. Windows keeps the directory open until cancellation.
+  Future<void> close() => _closing ??= _close();
+
+  Future<void> _close() async {
     _disposed = true;
     _poll?.cancel();
-    _watch?.cancel();
-    super.dispose();
+    await _watch?.cancel();
+    await _starting;
+    await _scanning;
   }
 }

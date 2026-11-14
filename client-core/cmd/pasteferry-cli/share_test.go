@@ -101,6 +101,9 @@ func TestShareMenusQuoteExecutableAndProtectUnrelatedFiles(t *testing.T) {
 	if err := installShareMenus(cli, data, false); err == nil {
 		t.Fatal("replaced unrelated script")
 	}
+	if _, err := os.Stat(filepath.Join(data, "kio", "servicemenus", "pasteferry-send.desktop")); !os.IsNotExist(err) {
+		t.Fatalf("installed a partial menu despite a conflict: %v", err)
+	}
 	if err := installShareMenus(cli, data, true); err == nil {
 		t.Fatal("removed unrelated script")
 	}

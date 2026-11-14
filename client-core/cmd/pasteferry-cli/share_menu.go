@@ -45,12 +45,15 @@ func installShareMenus(cli, data string, remove bool) error {
 		filepath.Join(data, "kio", "servicemenus", "pasteferry-send.desktop"): menu,
 		filepath.Join(data, "nautilus", "scripts", "Send with PasteFerry"):    script,
 	}
-	for path, content := range items {
+	// Check every destination before changing either menu, including removal.
+	for path := range items {
 		if old, err := os.ReadFile(path); err == nil && !strings.Contains(string(old), shareMenuMarker) {
 			return fmt.Errorf("refusing to replace a non-PasteFerry menu: %s", path)
 		} else if err != nil && !os.IsNotExist(err) {
 			return err
 		}
+	}
+	for path, content := range items {
 		if remove {
 			if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
 				return err

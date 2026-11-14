@@ -59,6 +59,7 @@ void main() {
     await shares.start();
   });
   tearDown(() async {
+    await shares.close();
     shares.dispose();
     await root.delete(recursive: true);
   });
@@ -69,6 +70,7 @@ void main() {
       await incoming('batch-0001');
       await incoming('batch-0001');
       expect(shares.pending, hasLength(1));
+      await shares.close();
       shares.dispose();
       shares = ExternalShares(dataDir: root.path);
       await shares.start();
@@ -99,6 +101,7 @@ void main() {
         shares.pending.single,
         Transfer(id: 'transfer-0001'),
       );
+      await shares.close();
       shares.dispose();
       shares = ExternalShares(dataDir: root.path);
       await shares.start();

@@ -64,15 +64,21 @@ Type: filesandordirs; Name: "{localappdata}\Programs\CopySync"
 Name: "sharemenu"; Description: "Add Send with PasteFerry to the file context menu"; Flags: checkedonce
 
 [Files]
-Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
+Source: "{#SourceDir}\*"; DestDir: "{app}"; Excludes: "PasteFerryShare.dll"; Flags: recursesubdirs ignoreversion
+; Explorer can keep an old extension loaded. Use a new path on each upgrade.
+Source: "{#SourceDir}\PasteFerryShare.dll"; DestDir: "{app}"; DestName: "PasteFerryShare-{#AppVersion}.dll"; Flags: ignoreversion uninsrestartdelete
 
 [Icons]
 Name: "{autoprograms}\PasteFerry"; Filename: "{app}\PasteFerry.exe"
 Name: "{autodesktop}\PasteFerry"; Filename: "{app}\PasteFerry.exe"
 
 [Registry]
-Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; ValueType: none; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}\InprocServer32"; ValueType: string; ValueData: "{app}\PasteFerryShare.dll"; Flags: uninsdeletekey; Tasks: sharemenu
+; Removing the task during an upgrade must remove the previous registration.
+Root: HKCU; Subkey: "Software\Classes\*\shell\PasteFerry"; ValueType: none; Flags: deletekey; Tasks: not sharemenu
+Root: HKCU; Subkey: "Software\Classes\Directory\shell\PasteFerry"; ValueType: none; Flags: deletekey; Tasks: not sharemenu
+Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; ValueType: none; Flags: deletekey; Tasks: not sharemenu
+Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; ValueType: none; Flags: uninsdeletekey; Tasks: sharemenu
+Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}\InprocServer32"; ValueType: string; ValueData: "{app}\PasteFerryShare-{#AppVersion}.dll"; Flags: uninsdeletekey; Tasks: sharemenu
 Root: HKCU; Subkey: "Software\Classes\CLSID\{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}\InprocServer32"; ValueType: string; ValueName: "ThreadingModel"; ValueData: "Apartment"; Tasks: sharemenu
 Root: HKCU; Subkey: "Software\Classes\*\shell\PasteFerry"; ValueType: string; ValueName: "ExplorerCommandHandler"; ValueData: "{{9C2E791A-28CB-4D10-9E63-832BA7B431D2}"; Flags: uninsdeletekey; Tasks: sharemenu
 Root: HKCU; Subkey: "Software\Classes\*\shell\PasteFerry"; ValueType: string; ValueName: "MultiSelectModel"; ValueData: "Player"; Tasks: sharemenu
