@@ -17,7 +17,8 @@ const paletteRoles = [
 ];
 
 /// 主题可以用的字体：App 自带的，或者跟随系统（null）
-const _fonts = {'FusionPixel': 'FusionPixelMono'};
+const _fonts = {'FusionPixel': 'FusionPixelMono', 'SpaceGrotesk': null};
+const _headingFonts = {'FusionPixel', 'BarlowCondensed', 'SpaceGrotesk', 'ArchivoBlack'};
 
 /// 解析一份主题。[json] 可以是字符串或已经解码的 Map；没写的字段从 [base] 补齐，
 /// [base] 为空时按 JSON 里的 `base` 取内置主题。格式不对时抛 FormatException。
@@ -37,6 +38,8 @@ AppThemeSpec parseTheme(Object json, {AppThemeSpec? base}) {
   // 'system' 与 null 都表示跟随系统
   String? font(Object? v) => v == null || v == 'system' ? null : v as String;
   final family = typo.containsKey('family') ? font(typo['family']) : b.typography.family;
+  final heading = typo.containsKey('heading') ? font(typo['heading']) : b.typography.heading;
+  if (heading != null && !_headingFonts.contains(heading)) throw FormatException('不认识的标题字体：$heading');
   if (family != null && !_fonts.containsKey(family)) throw FormatException('不认识的字体：$family');
   final sizes = (typo['sizes'] as List?)?.map((e) => (e as num).toDouble()).toList() ?? b.typography.sizes;
   final motionMap = motion is Map ? motion.cast<String, dynamic>() : const <String, dynamic>{};
@@ -57,6 +60,7 @@ AppThemeSpec parseTheme(Object json, {AppThemeSpec? base}) {
     ),
     typography: AppTypography(
       family: family,
+      heading: heading,
       mono: typo.containsKey('mono')
           ? font(typo['mono'])
           : (family == b.typography.family ? b.typography.mono : _fonts[family]),
@@ -67,6 +71,7 @@ AppThemeSpec parseTheme(Object json, {AppThemeSpec? base}) {
       steps: (motionMap['steps'] as num?)?.toInt() ?? b.motion.steps,
     ),
     pixelIcons: m.containsKey('icons') ? m['icons'] == 'pixel' : b.pixelIcons,
+    artwork: pick(ArtworkStyle.values, m['artwork'], b.artwork),
     scenery: m['scenery'] as bool? ?? b.scenery,
     scene: m.containsKey('scene') ? _scene(m['scene']) : b.scene,
     background: m.containsKey('background') ? _background(m['background']) : b.background,
@@ -217,7 +222,8 @@ Map<String, Object?> themeToJson(AppThemeSpec s, {Map<String, String> name = con
     'modes': {'light': palette(s.light), 'dark': palette(s.dark)},
     'typography': {
       'family': s.typography.family ?? 'system',
-      'mono': s.typography.family == null ? 'system' : s.typography.mono,
+      if (s.typography.heading != null) 'heading': s.typography.heading,
+      'mono': s.typography.mono == 'FusionPixelMono' ? 'FusionPixelMono' : 'system',
       'sizes': s.typography.sizes,
     },
     'shape': {
@@ -229,6 +235,7 @@ Map<String, Object?> themeToJson(AppThemeSpec s, {Map<String, String> name = con
     },
     'motion': s.motion.style.name,
     'icons': s.pixelIcons ? 'pixel' : 'system',
+    if (s.artwork != ArtworkStyle.none) 'artwork': s.artwork.name,
     'scenery': s.scenery,
     if (s.scene != null)
       'scene': {

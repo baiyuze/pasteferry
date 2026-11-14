@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "id": "pixel-arcade",
+  "name": {
+    "en": "Pixel Arcade",
+    "zh-Hans": "像素街机",
+    "ja": "ピクセルアーケード",
+    "zh-Hant-TW": "像素街機",
+    "zh-Hant-HK": "像素街機",
+    "ar": "ألعاب البكسل",
+    "de": "Pixel-Arcade",
+    "es": "Arcade de píxeles",
+    "fr": "Arcade pixel",
+    "id": "Arkade Piksel",
+    "it": "Arcade pixel",
+    "ko": "픽셀 아케이드",
+    "pl": "Pikselowe arcade",
+    "pt": "Arcade pixel",
+    "ru": "Пиксельная аркада",
+    "tr": "Piksel Atari",
+    "uk": "Піксельна аркада",
+    "vi": "Arcade điểm ảnh"
+  },
+  "base": "default",
+  "modes": {
+    "light": {
+      "accent": "#2E6240",
+      "background": "#EEF3DC",
+      "sidebar": "#DCE7C4",
+      "surface": "#F8FAEB",
+      "border": "#81956B",
+      "borderStrong": "#263F2A",
+      "separator": "#B7C69C",
+      "text": "#193A2B",
+      "textDim": "#48623F",
+      "textFaint": "#5E7049",
+      "selection": "#CFDDB1",
+      "hover": "#0C000000",
+      "fill": "#E3EABF",
+      "online": "#248A3D",
+      "warning": "#B25000",
+      "danger": "#D70015",
+      "onAccent": "#FFFFFF",
+      "inverse": "#193A2B",
+      "onInverse": "#EEF3DC",
+      "bevelLight": "#D9FFFFFF",
+      "bevelDark": "#67566B60",
+      "shadow": "#80503828"
+    },
+    "dark": {
+      "accent": "#C8E59B",
+      "background": "#102F29",
+      "sidebar": "#0A241E",
+      "surface": "#183C30",
+      "border": "#61825A",
+      "borderStrong": "#9CB66D",
+      "separator": "#446446",
+      "text": "#D9EDB6",
+      "textDim": "#B2CF96",
+      "textFaint": "#9CB780",
+      "selection": "#294F38",
+      "hover": "#0CFFFFFF",
+      "fill": "#1E432E",
+      "online": "#32D74B",
+      "warning": "#FF9F0A",
+      "danger": "#FF453A",
+      "onAccent": "#153225",
+      "inverse": "#D9EDB6",
+      "onInverse": "#102F29",
+      "bevelLight": "#4DDCE4C7",
+      "bevelDark": "#8A000000",
+      "shadow": "#99000000"
+    }
+  },
+  "typography": {
+    "family": "FusionPixel",
+    "heading": "FusionPixel",
+    "mono": "FusionPixelMono",
+    "sizes": [
+      12,
+      24
+    ]
+  },
+  "shape": {
+    "radius": {
+      "sm": 0,
+      "md": 0,
+      "lg": 0
+    },
+    "corner": "pixel",
+    "borderWidth": 2,
+    "unit": 2,
+    "shadow": "hard"
+  },
+  "motion": "stepped",
+  "icons": "pixel",
+  "artwork": "arcade",
+  "scenery": true
+}

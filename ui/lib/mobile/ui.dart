@@ -7,6 +7,7 @@ import '../i18n.dart';
 import '../icons.dart';
 import '../main.dart' show AppScope;
 import '../theme.dart';
+import '../theme_artwork.dart';
 import '../pixel_theme.dart';
 import 'host.dart';
 import '../widgets/backdrop.dart';
@@ -37,7 +38,7 @@ class MobileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    final header = Padding(
       padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.lg, Insets.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,6 +57,11 @@ class MobileHeader extends StatelessWidget {
         ],
       ),
     );
+    if (context.artwork == ArtworkStyle.none || !context.showScenery) return header;
+    return Stack(children: [
+      const Positioned.fill(child: Opacity(opacity: .4, child: DesignArtwork(height: 112))),
+      header,
+    ]);
   }
 }
 

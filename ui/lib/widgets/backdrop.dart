@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../pixel_art.dart';
 import '../theme.dart';
 import '../theme_controller.dart';
+import '../theme_artwork.dart';
 
 /// 窗口最底下的背景图层（design/themes.md 第 7.5 节）：图片、遮罩，上面是内容。
 ///
@@ -137,6 +138,7 @@ class SceneHeader extends StatelessWidget {
     final bytes = controller.sceneImage('header', brightness);
     final scrim = controller.sceneScrim(brightness, p);
     if (controller.spec.scene?.shaFor('header', brightness) == null) {
+      if (context.artwork != ArtworkStyle.none) return _Fade(top: false, child: DesignArtwork(height: height));
       return context.shape.pixel ? PixelScene(height: height) : const SizedBox.shrink();
     }
     if (bytes == null || scrim == null) return SizedBox(height: height);
@@ -168,6 +170,7 @@ class SceneSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     if (controller.spec.scene?.shaFor('sidebar', brightness) == null) {
+      if (context.artwork != ArtworkStyle.none) return const DesignArtwork(height: 96, sidebar: true);
       return context.shape.pixel ? const PixelCamp() : const SizedBox.shrink();
     }
     final bytes = controller.sceneImage('sidebar', brightness);

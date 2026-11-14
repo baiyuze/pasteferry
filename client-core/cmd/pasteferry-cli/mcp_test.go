@@ -192,7 +192,7 @@ func TestMCPThemeWorkflow(t *testing.T) {
 	if v := toolData(t, replies[2], false); v["valid"] != true || v["id"] != "mint" {
 		t.Errorf("校验：%v", v)
 	}
-	if list := toolData(t, replies[3], false); len(list["themes"].([]any)) != 2 {
+	if list := toolData(t, replies[3], false); len(list["themes"].([]any)) != 9 {
 		t.Errorf("只校验不该保存：%v", list)
 	}
 	if w := toolData(t, replies[4], false)["warnings"].([]any); len(w) == 0 || w[0].(map[string]any)["foreground"] != "textDim" {
@@ -204,7 +204,7 @@ func TestMCPThemeWorkflow(t *testing.T) {
 	if v := toolData(t, replies[6], false); v["current"] != "mint" || v["mode"] != "dark" {
 		t.Errorf("应用：%v", v)
 	}
-	if list := toolData(t, replies[7], false); list["current"] != "mint" || list["mode"] != "dark" || len(list["themes"].([]any)) != 3 {
+	if list := toolData(t, replies[7], false); list["current"] != "mint" || list["mode"] != "dark" || len(list["themes"].([]any)) != 10 {
 		t.Errorf("列表：%v", list)
 	}
 	if structured := replies[7]["result"].(map[string]any)["structuredContent"]; structured == nil {

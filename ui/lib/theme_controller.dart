@@ -11,6 +11,7 @@ import 'l10n/app_localizations.dart';
 import 'theme.dart';
 import 'scrim.dart';
 import 'theme_json.dart';
+import 'style_themes.dart';
 
 /// 一个窗口要画的背景：设置、取到的图片与分析结果
 class Backdrop {
@@ -61,11 +62,12 @@ class ThemeChoice {
     if (id == 'default') return l.themeDefault;
     if (id == 'pixel') return l.themePixel;
     final lang = l.localeName.replaceAll('_', '-');
-    return names[lang] ??
-        names[lang == 'zh' ? 'zh-Hans' : lang] ??
-        names[lang.split('-').first] ??
-        names['en'] ??
-        names.values.firstOrNull ??
+    final translated = names.isEmpty ? styleThemeNames[id] ?? names : names;
+    return translated[lang] ??
+        translated[lang == 'zh' ? 'zh-Hans' : lang] ??
+        translated[lang.split('-').first] ??
+        translated['en'] ??
+        translated.values.firstOrNull ??
         id;
   }
 }
@@ -111,6 +113,7 @@ class ThemeController extends ChangeNotifier {
       typography: s.typography,
       motion: s.motion,
       pixelIcons: s.pixelIcons,
+      artwork: s.artwork,
       scenery: s.scenery,
       scene: s.scene,
       background: bg,

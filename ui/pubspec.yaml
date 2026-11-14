@@ -70,9 +70,22 @@ flutter:
 
   assets:
     - assets/app_icon.png
+    - assets/fonts/BarlowCondensed-OFL.txt
+    - assets/fonts/SpaceGrotesk-OFL.txt
+    - assets/fonts/ArchivoBlack-OFL.txt
 
   # 像素主题的字体与图标，见 tools/pixel-theme/build_assets.py。许可证在同一目录
   fonts:
+    - family: BarlowCondensed
+      fonts:
+        - asset: assets/fonts/BarlowCondensed-Bold.ttf
+          weight: 700
+    - family: SpaceGrotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk.ttf
+    - family: ArchivoBlack
+      fonts:
+        - asset: assets/fonts/ArchivoBlack-Regular.ttf
     - family: FusionPixel
       fonts:
         - asset: assets/fonts/FusionPixel12.otf

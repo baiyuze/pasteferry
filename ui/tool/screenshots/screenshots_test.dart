@@ -169,6 +169,9 @@ Future<void> _loadFonts() async {
     ('FusionPixel', 'FusionPixel12.otf'),
     ('FusionPixelMono', 'FusionPixel12Mono.otf'),
     ('PixelIcons', 'PixelIcons.ttf'),
+    ('BarlowCondensed', 'BarlowCondensed-Bold.ttf'),
+    ('SpaceGrotesk', 'SpaceGrotesk.ttf'),
+    ('ArchivoBlack', 'ArchivoBlack-Regular.ttf'),
   ]) {
     await (FontLoader(name)..addFont(rootBundle.load('assets/fonts/$file'))).load();
   }

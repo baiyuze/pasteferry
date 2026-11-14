@@ -8,6 +8,14 @@ PasteFerry themes can be made by AI. Ask for "a cyberpunk theme" or "use this ph
 
 ## Before you start
 
+PasteFerry 2.12.1 adds Jazz Records (`jazz`), Space Age (`space-age`),
+Memphis (`memphis`), Y2K Future (`y2k`), Vintage Print (`americana`),
+Pixel Arcade (`pixel-arcade`) and Retro Desktop (`retro-desktop`). Choose one
+in Settings > Appearance, or use its id as `base` when asking AI to customize it.
+Every theme has light and dark palettes. Default and Pixel remain available.
+Copies preserve the heading font, artwork and control shapes. The `scenery`
+toggle hides the artwork; your own scenery and background images take priority.
+
 1. Install the PasteFerry desktop app and open it (the background service must be running).
 2. Find `pasteferry-cli`:
 

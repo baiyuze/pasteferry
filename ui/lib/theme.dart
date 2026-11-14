@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 
 import 'pixel_theme.dart';
+import 'style_themes.dart';
 
 /// PasteFerry 的设计系统。
 ///
@@ -50,6 +51,7 @@ class AppThemeSpec {
     this.typography = AppTypography.standard,
     this.motion = AppMotion.standard,
     this.pixelIcons = false,
+    this.artwork = ArtworkStyle.none,
     this.scenery = true,
     this.scene,
     this.background,
@@ -64,6 +66,8 @@ class AppThemeSpec {
 
   /// 用像素图标（[AppIcons] 里的 Pixelarticons），而不是系统风格的图标
   final bool pixelIcons;
+
+  final ArtworkStyle artwork;
 
   /// 页面顶部的风景与侧边栏底部的小图（像素主题默认是像素风景与营地）；显示背景图时总是不画
   final bool scenery;
@@ -81,7 +85,7 @@ class AppThemeSpec {
   /// 软件自带的主题，按在「外观」里的顺序。加一套自带主题：在这里登记，
   /// 再把同样的定义写进 client-core/internal/theme/builtin/ 下以 id 命名的 JSON（后台服务据此校验与合并），
   /// test/builtin_themes_test.dart 会核对两边一致。
-  static const builtins = {'default': standard, 'pixel': pixelTheme};
+  static const builtins = {'default': standard, 'pixel': pixelTheme, ...styleThemes};
 
   /// 内置主题，按 id 取；不认识的 id 用默认主题
   static AppThemeSpec byId(String id) => builtins[id] ?? standard;
@@ -319,7 +323,20 @@ class AppPalette extends ThemeExtension<AppPalette> {
 enum ShadowStyle { soft, hard, none }
 
 /// 角的画法：[round] 是圆角；[pixel] 是像素角，四角切掉台阶状的方格，见 [PixelBorder]。
-enum CornerStyle { round, pixel }
+enum CornerStyle { round, pixel, bevel }
+
+/// A decorative visual language shared by the main window and theme previews.
+enum ArtworkStyle { none, jazz, space, memphis, y2k, americana, arcade, retro }
+
+@immutable
+class AppArtwork extends ThemeExtension<AppArtwork> {
+  const AppArtwork(this.style);
+  final ArtworkStyle style;
+  @override
+  AppArtwork copyWith({ArtworkStyle? style}) => AppArtwork(style ?? this.style);
+  @override
+  AppArtwork lerp(AppArtwork? other, double t) => t < .5 || other == null ? this : other;
+}
 
 /// 圆角、边框与投影。
 @immutable
@@ -346,6 +363,8 @@ class AppShape extends ThemeExtension<AppShape> {
 
   bool get pixel => corner == CornerStyle.pixel;
 
+  bool get beveled => pixel || corner == CornerStyle.bevel;
+
   static const standard = AppShape();
 
   /// 进度条、角标这类小装饰写死的圆角 [r]，按 [sm] 与默认值的比例缩放：直角主题里一起变成直角。
@@ -362,19 +381,20 @@ class AppShape extends ThemeExtension<AppShape> {
 
   /// 按钮、对话框、菜单的外形。[radius] 默认是 [sm]。
   /// 像素主题里可以加斜面 [bevel]（上左、下右两色）和浮层投影 [drop]；默认主题忽略它们
-  OutlinedBorder outline({BorderSide side = BorderSide.none, double? radius, (Color, Color)? bevel, Color? drop}) => pixel
-      ? PixelBorder(side: side, unit: unit, topLeft: bevel?.$1, bottomRight: bevel?.$2, drop: drop)
+  OutlinedBorder outline({BorderSide side = BorderSide.none, double? radius, (Color, Color)? bevel, Color? drop}) => beveled
+      ? PixelBorder(side: side, unit: unit, steps: pixel ? 1 : 0, topLeft: bevel?.$1, bottomRight: bevel?.$2, drop: drop)
       : RoundedRectangleBorder(side: side, borderRadius: BorderRadius.circular(radius ?? sm));
 
   /// 容器的底、边框与投影。默认主题是带圆角 [radius]（默认 [md]）的 BoxDecoration，
   /// 像素主题换成切角、粗边框的 ShapeDecoration，可以加斜面 [bevel]（上左、下右两色）。
-  Decoration box({Color? color, Color? border, double? radius, List<BoxShadow>? shadows, (Color, Color)? bevel}) => pixel
+  Decoration box({Color? color, Color? border, double? radius, List<BoxShadow>? shadows, (Color, Color)? bevel}) => beveled
       ? ShapeDecoration(
           color: color,
           shadows: shadows,
           shape: PixelBorder(
             side: border == null ? BorderSide.none : BorderSide(color: border, width: borderWidth),
             unit: unit,
+            steps: pixel ? 1 : 0,
             topLeft: bevel?.$1,
             bottomRight: bevel?.$2,
           ),
@@ -382,7 +402,7 @@ class AppShape extends ThemeExtension<AppShape> {
       : BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(radius ?? md),
-          border: border == null ? null : Border.all(color: border),
+          border: border == null ? null : Border.all(color: border, width: borderWidth),
           boxShadow: shadows,
         );
 
@@ -445,10 +465,12 @@ final monoFamily = Platform.isWindows
 /// 主题指定的字体。正文字体 [family] 由 [buildTheme] 写进 TextTheme；页面要单独取的是等宽字体 [mono]。
 @immutable
 class AppTypography extends ThemeExtension<AppTypography> {
-  const AppTypography({this.family, this._mono, this.sizes = const []});
+  const AppTypography({this.family, this.heading, this._mono, this.sizes = const []});
 
   /// 正文字体。为空时跟随系统
   final String? family;
+
+  final String? heading;
 
   final String? _mono;
 
@@ -462,8 +484,8 @@ class AppTypography extends ThemeExtension<AppTypography> {
   static const standard = AppTypography();
 
   @override
-  AppTypography copyWith({String? family, String? mono, List<double>? sizes}) =>
-      AppTypography(family: family ?? this.family, mono: mono ?? _mono, sizes: sizes ?? this.sizes);
+  AppTypography copyWith({String? family, String? heading, String? mono, List<double>? sizes}) =>
+      AppTypography(family: family ?? this.family, heading: heading ?? this.heading, mono: mono ?? _mono, sizes: sizes ?? this.sizes);
 
   @override
   AppTypography lerp(AppTypography? other, double t) => t < 0.5 || other == null ? this : other;
@@ -554,6 +576,7 @@ extension PaletteAccess on BuildContext {
   AppShape get shape => Theme.of(this).extension<AppShape>()!;
   AppTypography get typography => Theme.of(this).extension<AppTypography>()!;
   AppMotion get motion => Theme.of(this).extension<AppMotion>()!;
+  ArtworkStyle get artwork => Theme.of(this).extension<AppArtwork>()?.style ?? ArtworkStyle.none;
 }
 
 /// Windows 上汉字（以及韩文）用哪些字体，按界面语言 [language] 排先后。
@@ -614,7 +637,7 @@ ThemeData buildTheme(Brightness brightness,
   // 默认主题里 borderStrong 就是 border，斜面与投影都不画
   final strong = BorderSide(color: p.borderStrong, width: shape.borderWidth);
   final raised = (p.bevelLight, p.bevelDark);
-  final drop = shape.pixel ? p.shadow : null;
+  final drop = shape.beveled ? p.shadow : null;
 
   final scheme = ColorScheme.fromSeed(seedColor: p.accent, brightness: brightness).copyWith(
     primary: p.accent,
@@ -660,13 +683,19 @@ ThemeData buildTheme(Brightness brightness,
   if (fontFamily != null || fontFamilyFallback != null) {
     textTheme = textTheme.apply(fontFamily: fontFamily, fontFamilyFallback: fontFamilyFallback);
   }
+  if (spec.typography.heading case final String heading) {
+    TextStyle? display(TextStyle? style) => style?.copyWith(fontFamily: heading,
+        fontFamilyFallback: [?fontFamily, ...?fontFamilyFallback], letterSpacing: 0);
+    textTheme = textTheme.copyWith(headlineSmall: display(textTheme.headlineSmall),
+        titleMedium: display(textTheme.titleMedium), titleSmall: display(textTheme.titleSmall));
+  }
 
   final controlShape = shape.outline();
   const controlPadding = EdgeInsets.symmetric(horizontal: 14, vertical: 9);
 
   /// 像素主题的按钮是凸起的，按下时斜面明暗互换、文字下沉 2px，像按下一个实体按键
   ButtonStyle pressable(ButtonStyle style) {
-    if (!shape.pixel) return style;
+    if (!shape.beveled) return style;
     final up = shape.outline(side: strong, bevel: raised) as PixelBorder;
     final sink = EdgeInsets.only(top: shape.unit, bottom: -shape.unit);
     return style.copyWith(
@@ -677,10 +706,11 @@ ThemeData buildTheme(Brightness brightness,
   }
 
   /// 输入框的边框：像素主题是凹下去的槽
-  InputBorder field(Color color, {double? width}) => shape.pixel
+  InputBorder field(Color color, {double? width}) => shape.beveled
       ? PixelInputBorder(
           borderSide: BorderSide(color: color, width: shape.borderWidth),
           unit: shape.unit,
+          steps: shape.pixel ? 1 : 0,
           topLeft: p.bevelDark,
           bottomRight: p.bevelLight,
         )
@@ -698,7 +728,7 @@ ThemeData buildTheme(Brightness brightness,
     textTheme: textTheme,
     fontFamily: fontFamily,
     fontFamilyFallback: fontFamilyFallback,
-    extensions: [p, shape, spec.typography, spec.motion],
+    extensions: [p, shape, spec.typography, spec.motion, AppArtwork(spec.artwork)],
     splashFactory: NoSplash.splashFactory, // 桌面端没有触摸涟漪
     highlightColor: Colors.transparent,
     hoverColor: p.hover,
@@ -711,7 +741,7 @@ ThemeData buildTheme(Brightness brightness,
         disabledBackgroundColor: p.fill,
         disabledForegroundColor: p.textFaint,
         shape: controlShape,
-        side: shape.pixel ? strong : null,
+        side: shape.beveled ? strong : null,
         padding: controlPadding,
         minimumSize: const Size(0, 32),
         textStyle: textTheme.labelLarge,
@@ -773,7 +803,7 @@ ThemeData buildTheme(Brightness brightness,
       surfaceTintColor: Colors.transparent,
       elevation: flat ? 0 : 18,
       shadowColor: Color(dark ? 0x99000000 : 0x40000000),
-      shape: shape.outline(radius: shape.lg, side: shape.pixel ? strong : BorderSide.none, drop: drop),
+      shape: shape.outline(radius: shape.lg, side: shape.beveled ? strong : BorderSide.none, bevel: raised, drop: drop),
       titleTextStyle: textTheme.titleMedium,
       contentTextStyle: textTheme.bodyMedium?.copyWith(color: p.textDim),
     ),

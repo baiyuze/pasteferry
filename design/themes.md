@@ -6,6 +6,14 @@
 
 ## 1. 概览
 
+2.12.1 新增七套设计主题：`jazz`、`space-age`、`memphis`、`y2k`、`americana`、
+`pixel-arcade`、`retro-desktop`，默认与原像素主题保留。下文的首发两套是历史方案。
+新增可继承字段 `artwork`（`none/jazz/space/memphis/y2k/americana/arcade/retro`）、
+`typography.heading`（软件内置的标题字体），以及 `shape.corner=bevel`（不切角的复古斜面控件）。
+`artwork` 同样服从「风景」开关，并让位给用户设置的风景与背景图。
+后台 JSON 是唯一配色来源；`tools/themes/generate.py` 生成 Flutter 常量与 18 语言主题名，
+`builtin_themes_test.dart` 核对一致性。字体来源与许可证见 `tools/themes/README.md`。
+
 这次一共四项改动：
 
 1. **主题**：「外观」里可以换主题。首发两套内置主题：

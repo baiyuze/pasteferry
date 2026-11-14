@@ -12,6 +12,7 @@ import '../icons.dart';
 import '../main.dart';
 import '../theme.dart';
 import '../theme_controller.dart';
+import '../theme_artwork.dart';
 import '../widgets/common.dart';
 
 /// 设置页的「外观」：主题管理（软件自带的与自定义的）、浅色与深色、像素主题的扫描线。
@@ -633,7 +634,15 @@ class ThemePreview extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Aa', style: TextStyle(fontSize: 12, height: 1, color: p.text)),
+                            SizedBox(
+                              height: spec.artwork == ArtworkStyle.none ? 12 : 18,
+                              child: Row(children: [
+                                Text('Aa', style: context.text.titleSmall?.copyWith(fontSize: 12, height: 1)),
+                                const Spacer(),
+                                if (spec.artwork != ArtworkStyle.none)
+                                  const SizedBox(width: 58, child: DesignArtwork(height: 18)),
+                              ]),
+                            ),
                             const SizedBox(height: 6),
                             Expanded(
                               child: Container(

@@ -25,7 +25,7 @@ const (
 	PixelID   = "pixel"
 )
 
-var builtinIDs = []string{DefaultID, PixelID}
+var builtinIDs = []string{DefaultID, PixelID, "jazz", "space-age", "memphis", "y2k", "americana", "pixel-arcade", "retro-desktop"}
 
 //go:embed builtin/*.json
 var builtinFS embed.FS
@@ -58,8 +58,9 @@ type Theme struct {
 	Modes      map[string]map[string]string `json:"modes,omitempty"`
 	Typography *Typography                  `json:"typography,omitempty"`
 	Shape      *Shape                       `json:"shape,omitempty"`
-	Motion     string                       `json:"motion,omitempty"` // smooth、stepped、reduced
-	Icons      string                       `json:"icons,omitempty"`  // system、pixel
+	Motion     string                       `json:"motion,omitempty"`  // smooth、stepped、reduced
+	Icons      string                       `json:"icons,omitempty"`   // system、pixel
+	Artwork    string                       `json:"artwork,omitempty"` // Built-in decorative language, inherited by custom themes.
 	// 页面顶部的风景与侧边栏底部的小图：像素边角的主题默认画像素风景，Scene 可以换成自己的图；
 	// false 时都不画。显示整窗背景图时总是不画
 	Scenery    *bool       `json:"scenery,omitempty"`
@@ -68,8 +69,9 @@ type Theme struct {
 }
 
 type Typography struct {
-	Family *string `json:"family,omitempty"` // system，或 App 自带的 FusionPixel
-	Mono   *string `json:"mono,omitempty"`   // system，或 FusionPixelMono
+	Family  *string `json:"family,omitempty"`  // system，或 App 自带的 FusionPixel
+	Heading *string `json:"heading,omitempty"` // Bundled display face; body text keeps its language fallback.
+	Mono    *string `json:"mono,omitempty"`    // system，或 FusionPixelMono
 	// 允许的字号；空数组表示不限（点阵字体要吸附到设计字号的整数倍）
 	Sizes *[]float64 `json:"sizes,omitempty"`
 }
@@ -219,8 +221,11 @@ func validate(t Theme) error {
 		}
 	}
 	if ty := t.Typography; ty != nil {
-		if ty.Family != nil && !oneOf(*ty.Family, "system", "FusionPixel") {
-			return invalid("typography.family 只能是 system 或 FusionPixel，不能是 %q", *ty.Family)
+		if ty.Family != nil && !oneOf(*ty.Family, "system", "FusionPixel", "SpaceGrotesk") {
+			return invalid("不认识的 typography.family：%q", *ty.Family)
+		}
+		if ty.Heading != nil && !oneOf(*ty.Heading, "system", "FusionPixel", "BarlowCondensed", "SpaceGrotesk", "ArchivoBlack") {
+			return invalid("不认识的 typography.heading：%q", *ty.Heading)
 		}
 		if ty.Mono != nil && !oneOf(*ty.Mono, "system", "FusionPixelMono") {
 			return invalid("typography.mono 只能是 system 或 FusionPixelMono，不能是 %q", *ty.Mono)
@@ -246,8 +251,8 @@ func validate(t Theme) error {
 				}
 			}
 		}
-		if sh.Corner != "" && !oneOf(sh.Corner, "round", "pixel") {
-			return invalid("shape.corner 只能是 round 或 pixel，不能是 %q", sh.Corner)
+		if sh.Corner != "" && !oneOf(sh.Corner, "round", "pixel", "bevel") {
+			return invalid("shape.corner 只能是 round、pixel 或 bevel，不能是 %q", sh.Corner)
 		}
 		if sh.BorderWidth != nil {
 			if err := inRange("shape.borderWidth", *sh.BorderWidth, 0, 4); err != nil {
@@ -268,6 +273,9 @@ func validate(t Theme) error {
 	}
 	if t.Icons != "" && !oneOf(t.Icons, "system", "pixel") {
 		return invalid("icons 只能是 system 或 pixel，不能是 %q", t.Icons)
+	}
+	if t.Artwork != "" && !oneOf(t.Artwork, "none", "jazz", "space", "memphis", "y2k", "americana", "arcade", "retro") {
+		return invalid("不认识的 artwork：%q", t.Artwork)
 	}
 	for _, img := range t.Scene.images() {
 		if img != "" && !userRef.MatchString(img) {
@@ -377,6 +385,9 @@ func merge(base, child Theme) Theme {
 		if c.Family != nil {
 			t.Family = c.Family
 		}
+		if c.Heading != nil {
+			t.Heading = c.Heading
+		}
 		if c.Mono != nil {
 			t.Mono = c.Mono
 		}
@@ -425,6 +436,9 @@ func merge(base, child Theme) Theme {
 	}
 	if child.Icons != "" {
 		out.Icons = child.Icons
+	}
+	if child.Artwork != "" {
+		out.Artwork = child.Artwork
 	}
 	if child.Scenery != nil {
 		out.Scenery = child.Scenery

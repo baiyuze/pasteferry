@@ -84,7 +84,7 @@ func TestDeleteCurrentThemeFallsBack(t *testing.T) {
 		t.Fatalf("格式不对应当是 InvalidArgument：%v", err)
 	}
 	list, err := s.ListThemes(ctx, &pb.Empty{})
-	if err != nil || len(list.GetThemes()) != 3 || !list.GetThemes()[0].GetBuiltin() {
+	if err != nil || len(list.GetThemes()) != 10 || !list.GetThemes()[0].GetBuiltin() {
 		t.Fatalf("列表不对：%v %v", err, list)
 	}
 }

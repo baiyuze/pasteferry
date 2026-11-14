@@ -178,13 +178,14 @@ class PixelBorder extends OutlinedBorder {
 
 /// 输入框的像素边框：凹下去的槽（上、左暗，下、右亮），聚焦时边框换成强调色。
 class PixelInputBorder extends InputBorder {
-  const PixelInputBorder({super.borderSide, this.unit = 2, this.topLeft, this.bottomRight});
+  const PixelInputBorder({super.borderSide, this.unit = 2, this.steps = 1, this.topLeft, this.bottomRight});
 
   final double unit;
+  final int steps;
   final Color? topLeft;
   final Color? bottomRight;
 
-  PixelBorder get _border => PixelBorder(side: borderSide, unit: unit, topLeft: topLeft, bottomRight: bottomRight);
+  PixelBorder get _border => PixelBorder(side: borderSide, unit: unit, steps: steps, topLeft: topLeft, bottomRight: bottomRight);
 
   @override
   bool get isOutline => true;
@@ -194,11 +195,11 @@ class PixelInputBorder extends InputBorder {
 
   @override
   PixelInputBorder copyWith({BorderSide? borderSide}) =>
-      PixelInputBorder(borderSide: borderSide ?? this.borderSide, unit: unit, topLeft: topLeft, bottomRight: bottomRight);
+      PixelInputBorder(borderSide: borderSide ?? this.borderSide, unit: unit, steps: steps, topLeft: topLeft, bottomRight: bottomRight);
 
   @override
   ShapeBorder scale(double t) =>
-      PixelInputBorder(borderSide: borderSide.scale(t), unit: unit * t, topLeft: topLeft, bottomRight: bottomRight);
+      PixelInputBorder(borderSide: borderSide.scale(t), unit: unit * t, steps: steps, topLeft: topLeft, bottomRight: bottomRight);
 
   @override
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) => _border.getInnerPath(rect);
@@ -216,11 +217,12 @@ class PixelInputBorder extends InputBorder {
       other is PixelInputBorder &&
       other.borderSide == borderSide &&
       other.unit == unit &&
+      other.steps == steps &&
       other.topLeft == topLeft &&
       other.bottomRight == bottomRight;
 
   @override
-  int get hashCode => Object.hash(borderSide, unit, topLeft, bottomRight);
+  int get hashCode => Object.hash(borderSide, unit, steps, topLeft, bottomRight);
 }
 
 /// 列表、分组里行与行之间的分隔线。默认主题就是 Divider；像素主题是隔一格画一格的点线

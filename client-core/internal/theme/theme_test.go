@@ -52,6 +52,42 @@ func TestBuiltinsParse(t *testing.T) {
 	}
 }
 
+func TestDesignThemesRemainEditableAndReadable(t *testing.T) {
+	s := newStore(t)
+	for _, id := range builtinIDs[2:] {
+		t.Run(id, func(t *testing.T) {
+			original, _, err := builtin(id)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(original.Name) != 18 {
+				t.Fatalf("missing localized names: %v", original.Name)
+			}
+			// Exporting a built-in and editing its id must produce a valid custom theme.
+			original.ID = "copy-" + id
+			data, err := json.Marshal(original)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, warnings, err := s.Put(data); err != nil || len(warnings) != 0 {
+				t.Fatalf("save: %v; contrast: %+v", err, warnings)
+			}
+			child := `{"schema":1,"id":"child-` + id + `","base":"` + original.ID + `"}`
+			put(t, s, child)
+			resolved, err := s.Get("child-"+id, true)
+			if err != nil {
+				t.Fatal(err)
+			}
+			got, err := Parse(resolved)
+			if err != nil || got.Artwork != original.Artwork || got.Typography == nil ||
+				got.Typography.Heading == nil || *got.Typography.Heading != *original.Typography.Heading ||
+				got.Shape.Corner != original.Shape.Corner {
+				t.Fatalf("design did not survive inheritance: %s (%v)", resolved, err)
+			}
+		})
+	}
+}
+
 func TestParseRejectsBadFormat(t *testing.T) {
 	for name, js := range map[string]string{
 		"不是 JSON":   `{`,
@@ -138,7 +174,7 @@ func TestMergeWithBase(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(infos) != 3 || infos[0].ID != DefaultID || infos[1].ID != PixelID || infos[2].ID != "mint" || infos[2].Base != "pixel" {
+	if len(infos) != len(builtinIDs)+1 || infos[0].ID != DefaultID || infos[1].ID != PixelID || infos[len(builtinIDs)].ID != "mint" || infos[len(builtinIDs)].Base != "pixel" {
 		t.Errorf("列表不对：%+v", infos)
 	}
 }

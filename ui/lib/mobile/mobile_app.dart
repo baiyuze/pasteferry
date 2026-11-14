@@ -141,7 +141,13 @@ ThemeData buildMobileTheme(Brightness brightness, {AppThemeSpec spec = AppThemeS
   // 主题自带字体（像素字体）时换上它；字号由 ThemeTextScale 吸附到点阵字号
   final family = spec.typography.family;
   if (family != null) text = text.apply(fontFamily: family);
-  final shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(r.md));
+  if (spec.typography.heading case final String heading) {
+    TextStyle? display(TextStyle? style) => style?.copyWith(fontFamily: heading);
+    text = text.copyWith(headlineMedium: display(text.headlineMedium), headlineSmall: display(text.headlineSmall),
+        titleLarge: display(text.titleLarge), titleMedium: display(text.titleMedium), titleSmall: display(text.titleSmall));
+  }
+  final shape = r.outline(radius: r.md, side: r.beveled ? BorderSide(color: p.borderStrong, width: r.borderWidth) : BorderSide.none,
+      bevel: (p.bevelLight, p.bevelDark));
   const padding = EdgeInsets.symmetric(horizontal: 18, vertical: 12);
   return base.copyWith(
     textTheme: text,
@@ -188,12 +194,12 @@ ThemeData buildMobileTheme(Brightness brightness, {AppThemeSpec spec = AppThemeS
       isDense: false,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       hintStyle: text.bodyLarge?.copyWith(color: p.textFaint),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(r.md), borderSide: BorderSide(color: p.border)),
-      enabledBorder: OutlineInputBorder(
+      border: r.beveled ? base.inputDecorationTheme.border : OutlineInputBorder(borderRadius: BorderRadius.circular(r.md), borderSide: BorderSide(color: p.border)),
+      enabledBorder: r.beveled ? base.inputDecorationTheme.enabledBorder : OutlineInputBorder(
         borderRadius: BorderRadius.circular(r.md),
         borderSide: BorderSide(color: p.border),
       ),
-      focusedBorder: OutlineInputBorder(
+      focusedBorder: r.beveled ? base.inputDecorationTheme.focusedBorder : OutlineInputBorder(
         borderRadius: BorderRadius.circular(r.md),
         borderSide: BorderSide(color: p.accent, width: 1.5),
       ),

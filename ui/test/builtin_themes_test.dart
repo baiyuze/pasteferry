@@ -28,6 +28,7 @@ void main() {
       expect(got['typography'], want['typography'], reason: '字体');
       expect(got['motion'], want['motion'], reason: '动效');
       expect(got['icons'], want['icons'], reason: '图标');
+      expect(got['artwork'], want['artwork'], reason: '装饰图形');
     });
   }
 }
