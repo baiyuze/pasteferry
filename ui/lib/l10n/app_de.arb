@@ -779,5 +779,9 @@
   "starBody": "Wenn es Ihnen gefällt, wäre ein Stern auf GitHub eine große Hilfe.",
   "starAction": "Stern auf GitHub geben",
   "starLater": "Später",
-  "starDismiss": "Nicht mehr anzeigen"
+  "starDismiss": "Nicht mehr anzeigen",
+  "quickPasteRepair": "Schnelleinfügen reparieren",
+  "quickPasteStarting": "Wird gestartet…",
+  "quickPasteStartupFailed": "Das Schnelleinfügefenster konnte nicht starten. Automatische Versuche wurden beendet.",
+  "quickPasteFailureDetails": "Fehlerdetails"
 }

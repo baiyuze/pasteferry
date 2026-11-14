@@ -2984,4 +2984,17 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get starDismiss => 'Nie pokazuj ponownie';
+
+  @override
+  String get quickPasteRepair => 'Napraw szybkie wklejanie';
+
+  @override
+  String get quickPasteStarting => 'Uruchamianie…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'Nie udało się uruchomić okna szybkiego wklejania. Zatrzymano automatyczne próby.';
+
+  @override
+  String get quickPasteFailureDetails => 'Szczegóły błędu';
 }

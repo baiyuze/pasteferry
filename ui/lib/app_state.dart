@@ -8,6 +8,7 @@ import 'background_service.dart';
 import 'daemon_client.dart';
 import 'i18n.dart';
 import 'quick_paste_service.dart';
+import 'quick_paste_recovery.dart';
 import 'star_prompt.dart';
 import 'theme_controller.dart';
 import 'gen/pasteferry/v1/daemon.pb.dart';
@@ -53,15 +54,25 @@ enum PairingFailure {
 /// 所有与 daemon 的交互都经过这里：页面只读状态、调方法，不直接碰 gRPC。
 /// 这样断线重连、事件合并这些琐事集中在一处，页面代码保持干净。
 class AppState extends ChangeNotifier implements RecordDetails {
-  AppState({BackgroundService? service, QuickPasteService? quickPasteService,
-    Future<DaemonConnection> Function()? connectDaemon, StarPrompt? starPrompt})
-    : service = service ?? BackgroundService(),
-      quickPasteService = quickPasteService ?? QuickPasteService(),
-      _connectDaemon = connectDaemon ?? DaemonConnection.connect {
-    this.starPrompt = (starPrompt ??
-        // 跑测试时不读写真实数据目录里的文件
-        (Platform.environment.containsKey('FLUTTER_TEST') ? StarPrompt.memory() : StarPrompt()))
-      ..onChanged = notifyListeners;
+  AppState({
+    BackgroundService? service,
+    QuickPasteService? quickPasteService,
+    Future<DaemonConnection> Function()? connectDaemon,
+    StarPrompt? starPrompt,
+  }) : service = service ?? BackgroundService(),
+       quickPasteService = quickPasteService ?? QuickPasteService(),
+       _connectDaemon = connectDaemon ?? DaemonConnection.connect {
+    quickPasteRecovery = QuickPasteRecovery(
+      service: this.quickPasteService,
+      status: () => _quickPaste,
+    )..addListener(notifyListeners);
+    this.starPrompt =
+        (starPrompt ??
+              // 跑测试时不读写真实数据目录里的文件
+              (Platform.environment.containsKey('FLUTTER_TEST')
+                  ? StarPrompt.memory()
+                  : StarPrompt()))
+          ..onChanged = notifyListeners;
   }
 
   /// 请用户去 GitHub 点 Star 的小横幅，见 star_prompt.dart
@@ -71,6 +82,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// Mac 上快捷粘贴窗口的 LaunchAgent，见 quick_paste_service.dart
   final QuickPasteService quickPasteService;
+  late final QuickPasteRecovery quickPasteRecovery;
 
   final Future<DaemonConnection> Function() _connectDaemon;
 
@@ -274,7 +286,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
   ServiceState? get serviceState => _serviceState;
 
   List<Friend> get friends => List.unmodifiable(_friends);
-  Friend? friendById(String id) => _friends.where((f) => f.id == id).firstOrNull;
+  Friend? friendById(String id) =>
+      _friends.where((f) => f.id == id).firstOrNull;
   Profile? get profile => _profile;
 
   WebShareStatus? get webShare => _webShare;
@@ -286,10 +299,12 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// 好友、陌生设备发来、在等本机用户接受的批次（最早的在前）
   List<Transfer> get askingIncoming => _transfers
-      .where((t) =>
-          t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING &&
-          t.status == 'asking' &&
-          !_handledAsks.contains(t.id))
+      .where(
+        (t) =>
+            t.direction == TransferDirection.TRANSFER_DIRECTION_INCOMING &&
+            t.status == 'asking' &&
+            !_handledAsks.contains(t.id),
+      )
       .toList()
       .reversed
       .toList();
@@ -378,6 +393,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   @override
   void dispose() {
+    quickPasteRecovery.dispose();
     _retry?.cancel();
     _webShareInviteUsed.close();
     _historySearch.dispose();
@@ -463,6 +479,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
       _serviceState = null;
       _setLink(LinkState.online, null);
       _maintenance = _ensureServiceCurrent();
+      unawaited(_syncQuickPaste());
       _historySearch.schedule(Duration.zero);
       _favoriteSearch.schedule(Duration.zero);
     } on DaemonNotRunning {
@@ -554,24 +571,26 @@ class AppState extends ChangeNotifier implements RecordDetails {
     final qp = quickPasteService;
     if (!qp.available || _quitting) return;
     try {
-      // 快捷窗口跟着后台服务走：后台服务没登记成登录项（开发时手动跑的、测试用的）就不登记它
-      if (await service.state() != ServiceState.running) return;
-      if (_config?.quickPasteDisabled ?? false) {
-        await qp.uninstall();
-      } else if (!await qp.installed()) {
-        await qp.install();
-      } else {
-        final v = _quickPaste?.version ?? '';
-        if (appVersion != 'dev' && v.isNotEmpty && v != appVersion) {
-          await qp.restart();
-        }
-      }
-      if (!(_config?.quickPasteDisabled ?? false)) {
-        await qp.setLaunchAtLogin(await service.launchAtLogin());
-      }
-    } catch (_) {
-      // 登记失败不影响主界面，设置页会显示快捷窗口没在运行
+      final running = isOnline && await service.state() == ServiceState.running;
+      final login = running && await service.launchAtLogin();
+      if (_quitting) return;
+      await quickPasteRecovery.synchronize(
+        enabled: !(_config?.quickPasteDisabled ?? false),
+        hostRunning: running,
+        launchAtLogin: login,
+        version: appVersion,
+      );
+    } catch (e) {
+      if (!_quitting) quickPasteRecovery.reportFailure(e);
     }
+  }
+
+  Future<void> repairQuickPaste() async {
+    if (_quitting || !isOnline || !quickPasteService.available) return;
+    if (quickPasteRecovery.health == QuickPasteHealth.idle) {
+      await _syncQuickPaste();
+    }
+    await quickPasteRecovery.repair();
   }
 
   /// 截图与界面测试用：直接填入数据，不连接后台服务。
@@ -634,6 +653,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// 停用后台服务：关闭同步并取消开机自启。快捷窗口离了后台服务没法用，一起撤下，重新启用时再登记。
   Future<void> disableService() async {
+    await quickPasteRecovery.suspend();
     _sessionStartTried = true;
     _retry?.cancel();
     if (quickPasteService.available) await quickPasteService.uninstall();
@@ -735,6 +755,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
   void _setLink(LinkState state, String? error) {
     _link = state;
     _error = error;
+    if (state != LinkState.online) unawaited(quickPasteRecovery.suspend());
     notifyListeners();
   }
 
@@ -773,12 +794,14 @@ class AppState extends ChangeNotifier implements RecordDetails {
         // 别处（快捷窗口、另一个界面窗口）改了设置
         _config = ev.configChanged;
         theme.applyConfig(ev.configChanged);
+        unawaited(_syncQuickPaste());
 
       case Event_Payload.themesChanged:
         theme.onThemesChanged(ev.themesChanged);
 
       case Event_Payload.quickPasteChanged:
         _quickPaste = ev.quickPasteChanged;
+        quickPasteRecovery.statusChanged();
 
       case Event_Payload.clipboardWritten:
         _clipboardResults[ev.clipboardWritten.clipId] = ev.clipboardWritten;
@@ -1035,9 +1058,15 @@ class AppState extends ChangeNotifier implements RecordDetails {
   }
 
   /// 输入好友码，返回对方的名片；之后在确认框里 [confirmFriend]
-  Future<FriendRequest> redeemFriendCode(String code, {String address = ''}) async {
+  Future<FriendRequest> redeemFriendCode(
+    String code, {
+    String address = '',
+  }) async {
     final r = await _client.redeemFriendCode(
-      RedeemPairingCodeRequest(code: code.trim().toUpperCase(), address: address.trim()),
+      RedeemPairingCodeRequest(
+        code: code.trim().toUpperCase(),
+        address: address.trim(),
+      ),
       // 局域网里找几秒，找不到去服务器上兑换，还要等对方说明用途
       options: CallOptions(timeout: const Duration(seconds: 40)),
     );
@@ -1051,7 +1080,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
     _handledFriendSessions.add(session);
     if (_pendingFriend?.session == session) _pendingFriend = null;
     notifyListeners();
-    await _client.confirmFriend(ConfirmPairingRequest(pairingSession: session, accept: accept));
+    await _client.confirmFriend(
+      ConfirmPairingRequest(pairingSession: session, accept: accept),
+    );
   }
 
   void dismissPendingFriend() {
@@ -1068,7 +1099,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
   }
 
   Future<void> setFriendAutoAccept(String id, bool on) async {
-    final f = await _client.setFriendAutoAccept(SetFriendAutoAcceptRequest(deviceId: id, autoAccept: on));
+    final f = await _client.setFriendAutoAccept(
+      SetFriendAutoAcceptRequest(deviceId: id, autoAccept: on),
+    );
     final i = _friends.indexWhere((x) => x.id == id);
     if (i >= 0) {
       _friends = List<Friend>.from(_friends)..[i] = f;
@@ -1082,9 +1115,21 @@ class AppState extends ChangeNotifier implements RecordDetails {
   }
 
   /// 设置头像：[image] 是图片数据（粘贴、拖入），否则读 [path]；裁剪区域按原图比例
-  Future<void> setAvatar({String path = '', List<int>? image, double x = 0, double y = 0, double size = 0}) async {
+  Future<void> setAvatar({
+    String path = '',
+    List<int>? image,
+    double x = 0,
+    double y = 0,
+    double size = 0,
+  }) async {
     _profile = await _client.setAvatar(
-      SetAvatarRequest(path: path, image: image, cropX: x, cropY: y, cropSize: size),
+      SetAvatarRequest(
+        path: path,
+        image: image,
+        cropX: x,
+        cropY: y,
+        cropSize: size,
+      ),
       options: CallOptions(timeout: const Duration(seconds: 20)),
     );
     _avatars.remove('');
@@ -1105,10 +1150,17 @@ class AppState extends ChangeNotifier implements RecordDetails {
     if (cached != null && cached.$1 == key) return cached.$2;
     if (_conn == null || _avatarLoading.contains(deviceId)) return cached?.$2;
     _avatarLoading.add(deviceId);
-    _client.getAvatar(GetAvatarRequest(deviceId: deviceId)).then((a) {
-      _avatars[deviceId] = (key, a.jpeg.isEmpty ? null : Uint8List.fromList(a.jpeg));
-      notifyListeners();
-    }).catchError((_) {}).whenComplete(() => _avatarLoading.remove(deviceId));
+    _client
+        .getAvatar(GetAvatarRequest(deviceId: deviceId))
+        .then((a) {
+          _avatars[deviceId] = (
+            key,
+            a.jpeg.isEmpty ? null : Uint8List.fromList(a.jpeg),
+          );
+          notifyListeners();
+        })
+        .catchError((_) {})
+        .whenComplete(() => _avatarLoading.remove(deviceId));
     return cached?.$2;
   }
 
@@ -1127,11 +1179,21 @@ class AppState extends ChangeNotifier implements RecordDetails {
       _client.watchStrangers(Empty()).map((e) => e.strangers.toList());
 
   /// 接收弹窗里的「接受」「拒绝」
-  Future<void> answerIncoming(String transferId, bool accept, {bool always = false}) async {
+  Future<void> answerIncoming(
+    String transferId,
+    bool accept, {
+    bool always = false,
+  }) async {
     _handledAsks.add(transferId);
     notifyListeners();
     try {
-      await _client.answerIncoming(AnswerIncomingRequest(transferId: transferId, accept: accept, always: always));
+      await _client.answerIncoming(
+        AnswerIncomingRequest(
+          transferId: transferId,
+          accept: accept,
+          always: always,
+        ),
+      );
     } on GrpcError catch (e) {
       // 已经过时了（对方取消、超时）：不用再提示
       if (e.code != StatusCode.failedPrecondition) rethrow;
@@ -1151,7 +1213,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
     notifyListeners();
   }
 
-  Future<void> setReceiveFrom(String v) => updateConfig(config!.deepCopy()..receiveFrom = v);
+  Future<void> setReceiveFrom(String v) =>
+      updateConfig(config!.deepCopy()..receiveFrom = v);
 
   /// 手动告诉后台服务某台设备的地址：跨网段、或两边都换了地址时用。
   Future<void> setDeviceAddress(String deviceId, String address) =>
@@ -1231,6 +1294,7 @@ class AppState extends ChangeNotifier implements RecordDetails {
   /// Stop helper jobs before the UI exits, preserving login entries.
   Future<void> quitApplication() async {
     _quitting = true;
+    await quickPasteRecovery.suspend();
     _retry?.cancel();
     try {
       await _connectionWork;
@@ -1260,9 +1324,10 @@ class AppState extends ChangeNotifier implements RecordDetails {
   bool get autoCheckUpdates => !(_config?.updateCheckDisabled ?? false);
 
   /// [language] 是更新日志的语言，见 [settingFromLocale]。
-  Future<UpdateInfo> checkForUpdate(String language) =>
-      _client.checkForUpdate(CheckForUpdateRequest(language: language),
-          options: CallOptions(timeout: const Duration(seconds: 30)));
+  Future<UpdateInfo> checkForUpdate(String language) => _client.checkForUpdate(
+    CheckForUpdateRequest(language: language),
+    options: CallOptions(timeout: const Duration(seconds: 30)),
+  );
 
   /// 下载并校验新版本。取消订阅即停止下载。
   Stream<UpdateProgress> downloadUpdate(String version) =>
@@ -1270,9 +1335,15 @@ class AppState extends ChangeNotifier implements RecordDetails {
 
   /// 让后台服务启动更新助手。返回后界面要立即退出，助手等它退出后替换文件并重新打开。
   Future<void> installUpdate(String version) async {
-    await _client.installUpdate(
-      InstallUpdateRequest(version: version, uiPid: pid),
-    );
+    await quickPasteRecovery.suspend();
+    try {
+      await _client.installUpdate(
+        InstallUpdateRequest(version: version, uiPid: pid),
+      );
+    } catch (_) {
+      unawaited(_syncQuickPaste());
+      rethrow;
+    }
   }
 
   Future<void> skipUpdate(String version) =>
@@ -1350,7 +1421,8 @@ class AppState extends ChangeNotifier implements RecordDetails {
   }
 
   /// 图片和文件在本机的路径（Android 的「保存」「分享」用）；不在本机时为空。下载后会变，不缓存
-  Future<List<String>> localPaths(String clipId) async => (await requestClipDetail(clipId)).localPaths;
+  Future<List<String>> localPaths(String clipId) async =>
+      (await requestClipDetail(clipId)).localPaths;
 
   @protected
   Future<ClipDetail> requestClipDetail(String clipId) =>

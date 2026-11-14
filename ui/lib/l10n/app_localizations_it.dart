@@ -2963,4 +2963,17 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get starDismiss => 'Non mostrare più';
+
+  @override
+  String get quickPasteRepair => 'Ripara incolla rapido';
+
+  @override
+  String get quickPasteStarting => 'Avvio…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'Impossibile avviare la finestra di incolla rapido. I tentativi automatici sono stati interrotti.';
+
+  @override
+  String get quickPasteFailureDetails => 'Dettagli errore';
 }

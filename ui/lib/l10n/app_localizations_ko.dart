@@ -2728,4 +2728,17 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get starDismiss => '다시 표시하지 않음';
+
+  @override
+  String get quickPasteRepair => '빠른 붙여넣기 복구';
+
+  @override
+  String get quickPasteStarting => '시작 중…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      '빠른 붙여넣기 창을 시작하지 못했습니다. 자동 재시도를 중지했습니다.';
+
+  @override
+  String get quickPasteFailureDetails => '오류 세부 정보';
 }

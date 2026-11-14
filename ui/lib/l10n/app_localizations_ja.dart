@@ -2708,4 +2708,17 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get starDismiss => '今後表示しない';
+
+  @override
+  String get quickPasteRepair => 'クイック貼り付けを修復';
+
+  @override
+  String get quickPasteStarting => '起動中…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'クイック貼り付けウィンドウを起動できませんでした。自動再試行を停止しました。';
+
+  @override
+  String get quickPasteFailureDetails => 'エラーの詳細';
 }

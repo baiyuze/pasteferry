@@ -779,5 +779,9 @@
   "starBody": "気に入っていただけたら、GitHub でスターを付けて応援してください。",
   "starAction": "GitHub でスター",
   "starLater": "あとで",
-  "starDismiss": "今後表示しない"
+  "starDismiss": "今後表示しない",
+  "quickPasteRepair": "クイック貼り付けを修復",
+  "quickPasteStarting": "起動中…",
+  "quickPasteStartupFailed": "クイック貼り付けウィンドウを起動できませんでした。自動再試行を停止しました。",
+  "quickPasteFailureDetails": "エラーの詳細"
 }

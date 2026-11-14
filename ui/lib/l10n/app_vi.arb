@@ -779,5 +779,9 @@
   "starBody": "Nếu bạn thích, một ngôi sao trên GitHub sẽ rất có ý nghĩa.",
   "starAction": "Gắn sao trên GitHub",
   "starLater": "Để sau",
-  "starDismiss": "Không hiện lại"
+  "starDismiss": "Không hiện lại",
+  "quickPasteRepair": "Sửa dán nhanh",
+  "quickPasteStarting": "Đang khởi động…",
+  "quickPasteStartupFailed": "Không thể khởi động cửa sổ dán nhanh. Đã dừng tự động thử lại.",
+  "quickPasteFailureDetails": "Chi tiết lỗi"
 }

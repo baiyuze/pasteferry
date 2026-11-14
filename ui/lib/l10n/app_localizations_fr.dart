@@ -2965,4 +2965,17 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get starDismiss => 'Ne plus afficher';
+
+  @override
+  String get quickPasteRepair => 'Réparer le collage rapide';
+
+  @override
+  String get quickPasteStarting => 'Démarrage…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'La fenêtre de collage rapide n’a pas démarré. Les tentatives automatiques sont arrêtées.';
+
+  @override
+  String get quickPasteFailureDetails => 'Détails de l’erreur';
 }

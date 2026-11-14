@@ -2968,4 +2968,17 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get starDismiss => 'Não mostrar de novo';
+
+  @override
+  String get quickPasteRepair => 'Reparar colagem rápida';
+
+  @override
+  String get quickPasteStarting => 'Iniciando…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'A janela de colagem rápida não iniciou. As tentativas automáticas foram interrompidas.';
+
+  @override
+  String get quickPasteFailureDetails => 'Detalhes do erro';
 }

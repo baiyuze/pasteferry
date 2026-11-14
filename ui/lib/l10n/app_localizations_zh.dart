@@ -2678,6 +2678,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get starDismiss => '不再提示';
+
+  @override
+  String get quickPasteRepair => '修复快捷窗口';
+
+  @override
+  String get quickPasteStarting => '正在启动…';
+
+  @override
+  String get quickPasteStartupFailed => '快捷窗口未能启动，已停止自动重试。';
+
+  @override
+  String get quickPasteFailureDetails => '错误详情';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -5354,6 +5366,18 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get starDismiss => '不再提示';
+
+  @override
+  String get quickPasteRepair => '修復快捷視窗';
+
+  @override
+  String get quickPasteStarting => '正在啟動…';
+
+  @override
+  String get quickPasteStartupFailed => '快捷視窗無法啟動，已停止自動重試。';
+
+  @override
+  String get quickPasteFailureDetails => '錯誤詳情';
 }
 
 /// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
@@ -8030,4 +8054,16 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get starDismiss => '不再提示';
+
+  @override
+  String get quickPasteRepair => '修復快捷視窗';
+
+  @override
+  String get quickPasteStarting => '正在啟動…';
+
+  @override
+  String get quickPasteStartupFailed => '快捷視窗無法啟動，已停止自動重試。';
+
+  @override
+  String get quickPasteFailureDetails => '錯誤詳情';
 }

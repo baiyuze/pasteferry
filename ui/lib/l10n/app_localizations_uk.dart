@@ -2979,4 +2979,17 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get starDismiss => 'Більше не показувати';
+
+  @override
+  String get quickPasteRepair => 'Відновити швидке вставлення';
+
+  @override
+  String get quickPasteStarting => 'Запуск…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'Не вдалося запустити вікно швидкого вставлення. Автоматичні спроби зупинено.';
+
+  @override
+  String get quickPasteFailureDetails => 'Відомості про помилку';
 }

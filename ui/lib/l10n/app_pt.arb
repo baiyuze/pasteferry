@@ -779,5 +779,9 @@
   "starBody": "Se estiver gostando, uma estrela no GitHub faria muita diferença.",
   "starAction": "Dar uma estrela no GitHub",
   "starLater": "Mais tarde",
-  "starDismiss": "Não mostrar de novo"
+  "starDismiss": "Não mostrar de novo",
+  "quickPasteRepair": "Reparar colagem rápida",
+  "quickPasteStarting": "Iniciando…",
+  "quickPasteStartupFailed": "A janela de colagem rápida não iniciou. As tentativas automáticas foram interrompidas.",
+  "quickPasteFailureDetails": "Detalhes do erro"
 }

@@ -779,5 +779,9 @@
   "starBody": "Beğendiyseniz GitHub'da vereceğiniz bir yıldız bizim için çok değerli olur.",
   "starAction": "GitHub'da yıldız ver",
   "starLater": "Daha sonra",
-  "starDismiss": "Bir daha gösterme"
+  "starDismiss": "Bir daha gösterme",
+  "quickPasteRepair": "Hızlı yapıştırmayı onar",
+  "quickPasteStarting": "Başlatılıyor…",
+  "quickPasteStartupFailed": "Hızlı yapıştırma penceresi başlatılamadı. Otomatik denemeler durduruldu.",
+  "quickPasteFailureDetails": "Hata ayrıntıları"
 }

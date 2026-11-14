@@ -779,5 +779,9 @@
   "starBody": "Якщо він вам подобається, зірочка на GitHub дуже допоможе.",
   "starAction": "Поставити зірочку на GitHub",
   "starLater": "Пізніше",
-  "starDismiss": "Більше не показувати"
+  "starDismiss": "Більше не показувати",
+  "quickPasteRepair": "Відновити швидке вставлення",
+  "quickPasteStarting": "Запуск…",
+  "quickPasteStartupFailed": "Не вдалося запустити вікно швидкого вставлення. Автоматичні спроби зупинено.",
+  "quickPasteFailureDetails": "Відомості про помилку"
 }

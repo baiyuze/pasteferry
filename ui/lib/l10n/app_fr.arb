@@ -779,5 +779,9 @@
   "starBody": "Si PasteFerry vous plaît, une étoile sur GitHub nous ferait très plaisir.",
   "starAction": "Ajouter une étoile sur GitHub",
   "starLater": "Plus tard",
-  "starDismiss": "Ne plus afficher"
+  "starDismiss": "Ne plus afficher",
+  "quickPasteRepair": "Réparer le collage rapide",
+  "quickPasteStarting": "Démarrage…",
+  "quickPasteStartupFailed": "La fenêtre de collage rapide n’a pas démarré. Les tentatives automatiques sont arrêtées.",
+  "quickPasteFailureDetails": "Détails de l’erreur"
 }

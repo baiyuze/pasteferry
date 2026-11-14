@@ -1874,5 +1874,9 @@
   "starBody": "If you enjoy it, a star on GitHub would mean a lot.",
   "starAction": "Star on GitHub",
   "starLater": "Later",
-  "starDismiss": "Don't show again"
+  "starDismiss": "Don't show again",
+  "quickPasteRepair": "Repair quick paste",
+  "quickPasteStarting": "Starting…",
+  "quickPasteStartupFailed": "The quick paste window could not start. Automatic retries have stopped.",
+  "quickPasteFailureDetails": "Error details"
 }

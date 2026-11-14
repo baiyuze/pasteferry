@@ -2962,4 +2962,17 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get starDismiss => 'Больше не показывать';
+
+  @override
+  String get quickPasteRepair => 'Восстановить быструю вставку';
+
+  @override
+  String get quickPasteStarting => 'Запуск…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'Не удалось запустить окно быстрой вставки. Автоматические попытки остановлены.';
+
+  @override
+  String get quickPasteFailureDetails => 'Сведения об ошибке';
 }

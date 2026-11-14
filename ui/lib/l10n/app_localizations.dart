@@ -4815,6 +4815,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Don\'t show again'**
   String get starDismiss;
+
+  /// No description provided for @quickPasteRepair.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair quick paste'**
+  String get quickPasteRepair;
+
+  /// No description provided for @quickPasteStarting.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting…'**
+  String get quickPasteStarting;
+
+  /// No description provided for @quickPasteStartupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The quick paste window could not start. Automatic retries have stopped.'**
+  String get quickPasteStartupFailed;
+
+  /// No description provided for @quickPasteFailureDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Error details'**
+  String get quickPasteFailureDetails;
 }
 
 class _AppLocalizationsDelegate

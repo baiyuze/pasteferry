@@ -779,5 +779,9 @@
   "starBody": "Jika Anda menyukainya, bintang di GitHub akan sangat berarti.",
   "starAction": "Beri Bintang di GitHub",
   "starLater": "Nanti",
-  "starDismiss": "Jangan tampilkan lagi"
+  "starDismiss": "Jangan tampilkan lagi",
+  "quickPasteRepair": "Perbaiki tempel cepat",
+  "quickPasteStarting": "Memulai…",
+  "quickPasteStartupFailed": "Jendela tempel cepat tidak dapat dimulai. Percobaan otomatis dihentikan.",
+  "quickPasteFailureDetails": "Detail kesalahan"
 }

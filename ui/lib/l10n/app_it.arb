@@ -779,5 +779,9 @@
   "starBody": "Se ti piace, una stella su GitHub significherebbe molto.",
   "starAction": "Metti una stella su GitHub",
   "starLater": "Più tardi",
-  "starDismiss": "Non mostrare più"
+  "starDismiss": "Non mostrare più",
+  "quickPasteRepair": "Ripara incolla rapido",
+  "quickPasteStarting": "Avvio…",
+  "quickPasteStartupFailed": "Impossibile avviare la finestra di incolla rapido. I tentativi automatici sono stati interrotti.",
+  "quickPasteFailureDetails": "Dettagli errore"
 }

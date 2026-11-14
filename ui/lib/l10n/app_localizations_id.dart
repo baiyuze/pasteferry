@@ -2906,4 +2906,17 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get starDismiss => 'Jangan tampilkan lagi';
+
+  @override
+  String get quickPasteRepair => 'Perbaiki tempel cepat';
+
+  @override
+  String get quickPasteStarting => 'Memulai…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'Jendela tempel cepat tidak dapat dimulai. Percobaan otomatis dihentikan.';
+
+  @override
+  String get quickPasteFailureDetails => 'Detail kesalahan';
 }

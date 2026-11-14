@@ -2905,4 +2905,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get starDismiss => 'Don\'t show again';
+
+  @override
+  String get quickPasteRepair => 'Repair quick paste';
+
+  @override
+  String get quickPasteStarting => 'Starting…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'The quick paste window could not start. Automatic retries have stopped.';
+
+  @override
+  String get quickPasteFailureDetails => 'Error details';
 }

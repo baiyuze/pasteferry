@@ -3027,4 +3027,17 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get starDismiss => 'عدم الإظهار مجددًا';
+
+  @override
+  String get quickPasteRepair => 'إصلاح اللصق السريع';
+
+  @override
+  String get quickPasteStarting => 'جارٍ البدء…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'تعذر بدء نافذة اللصق السريع. توقفت المحاولات التلقائية.';
+
+  @override
+  String get quickPasteFailureDetails => 'تفاصيل الخطأ';
 }

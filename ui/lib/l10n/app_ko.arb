@@ -779,5 +779,9 @@
   "starBody": "마음에 드신다면 GitHub에서 별표를 눌러 주시면 큰 힘이 됩니다.",
   "starAction": "GitHub에서 별표 누르기",
   "starLater": "나중에",
-  "starDismiss": "다시 표시하지 않음"
+  "starDismiss": "다시 표시하지 않음",
+  "quickPasteRepair": "빠른 붙여넣기 복구",
+  "quickPasteStarting": "시작 중…",
+  "quickPasteStartupFailed": "빠른 붙여넣기 창을 시작하지 못했습니다. 자동 재시도를 중지했습니다.",
+  "quickPasteFailureDetails": "오류 세부 정보"
 }

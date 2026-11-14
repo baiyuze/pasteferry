@@ -49,22 +49,31 @@ class _ManagedByDaemon implements QuickPasteService {
 }
 
 class MacQuickPasteService implements QuickPasteService {
-  MacQuickPasteService({String? executable, String? home})
-    : _executable = executable ?? Platform.resolvedExecutable,
-      _home = home ?? Platform.environment['HOME'] ?? '';
+  MacQuickPasteService({
+    String? executable,
+    String? home,
+    this.serviceLabel = label,
+    this.environment = const {},
+    Future<ProcessResult> Function(String, List<String>)? run,
+  }) : _executable = executable ?? Platform.resolvedExecutable,
+       _home = home ?? Platform.environment['HOME'] ?? '',
+       _run = run ?? ((command, args) => Process.run(command, args));
 
   static const label = 'com.pasteferry.picker';
   static const _appBundleId = 'com.pasteferry.app';
 
   final String _executable;
   final String _home;
+  final String serviceLabel;
+  final Map<String, String> environment;
+  final Future<ProcessResult> Function(String, List<String>) _run;
 
   /// `…/PasteFerry.app`，由可执行文件 `…/PasteFerry.app/Contents/MacOS/PasteFerry` 上溯三级。
   String get _bundle => File(_executable).parent.parent.parent.path;
 
   String get helperBinary =>
       '$_bundle/Contents/Helpers/PasteFerryPicker.app/Contents/MacOS/PasteFerryPicker';
-  String get plistPath => '$_home/Library/LaunchAgents/$label.plist';
+  String get plistPath => '$_home/Library/LaunchAgents/$serviceLabel.plist';
   String get logPath => '$_home/Library/Logs/PasteFerry/picker.log';
   String get runtimePath =>
       '$_home/Library/Application Support/PasteFerry/picker.plist';
@@ -80,38 +89,40 @@ class MacQuickPasteService implements QuickPasteService {
         : File(plistPath);
     if (!await plist.exists()) return false;
     if (!(await plist.readAsString()).contains(helperBinary)) return false;
-    return (await Process.run('launchctl', [
-          'print',
-          await _target(),
-        ])).exitCode ==
-        0;
+    return (await _run('launchctl', ['print', await _target()])).exitCode == 0;
   }
 
   @override
   Future<void> install() async {
     await _bootout();
-    await Process.run('xattr', [
+    final quarantine = await _run('xattr', [
       '-dr',
       'com.apple.quarantine',
       File(helperBinary).parent.parent.parent.path,
     ]);
+    if (quarantine.exitCode != 0) {
+      throw ServiceException(
+        'xattr (${quarantine.exitCode}): ${quarantine.stderr}'.trim(),
+      );
+    }
     await Directory(File(plistPath).parent.path).create(recursive: true);
     await Directory(File(logPath).parent.path).create(recursive: true);
     await File(runtimePath).parent.create(recursive: true);
     await File(runtimePath).writeAsString(_plist());
-    final r = await Process.run('launchctl', [
+    final r = await _run('launchctl', [
       'bootstrap',
       await _domain(),
       runtimePath,
     ]);
-    if (r.exitCode != 0) throw ServiceException('${r.stderr}'.trim());
+    if (r.exitCode != 0) {
+      throw ServiceException('bootstrap (${r.exitCode}): ${r.stderr}'.trim());
+    }
   }
 
   @override
   Future<void> stop() async {
     await _bootout();
-    if ((await Process.run('launchctl', ['print', await _target()])).exitCode ==
-        0) {
+    if ((await _run('launchctl', ['print', await _target()])).exitCode == 0) {
       throw ServiceException('The quick paste service did not stop.');
     }
   }
@@ -138,27 +149,80 @@ class MacQuickPasteService implements QuickPasteService {
 
   @override
   Future<void> restart() async {
-    await Process.run('launchctl', ['kickstart', '-k', await _target()]);
+    final result = await _run('launchctl', [
+      'kickstart',
+      '-k',
+      await _target(),
+    ]);
+    if (result.exitCode != 0) {
+      throw ServiceException(
+        'kickstart (${result.exitCode}): ${result.stderr}'.trim(),
+      );
+    }
   }
 
   Future<void> _bootout() async {
     final target = await _target();
-    await Process.run('launchctl', ['bootout', target]);
+    final before = await _run('launchctl', ['print', target]);
+    if (before.exitCode == 113 || before.exitCode == 3) return;
+    if (before.exitCode != 0) {
+      throw ServiceException(
+        'print (${before.exitCode}): ${before.stderr}'.trim(),
+      );
+    }
+    final result = await _run('launchctl', ['bootout', target]);
     for (var i = 0; i < 20; i++) {
-      if ((await Process.run('launchctl', ['print', target])).exitCode != 0) {
+      final current = await _run('launchctl', ['print', target]);
+      if (current.exitCode == 113 || current.exitCode == 3) {
         return;
+      }
+      if (current.exitCode != 0) {
+        throw ServiceException(
+          'print (${current.exitCode}): ${current.stderr}'.trim(),
+        );
+      }
+      if (result.exitCode != 0) {
+        throw ServiceException(
+          'bootout (${result.exitCode}): ${result.stderr}'.trim(),
+        );
       }
       await Future<void>.delayed(const Duration(milliseconds: 250));
     }
+    throw ServiceException(
+      'The quick paste service did not stop within 5 seconds.',
+    );
   }
 
   String? _uid;
   Future<String> _domain() async {
-    _uid ??= '${(await Process.run('id', ['-u'])).stdout}'.trim();
+    final result = _uid == null ? await _run('id', ['-u']) : null;
+    if (result != null) {
+      final value = '${result.stdout}'.trim();
+      if (result.exitCode != 0 || !RegExp(r'^\d+$').hasMatch(value)) {
+        throw ServiceException(
+          'Cannot determine the login user: ${result.stderr}',
+        );
+      }
+      _uid = value;
+    }
     return 'gui/$_uid';
   }
 
-  Future<String> _target() async => '${await _domain()}/$label';
+  Future<String> _target() async => '${await _domain()}/$serviceLabel';
+
+  Future<String> diagnostics() async {
+    final result = await _run('launchctl', ['print', await _target()]);
+    final lines = '${result.stdout}'
+        .split('\n')
+        .where(
+          (line) => RegExp(
+            r'^\s*(state|job state|last exit code|pid|runs)\s*=',
+          ).hasMatch(line),
+        )
+        .take(12);
+    return 'launchctl print: ${result.exitCode}\n${lines.join('\n')}\n${result.stderr}'
+        .trim();
+  }
 
   // 只在异常退出时重启：快捷粘贴被关掉时它自己正常退出，不该再被拉起来
   String _plist() =>
@@ -167,12 +231,13 @@ class MacQuickPasteService implements QuickPasteService {
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key>              <string>$label</string>
+    <key>Label</key>              <string>$serviceLabel</string>
     <key>ProgramArguments</key>
     <array>
         <string>${_xml(helperBinary)}</string>
     </array>
     <key>RunAtLoad</key>          <true/>
+    ${environment.isEmpty ? '' : '<key>EnvironmentVariables</key><dict>${environment.entries.map((e) => '<key>${_xml(e.key)}</key><string>${_xml(e.value)}</string>').join()}</dict>'}
     <key>KeepAlive</key>
     <dict>
         <key>SuccessfulExit</key> <false/>

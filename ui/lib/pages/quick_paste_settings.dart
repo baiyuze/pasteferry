@@ -9,13 +9,19 @@ import '../hotkey.dart';
 import '../i18n.dart';
 import '../main.dart';
 import '../quick_paste_service.dart';
+import '../quick_paste_recovery.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 
 /// 设置页的「快捷粘贴」一节：开关、快捷键、选中后直接粘贴还是只复制，以及各平台要用户处理的事
 /// （Mac 的辅助功能权限、Linux Wayland 的系统快捷键）。见 design/quick-paste-and-favorites.md 第 9 节。
 class QuickPasteSection extends StatelessWidget {
-  const QuickPasteSection({super.key, required this.config, required this.onUpdate, this.titled = true});
+  const QuickPasteSection({
+    super.key,
+    required this.config,
+    required this.onUpdate,
+    this.titled = true,
+  });
 
   final Config config;
 
@@ -35,6 +41,7 @@ class QuickPasteSection extends StatelessWidget {
     final notRunning = enabled && qp != null && !qp.running && state.isOnline;
     final portal = qp?.hotkeySource == 'portal';
     final systemShortcut = qp?.hotkeySource == 'system_shortcut';
+    final recovery = state.quickPasteRecovery;
 
     return GroupSection(
       title: titled ? l.quickPaste : '',
@@ -42,33 +49,88 @@ class QuickPasteSection extends StatelessWidget {
         children: [
           SettingRow(
             title: l.quickPasteWindow,
-            description: notRunning ? l.quickPasteNotRunning : l.quickPasteWindowDesc,
+            description: notRunning
+                ? l.quickPasteNotRunning
+                : l.quickPasteWindowDesc,
             child: SmallSwitch(
               value: enabled,
-              onChanged: (v) => onUpdate(config.deepCopy()..quickPasteDisabled = !v),
+              onChanged: (v) =>
+                  onUpdate(config.deepCopy()..quickPasteDisabled = !v),
             ),
           ),
+          if (enabled &&
+              Platform.isMacOS &&
+              state.quickPasteService.available &&
+              (notRunning ||
+                  recovery.busy ||
+                  recovery.health == QuickPasteHealth.failed))
+            SettingRow(
+              title: recovery.busy ? l.quickPasteStarting : l.quickPasteRepair,
+              description: recovery.health == QuickPasteHealth.failed
+                  ? l.quickPasteStartupFailed
+                  : null,
+              child: Wrap(
+                spacing: 8,
+                children: [
+                  if (recovery.error != null)
+                    TextButton(
+                      onPressed: () => showDialog<void>(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text(l.quickPasteStartupFailed),
+                          content: SelectableText(recovery.error!),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx),
+                              child: Text(l.close),
+                            ),
+                          ],
+                        ),
+                      ),
+                      child: Text(l.quickPasteFailureDetails),
+                    ),
+                  OutlinedButton(
+                    onPressed: recovery.busy ? null : state.repairQuickPaste,
+                    child: Text(
+                      recovery.busy ? l.quickPasteStarting : l.quickPasteRepair,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           if (enabled && portal)
             SettingRow(
               title: l.quickPasteShortcut,
               description: l.quickPastePortalKey,
-              child: _KeyCap(text: qp!.hotkey.isEmpty ? '—' : ltr(Hotkey.parse(qp.hotkey)?.display() ?? qp.hotkey)),
+              child: _KeyCap(
+                text: qp!.hotkey.isEmpty
+                    ? '—'
+                    : ltr(Hotkey.parse(qp.hotkey)?.display() ?? qp.hotkey),
+              ),
             )
           else if (enabled)
             _ShortcutRow(
               hotkey: hotkey,
               error: _hotkeyError(l, qp, hotkey),
-              onChanged: (h) => onUpdate(config.deepCopy()..quickPasteHotkey = h.setting),
+              onChanged: (h) =>
+                  onUpdate(config.deepCopy()..quickPasteHotkey = h.setting),
             ),
           if (enabled && systemShortcut) _SystemShortcutRow(hotkey: hotkey),
           if (enabled)
             SettingRow(
               title: l.quickPasteAfterPick,
-              description: Platform.isLinux && (qp?.pasteUnavailableReason == 'wayland') ? l.quickPasteWaylandDesc : null,
+              description:
+                  Platform.isLinux && (qp?.pasteUnavailableReason == 'wayland')
+                  ? l.quickPasteWaylandDesc
+                  : null,
               child: Segmented<bool>(
                 value: !config.quickPasteCopyOnly,
-                segments: [(true, l.quickPastePasteIt), (false, l.quickPasteCopyIt)],
-                onChanged: (paste) => onUpdate(config.deepCopy()..quickPasteCopyOnly = !paste),
+                segments: [
+                  (true, l.quickPastePasteIt),
+                  (false, l.quickPasteCopyIt),
+                ],
+                onChanged: (paste) =>
+                    onUpdate(config.deepCopy()..quickPasteCopyOnly = !paste),
               ),
             ),
           if (enabled)
@@ -77,11 +139,19 @@ class QuickPasteSection extends StatelessWidget {
               description: l.quickPasteIndexKeyDesc,
               child: Segmented<String>(
                 value: IndexModifier.of(config.quickPasteIndexModifier),
-                segments: [for (final m in IndexModifier.choices) (m, ltr('${IndexModifier.label(m)}1–9'))],
-                onChanged: (m) => onUpdate(config.deepCopy()..quickPasteIndexModifier = m),
+                segments: [
+                  for (final m in IndexModifier.choices)
+                    (m, ltr('${IndexModifier.label(m)}1–9')),
+                ],
+                onChanged: (m) =>
+                    onUpdate(config.deepCopy()..quickPasteIndexModifier = m),
               ),
             ),
-          if (enabled && Platform.isMacOS && qp != null && qp.running && !config.quickPasteCopyOnly)
+          if (enabled &&
+              Platform.isMacOS &&
+              qp != null &&
+              qp.running &&
+              !config.quickPasteCopyOnly)
             SettingRow(
               title: l.quickPasteAccessibility,
               description: l.quickPasteAccessibilityDesc,
@@ -89,21 +159,38 @@ class QuickPasteSection extends StatelessWidget {
                   ? OutlinedButton(
                       onPressed: () async {
                         try {
-                          await state.sendQuickPasteCommand('request_permission');
+                          await state.sendQuickPasteCommand(
+                            'request_permission',
+                          );
                         } catch (e) {
-                          if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+                          if (context.mounted) {
+                            showToast(
+                              context,
+                              AppState.describeError(e),
+                              error: true,
+                            );
+                          }
                         }
                       },
                       child: Text(l.quickPasteAllow),
                     )
-                  : Text(l.quickPasteAllowed, style: context.text.bodyMedium?.copyWith(color: p.textDim)),
+                  : Text(
+                      l.quickPasteAllowed,
+                      style: context.text.bodyMedium?.copyWith(
+                        color: p.textDim,
+                      ),
+                    ),
             ),
         ],
       ),
     );
   }
 
-  static String? _hotkeyError(AppLocalizations l, QuickPasteStatus? qp, Hotkey hotkey) {
+  static String? _hotkeyError(
+    AppLocalizations l,
+    QuickPasteStatus? qp,
+    Hotkey hotkey,
+  ) {
     final err = qp?.hotkeyError ?? '';
     if (err.isEmpty || qp?.running != true) return null;
     // 快捷窗口报的是它实际在用的那个；设置刚改过、它还没重新注册时不显示旧的错误
@@ -129,9 +216,16 @@ class _KeyCap extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(context.shape.sm),
-        border: Border.all(color: active ? p.accent : p.border, width: active ? 1.5 : 1),
+        border: Border.all(
+          color: active ? p.accent : p.border,
+          width: active ? 1.5 : 1,
+        ),
       ),
-      child: Text(text, textAlign: TextAlign.center, style: context.text.labelLarge),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: context.text.labelLarge,
+      ),
     );
   }
 }
@@ -139,7 +233,11 @@ class _KeyCap extends StatelessWidget {
 /// 快捷键一行：点一下进入录制，按下新的组合就保存；Esc 或点别处取消。
 /// 录制期间请快捷窗口暂停全局快捷键，否则按下当前的快捷键会把快捷窗口叫出来。
 class _ShortcutRow extends StatefulWidget {
-  const _ShortcutRow({required this.hotkey, required this.error, required this.onChanged});
+  const _ShortcutRow({
+    required this.hotkey,
+    required this.error,
+    required this.onChanged,
+  });
 
   final Hotkey hotkey;
   final String? error;
@@ -196,11 +294,19 @@ class _ShortcutRowState extends State<_ShortcutRow> {
       _focus.unfocus();
       return KeyEventResult.handled;
     }
-    final h = Hotkey.fromKey(e.logicalKey, e.physicalKey, Hotkey.pressedModifiers());
+    final h = Hotkey.fromKey(
+      e.logicalKey,
+      e.physicalKey,
+      Hotkey.pressedModifiers(),
+    );
     if (h == null) return KeyEventResult.handled; // 修饰键本身，等下一个键
     if (!h.usable) {
       final l = context.l10n;
-      setState(() => _hint = Platform.isMacOS ? l.quickPasteNeedsModifier : l.quickPasteNeedsModifierPc);
+      setState(
+        () => _hint = Platform.isMacOS
+            ? l.quickPasteNeedsModifier
+            : l.quickPasteNeedsModifierPc,
+      );
       return KeyEventResult.handled;
     }
     _stop();
@@ -216,13 +322,17 @@ class _ShortcutRowState extends State<_ShortcutRow> {
     final message = _recording ? _hint : widget.error;
     return SettingRow(
       title: l.quickPasteShortcut,
-      description: message ?? (_recording ? l.quickPasteRecording : l.quickPasteRecord),
+      description:
+          message ?? (_recording ? l.quickPasteRecording : l.quickPasteRecord),
       descriptionColor: message != null ? p.danger : null,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (!_recording && widget.hotkey != Hotkey.fallback) ...[
-            TextButton(onPressed: () => widget.onChanged(Hotkey.fallback), child: Text(l.quickPasteUseDefault)),
+            TextButton(
+              onPressed: () => widget.onChanged(Hotkey.fallback),
+              child: Text(l.quickPasteUseDefault),
+            ),
             const SizedBox(width: Insets.xs),
           ],
           Focus(
@@ -268,9 +378,16 @@ class _SystemShortcutRow extends StatelessWidget {
         onPressed: () async {
           try {
             await GnomeShortcut.install(hotkey);
-            if (context.mounted) showToast(context, l.quickPasteShortcutAdded(ltr(hotkey.display())));
+            if (context.mounted) {
+              showToast(
+                context,
+                l.quickPasteShortcutAdded(ltr(hotkey.display())),
+              );
+            }
           } catch (e) {
-            if (context.mounted) showToast(context, AppState.describeError(e), error: true);
+            if (context.mounted) {
+              showToast(context, AppState.describeError(e), error: true);
+            }
           }
         },
         child: Text(l.quickPasteAddShortcut),

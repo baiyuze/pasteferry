@@ -2974,4 +2974,17 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get starDismiss => 'No volver a mostrar';
+
+  @override
+  String get quickPasteRepair => 'Reparar pegado rápido';
+
+  @override
+  String get quickPasteStarting => 'Iniciando…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'No se pudo iniciar la ventana de pegado rápido. Se detuvieron los reintentos automáticos.';
+
+  @override
+  String get quickPasteFailureDetails => 'Detalles del error';
 }

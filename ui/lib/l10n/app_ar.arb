@@ -779,5 +779,9 @@
   "starBody": "إذا أعجبك، فإن منحه نجمة على GitHub سيعني لنا الكثير.",
   "starAction": "منح نجمة على GitHub",
   "starLater": "لاحقًا",
-  "starDismiss": "عدم الإظهار مجددًا"
+  "starDismiss": "عدم الإظهار مجددًا",
+  "quickPasteRepair": "إصلاح اللصق السريع",
+  "quickPasteStarting": "جارٍ البدء…",
+  "quickPasteStartupFailed": "تعذر بدء نافذة اللصق السريع. توقفت المحاولات التلقائية.",
+  "quickPasteFailureDetails": "تفاصيل الخطأ"
 }

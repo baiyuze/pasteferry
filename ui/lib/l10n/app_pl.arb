@@ -779,5 +779,9 @@
   "starBody": "Jeśli aplikacja się podoba, gwiazdka na GitHubie bardzo pomoże.",
   "starAction": "Daj gwiazdkę na GitHubie",
   "starLater": "Później",
-  "starDismiss": "Nie pokazuj ponownie"
+  "starDismiss": "Nie pokazuj ponownie",
+  "quickPasteRepair": "Napraw szybkie wklejanie",
+  "quickPasteStarting": "Uruchamianie…",
+  "quickPasteStartupFailed": "Nie udało się uruchomić okna szybkiego wklejania. Zatrzymano automatyczne próby.",
+  "quickPasteFailureDetails": "Szczegóły błędu"
 }

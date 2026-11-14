@@ -779,5 +779,9 @@
   "starBody": "如果喜歡，歡迎到 GitHub 點個 Star 支持一下。",
   "starAction": "去點 Star",
   "starLater": "以後再說",
-  "starDismiss": "不再提示"
+  "starDismiss": "不再提示",
+  "quickPasteRepair": "修復快捷視窗",
+  "quickPasteStarting": "正在啟動…",
+  "quickPasteStartupFailed": "快捷視窗無法啟動，已停止自動重試。",
+  "quickPasteFailureDetails": "錯誤詳情"
 }

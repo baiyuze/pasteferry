@@ -2953,4 +2953,17 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get starDismiss => 'Nicht mehr anzeigen';
+
+  @override
+  String get quickPasteRepair => 'Schnelleinfügen reparieren';
+
+  @override
+  String get quickPasteStarting => 'Wird gestartet…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'Das Schnelleinfügefenster konnte nicht starten. Automatische Versuche wurden beendet.';
+
+  @override
+  String get quickPasteFailureDetails => 'Fehlerdetails';
 }

@@ -779,5 +779,9 @@
   "starBody": "Si te gusta, una estrella en GitHub significaría mucho.",
   "starAction": "Dar una estrella en GitHub",
   "starLater": "Más tarde",
-  "starDismiss": "No volver a mostrar"
+  "starDismiss": "No volver a mostrar",
+  "quickPasteRepair": "Reparar pegado rápido",
+  "quickPasteStarting": "Iniciando…",
+  "quickPasteStartupFailed": "No se pudo iniciar la ventana de pegado rápido. Se detuvieron los reintentos automáticos.",
+  "quickPasteFailureDetails": "Detalles del error"
 }

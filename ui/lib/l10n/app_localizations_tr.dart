@@ -2898,4 +2898,17 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get starDismiss => 'Bir daha gösterme';
+
+  @override
+  String get quickPasteRepair => 'Hızlı yapıştırmayı onar';
+
+  @override
+  String get quickPasteStarting => 'Başlatılıyor…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'Hızlı yapıştırma penceresi başlatılamadı. Otomatik denemeler durduruldu.';
+
+  @override
+  String get quickPasteFailureDetails => 'Hata ayrıntıları';
 }

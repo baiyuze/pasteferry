@@ -779,5 +779,9 @@
   "starBody": "如果喜欢，欢迎到 GitHub 点个 Star 支持一下。",
   "starAction": "去点 Star",
   "starLater": "以后再说",
-  "starDismiss": "不再提示"
+  "starDismiss": "不再提示",
+  "quickPasteRepair": "修复快捷窗口",
+  "quickPasteStarting": "正在启动…",
+  "quickPasteStartupFailed": "快捷窗口未能启动，已停止自动重试。",
+  "quickPasteFailureDetails": "错误详情"
 }

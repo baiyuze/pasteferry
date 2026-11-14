@@ -2799,4 +2799,17 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get starDismiss => 'Không hiện lại';
+
+  @override
+  String get quickPasteRepair => 'Sửa dán nhanh';
+
+  @override
+  String get quickPasteStarting => 'Đang khởi động…';
+
+  @override
+  String get quickPasteStartupFailed =>
+      'Không thể khởi động cửa sổ dán nhanh. Đã dừng tự động thử lại.';
+
+  @override
+  String get quickPasteFailureDetails => 'Chi tiết lỗi';
 }
