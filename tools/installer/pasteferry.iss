@@ -42,7 +42,7 @@ MinVersion=10.0
 SetupIconFile=..\..\ui\windows\runner\resources\app_icon.ico
 UninstallDisplayIcon={app}\PasteFerry.exe
 UninstallDisplayName=PasteFerry
-; 用「重启管理器」关掉正在运行的界面，免得文件被占用
+; PrepareToInstall also stops the UI: older apps hide on a close request.
 CloseApplications=yes
 RestartApplications=no
 ShowLanguageDialog=no
@@ -66,7 +66,7 @@ Name: "sharemenu"; Description: "Add Send with PasteFerry to the file context me
 [Files]
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Excludes: "PasteFerryShare.dll"; Flags: recursesubdirs ignoreversion
 ; Explorer can keep an old extension loaded. Use a new path on each upgrade.
-Source: "{#SourceDir}\PasteFerryShare.dll"; DestDir: "{app}"; DestName: "PasteFerryShare-{#AppVersion}.dll"; Flags: ignoreversion uninsrestartdelete
+Source: "{#SourceDir}\PasteFerryShare.dll"; DestDir: "{app}"; DestName: "PasteFerryShare-{#AppVersion}.dll"; Flags: ignoreversion uninsrestartdelete; Tasks: sharemenu
 
 [Icons]
 Name: "{autoprograms}\PasteFerry"; Filename: "{app}\PasteFerry.exe"
@@ -117,6 +117,7 @@ begin
   Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM pasteferryd.exe', '', SW_HIDE, ewWaitUntilTerminated, Code);
   Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM copysyncd.exe', '', SW_HIDE, ewWaitUntilTerminated, Code);
   Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM CopySync.exe', '', SW_HIDE, ewWaitUntilTerminated, Code);
+  Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM PasteFerry.exe', '', SW_HIDE, ewWaitUntilTerminated, Code);
   RunKey := 'Software\Microsoft\Windows\CurrentVersion\Run';
   if RegValueExists(HKEY_CURRENT_USER, RunKey, 'CopySync') then
   begin
