@@ -5,7 +5,7 @@
 在 GitHub Release 与 Gitee 发行版的附件都传好之后运行，再单独提交推送：清单一出现，
 已安装的 App 就会提示更新，这时安装包必须已经能下载。
 
-检查五种语言的更新日志都齐全、release/ 里正好是发布的 14 个文件且与 SHA256SUMS 一致、
+检查最新版本 18 种语言的更新日志都齐全、release/ 里正好是发布的 15 个文件且与 SHA256SUMS 一致、
 版本号与 tools/site/build.py 一致。签名用 client-core/cmd/updatesign，私钥在 macOS 钥匙串里。
 
 端到端测试时把安装包放在本地的测试服务器上，清单写到别处，不碰 updates/：
@@ -27,6 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).parent))
 from notes import MAX_RELEASES, RELEASES  # noqa: E402
+from notes_extra import EXTRA_LANGS, EXTRA_NOTES  # noqa: E402
 
 # 清单里安装包的键 → 文件名。键与客户端 internal/update 里 Target.Asset 一致
 ASSETS = {
@@ -46,6 +47,7 @@ RELEASE_FILES = 15
 
 # notes.py 每一条的语言顺序 → 清单里的语言代码
 LANGS = ["en", "zh-Hans", "ja", "zh-Hant-TW", "zh-Hant-HK"]
+ALL_LANGS = LANGS + EXTRA_LANGS
 
 TEST_NOTES = ("Test build for checking automatic updates.", "用于验证自动更新的测试版本。",
               "自動アップデート検証用のテストビルドです。", "用於驗證自動更新的測試版本。", "用於驗證自動更新的測試版本。")
@@ -78,6 +80,22 @@ def release_entry(r: dict) -> dict:
         if fixes[lang]:
             n["fixes"] = fixes[lang]
         notes[lang] = n
+    extra = EXTRA_NOTES.get(r["version"], {})
+    if extra:
+        if set(extra) != set(EXTRA_LANGS):
+            die(f"{r['version']} 的额外语言必须完整提供 {len(EXTRA_LANGS)} 种")
+        for lang, translated in extra.items():
+            if set(translated) != {"changes", "fixes"}:
+                die(f"{r['version']} {lang} 必须提供 changes 和 fixes")
+            n = {}
+            for category in ("changes", "fixes"):
+                items = translated[category]
+                if (not isinstance(items, list) or len(items) != len(r[category])
+                        or any(not isinstance(s, str) or not s.strip() for s in items)):
+                    die(f"{r['version']} {lang} {category} 缺少翻译或条目数不一致")
+                if items:
+                    n[category] = items
+            notes[lang] = n
     return {"version": r["version"], "date": r["date"], "notes": notes}
 
 
@@ -131,6 +149,8 @@ def main() -> None:
         entries = [release_entry(r) for r in RELEASES if version_key(r["version"]) <= version_key(version)]
         if not entries or entries[0]["version"] != version:
             die(f"tools/release/notes.py 里没有 {version} 的更新日志（要写在最前面）")
+        if set(entries[0]["notes"]) != set(ALL_LANGS):
+            die(f"最新版本 {version} 必须完整提供 {len(ALL_LANGS)} 种语言的更新日志")
     entries = entries[:MAX_RELEASES]
 
     if args.mirror:

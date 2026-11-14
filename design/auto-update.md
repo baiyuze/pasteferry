@@ -42,9 +42,18 @@ a wrong signature is ignored.
 - `releases` keeps the newest 10 versions so a user several versions behind
   sees every change since their version. Missing languages fall back
   zh-Hant-HK → zh-Hant-TW → zh-Hans → en.
-- Release notes are written in `tools/release/notes.py`, five languages per
-  item. `tools/release/manifest.py X.Y.Z` checks that every language is present
-  and every file matches `release/SHA256SUMS`, writes the list and signs it.
+- The original five release-note languages are written in
+  `tools/release/notes.py`; the other 13 interface languages are in
+  `tools/release/notes_extra.py`, with matching item counts and ordering.
+  The latest release must include all 18 languages. Historical releases may
+  retain their original five translations, with English as the final fallback.
+  `tools/release/manifest.py X.Y.Z` validates coverage and checks every file
+  against `release/SHA256SUMS`, then writes and signs the manifest.
+- Clients through 2.12.0 select English for the additional 13 languages even
+  when those translations exist in the manifest. The client must be updated
+  once to use the requested language before falling back to English. After
+  that client change, release-note translations can be updated through the
+  signed JSON alone; installer files and their hashes need not change.
 
 ## Signing key
 
