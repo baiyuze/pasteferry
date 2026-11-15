@@ -1,65 +1,269 @@
 {
   "schema": 1,
-  "latest": "2.12.1",
-  "date": "2026-11-14",
+  "latest": "2.12.2",
+  "date": "2026-11-15",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.12.1/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.12.2/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.12.1/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.12.2/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 29143363,
-      "sha256": "7c5ac3247fc4bb9a19a827966edbc6f0231ac435655bdf8d7654f7988827a497"
+      "size": 29320411,
+      "sha256": "ae7c39a56eabab378d600c65eb5fe6291ee4d73c8116d111b2033917a0772717"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 31316268,
-      "sha256": "ec030d23b13fe9d7d7971344b49bfb1496f5564387ad50d861f1226c7ce4ed3a"
+      "size": 31493770,
+      "sha256": "d2814f92b2d56ee42393408f0aa45a20f3cacab6f218f774e830d7f6ffb8ab1a"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 57242658,
-      "sha256": "05c82fc4508af3cf8661820c28fcc71d95cdd0cfd3e69bc1b7004cf18e07cf0a"
+      "size": 57582075,
+      "sha256": "2c5319fcc416e61ed1a5fe658350f92efdb47e76f48cf786dfcd39936384982f"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 27280900,
-      "sha256": "32136afbce1d56e1e52e8f455725e8c96e7b6ac70dcb25024899d1e97f1ff5ea"
+      "size": 27454914,
+      "sha256": "906c04fe84175475d64a142c3e4ea57fec87d779e1ec82e43f1790706b5f9188"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 35230251,
-      "sha256": "f29105c81b4ceab53b6f0424bf00ad50daff6dc7188854a5f42b9012f7bbd116"
+      "size": 35457004,
+      "sha256": "350f9dcbbcfd8ed1ee8c0ddf064e3b0dba2298d8f5e22962466bbf5cb59d95a3"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 26788064,
-      "sha256": "4566d39f481e11c7eebad662c08d2c93458ee24bce28f73a7602438b4a568f50"
+      "size": 26906054,
+      "sha256": "aae5d9959b8146f542ebad57bd6607eeaf8e5057537f0d9c190b1676c3be1e36"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 25139856,
-      "sha256": "7e6f17224529f28753c4b8649d777adeccf161091ce65a7456c94b8f001fc638"
+      "size": 25263134,
+      "sha256": "b3cd0b0650873fdf7c3bc6edbef7740c6e605c2814ff1d024e63dbbf1e753331"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 32821777,
-      "sha256": "ee3f1cd3b40de6a075512d52ed87de70aeff63348bd018e3d9c7950930540da9"
+      "size": 32973563,
+      "sha256": "1183bcd0b893a3ebac3df0f12f218ae05a524226fab66629896cfc00584c4c7a"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 31007059,
-      "sha256": "52fc880b7f8b42a1d2b5b715127013c902c9eda870b667363c11cb69346be149"
+      "size": 31158169,
+      "sha256": "42ed790a66a1020d51f254ec555294e0e9cfceeec6a3ea8e67c7b18ba6853990"
     }
   },
   "releases": [
+    {
+      "version": "2.12.2",
+      "date": "2026-11-15",
+      "notes": {
+        "en": {
+          "changes": [
+            "System file sharing: Send files from Android's share sheet, Finder's Services menu and Windows' classic context menu (Show more options on Windows 11). On Linux, install Nautilus and Dolphin entries in Settings > Send Files.",
+            "Send confirmation: Review shared files and choose one paired receiving device before sending. Pending batches survive reopening the app, and imported attachments remain available for paused transfers.",
+            "Localized sharing: Sharing menus follow the system language, and confirmation screens follow the app language across all 18 supported languages."
+          ],
+          "fixes": [
+            "Mac quick paste recovery: Registered helpers that fail to start are no longer treated as ready. PasteFerry waits for the helper session, limits automatic retries and offers a manual repair action with error details.",
+            "Windows installers now close a running app correctly instead of hiding its window and aborting an upgrade. Repeat installations also leave Windows Explorer running when it has loaded the sharing extension."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "系统文件分享：从安卓分享面板、Finder 的“服务”和 Windows 经典右键菜单发送文件；Windows 11 请先点“显示更多选项”。Linux 在“设置 > 隔空传送”中安装 Nautilus 和 Dolphin 菜单入口。",
+            "发送确认：先核对分享的文件，选择一台已配对的接收设备，再确认发送。重新打开应用后仍可处理待发送的批次，已导入的附件在传输暂停时也会保留。",
+            "分享多语言：系统分享菜单跟随系统语言，确认窗口跟随应用语言，完整覆盖现有的 18 种语言。"
+          ],
+          "fixes": [
+            "Mac 快捷窗口恢复：已登记但启动失败的辅助程序不再被当作就绪。应用会等待窗口会话，限制自动重试次数；仍失败时提供手动修复入口和错误详情。",
+            "Windows 安装程序现在能正确退出正在运行的应用，不再因窗口被隐藏而取消升级。 重复安装时，即使资源管理器已加载分享插件，也会保持其运行并完成安装。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "システムからファイルを共有：Android の共有シート、Finder の「サービス」、Windows の従来の右クリックメニューから送信できます。Windows 11 は「その他のオプションを表示」から開きます。Linux は「設定 > ファイル送信」で Nautilus と Dolphin のメニューを追加できます。",
+            "送信前の確認：共有ファイルを確認し、ペアリング済みの送信先を1台選んでから送信します。アプリを開き直しても未送信のファイルは残り、一時停止した転送用の添付ファイルも保持されます。",
+            "共有の多言語対応：共有メニューはシステム言語、確認画面はアプリの言語に従い、対応する18言語をすべて利用できます。"
+          ],
+          "fixes": [
+            "Mac のクイックペーストを復旧：登録済みでも起動に失敗したヘルパーを準備完了と判定しなくなりました。セッションの接続を待ち、自動再試行の回数を制限します。復旧しない場合は手動修復とエラー詳細を表示します。",
+            "Windows のインストーラーが実行中のアプリを正しく終了し、ウィンドウが非表示になって更新が中止される問題を修正しました。 共有拡張機能が読み込まれていても、エクスプローラーを終了せずに再インストールできます。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "系統檔案分享：從安卓分享面板、Finder 的「服務」和 Windows 傳統右鍵選單傳送檔案；Windows 11 請先點「顯示其他選項」。Linux 在「設定 > 隔空傳送」中安裝 Nautilus 和 Dolphin 選單入口。",
+            "傳送確認：先核對分享的檔案，選擇一台已配對的接收裝置，再確認傳送。重新開啟應用程式後仍可處理待傳送的批次，已匯入的附件在傳輸暫停時也會保留。",
+            "分享多語言：系統分享選單依照系統語言，確認視窗依照應用程式語言，完整支援現有的 18 種語言。"
+          ],
+          "fixes": [
+            "Mac 快捷視窗復原：已登記但啟動失敗的輔助程式不再被視為就緒。應用程式會等待視窗工作階段，限制自動重試次數；仍失敗時提供手動修復入口和錯誤詳情。",
+            "Windows 安裝程式現在能正確結束執行中的應用程式，不再因視窗被隱藏而取消升級。 重複安裝時，即使檔案總管已載入分享擴充功能，也會保持其執行並完成安裝。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "系統檔案分享：從安卓分享面板、Finder 的「服務」和 Windows 傳統右鍵選單傳送檔案；Windows 11 請先按「顯示更多選項」。Linux 在「設定 > 隔空傳送」中安裝 Nautilus 和 Dolphin 選單入口。",
+            "傳送確認：先核對分享的檔案，選擇一部已配對的接收裝置，再確認傳送。重新開啟應用程式後仍可處理待傳送的批次，已匯入的附件在傳輸暫停時也會保留。",
+            "分享多語言：系統分享選單跟隨系統語言，確認視窗跟隨應用程式語言，完整支援現有的 18 種語言。"
+          ],
+          "fixes": [
+            "Mac 快捷視窗復原：已登記但啟動失敗的輔助程式不再被視為就緒。應用程式會等待視窗連線，限制自動重試次數；仍失敗時提供手動修復入口和錯誤詳情。",
+            "Windows 安裝程式現在能正確結束執行中的應用程式，不再因視窗被隱藏而取消升級。 重複安裝時，即使檔案總管已載入分享擴充功能，也會保持其執行並完成安裝。"
+          ]
+        },
+        "ar": {
+          "changes": [
+            "مشاركة الملفات من لوحة Android وخدمات Finder والقائمة التقليدية في Windows؛ في Windows 11 اختر إظهار المزيد من الخيارات. ثبّت قوائم Nautilus وDolphin من الإعدادات > إرسال الملفات.",
+            "راجع الملفات واختر جهازًا مقترنًا واحدًا ثم أكّد الإرسال. تبقى الدفعات المعلقة بعد إعادة فتح التطبيق، وتُحفظ المرفقات للتحويلات المتوقفة.",
+            "المشاركة بلغات متعددة: تتبع قوائم المشاركة لغة النظام وشاشات التأكيد لغة التطبيق، مع دعم اللغات الـ18 كلها."
+          ],
+          "fixes": [
+            "إصلاح اللصق السريع على Mac: لا يعني تسجيل المساعد أنه جاهز. ينتظر التطبيق اتصاله، ويحدّ المحاولات التلقائية، ويعرض إصلاحًا يدويًا وتفاصيل الخطأ عند الفشل.",
+            "تُغلق أدوات تثبيت Windows التطبيق الجاري بصورة صحيحة بدل إخفاء نافذته وإلغاء الترقية. تستمر إعادة التثبيت دون إغلاق مستكشف Windows حتى عند تحميل إضافة المشاركة."
+          ]
+        },
+        "de": {
+          "changes": [
+            "Dateien über Androids Teilen-Menü, Finder-Dienste und das klassische Windows-Kontextmenü senden (Weitere Optionen anzeigen unter Windows 11). Nautilus- und Dolphin-Menüs unter Einstellungen > Dateien senden installieren.",
+            "Geteilte Dateien prüfen, ein gekoppeltes Empfangsgerät wählen und das Senden bestätigen. Ausstehende Stapel bleiben nach erneutem Öffnen erhalten, importierte Anhänge für pausierte Übertragungen verfügbar.",
+            "Mehrsprachiges Teilen: Freigabemenüs folgen der Systemsprache, Bestätigungsdialoge der App-Sprache. Alle 18 unterstützten Sprachen sind abgedeckt."
+          ],
+          "fixes": [
+            "Mac-Schnelleinfügen: Registrierte, nicht gestartete Helfer gelten nicht mehr als bereit. Begrenzte automatische Wiederholungen, Sitzungsprüfung und manuelle Reparatur mit Fehlerdetails.",
+            "Windows-Installer beenden eine laufende App korrekt, statt ihr Fenster auszublenden und das Upgrade abzubrechen. Auch bei geladenem Freigabe-Plugin bleibt Windows Explorer während einer erneuten Installation geöffnet."
+          ]
+        },
+        "es": {
+          "changes": [
+            "Envía archivos desde Compartir de Android, Servicios de Finder y el menú clásico de Windows (Mostrar más opciones en Windows 11). Instala los menús de Nautilus y Dolphin en Ajustes > Enviar archivos.",
+            "Revisa los archivos, elige un único dispositivo vinculado y confirma el envío. Los lotes pendientes se conservan al reabrir la aplicación y los adjuntos importados siguen disponibles para transferencias pausadas.",
+            "Compartir en varios idiomas: los menús siguen el idioma del sistema y las pantallas de confirmación el de la aplicación, con los 18 idiomas disponibles."
+          ],
+          "fixes": [
+            "Pegado rápido en Mac: un auxiliar registrado que no arranca ya no se considera listo. Se espera su sesión, se limitan los reintentos y se ofrece reparación manual con detalles del error.",
+            "El instalador de Windows cierra correctamente la aplicación abierta en lugar de ocultar su ventana y cancelar la actualización. La reinstalación mantiene abierto el Explorador de Windows aunque haya cargado la extensión para compartir."
+          ]
+        },
+        "fr": {
+          "changes": [
+            "Envoyez depuis le partage Android, les Services du Finder et le menu classique Windows (Afficher plus d’options sous Windows 11). Installez les menus Nautilus et Dolphin dans Réglages > Envoi de fichiers.",
+            "Vérifiez les fichiers, choisissez un seul appareil jumelé et confirmez. Les lots en attente restent après réouverture, et les pièces importées sont conservées pour les transferts en pause.",
+            "Partage multilingue : les menus suivent la langue du système et les écrans de confirmation celle de l’application, dans les 18 langues prises en charge."
+          ],
+          "fixes": [
+            "Collage rapide sur Mac : un auxiliaire enregistré mais non démarré n’est plus considéré comme prêt. Attente de sa session, tentatives limitées et réparation manuelle avec détails de l’erreur.",
+            "Le programme d’installation Windows ferme correctement l’application ouverte au lieu de masquer sa fenêtre et d’annuler la mise à niveau. La réinstallation laisse aussi l’Explorateur Windows ouvert lorsque l’extension de partage est chargée."
+          ]
+        },
+        "id": {
+          "changes": [
+            "Kirim berkas dari lembar berbagi Android, Layanan Finder, dan menu klasik Windows (Tampilkan opsi lainnya di Windows 11). Pasang menu Nautilus dan Dolphin di Pengaturan > Kirim Berkas.",
+            "Periksa berkas, pilih satu perangkat yang dipasangkan, lalu konfirmasi. Antrean tetap ada setelah aplikasi dibuka kembali, dan lampiran disimpan untuk transfer yang dijeda.",
+            "Berbagi multibahasa: menu mengikuti bahasa sistem dan layar konfirmasi mengikuti bahasa aplikasi, mencakup seluruh 18 bahasa yang didukung."
+          ],
+          "fixes": [
+            "Tempel cepat Mac: pembantu yang terdaftar tetapi gagal dimulai tidak lagi dianggap siap. Aplikasi menunggu sesi, membatasi percobaan otomatis, dan menyediakan perbaikan manual beserta detail kesalahan.",
+            "Pemasang Windows kini menutup aplikasi yang berjalan dengan benar, bukan menyembunyikan jendelanya dan membatalkan pembaruan. Pemasangan ulang juga membiarkan Windows Explorer tetap berjalan saat ekstensi berbagi dimuat."
+          ]
+        },
+        "it": {
+          "changes": [
+            "Invia dal menu Condividi di Android, dai Servizi del Finder e dal menu classico Windows (Mostra altre opzioni in Windows 11). Installa i menu Nautilus e Dolphin in Impostazioni > Invio file.",
+            "Controlla i file, scegli un solo dispositivo abbinato e conferma. I lotti in attesa restano dopo la riapertura e gli allegati importati vengono conservati per i trasferimenti in pausa.",
+            "Condivisione multilingue: i menu seguono la lingua del sistema e le schermate di conferma quella dell’app, in tutte le 18 lingue supportate."
+          ],
+          "fixes": [
+            "Incolla rapido su Mac: un helper registrato che non si avvia non è più considerato pronto. Attesa della sessione, tentativi limitati e riparazione manuale con dettagli errore.",
+            "Il programma di installazione Windows chiude correttamente l’app in esecuzione invece di nasconderne la finestra e interrompere l’aggiornamento. La reinstallazione lascia aperto Esplora file anche quando l’estensione di condivisione è caricata."
+          ]
+        },
+        "ko": {
+          "changes": [
+            "Android 공유 패널, Finder 서비스, Windows 기본 오른쪽 클릭 메뉴에서 파일을 보냅니다. Windows 11은 더 많은 옵션 표시를 선택합니다. Linux에서는 설정 > 파일 보내기에서 Nautilus와 Dolphin 메뉴를 설치합니다.",
+            "공유 파일을 확인하고 페어링된 받는 기기 한 대를 선택한 뒤 전송을 확인합니다. 앱을 다시 열어도 대기 목록이 유지되고 일시 중지한 전송의 첨부 파일도 보관됩니다.",
+            "다국어 공유: 공유 메뉴는 시스템 언어를, 확인 화면은 앱 언어를 따르며 지원하는 18개 언어를 모두 제공합니다."
+          ],
+          "fixes": [
+            "Mac 빠른 붙여넣기: 등록되었지만 시작하지 못한 도우미를 준비 완료로 간주하지 않습니다. 세션을 기다리고 자동 재시도를 제한하며 수동 복구와 오류 세부 정보를 제공합니다.",
+            "Windows 설치 프로그램이 실행 중인 앱을 올바르게 종료하므로 창만 숨겨져 업그레이드가 취소되지 않습니다. 공유 확장 기능이 로드되어 있어도 파일 탐색기를 종료하지 않고 다시 설치할 수 있습니다."
+          ]
+        },
+        "pl": {
+          "changes": [
+            "Wysyłaj z panelu udostępniania Androida, Usług Findera i klasycznego menu Windows (Pokaż więcej opcji w Windows 11). Menu Nautilusa i Dolphina zainstalujesz w Ustawienia > Wysyłanie plików.",
+            "Sprawdź pliki, wybierz jedno sparowane urządzenie i potwierdź. Oczekujące partie pozostają po ponownym otwarciu aplikacji, a załączniki są zachowywane dla wstrzymanych transferów.",
+            "Udostępnianie w wielu językach: menu używają języka systemu, a ekrany potwierdzenia języka aplikacji. Obsługiwane jest wszystkich 18 języków."
+          ],
+          "fixes": [
+            "Szybkie wklejanie na Macu: zarejestrowany, nieuruchomiony pomocnik nie jest już uznawany za gotowy. Oczekiwanie na sesję, ograniczone próby i ręczna naprawa ze szczegółami błędu.",
+            "Instalator Windows prawidłowo zamyka uruchomioną aplikację zamiast ukrywać jej okno i przerywać aktualizację. Ponowna instalacja pozostawia Eksplorator Windows uruchomiony również po załadowaniu rozszerzenia udostępniania."
+          ]
+        },
+        "pt-BR": {
+          "changes": [
+            "Envie pelo compartilhamento do Android, Serviços do Finder e menu clássico do Windows (Mostrar mais opções no Windows 11). Instale os menus do Nautilus e Dolphin em Configurações > Enviar arquivos.",
+            "Confira os arquivos, escolha um único dispositivo pareado e confirme. Os lotes pendentes permanecem após reabrir o app e os anexos são mantidos para transferências pausadas.",
+            "Compartilhamento multilíngue: os menus seguem o idioma do sistema e as telas de confirmação o do aplicativo, com suporte aos 18 idiomas."
+          ],
+          "fixes": [
+            "Colagem rápida no Mac: um auxiliar registrado que falha ao iniciar não é mais considerado pronto. O app espera a sessão, limita as tentativas e oferece reparo manual com detalhes do erro.",
+            "O instalador do Windows agora fecha corretamente o aplicativo aberto, em vez de ocultar a janela e cancelar a atualização. A reinstalação também mantém o Explorador de Arquivos aberto quando a extensão de compartilhamento está carregada."
+          ]
+        },
+        "ru": {
+          "changes": [
+            "Отправляйте через меню Android, Службы Finder и классическое меню Windows (Показать дополнительные параметры в Windows 11). Меню Nautilus и Dolphin устанавливаются в Настройки > Отправка файлов.",
+            "Проверьте файлы, выберите одно сопряжённое устройство и подтвердите отправку. Очередь сохраняется при повторном открытии приложения, вложения остаются для приостановленных передач.",
+            "Многоязычная отправка: меню используют язык системы, а экраны подтверждения — язык приложения. Поддерживаются все 18 языков."
+          ],
+          "fixes": [
+            "Быстрая вставка на Mac: зарегистрированный, но не запущенный помощник больше не считается готовым. Ожидание сеанса, ограниченные повторы и ручное восстановление со сведениями об ошибке.",
+            "Установщик Windows корректно завершает работающую программу, а не скрывает её окно и прерывает обновление. Повторная установка также не закрывает Проводник Windows, если в нём загружено расширение отправки файлов."
+          ]
+        },
+        "tr": {
+          "changes": [
+            "Android paylaşım paneli, Finder Servisleri ve Windows klasik menüsünden dosya gönderin (Windows 11: Daha fazla seçenek göster). Nautilus ve Dolphin menülerini Ayarlar > Dosya Gönder bölümünden kurun.",
+            "Dosyaları inceleyin, eşleştirilmiş bir alıcı seçin ve onaylayın. Uygulama yeniden açıldığında bekleyen gruplar korunur; içe aktarılan ekler duraklatılan aktarımlar için saklanır.",
+            "Çok dilli paylaşım: menüler sistem dilini, onay ekranları uygulama dilini izler. Desteklenen 18 dilin tamamı kullanılabilir."
+          ],
+          "fixes": [
+            "Mac hızlı yapıştırma: kayıtlı olup başlatılamayan yardımcı artık hazır sayılmaz. Oturum beklenir, otomatik denemeler sınırlandırılır ve hata ayrıntılarıyla manuel onarım sunulur.",
+            "Windows yükleyicisi artık pencereyi gizleyip yükseltmeyi iptal etmek yerine çalışan uygulamayı doğru biçimde kapatır. Paylaşım uzantısı yüklü olsa bile yeniden kurulum sırasında Windows Gezgini açık kalır."
+          ]
+        },
+        "uk": {
+          "changes": [
+            "Надсилайте через панель Android, Служби Finder і класичне меню Windows (Показати додаткові параметри у Windows 11). Меню Nautilus і Dolphin встановлюються в Налаштування > Надсилання файлів.",
+            "Перевірте файли, виберіть один спарений пристрій і підтвердьте. Черга зберігається після повторного відкриття, вкладення залишаються для призупинених передач.",
+            "Багатомовне надсилання: меню використовують мову системи, а екрани підтвердження — мову програми. Підтримуються всі 18 мов."
+          ],
+          "fixes": [
+            "Швидке вставлення на Mac: зареєстрований, але не запущений помічник більше не вважається готовим. Очікування сеансу, обмежені повтори й ручне відновлення з відомостями про помилку.",
+            "Інсталятор Windows належно завершує запущену програму, а не приховує її вікно та скасовує оновлення. Повторне встановлення також не закриває Провідник Windows, якщо в ньому завантажено розширення надсилання файлів."
+          ]
+        },
+        "vi": {
+          "changes": [
+            "Gửi từ bảng chia sẻ Android, Dịch vụ Finder và menu cổ điển Windows (Hiển thị thêm tùy chọn trên Windows 11). Cài menu Nautilus và Dolphin trong Cài đặt > Gửi tệp.",
+            "Kiểm tra tệp, chọn một thiết bị đã ghép đôi rồi xác nhận. Các lô đang chờ vẫn còn khi mở lại ứng dụng; tệp đính kèm được giữ cho việc truyền đang tạm dừng.",
+            "Chia sẻ đa ngôn ngữ: menu theo ngôn ngữ hệ thống, màn hình xác nhận theo ngôn ngữ ứng dụng, hỗ trợ đủ 18 ngôn ngữ."
+          ],
+          "fixes": [
+            "Dán nhanh trên Mac: trình trợ giúp đã đăng ký nhưng không khởi động không còn được coi là sẵn sàng. Chờ phiên kết nối, giới hạn thử lại và cung cấp sửa thủ công cùng chi tiết lỗi.",
+            "Trình cài đặt Windows nay đóng đúng ứng dụng đang chạy, thay vì ẩn cửa sổ và hủy nâng cấp. Cài đặt lại vẫn giữ Windows Explorer hoạt động ngay cả khi đã tải tiện ích chia sẻ."
+          ]
+        }
+      }
+    },
     {
       "version": "2.12.1",
       "date": "2026-11-14",
@@ -616,62 +820,6 @@
           ],
           "fixes": [
             "裝置配對現在會正確拒絕好友碼，即使前一次配對的延遲回覆先到達，亦不會忽略用途不一致。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.8.3",
-      "date": "2026-11-01",
-      "notes": {
-        "en": {
-          "fixes": [
-            "Devices now show \"Connecting\" while the connection and capabilities are being established, instead of misleading update or version mismatch messages. Reconnection also refreshes stale capability information.",
-            "Settings no longer wait indefinitely for a background-service request. Startup failures can be retried, and settings become available as soon as the configuration is loaded.",
-            "A failed initial connection can recover without restarting the app. Network setup failures release the failed connection, changing the signaling server cancels the old startup attempt, and Windows retries failed local-network advertisements.",
-            "Files being sent to a friend can be cancelled from the friend conversation and send dialog, including queued transfers and transfers waiting for acceptance. Ongoing transfers remain visible when the dialog is reopened.",
-            "File transfer streams remain open until the receiver confirms completion, and cancellation no longer stalls subsequent transfers.",
-            "Adding a friend can recover when the initial handshake reply arrives before the pairing session is ready."
-          ]
-        },
-        "zh-Hans": {
-          "fixes": [
-            "设备建立连接、确认功能期间显示「正在连接」，不再误报需要更新或版本不匹配；重新连接时也会刷新过期的功能信息。",
-            "设置不再因后台请求无响应而一直转圈；启动失败后可重试，配置读取完成即可使用设置。",
-            "首次连接失败后可自行恢复，无需退出重开；网络初始化失败会清理连接，切换信令服务器会停止旧的启动尝试，Windows 会重试失败的局域网广播。",
-            "发给好友的文件可在好友会话和发送窗口取消，包括排队和等待对方接收的任务；重新打开窗口仍能看到进行中的传输。",
-            "文件传输通道会保持到接收方确认完成；取消传输后，下一批文件也能正常发送。",
-            "添加好友时，即使首次握手回复早于配对会话准备完成，也能通过重试恢复。"
-          ]
-        },
-        "ja": {
-          "fixes": [
-            "接続と機能確認の間は「接続中」と表示し、更新やバージョン不一致の誤案内を防ぎます。再接続時には古い機能情報も更新します。",
-            "設定画面がバックグラウンド処理の応答を無期限に待たないよう修正。起動失敗後は再試行でき、設定の読み込み後すぐに操作できます。",
-            "初回接続の失敗後、アプリの再起動なしで復旧できるよう修正。失敗した接続を解放し、シグナリング先の変更で古い接続試行を中止し、WindowsのLAN広告を再試行します。",
-            "友だちへのファイル送信を会話画面と送信画面からキャンセルできます。待機中・承認待ちにも対応し、画面を開き直しても進行中の転送を表示します。",
-            "ファイル転送の通信路を受信側の完了確認まで保持し、キャンセル後に次の転送が止まる問題も修正しました。",
-            "友だち追加の初回応答がペアリング準備より早く届いた場合も、再試行で復旧します。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "fixes": [
-            "裝置建立連線、確認功能期間顯示「正在連線」，不再誤報需要更新或版本不符；重新連線時也會更新過期的功能資訊。",
-            "設定不再因背景請求無回應而一直轉圈；啟動失敗後可重試，設定讀取完成即可使用。",
-            "首次連線失敗後可自行恢復，無須退出重開；網路初始化失敗會清理連線，切換信令伺服器會停止舊的啟動嘗試，Windows 會重試失敗的區域網路廣播。",
-            "傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。",
-            "檔案傳輸通道會保持到接收端確認完成；取消傳輸後，下一批檔案也能正常傳送。",
-            "新增好友時，即使首次交握回覆早於配對工作階段準備完成，也能透過重試恢復。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "fixes": [
-            "裝置建立連線、確認功能期間顯示「正在連線」，不再誤報需要更新或版本不符；重新連線時亦會更新過期的功能資訊。",
-            "設定不再因背景請求無回應而一直轉圈；啟動失敗後可重試，設定讀取完成即可使用。",
-            "首次連線失敗後可自行恢復，無須退出重開；網絡初始化失敗會清理連線，切換信令伺服器會停止舊的啟動嘗試，Windows 會重試失敗的區域網絡廣播。",
-            "傳給好友的檔案可在好友對話和傳送視窗取消，包括排隊和等待對方接收的工作；重新開啟視窗仍能看到進行中的傳輸。",
-            "檔案傳輸通道會保持到接收端確認完成；取消傳輸後，下一批檔案也能正常傳送。",
-            "新增好友時，即使首次交握回覆早於配對工作階段準備完成，亦能透過重試恢復。"
           ]
         }
       }
