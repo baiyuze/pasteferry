@@ -3,8 +3,9 @@
 #
 #   1. 推送 GitHub 上的 main 与本地全部 tag
 #   2. 建与 GitHub Release 同名、同正文的发行版
-#   3. 上传 release/ 里的 15 个文件（含 Android APK；已有的同名文件跳过，可以重复运行）
-#   4. 只保留最近 KEEP 个发行版的附件：Gitee 每个仓库的附件总共只有 1 GB，一版约 270 MB
+#   3. 只保留最近 KEEP 个发行版（含这一版）的附件：Gitee 每个仓库的附件总共只有 1 GB，一版约 370 MB。
+#      先清理再上传，否则上传途中会同时有三版的附件，超出 1 GB，Gitee 拒收（返回 400）
+#   4. 上传 release/ 里的 15 个文件（含 Android APK；已有的同名文件跳过，可以重复运行）
 #
 #   ./scripts/gitee-mirror.sh vX.Y.Z "PasteFerry X.Y.Z — Summary" <正文文件>
 #
@@ -63,6 +64,16 @@ if [[ -z $ID ]]; then
 fi
 echo "  id $ID"
 
+echo "▶ 清理旧版本的附件（保留最近 $KEEP 个发行版）"
+OLD=$(gitee GET "/releases?per_page=100&direction=desc" |
+    json "rs = sorted(d, key=lambda r: r['created_at'], reverse=True); print('\n'.join(str(r['id']) for r in rs[$KEEP:]))")
+for rid in $OLD; do
+    for aid in $(gitee GET "/releases/$rid/attach_files?per_page=100" | json 'print("\n".join(str(a["id"]) for a in d))'); do
+        gitee DELETE "/releases/$rid/attach_files/$aid" >/dev/null
+        echo "  删除发行版 $rid 的附件 $aid"
+    done
+done
+
 echo "▶ 上传附件"
 HAVE=$(gitee GET "/releases/$ID/attach_files?per_page=100" | json 'print("\n".join(a["name"] for a in d))')
 for f in release/*; do
@@ -73,16 +84,6 @@ for f in release/*; do
     fi
     gitee POST "/releases/$ID/attach_files" -F "file=@$f" >/dev/null
     echo "  ✓ $name"
-done
-
-echo "▶ 清理旧版本的附件（保留最近 $KEEP 个发行版）"
-OLD=$(gitee GET "/releases?per_page=100&direction=desc" |
-    json "rs = sorted(d, key=lambda r: r['created_at'], reverse=True); print('\n'.join(str(r['id']) for r in rs[$KEEP:]))")
-for rid in $OLD; do
-    for aid in $(gitee GET "/releases/$rid/attach_files?per_page=100" | json 'print("\n".join(str(a["id"]) for a in d))'); do
-        gitee DELETE "/releases/$rid/attach_files/$aid" >/dev/null
-        echo "  删除发行版 $rid 的附件 $aid"
-    done
 done
 
 echo "▶ 核对匿名下载"
