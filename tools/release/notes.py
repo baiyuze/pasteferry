@@ -12,6 +12,34 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.13.0',
+ 'date': '2026-11-20',
+ 'changes': [('Direct connections on mobile networks: Devices behind carrier networks that assign '
+              'ports in sequence, common with portable Wi-Fi and mobile data, can now connect '
+              'directly instead of only through the relay. Only the device on that network needs '
+              'this update.',
+              '手机网络也能直连：随身 WiFi、手机流量这类按顺序分配端口的运营商网络，现在可以直接连接，不再只能经中转。只需升级处在这类网络里的那台设备。',
+              'モバイル回線でも直接接続：ポケット Wi-Fi '
+              'やモバイルデータ通信など、ポートを順番に割り当てるキャリアのネットワークでも、中継だけに頼らず直接接続できるようになりました。更新が必要なのは、そのネットワークにあるデバイスだけです。',
+              '行動網路也能直連：隨身 Wi-Fi、行動數據這類依序分配連接埠的電信網路，現在可以直接連線，不再只能經中繼。只需更新位於這類網路中的那台裝置。',
+              '流動網絡也能直連：隨身 Wi-Fi、流動數據這類按次序分配連接埠的電訊網絡，現在可以直接連線，不再只能經中轉。只需更新位於這類網絡中的那部裝置。'),
+             ('IPv6 direct connections: When both devices have public IPv6 addresses, they connect '
+              'directly over IPv6 without crossing any NAT.',
+              'IPv6 直连：两台设备都有公网 IPv6 地址时，直接经 IPv6 连接，无需穿越 NAT。',
+              'IPv6 で直接接続：両方のデバイスにグローバル IPv6 アドレスがある場合、NAT を越えずに IPv6 で直接接続します。',
+              'IPv6 直連：兩台裝置都有公用 IPv6 位址時，直接經 IPv6 連線，無需穿越 NAT。',
+              'IPv6 直連：兩部裝置都有公用 IPv6 位址時，直接經 IPv6 連線，無需穿越 NAT。')],
+ 'fixes': [('Relayed connections no longer drop after a few seconds of network congestion, which '
+            'on portable Wi-Fi left devices stuck at Connecting and stopped file transfers. A '
+            'stalled relay now has up to 35 seconds to recover, and diagnostics record why a relay '
+            'ended.',
+            '网络短暂拥堵几秒，中转连接不再随之断开。以前在随身 WiFi 上会一直显示「正在连接」、文件发不出去。现在中转卡顿后最多等 35 秒恢复，诊断报告也会记录中转断开的原因。',
+            '数秒の通信の詰まりで中継接続が切れなくなりました。これまではポケット Wi-Fi で「接続中」のまま止まり、ファイルを送れないことがありました。中継が滞っても最大 35 '
+            '秒は復旧を待ち、中継が切れた理由を診断レポートに記録します。',
+            '網路短暫壅塞幾秒，中繼連線不再隨之中斷。以往在隨身 Wi-Fi 上會一直顯示「正在連線」，檔案傳不出去。現在中繼停頓後最多等 35 '
+            '秒恢復，診斷報告也會記錄中繼中斷的原因。',
+            '網絡短暫擠塞幾秒，中轉連線不再隨之中斷。以往在隨身 Wi-Fi 上會一直顯示「正在連線」，檔案傳不出去。現在中轉停頓後最多等 35 '
+            '秒恢復，診斷報告亦會記錄中轉中斷的原因。')]},
 {'version': '2.12.2',
  'date': '2026-11-15',
  'changes': [("System file sharing: Send files from Android's share sheet, Finder's Services menu "

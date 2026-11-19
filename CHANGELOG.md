@@ -1,5 +1,25 @@
 # 更新记录 / Changelog
 
+## 2.13.0 — 2026-11-20
+
+Keep devices on mobile networks and portable Wi-Fi connected: more of them connect directly, and relayed connections ride out brief network stalls.
+
+### Changes
+
+- Direct connections on mobile networks: Devices behind carrier networks that assign ports in sequence, common with portable Wi-Fi and mobile data, can now connect directly instead of only through the relay. Only the device on that network needs this update.
+- IPv6 direct connections: When both devices have public IPv6 addresses, they connect directly over IPv6 without crossing any NAT.
+
+### Fixes
+
+- Relayed connections no longer drop after a few seconds of network congestion, which on portable Wi-Fi left devices stuck at Connecting and stopped file transfers. A stalled relay now has up to 35 seconds to recover, and diagnostics record why a relay ended.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended, especially on mobile networks and portable Wi-Fi. Direct connections through sequential carrier networks need only the device on that network updated; IPv6 direct connections and steadier relays work best with both devices updated.
+- **Android**: optional. Transfers remain limited to the local network.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.12.2 — 2026-11-15
 
 Share files from system menus and recover failed Mac quick paste startup.

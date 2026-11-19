@@ -8,6 +8,140 @@ Older releases without these translations continue to fall back to English.
 EXTRA_LANGS = ["ar", "de", "es", "fr", "id", "it", "ko", "pl", "pt-BR", "ru", "tr", "uk", "vi"]
 
 EXTRA_NOTES = {
+    "2.13.0": {'ar': {'changes': ['اتصال مباشر عبر شبكات الجوال: يمكن الآن للأجهزة خلف شبكات المشغّلين التي '
+                    'توزّع المنافذ بالتسلسل، كما في أجهزة Wi-Fi المحمولة وبيانات الجوال، أن تتصل '
+                    'مباشرة بدل الاعتماد على الترحيل وحده. يكفي تحديث الجهاز الموجود على تلك '
+                    'الشبكة.',
+                    'اتصال مباشر عبر IPv6: عندما يملك الجهازان عناوين IPv6 عامة، يتصلان مباشرة عبر '
+                    'IPv6 دون عبور أي NAT.'],
+        'fixes': ['لم تعد اتصالات الترحيل تنقطع بعد ثوانٍ من ازدحام الشبكة، وهو ما كان يُبقي '
+                  'الأجهزة على Wi-Fi المحمول عالقة عند «جارٍ الاتصال…» ويوقف نقل الملفات. يُمنح '
+                  'الترحيل المتعطل الآن حتى 35 ثانية ليتعافى، ويسجّل التشخيص سبب انتهاء الترحيل.']},
+ 'de': {'changes': ['Direkte Verbindungen in Mobilfunknetzen: Geräte hinter Providernetzen, die '
+                    'Ports der Reihe nach vergeben – typisch für mobile WLAN-Router und mobile '
+                    'Daten –, verbinden sich jetzt direkt statt nur über das Relay. Aktualisiert '
+                    'werden muss nur das Gerät in diesem Netz.',
+                    'Direkte Verbindungen über IPv6: Haben beide Geräte öffentliche IPv6-Adressen, '
+                    'verbinden sie sich direkt über IPv6, ohne NAT zu durchqueren.'],
+        'fixes': ['Relay-Verbindungen brechen bei kurz überlastetem Netz nicht mehr nach wenigen '
+                  'Sekunden ab; über mobile WLAN-Router blieben Geräte bisher bei „Verbinden…“ '
+                  'hängen und Dateiübertragungen stoppten. Ein stockendes Relay hat jetzt bis zu '
+                  '35 Sekunden Zeit, sich zu erholen, und die Diagnose hält fest, warum ein Relay '
+                  'endete.']},
+ 'es': {'changes': ['Conexión directa en redes móviles: los dispositivos detrás de redes de '
+                    'operador que asignan puertos de forma secuencial, habituales en el Wi-Fi '
+                    'portátil y los datos móviles, ahora pueden conectarse directamente en lugar '
+                    'de depender solo de la retransmisión. Solo hay que actualizar el dispositivo '
+                    'que está en esa red.',
+                    'Conexión directa por IPv6: cuando ambos dispositivos tienen direcciones IPv6 '
+                    'públicas, se conectan directamente por IPv6 sin atravesar ningún NAT.'],
+        'fixes': ['Las conexiones por retransmisión ya no se cortan tras unos segundos de '
+                  'congestión de la red; con Wi-Fi portátil, los dispositivos se quedaban en '
+                  '«Conectando…» y las transferencias de archivos se detenían. Una retransmisión '
+                  'atascada ahora dispone de hasta 35 segundos para recuperarse, y el diagnóstico '
+                  'registra por qué terminó.']},
+ 'fr': {'changes': ['Connexion directe sur les réseaux mobiles : les appareils derrière des '
+                    "réseaux d'opérateur qui attribuent les ports dans l'ordre, courants avec le "
+                    'Wi-Fi de poche et les données mobiles, se connectent désormais directement au '
+                    "lieu de passer uniquement par le relais. Seul l'appareil sur ce réseau doit "
+                    'être mis à jour.',
+                    'Connexion directe en IPv6 : lorsque les deux appareils ont une adresse IPv6 '
+                    'publique, ils se connectent directement en IPv6, sans traverser de NAT.'],
+        'fixes': ['Les connexions par relais ne tombent plus après quelques secondes de congestion '
+                  'du réseau ; avec un Wi-Fi de poche, les appareils restaient bloqués sur « '
+                  "Connexion… » et les transferts de fichiers s'arrêtaient. Un relais bloqué "
+                  'dispose désormais de 35 secondes pour se rétablir, et le diagnostic indique '
+                  "pourquoi un relais s'est terminé."]},
+ 'id': {'changes': ['Koneksi langsung di jaringan seluler: Perangkat di balik jaringan operator '
+                    'yang membagikan port secara berurutan, umum pada Wi-Fi portabel dan data '
+                    'seluler, kini dapat terhubung langsung, tidak hanya lewat relai. Hanya '
+                    'perangkat di jaringan tersebut yang perlu diperbarui.',
+                    'Koneksi langsung lewat IPv6: Jika kedua perangkat memiliki alamat IPv6 '
+                    'publik, keduanya terhubung langsung lewat IPv6 tanpa melewati NAT.'],
+        'fixes': ['Koneksi lewat relai tidak lagi terputus setelah jaringan padat selama beberapa '
+                  'detik; pada Wi-Fi portabel, perangkat sebelumnya tertahan di "Menghubungkan…" '
+                  'dan transfer file terhenti. Relai yang tersendat kini diberi waktu hingga 35 '
+                  'detik untuk pulih, dan diagnostik mencatat alasan relai berakhir.']},
+ 'it': {'changes': ['Connessione diretta sulle reti mobili: i dispositivi dietro reti di operatore '
+                    'che assegnano le porte in sequenza, comuni con il Wi-Fi portatile e i dati '
+                    'mobili, ora possono connettersi direttamente invece di passare solo per '
+                    "l'inoltro. Basta aggiornare il dispositivo che si trova su quella rete.",
+                    'Connessione diretta via IPv6: se entrambi i dispositivi hanno un indirizzo '
+                    'IPv6 pubblico, si connettono direttamente via IPv6 senza attraversare alcun '
+                    'NAT.'],
+        'fixes': ['Le connessioni tramite inoltro non cadono più dopo pochi secondi di congestione '
+                  'della rete; con il Wi-Fi portatile i dispositivi restavano fermi su '
+                  '«Connessione…» e i trasferimenti di file si interrompevano. Un inoltro bloccato '
+                  'ha ora fino a 35 secondi per riprendersi e la diagnostica registra il motivo '
+                  'per cui è terminato.']},
+ 'ko': {'changes': ['모바일 네트워크에서도 직접 연결: 포켓 와이파이나 모바일 데이터처럼 포트를 순서대로 할당하는 통신사 네트워크에 있는 기기도 이제 중계에만 '
+                    '의존하지 않고 직접 연결할 수 있습니다. 해당 네트워크에 있는 기기만 업데이트하면 됩니다.',
+                    'IPv6 직접 연결: 두 기기 모두 공인 IPv6 주소가 있으면 NAT를 거치지 않고 IPv6로 직접 연결합니다.'],
+        'fixes': ["네트워크가 몇 초 동안 혼잡해져도 중계 연결이 더 이상 끊기지 않습니다. 이전에는 포켓 와이파이에서 '연결 중…'에 머물며 파일 전송이 멈추곤 "
+                  '했습니다. 이제 중계가 멈추면 최대 35초까지 복구를 기다리며, 중계가 끝난 이유를 진단에 기록합니다.']},
+ 'pl': {'changes': ['Bezpośrednie połączenia w sieciach komórkowych: urządzenia w sieciach '
+                    'operatorów, które przydzielają porty po kolei – typowe dla mobilnych routerów '
+                    'Wi-Fi i danych komórkowych – mogą teraz łączyć się bezpośrednio, a nie tylko '
+                    'przez przekaźnik. Wystarczy zaktualizować urządzenie w tej sieci.',
+                    'Bezpośrednie połączenia przez IPv6: gdy oba urządzenia mają publiczne adresy '
+                    'IPv6, łączą się bezpośrednio przez IPv6, bez przechodzenia przez NAT.'],
+        'fixes': ['Połączenia przez przekaźnik nie zrywają się już po kilku sekundach przeciążenia '
+                  'sieci; przy mobilnym routerze Wi-Fi urządzenia zatrzymywały się na „Łączenie…”, '
+                  'a przesyłanie plików stawało. Zablokowany przekaźnik ma teraz do 35 sekund na '
+                  'powrót, a diagnostyka zapisuje, dlaczego się zakończył.']},
+ 'pt-BR': {'changes': ['Conexão direta em redes móveis: dispositivos atrás de redes de operadora '
+                       'que atribuem portas em sequência, comuns em Wi-Fi portátil e dados móveis, '
+                       'agora podem se conectar diretamente, em vez de depender só da '
+                       'retransmissão. Basta atualizar o dispositivo que está nessa rede.',
+                       'Conexão direta por IPv6: quando os dois dispositivos têm endereços IPv6 '
+                       'públicos, eles se conectam diretamente por IPv6, sem atravessar NAT.'],
+           'fixes': ['Conexões por retransmissão não caem mais após alguns segundos de '
+                     'congestionamento da rede; no Wi-Fi portátil, os dispositivos ficavam parados '
+                     'em "Conectando…" e as transferências de arquivos paravam. Uma retransmissão '
+                     'travada agora tem até 35 segundos para se recuperar, e o diagnóstico '
+                     'registra por que ela terminou.']},
+ 'ru': {'changes': ['Прямое подключение в мобильных сетях: устройства в сетях операторов, которые '
+                    'выдают порты по порядку (это типично для карманных роутеров Wi-Fi и '
+                    'мобильного интернета), теперь подключаются напрямую, а не только через '
+                    'ретрансляцию. Обновить нужно только устройство в такой сети.',
+                    'Прямое подключение по IPv6: если у обоих устройств есть публичные адреса '
+                    'IPv6, они подключаются напрямую по IPv6, не проходя через NAT.'],
+        'fixes': ['Подключения через ретрансляцию больше не обрываются после нескольких секунд '
+                  'перегрузки сети; с карманным роутером Wi-Fi устройства раньше зависали на '
+                  '«Подключение…», а передача файлов останавливалась. Теперь у зависшей '
+                  'ретрансляции есть до 35 секунд на восстановление, а диагностика записывает, '
+                  'почему она завершилась.']},
+ 'tr': {'changes': ['Mobil ağlarda doğrudan bağlantı: Taşınabilir Wi-Fi ve mobil veride sık '
+                    'görülen, portları sırayla atayan operatör ağlarının arkasındaki cihazlar '
+                    'artık yalnızca aktarmaya bağlı kalmadan doğrudan bağlanabiliyor. Yalnızca o '
+                    'ağdaki cihazın güncellenmesi yeterli.',
+                    'IPv6 ile doğrudan bağlantı: İki cihazın da genel IPv6 adresi varsa hiçbir '
+                    "NAT'tan geçmeden IPv6 üzerinden doğrudan bağlanır."],
+        'fixes': ['Aktarma bağlantıları, ağ birkaç saniye yoğunlaştığında artık kopmuyor; '
+                  'taşınabilir Wi-Fi\'de cihazlar "Bağlanıyor…" durumunda kalıyor ve dosya '
+                  'aktarımları duruyordu. Takılan bir aktarma artık toparlanmak için 35 saniyeye '
+                  'kadar bekliyor ve tanılama, aktarmanın neden sona erdiğini kaydediyor.']},
+ 'uk': {'changes': ['Пряме підключення в мобільних мережах: пристрої в мережах операторів, які '
+                    'видають порти по черзі (це типово для кишенькових роутерів Wi-Fi і мобільного '
+                    'інтернету), тепер підключаються напряму, а не лише через ретрансляцію. '
+                    'Оновити потрібно лише пристрій у такій мережі.',
+                    'Пряме підключення через IPv6: якщо обидва пристрої мають публічні адреси '
+                    'IPv6, вони підключаються напряму через IPv6, не проходячи через NAT.'],
+        'fixes': ['Підключення через ретрансляцію більше не обриваються після кількох секунд '
+                  'перевантаження мережі; з кишеньковим роутером Wi-Fi пристрої раніше зависали на '
+                  '«Підключення…», а передавання файлів зупинялося. Тепер ретрансляція, що '
+                  'зависла, має до 35 секунд на відновлення, а діагностика записує, чому вона '
+                  'завершилася.']},
+ 'vi': {'changes': ['Kết nối trực tiếp trên mạng di động: Các thiết bị sau mạng nhà mạng cấp cổng '
+                    'theo thứ tự, thường gặp với Wi-Fi bỏ túi và dữ liệu di động, nay có thể kết '
+                    'nối trực tiếp thay vì chỉ qua chuyển tiếp. Chỉ cần cập nhật thiết bị ở trong '
+                    'mạng đó.',
+                    'Kết nối trực tiếp qua IPv6: Khi cả hai thiết bị đều có địa chỉ IPv6 công '
+                    'cộng, chúng kết nối trực tiếp qua IPv6 mà không phải đi qua NAT.'],
+        'fixes': ['Kết nối chuyển tiếp không còn bị ngắt sau vài giây mạng nghẽn; trước đây, trên '
+                  'Wi-Fi bỏ túi, thiết bị bị kẹt ở "Đang kết nối…" và việc truyền tệp bị dừng. Nay '
+                  'chuyển tiếp bị nghẽn có tối đa 35 giây để phục hồi, và phần chẩn đoán ghi lại '
+                  'lý do chuyển tiếp kết thúc.']}},
     "2.12.2": {'ar': {'changes': ['مشاركة الملفات من لوحة Android وخدمات Finder والقائمة التقليدية في Windows؛ '
                     'في Windows 11 اختر إظهار المزيد من الخيارات. ثبّت قوائم Nautilus وDolphin من '
                     'الإعدادات > إرسال الملفات.',
