@@ -6,6 +6,7 @@ import (
 	"hash/fnv"
 	"net"
 	"net/netip"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -63,6 +64,24 @@ type EgressReport struct {
 	Probed    int // 发出探测的服务器数（按 IP 去重后）
 	Answered  int // 有响应的服务器数
 	At        time.Time
+	// Predicted 是按端口分配规律推测的、下一条新映射可能用到的公网地址（见 predictPorts）。
+	// 只有对称型 NAT（同一公网 IP 对不同服务器给出不同端口）才有
+	Predicted []netip.AddrPort
+}
+
+// Symmetric 报告这一轮是否看到对称型 NAT：同一个公网 IP 对不同目标给出了不同的端口。
+func (r EgressReport) Symmetric() bool {
+	ports := map[netip.Addr]uint16{}
+	for _, e := range r.Egresses {
+		if e.Guessed() {
+			continue
+		}
+		if p, ok := ports[e.Addr.Addr()]; ok && p != e.Addr.Port() {
+			return true
+		}
+		ports[e.Addr.Addr()] = e.Addr.Port()
+	}
+	return false
 }
 
 // stunProber 由 ice.UniversalUDPMux 实现：在共享的那个端口上做一次 STUN 探测。
@@ -254,20 +273,17 @@ func mustPrefixes(ss ...string) []netip.Prefix {
 
 // srflxCandidates 把探测结果转成发给对端的 srflx candidate 字符串。
 //
-// 实测到的地址排在前面、优先级更高；推算的地址垫底。数量有上限：每多一个地址，
-// 对端就要多做一轮连通性检查。
+// 实测到的地址排在前面、优先级更高；推算的地址其次；端口预测的地址垫底。数量有上限：
+// 每多一个地址，对端就要多做一轮连通性检查。预测的地址单独计数，不挤占实测地址的名额。
 func srflxCandidates(r EgressReport) []string {
 	var out []string
 	seen := map[netip.AddrPort]bool{}
-	add := func(e Egress, localPref int) {
-		if len(out) >= maxSrflxAdvertise || seen[e.Addr] {
-			return
-		}
-		seen[e.Addr] = true
+	add := func(a netip.AddrPort, localPref int) {
+		seen[a] = true
 		// RFC 8445 5.1.2.1：priority = 2^24*type + 2^8*local + (256 - component)
 		priority := (1<<24)*100 + (1<<8)*localPref + 255
 		out = append(out, fmt.Sprintf("candidate:%d 1 udp %d %s %d typ srflx raddr 0.0.0.0 rport %d",
-			candidateFoundation(e.Addr), priority, e.Addr.Addr(), e.Addr.Port(), r.LocalPort))
+			candidateFoundation(a), priority, a.Addr(), a.Port(), r.LocalPort))
 	}
 	var measured, guessed []Egress
 	for _, e := range r.Egresses {
@@ -277,11 +293,183 @@ func srflxCandidates(r EgressReport) []string {
 			measured = append(measured, e)
 		}
 	}
-	for i, e := range measured {
-		add(e, 65535-i)
+	for i, e := range append(measured, guessed...) {
+		if len(out) >= maxSrflxAdvertise {
+			break
+		}
+		if seen[e.Addr] {
+			continue
+		}
+		pref := 65535 - i
+		if e.Guessed() {
+			pref = 32767 - i
+		}
+		add(e.Addr, pref)
 	}
-	for i, e := range guessed {
-		add(e, 32767-i)
+	predicted := 0
+	for i, a := range r.Predicted {
+		if predicted >= maxPredictAdvertise {
+			break
+		}
+		if seen[a] {
+			continue
+		}
+		add(a, 16383-i)
+		predicted++
+	}
+	return out
+}
+
+// ───────────── 对称型 NAT 的端口预测 ─────────────
+//
+// 对称型 NAT 给每个目标分配一个新的公网端口，STUN 探测到的端口只对探测服务器有效，
+// 对端往那里发包会被丢弃——这是对称型 NAT 打不通的根本原因。
+//
+// 但不少对称型 NAT（实测某款随身 WiFi 走的运营商网络）的端口是一个计数器顺序往上加：
+// 同一轮探测里新开的几个映射端口挨在一起（如 59739–59743），一天里只缓慢地往后走，
+// 到 65535 后回到低位。这样下一条新映射——发往对端的那一条——多半就落在刚探测到的
+// 最大端口后面几个号里。把这一段端口也作为出口地址告诉对端，对端的连通性检查会挨个
+// 往这些端口发包：既打开了它自己路由器对这些端口的过滤，也总有一个正好对上本端的
+// 新映射，连接就通了。对端无需任何改动，照常检查收到的 candidate 即可。
+//
+// 端口随机分配的对称型 NAT 预测不中，只是多发了几十个检查包，照旧落到中转。
+const (
+	maxPredictAdvertise = 32               // 发给对端的预测地址上限
+	predictSpan         = 12               // 每段连续分配之后预测的端口数
+	predictClusterGap   = 512              // 端口相距不超过这么多，算同一段连续分配（中途偶有一两百的跳跃）
+	predictPersistAge   = time.Minute      // 两轮探测至少隔这么久，才能据此认出一直保持着的旧映射
+	predictFresh        = 10 * time.Second // 握手时探测结果超过这么久，先重新探测，预测要用最新的计数
+	natPortFloor        = 1024             // 端口计数到 65535 后假定从这里重新开始
+)
+
+// predictPorts 为对称型 NAT 推测接下来会分配的公网端口。
+//
+// 按公网 IP 分组，把本轮实测的端口按「相距不远」分段，每一段的末尾（最新分配的那个）
+// 之后预测 predictSpan 个端口。分段而不是只看最大值：运营商 NAT 可能有不止一个计数器
+// （比如另一个公网 IP 或另一段端口池），只看最大值会押错。
+//
+// prev 是上一轮探测：间隔足够久仍原样出现的映射是一直保持着的旧映射（发往某台服务器的
+// 映射被保活），它们所在的段不代表当前计数，排到最后。
+func predictPorts(cur, prev EgressReport) []netip.AddrPort {
+	if !cur.Symmetric() {
+		return nil
+	}
+	persistent := map[netip.AddrPort]bool{}
+	if !prev.At.IsZero() && prev.LocalPort == cur.LocalPort && cur.At.Sub(prev.At) >= predictPersistAge {
+		for _, e := range prev.Egresses {
+			if !e.Guessed() {
+				persistent[e.Addr] = true
+			}
+		}
+	}
+
+	type cluster struct {
+		ip    netip.Addr
+		top   int // 段内最新分配的端口
+		size  int
+		stale bool // 段内全是上一轮就有的旧映射
+	}
+	var clusters []cluster
+	seen := map[netip.AddrPort]bool{}
+	var ipOrder []netip.Addr
+	byIP := map[netip.Addr][]int{}
+	for _, e := range cur.Egresses {
+		if e.Guessed() {
+			continue
+		}
+		seen[e.Addr] = true
+		ip := e.Addr.Addr()
+		if _, ok := byIP[ip]; !ok {
+			ipOrder = append(ipOrder, ip)
+		}
+		byIP[ip] = append(byIP[ip], int(e.Addr.Port()))
+	}
+	for _, ip := range ipOrder {
+		for _, seg := range portClusters(byIP[ip]) {
+			stale := true
+			for _, port := range seg {
+				if !persistent[netip.AddrPortFrom(ip, uint16(port))] {
+					stale = false
+				}
+			}
+			clusters = append(clusters, cluster{ip: ip, top: seg[len(seg)-1], size: len(seg), stale: stale})
+		}
+	}
+	// 新分配的段在前，其中端口多的（计数器最活跃的）在前
+	sort.SliceStable(clusters, func(i, j int) bool {
+		if clusters[i].stale != clusters[j].stale {
+			return !clusters[i].stale
+		}
+		return clusters[i].size > clusters[j].size
+	})
+
+	var out []netip.AddrPort
+	for _, c := range clusters {
+		port := c.top
+		for n := 0; n < predictSpan && len(out) < maxPredictAdvertise; {
+			port = nextNATPort(port)
+			a := netip.AddrPortFrom(c.ip, uint16(port))
+			if seen[a] {
+				continue // 已是发往别处的映射，不会再分给新目标
+			}
+			seen[a] = true
+			out = append(out, a)
+			n++
+		}
+	}
+	return out
+}
+
+// portClusters 把端口分成若干段「连续分配」：排序后相邻两个相距不超过 predictClusterGap 的归为一段。
+// 计数到顶后会回到低位，跨过 65535 的两段首尾相接，合成一段。每段按分配先后排列，末尾是最新的。
+func portClusters(ports []int) [][]int {
+	if len(ports) == 0 {
+		return nil
+	}
+	sorted := slices.Clone(ports)
+	slices.Sort(sorted)
+	sorted = slices.Compact(sorted)
+	var segs [][]int
+	start := 0
+	for i := 1; i <= len(sorted); i++ {
+		if i == len(sorted) || sorted[i]-sorted[i-1] > predictClusterGap {
+			segs = append(segs, sorted[start:i])
+			start = i
+		}
+	}
+	if len(segs) > 1 {
+		first, last := segs[0], segs[len(segs)-1]
+		if (65535-last[len(last)-1])+(first[0]-natPortFloor) <= predictClusterGap {
+			// 高位那段在前（先分配），回绕后的低位那段在后
+			merged := append(slices.Clone(last), first...)
+			segs = append([][]int{merged}, segs[1:len(segs)-1]...)
+		}
+	}
+	return segs
+}
+
+// nextNATPort 是端口计数的下一个值，到顶后回到低位。
+func nextNATPort(p int) int {
+	if p >= 65535 {
+		return natPortFloor
+	}
+	return p + 1
+}
+
+// predictedSummary 把预测的地址压缩成「IP:起-止」的区间，用于日志。
+func predictedSummary(addrs []netip.AddrPort) []string {
+	var out []string
+	for i := 0; i < len(addrs); {
+		j := i
+		for j+1 < len(addrs) && addrs[j+1].Addr() == addrs[i].Addr() && int(addrs[j+1].Port()) == nextNATPort(int(addrs[j].Port())) {
+			j++
+		}
+		s := addrs[i].String()
+		if j > i {
+			s += fmt.Sprintf("-%d", addrs[j].Port())
+		}
+		out = append(out, s)
+		i = j + 1
 	}
 	return out
 }

@@ -12,6 +12,7 @@ import (
 
 	"github.com/baiyuze/pasteferry/client-core/internal/gateway"
 	"github.com/pion/ice/v4"
+	"github.com/pion/transport/v5"
 	"github.com/pion/webrtc/v4"
 
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
@@ -44,6 +45,8 @@ type Manager struct {
 	// 只有共用一个端口，各台探测服务器问到的公网地址才对同一个端口成立（见 egress.go）。
 	mux          *ice.UniversalUDPMuxDefault
 	localPort    int
+	net          transport.Net // 为空时用系统网络；测试时是虚拟网络
+	noPredict    bool
 	probeOpts    probeOptions
 	probeServers func() []string
 	history      *egressHistory
@@ -79,6 +82,10 @@ type ManagerOptions struct {
 	// DisableEgressProbe 退回 pion 默认的候选收集方式：每个 STUN 服务器各开一个端口，
 	// 不做多出口探测。NAT 实验室用它复现旧版本的行为作对照
 	DisableEgressProbe bool
+	// DisablePortPrediction 不做对称型 NAT 的端口预测（见 predictPorts），供测试作对照
+	DisablePortPrediction bool
+	// Net 替换打洞端口与直连所用的网络，仅供测试（pion 的虚拟网络）
+	Net transport.Net
 }
 
 func NewManager(opts ManagerOptions) *Manager {
@@ -97,6 +104,8 @@ func NewManager(opts ManagerOptions) *Manager {
 		onStream:     opts.OnStream,
 		peers:        make(map[string]*Peer),
 		forceRelay:   opts.ForceRelay,
+		net:          opts.Net,
+		noPredict:    opts.DisablePortPrediction,
 		probeOpts:    probeOptions{AllowPrivate: opts.ProbeAllowPrivate},
 		probeServers: opts.ProbeServers,
 		history:      loadEgressHistory(opts.StatePath),
@@ -107,13 +116,19 @@ func NewManager(opts ManagerOptions) *Manager {
 	if opts.DisableEgressProbe {
 		return m
 	}
-	conn, err := net.ListenUDP("udp4", &net.UDPAddr{})
+	var conn net.PacketConn
+	var err error
+	if opts.Net != nil {
+		conn, err = opts.Net.ListenUDP("udp4", &net.UDPAddr{})
+	} else {
+		conn, err = net.ListenUDP("udp4", &net.UDPAddr{})
+	}
 	if err != nil {
 		// 开不出共享端口就退回 pion 的默认做法：功能不受影响，只是多出口网络里难以直连
 		log.Warn("无法打开打洞端口，退回默认的候选收集方式", "err", err)
 		return m
 	}
-	m.mux = ice.NewUniversalUDPMuxDefault(ice.UniversalUDPMuxParams{UDPConn: conn})
+	m.mux = ice.NewUniversalUDPMuxDefault(ice.UniversalUDPMuxParams{UDPConn: conn, Net: opts.Net})
 	m.localPort = conn.LocalAddr().(*net.UDPAddr).Port
 
 	go m.egressLoop()
@@ -235,6 +250,7 @@ func (m *Manager) runProbe(done chan struct{}) {
 	for {
 		m.egressMu.Lock()
 		servers := slices.Clone(m.serverSTUN)
+		prev := m.egress
 		m.egressMu.Unlock()
 		if m.probeServers != nil {
 			servers = append(servers, m.probeServers()...)
@@ -245,6 +261,9 @@ func (m *Manager) runProbe(done chan struct{}) {
 			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			report = probeEgress(ctx, m.mux, m.localPort, servers, m.probeOpts)
 			cancel()
+		}
+		if !m.noPredict {
+			report.Predicted = predictPorts(report, prev)
 		}
 		network := localNetworkKey()
 		m.history.record(network, report)
@@ -262,8 +281,11 @@ func (m *Manager) runProbe(done chan struct{}) {
 			summary = append(summary, s)
 		}
 		if len(servers) > 0 {
-			m.log.Info("出口探测完成", "本地端口", m.localPort, "出口", summary,
-				"响应", report.Answered, "探测", report.Probed)
+			attrs := []any{"本地端口", m.localPort, "出口", summary, "响应", report.Answered, "探测", report.Probed}
+			if len(report.Predicted) > 0 {
+				attrs = append(attrs, "对称型NAT预测", predictedSummary(report.Predicted))
+			}
+			m.log.Info("出口探测完成", attrs...)
 		}
 
 		m.egressMu.Lock()
@@ -307,7 +329,15 @@ func (m *Manager) advertisedCandidates() []string {
 	}
 	m.egressMu.Lock()
 	wait := m.probing
+	stale := wait == nil && len(m.egress.Predicted) > 0 && time.Since(m.egress.At) > predictFresh
 	m.egressMu.Unlock()
+	if stale {
+		// 对称型 NAT 的端口计数一直在往后走，几分钟前的探测结果预测不准，先重新探测一轮
+		m.triggerProbe()
+		m.egressMu.Lock()
+		wait = m.probing
+		m.egressMu.Unlock()
+	}
 	if wait != nil {
 		select {
 		case <-wait:
@@ -529,6 +559,7 @@ func (m *Manager) peer(deviceID string) (*Peer, error) {
 		Logger:          m.log,
 		ICEServers:      iceServers,
 		ForceRelay:      forceRelay,
+		Net:             m.net,
 		UDPMux:          mux,
 		ExtraCandidates: m.advertisedCandidates,
 		RefreshEgress:   m.refreshEgress,

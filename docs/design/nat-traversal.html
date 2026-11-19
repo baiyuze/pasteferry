@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>多出口网络的 NAT 打洞：隔空贴技术方案</title>
-  <meta name="description" content="状态：已实现。多出口探测随 1.1.0 发布（2026-10-08）；中转后换直连、连接失效检测与补发随 1.1.1 发布（2026-10-09）；谁先发包随 1.1.2 发布（2026-10-09）">
+  <meta name="description" content="状态：已实现。多出口探测随 1.1.0 发布（2026-10-08）；中转后换直连、连接失效检测与补发随 1.1.1 发布（2026-10-09）；谁先发包随 1.1.2 发布（2026-10-09）；对称型 NAT 的端口预测随 2.13.0 发布">
   <link rel="canonical" href="https://pasteferry.cc/design/nat-traversal.html">
   <meta name="theme-color" content="#141416">
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
@@ -36,7 +36,7 @@
     <article class="article">
       <p class="crumb"><a href="../">隔空贴</a>的技术方案</p>
       <h1>多出口网络的 NAT 打洞</h1>
-<blockquote><p>状态：已实现。多出口探测随 1.1.0 发布（2026-10-08）；中转后换直连、连接失效检测与补发随 1.1.1 发布（2026-10-09）；谁先发包随 1.1.2 发布（2026-10-09）</p><p>代码：<code>client-core/internal/transport/p2p/egress*.go</code>、<code>manager.go</code>、<code>peer.go</code>；补发在 <code>client-core/internal/sync/backlog.go</code></p><p>验证：<code>tools/natlab/</code>（NAT 打洞实验室，CI 中运行）</p></blockquote>
+<blockquote><p>状态：已实现。多出口探测随 1.1.0 发布（2026-10-08）；中转后换直连、连接失效检测与补发随 1.1.1 发布（2026-10-09）；谁先发包随 1.1.2 发布（2026-10-09）；对称型 NAT 的端口预测随 2.13.0 发布</p><p>代码：<code>client-core/internal/transport/p2p/egress*.go</code>、<code>manager.go</code>、<code>peer.go</code>；补发在 <code>client-core/internal/sync/backlog.go</code></p><p>验证：<code>tools/natlab/</code>（NAT 打洞实验室，CI 中运行）</p></blockquote>
 <nav class="toc" aria-label="目录"><strong>目录</strong><ul><li><a href="#一-问题">一、问题</a></li><li><a href="#二-测量">二、测量</a></li><li><a href="#三-方案">三、方案</a></li><li><a href="#四-能覆盖哪些场景">四、能覆盖哪些场景</a></li><li><a href="#五-验证">五、验证</a></li><li><a href="#六-踩过的坑">六、踩过的坑</a></li><li><a href="#七-局限与后续">七、局限与后续</a></li></ul></nav>
 <h2 id="一-问题">一、问题</h2>
 <p>两台 Mac 配对成功，同步也正常，但设备列表里一直显示「中转」：数据全部经服务器转发，速度被服务器带宽卡在约 0.6 MB/s。</p>
@@ -103,16 +103,24 @@
 <p>NAT 实验室起初没有复现，是因为模拟路由器都丢弃外来的新连接（第六节「踩过的坑」里那条），而且实验室里信令没有延迟，两端几乎同时发包。去掉公司侧路由器的丢弃规则、给信令加上 80 毫秒延迟后，旧代码稳定落到中转，后续的重启也都失败；连探测服务器看到的公网端口都被挤得变了，与实测公司网络里出口 C、D 端口忽变的现象一致。</p>
 <p><strong>做法。</strong>让「先发包」由规则决定，而不是靠运气：</p>
 <ul><li>等待的一方先不公布出口地址，等收到对方本轮的出口地址、本端发往那里的包已经发出（再留 200 毫秒），才公布自己的。这样本端的路由器先有一条本端发起的记录，对方的包回来正好对上；先收到陌生包的是对方的路由器。最多等 3 秒，对方是没有出口地址的旧版本时照常发出。</li><li>初次握手由发起方等。用户这一对设备里发起方恰好是公司那台，初次握手就能打通。</li><li>若先收到包的那一侧路由器才是会占端口的，初次握手会失败。所以换直连的重试里两种顺序轮流用：第一次重试请应答方等（<code>SdpOffer.answerer_waits</code>），第二次换回发起方等，依此类推。哪一侧的路由器有这个毛病，最多一次重试就能避开；两侧都有就只能中转。</li><li>「出口地址」靠格式识别：出口探测生成的 srflx candidate 不带 ufrag 扩展，pion 自己收集的都带。</li></ul>
+<h3 id="11-对称型-nat-的端口预测-2-13-0">11. 对称型 NAT 的端口预测（2.13.0）</h3>
+<p>一位用户的 Windows 用随身 WiFi 上网，与另一台 Mac 一整天没有直连过一次。诊断报告里，Windows 每轮探测得到的公网端口都随服务器而变：对称型 NAT，每个目标一个新端口，探测到的端口对端用不上。但端口并不随机——全天的探测记录是一个计数器顺序往上加：</p>
+<div class="table-scroll"><table><thead><tr><th scope="col">时间</th><th scope="col">新分配的端口</th></tr></thead><tbody><tr><td>00:05</td><td>55053、55054</td></tr><tr><td>06:35</td><td>56534、56535、56536</td></tr><tr><td>15:55</td><td>59739–59743</td></tr><tr><td>21:50</td><td>64198、64199</td></tr><tr><td>22:20</td><td>2969、2970（到 65535 后回到低位）</td></tr></tbody></table></div>
+<p>一天只走了约一万个号，同一轮里新开的映射挨在一起，偶尔跳一两百。于是发往对端的那条新映射多半落在刚探测到的最大端口后面几个号里。</p>
+<p>做法（<code>predictPorts</code>）：</p>
+<ul><li>同一公网 IP 对不同服务器给出不同端口，才认定为对称型 NAT 并预测；端口不随目标变化的 NAT 不受影响。</li><li>按公网 IP 分组，把端口按「相距不超过 512」分段，跨过 65535 的首尾两段合并。每段末尾（最新分配的）之后预测 12 个端口，全部不超过 32 个。分段而不是只看最大值：运营商 NAT 可能有不止一个计数器，实测就有另一组号单独递增。</li><li>与一分钟以前的上一轮相比原样未变的映射是被保活的旧映射，所在的段排到最后。</li><li>预测的地址作为 srflx candidate 排在实测地址之后、优先级最低，单独计数，不挤占实测地址的名额。</li><li>计数器一直在走，几分钟前的结果预测不准：握手时探测结果超过 10 秒就先重探一轮（仍受 4 秒的等待上限约束）。</li><li>对端的连通性检查会挨个往这些端口发包，既打开了它自己路由器对这些端口的过滤，也总有一个对上本端的新映射。<strong>只需对称型 NAT 这一侧升级</strong>，对端照常检查收到的 candidate 即可。</li><li>端口随机分配的对称型 NAT 预测不中，只多发几十个检查包，照旧落到中转。日志「出口探测完成」里多出「对称型NAT预测」一项，诊断报告里能看到预测了哪些端口。</li></ul>
 <h3 id="代码位置">代码位置</h3>
-<div class="table-scroll"><table><thead><tr><th scope="col">文件</th><th scope="col">内容</th></tr></thead><tbody><tr><td><code>p2p/egress.go</code></td><td>探测、地址过滤、srflx candidate 生成</td></tr><tr><td><code>p2p/egress_history.go</code></td><td>出口历史与推算</td></tr><tr><td><code>p2p/manager.go</code></td><td>共享端口、探测时机、把地址交给每个连接</td></tr><tr><td><code>p2p/peer.go</code></td><td>发送出口地址（含谁先发包）、中转等待、<code>LinkInfo</code>、ICE 重启换直连、失效连接的清理</td></tr><tr><td><code>sync/backlog.go</code></td><td>逐台发送、待补发队列、连接恢复后补发</td></tr><tr><td><code>server/relay/turn.go</code></td><td>TURN 可绑定指定 IP（<code>ListenIP</code>），实验室需要</td></tr></tbody></table></div>
+<div class="table-scroll"><table><thead><tr><th scope="col">文件</th><th scope="col">内容</th></tr></thead><tbody><tr><td><code>p2p/egress.go</code></td><td>探测、地址过滤、srflx candidate 生成、对称型 NAT 的端口预测</td></tr><tr><td><code>p2p/egress_history.go</code></td><td>出口历史与推算</td></tr><tr><td><code>p2p/manager.go</code></td><td>共享端口、探测时机、把地址交给每个连接</td></tr><tr><td><code>p2p/peer.go</code></td><td>发送出口地址（含谁先发包）、中转等待、<code>LinkInfo</code>、ICE 重启换直连、失效连接的清理</td></tr><tr><td><code>sync/backlog.go</code></td><td>逐台发送、待补发队列、连接恢复后补发</td></tr><tr><td><code>server/relay/turn.go</code></td><td>TURN 可绑定指定 IP（<code>ListenIP</code>），实验室需要</td></tr></tbody></table></div>
 <h2 id="四-能覆盖哪些场景">四、能覆盖哪些场景</h2>
-<div class="table-scroll"><table><thead><tr><th scope="col">本端</th><th scope="col">对端</th><th scope="col">结果</th></tr></thead><tbody><tr><td>单出口</td><td>单出口</td><td>直连</td></tr><tr><td>多出口（按目标 IP 选）</td><td>单出口</td><td>直连</td></tr><tr><td>多出口</td><td>多出口</td><td>直连（实验室验证；能否成立取决于两边线路组合，属于尽力而为）</td></tr><tr><td>任意</td><td>端口随机分配的 NAT</td><td>中转</td></tr><tr><td>任意</td><td>UDP 被拦截</td><td>中转</td></tr><tr><td>同一局域网</td><td>—</td><td>直连</td></tr></tbody></table></div>
+<div class="table-scroll"><table><thead><tr><th scope="col">本端</th><th scope="col">对端</th><th scope="col">结果</th></tr></thead><tbody><tr><td>单出口</td><td>单出口</td><td>直连</td></tr><tr><td>多出口（按目标 IP 选）</td><td>单出口</td><td>直连</td></tr><tr><td>多出口</td><td>多出口</td><td>直连（实验室验证；能否成立取决于两边线路组合，属于尽力而为）</td></tr><tr><td>端口不随目标变化的 NAT</td><td>端口顺序分配的对称型 NAT（2.13.0）</td><td>直连（端口预测）</td></tr><tr><td>任意</td><td>端口随机分配的 NAT</td><td>中转</td></tr><tr><td>任意</td><td>UDP 被拦截</td><td>中转</td></tr><tr><td>同一局域网</td><td>—</td><td>直连</td></tr></tbody></table></div>
 <p>只要多出口的一侧升级，就能与旧版本的对端直连：新增的只是标准的 srflx candidate，旧版本照常处理。</p>
 <h2 id="五-验证">五、验证</h2>
 <h3 id="单元测试与集成测试">单元测试与集成测试</h3>
 <p><code>p2p/egress_test.go</code>：解析服务器地址；过滤污染地址；同一出口被多台服务器看到时归并；区分改写端口与不改写端口；按历史补出口、换网络不串用、过期失效；生成的 candidate 能被 pion 解析，且实测地址优先级高于推算地址。</p>
 <p><code>p2p/egress_integration_test.go</code>：起一台本机 STUN 服务，验证管理器在共享端口上完成探测，把出口地址作为 srflx candidate 发给对端，连接照常建立。</p>
 <p><code>p2p/upgrade_test.go</code>（1.1.1）：ICE 重启期间两端状态一直是直连、重启中发出的消息照样送达；中转时发起方自己重启并改回直连，礼让方不主动重启；对端换了证书时本端重建连接（去掉这个处理，测试会卡在「连接中」）；连接断开时发送报错。信令桩异步、不保序地投递，比真实服务器更苛刻。<code>TestEgressOrder</code>（1.1.2）核对出口地址的收发顺序：初次握手发起方先收到对方的再发自己的，请应答方等的重启反过来；去掉等待，这个测试会失败。</p>
+<p><code>p2p/predict_test.go</code>（2.13.0）：用上面那台随身 WiFi 的真实端口序列核对预测：顺序分配时预测窗口紧跟最新端口；保活的旧映射排到最后；计数回绕后从低位往后预测；跨过 65535 的一段合并；不预测已知映射、总数有上限；端口不随目标变化时不预测。</p>
+<p><code>p2p/symmetric_nat_test.go</code>（2.13.0）：在 pion 的虚拟网络里搭一台端口限制型 NAT（Mac 那边）与一台端口顺序分配的对称型 NAT（随身 WiFi），各接 5 台 STUN 服务器。做端口预测时，无论哪一侧发起都能直连；关掉预测的对照组 15 秒内打不通。</p>
 <p><code>sync/backlog_test.go</code>（1.1.1）：连不上的设备在连接恢复后按复制先后收到补发、带补发标记，已送达的不重复；太旧的、已删除的不补发，补发途中又断开的留到下次；收到补发的文件不写进剪贴板。</p>
 <h3 id="nat-打洞实验室">NAT 打洞实验室</h3>
 <p><code>tools/natlab/run.sh</code> 用 Linux 网络命名空间与 iptables 搭出真实拓扑，<code>client-core/cmd/natlab</code> 用隔空贴真实的 P2P 代码扮演两台设备：</p>
@@ -137,7 +145,7 @@
 <h2 id="六-踩过的坑">六、踩过的坑</h2>
 <ul><li><strong>pion 为每台 STUN 服务器单独开端口。</strong>这是多配 STUN 服务器也打不通的原因，也是改用共享端口的出发点。</li><li><strong>单靠本端判断「是否中转」会出错。</strong>一端经 TURN 发送时，另一端看到的源地址可能是 peer-reflexive 地址，并不标为 relay。这曾导致两台设备一台显示直连、一台显示中转，靠两端交换 <code>LinkInfo</code> 解决。</li><li><strong>实验室路由器必须丢弃外网主动发起的新连接。</strong>两端同时打洞时，对方的包可能先到达本端路由器。若放行到路由器本机，Linux conntrack 会为它建一条「未应答」记录；随后本端往外发时源端口与之冲突，SNAT 只好换一个端口，事先告诉对端的地址就失效了。真实路由器的防火墙直接丢弃这类包，被丢弃的包不会留下连接记录。没加这条规则时，连最简单的单出口场景都会误判为打不通。</li><li><strong>公共 STUN 域名可能被污染。</strong><code>stun.syncthing.net</code> 在测试网络里被解析到 <code>192.0.2.42</code>。不过滤的话，要么白等超时，要么被当成一个出口。</li><li><strong>实验室场景要互相隔离。</strong>出口历史文件跨场景残留，曾让「无历史」场景意外直连。这反过来也说明历史推算确实生效。</li><li><strong>pion 选定 candidate 对后不再更换。</strong>一次握手输给中转，整个连接期间都是中转。等待时限只能降低输的概率，要补救得靠 ICE 重启（第 8 节）。</li><li><strong>模拟路由器太「规矩」会掩盖问题。</strong>实验室里的路由器都丢弃外来的新连接、信令又没有延迟，于是「谁先发包」从来不是问题；真实的公司路由器会为外来包占住端口，信令也要绕服务器几十毫秒。现在实验室两种路由器都有，会占端口的场景给信令加了延迟。</li><li><strong>pion 报告失败后不会自己关闭连接</strong>，控制通道也仍显示打开。只把状态改成离线是不够的，必须关闭清理，否则上层永远不会重连（第 9 节）。</li></ul>
 <h2 id="七-局限与后续">七、局限与后续</h2>
-<ul><li><strong>对端是端口随机分配的 NAT 时仍会中转。</strong>理论上可以做端口预测或大规模并发打洞，但成功率低、流量大，暂不做。</li><li><strong>UDP 被拦截时只能中转。</strong>后续可以增加 TURN over TCP/TLS（443 端口）。</li><li><strong>探测覆盖取决于服务器 IP 的分散程度。</strong>线路越多，越需要更多 IP。服务器可以用 <code>-stun</code> 参数下发更多 STUN 地址，客户端会一并探测。</li><li><strong>待补发队列只在内存里。</strong>本机后台服务重启后清空；对方离线超过 24 小时的内容也不补发。</li><li><strong>两边都有公网 IPv6 时最省事。</strong>pion 会直接收集 IPv6 地址，无需穿越 NAT。这次的两台设备都没有。</li></ul>
+<ul><li><strong>对端是端口随机分配的 NAT 时仍会中转。</strong>端口顺序分配的对称型 NAT 已能靠预测直连（第 11 节）；随机分配的要靠「困难一侧开几百个端口、另一侧随机探测」的生日法，要绕开 pion 自己收发，流量也像端口扫描，暂不做。两侧都是对称型 NAT 时只能中转。</li><li><strong>UDP 被拦截时只能中转。</strong>后续可以增加 TURN over TCP/TLS（443 端口）。</li><li><strong>探测覆盖取决于服务器 IP 的分散程度。</strong>线路越多，越需要更多 IP。服务器可以用 <code>-stun</code> 参数下发更多 STUN 地址，客户端会一并探测。</li><li><strong>待补发队列只在内存里。</strong>本机后台服务重启后清空；对方离线超过 24 小时的内容也不补发。</li><li><strong>两边都有公网 IPv6 时最省事。</strong>pion 会直接收集 IPv6 地址，无需穿越 NAT。这次的两台设备都没有。</li></ul>
     </article>
   </main>
 
