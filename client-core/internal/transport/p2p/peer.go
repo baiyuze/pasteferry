@@ -253,6 +253,12 @@ func (p *Peer) LANAddr() (netip.Addr, bool) {
 		p.log.Info("对端地址不能用来开快速通道", "remote", pair.Remote.Address)
 		return netip.Addr{}, false
 	}
+	if publicIPv6(remote.Unmap()) && !onLocalIPv6Subnet(remote) {
+		// 公网 IPv6 的 host 对 host 可能跨着整个互联网：对方的防火墙一般不放行
+		// 外来的 TCP 连接，快速通道开不起来，直接用数据通道
+		p.log.Info("经公网 IPv6 直连，不是局域网，隔空传送不走快速通道")
+		return netip.Addr{}, false
+	}
 	local, err := sourceAddrFor(remote.Unmap())
 	if err != nil {
 		p.log.Info("找不到发往对端用的本机地址", "remote", remote, "err", err)

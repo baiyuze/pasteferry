@@ -44,6 +44,8 @@ type Manager struct {
 	// 打洞共用的那一个本地 UDP 端口，所有连接都从它收发。
 	// 只有共用一个端口，各台探测服务器问到的公网地址才对同一个端口成立（见 egress.go）。
 	mux          *ice.UniversalUDPMuxDefault
+	mux6         *ice.UDPMuxDefault // IPv6 打洞端口（见 ipv6.go）；本机没有 IPv6 时为空
+	iceMux       ice.UDPMux         // 交给 pion 的：IPv4 共享端口，有 IPv6 时再合上 IPv6 端口
 	localPort    int
 	net          transport.Net // 为空时用系统网络；测试时是虚拟网络
 	noPredict    bool
@@ -130,6 +132,14 @@ func NewManager(opts ManagerOptions) *Manager {
 	}
 	m.mux = ice.NewUniversalUDPMuxDefault(ice.UniversalUDPMuxParams{UDPConn: conn, Net: opts.Net})
 	m.localPort = conn.LocalAddr().(*net.UDPAddr).Port
+	m.iceMux = m.mux
+	if opts.Net == nil {
+		if m.mux6 = openIPv6Mux(m.localPort); m.mux6 != nil {
+			m.iceMux = &dualStackMux{v4: m.mux, v6: m.mux6}
+		} else {
+			log.Info("本机没有 IPv6，只用 IPv4 打洞")
+		}
+	}
 
 	go m.egressLoop()
 	m.triggerProbe()
@@ -189,6 +199,9 @@ func (m *Manager) Close() {
 		close(m.stop)
 		if m.mux != nil {
 			_ = m.mux.Close()
+		}
+		if m.mux6 != nil {
+			_ = m.mux6.Close()
 		}
 	})
 }
@@ -550,8 +563,8 @@ func (m *Manager) peer(deviceID string) (*Peer, error) {
 	m.mu.Unlock()
 
 	var mux ice.UDPMux
-	if m.mux != nil {
-		mux = m.mux
+	if m.iceMux != nil {
+		mux = m.iceMux
 	}
 	p, err := NewPeer(PeerOptions{
 		DeviceID:        deviceID,
