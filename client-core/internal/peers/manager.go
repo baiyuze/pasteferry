@@ -782,8 +782,13 @@ func (m *Manager) handlePresence(deviceID string, online bool) {
 		if notice {
 			go m.sendNotices()
 		}
-	} else if !m.lan.Reachable(deviceID) {
-		// 服务器说对方下线了，局域网里也找不到：连接多半已经失效
+	} else if !m.lan.Reachable(deviceID) && !connected(m.p2p.State(deviceID)) {
+		// 服务器说对方下线了，局域网里也找不到：连接多半已经失效。
+		//
+		// 但连接还通着（直连或中转）就留着：对方多半只是网络卡了一下，信令先断了，
+		// P2P 连接未必有事。它真断了 ICE 自己能发现（5 秒报断开、30 秒报失败），
+		// 不必在这里拆掉重连——只能中转的一对设备重建中转要几十秒，随身 WiFi 这类
+		// 时断时续的网络上，一拆就再也用不上。
 		m.p2p.Disconnect(deviceID)
 		m.mu.Lock()
 		delete(m.conn, deviceID)

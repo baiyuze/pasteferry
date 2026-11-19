@@ -356,7 +356,7 @@ func (m *Manager) RetryDirect(ctx context.Context, deviceID string) error {
 func (m *Manager) retryDirect(ctx context.Context, deviceID string) error {
 	m.mu.RLock()
 	p := m.peers[deviceID]
-	a := m.relays[deviceID]
+	relayed := m.relayCarryingLocked(deviceID)
 	m.mu.RUnlock()
 	if p == nil {
 		return m.Connect(ctx, deviceID)
@@ -364,7 +364,7 @@ func (m *Manager) retryDirect(ctx context.Context, deviceID string) error {
 	if p.State() == StateDirect {
 		return nil
 	}
-	if a != nil && a.peer != nil && a.peer.State() == StateRelay {
+	if relayed {
 		// 官方中转是另一条连接，照常用着；直连那条带上新探测的出口地址从头再打一次洞，
 		// 打通后发送自动换到直连（见 selectedLocked），中转随之释放
 		m.log.Info("经官方中转，按用户要求重新尝试直连", "peer", deviceID)
@@ -476,13 +476,8 @@ func (m *Manager) LANAddr(deviceID string) (netip.Addr, bool) {
 
 func (m *Manager) State(deviceID string) ConnState {
 	m.mu.RLock()
-	p := m.selectedLocked(deviceID)
-	m.mu.RUnlock()
-
-	if p == nil {
-		return StateOffline
-	}
-	return p.State()
+	defer m.mu.RUnlock()
+	return m.stateLocked(deviceID)
 }
 
 // Disconnect 断开并丢弃与某个对端的连接（解除配对或对端离线时）。
@@ -547,11 +542,10 @@ func (m *Manager) peer(deviceID string) (*Peer, error) {
 				m.stopOfficial(deviceID)
 			}
 			m.mu.RLock()
-			active := m.selectedLocked(deviceID)
-			m.mu.RUnlock()
-			if active != nil && active.State() == StateRelay {
+			if m.stateLocked(deviceID) == StateRelay {
 				s = StateRelay
 			}
+			m.mu.RUnlock()
 			if m.onState != nil {
 				m.onState(deviceID, s)
 			}

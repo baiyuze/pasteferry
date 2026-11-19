@@ -29,6 +29,17 @@ adapter. Keep the direct connection independent so a later successful direct
 attempt can release the relay. An offline/legacy peer or signaling error is
 not evidence that relay authorization should be requested.
 
+A connected relay that stalls is not abandoned at once (2.13.0). The tunnel
+is TCP, so a congested mobile link can hold packets for several seconds, and
+ICE then reports Disconnected after five seconds without traffic. Until 2.13.0
+that transient state closed the relay, released the session and imposed a
+one-minute cooldown, so relays over portable Wi-Fi rarely lasted beyond
+seconds. Now, while the PeerConnection stays open, the client keeps the relay
+selected and reported as relayed for up to 35 seconds; ICE's Failed verdict
+(30 seconds without traffic), a closed tunnel or the deadline releases it, and
+the real state is then reported once. Every release logs a warning with its
+reason, so diagnostics show why a relay ended.
+
 Signed SignalMessage adds optional `connection_attempt_id`, `official_relay`
 and `gateway_capable` and `relay_denial_code` fields. The server forwards the original signed payload;
 it does not interpret these capabilities. PeerDisplay travels only inside the

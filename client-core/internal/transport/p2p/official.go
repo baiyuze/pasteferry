@@ -9,6 +9,7 @@ import (
 	"net"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	pb "github.com/baiyuze/pasteferry/proto/gen/pasteferry/v1"
@@ -16,6 +17,16 @@ import (
 )
 
 const officialDirectWait = 8 * time.Second
+
+// 官方中转暂时断开后，等它自己恢复的时限与检查间隔（变量供测试缩短）。
+//
+// 中转的数据走 WSS 隧道（TCP），4G、随身 WiFi 一卡顿，几秒收不到包是常事。
+// pion 5 秒收不到就报 Disconnected，这只是「暂时断开」，包一恢复就自动回到 Connected；
+// 30 秒仍没有包才报 Failed。时限要比这长，让 pion 先作结论。
+var (
+	relayRecoveryWait = 35 * time.Second
+	relayRecoveryPoll = time.Second
+)
 
 type officialAttempt struct {
 	id          string
@@ -25,21 +36,43 @@ type officialAttempt struct {
 	pending     []*pb.SignalMessage
 	failedUntil time.Time
 	failReason  string
-	mu          sync.Mutex
+	// recovering 表示中转暂时断开、正在等它恢复。这期间仍把中转当作当前连接，
+	// 不向上层报告离线，免得一次卡顿就打断发送、让界面跳回「正在连接」
+	recovering atomic.Bool
+	mu         sync.Mutex
 }
 
 func (m *Manager) officialEnabled() bool {
 	return m.gateway != nil && m.official != nil && m.official()
 }
+
+// relayCarryingLocked 报告官方中转是否正承载与该设备的连接：已连通，或暂时断开、正在等它恢复。
+func (m *Manager) relayCarryingLocked(id string) bool {
+	a := m.relays[id]
+	return a != nil && a.peer != nil && (a.peer.State() == StateRelay || a.recovering.Load())
+}
+
 func (m *Manager) selectedLocked(id string) *Peer {
 	p := m.peers[id]
 	if p != nil && p.State() == StateDirect {
 		return p
 	}
-	if a := m.relays[id]; a != nil && a.peer != nil && a.peer.State() == StateRelay {
-		return a.peer
+	if m.relayCarryingLocked(id) {
+		return m.relays[id].peer
 	}
 	return p
+}
+
+// stateLocked 是对上层报告的连接状态：中转暂时断开、等待恢复时仍报「中转」。
+func (m *Manager) stateLocked(id string) ConnState {
+	p := m.selectedLocked(id)
+	if p == nil {
+		return StateOffline
+	}
+	if a := m.relays[id]; a != nil && p == a.peer && a.recovering.Load() {
+		return StateRelay
+	}
+	return p.State()
 }
 func (m *Manager) scheduleFallback(id string) {
 	if !m.officialEnabled() || m.selfID > id {
@@ -190,22 +223,7 @@ func (m *Manager) startOfficial(deviceID, id string, initial *pb.SignalMessage, 
 				msg.ConnectionAttemptId = id
 				return m.sendSignal(ctx, deviceID, msg)
 			},
-			OnState: func(s ConnState) {
-				m.mu.RLock()
-				current := m.relays[deviceID] == a
-				direct := m.peers[deviceID]
-				m.mu.RUnlock()
-				if !current || direct != nil && direct.State() == StateDirect {
-					return
-				}
-				if s == StateOffline && ctx.Err() == nil {
-					go m.officialFailed(deviceID, a, errors.New("relay connection closed"))
-					return
-				}
-				if m.onState != nil {
-					m.onState(deviceID, s)
-				}
-			},
+			OnState: func(s ConnState) { m.relayStateChanged(deviceID, a, s) },
 			OnMessage: func(msg *pb.PeerMessage) {
 				if m.onMessage != nil {
 					m.onMessage(deviceID, msg)
@@ -244,6 +262,78 @@ func (m *Manager) startOfficial(deviceID, id string, initial *pb.SignalMessage, 
 		}
 	}()
 }
+// relayStateChanged 处理官方中转连接的状态变化。
+func (m *Manager) relayStateChanged(deviceID string, a *officialAttempt, s ConnState) {
+	m.mu.RLock()
+	current := m.relays[deviceID] == a
+	direct := m.peers[deviceID]
+	p := a.peer
+	m.mu.RUnlock()
+	if !current || direct != nil && direct.State() == StateDirect {
+		return
+	}
+	if s == StateOffline && a.ctx.Err() == nil {
+		if p != nil && p.Recoverable() {
+			// 只是暂时断开（ICE Disconnected），连接还在，先等它恢复。
+			// 以前这里立即拆掉中转并冷却一分钟，链路一卡顿就前功尽弃
+			go m.awaitRelayRecovery(deviceID, a)
+			return
+		}
+		go m.officialFailed(deviceID, a, errors.New("relay connection closed"))
+		return
+	}
+	if m.onState != nil {
+		m.onState(deviceID, s)
+	}
+}
+
+// awaitRelayRecovery 等暂时断开的中转恢复；连接被关闭、或超过 relayRecoveryWait 仍未恢复才放弃。
+func (m *Manager) awaitRelayRecovery(id string, a *officialAttempt) {
+	if !a.recovering.CompareAndSwap(false, true) {
+		return
+	}
+	m.mu.RLock()
+	p := a.peer
+	m.mu.RUnlock()
+	m.log.Info("官方中转暂时断开，等待恢复", "peer", id)
+	deadline := time.Now().Add(relayRecoveryWait)
+	tick := time.NewTicker(relayRecoveryPoll)
+	defer tick.Stop()
+	for {
+		select {
+		case <-a.ctx.Done():
+			// 别处已经放弃了这次中转（隧道关闭、被新的尝试取代、断开设备）
+			a.recovering.Store(false)
+			m.reportAfterRelay(id, a)
+			return
+		case <-tick.C:
+		}
+		if p.State() == StateRelay {
+			a.recovering.Store(false)
+			m.log.Info("官方中转已恢复", "peer", id)
+			return
+		}
+		if !p.Recoverable() || time.Now().After(deadline) {
+			break
+		}
+	}
+	a.recovering.Store(false)
+	m.officialFailed(id, a, errors.New("relay connection lost"))
+	m.reportAfterRelay(id, a)
+}
+
+// reportAfterRelay 在等待恢复的中转被放弃后，向上层补报一次真实状态：
+// 等待期间一直报的是「中转」，放弃时中转连接已是离线，关闭它不会再触发状态回调。
+func (m *Manager) reportAfterRelay(id string, a *officialAttempt) {
+	m.mu.RLock()
+	current := m.relays[id] == a
+	s := m.stateLocked(id)
+	m.mu.RUnlock()
+	if current && m.onState != nil {
+		m.onState(id, s)
+	}
+}
+
 func officialTURN(servers []webrtc.ICEServer) ([]webrtc.ICEServer, string) {
 	for _, s := range servers {
 		for _, u := range s.URLs {
@@ -306,7 +396,10 @@ func (m *Manager) officialFailed(id string, a *officialAttempt, err error) {
 		}
 	}
 	p := a.peer
+	retryAt := a.failedUntil
 	m.mu.Unlock()
+	// 中转失败的原因以前只在调试日志里，诊断报告看不出中转为什么断
+	m.log.Warn("官方中转失败", "peer", id, "err", err, "最早重试", retryAt.Format("01-02 15:04:05"))
 	a.cancel()
 	m.gateway.ReleaseSession(a.id)
 	if p != nil {

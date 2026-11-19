@@ -276,6 +276,14 @@ func sourceAddrFor(dst netip.Addr) (netip.Addr, error) {
 	return local, nil
 }
 
+// Recoverable 报告连接是否只是暂时断开：连通过、PeerConnection 还没关闭。
+// ICE 报 Disconnected 时就是这样，包一恢复会自己回到 Connected；报 Failed 后连接已被关闭。
+func (p *Peer) Recoverable() bool {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return p.pc != nil && p.pcConnected
+}
+
 func (p *Peer) DirectAttemptReady() bool {
 	p.mu.Lock()
 	defer p.mu.Unlock()
