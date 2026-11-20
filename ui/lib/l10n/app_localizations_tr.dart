@@ -2779,7 +2779,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Metni, simgeleri ve boşlukları birlikte büyütür veya küçültür; bu pencerede ve hızlı yapıştır penceresinde geçerlidir. Kısayollar: $keys';
+    return 'Kısayollar: $keys';
   }
 
   @override

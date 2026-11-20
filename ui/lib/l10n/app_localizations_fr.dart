@@ -2845,7 +2845,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Agrandit ou réduit ensemble le texte, les icônes et les espacements, dans cette fenêtre et dans la fenêtre de collage rapide. Raccourcis : $keys';
+    return 'Raccourcis : $keys';
   }
 
   @override

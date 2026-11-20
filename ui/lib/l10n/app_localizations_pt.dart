@@ -2849,7 +2849,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Aumenta ou diminui juntos o texto, os ícones e os espaçamentos, nesta janela e na janela de colagem rápida. Atalhos: $keys';
+    return 'Atalhos: $keys';
   }
 
   @override

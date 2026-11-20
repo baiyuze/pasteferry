@@ -2843,7 +2843,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Увеличивает или уменьшает текст, значки и отступы вместе — в этом окне и в окне быстрой вставки. Сочетания клавиш: $keys';
+    return 'Сочетания клавиш: $keys';
   }
 
   @override

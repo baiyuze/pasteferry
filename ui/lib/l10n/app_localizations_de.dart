@@ -2834,7 +2834,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Text, Symbole und Abstände gemeinsam vergrößern oder verkleinern, in diesem Fenster und im Schnelleinfügen-Fenster. Tastenkürzel: $keys';
+    return 'Tastenkürzel: $keys';
   }
 
   @override

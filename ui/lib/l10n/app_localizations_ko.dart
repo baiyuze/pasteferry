@@ -2612,7 +2612,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return '글자, 아이콘, 여백을 함께 확대하거나 축소합니다. 기본 창과 빠른 붙여넣기 창에 적용됩니다. 단축키: $keys';
+    return '단축키: $keys';
   }
 
   @override

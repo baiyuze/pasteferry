@@ -2843,7 +2843,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Ingrandisce o riduce insieme testo, icone e spaziature, in questa finestra e nella finestra Incolla rapido. Scorciatoie: $keys';
+    return 'Scorciatoie: $keys';
   }
 
   @override

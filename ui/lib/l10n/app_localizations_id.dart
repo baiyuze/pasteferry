@@ -2787,7 +2787,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Perbesar atau perkecil teks, ikon, dan jarak sekaligus, di jendela ini dan jendela tempel cepat. Pintasan: $keys';
+    return 'Pintasan: $keys';
   }
 
   @override

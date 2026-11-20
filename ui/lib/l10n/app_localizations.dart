@@ -4597,7 +4597,7 @@ abstract class AppLocalizations {
   /// No description provided for @uiScaleDesc.
   ///
   /// In en, this message translates to:
-  /// **'Make text, icons and spacing larger or smaller together, in this window and the quick paste window. Shortcuts: {keys}'**
+  /// **'Shortcuts: {keys}'**
   String uiScaleDesc(String keys);
 
   /// No description provided for @themeBackground.

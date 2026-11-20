@@ -743,7 +743,7 @@
   "themeScanlines": "扫描线",
   "themeScanlinesDesc": "整个窗口叠一层很淡的 CRT 扫描线，只在像素主题里有效",
   "uiScale": "界面缩放",
-  "uiScaleDesc": "文字、图标和间距一起放大或缩小，主窗口和快捷粘贴窗口都生效。快捷键：{keys}",
+  "uiScaleDesc": "快捷键：{keys}",
   "themeBackground": "背景图",
   "themeBackgroundDesc": "铺满侧边栏和页面后面。图上盖一层遮罩，文字照样看得清。",
   "themeBackgroundChoose": "选择图片…",

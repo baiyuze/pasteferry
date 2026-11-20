@@ -2909,7 +2909,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'تكبير النصوص والأيقونات والمسافات أو تصغيرها معًا، في هذه النافذة وفي نافذة اللصق السريع. الاختصارات: $keys';
+    return 'الاختصارات: $keys';
   }
 
   @override

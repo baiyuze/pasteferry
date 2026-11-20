@@ -743,7 +743,7 @@
   "themeScanlines": "Lignes de balayage",
   "themeScanlinesDesc": "Superpose de légères lignes de balayage CRT sur la fenêtre. Thèmes pixel uniquement.",
   "uiScale": "Taille de l’interface",
-  "uiScaleDesc": "Agrandit ou réduit ensemble le texte, les icônes et les espacements, dans cette fenêtre et dans la fenêtre de collage rapide. Raccourcis : {keys}",
+  "uiScaleDesc": "Raccourcis : {keys}",
   "themeBackground": "Image de fond",
   "themeBackgroundDesc": "Remplit la fenêtre derrière la barre latérale et les pages. Un voile par-dessus garde le texte lisible.",
   "themeBackgroundChoose": "Choisir une image…",

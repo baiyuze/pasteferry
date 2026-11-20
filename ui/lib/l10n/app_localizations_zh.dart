@@ -2566,7 +2566,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return '文字、图标和间距一起放大或缩小，主窗口和快捷粘贴窗口都生效。快捷键：$keys';
+    return '快捷键：$keys';
   }
 
   @override
@@ -5292,7 +5292,7 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String uiScaleDesc(String keys) {
-    return '文字、圖示和間距一起放大或縮小，主視窗和快速貼上視窗都會套用。快速鍵：$keys';
+    return '快速鍵：$keys';
   }
 
   @override
@@ -8018,7 +8018,7 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String uiScaleDesc(String keys) {
-    return '文字、圖示和間距一起放大或縮小，主視窗和快速貼上視窗都會套用。快速鍵：$keys';
+    return '快速鍵：$keys';
   }
 
   @override

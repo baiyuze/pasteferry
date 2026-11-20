@@ -2786,7 +2786,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Make text, icons and spacing larger or smaller together, in this window and the quick paste window. Shortcuts: $keys';
+    return 'Shortcuts: $keys';
   }
 
   @override

@@ -534,7 +534,7 @@ class ZoomShortcuts extends StatelessWidget {
   final Widget child;
 
   /// 显示给用户看的快捷键，比如设置里的说明
-  static String get labels => Platform.isMacOS ? '⌘+ / ⌘− / ⌘0' : 'Ctrl + + / Ctrl + − / Ctrl + 0';
+  static String get labels => Platform.isMacOS ? '⌘ + / − / 0' : 'Ctrl + / − / 0';
 
   @override
   Widget build(BuildContext context) {

@@ -2860,7 +2860,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Збільшує або зменшує текст, значки й відступи разом — у цьому вікні та у вікні швидкої вставки. Сполучення клавіш: $keys';
+    return 'Сполучення клавіш: $keys';
   }
 
   @override

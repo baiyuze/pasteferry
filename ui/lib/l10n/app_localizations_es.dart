@@ -2854,7 +2854,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Amplía o reduce a la vez el texto, los iconos y los espacios, en esta ventana y en la ventana de pegado rápido. Atajos: $keys';
+    return 'Atajos: $keys';
   }
 
   @override

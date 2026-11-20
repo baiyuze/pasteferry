@@ -2681,7 +2681,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Phóng to hoặc thu nhỏ cùng lúc chữ, biểu tượng và khoảng cách, trong cửa sổ này và cửa sổ dán nhanh. Phím tắt: $keys';
+    return 'Phím tắt: $keys';
   }
 
   @override

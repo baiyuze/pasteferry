@@ -743,7 +743,7 @@
   "themeScanlines": "Garis pindai",
   "themeScanlinesDesc": "Lapisi jendela dengan garis pindai CRT yang samar. Hanya untuk tema piksel.",
   "uiScale": "Ukuran antarmuka",
-  "uiScaleDesc": "Perbesar atau perkecil teks, ikon, dan jarak sekaligus, di jendela ini dan jendela tempel cepat. Pintasan: {keys}",
+  "uiScaleDesc": "Pintasan: {keys}",
   "themeBackground": "Gambar latar",
   "themeBackgroundDesc": "Mengisi jendela di belakang bilah samping dan halaman. Lapisan penutup di atasnya menjaga teks tetap terbaca.",
   "themeBackgroundChoose": "Pilih Gambar…",

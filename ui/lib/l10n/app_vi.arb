@@ -743,7 +743,7 @@
   "themeScanlines": "Đường quét",
   "themeScanlinesDesc": "Phủ các đường quét CRT mờ lên cửa sổ. Chỉ dùng cho chủ đề Pixel.",
   "uiScale": "Cỡ giao diện",
-  "uiScaleDesc": "Phóng to hoặc thu nhỏ cùng lúc chữ, biểu tượng và khoảng cách, trong cửa sổ này và cửa sổ dán nhanh. Phím tắt: {keys}",
+  "uiScaleDesc": "Phím tắt: {keys}",
   "themeBackground": "Ảnh nền",
   "themeBackgroundDesc": "Phủ kín cửa sổ phía sau thanh bên và các trang. Một lớp phủ phía trên giúp chữ vẫn dễ đọc.",
   "themeBackgroundChoose": "Chọn ảnh…",

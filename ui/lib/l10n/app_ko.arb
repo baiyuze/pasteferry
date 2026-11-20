@@ -743,7 +743,7 @@
   "themeScanlines": "스캔라인",
   "themeScanlinesDesc": "윈도우에 희미한 CRT 스캔라인을 겹쳐 표시합니다. 픽셀 테마에서만 적용됩니다.",
   "uiScale": "화면 크기",
-  "uiScaleDesc": "글자, 아이콘, 여백을 함께 확대하거나 축소합니다. 기본 창과 빠른 붙여넣기 창에 적용됩니다. 단축키: {keys}",
+  "uiScaleDesc": "단축키: {keys}",
   "themeBackground": "배경 이미지",
   "themeBackgroundDesc": "사이드바와 페이지 뒤의 윈도우 전체를 채웁니다. 위에 덮는 반투명 막이 텍스트를 읽기 쉽게 유지합니다.",
   "themeBackgroundChoose": "이미지 선택…",

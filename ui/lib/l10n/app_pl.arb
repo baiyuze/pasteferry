@@ -743,7 +743,7 @@
   "themeScanlines": "Linie skanowania",
   "themeScanlinesDesc": "Nakłada na okno delikatne linie skanowania jak w monitorze CRT. Tylko w motywach pikselowych.",
   "uiScale": "Rozmiar interfejsu",
-  "uiScaleDesc": "Powiększa lub pomniejsza razem tekst, ikony i odstępy w tym oknie i w oknie szybkiego wklejania. Skróty: {keys}",
+  "uiScaleDesc": "Skróty: {keys}",
   "themeBackground": "Obraz tła",
   "themeBackgroundDesc": "Wypełnia okno za paskiem bocznym i stronami. Nakładka na wierzchu zapewnia czytelność tekstu.",
   "themeBackgroundChoose": "Wybierz obraz…",

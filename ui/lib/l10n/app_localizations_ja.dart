@@ -2595,7 +2595,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return '文字・アイコン・余白をまとめて拡大・縮小します。メインウインドウとクイックペーストウィンドウに適用されます。ショートカット：$keys';
+    return 'ショートカット：$keys';
   }
 
   @override

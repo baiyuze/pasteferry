@@ -2864,7 +2864,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String uiScaleDesc(String keys) {
-    return 'Powiększa lub pomniejsza razem tekst, ikony i odstępy w tym oknie i w oknie szybkiego wklejania. Skróty: $keys';
+    return 'Skróty: $keys';
   }
 
   @override
