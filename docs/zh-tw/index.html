@@ -53,7 +53,7 @@
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
-      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "features": "features/", "why": "features/"};
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "why": "features/"};
       var to = moved[location.hash.slice(1)];
       if (to) location.replace(to);
     })();
@@ -193,9 +193,9 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">v2.13.1</a>
+        <a class="release-note" href="#latest">2.13.1：介面縮放，文字、圖示一起放大 →</a>
         <h1 class="display">跨裝置，<br>複製貼上。</h1>
-        <p class="lede">同步剪貼簿、儲存複製記錄，互傳照片和檔案。</p>
+        <p class="lede">在 Mac、Windows、Linux 之間同步剪貼簿，不必使用同一帳號。複製記錄能搜尋、收藏，檔案和資料夾也能拖放互傳。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 看完整示範 <span class="tour-duration">1:25</span></a>
@@ -239,10 +239,39 @@
       </div>
     </section>
 
+    <section class="section" id="latest" aria-labelledby="latest-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">最新升級 · 2.13.1</span></p>
+        <h2 id="latest-title">文字、圖示，<br>一起調到舒適的大小。</h2>
+        <p class="intro">2.13.1 新增 90%–150% 介面縮放，文字、圖示和間距一起調整，主視窗與快速貼上視窗同步生效。Mac、Windows、Linux 都能在「設定 → 外觀」調整，也支援快捷鍵。</p>
+        <p class="more"><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">查看完整更新 →</a></p>
+        <div class="block">
+          <h3 class="kicker">近期還有這些升級</h3>
+          <ul class="tiles" aria-label="近期還有這些升級">
+          <li class="tile">
+            <span class="new">2.13.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.0">行動網路連線更穩</a></h3>
+            <p>行動 Wi-Fi 更容易建立直連，新增 IPv6 直連，中繼也能應對短暫的網路壅塞。</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.2</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.2">從系統選單傳送檔案</a></h3>
+            <p>Finder、Windows 右鍵與安卓分享選單，都能直接將檔案交給隔空貼傳送。</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.0">遠端大檔案傳輸加速</a></h3>
+            <p>跨網路直連支援平行加速，傳送與接收兩端更新後啟用。</p>
+          </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
         <h2 id="qp-title">複製記錄，<br>隨時找回。</h2>
-        <p class="intro">在任何 App 裡按一下，選一筆就貼上。</p>
+        <p class="intro">按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> 開啟複製記錄，搜尋並選取一筆，直接貼到目前 App。常用內容可以收藏，檔案會另存副本。</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
             <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
@@ -256,7 +285,7 @@
     <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <h2 id="send-title">拖過去，<br>就到了。</h2>
-        <p class="intro">將檔案或資料夾拖到目標裝置。</p>
+        <p class="intro">電腦之間，檔案與整個資料夾都能拖放傳送，支援大檔案與續傳。收到的檔案集中存到「下載」。</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/zh-tw/send-dark.png?v=80ceaf9caf" width="2552" height="1632" alt="隔空傳送頁：左邊是雷達，中間是這台 Mac，周圍是同一區域網路和其他網路裡的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度" loading="lazy"><img class="theme-light" src="../assets/screenshots/zh-tw/send.png?v=8b9bbb5b6d" width="2552" height="1632" alt="隔空傳送頁：左邊是雷達，中間是這台 Mac，周圍是同一區域網路和其他網路裡的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度" loading="lazy">
         </figure>
@@ -267,11 +296,35 @@
     <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
         <h2 id="phone-title">手機也能用了。</h2>
-        <p class="intro">同一網路內，用安卓 App 或掃碼網頁與電腦互傳內容。</p>
+        <p class="intro">同一網路內，安卓 App 可與電腦雙向傳送照片和檔案，支援多選、儲存與分享。iPhone、iPad 可掃碼使用網頁，查看複製記錄或傳送內容，網頁須保持開啟。</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/zh-tw/web-share-dark.png?v=e478580e3a" width="2552" height="1632" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表" loading="lazy"><img class="theme-light" src="../assets/screenshots/zh-tw/web-share.png?v=122ff0f8ec" width="2552" height="1632" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表" loading="lazy">
         </figure>
         <p class="more"><a href="features/#phone">了解手機端怎麼用 →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <h2 id="features-title">不只是同步剪貼簿。</h2>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
+            <h3><a href="features/#friends">傳檔案給好友</a></h3>
+            <p>加入好友後直接傳送檔案，由對方確認接收。好友不會看到你的剪貼簿與複製記錄。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
+            <h3><a href="themes/">九套主題，也能自己做</a></h3>
+            <p>預設、像素與七套風格主題都有深淺色。可自訂配色與背景圖，或讓 AI 產生並套用主題。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            <h3><a href="security/">端對端加密</a></h3>
+            <p>端對端加密，配對時核對安全指紋。伺服器只負責連線與轉送，無法解密複製或傳送的內容。</p>
+          </li>
+        </ul>
+        <p class="more"><a href="features/">查看全部功能 →</a></p>
       </div>
     </section>
 
@@ -282,7 +335,7 @@
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
             <h3>服務</h3>
-            <p>開啟「服務」，連接不同網路中的電腦。</p>
+            <p>開啟「服務」，連接不同網路中的電腦。 每台電腦每天 100 MB 中繼流量，直連不限。</p>
             <span class="path-go">開啟「服務」 →</span>
           </a>
           <a class="path" href="lan/">

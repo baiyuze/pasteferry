@@ -53,7 +53,7 @@
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
-      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "features": "features/", "why": "features/"};
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "why": "features/"};
       var to = moved[location.hash.slice(1)];
       if (to) location.replace(to);
     })();
@@ -193,9 +193,9 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">v2.13.1</a>
+        <a class="release-note" href="#latest">2.13.1：表示サイズの設定、文字もアイコンもまとめて拡大 →</a>
         <h1 class="display">デバイスをまたいで、<br>コピー＆ペースト。</h1>
-        <p class="lede">クリップボードを同期。コピー履歴を保存し、写真やファイルを転送。</p>
+        <p class="lede">Mac・Windows・Linux でクリップボードを同期。同じアカウントは不要です。コピー履歴の検索・お気に入り保存、ファイルやフォルダーのドラッグ転送にも対応。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry をダウンロード</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 紹介ムービーを見る <span class="tour-duration">1:25</span></a>
@@ -239,10 +239,39 @@
       </div>
     </section>
 
+    <section class="section" id="latest" aria-labelledby="latest-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">最新アップデート · 2.13.1</span></p>
+        <h2 id="latest-title">文字もアイコンも、<br>見やすい大きさに。</h2>
+        <p class="intro">2.13.1 では表示サイズを 90%〜150% に調整できます。文字・アイコン・余白が一緒に変わり、メインとクイックペーストの両ウィンドウに反映。Mac・Windows・Linux の「設定 → 外観」かショートカットで変更できます。</p>
+        <p class="more"><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">更新内容を見る →</a></p>
+        <div class="block">
+          <h3 class="kicker">最近の主な改善</h3>
+          <ul class="tiles" aria-label="最近の主な改善">
+          <li class="tile">
+            <span class="new">2.13.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.0">モバイル回線でも安定</a></h3>
+            <p>モバイル Wi-Fi での直接接続を改善。IPv6 での直接接続と、一時的な混雑から復帰できる中継にも対応。</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.2</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.2">システムメニューから送信</a></h3>
+            <p>Finder、Windows の右クリック、Android の共有メニューからファイルを送信できます。</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.0">離れた相手への大容量転送を高速化</a></h3>
+            <p>低速な直接接続で並列転送を試します。送信側・受信側の両方を更新すると有効になります。</p>
+          </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
         <h2 id="qp-title">コピー履歴を、<br>いつでも。</h2>
-        <p class="intro">どのアプリでも、押して選ぶだけで貼り付け。</p>
+        <p class="intro"><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> でコピー履歴を検索し、選んだ内容を今のアプリに貼り付け。よく使う内容はお気に入りに、ファイルは別のコピーとして保存できます。</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
             <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
@@ -256,7 +285,7 @@
     <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <h2 id="send-title">ドラッグすれば、<br>もう届いている。</h2>
-        <p class="intro">ファイルやフォルダーを送信先のデバイスへドラッグ。</p>
+        <p class="intro">パソコン間でファイルやフォルダーをドラッグ転送。大容量ファイルも中断後に再開でき、受信ファイルは「ダウンロード」にまとめて保存します。</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/ja/send-dark.png?v=763064b6ab" width="2552" height="1632" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/send.png?v=5c66611508" width="2552" height="1632" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示" loading="lazy">
         </figure>
@@ -267,11 +296,35 @@
     <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
         <h2 id="phone-title">スマホでも使える。</h2>
-        <p class="intro">同じネットワークで、Android アプリか QR コードで開く Web 版からパソコンと転送。</p>
+        <p class="intro">同じネットワークで、Android は写真やファイルを双方向に転送し、複数選択・保存・共有も可能。iPhone・iPad は QR コードで Web 版を開き、コピー履歴や転送を利用できます。ページは開いたままにします。</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/ja/web-share-dark.png?v=5f663678e1" width="2552" height="1632" alt="デバイスページのスマホ向けウェブ転送：QR コードと登録済みのスマホ一覧" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/web-share.png?v=481643d2bc" width="2552" height="1632" alt="デバイスページのスマホ向けウェブ転送：QR コードと登録済みのスマホ一覧" loading="lazy">
         </figure>
         <p class="more"><a href="features/#phone">スマホの使い方 →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <h2 id="features-title">クリップボードの同期だけじゃない。</h2>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
+            <h3><a href="features/#friends">友だちにファイルを送る</a></h3>
+            <p>友だちを追加し、相手が確認してから受信。友だちにクリップボードやコピー履歴は見えません。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
+            <h3><a href="themes/">9 種のテーマとカスタマイズ</a></h3>
+            <p>デフォルト・ピクセルと 7 種のスタイルにライト・ダーク配色。色や背景の変更、AI によるテーマの作成・適用も可能です。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            <h3><a href="security/">内容は自分のデバイスだけに</a></h3>
+            <p>ペアリング時にフィンガープリントを確認し、内容はエンドツーエンド暗号化。サーバーは接続や中継のみを担い、復号できません。</p>
+          </li>
+        </ul>
+        <p class="more"><a href="features/">すべての機能を見る →</a></p>
       </div>
     </section>
 
@@ -282,7 +335,7 @@
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
             <h3>サービス</h3>
-            <p>サービスをオンにして、異なるネットワークのパソコンを接続。</p>
+            <p>サービスをオンにして、異なるネットワークのパソコンを接続。 中継はパソコン 1 台につき 1 日 100 MB。直接転送は無制限。</p>
             <span class="path-go">「サービス」をオンにする →</span>
           </a>
           <a class="path" href="lan/">

@@ -21,6 +21,7 @@ from content.privacy import COPY as PRIVACY_COPY
 from content.themes import COPY as THEMES_COPY, EXAMPLE as THEME_EXAMPLE, DESKTOP_CONFIG as THEME_DESKTOP, CLAUDE_CODE as THEME_CLAUDE_CODE
 from content.official import COPY as OFFICIAL_COPY
 from content.features import localized as features_copy
+from content.home import localized as home_copy, FEATURED_VERSION, RECENT_VERSIONS
 from content.feedback import COPY as FEEDBACK_COPY
 from content.packs import PACKS, pack
 
@@ -470,7 +471,7 @@ def paths(c: dict, base: str) -> str:
         cards.append(f"""          <a class="path" href="{base}{page}">
             <svg viewBox="0 0 240 112" aria-hidden="true">{art}</svg>
             <h3>{p["name"]}</h3>
-            <p>{p["summary"]}</p>
+            <p>{p["summary"]}{' ' + c['official']['quota'] if key == 'official' else ''}</p>
             <span class="path-go">{p["go"]}</span>
           </a>""")
     return '<div class="paths">\n' + "\n".join(cards) + "\n        </div>"
@@ -674,15 +675,36 @@ def stage(c: dict, f: dict) -> str:
 def home(code: str) -> str:
     c = load(code)
     f = features_copy(code)
+    h = home_copy(code)
+    if FEATURED_VERSION != VERSION:
+        raise ValueError(f"Update content/home.py for release {VERSION}")
     _, tour_ui, _ = tour_copy(code, c)
     path, hl, _, _ = LANGS[code]
     up = "../" * path.count("/")
     a = up + "assets/"
     shots = shots_dir(code)
+    badge = fill(f["badge"], {"version": VERSION})
+    recent = "\n".join(
+        f'''          <li class="tile">
+            <span class="new">{version}</span>
+            <h3><a href="{REPO}/releases/tag/v{version}">{esc(title)}</a></h3>
+            <p>{esc(text)}</p>
+          </li>'''
+        for version, (title, text) in zip(RECENT_VERSIONS, h["recent"])
+    )
+    destinations = (("send", FEATURES + "#friends"), ("star", THEMES), ("lock", SECURITY))
+    extras = "\n".join(
+        f'''          <li class="tile">
+            {icon(symbol)}
+            <h3><a href="{target}">{esc(title)}</a></h3>
+            <p>{esc(text)}</p>
+          </li>'''
+        for (symbol, target), (title, text) in zip(destinations, h["extras"])
+    )
     moved = MOVED_ANCHORS.replace("MOVED", json.dumps({
         "how": HOW, "multi-uplink": HOW + "#multi-uplink", "install": DOWNLOAD,
         "faq": FAQ, "security": SECURITY, "specs": HOW + "#specs",
-        "themes": FEATURES + "#themes", "friends": FEATURES + "#friends", "features": FEATURES, "why": FEATURES,
+        "themes": FEATURES + "#themes", "friends": FEATURES + "#friends", "why": FEATURES,
     }))
 
     return f"""<!doctype html>
@@ -700,17 +722,32 @@ def home(code: str) -> str:
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="{REPO}/releases/tag/v{VERSION}">v{VERSION}</a>
+        <a class="release-note" href="#latest">{keys(badge)}</a>
         <h1 class="display">{c["h1"]}</h1>
-        <p class="lede">{c["lede"]}</p>{cta(c, "", START, tour_ui["watch"])}
+        <p class="lede">{esc(h["hero"])}</p>{cta(c, "", START, tour_ui["watch"])}
         {stage(c, f)}
+      </div>
+    </section>
+
+    <section class="section" id="latest" aria-labelledby="latest-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">{esc(h["release_kicker"])} · {VERSION}</span></p>
+        <h2 id="latest-title">{h["release_title"]}</h2>
+        <p class="intro">{esc(h["release_intro"])}</p>
+        <p class="more"><a href="{REPO}/releases/tag/v{VERSION}">{esc(h["release_more"])}</a></p>
+        <div class="block">
+          <h3 class="kicker">{esc(h["recent_heading"])}</h3>
+          <ul class="tiles" aria-label="{esc(h['recent_heading'])}">
+{recent}
+          </ul>
+        </div>
       </div>
     </section>
 
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
         <h2 id="qp-title">{keys(f["home_qp_h2"])}</h2>
-        <p class="intro">{keys(f["home_qp_intro"])}</p>
+        <p class="intro">{keys(h["history"])}</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
             <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
@@ -724,7 +761,7 @@ def home(code: str) -> str:
     <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <h2 id="send-title">{f["home_send_h2"]}</h2>
-        <p class="intro">{f["home_send_intro"]}</p>
+        <p class="intro">{esc(h["send"])}</p>
         <figure class="spot wide" data-reveal>
           <img src="{up}{shots}send-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["send_alt"])}">
         </figure>
@@ -735,11 +772,21 @@ def home(code: str) -> str:
     <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
         <h2 id="phone-title">{f["home_phone_h2"]}</h2>
-        <p class="intro">{f["home_phone_intro"]}</p>
+        <p class="intro">{esc(h["phone"])}</p>
         <figure class="spot wide" data-reveal>
           <img src="{up}{shots}web-share-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["phone_alt"])}">
         </figure>
         <p class="more"><a href="{FEATURES}#phone">{f["home_phone_link"]}</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <h2 id="features-title">{f["grid_h2"]}</h2>
+        <ul class="tiles">
+{extras}
+        </ul>
+        <p class="more"><a href="{FEATURES}">{f["grid_more"]}</a></p>
       </div>
     </section>
 

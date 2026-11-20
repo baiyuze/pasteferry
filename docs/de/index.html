@@ -53,7 +53,7 @@
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
-      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "features": "features/", "why": "features/"};
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "why": "features/"};
       var to = moved[location.hash.slice(1)];
       if (to) location.replace(to);
     })();
@@ -193,9 +193,9 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">v2.13.1</a>
+        <a class="release-note" href="#latest">2.13.1: Oberflächengröße für größere Texte und Symbole →</a>
         <h1 class="display">Hier kopieren.<br>Dort einfügen.</h1>
-        <p class="lede">Zwischenablage synchronisieren, Verlauf behalten, Fotos und Dateien senden.</p>
+        <p class="lede">Die Zwischenablage zwischen Mac, Windows und Linux synchronisieren, ohne gemeinsames Konto. Kopiertes suchen und als Favorit sichern oder Dateien und Ordner auf ein anderes Gerät ziehen.</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry herunterladen</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> Sehen Sie sich die komplette Tour an <span class="tour-duration">1:25</span></a>
@@ -239,10 +239,39 @@
       </div>
     </section>
 
+    <section class="section" id="latest" aria-labelledby="latest-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">Neues Update · 2.13.1</span></p>
+        <h2 id="latest-title">Alles in der Größe,<br>die für dich passt.</h2>
+        <p class="intro">Neu in 2.13.1: Text, Symbole und Abstände gemeinsam von 90 % bis 150 % skalieren. Hauptfenster und Schnelleinfügen ändern sich zusammen. Auf Mac, Windows und Linux unter Einstellungen → Darstellung oder per Tastenkürzel anpassen.</p>
+        <p class="more"><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">Alle Änderungen →</a></p>
+        <div class="block">
+          <h3 class="kicker">Weitere aktuelle Verbesserungen</h3>
+          <ul class="tiles" aria-label="Weitere aktuelle Verbesserungen">
+          <li class="tile">
+            <span class="new">2.13.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.0">Stabiler im Mobilfunknetz</a></h3>
+            <p>Direktverbindungen über mobiles WLAN gelingen häufiger. IPv6 und Relays mit Erholung bei kurzen Netzengpässen kommen hinzu.</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.2</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.2">Aus Systemmenüs senden</a></h3>
+            <p>Dateien direkt aus Finder, dem Windows-Kontextmenü oder dem Android-Teilen-Menü senden.</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.0">Schnellere Fernübertragung</a></h3>
+            <p>Parallele Übertragung kann langsame Direktverbindungen zwischen Netzwerken beschleunigen. Dafür beide Computer aktualisieren.</p>
+          </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
         <h2 id="qp-title">Kopiertes<br>wiederfinden.</h2>
-        <p class="intro">Drücken Sie in einer beliebigen App darauf, wählen Sie ein Element aus und es wird eingefügt.</p>
+        <p class="intro">Mit <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> den Verlauf durchsuchen und direkt in die aktuelle App einfügen. Favoriten bleiben gespeichert, Dateien als eigene Kopie.</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
             <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
@@ -256,7 +285,7 @@
     <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <h2 id="send-title">Ziehen Sie es rüber.<br>Es ist da.</h2>
-        <p class="intro">Dateien oder Ordner auf das Zielgerät ziehen.</p>
+        <p class="intro">Dateien und ganze Ordner zwischen Computern ziehen. Große Übertragungen lassen sich fortsetzen, empfangene Dateien landen in Downloads.</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" alt="Die Seite „Dateien senden“: ein Radar mit diesem Mac in der Mitte und Geräten im selben Netzwerk und anderswo in der Nähe; auf der rechten Seite empfangene Dateien mit einem ankommenden Ordner sowie dessen Fortschritt und Geschwindigkeit" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/send.png?v=740f8bec78" width="2552" height="1632" alt="Die Seite „Dateien senden“: ein Radar mit diesem Mac in der Mitte und Geräten im selben Netzwerk und anderswo in der Nähe; auf der rechten Seite empfangene Dateien mit einem ankommenden Ordner sowie dessen Fortschritt und Geschwindigkeit" loading="lazy">
         </figure>
@@ -267,11 +296,35 @@
     <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
         <h2 id="phone-title">Ihr Telefon schaltet sich ein.</h2>
-        <p class="intro">Im selben Netzwerk Inhalte per Android-App oder QR-Code im Browser mit dem Computer austauschen.</p>
+        <p class="intro">Im selben Netzwerk mit Android Fotos und Dateien in beide Richtungen übertragen, mehrfach auswählen, speichern und teilen. Auf iPhone und iPad per QR-Code den Verlauf und die Übertragung im Browser öffnen; die Seite geöffnet lassen.</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" alt="Die Geräteseite Telefon-Webübertragung: der Code und die registrierten Telefone" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/web-share.png?v=29f0d60dd1" width="2552" height="1632" alt="Die Geräteseite Telefon-Webübertragung: der Code und die registrierten Telefone" loading="lazy">
         </figure>
         <p class="more"><a href="features/#phone">So nutzen Sie das Telefon →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <h2 id="features-title">Mehr als eine gemeinsame Zwischenablage.</h2>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
+            <h3><a href="features/#friends">Dateien an Kontakte senden</a></h3>
+            <p>Kontakt hinzufügen und Dateien nach Bestätigung des Empfängers senden. Deine Zwischenablage und dein Verlauf bleiben für Kontakte unsichtbar.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
+            <h3><a href="themes/">Neun Designs und eigene Ideen</a></h3>
+            <p>Standard, Pixel und sieben weitere Stile mit hellen und dunklen Farben. Farben und Hintergründe anpassen oder ein Design mit KI erstellen und anwenden.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            <h3><a href="security/">Deine Inhalte bleiben privat</a></h3>
+            <p>Ende-zu-Ende-Verschlüsselung mit Fingerabgleich beim Koppeln. Server verbinden Geräte und leiten Daten weiter, können Inhalte aber nicht entschlüsseln.</p>
+          </li>
+        </ul>
+        <p class="more"><a href="features/">Alle Funktionen anzeigen →</a></p>
       </div>
     </section>
 
@@ -282,7 +335,7 @@
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
             <h3>Dienst</h3>
-            <p>Dienst aktivieren, um Computer über Netzwerke hinweg zu verbinden.</p>
+            <p>Dienst aktivieren, um Computer über Netzwerke hinweg zu verbinden. 100 MB Relay pro Computer und Tag. Direkte Übertragungen unbegrenzt.</p>
             <span class="path-go">Schalten Sie den Dienst ein →</span>
           </a>
           <a class="path" href="lan/">

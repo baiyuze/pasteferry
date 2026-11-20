@@ -53,7 +53,7 @@
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
-      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "features": "features/", "why": "features/"};
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "why": "features/"};
       var to = moved[location.hash.slice(1)];
       if (to) location.replace(to);
     })();
@@ -193,9 +193,9 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">v2.13.1</a>
+        <a class="release-note" href="#latest">2.13.1: 화면 크기 설정으로 글자와 아이콘을 함께 확대 →</a>
         <h1 class="display">복사하고,<br>다른 기기에 붙여넣기.</h1>
-        <p class="lede">클립보드 동기화, 복사 기록 보관, 사진과 파일 전송.</p>
+        <p class="lede">같은 계정 없이 Mac, Windows, Linux의 클립보드를 동기화하세요. 복사 기록을 검색하고 즐겨찾기에 보관하거나 파일과 폴더를 끌어서 전송할 수 있습니다.</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry 다운로드</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 전체 둘러보기 <span class="tour-duration">1:25</span></a>
@@ -239,10 +239,39 @@
       </div>
     </section>
 
+    <section class="section" id="latest" aria-labelledby="latest-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">최신 업데이트 · 2.13.1</span></p>
+        <h2 id="latest-title">글자와 아이콘을<br>편안한 크기로.</h2>
+        <p class="intro">2.13.1에서는 글자, 아이콘, 여백을 90%–150%로 함께 조절합니다. 기본 창과 빠른 붙여넣기 창에 동시에 적용됩니다. Mac, Windows, Linux의 설정 → 외관이나 단축키로 변경하세요.</p>
+        <p class="more"><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">업데이트 내용 보기 →</a></p>
+        <div class="block">
+          <h3 class="kicker">최근 주요 개선</h3>
+          <ul class="tiles" aria-label="최근 주요 개선">
+          <li class="tile">
+            <span class="new">2.13.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.0">더 안정적인 모바일 연결</a></h3>
+            <p>휴대용 Wi-Fi에서 직접 연결이 쉬워지고 IPv6 직접 연결과 일시적인 혼잡에서 복구되는 릴레이를 지원합니다.</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.2</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.2">시스템 메뉴에서 파일 보내기</a></h3>
+            <p>Finder, Windows 우클릭 메뉴, Android 공유 메뉴에서 파일을 보낼 수 있습니다.</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.0">원격 대용량 파일 전송 가속</a></h3>
+            <p>느린 네트워크 간 직접 연결에서 병렬 전송으로 속도를 높입니다. 양쪽 컴퓨터를 업데이트하면 활성화됩니다.</p>
+          </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
         <h2 id="qp-title">복사 기록을<br>언제든 다시.</h2>
-        <p class="intro">아무 앱에서나 누르고 항목을 선택하면 붙여넣어집니다.</p>
+        <p class="intro"><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>로 복사 기록을 검색하고 현재 앱에 붙여넣으세요. 자주 쓰는 내용은 즐겨찾기에 보관하며 파일은 별도 사본으로 저장됩니다.</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
             <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
@@ -256,7 +285,7 @@
     <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <h2 id="send-title">위로 드래그하세요.<br>거기 있어요.</h2>
-        <p class="intro">파일이나 폴더를 대상 장치에 끌어다 놓으세요.</p>
+        <p class="intro">컴퓨터 간에 파일이나 폴더를 끌어서 전송하세요. 대용량 전송은 중단 후 이어지고 받은 파일은 다운로드에 모입니다.</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" alt="파일 보내기 페이지: 중앙에 이 Mac이 있고 동일한 네트워크 및 주변의 다른 장치에 있는 레이더입니다. 오른쪽에는 수신된 파일과 폴더 도착, 진행 상황 및 속도가 표시됩니다." loading="lazy"><img class="theme-light" src="../assets/screenshots/en/send.png?v=740f8bec78" width="2552" height="1632" alt="파일 보내기 페이지: 중앙에 이 Mac이 있고 동일한 네트워크 및 주변의 다른 장치에 있는 레이더입니다. 오른쪽에는 수신된 파일과 폴더 도착, 진행 상황 및 속도가 표시됩니다." loading="lazy">
         </figure>
@@ -267,11 +296,35 @@
     <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
         <h2 id="phone-title">귀하의 휴대전화가 합류합니다.</h2>
-        <p class="intro">같은 네트워크에서 Android 앱이나 QR 코드로 여는 웹을 통해 컴퓨터와 주고받으세요.</p>
+        <p class="intro">같은 네트워크에서 Android 앱으로 사진과 파일을 양방향 전송하고 여러 개 선택, 저장, 공유할 수 있습니다. iPhone과 iPad는 QR 코드로 웹을 열어 기록과 전송을 이용하세요. 페이지는 열어 두세요.</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" alt="장치 페이지 전화 웹 전송: 코드 및 등록된 전화" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/web-share.png?v=29f0d60dd1" width="2552" height="1632" alt="장치 페이지 전화 웹 전송: 코드 및 등록된 전화" loading="lazy">
         </figure>
         <p class="more"><a href="features/#phone">전화사용방법 →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <h2 id="features-title">공유 클립보드 그 이상입니다.</h2>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
+            <h3><a href="features/#friends">친구에게 파일 보내기</a></h3>
+            <p>친구를 추가하고 상대방이 수락하면 파일을 전송합니다. 친구에게 클립보드나 복사 기록이 공개되지 않습니다.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
+            <h3><a href="themes/">9가지 테마와 나만의 테마</a></h3>
+            <p>기본, 픽셀과 7가지 스타일 모두 밝은·어두운 모드를 지원합니다. 색상과 배경을 바꾸거나 AI로 테마를 만들고 적용하세요.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            <h3><a href="security/">내 내용은 내 장치에만</a></h3>
+            <p>페어링 시 지문을 확인하고 종단 간 암호화합니다. 서버는 연결과 중계만 담당하며 내용을 복호화할 수 없습니다.</p>
+          </li>
+        </ul>
+        <p class="more"><a href="features/">모든 기능 보기 →</a></p>
       </div>
     </section>
 
@@ -282,7 +335,7 @@
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
             <h3>서비스</h3>
-            <p>서비스를 켜서 다른 네트워크의 컴퓨터를 연결하세요.</p>
+            <p>서비스를 켜서 다른 네트워크의 컴퓨터를 연결하세요. 컴퓨터당 하루 100MB 릴레이. 직접 전송은 무제한입니다.</p>
             <span class="path-go">서비스 켜기 →</span>
           </a>
           <a class="path" href="lan/">

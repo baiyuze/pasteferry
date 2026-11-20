@@ -53,7 +53,7 @@
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
-      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "features": "features/", "why": "features/"};
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "why": "features/"};
       var to = moved[location.hash.slice(1)];
       if (to) location.replace(to);
     })();
@@ -193,9 +193,9 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">v2.13.1</a>
+        <a class="release-note" href="#latest">2.13.1: interface scale for larger text and icons →</a>
         <h1 class="display">Copy here.<br>Paste there.</h1>
-        <p class="lede">Sync your clipboard, keep a history, and send photos and files.</p>
+        <p class="lede">Sync your clipboard across Mac, Windows and Linux without a shared account. Search and save your clipboard history, or drag files and folders to another device.</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download PasteFerry</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> Watch the full tour <span class="tour-duration">1:25</span></a>
@@ -239,10 +239,39 @@
       </div>
     </section>
 
+    <section class="section" id="latest" aria-labelledby="latest-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">Latest update · 2.13.1</span></p>
+        <h2 id="latest-title">Make everything<br>the right size for you.</h2>
+        <p class="intro">New in 2.13.1: scale text, icons and spacing together from 90% to 150%. The main and quick paste windows stay in sync. On Mac, Windows and Linux, adjust it in Settings → Appearance or use keyboard shortcuts.</p>
+        <p class="more"><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">Read the release notes →</a></p>
+        <div class="block">
+          <h3 class="kicker">Other recent improvements</h3>
+          <ul class="tiles" aria-label="Other recent improvements">
+          <li class="tile">
+            <span class="new">2.13.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.0">Steadier mobile connections</a></h3>
+            <p>More portable Wi-Fi networks can connect directly, with IPv6 direct connections and relays that recover from brief congestion.</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.2</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.2">Send from system menus</a></h3>
+            <p>Send files from Finder, the Windows context menu or Android’s share sheet.</p>
+          </li>
+          <li class="tile">
+            <span class="new">2.12.0</span>
+            <h3><a href="https://github.com/baiyuze/pasteferry/releases/tag/v2.12.0">Faster remote file transfers</a></h3>
+            <p>Parallel transfers can speed up slow direct connections across networks. Update both computers to enable them.</p>
+          </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
         <h2 id="qp-title">Your clipboard<br>history, at hand.</h2>
-        <p class="intro">Press it in any app, pick an item, and it’s pasted.</p>
+        <p class="intro">Press <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> to search your clipboard history and paste into the current app. Save favorites for later, with a separate copy of each file.</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
             <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
@@ -256,7 +285,7 @@
     <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
         <h2 id="send-title">Drag it over.<br>It’s there.</h2>
-        <p class="intro">Drop files or folders onto the destination device.</p>
+        <p class="intro">Drag files and whole folders between computers. Large transfers can resume after an interruption, and received files stay together in Downloads.</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" alt="The Send Files page: a radar with this Mac in the middle and devices on the same network and elsewhere around it; on the right, received files, with a folder arriving and its progress and speed" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/send.png?v=740f8bec78" width="2552" height="1632" alt="The Send Files page: a radar with this Mac in the middle and devices on the same network and elsewhere around it; on the right, received files, with a folder arriving and its progress and speed" loading="lazy">
         </figure>
@@ -267,11 +296,35 @@
     <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
         <h2 id="phone-title">Your phone joins in.</h2>
-        <p class="intro">Send content between phone and computer on the same network, using Android or a QR code in your browser.</p>
+        <p class="intro">On the same network, Android can send and receive batches of photos and files, then save or share them. On iPhone and iPad, scan a QR code for clipboard history and transfers in the browser; keep the page open.</p>
         <figure class="spot wide" data-reveal>
           <img class="theme-dark" src="../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" alt="The devices page phone web transfer: the code and the registered phones" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/web-share.png?v=29f0d60dd1" width="2552" height="1632" alt="The devices page phone web transfer: the code and the registered phones" loading="lazy">
         </figure>
         <p class="more"><a href="features/#phone">How to use the phone →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <h2 id="features-title">More than a shared clipboard.</h2>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
+            <h3><a href="features/#friends">Send files to contacts</a></h3>
+            <p>Add a contact and send files for them to accept. Contacts cannot see your clipboard or history.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>
+            <h3><a href="themes/">Nine themes, plus your own</a></h3>
+            <p>Default, Pixel and seven more styles have light and dark palettes. Customize colors and backgrounds, or create and apply a theme with AI.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            <h3><a href="security/">Your content stays private</a></h3>
+            <p>End-to-end encryption, with fingerprints checked during pairing. Servers help connect devices and relay data, but cannot decrypt your content.</p>
+          </li>
+        </ul>
+        <p class="more"><a href="features/">See all features →</a></p>
       </div>
     </section>
 
@@ -282,7 +335,7 @@
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
             <h3>Service</h3>
-            <p>Turn on Service to connect computers across networks.</p>
+            <p>Turn on Service to connect computers across networks. 100 MB of relay per computer per day. Direct transfers are unlimited.</p>
             <span class="path-go">Turn on Service →</span>
           </a>
           <a class="path" href="lan/">
