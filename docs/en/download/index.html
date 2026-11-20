@@ -96,7 +96,7 @@
       <div class="wrap">
         <p class="crumb"><a href="../../en/">PasteFerry</a> / Download</p>
         <h1 class="display">Download PasteFerry</h1>
-        <p class="lede">Free and open source, version 2.13.1. Install it on each computer you want to sync; Mac, Windows and Linux mix freely.</p>
+        <p class="lede">Free and open source · Version 2.13.1</p>
       </div>
     </section>
 
@@ -117,16 +117,11 @@
                 <div class="dl-row">
                   <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-Setup.exe"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download the installer</a>
                 </div>
-                <p class="small">Rather not run an installer? Get the <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-windows-x64.zip">portable zip</a>, extract it and run PasteFerry from there.</p>
-                <ol class="steps">
-                <li>Run PasteFerry-Setup.exe. It installs for the current user, no administrator rights needed.<span class="aside">If you see "Windows protected your PC", click More info, then Run anyway.</span></li>
-                <li>Open PasteFerry and click Turn on background sync. Allow it if Windows Firewall asks.</li>
-                </ol>
+                <p class="small"><a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-windows-x64.zip">Portable version</a> — no installation</p>
+                <p class="more"><a href="../../en/start/#app">Quick start →</a></p>
               </div>
               <ul class="points">
                 <li>Windows 10 and Windows 11, x64.</li>
-                <li>The installer is about 23 MB, the portable zip about 29 MB.</li>
-                <li>After you close the window, PasteFerry keeps running in the notification area.</li>
               </ul>
             </div>
           </section>
@@ -139,20 +134,15 @@
                   <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-mac-apple-silicon.dmg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Apple silicon (M1 and later)</a>
                   <a class="button quiet" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-mac-intel.dmg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Intel</a>
                 </div>
-                <p class="small">A <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry.dmg">universal version</a> that runs on both is also available, at twice the size.</p>
-                <p class="small">You can also install the desktop app and bundled CLI with <code>brew install --cask baiyuze/tap/pasteferry</code>. If already installed manually, quit and move the existing app first; keep your application data. See the <a href="https://github.com/baiyuze/homebrew-tap">installation and upgrade guide</a>.</p>
-                <ol class="steps">
-                <li>Open the DMG you downloaded and drag PasteFerry into Applications.</li>
-                <li>Open it from Applications.<span class="aside">The first time, macOS says it can't verify the developer: go to System Settings → Privacy &amp; Security and click Open Anyway near the bottom.</span></li>
-                <li>Click Turn on background sync. When macOS asks about clipboard access and finding devices on your local network, allow both.</li>
-                </ol>
+                <p class="small">Or get the <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry.dmg">universal build</a>.</p>
+                <p class="small">Homebrew: <code>brew install --cask baiyuze/tap/pasteferry</code>. <a href="https://github.com/baiyuze/homebrew-tap">Install and upgrade</a></p>
+                <p class="more"><a href="../../en/start/#app">Quick start →</a></p>
               </div>
               <div>
                 <h4>Not sure which chip?</h4>
                 <ul class="points">
                 <li>Click the Apple menu in the top-left corner of the screen and choose About This Mac.</li>
                 <li>"Chip: Apple M1" (or M2, M3, M4…) means Apple silicon; "Processor: … Intel Core …" means Intel.</li>
-                <li>Almost every Mac bought since late 2020 has Apple silicon. If you pick the wrong one, just download the other: on an Apple silicon Mac the Intel version needs Rosetta installed first, and the Apple silicon version won't open on an Intel Mac.</li>
                 <li>Requires macOS 13 Ventura or later.</li>
                 </ul>
               </div>
@@ -184,11 +174,8 @@
                 </div>
               </div>
               <ul class="points">
-                <li>Needs a graphical desktop: X11, or Wayland with XWayland, which GNOME, KDE and other major desktops include by default.</li>
-                <li>Not sure whether you have x64 or ARM64? Run <code>uname -m</code> in a terminal: <code>x86_64</code> means x64, <code>aarch64</code> means ARM64.</li>
-                <li>The .deb installs to /opt/PasteFerry and adds PasteFerry to the app menu. The tar.gz runs from wherever you extract it, and <code>install.sh</code> adds it to the app menu.</li>
-                <li>Once it's open, click Turn on background sync; from then on it starts when you log in. GNOME shows no tray icon by default, so open the window from the app menu.</li>
-                <li>Needs GTK 3. Tested on Ubuntu 24.04 with GNOME (Wayland).</li>
+                <li>Requires GTK 3 and an X11 desktop or Wayland with XWayland.</li>
+                <li>Run <code>uname -m</code>: <code>x86_64</code> means x64; <code>aarch64</code> means ARM64.</li>
               </ul>
             </div>
           </section>
@@ -199,19 +186,17 @@
                 <div class="dl-row">
                   <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-android-arm64.apk"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download for Android (APK)</a>
                 </div>
-                <p class="small">Android 9 or later, arm64 phones. Android asks once before installing it.</p>
+                <p class="small">Android 9 or later · ARM64</p>
                 <h4>The web page (nothing to install)</h4>
                 <p class="small">Turn on Devices › Phone web transfer on the computer and scan the code with your phone.</p>
                 <ol class="steps">
                 <li>After installing the app, pair the phone from Devices on the computer, the same way you pair another computer.</li>
-                <li>Or use the web page: turn on Devices › Phone web transfer on the computer and scan the code.</li>
                 <li>On the phone, paste what you copied and send it; what you copy on the computer appears in the phone’s records.</li>
                 </ol>
               </div>
               <ul class="points">
-                <li>Text, screenshots and files go both ways.</li>
-                <li>There is no iPhone or iPad app: iOS does not let apps read the clipboard in the background, and distributing one needs a certificate. Use the web page instead.</li>
-                <li>Contents are encrypted between the phone and the computer; use it at home or on a network you trust.</li>
+                <li>Keep the phone and computer on the same network.</li>
+                <li>Use the web version on iPhone and iPad.</li>
               </ul>
             </div>
           </section>

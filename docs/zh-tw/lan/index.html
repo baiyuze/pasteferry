@@ -96,7 +96,7 @@
       <div class="wrap">
         <p class="crumb"><a href="../../zh-tw/">隔空貼</a> / <a href="../../zh-tw/start/#server">連線方式</a></p>
         <h1 class="display">在同一個網路裡直接用</h1>
-        <p class="lede">兩台電腦連著同一台路由器，就不需要伺服器。裝好 App，輸入配對碼，之後複製就會同步。</p>
+        <p class="lede">連接同一網路，輸入配對碼即可同步。</p>
         <ol class="guide-toc">
           <li><a href="#prepare">開始之前</a></li>
           <li><a href="#pair">配對</a></li>
@@ -109,7 +109,7 @@
     <section class="section" id="overview" aria-labelledby="overview-title">
       <div class="wrap">
         <h2 id="overview-title">不需要伺服器</h2>
-        <p class="intro">同一個網路裡的兩台電腦，靠 mDNS 互相發現、直接交換連線資訊，然後建立加密的直連。沒有伺服器，也不需要一台一直開著的電腦。</p>
+        <p class="intro">自動探索同網段裝置，建立加密直連，不需伺服器。</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 330" role="img" aria-labelledby="lan-title lan-desc">
             <title id="lan-title">同一個網路裡的隔空貼</title>
@@ -131,11 +131,6 @@
             <text class="d-note" x="480" y="242" text-anchor="middle">複製的內容只在兩台電腦之間傳輸</text>
           </svg>
         </figure>
-        <ul class="points ports">
-          <li><strong>自動發現。</strong>每台電腦用 mDNS 在區域網路裡廣播自己，廣播裡只有一個每天都會變的匿名識別碼，看不出是誰的電腦。打開「搜尋附近裝置」時才會帶上裝置名稱，關掉就撤下。</li>
-          <li><strong>直連。</strong>複製的內容在兩台電腦之間直接傳輸，速度就是區域網路的速度。</li>
-          <li><strong>一樣安全。</strong>配對時核對兩行安全指紋，之後的每則訊息都帶有簽章，同一個網路裡的其他人冒充不了你的裝置。</li>
-        </ul>
       </div>
     </section>
 
@@ -191,7 +186,7 @@
       <div class="wrap">
         <p class="eyebrow">第 2 步</p>
         <h2 id="subnet-title">不在同一網段</h2>
-        <p class="intro">區域網路探索只在一個網段裡有效。兩台電腦在不同網段、但網段之間互通時（公司裡很常見），配對時多輸入一個位址就行。</p>
+        <p class="intro">不同網段但可互相存取時，配對時填入對方位址。</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">
@@ -242,7 +237,7 @@
         <div class="cta">
           <a class="button" href="../../zh-tw/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
         </div>
-        <p class="note">版本 2.13.1，免費開源。macOS 13 以上；Windows 10、11；Linux（x64 與 ARM64）；安卓 9 以上。新增介面縮放：文字、圖示和間距一起放大或縮小。</p>
+        <p class="note">免費開源 · Mac / Windows / Linux / Android</p>
         <a class="source" href="../../design/lan-mode.html">區域網路直連的技術說明</a>
       </div>
     </section>

@@ -21,14 +21,14 @@ C = {
     "nav_download": "下載",
     "lang_label": "語言",
 
-    "h1": "電腦與手機，<br>內容隨手互通。",
-    "lede": "電腦間複製貼上、找回記錄；電腦與安卓互傳相片和檔案。Mac、Windows、Linux、安卓都能用，毋須使用同一帳號。手機也能掃碼開啟網頁；安卓與網頁限同一網絡。",
+    "h1": '跨裝置，<br>複製貼上。',
+    "lede": '同步剪貼簿、儲存複製記錄，互傳相片和檔案。',
     "dl_button": "下載隔空貼",
     "dl_mac": "下載 Mac 版",
     "dl_win": "下載 Windows 版",
     "dl_linux": "下載 Linux 版",
-    "dl_note": '版本 2.13.1，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）；安卓 9 或以上。新增介面縮放：文字、圖示和間距一起放大或縮小。',
-    "start_link": "第一次用？三步設定好 →",
+    "dl_note": '免費開源 · Mac / Windows / Linux / Android',
+    "start_link": '快速入門 →',
     "stage_label": "示範：在 MacBook 上按下 Command C，檔案化成一張紙，經直連飛到 Windows 手提電腦，在那裏按下 Ctrl V 貼上",
     "stage_file": "季度報告-最終版.pptx",
     "stage_win": "Windows 手提電腦",
@@ -38,60 +38,48 @@ C = {
     # 三种连接方式，地位相同，由用户自己选。首页的卡片用 name、fit、summary、go；
     # 快速开始的分页用 name、facts、steps、address、go；安装一节用 name、fit。
     # steps 与 address 里的 {lan}、{cloud}、{server}、{ts} 换成对应教程的地址
-    "paths_h2": "兩部電腦怎樣連起來",
-    "paths_intro": '同一個網絡裏裝好就能配對。不在同一個網絡，開啟「服務」就可以，也可以自建伺服器或用 Tailscale。',
+    "paths_h2": '連線方式',
+    "paths_intro": '同一網絡直接配對；跨網絡可用「服務」、自設伺服器或 Tailscale。',
     "paths_after": '第一次用？跟着<a href="{start}#server">快速開始</a>做一遍。「服務」免費，中轉每日 100 MB，直連不限。',
     "plans_label": "連接方式",
     "plans": {
         "lan": {
             "name": "同一網絡",
-            "fit": "甚麼都不用裝",
-            "summary": "連着同一部路由器的兩部電腦，裝好 App、輸入配對碼就能用，不需要伺服器。",
+            "fit": '無需伺服器',
+            "summary": '同一 Wi-Fi 或有線網絡內，輸入配對碼即可連線。',
             "go": "同一網絡教學 →",
             "facts": [
                 ("適合", "家裏或辦公室，兩部電腦連同一個 Wi‑Fi 或有線網絡。"),
                 ("要準備", "不用準備，每部電腦裝好 App 就可以。"),
                 ("要注意", "離開這個網絡就不會同步，回來後自動恢復。有線和無線不在同一網段時，配對時要多填一個地址。"),
             ],
-            "steps": [
-                "每部電腦裝好 App，按「啟用背景同步」。",
-                "Windows 防火牆和 macOS「尋找本地網絡上的裝置」的詢問都選允許。",
-                "一部顯示配對碼，另一部輸入，核對指紋。不在同一網段時，再填配對碼下面的地址，見<a href=\"{lan}#subnet\">同一網絡教學</a>。",
-            ],
+            "steps": ['兩部電腦連接同一 Wi-Fi 或有線網絡。'],
             "address": "不用填伺服器地址。",
         },
         "cloud": {
             "name": '自建公網伺服器',
             "fit": '自己的伺服器，中轉不限量',
-            "summary": "一部有公網 IP 的 Linux 雲端伺服器，最低配置就夠。所有電腦連到它，在哪裏都能同步。",
+            "summary": '在自己的 Linux 雲端主機上架設。',
             "go": "公網伺服器部署教學 →",
             "facts": [
                 ("適合", "想自己掌控伺服器，或者中轉流量用得多。"),
                 ("要準備", "一部有公網 IP 的 Linux 雲端伺服器，需要 root 權限。"),
                 ("要注意", "雲端伺服器要付費；中轉速度受它的頻寬限制。用內地的雲端伺服器而域名未有 ICP 備案時，用戶端要填 IP。"),
             ],
-            "steps": [
-                "在雲端供應商的安全群組裏開放 TCP 8787、UDP 3478 和 UDP 32768–60999。",
-                "用 ssh 登入伺服器，下載並執行安裝腳本：<code>sudo ./install.sh 公網IP</code>。",
-                "每部電腦在「設定 → 連接」裏填 <code>ws://公網IP:8787/signal</code>，按 Enter，再配對。",
-            ],
+            "steps": ['依<a href="{cloud}">架設教學</a>安裝伺服器。', '在「設定 → 連線」填入產生的伺服器位址。'],
             "address": "用瀏覽器開啟 <code>http://公網IP:8787/healthz</code>，顯示 ok 就裝好了。",
         },
         "ts": {
             "name": "Tailscale",
             "fit": "跨網絡，不用伺服器",
-            "summary": "每部電腦安裝 Tailscale、登入同一個帳戶，配對時填對方的 Tailscale 地址。",
+            "summary": '透過現有的 Tailscale 網絡配對。',
             "go": "Tailscale 教學 →",
             "facts": [
                 ("適合", "已經在用 Tailscale，或者不想依賴任何伺服器。"),
                 ("要準備", "每部電腦都安裝 Tailscale，登入同一個帳戶。"),
                 ("要注意", "Tailscale 要一直保持連線。它本身打不通時會經境外中轉，在內地會比較慢。"),
             ],
-            "steps": [
-                "每部電腦裝上 Tailscale，登入同一個帳戶。",
-                "在對方電腦上執行 <code>tailscale ip -4</code>，記下以 100 開頭的地址。",
-                "配對時按「不在同一網段？」，填上這個地址。",
-            ],
+            "steps": ['每部電腦裝上 Tailscale，登入同一個帳戶。', '在對方電腦上執行 <code>tailscale ip -4</code>，記下以 100 開頭的地址。'],
             "address": "不需要伺服器。Tailscale 地址不會改變，配對時填一次就可以。",
         },
     },
@@ -239,7 +227,7 @@ C = {
      ('開啟 UU 遠程時，為甚麼不斷出現 .uuremote_ 檔案？',
       ['這是舊版本的問題，升級到新版本就好了。'])],
 
-    "closing": "電腦與手機，內容隨手互通。",
+    "closing": '開始使用隔空貼。',
     "footer_license": "隔空貼以 GNU AGPL-3.0 開源。",
     "footer_label": "頁尾連結",
     "footer_links": [
@@ -421,14 +409,13 @@ C = {
         "description": "一部有公網 IP 的 Linux 雲端伺服器，執行一個腳本就能安裝好隔空貼的信令與 TURN 伺服器。每部電腦直接連線到它，"
                        "在家、在公司、在外面都能同步剪貼簿。內容包括安全群組設定、檢查、用戶端設定，以及內地域名 ICP 備案的說明。",
         "h1": "部署到公網伺服器",
-        "lede": "一部有公網 IP 的 Linux 雲端伺服器，最低配置已經足夠。每部電腦直接連線到它，在家、在公司、在外面都能同步，不用另外安裝軟件。",
+        "lede": '在 Linux 雲端主機架設，連接不同網絡中的電腦。',
         "toc": [("prepare", "準備"), ("ports", "開放端口"), ("install", "安裝伺服器"), ("check", "檢查"),
                 ("clients", "填寫地址"), ("faq", "常見問題")],
         "step": "第 {n} 步",
 
         "overview_h2": "所有電腦都直接連線到它",
-        "overview_intro": "伺服器在公網上，每部電腦不論身處哪個網絡，都能直接連上。複製的內容優先在兩部電腦之間直連傳輸；"
-                          "打不通直連時經伺服器中轉，內容依然加密。",
+        "overview_intro": '優先直連；無法直連時，透過伺服器中繼加密內容。',
         "diagram": {
             "title": "透過公網伺服器使用隔空貼",
             "desc": "公網伺服器的地址是 203.0.113.10。Mac 在公司網絡裏，Windows 在家裏的網絡裏，兩部電腦都透過信令連接到伺服器；"
@@ -472,7 +459,7 @@ C = {
         ],
 
         "install_h2": "執行安裝腳本",
-        "install_intro": "把公網 IP 傳給安裝腳本，它會安裝好伺服器、註冊為開機自動啟動的 systemd 服務，最後顯示用戶端要填的地址。",
+        "install_intro": '執行腳本安裝服務，並產生用戶端連線位址。',
         "install_steps": [
             "用 ssh 登入伺服器，例如 <code>ssh root@203.0.113.10</code>（換成你的公網 IP）。",
             "逐行執行，最後一行換成你的公網 IP：<span class=\"aside\">ARM 伺服器請把 <code>amd64</code> 換成 <code>arm64</code>。</span>",
@@ -529,21 +516,14 @@ C = {
         "title": "快速開始：三步用上隔空貼",
         "description": "第一次用隔空貼？每部電腦裝上 App；在同一個網絡裏直接配對，不在同一個網絡就開啟「服務」。之後在一部複製，到另一部貼上。",
         "h1": "快速開始",
-        "lede": "裝好 App，選一種連接方式，再把兩部電腦配對。同一個網絡裏幾分鐘就完成。",
+        "lede": '安裝 App、連接裝置、輸入配對碼。',
         "toc": [("app", "安裝 App"), ("server", "選擇連接方式"), ("pair", "配對"), ("phone", "手機怎麼用")],
         "step": "第 {n} 步",
 
         "app_h2": "在每部電腦上安裝 App",
         "app_intro": "要同步的每部電腦都安裝一個，Mac、Windows、Linux 可以混合使用。",
-        "mac": [
-            "下載 DMG，開啟後把隔空貼拖進「應用程式」。<span class=\"aside\">Apple 晶片與 Intel 處理器的 Mac 各有一個版本，下載頁會告訴你怎樣選擇。</span>",
-            "從「應用程式」裏開啟。<span class=\"aside\">第一次會提示「無法驗證開發者」：到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」。</span>",
-            "按「啟用背景同步」。系統詢問是否允許讀取剪貼簿、能否尋找本地網絡上的裝置時，都選擇允許。",
-        ],
-        "win": [
-            "執行 PasteFerry-Setup.exe，不需要管理員權限。<span class=\"aside\">提示「Windows 已保護您的電腦」時，按「其他資訊」，再按「仍要執行」。</span>",
-            "開啟隔空貼，按「啟用背景同步」。防火牆詢問時選擇允許。關閉視窗後，它會在右下角的系統匣裏繼續執行。",
-        ],
+        "mac": ['下載 DMG，將隔空貼拖入「應用程式」。', '首次開啟受阻時，到「系統設定 → 私隱與保安」按「照樣開啟」。', '啟用背景同步，允許剪貼簿及本機網絡權限。'],
+        "win": ['執行安裝程式；SmartScreen 阻擋時，按「其他資訊 → 仍要執行」。', '啟用背景同步，並允許防火牆存取。'],
         "linux": [
             "Ubuntu、Debian 等發行版安裝 .deb；其他發行版解壓 tar.gz，執行裏面的 <code>install.sh</code>。",
             "從應用程式選單開啟隔空貼，按「啟用背景同步」。",
@@ -551,31 +531,22 @@ C = {
         "app_alt": "第一次開啟隔空貼：提示「啟用背景同步」",
 
         "server_h2": "選擇一種連接方式",
-        "server_intro": '在同一個網絡裏，裝好就能配對。不在同一個網絡，開啟「服務」就可以。想自己掌控，也可以自建伺服器或用 Tailscale。',
+        "server_intro": '同一網絡直接連線；跨網絡請選「服務」、自設伺服器或 Tailscale。',
 
         "pair_h2": "把兩部電腦配對",
         "pair_intro": "每兩部電腦之間配對一次，之後就不用再理會了。",
-        "pair_steps": [
-            "在一部電腦上開啟「裝置」，按「新增裝置」，會顯示一個 6 位配對碼，5 分鐘內有效，下面是這部電腦的地址。",
-            '在另一部電腦上按「新增裝置 → 輸入配對碼」。用「服務」時不用填 IP；只有區域網絡跨網段或用 Tailscale 時，才要展開地址欄填對方的地址。',
-            "兩邊螢幕會顯示同樣的兩行安全指紋。逐字核對一致後，再按確認。"
-            "<span class=\"aside\">這一步防止有人在中間冒充你的裝置，不要略過。</span>",
-        ],
+        "pair_steps": ['一部電腦開啟「裝置 → 新增裝置」，顯示配對碼。', '另一部輸入配對碼；跨網段或使用 Tailscale 時，補填對方位址。', '核對兩邊的安全指紋一致後確認。'],
         "pair_alt": "「新增裝置」：顯示配對碼 K7MP2X，下面是「本機地址」192.168.1.20",
 
         "done_h2": "複製試試看。",
-        "done_text": "在一部電腦上複製文字、圖片或檔案，到另一部按 ⌘V 或 Ctrl+V。兩邊複製過的內容都在「複製記錄」裏。",
+        "done_text": '在一部電腦複製，到另一部貼上。',
         "help": "遇到問題：<a href=\"{lan}#faq\">同一網絡的常見問題</a> · <a href=\"{ts}#faq\">Tailscale 的常見問題</a> · "
                 "<a href=\"{cloud}#faq\">公網伺服器的常見問題</a> · <a href=\"{issues}\">回報問題</a>",
             "phone_h2": "手機怎麼用",
-        "phone_intro": "兩部電腦照上面配好之後，手機隨時可以加入：掃碼用網頁版，或者裝安卓 App。",
+        "phone_intro": '手機與電腦連接同一網絡，選擇安卓 App 或網頁版。',
         "phone_toc": "手機怎麼用",
         "web_h": "網頁版：不用安裝",
-        "web_steps": [
-            "電腦：打開「裝置 › 手機網頁傳輸」，把開關打開，出現 QR 碼。",
-            "手機：用相機或瀏覽器掃這個碼，起個名字（比如「我的iPhone」）。",
-            "之後手機瀏覽器裏就是電腦的複製記錄：按「複製」到手機，或在「傳送」裏把文字、照片、檔案傳到電腦。",
-        ],
+        "web_steps": ['電腦開啟「裝置 › 手機網頁傳輸」。', '手機掃碼，輸入裝置名稱。', '查看複製記錄，或傳送文字、相片及檔案。'],
         "apk_h": "安卓 App：像配電腦一樣配對",
         "apk_steps": [
             '手機：<a href="{android}">下載 APK</a> 並安裝（設定裏允許安裝未知來源的應用）。',
@@ -591,13 +562,12 @@ C = {
         "description": "兩部電腦在同一個 Wi‑Fi 或有線網絡裏時，隔空貼不需要伺服器：安裝好 App，輸入 6 位配對碼，"
                        "就能在 Mac 與 Windows 之間同步剪貼簿和檔案。不在同一網段時，配對時多輸入一個地址即可。",
         "h1": "在同一網絡裏直接使用",
-        "lede": "兩部電腦連着同一部路由器，就不需要伺服器。安裝好 App，輸入配對碼，之後複製的內容就會同步。",
+        "lede": '連接同一網絡，輸入配對碼即可同步。',
         "toc": [("prepare", "開始之前"), ("pair", "配對"), ("subnet", "不在同一網段"), ("faq", "常見問題")],
         "step": "第 {n} 步",
 
         "overview_h2": "不需要伺服器",
-        "overview_intro": "同一個網絡裏的兩部電腦，靠 mDNS 互相發現、直接交換連線資訊，然後建立加密的直連。"
-                          "沒有伺服器，也不需要長期開着的電腦。",
+        "overview_intro": '自動探索同網段裝置，建立加密直連，無需伺服器。',
         "diagram": {
             "title": "同一網絡裏的隔空貼",
             "desc": "在同一個區域網絡裏，Mac（192.168.1.20）與 Windows（192.168.1.35）透過 mDNS 互相發現，經 UDP 8788 交換連線資訊，"
@@ -641,7 +611,7 @@ C = {
         "nearby_alt": "「附近的裝置」：本機在中間，周圍是同樣開啟了這個視窗的設計部 PC、會議室 iMac，以及已經配對過的 MacBook Air",
 
         "subnet_h2": "不在同一網段",
-        "subnet_intro": "區域網絡發現只在一個網段裏有效。兩部電腦在不同網段、但網段之間互通時（公司裏很常見），配對時多輸入一個地址就可以。",
+        "subnet_intro": '不同網段但可互相存取時，配對時填入對方位址。',
         "subnet_steps": [
             "顯示配對碼的那部電腦，在配對碼下面能看到本機的地址，例如 <code>192.168.1.20</code>。",
             "輸入配對碼的那部電腦，按「不在同一網段？」，填上這個地址，再按「繼續」。",
@@ -795,29 +765,25 @@ C = {
         "phone": {
             "title": "手機（安卓 App 或網頁版）",
             "apk": "下載安卓版（APK）",
-            "apk_note": "安卓 9 或以上、arm64 的手機。安裝前系統會讓你確認一次。",
+            "apk_note": 'Android 9 或以上 · ARM64',
             "web_h": "網頁版（不用安裝）",
-            "web_note": "在電腦上打開「裝置 › 手機網頁傳輸」，用手機掃 QR 碼，瀏覽器裏就能用。",
+            "web_note": '電腦開啟「裝置 › 手機網頁傳輸」，用手機掃碼連線。',
             "steps": [
                 "裝好 App 後，在電腦的「裝置」裏像配對另一部電腦一樣配對手機。",
                 "或者用網頁版：電腦打開「裝置 › 手機網頁傳輸」掃 QR 碼。",
                 "手機上複製的內容貼到隔空貼再傳送；電腦複製的內容會自動出現在手機的記錄裏。",
             ],
-            "notes": [
-                "文字、截圖、檔案都能雙向傳。",
-                "iPhone、iPad 沒有 App：iOS 不允許背景讀取剪貼簿，且分發需要憑證，請用網頁版。",
-                "內容和電腦之間加密傳輸，建議在家裏或可信的辦公網絡使用。",
-            ],
+            "notes": ['手機與電腦須在同一網絡。', 'iPhone、iPad 請使用網頁版。'],
         },
         "title": "下載隔空貼：Mac（Apple 晶片、Intel）、Windows、Linux",
         "description": "隔空貼各系統的安裝檔：macOS 13 或以上的 Apple 晶片版與 Intel 版，Windows 10、11 的安裝程式與免安裝版，"
                        "Linux x64 與 ARM64 的 .deb 和 tar.gz。免費開源。",
         "h1": "下載隔空貼",
-        "lede": "免費開源，目前版本 {version}。每部要同步的電腦各安裝一個，Mac、Windows、Linux 可以混合使用。",
+        "lede": '免費開源 · 版本 {version}',
         "os_label": "選擇系統",
         "win": {
             "setup": "下載安裝程式",
-            "portable": "不想執行安裝程式的話，可以下載<a href=\"{portable}\">免安裝版</a>，解壓後直接執行。",
+            "portable": '<a href="{portable}">可攜版</a>（免安裝）',
             "steps": [
                 "執行 PasteFerry-Setup.exe，它會安裝在目前用戶的目錄下，不需要管理員權限。"
                 "<span class=\"aside\">提示「Windows 已保護您的電腦」時，按「其他資訊」，再按「仍要執行」。</span>",
@@ -832,44 +798,31 @@ C = {
         "mac": {
             "apple": "Apple 晶片（M1 或更新）",
             "intel": "Intel 處理器",
-            "universal": "兩種 Mac 都能用的<a href=\"{universal}\">通用版</a>也有提供，檔案大一倍。",
-            "homebrew": '亦可透過 Homebrew 安裝完整 App 和內置命令列工具：<code>brew install --cask baiyuze/tap/pasteferry</code>。如已手動安裝，請先結束並移走 App，保留應用程式資料。<a href="{homebrew}">查看安裝與升級說明</a>。',
+            "universal": '亦可下載<a href="{universal}">通用版</a>。',
+            "homebrew": 'Homebrew：<code>brew install --cask baiyuze/tap/pasteferry</code>。<a href="{homebrew}">安裝與升級</a>',
             "steps": [
                 "開啟下載的 DMG，把隔空貼拖進「應用程式」。",
                 "從「應用程式」裏開啟。<span class=\"aside\">第一次會提示「無法驗證開發者」：到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」。</span>",
                 "按「啟用背景同步」。系統詢問是否允許讀取剪貼簿、能否尋找本地網絡上的裝置時，都選擇允許。",
             ],
             "chip_h": "不確定你的 Mac 屬於哪一種？",
-            "chip": [
-                "按螢幕左上角的 Apple 選單，選擇「關於此 Mac」。",
-                "寫着「晶片：Apple M1」（或 M2、M3、M4 等）的是 Apple 晶片；寫着「處理器：… Intel Core …」的是 Intel 處理器。",
-                "2020 年底之後購買的 Mac 大多配備 Apple 晶片。選錯了也不要緊，換另一個下載就可以：Intel 版在 Apple 晶片的 Mac 上要先安裝 Rosetta，Apple 晶片版在 Intel 處理器的 Mac 上無法開啟。",
-                "需要 macOS 13 Ventura 或以上。",
-            ],
+            "chip": ['在蘋果選單中開啟「關於這台 Mac」。', '顯示「晶片」選 Apple 晶片版；顯示「Intel」選 Intel 版。', '需要 macOS 13 或以上。'],
         },
         "linux": {
             "deb_h": "Ubuntu、Debian 及其衍生版",
             "tar_h": "其他發行版",
             "x64": "x64",
             "arm64": "ARM64",
-            "notes": [
-                "需要圖形桌面：X11，或者帶 XWayland 的 Wayland 桌面，GNOME、KDE 等主流桌面預設都已包含。",
-                "不確定是 x64 還是 ARM64：在終端機執行 <code>uname -m</code>，顯示 <code>x86_64</code> 是 x64，<code>aarch64</code> 是 ARM64。",
-                ".deb 會安裝在 /opt/PasteFerry，並出現在應用程式選單裏。tar.gz 解壓到哪裏都能執行，<code>install.sh</code> 會把它加入應用程式選單。",
-                "開啟後按「啟用背景同步」，之後會在登入時自動啟動。GNOME 預設不顯示系統匣圖示，請從應用程式選單開啟視窗。",
-                "需要 GTK 3。已在 Ubuntu 24.04 的 GNOME（Wayland）上實測。",
-            ],
+            "notes": ['需要 X11 或含 XWayland 的 Wayland 桌面，以及 GTK 3。',
+                      '執行 <code>uname -m</code>：<code>x86_64</code> 選 x64，<code>aarch64</code> 選 ARM64。'],
         },
         "more_h2": "其他",
-        "mirror": {"lead": "預設從 Gitee 鏡像下載。備用 GitHub 下載：", "setup": "安裝程式", "portable": "便攜版",
+        "mirror": {"lead": 'GitHub：', "setup": "安裝程式", "portable": "便攜版",
                    "apple": "Apple 晶片", "intel": "Intel 晶片", "universal": "通用版", "android": "安卓版"},
-        "more": [
-            ("伺服器", "兩部電腦在同一個網絡裏不需要伺服器。跨網絡時的幾種方式見<a href=\"{server}\">快速開始</a>，"
-                      "伺服器的安裝檔在各自的教學裏。"),
-            ("校驗檔案", "所有檔案的 SHA-256 都在 <a href=\"{sums}\">SHA256SUMS</a> 裏。"),
-            ("更新內容與舊版本", "這個版本改了甚麼，見<a href=\"{notes}\">發佈說明</a>；舊版本在 <a href=\"{releases}\">GitHub Releases</a>。"),
-            ("內地鏡像", "程式碼和最近兩個版本的安裝檔同步在 <a href=\"{gitee}\">Gitee</a>，與 GitHub 上的檔案相同，可以用 SHA256SUMS 校驗。"),
-        ],
+        "more": [('伺服器', '架設方式見<a href="{server}">快速入門</a>。'),
+                 ('校驗檔案', '<a href="{sums}">SHA256SUMS</a>'),
+                 ('更新與舊版', '<a href="{notes}">版本說明</a> · <a href="{releases}">歷史版本</a>'),
+                 ('中國內地鏡像', '<a href="{gitee}">Gitee</a>')],
     },
 
     "gitee_hint": "內地伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：",

@@ -96,7 +96,7 @@
       <div class="wrap">
         <p class="crumb"><a href=".././">隔空贴</a> / <a href="../start/#server">连接方式</a></p>
         <h1 class="display">在同一网络里直接用</h1>
-        <p class="lede">两台电脑连着同一个路由器，就不需要服务器。装好 App，输入配对码，之后复制就会同步。</p>
+        <p class="lede">连接同一网络，输入配对码即可同步。</p>
         <ol class="guide-toc">
           <li><a href="#prepare">开始之前</a></li>
           <li><a href="#pair">配对</a></li>
@@ -109,7 +109,7 @@
     <section class="section" id="overview" aria-labelledby="overview-title">
       <div class="wrap">
         <h2 id="overview-title">不需要服务器</h2>
-        <p class="intro">同一个网络里的两台电脑，靠 mDNS 互相发现、直接交换连接信息，然后建立加密的直连。没有服务器，也不需要一台一直开着的电脑。</p>
+        <p class="intro">自动发现同网段设备，建立加密直连，无需服务器。</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 330" role="img" aria-labelledby="lan-title lan-desc">
             <title id="lan-title">同一网络里的隔空贴</title>
@@ -131,11 +131,6 @@
             <text class="d-note" x="480" y="242" text-anchor="middle">复制的内容只在两台电脑之间传输</text>
           </svg>
         </figure>
-        <ul class="points ports">
-          <li><strong>自动发现。</strong>每台电脑用 mDNS 在局域网里广播自己，广播里只有一个每天都变的匿名标识，看不出是谁的电脑。打开「搜索附近设备」时才带上设备名，关掉就撤下。</li>
-          <li><strong>直连。</strong>复制的内容在两台电脑之间直接传输，速度就是局域网的速度。</li>
-          <li><strong>安全照旧。</strong>配对时核对两行安全指纹，之后的每条消息都带签名，同一网络里的其他人冒充不了你的设备。</li>
-        </ul>
       </div>
     </section>
 
@@ -191,7 +186,7 @@
       <div class="wrap">
         <p class="eyebrow">第 2 步</p>
         <h2 id="subnet-title">不在同一网段</h2>
-        <p class="intro">局域网发现只在一个网段里有效。两台电脑在不同网段、但网段之间互通时（公司里常见），配对时多输入一个地址就行。</p>
+        <p class="intro">不同网段但能互相访问时，配对时填入对方地址。</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">
@@ -242,7 +237,7 @@
         <div class="cta">
           <a class="button" href="../download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
         </div>
-        <p class="note">版本 2.13.1，免费开源。macOS 13 及以上；Windows 10、11；Linux（x64 与 ARM64）；安卓 9 及以上。新增界面缩放：文字、图标和间距一起放大或缩小。</p>
+        <p class="note">免费开源 · Mac / Windows / Linux / Android</p>
         <a class="source" href="../design/lan-mode.html">局域网直连的技术方案</a>
       </div>
     </section>

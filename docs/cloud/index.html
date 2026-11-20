@@ -96,7 +96,7 @@
       <div class="wrap">
         <p class="crumb"><a href=".././">隔空贴</a> / <a href="../start/#server">连接方式</a></p>
         <h1 class="display">部署到公网服务器</h1>
-        <p class="lede">一台有公网 IP 的 Linux 云主机，最低配置就够。每台电脑直接连它，在家、在公司、在外面都能同步，不用另装软件。</p>
+        <p class="lede">在 Linux 云主机上部署，连接不同网络中的电脑。</p>
         <ol class="guide-toc">
           <li><a href="#prepare">准备</a></li>
           <li><a href="#ports">放行端口</a></li>
@@ -111,7 +111,7 @@
     <section class="section" id="overview" aria-labelledby="overview-title">
       <div class="wrap">
         <h2 id="overview-title">所有电脑都直接连它</h2>
-        <p class="intro">服务器在公网上，每台电脑不管在哪个网络里，都能直接连上。复制的内容优先在两台电脑之间直连传输；打不通直连时经服务器中转，内容依然加密。</p>
+        <p class="intro">优先直连；无法直连时，通过服务器中转加密内容。</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 460" role="img" aria-labelledby="cloud-title cloud-desc">
             <title id="cloud-title">通过公网服务器使用隔空贴</title>
@@ -145,11 +145,6 @@
             </g>
           </svg>
         </figure>
-        <ul class="points ports">
-          <li><strong>信令，TCP 8787。</strong>每台电脑一直连着它，用来发现对方、配对、交换连接信息。</li>
-          <li><strong>直连。</strong>两台电脑在不同网络里时，靠 NAT 打洞直接相连，大多数家庭和公司网络都能打通。</li>
-          <li><strong>中转，UDP 3478 与中转端口。</strong>打不通直连时经服务器转发，内容依然加密，速度受服务器带宽限制。</li>
-        </ul>
       </div>
     </section>
 
@@ -197,7 +192,7 @@
       <div class="wrap">
         <p class="eyebrow">第 2 步</p>
         <h2 id="install-title">运行安装脚本</h2>
-        <p class="intro">把公网 IP 带给安装脚本，它会装好服务器、注册为开机自启的 systemd 服务，最后显示客户端要填的地址。</p>
+        <p class="intro">运行脚本安装服务，并生成客户端连接地址。</p>
         <div class="os-grid qs-grid">
           <div class="os-steps">
             <ol class="steps">
@@ -322,7 +317,7 @@ sudo ./install.sh 203.0.113.10</code></pre>
         <div class="cta">
           <a class="button" href="../download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
         </div>
-        <p class="note">版本 2.13.1，免费开源。macOS 13 及以上；Windows 10、11；Linux（x64 与 ARM64）；安卓 9 及以上。新增界面缩放：文字、图标和间距一起放大或缩小。</p>
+        <p class="note">免费开源 · Mac / Windows / Linux / Android</p>
         <a class="source" href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md">服务器的完整部署说明（含 Docker 与全部参数）</a>
       </div>
     </section>

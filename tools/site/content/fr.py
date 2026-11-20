@@ -22,34 +22,28 @@ C = {'brand': 'PasteFerry',
  'nav_server': 'Façons de se connecter',
  'nav_download': 'Télécharger',
  'lang_label': 'Langue',
- 'h1': 'Vos ordinateurs. Votre téléphone.<br>Tout à portée de main.',
- 'lede': 'Copiez sur un ordinateur, collez sur un autre. Retrouvez votre historique et transférez vos photos '
-         'et fichiers entre Mac, Windows, Linux et Android, sans compte commun. Sur téléphone, scannez un '
-         'code pour ouvrir la version web. Android et la version web s’utilisent sur le même réseau.',
+ 'h1': 'Copiez ici.<br>Collez ailleurs.',
+ 'lede': 'Synchronisez le presse-papiers, gardez un historique et envoyez des fichiers.',
  'dl_button': 'Télécharger PasteFerry',
  'dl_mac': 'Télécharger pour Mac',
  'dl_win': 'Télécharger pour Windows',
  'dl_linux': 'Télécharger pour Linux',
- 'dl_note': 'Version 2.13.1, gratuite et open source. Pour macOS 13 ou version ultérieure, Windows 10 et 11, '
-            'Linux (x64 et ARM64) et Android 9 ou version ultérieure. Le nouveau réglage de taille agrandit '
-            'ou réduit le texte, les icônes et les espacements ensemble.',
- 'start_link': 'Nouveau ici ? Configurez-le en trois étapes →',
+ 'dl_note': 'Gratuit et open source · Mac / Windows / Linux / Android',
+ 'start_link': 'Démarrage rapide →',
  'stage_label': 'Démo\xa0: la commande C sur un MacBook transforme un fichier en une feuille qui survole une '
                 'connexion directe à un ordinateur portable Windows , où Ctrl V pastes it',
  'stage_file': 'Bilan du troisième trimestre - final.pptx',
  'stage_win': 'Ordinateur portable Windows',
  'stage_arc': 'Chiffrement direct de bout en bout',
  'replay': 'Rejouer',
- 'paths_h2': 'Comment vos ordinateurs se connectent',
- 'paths_intro': 'Sur le même réseau, installez et associez. Sur différents réseaux, activez le service ou '
-                'exécutez votre propre serveur ou Tailscale.',
+ 'paths_h2': 'Modes de connexion',
+ 'paths_intro': 'Associez les appareils sur le même réseau, ou utilisez le Service, votre serveur ou Tailscale.',
  'paths_after': 'Nouveau ici ? Suivez le démarrage rapide <a href="{start}#server"></a>. Le service est '
                 'gratuit : 100 Mo de relais par jour, connexions directes illimitées.',
  'plans_label': 'Façons de se connecter',
  'plans': {'lan': {'name': 'Même réseau',
-                   'fit': 'Rien à mettre en place',
-                   'summary': "Deux ordinateurs sur le même routeur : installez l'application, saisissez un "
-                              "code d'appairage et le tour est joué. Aucun serveur n'est nécessaire.",
+                   'fit': 'Sans serveur',
+                   'summary': 'Associez par code sur le même réseau Wi-Fi ou filaire.',
                    'go': 'Même guide réseau →',
                    'facts': [('Idéal pour',
                               'À la maison ou au bureau, avec les deux ordinateurs sur le même réseau Wi-Fi '
@@ -59,19 +53,11 @@ C = {'brand': 'PasteFerry',
                               "La synchronisation s'arrête lorsque vous quittez le réseau et reprend à votre "
                               'retour. Si les réseaux filaire et Wi-Fi se trouvent sur des sous-réseaux '
                               'différents, vous saisissez une adresse supplémentaire lors du couplage.')],
-                   'steps': ["Installez l'application sur chaque ordinateur et cliquez sur Activer la "
-                             'synchronisation en arrière-plan.',
-                             'Autorisez PasteFerry lorsque le pare-feu Windows ou macOS pose des questions '
-                             'sur le réseau local.',
-                             "Affichez un code sur un ordinateur, saisissez-le sur l'autre et comparez les "
-                             "empreintes digitales. Sur un autre sous-réseau, saisissez également l'adresse "
-                             'indiquée sous le code\xa0; voir le même guide réseau <a '
-                             'href="{lan}#subnet"></a>.'],
+                   'steps': ['Connectez les deux ordinateurs au même réseau Wi-Fi ou filaire.'],
                    'address': 'Aucune adresse de serveur à saisir.'},
            'cloud': {'name': 'Votre propre serveur public',
                      'fit': 'Votre serveur, relais illimité',
-                     'summary': 'Une VM Linux avec une IP publique\xa0; la plus petite taille suffit. Chaque '
-                                "ordinateur s'y connecte et se synchronise depuis n'importe où.",
+                     'summary': 'Hébergez-le sur votre serveur Linux.',
                      'go': 'Guide du serveur public →',
                      'facts': [('Idéal pour', 'Exécuter le serveur vous-même ou relayer beaucoup de trafic.'),
                                ('Vous avez besoin',
@@ -80,18 +66,13 @@ C = {'brand': 'PasteFerry',
                                 "La VM coûte de l'argent et la vitesse du relais est limitée par sa bande "
                                 "passante. En Chine continentale, saisissez l'adresse IP, sauf si le domaine "
                                 "dispose d'un dépôt ICP.")],
-                     'steps': ['Dans le groupe de sécurité de votre fournisseur de cloud, ouvrez TCP 8787, '
-                               'UDP 3478 et UDP 32768–60999.',
-                               "Connectez-vous avec ssh, téléchargez le script d'installation et "
-                               'exécutez-le\xa0: <code>sudo ./install.sh PUBLIC_IP</code>.',
-                               'Dans Paramètres → Connexion sur chaque ordinateur, saisissez '
-                               '<code>ws://PUBLIC_IP:8787/signal</code>, appuyez sur Retour, puis associez.'],
+                     'steps': ['Installez le serveur en suivant le <a href="{cloud}">guide</a>.',
+                               'Saisissez l’adresse générée dans Paramètres → Connexion.'],
                      'address': "Ouvrez <code>http://PUBLIC_IP:8787/healthz</code> dans un navigateur. S'il "
                                 'dit ok, il fonctionne.'},
            'ts': {'name': 'Tailscale',
                   'fit': 'Sur les réseaux, pas de serveur',
-                  'summary': 'Installez Tailscale sur chaque ordinateur, connectez-vous au même compte et '
-                             "saisissez l'adresse Tailscale de l'autre ordinateur lors du couplage.",
+                  'summary': 'Associez via votre réseau Tailscale.',
                   'go': 'Guide Tailscale →',
                   'facts': [('Idéal pour',
                              "Vous utilisez déjà Tailscale ou ne souhaitez dépendre d'aucun serveur."),
@@ -101,10 +82,7 @@ C = {'brand': 'PasteFerry',
                              'deux ordinateurs, il effectue le relais via ses propres serveurs, ce qui peut '
                              'être lent.')],
                   'steps': ['Installez Tailscale sur chaque ordinateur et connectez-vous au même compte.',
-                            "Sur l'autre ordinateur, exécutez <code>tailscale ip -4</code> et notez "
-                            "l'adresse commençant par 100.",
-                            'Lors du couplage, cliquez sur Sur un autre sous-réseau ? et entrez cette '
-                            'adresse.'],
+                            "Sur l'autre ordinateur, exécutez <code>tailscale ip -4</code> et notez l'adresse commençant par 100."],
                   'address': "Aucun serveur n'est nécessaire. Une adresse Tailscale ne change pas, vous la "
                              "saisissez donc une fois, lors de l'appairage."}},
  'flow_h2': 'Que se passe-t-il lorsque vous copiez',
@@ -364,7 +342,7 @@ C = {'brand': 'PasteFerry',
           ['Oui. PasteFerry essaie chaque liaison montante.']),
          ("Pourquoi les fichiers .uuremote_ continuent-ils d'apparaître pendant l'exécution d'UU Remote\xa0?",
           ["C'était un bug dans les anciennes versions. Mettez à jour vers le dernier."])],
- 'closing': 'Vos appareils. Votre contenu. À la portée.',
+ 'closing': 'Téléchargez PasteFerry.',
  'footer_license': 'PasteFerry est open source sous GNU AGPL-3.0.',
  'footer_label': 'Pied de page',
  'footer_links': [('Toutes les versions', 'https://github.com/baiyuze/pasteferry/releases'),
@@ -738,8 +716,7 @@ C = {'brand': 'PasteFerry',
                           'même réseau, associez-le simplement\xa0; sur différents réseaux, activez le '
                           "service. Copiez ensuite sur un ordinateur et collez sur l'autre.",
            'h1': 'Démarrage rapide',
-           'lede': "Installez l'application, choisissez un moyen de vous connecter et associez vos "
-                   'ordinateurs. Sur le même réseau cela prend quelques minutes.',
+           'lede': 'Installez l’application, connectez les appareils et associez-les par code.',
            'toc': [('app', "Installez l'application"),
                    ('server', 'Choisissez un moyen de vous connecter'),
                    ('pair', 'Paire'),
@@ -770,9 +747,7 @@ C = {'brand': 'PasteFerry',
            'app_alt': "PasteFerry à la première ouverture, vous demandant d'activer la synchronisation en "
                       'arrière-plan',
            'server_h2': 'Choisissez un moyen de vous connecter',
-           'server_intro': 'Sur le même réseau, installez et associez. Sur différents réseaux, activez le '
-                           'service. Si vous souhaitez un contrôle total, exécutez votre propre serveur ou '
-                           'utilisez Tailscale.',
+           'server_intro': 'Connectez en local ou choisissez le Service, votre serveur ou Tailscale à distance.',
            'pair_h2': 'Associez vos ordinateurs',
            'pair_intro': "Associez deux ordinateurs une fois, et c'est tout.",
            'pair_steps': ['Sur un ordinateur, ouvrez Appareils et cliquez sur Ajouter un appareil. Il '
@@ -1079,8 +1054,7 @@ C = {'brand': 'PasteFerry',
         'source': 'Retour au même guide réseau'},
  'download': {'phone': {'title': 'Téléphone (application Android ou page Web)',
                         'apk': 'Télécharger pour Android (APK)',
-                        'apk_note': 'Android 9 ou version ultérieure, téléphones arm64 . Android demande une '
-                                    "fois avant de l'installer.",
+                        'apk_note': 'Android 9 ou ultérieur · ARM64',
                         'web_h': 'La page web (rien à installer)',
                         'web_note': "Allumez Appareils › Transfert Web par téléphone sur l'ordinateur et "
                                     'scannez le code avec votre téléphone.',
@@ -1092,12 +1066,8 @@ C = {'brand': 'PasteFerry',
                                   'Sur le téléphone, collez ce que vous avez copié et envoyez-le ; ce que '
                                   'vous copiez sur l’ordinateur apparaît dans les enregistrements du '
                                   'téléphone.'],
-                        'notes': ['Le texte, les captures d’écran et les fichiers vont dans les deux sens.',
-                                  "Il n'existe pas d'application iPhone ou iPad\xa0: iOS ne permet pas aux "
-                                  'applications de lire le presse-papiers en arrière-plan et sa distribution '
-                                  'nécessite un certificat. Utilisez plutôt la page Web.',
-                                  "Le contenu est crypté entre le téléphone et l'ordinateur ; utilisez-le à "
-                                  'la maison ou sur un réseau de confiance.'],
+                        'notes': ['Le téléphone et l’ordinateur doivent être sur le même réseau.',
+                                  'Sur iPhone et iPad, utilisez la version web.'],
                         'tab': 'Téléphone / web'},
               'title': 'Télécharger PasteFerry: Mac (Apple Silicon, Intel), Windows et Linux',
               'description': 'PasteFerry pour chaque système\xa0: versions Apple Silicon et Intel pour macOS '
@@ -1105,13 +1075,10 @@ C = {'brand': 'PasteFerry',
                              'Windows 10 et 11, ainsi que des packages .deb et tar.gz pour Linux sur x64 et '
                              'ARM64. Gratuit et open source.',
               'h1': 'Télécharger PasteFerry',
-              'lede': 'Gratuit et open source, version {version}. Installez-le sur chaque ordinateur que '
-                      'vous souhaitez synchroniser\xa0; Mac, Windows et Linux se mélangent librement.',
+              'lede': 'Gratuit et open source · Version {version}',
               'os_label': 'Choisissez votre système',
               'win': {'setup': "Téléchargez le programme d'installation",
-                      'portable': "Vous préférez ne pas exécuter de programme d'installation\xa0? Obtenez le "
-                                  'zip portable <a href="{portable}"></a>, extrayez-le et exécutez '
-                                  'PasteFerry à partir de là.',
+                      'portable': '<a href="{portable}">Version portable</a>, sans installation',
                       'steps': ["Exécutez PasteFerry-Setup.exe. Il s'installe pour l'utilisateur actuel, "
                                 'aucun droit d\'administrateur n\'est requis.<span class="aside">Si vous '
                                 "voyez «Windows a protégé votre PC », cliquez sur Plus d'informations, puis "
@@ -1125,14 +1092,9 @@ C = {'brand': 'PasteFerry',
                                 'zone de notification.']},
               'mac': {'apple': 'Puces Apple (M1+)',
                       'intel': 'Intel',
-                      'universal': 'Une version universelle <a href="{universal}">,</a> , qui fonctionne sur '
-                                   'les deux, est également disponible, avec une taille deux fois plus '
-                                   'grande.',
-                      'homebrew': "Vous pouvez également installer l'application de bureau et la CLI fournie "
-                                  'avec <code>brew install --cask baiyuze/tap/pasteferry</code>. Si elle est '
-                                  "déjà installée manuellement, quittez et déplacez d'abord l'application "
-                                  'existante\xa0; conservez vos données de candidature. Consultez le guide '
-                                  'd\'installation et de mise à niveau <a href="{homebrew}"></a>.',
+                      'universal': 'Une <a href="{universal}">version universelle</a> est aussi disponible.',
+                      'homebrew': (('Homebrew : <code>brew install --cask baiyuze/tap/pasteferry</code>. <a href="{homebrew}">Installation et '
+                                    'mise à jour</a>')),
                       'steps': ['Ouvrez le DMG que vous avez téléchargé et faites glisser PasteFerry dans '
                                 'Applications.',
                                 'Ouvrez-le depuis Applications.<span class="aside">La première fois, macOS '
@@ -1156,19 +1118,8 @@ C = {'brand': 'PasteFerry',
                         'tar_h': 'Autres distributions',
                         'x64': 'x64',
                         'arm64': 'ARM64',
-                        'notes': ['Nécessite un bureau graphique : X11, ou Wayland avec XWayland, que GNOME, '
-                                  "KDE et d'autres bureaux majeurs incluent par défaut.",
-                                  'Vous ne savez pas si vous possédez x64 ou ARM64? Exécutez <code>uname '
-                                  '-m</code> dans un terminal\xa0: <code>x86_64</code> signifie x64, '
-                                  '<code>aarch64</code> signifie ARM64.',
-                                  "Le .deb s'installe dans /opt/PasteFerry et ajoute PasteFerry au menu de "
-                                  "l'application. Le tar.gz s'exécute partout où vous l'extrayez et "
-                                  "<code>install.sh</code> l'ajoute au menu de l'application.",
-                                  'Une fois ouvert, cliquez sur Activer la synchronisation en '
-                                  'arrière-plan\xa0; à partir de là, il démarre lorsque vous vous connectez. '
-                                  "GNOME n'affiche aucune icône de barre d'état par défaut, alors ouvrez la "
-                                  "fenêtre à partir du menu de l'application.",
-                                  'Nécessite GTK 3. Testé sur Ubuntu 24.04 avec GNOME (Wayland).']},
+                        'notes': ['Nécessite GTK 3 et un bureau X11 ou Wayland avec XWayland.',
+                                  'Exécutez <code>uname -m</code> : <code>x86_64</code> = x64 ; <code>aarch64</code> = ARM64.']},
               'more_h2': 'Plus',
               'more': [('Serveur',
                         "Deux ordinateurs sur le même réseau n'ont pas besoin de serveur. Les moyens de se "
@@ -1227,21 +1178,16 @@ FEATURES = {'nav_features': 'Caractéristiques',
  'theme_dark': 'Sombre',
  'badge': '{version} : réglez la taille du texte et des icônes ensemble →',
  'home_phone_h2': 'Votre téléphone participe.',
- 'home_phone_intro': "Utilisez l'application Android pour envoyer et recevoir des lots de photos et de "
-                     'fichiers avec un ordinateur, puis enregistrez-les ou partagez-les. Vous préférez ne '
-                     "pas installer\xa0? Scannez un code pour connaître l'historique du presse-papiers, "
-                     "l'envoi de contenu et les transferts de fichiers séparés dans le navigateur.",
+ 'home_phone_intro': 'Échangez avec votre ordinateur sur le même réseau, via Android ou un QR code dans le navigateur.',
  'home_phone_points': ["<b>Utilisez le navigateur</b> pour l'historique et les transferts de fichiers "
                        'séparés.',
                        '<b>Android envoie et reçoit des lots</b> , avec sauvegarde et partage.',
                        '<b>Même réseau</b>; garder la page Web ouverte.'],
  'home_phone_link': 'Comment utiliser le téléphone →',
  'home_send_h2': "Faites-le glisser.<br>C'est là.",
- 'home_send_intro': 'Déposez des fichiers sur un ordinateur ou sélectionnez un lot sur Android. Les photos '
-                    'et les fichiers vont directement vers un autre appareil\xa0; les transferts '
-                    "d'applications reprennent après une interruption.",
+ 'home_send_intro': 'Glissez les fichiers ou dossiers sur l’appareil destinataire.',
  'home_send_link': "En savoir plus sur l'envoi de fichiers →",
- 'home_qp_h2': 'Appuyez sur {key}.<br>Tout ce que vous avez copié, juste là.',
+ 'home_qp_h2': 'Retrouvez<br>vos copies.',
  'home_qp_intro': "Appuyez dessus dans n'importe quelle application, choisissez un élément et il est collé.",
  'home_qp_link': 'En savoir plus sur le collage rapide →',
  'home_qp_alt': 'La fenêtre de collage rapide\xa0: un champ de recherche et six onglets (Tous, Texte, Liens, '
@@ -1281,19 +1227,18 @@ FEATURES = {'nav_features': 'Caractéristiques',
                 "envoyez des fichiers de n'importe quelle taille directement vers un autre ordinateur.",
  'eyebrow': 'Caractéristiques du PasteFerry',
  'h1': 'Copiez et collez<br>comme il se doit.',
- 'lede': 'Un presse-papiers pour vos ordinateurs Mac, Windows et Linux .',
+ 'lede': 'Presse-papiers synchronisé, historique et transfert de fichiers.',
  'hero_alt': "Historique de PasteFerry: une barre latérale avec l'historique, les favoris, l'envoi de "
              "fichiers, les appareils et les paramètres, ainsi qu'une liste de textes, d'images, de fichiers "
              'et de liens provenant de différents ordinateurs.',
  'sync_h2': 'Copiez ici.<br>Collez-y.',
- 'sync_intro': "{copy} ici, {paste} là. Aucun compte partagé n'est nécessaire.",
+ 'sync_intro': 'Copiez-collez du texte, des images, des fichiers et des dossiers.',
  'sync_facts': [('Texte, images, fichiers, dossiers', 'Se colle proprement dans les champs de texte brut.'),
                 ("Jusqu'à 50 Mo sont envoyés lors de la copie",
                  'Articles plus grands sur demande. La limite est réglable.'),
                 ('Faites une pause à tout moment', 'Mettez tout en pause, ou juste un ordinateur.')],
  'send_h2': "N'importe quelle taille.<br>Faites-le simplement glisser.",
- 'send_intro': 'Les ordinateurs proches et lointains sont sur le radar. Faites glisser les fichiers sur un '
-               'pour les envoyer. Pas de lecteur cloud et votre historique reste propre.',
+ 'send_intro': 'Glissez les fichiers ou dossiers sur l’appareil destinataire.',
  'send_points': [("N'importe quelle taille",
                   'Vidéos de plusieurs Go ou dossiers contenant des milliers de fichiers.'),
                  ("Reprend là où il s'est arrêté",
@@ -1301,16 +1246,13 @@ FEATURES = {'nav_features': 'Caractéristiques',
                   'vérifié.'),
                  ('Fichiers reçus en un seul endroit',
                   'Enregistré dans les téléchargements par défaut, un clic pour afficher.')],
- 'send_note': 'Fonctionne sur les réseaux\xa0; le relais via le Service est limité à 100 Mo par jour. Les '
-              'deux ordinateurs ont besoin de la version 2.5 ou ultérieure.',
+ 'send_note': 'Transferts directs illimités ; relais du Service : 100 Mo par ordinateur et par jour.',
  'send_alt': 'La page Envoyer des fichiers : un radar avec ce Mac au milieu et des appareils sur le même '
              'réseau et ailleurs autour de lui ; à droite, les fichiers reçus, avec un dossier arrivant et '
              'son avancement et sa rapidité',
  'theme_kicker': 'Nouveau dans 2.10',
  'theme_h2': 'Faites-le vôtre.<br>Même en pixels.',
- 'theme_intro': 'Choisissez un thème dans Paramètres > Apparence\xa0:\xa0Par défaut et Pixel sont intégrés. '
-                "Dupliquez-en un et personnalisez-le, ou demandez à une IA d'en concevoir un. Clair, foncé "
-                'ou assorti au système.',
+ 'theme_intro': 'Neuf thèmes intégrés. Personnalisez-les ou créez-en avec l’IA.',
  'theme_points': [('Thème des pixels',
                    'Type bitmap, blocs crantés et boutons biseautés. Une scène de nuit ou de jour en haut, '
                    "un avion en papier lors de l'envoi et un éclat d'étoiles une fois terminé."),
@@ -1320,11 +1262,7 @@ FEATURES = {'nav_features': 'Caractéristiques',
                   ('Demandez à une IA',
                    'Ajoutez <code>pasteferry-cli mcp</code> à Claude, Cursor et autres, puis dites « '
                    'faites-moi un thème cyberpunk ». Il est créé et appliqué.')],
- 'theme_note': "Les thèmes s'appliquent uniquement à l'appareil sur lequel vous les configurez (sur un "
-               'ordinateur, la fenêtre principale et le collage rapide) ; ils ne sont pas synchronisés. '
-               "L'application Android possède ses propres paramètres > Apparence. Les thèmes de pixels "
-               "peuvent ajouter des lignes de balayage CRT. L'IA ne peut lire et écrire que des thèmes, "
-               'jamais votre historique ou vos appareils.',
+ 'theme_note': 'Les thèmes sont enregistrés sur cet appareil uniquement.',
  'theme_alt': 'La page Apparence dans Paramètres (thème Pixel, sombre) : vignettes des thèmes intégrés par '
               "défaut et Pixel et deux thèmes personnalisés, puis Importer le thème, Demander à l'IA de "
               'créer un thème, clair et sombre, et lignes de balayage.',
@@ -1339,8 +1277,7 @@ FEATURES = {'nav_features': 'Caractéristiques',
                    "l'en-tête, une tente et un feu de camp en bas de la barre latérale et type bitmap",
  'home_theme_link': 'En savoir plus sur les thèmes →',
  'friends_h2': "L'ordinateur d'un ami,<br>, tout aussi simple.",
- 'friends_intro': "Ajoutez-les en tant que contact, aucun couplage n'est nécessaire. Les fichiers arrivent "
-                  'une fois acceptés, avec une note facultative.',
+ 'friends_intro': 'Ajoutez un ami et envoyez-lui des fichiers.',
  'friends_points': [('Ils décident de ce qui entre',
                      "Découvrez qui a envoyé quoi avant d'accepter ou acceptez automatiquement les personnes "
                      'en qui vous avez confiance.'),
@@ -1349,8 +1286,7 @@ FEATURES = {'nav_features': 'Caractéristiques',
                     ('Des fichiers, pas du chat',
                      'Les contacts ne voient jamais votre presse-papiers, votre historique ou vos '
                      'appareils.')],
- 'friends_note': 'Sur différents réseaux, les deux activent le service. Les deux nécessitent la version 2.6 '
-                 'ou ultérieure.',
+ 'friends_note': 'À distance, activez le Service des deux côtés.',
  'friends_alt': 'La page Envoyer des fichiers\xa0: les avatars des contacts sous le radar et une demande au '
                 'milieu\xa0: un contact sur un MacBook Air souhaite vous envoyer des fichiers, avec une '
                 'note\xa0- que vous pouvez refuser ou accepter',
@@ -1358,19 +1294,13 @@ FEATURES = {'nav_features': 'Caractéristiques',
  'phone_kicker': 'Nouveau en 2.8',
  'phone_alt': 'La page des appareils transfert web téléphone : le code et les téléphones enregistrés',
  'phone_h2': 'Votre téléphone participe.',
- 'phone_intro': "Utilisez l'application Android pour envoyer et recevoir des lots de photos et de fichiers "
-                'avec un ordinateur, puis enregistrez-les ou partagez-les. Vous préférez ne pas installer\xa0'
-                "? Scannez un code pour connaître l'historique du presse-papiers, l'envoi de contenu et les "
-                'transferts de fichiers séparés dans le navigateur.',
+ 'phone_intro': 'Échangez avec votre ordinateur sur le même réseau, via Android ou un QR code dans le navigateur.',
  'phone_points': [('Utilisez le navigateur', "pour l'historique et les transferts de fichiers séparés."),
                   ('Android envoie et reçoit', 'lots, avec sauvegarde et partage.'),
                   ('Même réseau', '; garder la page Web ouverte.')],
- 'phone_note': "Il n'existe pas d'application iPhone ou iPad\xa0: iOS ne permet pas aux applications de lire "
-               'le presse-papiers en arrière-plan et sa distribution nécessite un certificat. Ces appareils '
-               'utilisent la page Web.',
- 'qp_h2': 'Appuyez sur {key}.<br>Votre historique, là où vous tapez.',
- 'qp_intro': "Appuyez sur le raccourci dans n'importe quelle application, choisissez un élément et il est "
-             'collé au niveau du curseur.',
+ 'phone_note': 'Sur iPhone et iPad, gardez la version web ouverte.',
+ 'qp_h2': 'Appuyez sur {key}.<br>Choisissez et collez.',
+ 'qp_intro': 'Cherchez dans l’historique et collez un élément.',
  'qp_steps': [('Appuyez sur {key}', "Fonctionne dans n'importe quelle application."),
               ('Tapez quelques lettres',
                'Recherchez du texte et des noms de fichiers ou appuyez sur {index}.'),
@@ -1400,15 +1330,14 @@ FEATURES = {'nav_features': 'Caractéristiques',
              ('text', 'Les notes de réunion sont dans le dossier partagé', 'Hier', False, True),
              ('text', 'pnpm install', 'Hier', False, False)],
  'fav_h2': 'Gardez ce que vous réutilisez.',
- 'fav_intro': 'Mettez en avant les choses que vous réutilisez. Ils sont conservés dans une copie distincte '
-              'et n’expirent jamais.',
+ 'fav_intro': 'Les favoris restent enregistrés, avec une copie distincte des fichiers.',
  'fav_points': [('Jamais nettoyé', "L'historique expire\xa0; les favoris restent."),
                 ('Une copie à elle seule',
                  'La modification ou la suppression de l’original ne l’affecte pas.'),
                 ('En pâte rapide aussi', 'Également en pâte rapide\xa0; appuyez sur {fav} pour ajouter.')],
  'fav_alt': 'La page Favoris\xa0: cinq éléments enregistrés, dont un modèle de rapport, une réponse '
             'standard, un lien de téléchargement et un PDF, chacun avec une étoile bleue',
- 'details_h2': 'Les détails,<br>pris en charge.',
+ 'details_h2': 'Autres fonctions',
  'filter_title': 'Les liens ont leur propre onglet',
  'filter_text': 'Textes, liens, images, fichiers : un clic pour filtrer.',
  'filter_rows': [('text', 'Réunion déplacée au jeudi 15h', False),
@@ -1438,7 +1367,7 @@ FEATURES = {'nav_features': 'Caractéristiques',
  'names_title': 'Des noms qui fonctionnent partout',
  'names_text': 'Les caractères Windows ne permettent pas de se ressembler en pleine largeur.',
  'net_h2': 'Maison et bureau,<br>connecté directement.',
- 'net_intro': 'Même réseau\xa0: installer et appairer. Différents réseaux\xa0: activez le service.',
+ 'net_intro': 'Associez les appareils sur le même réseau, ou utilisez le Service, votre serveur ou Tailscale.',
  'net_points': [('Même réseau', "Pas de serveur. Entrez un code d'appairage et vous avez terminé."),
                 ('À travers les réseaux', 'Service, votre propre serveur ou Tailscale.'),
                 ('Chiffré de bout en bout',
@@ -1462,7 +1391,7 @@ FEATURES = {'nav_features': 'Caractéristiques',
              "passe-t-il lorsqu'ils ne le peuvent pas.",
  'security_title': 'Sécurité et confidentialité\xa0: cryptage de bout en bout et vérification du couplage — '
                    'PasteFerry',
- 'security_lede': 'Seuls vos appareils peuvent décrypter ce que vous copiez. Le serveur ne peut pas.',
+ 'security_lede': 'Chiffrement de bout en bout et vérification des empreintes à l’association.',
  'privacy_link': 'Politique de confidentialité →',
  'faq_title': 'FAQ — PasteFerry',
  'faq_lede': 'Vous ne trouvez pas de réponse ? Faites-le-nous savoir.',
@@ -1550,11 +1479,8 @@ THEMES = {'name': 'Guide des thèmes',
  'summary': "Modifiez les thèmes dans PasteFerry, changez de clair et d'obscur, créez votre propre thème et "
             "laissez des applications d'IA telles que Claude et Cursor concevoir et appliquer des thèmes sur "
             'MCP.',
- 'fit': 'Changez-le, créez-le,<br>ou laissez une IA le faire.',
- 'lede': 'PasteFerry 2.12.1 comprend neuf thèmes\xa0: Default, Pixel, Jazz Records, Space Age, Memphis, Y2K '
-         'Future, Vintage Print, Pixel Arcade et Retro Desktop. Chacun prend en charge les modes clair et '
-         "sombre. Copiez-en un pour le personnaliser ou laissez l'IA vous aider à concevoir un thème. Les "
-         'thèmes restent locaux sur chaque appareil.',
+ 'fit': 'Thèmes et apparence',
+ 'lede': 'Neuf thèmes intégrés, modes clair et sombre, couleurs et fonds personnalisés.',
  'download': 'Télécharger 2.12.1',
  'jump_ai': "Passer aux thèmes créés par l'IA ↓",
  'switch_title': 'Changer le thème',
@@ -1601,9 +1527,7 @@ THEMES = {'name': 'Guide des thèmes',
                   'fichier. Un thème avec le même identifiant est remplacé et le thème importé est appliqué.',
                   'Pour supprimer un thème personnalisé, choisissez <b>Supprimer le thème</b> dans son menu '
                   '<b>⋯</b> . Les thèmes intégrés ne peuvent pas être supprimés.'],
- 'custom_note': "Le contraste du texte est vérifié lorsqu'un thème est enregistré. Les couleurs difficiles à "
-                'lire sont signalées, mais vous pouvez toujours sauvegarder. Les fichiers de thème peuvent '
-                'être partagés : l’autre personne les importe simplement.',
+ 'custom_note': 'Exportez un thème pour le partager.',
  'bg_title': "Utiliser une image d'arrière-plan",
  'bg_steps': ["Ouvrez Paramètres <b>› Apparence</b>, faites défiler jusqu'à <b>Image d'arrière-plan</b>, "
               'cliquez sur <b>Choisir une image…</b> et choisissez un JPEG, PNG ou GIF.',
@@ -1637,9 +1561,7 @@ THEMES = {'name': 'Guide des thèmes',
  'scene_alt': "Thème pixel en mode sombre avec l'en-tête de page et le bas de la barre latérale remplacés "
               'par une image de collines au coucher du soleil',
  'file_title': 'À quoi ressemble un fichier de thème',
- 'file_intro': 'Un thème est un fichier JSON . Écrivez uniquement ce que vous souhaitez modifier\xa0; tout '
-               'le reste vient du thème nommé dans <code>base</code>. Celui-ci part de Pixel et change '
-               "l'accent et quelques arrière-plans\xa0:",
+ 'file_intro': 'Les thèmes utilisent JSON. Cet exemple modifie les couleurs du thème Pixel :',
  'file_fields_title': 'Champs communs',
  'file_fields': [('<code>id</code>',
                   "L'identifiant du thème : lettres minuscules, chiffres et <code>-</code>. Il ne peut pas "
@@ -1676,10 +1598,7 @@ THEMES = {'name': 'Guide des thèmes',
                   '<code>headerDark</code> et <code>sidebarDark</code> en option pour le mode sombre.')],
  'file_more': 'Le format complet et où chaque couleur est utilisée\xa0:',
  'ai_title': 'Laissez une IA créer un thème',
- 'ai_intro': 'PasteFerry inclut un serveur MCP, <code>pasteferry-cli mcp</code>. Ajoutez-le à une '
-             "application d'IA prenant en charge MCP, telle que Claude Desktop, Claude Code ou Cursor, et "
-             "décrivez l'apparence souhaitée en une phrase. L'IA lit le format du thème, sélectionne les "
-             'couleurs, vérifie le contraste, puis enregistre et applique le thème.',
+ 'ai_intro': 'Connectez via MCP pour créer et appliquer des thèmes avec Claude, Cursor ou une autre IA.',
  'ai_step1': '1. Trouver Pasteferry-cli',
  'ai_paths': [('Mac',
                '<code>/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli</code> (avec Homebrew, '
@@ -1694,8 +1613,7 @@ THEMES = {'name': 'Guide des thèmes',
  'ai_desktop': 'Claude Desktop (Paramètres › Développeur › Modifier la configuration) et Curseur '
                '(<code>~/.cursor/mcp.json</code>) utilisent la même configuration. Sur un Mac\xa0:',
  'ai_code': 'Pour Claude Code, exécutez dans un terminal\xa0:',
- 'ai_restart': "Redémarrez l'application AI après avoir modifié sa configuration. Gardez PasteFerry en cours "
-               "d'exécution\xa0: l'IA change de thème via son service en arrière-plan sur cet ordinateur.",
+ 'ai_restart': 'Enregistrez, puis redémarrez l’application IA. Gardez PasteFerry ouvert.',
  'ai_step3': '3. Dites ce que vous voulez',
  'ai_prompts': ['Créez-moi un thème cyberpunk avec du rose fluo et du violet foncé, puis appliquez-le.',
                 'Commencez par le thème Pixel et créez une version coucher de soleil avec un fond sombre '
@@ -1713,10 +1631,7 @@ THEMES = {'name': 'Guide des thèmes',
              'Importez une image depuis cet ordinateur comme fond de fenêtre ou décor, et analysez sa '
              'luminosité et ses couleurs principales.'],
  'ai_safe_title': "Ce qu'il ne peut pas faire",
- 'ai_safe': "Le serveur MCP s'exécute uniquement sur cet ordinateur et n'ouvre aucun port réseau. Il peut "
-            'lire et écrire uniquement des thèmes et des images d’arrière-plan\xa0: il ne peut pas voir '
-            'votre historique, vos appareils ou vos amis, ni modifier d’autres paramètres. Les images '
-            "d'arrière-plan doivent être des fichiers locaux\xa0; rien n'est téléchargé depuis Internet.",
+ 'ai_safe': 'Accès limité aux thèmes et fonds locaux, sans accès à l’historique ni aux appareils.',
  'faq_title': 'Questions',
  'faq': [('Les thèmes sont-ils synchronisés avec mes autres appareils\xa0?',
           'Non. Un thème s’applique uniquement à l’appareil sur lequel vous l’avez défini. Pour utiliser le '
@@ -1743,8 +1658,7 @@ OFFICIAL = {'badge': 'Sur différents réseaux ? Activer le service et synchroni
  'name': 'Service',
  'fit': 'Fonctionne entre la maison et le bureau',
  'go': 'Activer le service →',
- 'summary': 'Allumez un seul interrupteur et vos ordinateurs personnels et professionnels se synchronisent, '
-            'sans serveur à acheter.',
+ 'summary': 'Activez le Service pour connecter des ordinateurs entre réseaux.',
  'lede': 'Lorsque deux ordinateurs ne sont pas sur le même réseau, activez le service et ils se '
          'synchronisent.',
  'steps_title': "Comment l'allumer",
@@ -1753,17 +1667,13 @@ OFFICIAL = {'badge': 'Sur différents réseaux ? Activer le service et synchroni
            'Activez Utiliser le service dans Paramètres → Connexion.',
            "Associez les deux ordinateurs. Les ordinateurs que vous avez déjà couplés n'ont pas besoin "
            "d'être à nouveau couplés."],
- 'routing_title': 'Direct lorsque cela est possible',
- 'routing': "Les ordinateurs se connectent directement lorsqu'ils le peuvent et passent par le serveur "
-            "uniquement lorsqu'ils ne le peuvent pas. Le contenu est crypté et le serveur ne peut pas le "
-            'déchiffrer.',
- 'quota_title': '100 Mo de relais par jour, direct illimité',
- 'quota': 'Relay est limité à 100\xa0Mo par ordinateur et par jour\xa0; direct est illimité. La page '
-          "d'utilisation montre combien il reste.",
- 'privacy_title': 'Désactivé par défaut',
- 'privacy': 'Le service est désactivé dans une nouvelle installation. Le serveur ne reçoit jamais ce que '
-            "vous copiez ; voir l'avis de confidentialité.",
- 'self_title': "Vous n'êtes pas obligé de l'utiliser",
+ 'routing_title': 'Transferts',
+ 'routing': 'Connexion directe si possible, sinon relais du contenu chiffré.',
+ 'quota_title': 'Quota de données',
+ 'quota': '100 Mo de relais par ordinateur et par jour. Transferts directs illimités.',
+ 'privacy_title': 'Activation',
+ 'privacy': 'Désactivé par défaut. À activer sur chaque ordinateur.',
+ 'self_title': 'Autres options',
  'self': "Sur le même réseau, vous n'en avez pas besoin. Vous pouvez également exécuter votre propre serveur "
          'ou utiliser Tailscale.',
  'settings_alt': 'Le commutateur Utiliser le service dans Paramètres → Connexion',

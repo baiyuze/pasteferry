@@ -96,7 +96,7 @@
       <div class="wrap">
         <p class="crumb"><a href="../../es/">PasteFerry</a> / Descargar</p>
         <h1 class="display">Descargar PasteFerry</h1>
-        <p class="lede">Gratis y de código abierto, versión 2.13.1. Instálalo en cada computadora que quieras sincronizar; Mac, Windows y Linux se mezclan libremente.</p>
+        <p class="lede">Gratis y de código abierto · Versión 2.13.1</p>
       </div>
     </section>
 
@@ -117,16 +117,11 @@
                 <div class="dl-row">
                   <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-Setup.exe"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Descarga el instalador</a>
                 </div>
-                <p class="small">¿Prefieres no ejecutar un instalador? Obtenga el zip portátil <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-windows-x64.zip"></a>, extráigalo y ejecute PasteFerry desde allí.</p>
-                <ol class="steps">
-                <li>Ejecute PasteFerry-Setup.exe. Se instala para el usuario actual, no se necesitan derechos de administrador.<span class="aside">Si ve "Windows protegió su PC", haga clic en Más información y luego en Ejecutar de todos modos.</span></li>
-                <li>Abra PasteFerry y haga clic en Activar sincronización en segundo plano. Permítalo si Windows Firewall lo solicita.</li>
-                </ol>
+                <p class="small"><a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-windows-x64.zip">Versión portátil</a>, sin instalación</p>
+                <p class="more"><a href="../../es/start/#app">Inicio rápido →</a></p>
               </div>
               <ul class="points">
                 <li>Windows 10 y Windows 11, x64.</li>
-                <li>El instalador pesa unos 23 MB, el zip portátil unos 29 MB.</li>
-                <li>Después de cerrar la ventana, PasteFerry sigue ejecutándose en el área de notificación.</li>
               </ul>
             </div>
           </section>
@@ -139,20 +134,15 @@
                   <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-mac-apple-silicon.dmg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Chip Apple (M1+)</a>
                   <a class="button quiet" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-mac-intel.dmg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Intel</a>
                 </div>
-                <p class="small">También está disponible una versión universal <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry.dmg"></a> que se ejecuta en ambos, con el doble de tamaño.</p>
-                <p class="small">También puede instalar la aplicación de escritorio y la CLI incluida con <code>brew install --cask baiyuze/tap/pasteferry</code>. Si ya está instalada manualmente, cierre y mueva la aplicación existente primero; conservar los datos de su solicitud. Consulte la guía de instalación y actualización <a href="https://github.com/baiyuze/homebrew-tap"></a>.</p>
-                <ol class="steps">
-                <li>Abra el DMG que descargó y arrastre PasteFerry a Aplicaciones.</li>
-                <li>Ábrelo desde Aplicaciones.<span class="aside">La primera vez, macOS dice que no puede verificar al desarrollador: vaya a Configuración del sistema → Privacidad y seguridad y haga clic en Abrir de todos modos cerca de la parte inferior.</span></li>
-                <li>Haga clic en Activar sincronización en segundo plano. Cuando macOS le pregunte sobre el acceso al portapapeles y la búsqueda de dispositivos en su red local, permita ambos.</li>
-                </ol>
+                <p class="small">También hay una <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry.dmg">versión universal</a>.</p>
+                <p class="small">Homebrew: <code>brew install --cask baiyuze/tap/pasteferry</code>. <a href="https://github.com/baiyuze/homebrew-tap">Instalación y actualización</a></p>
+                <p class="more"><a href="../../es/start/#app">Inicio rápido →</a></p>
               </div>
               <div>
                 <h4>¿No estás seguro de qué chip?</h4>
                 <ul class="points">
                 <li>Haga clic en el menú Apple en la esquina superior izquierda de la pantalla y elija Acerca de esta Mac.</li>
                 <li>"Chip: Apple M1" (o M2, M3, M4…) significa Apple Silicon; "Procesador:... Intel Core..." significa Intel.</li>
-                <li>Casi todos los Mac comprados desde finales de 2020 tienen silicio de Apple. Si elige el incorrecto, simplemente descargue el otro: en una Mac Apple Silicon, la versión Intel necesita que Rosetta esté instalada primero, y la versión Apple Silicon no se abre en una Mac Intel.</li>
                 <li>Requiere macOS 13 Ventura o posterior.</li>
                 </ul>
               </div>
@@ -184,11 +174,8 @@
                 </div>
               </div>
               <ul class="points">
-                <li>Necesita un escritorio gráfico: X11, o Wayland con XWayland, que GNOME, KDE y otros escritorios importantes incluyen por defecto.</li>
-                <li>¿No estás seguro de si tienes x64 o ARM64? Ejecute <code>uname -m</code> en una terminal: <code>x86_64</code> significa x64, <code>aarch64</code> significa ARM64.</li>
-                <li>El .deb se instala en /opt/PasteFerry y agrega PasteFerry al menú de la aplicación. El tar.gz se ejecuta desde donde lo extraiga y <code>install.sh</code> lo agrega al menú de la aplicación.</li>
-                <li>Una vez que esté abierto, haga clic en Activar sincronización en segundo plano; a partir de ese momento, comienza cuando inicias sesión. GNOME no muestra ningún icono de bandeja de forma predeterminada, así que abre la ventana desde el menú de la aplicación.</li>
-                <li>Necesita GTK 3. Probado en Ubuntu 24.04 con GNOME (Wayland).</li>
+                <li>Requiere GTK 3 y un escritorio X11 o Wayland con XWayland.</li>
+                <li>Ejecuta <code>uname -m</code>: <code>x86_64</code> es x64; <code>aarch64</code> es ARM64.</li>
               </ul>
             </div>
           </section>
@@ -199,19 +186,17 @@
                 <div class="dl-row">
                   <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-android-arm64.apk"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Descargar para Android (APK)</a>
                 </div>
-                <p class="small">Android 9 o posterior, teléfonos arm64 . Android pregunta una vez antes de instalarlo.</p>
+                <p class="small">Android 9 o posterior · ARM64</p>
                 <h4>La página web (nada que instalar)</h4>
                 <p class="small">Active Dispositivos › Transferencia web telefónica en la computadora y escanee el código con su teléfono.</p>
                 <ol class="steps">
                 <li>Después de instalar la aplicación, empareje el teléfono desde Dispositivos en la computadora, de la misma manera que empareja otra computadora.</li>
-                <li>O utilice la página web: active Dispositivos > Transferencia web del teléfono en la computadora y escanee el código.</li>
                 <li>En el teléfono pega lo que copiaste y envíalo; lo que copias en la computadora aparece en los registros del teléfono.</li>
                 </ol>
               </div>
               <ul class="points">
-                <li>El texto, las capturas de pantalla y los archivos van en ambos sentidos.</li>
-                <li>No existe una aplicación para iPhone o iPad: iOS no permite que las aplicaciones lean el portapapeles en segundo plano y para distribuir una se necesita un certificado. Utilice la página web en su lugar.</li>
-                <li>Los contenidos están cifrados entre el teléfono y la computadora; Úselo en casa o en una red de confianza.</li>
+                <li>Conecta el teléfono y el ordenador a la misma red.</li>
+                <li>En iPhone y iPad, usa la versión web.</li>
               </ul>
             </div>
           </section>

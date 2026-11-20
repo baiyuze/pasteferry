@@ -96,7 +96,7 @@
       <div class="wrap">
         <p class="crumb"><a href="../../zh-hk/">隔空貼</a> / <a href="../../zh-hk/start/#server">連接方式</a></p>
         <h1 class="display">部署到公網伺服器</h1>
-        <p class="lede">一部有公網 IP 的 Linux 雲端伺服器，最低配置已經足夠。每部電腦直接連線到它，在家、在公司、在外面都能同步，不用另外安裝軟件。</p>
+        <p class="lede">在 Linux 雲端主機架設，連接不同網絡中的電腦。</p>
         <ol class="guide-toc">
           <li><a href="#prepare">準備</a></li>
           <li><a href="#ports">開放端口</a></li>
@@ -111,7 +111,7 @@
     <section class="section" id="overview" aria-labelledby="overview-title">
       <div class="wrap">
         <h2 id="overview-title">所有電腦都直接連線到它</h2>
-        <p class="intro">伺服器在公網上，每部電腦不論身處哪個網絡，都能直接連上。複製的內容優先在兩部電腦之間直連傳輸；打不通直連時經伺服器中轉，內容依然加密。</p>
+        <p class="intro">優先直連；無法直連時，透過伺服器中繼加密內容。</p>
         <figure class="diagram">
           <svg viewBox="0 0 960 460" role="img" aria-labelledby="cloud-title cloud-desc">
             <title id="cloud-title">透過公網伺服器使用隔空貼</title>
@@ -145,11 +145,6 @@
             </g>
           </svg>
         </figure>
-        <ul class="points ports">
-          <li><strong>信令，TCP 8787。</strong>每部電腦一直連着它，用來發現對方、配對、交換連線資訊。</li>
-          <li><strong>直連。</strong>兩部電腦在不同網絡裏時，靠 NAT 打洞直接相連，大多數家庭和公司網絡都能打通。</li>
-          <li><strong>中轉，UDP 3478 與中轉端口。</strong>打不通直連時經伺服器轉發，內容依然加密，速度受伺服器頻寬限制。</li>
-        </ul>
       </div>
     </section>
 
@@ -197,7 +192,7 @@
       <div class="wrap">
         <p class="eyebrow">第 2 步</p>
         <h2 id="install-title">執行安裝腳本</h2>
-        <p class="intro">把公網 IP 傳給安裝腳本，它會安裝好伺服器、註冊為開機自動啟動的 systemd 服務，最後顯示用戶端要填的地址。</p>
+        <p class="intro">執行腳本安裝服務，並產生用戶端連線位址。</p>
         <div class="os-grid qs-grid">
           <div class="os-steps">
             <ol class="steps">
@@ -322,7 +317,7 @@ sudo ./install.sh 203.0.113.10</code></pre>
         <div class="cta">
           <a class="button" href="../../zh-hk/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
         </div>
-        <p class="note">版本 2.13.1，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）；安卓 9 或以上。新增介面縮放：文字、圖示和間距一起放大或縮小。</p>
+        <p class="note">免費開源 · Mac / Windows / Linux / Android</p>
         <a class="source" href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md">伺服器的完整部署說明（包括 Docker 與全部參數）</a>
       </div>
     </section>

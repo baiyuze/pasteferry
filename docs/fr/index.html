@@ -53,7 +53,7 @@
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
-      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs"};
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "features": "features/", "why": "features/"};
       var to = moved[location.hash.slice(1)];
       if (to) location.replace(to);
     })();
@@ -193,15 +193,15 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">2.13.1 : réglez la taille du texte et des icônes ensemble →</a>
-        <h1 class="display">Vos ordinateurs. Votre téléphone.<br>Tout à portée de main.</h1>
-        <p class="lede">Copiez sur un ordinateur, collez sur un autre. Retrouvez votre historique et transférez vos photos et fichiers entre Mac, Windows, Linux et Android, sans compte commun. Sur téléphone, scannez un code pour ouvrir la version web. Android et la version web s’utilisent sur le même réseau.</p>
+        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">v2.13.1</a>
+        <h1 class="display">Copiez ici.<br>Collez ailleurs.</h1>
+        <p class="lede">Synchronisez le presse-papiers, gardez un historique et envoyez des fichiers.</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Télécharger PasteFerry</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> Regardez la tournée complète <span class="tour-duration">1:25</span></a>
         </div>
-        <p class="note">Version 2.13.1, gratuite et open source. Pour macOS 13 ou version ultérieure, Windows 10 et 11, Linux (x64 et ARM64) et Android 9 ou version ultérieure. Le nouveau réglage de taille agrandit ou réduit le texte, les icônes et les espacements ensemble.</p>
-        <a class="start-link" href="start/">Nouveau ici ? Configurez-le en trois étapes →</a>
+        <p class="note">Gratuit et open source · Mac / Windows / Linux / Android</p>
+        <a class="start-link" href="start/">Démarrage rapide →</a>
         <div class="demo" data-demo data-pasted="{item} collé sur Ordinateur portable Windows">
           <div class="demo-modes" role="radiogroup" aria-label="Où sont les deux ordinateurs ?"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">Maison ↔ bureau</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">Même Wi-Fi</button></div>
           <div class="stage" data-play data-mode="wan" role="group" aria-label="Démo : la commande C sur un MacBook transforme un fichier en une feuille qui survole une connexion directe à un ordinateur portable Windows , où Ctrl V pastes it">
@@ -239,60 +239,9 @@
       </div>
     </section>
 
-    <section class="section spotlight" id="themes" aria-labelledby="theme-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">Nouveau dans 2.10</span></p>
-        <h2 id="theme-title">Faites-le vôtre.<br>Même en pixels.</h2>
-        <p class="intro">Les thèmes sont ici : un look pixel intégré, vos propres thèmes ou un thème conçu par l'IA pour vous.</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/en/pixel-history-dark.png?v=aaa7f233a7" width="2112" height="1472" alt="Histoire dans le thème Pixel (sombre) : montagnes nocturnes, pins et lune dans l&#x27;en-tête, une tente et un feu de camp en bas de la barre latérale et type bitmap" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/pixel-history.png?v=c0311ff88d" width="2112" height="1472" alt="Histoire dans le thème Pixel (sombre) : montagnes nocturnes, pins et lune dans l&#x27;en-tête, une tente et un feu de camp en bas de la barre latérale et type bitmap" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#themes">En savoir plus sur les thèmes →</a><a href="themes/">Guide des thèmes →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="friends" aria-labelledby="friends-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">Nouveau en 2.6</span></p>
-        <h2 id="friends-title">L'ordinateur d'un ami,<br>, tout aussi simple.</h2>
-        <p class="intro">Ajoutez-les en tant que contact, aucun couplage n'est nécessaire. Les fichiers arrivent une fois acceptés, avec une note facultative.</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/en/incoming-dark.png?v=3c9bf5f227" width="2552" height="1632" alt="La page Envoyer des fichiers : les avatars des contacts sous le radar et une demande au milieu : un contact sur un MacBook Air souhaite vous envoyer des fichiers, avec une note - que vous pouvez refuser ou accepter" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/incoming.png?v=c40261a11c" width="2552" height="1632" alt="La page Envoyer des fichiers : les avatars des contacts sous le radar et une demande au milieu : un contact sur un MacBook Air souhaite vous envoyer des fichiers, avec une note - que vous pouvez refuser ou accepter" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#friends">En savoir plus sur l'envoi aux contacts →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
-      <div class="wrap">
-        <h2 id="phone-title">Votre téléphone participe.</h2>
-        <p class="intro">Utilisez l'application Android pour envoyer et recevoir des lots de photos et de fichiers avec un ordinateur, puis enregistrez-les ou partagez-les. Vous préférez ne pas installer ? Scannez un code pour connaître l'historique du presse-papiers, l'envoi de contenu et les transferts de fichiers séparés dans le navigateur.</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" alt="La page des appareils transfert web téléphone : le code et les téléphones enregistrés" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/web-share.png?v=29f0d60dd1" width="2552" height="1632" alt="La page des appareils transfert web téléphone : le code et les téléphones enregistrés" loading="lazy">
-        </figure>
-        <ul class="points">
-          <li><b>Utilisez le navigateur</b> pour l'historique et les transferts de fichiers séparés.</li>
-          <li><b>Android envoie et reçoit des lots</b> , avec sauvegarde et partage.</li>
-          <li><b>Même réseau</b>; garder la page Web ouverte.</li>
-        </ul>
-        <p class="more"><a href="features/#phone">Comment utiliser le téléphone →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="send" aria-labelledby="send-title">
-      <div class="wrap">
-        <h2 id="send-title">Faites-le glisser.<br>C'est là.</h2>
-        <p class="intro">Déposez des fichiers sur un ordinateur ou sélectionnez un lot sur Android. Les photos et les fichiers vont directement vers un autre appareil ; les transferts d'applications reprennent après une interruption.</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" alt="La page Envoyer des fichiers : un radar avec ce Mac au milieu et des appareils sur le même réseau et ailleurs autour de lui ; à droite, les fichiers reçus, avec un dossier arrivant et son avancement et sa rapidité" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/send.png?v=740f8bec78" width="2552" height="1632" alt="La page Envoyer des fichiers : un radar avec ce Mac au milieu et des appareils sur le même réseau et ailleurs autour de lui ; à droite, les fichiers reçus, avec un dossier arrivant et son avancement et sa rapidité" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#send">En savoir plus sur l'envoi de fichiers →</a></p>
-      </div>
-    </section>
-
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <h2 id="qp-title">Appuyez sur <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>.<br>Tout ce que vous avez copié, juste là.</h2>
+        <h2 id="qp-title">Retrouvez<br>vos copies.</h2>
         <p class="intro">Appuyez dessus dans n'importe quelle application, choisissez un élément et il est collé.</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
@@ -304,116 +253,68 @@
       </div>
     </section>
 
-    <section class="section" id="features" aria-labelledby="grid-title">
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
-        <h2 id="grid-title">Plus qu'un presse-papiers partagé.</h2>
-        <ul class="tiles">
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
-            <h3>Envoi de fichiers <span class="new">Nouveautés</span></h3>
-            <p>Déposez des fichiers ou des dossiers sur un autre ordinateur ou un contact. N'importe quelle taille.</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
-            <h3>Collage rapide</h3>
-            <p>Appuyez sur <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> pour votre historique ; choisissez un élément et il est collé.</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
-            <h3>Fichiers et dossiers</h3>
-            <p>Les petits fichiers se synchronisent au fur et à mesure que vous copiez, les gros lorsque vous en avez besoin.</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-            <h3>Histoire et favoris</h3>
-            <p>Tout est copié sur chaque appareil, consultable.</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
-            <h3>À travers les réseaux</h3>
-            <p>Activez le service pour synchroniser entre la maison et le travail.</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
-            <h3>Chiffré de bout en bout</h3>
-            <p>Direct d’abord. Le serveur ne peut pas voir ce que vous copiez.</p>
-          </li>
-        </ul>
-        <p class="more"><a href="features/">Voir toutes les fonctionnalités →</a></p>
+        <h2 id="send-title">Faites-le glisser.<br>C'est là.</h2>
+        <p class="intro">Glissez les fichiers ou dossiers sur l’appareil destinataire.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" alt="La page Envoyer des fichiers : un radar avec ce Mac au milieu et des appareils sur le même réseau et ailleurs autour de lui ; à droite, les fichiers reçus, avec un dossier arrivant et son avancement et sa rapidité" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/send.png?v=740f8bec78" width="2552" height="1632" alt="La page Envoyer des fichiers : un radar avec ce Mac au milieu et des appareils sur le même réseau et ailleurs autour de lui ; à droite, les fichiers reçus, avec un dossier arrivant et son avancement et sa rapidité" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#send">En savoir plus sur l'envoi de fichiers →</a></p>
       </div>
     </section>
 
-    <section class="section" id="why" aria-labelledby="why-title">
+    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
-        <h2 id="why-title">Pourquoi ne pas utiliser ce que vous avez déjà</h2>
-        <p class="intro">Universal Clipboard a besoin du même Apple ID, AirDrop vous fait accepter à chaque fois, et aucun ne fonctionne entre un Mac et un PC Windows .</p>
-        <div class="block table-scroll">
-          <table class="compare">
-            <caption class="skip">PasteFerry par rapport aux autres options</caption>
-            <thead><tr><td></td><th scope="col" class="ours">PasteFerry</th><th scope="col">Presse-papiers universel</th><th scope="col">AirDrop</th><th scope="col">Applications de chat</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">Aucun compte requis</th><td class="yes ours">Oui</td><td class="no">Idem Apple ID</td><td class="partial">Appareils Apple uniquement</td><td class="no">Connexion nécessaire</td></tr>
-              <tr><th scope="row">Entre Mac, Windows, Linux et Android</th><td class="yes ours">Oui</td><td class="no">Non</td><td class="no">Non</td><td class="yes">Oui</td></tr>
-              <tr><th scope="row">Entre la maison et le bureau</th><td class="yes ours">Oui</td><td class="no">Non</td><td class="no">Non</td><td class="yes">Oui</td></tr>
-              <tr><th scope="row">Sur un réseau local sans Internet</th><td class="yes ours">Oui</td><td class="partial">A proximité seulement</td><td class="yes">Oui</td><td class="no">Non</td></tr>
-              <tr><th scope="row">Coller juste après la copie, rien à accepter</th><td class="yes ours">Oui</td><td class="yes">Oui</td><td class="no">Non</td><td class="no">Non</td></tr>
-              <tr><th scope="row">Fichiers et dossiers entiers, de toute taille</th><td class="yes ours">Oui</td><td class="partial">Peu fiable</td><td class="yes">Oui</td><td class="partial">Zip d'abord, limites de taille</td></tr>
-              <tr><th scope="row">Trouvez quelque chose que vous avez copié plus tôt</th><td class="yes ours">Oui</td><td class="no">Non</td><td class="no">Non</td><td class="partial">Faire défiler vers l'arrière</td></tr>
-              <tr><th scope="row">Seuls vos appareils peuvent décrypter</th><td class="yes ours">Oui</td><td class="yes">Oui</td><td class="yes">Oui</td><td class="some">Cela dépend de l'application</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <h2 id="phone-title">Votre téléphone participe.</h2>
+        <p class="intro">Échangez avec votre ordinateur sur le même réseau, via Android ou un QR code dans le navigateur.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" alt="La page des appareils transfert web téléphone : le code et les téléphones enregistrés" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/web-share.png?v=29f0d60dd1" width="2552" height="1632" alt="La page des appareils transfert web téléphone : le code et les téléphones enregistrés" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#phone">Comment utiliser le téléphone →</a></p>
       </div>
     </section>
 
     <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
-        <h2 id="deploy-title">Comment vos ordinateurs se connectent</h2>
-        <p class="intro">Sur le même réseau, installez et associez. Sur différents réseaux, activez le service ou exécutez votre propre serveur ou Tailscale.</p>
+        <h2 id="deploy-title">Modes de connexion</h2>
         <div class="paths">
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">Fonctionne entre la maison et le bureau</span>
             <h3>Service</h3>
-            <p>Allumez un seul interrupteur et vos ordinateurs personnels et professionnels se synchronisent, sans serveur à acheter.</p>
+            <p>Activez le Service pour connecter des ordinateurs entre réseaux.</p>
             <span class="path-go">Activer le service →</span>
           </a>
           <a class="path" href="lan/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-            <span class="path-when">Rien à mettre en place</span>
             <h3>Même réseau</h3>
-            <p>Deux ordinateurs sur le même routeur : installez l'application, saisissez un code d'appairage et le tour est joué. Aucun serveur n'est nécessaire.</p>
+            <p>Associez par code sur le même réseau Wi-Fi ou filaire.</p>
             <span class="path-go">Même guide réseau →</span>
           </a>
           <a class="path" href="cloud/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">Votre serveur, relais illimité</span>
             <h3>Votre propre serveur public</h3>
-            <p>Une VM Linux avec une IP publique ; la plus petite taille suffit. Chaque ordinateur s'y connecte et se synchronise depuis n'importe où.</p>
+            <p>Hébergez-le sur votre serveur Linux.</p>
             <span class="path-go">Guide du serveur public →</span>
           </a>
           <a class="path" href="tailscale/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-            <span class="path-when">Sur les réseaux, pas de serveur</span>
             <h3>Tailscale</h3>
-            <p>Installez Tailscale sur chaque ordinateur, connectez-vous au même compte et saisissez l'adresse Tailscale de l'autre ordinateur lors du couplage.</p>
+            <p>Associez via votre réseau Tailscale.</p>
             <span class="path-go">Guide Tailscale →</span>
           </a>
         </div>
-        <p class="note">Nouveau ici ? Suivez le démarrage rapide <a href="start/#server"></a>. Le service est gratuit : 100 Mo de relais par jour, connexions directes illimitées.</p>
       </div>
     </section>
 
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
-        <h2 class="display" id="closing-title">Vos appareils. Votre contenu. À la portée.</h2>
+        <h2 class="display" id="closing-title">Téléchargez PasteFerry.</h2>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Télécharger PasteFerry</a>
         </div>
-        <p class="note">Version 2.13.1, gratuite et open source. Pour macOS 13 ou version ultérieure, Windows 10 et 11, Linux (x64 et ARM64) et Android 9 ou version ultérieure. Le nouveau réglage de taille agrandit ou réduit le texte, les icônes et les espacements ensemble.</p>
-        <a class="start-link" href="start/">Nouveau ici ? Configurez-le en trois étapes →</a>
+        <a class="start-link" href="start/">Démarrage rapide →</a>
         <div class="star-ask">
-          <p>Vous aimez ça ? Mettez-le en vedette sur GitHub.</p>
           <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Étoile PasteFerry sur GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Ajouter une étoile sur GitHub</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
         </div>
       </div>

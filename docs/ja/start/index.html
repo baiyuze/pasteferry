@@ -96,7 +96,6 @@
       <div class="wrap">
         <p class="crumb"><a href="../../ja/">PasteFerry</a> / はじめかた</p>
         <h1 class="display">はじめかた</h1>
-        <p class="lede">アプリを入れて、接続方法を選び、2 台をペアリングします。同じネットワークなら数分で終わります。</p>
         <ol class="guide-toc">
           <li><a href="#app">アプリを入れる</a></li>
           <li><a href="#server">接続方法を選ぶ</a></li>
@@ -110,7 +109,6 @@
       <div class="wrap">
         <p class="eyebrow">ステップ 1</p>
         <h2 id="app-title">各コンピューターにアプリを入れる</h2>
-        <p class="intro">同期したいコンピューターすべてに入れます。Mac、Windows、Linux の組み合わせも自由です。</p>
         <div class="os-grid qs-grid">
           <div>
             <div class="qs-app">
@@ -150,7 +148,7 @@
       <div class="wrap">
         <p class="eyebrow">ステップ 2</p>
         <h2 id="server-title">接続方法を選ぶ</h2>
-        <p class="intro">同じネットワークなら、入れてそのままペアリング。別のネットワークなら「サービス」をオンにするだけです。自分で管理したいなら、独自サーバーや Tailscale も使えます。</p>
+        <p class="intro">同じネットワークで接続。離れたデバイスにはサービス、独自サーバー、Tailscale を利用。</p>
         <div class="os-tabs" data-tabs="plan">
           <div class="tablist" role="tablist" aria-label="接続方法" hidden>
             <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">サービス</button>
@@ -164,19 +162,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>各パソコンに最新版を入れ、「バックグラウンド同期を有効にする」をクリックします。</li>
                   <li>「設定 → 接続」で「サービスを使う」をオンにします。</li>
-                  <li>2 台をペアリングします。ペアリング済みならそのままで使えます。</li>
                 </ol>
-                <p class="plan-address">新しく入れたアプリではオフになっています。コピーした内容はサーバーに届きません。詳しくはプライバシーに関する説明をご覧ください。</p>
                 <a class="button quiet" href="../../ja/official/">「サービス」をオンにする →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>直接つながれば中継しない</dt><dd>直接つながればそのまま、つながらないときだけサーバーが中継します。内容は暗号化され、サーバーには読めません。</dd></div>
-                  <div><dt>中継は 1 日 100 MB、直接接続は無制限</dt><dd>中継はパソコン 1 台につき 1 日 100 MB、直接接続は無制限です。残りは使用量のページで確認できます。</dd></div>
-                </dl>
+                <p>中継はパソコン 1 台につき 1 日 100 MB。直接転送は無制限。</p>
               </div>
             </div>
           </section>
@@ -186,20 +178,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>各コンピューターにアプリを入れ、「バックグラウンド同期を有効にする」をクリックします。</li>
-                  <li>Windows ファイアウォールと、macOS のローカルネットワークの確認には、どちらも「許可」を選びます。</li>
-                  <li>一台でコードを表示し、もう一台で入力して指紋を照合します。別のサブネットにある場合は、コードの下のアドレスも入力します（<a href="../../ja/lan/#subnet">同じネットワークでの手順</a>）。</li>
+                  <li>両方のパソコンを同じ Wi-Fi または有線ネットワークに接続。</li>
                 </ol>
-                <p class="plan-address">サーバーのアドレスは入力不要です。</p>
                 <a class="button quiet" href="../../ja/lan/">同じネットワークでの手順 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-                <dl>
-                  <div><dt>向いている</dt><dd>家や会社で、2 台が同じ Wi‑Fi か有線ネットワークにある場合。</dd></div>
-                  <div><dt>必要なもの</dt><dd>特にありません。各コンピューターにアプリを入れるだけです。</dd></div>
-                  <div><dt>注意</dt><dd>そのネットワークを離れると同期は止まり、戻れば自動で再開します。有線と Wi‑Fi でサブネットが違う場合は、ペアリング時にアドレスをひとつ入力します。</dd></div>
-                </dl>
+                <p>サーバー不要</p>
               </div>
             </div>
           </section>
@@ -209,20 +194,14 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>クラウドのセキュリティグループで TCP 8787、UDP 3478、UDP 32768–60999 を開けます。</li>
-                  <li>ssh でログインし、インストールスクリプトをダウンロードして実行します：<code>sudo ./install.sh グローバルIP</code>。</li>
-                  <li>各コンピューターの「設定 → 接続」に <code>ws://グローバルIP:8787/signal</code> を入力して Return を押し、ペアリングします。</li>
+                  <li><a href="../../ja/cloud/">構築ガイド</a>に従ってサーバーをインストール。</li>
+                  <li>生成されたサーバーアドレスを「設定 → 接続」に入力。</li>
                 </ol>
-                <p class="plan-address">ブラウザーで <code>http://グローバルIP:8787/healthz</code> を開き、ok と表示されれば完了です。</p>
                 <a class="button quiet" href="../../ja/cloud/">公開サーバーでの手順 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>向いている</dt><dd>サーバーを自分で管理したい場合や、中継をたくさん使う場合。</dd></div>
-                  <div><dt>必要なもの</dt><dd>グローバル IP のある Linux クラウドサーバーと root 権限。</dd></div>
-                  <div><dt>注意</dt><dd>クラウドサーバーの費用がかかります。中継の速度はサーバーの帯域しだいです。中国本土では ICP 登録のないドメインが使えないため、IP を入力します。</dd></div>
-                </dl>
+                <p>自分のサーバーで、中継は無制限</p>
               </div>
             </div>
           </section>
@@ -234,18 +213,12 @@
                 <ol class="steps">
                   <li>各コンピューターに Tailscale を入れ、同じアカウントでサインインします。</li>
                   <li>相手のコンピューターで <code>tailscale ip -4</code> を実行し、100 で始まるアドレスを控えます。</li>
-                  <li>ペアリングのときに「別のサブネットにありますか？」をクリックし、そのアドレスを入力します。</li>
                 </ol>
-                <p class="plan-address">サーバーは要りません。Tailscale のアドレスは変わらないので、入力はペアリングのときの一度だけです。</p>
                 <a class="button quiet" href="../../ja/tailscale/">Tailscale での手順 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-                <dl>
-                  <div><dt>向いている</dt><dd>すでに Tailscale を使っている場合や、どのサーバーにも頼りたくない場合。</dd></div>
-                  <div><dt>必要なもの</dt><dd>すべてのコンピューターに、同じアカウントでサインインした Tailscale。</dd></div>
-                  <div><dt>注意</dt><dd>Tailscale は常に接続しておきます。Tailscale 自体が直接つなげないときは DERP サーバー経由になり、遅くなることがあります。</dd></div>
-                </dl>
+                <p>ネットワークをまたぐ、サーバーなし</p>
               </div>
             </div>
           </section>
@@ -257,7 +230,6 @@
       <div class="wrap">
         <p class="eyebrow">ステップ 3</p>
         <h2 id="pair-title">2 台をペアリングする</h2>
-        <p class="intro">2 台ごとに一度ペアリングすれば、あとは何もする必要はありません。</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">

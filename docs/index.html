@@ -77,7 +77,7 @@
   </script>
   <script>
     (function () {
-      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs"};
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "features": "features/", "why": "features/"};
       var to = moved[location.hash.slice(1)];
       if (to) location.replace(to);
     })();
@@ -217,15 +217,15 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">2.13.1：界面缩放，文字、图标一起放大 →</a>
-        <h1 class="display">电脑与手机，<br>内容随手互通。</h1>
-        <p class="lede">电脑间复制粘贴、找回历史；电脑与安卓互传照片和文件。Mac、Windows、Linux、安卓都能用，不用同一个账号。手机也能扫码打开网页；安卓和网页限同一网络。</p>
+        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">v2.13.1</a>
+        <h1 class="display">跨设备，<br>复制粘贴。</h1>
+        <p class="lede">同步剪贴板、保存复制记录，互传照片和文件。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 看完整演示 <span class="tour-duration">1:25</span></a>
         </div>
-        <p class="note">版本 2.13.1，免费开源。macOS 13 及以上；Windows 10、11；Linux（x64 与 ARM64）；安卓 9 及以上。新增界面缩放：文字、图标和间距一起放大或缩小。</p>
-        <a class="start-link" href="start/">第一次用？三步配好 →</a>
+        <p class="note">免费开源 · Mac / Windows / Linux / Android</p>
+        <a class="start-link" href="start/">快速开始 →</a>
         <div class="demo" data-demo data-pasted="{item} 已粘贴到 Windows 笔记本">
           <div class="demo-modes" role="radiogroup" aria-label="两台电脑在哪"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">家里 ↔ 公司</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">同一个 Wi‑Fi</button></div>
           <div class="stage" data-play data-mode="wan" role="group" aria-label="演示：在 MacBook 上按下 Command C，文件化作一张纸，经直连飞到 Windows 笔记本，在那里按下 Ctrl V 粘贴出来">
@@ -263,60 +263,9 @@
       </div>
     </section>
 
-    <section class="section spotlight" id="themes" aria-labelledby="theme-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">2.10 新功能</span></p>
-        <h2 id="theme-title">换个样子，<br>像素风也行。</h2>
-        <p class="intro">新增主题：自带像素风，也能自己做一套，或者让 AI 帮你配色。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="assets/screenshots/pixel-history-dark.png?v=f242b14be0" width="2112" height="1472" alt="像素主题的复制记录（深色）：页眉是夜里的远山、松树和月亮，侧边栏底下有帐篷和篝火，字是点阵字体" loading="lazy"><img class="theme-light" src="assets/screenshots/pixel-history.png?v=ae7e69fecf" width="2112" height="1472" alt="像素主题的复制记录（深色）：页眉是夜里的远山、松树和月亮，侧边栏底下有帐篷和篝火，字是点阵字体" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#themes">了解主题 →</a><a href="themes/">主题教程 →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="friends" aria-labelledby="friends-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">2.6 新功能</span></p>
-        <h2 id="friends-title">好友的电脑，<br>也能拖过去。</h2>
-        <p class="intro">加个好友就能发，不用配对。对方点接受才开始传，还能附一句备注。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="assets/screenshots/incoming-dark.png?v=82995fe46c" width="2552" height="1632" alt="隔空传送页：雷达下方是好友小明、王姐、阿杰的头像；中间弹出「小明 · MacBook Air 想发给你文件」，附有备注「合同第 3 页要签字」，可以拒绝或接受" loading="lazy"><img class="theme-light" src="assets/screenshots/incoming.png?v=c9cd3b08df" width="2552" height="1632" alt="隔空传送页：雷达下方是好友小明、王姐、阿杰的头像；中间弹出「小明 · MacBook Air 想发给你文件」，附有备注「合同第 3 页要签字」，可以拒绝或接受" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#friends">了解给好友发文件 →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
-      <div class="wrap">
-        <h2 id="phone-title">手机也能用了。</h2>
-        <p class="intro">安卓 App 可与电脑双向隔空传送，照片和文件一次多选，收到后保存或分享。不想安装？扫码打开网页，查看复制记录、发送内容，也能独立收发文件。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="assets/screenshots/web-share-dark.png?v=51b501d9f6" width="2552" height="1632" alt="设备页的手机网页传输：二维码与已登记的手机列表" loading="lazy"><img class="theme-light" src="assets/screenshots/web-share.png?v=7d60aa4c06" width="2552" height="1632" alt="设备页的手机网页传输：二维码与已登记的手机列表" loading="lazy">
-        </figure>
-        <ul class="points">
-          <li><b>手机浏览器直接用</b>，记录与独立文件收发。</li>
-          <li><b>安卓双向传文件</b>，多选、保存与分享。</li>
-          <li><b>同一网络使用</b>，网页需保持打开。</li>
-        </ul>
-        <p class="more"><a href="features/#phone">了解手机端怎么用 →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="send" aria-labelledby="send-title">
-      <div class="wrap">
-        <h2 id="send-title">拖过去，<br>就到了。</h2>
-        <p class="intro">电脑上拖放，安卓上多选，照片和文件直接送到另一台设备。App 传输中断后可继续。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="assets/screenshots/send-dark.png?v=8b0c48de8e" width="2552" height="1632" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度" loading="lazy"><img class="theme-light" src="assets/screenshots/send.png?v=2fad04b678" width="2552" height="1632" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#send">了解隔空传送 →</a></p>
-      </div>
-    </section>
-
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <h2 id="qp-title">按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>，<br>最近复制的都在手边。</h2>
+        <h2 id="qp-title">复制记录，<br>随时找回。</h2>
         <p class="intro">在任何 App 里按一下，选一条就粘贴进去。</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
@@ -328,116 +277,68 @@
       </div>
     </section>
 
-    <section class="section" id="features" aria-labelledby="grid-title">
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
-        <h2 id="grid-title">不只是同步剪贴板。</h2>
-        <ul class="tiles">
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
-            <h3>隔空传送 <span class="new">新</span></h3>
-            <p>把文件、文件夹拖到另一台电脑或好友那里，多大都行。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
-            <h3>快捷粘贴</h3>
-            <p>按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> 呼出复制记录，选中就粘贴。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
-            <h3>文件与文件夹</h3>
-            <p>小文件复制时就传好，大的用时再取。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-            <h3>复制记录与收藏</h3>
-            <p>所有设备复制过的都在这里，能搜，能收藏。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
-            <h3>跨网络</h3>
-            <p>开启「服务」，家里和公司之间也能同步。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
-            <h3>端到端加密</h3>
-            <p>优先直连，服务器看不到你复制了什么。</p>
-          </li>
-        </ul>
-        <p class="more"><a href="features/">查看全部功能 →</a></p>
+        <h2 id="send-title">拖过去，<br>就到了。</h2>
+        <p class="intro">把文件或文件夹拖到目标设备。</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="assets/screenshots/send-dark.png?v=8b0c48de8e" width="2552" height="1632" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度" loading="lazy"><img class="theme-light" src="assets/screenshots/send.png?v=2fad04b678" width="2552" height="1632" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#send">了解隔空传送 →</a></p>
       </div>
     </section>
 
-    <section class="section" id="why" aria-labelledby="why-title">
+    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
-        <h2 id="why-title">为什么不用现有的办法</h2>
-        <p class="intro">通用剪贴板只认同一个 Apple ID，隔空投送每次都要点接收，Mac 配 Windows 时都用不了。</p>
-        <div class="block table-scroll">
-          <table class="compare">
-            <caption class="skip">隔空贴与其他方式的对比</caption>
-            <thead><tr><td></td><th scope="col" class="ours">隔空贴</th><th scope="col">通用剪贴板</th><th scope="col">隔空投送</th><th scope="col">聊天软件</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">不需要账号</th><td class="yes ours">不需要</td><td class="no">要同一 Apple ID</td><td class="partial">仅限苹果设备</td><td class="no">要登录</td></tr>
-              <tr><th scope="row">Mac、Windows、Linux 与安卓之间</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">家里和公司之间</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">没有外网，同一局域网也能用</th><td class="yes ours">可以</td><td class="partial">仅限附近设备</td><td class="yes">可以</td><td class="no">不行</td></tr>
-              <tr><th scope="row">复制完直接粘贴，不用点接收</th><td class="yes ours">可以</td><td class="yes">可以</td><td class="no">不行</td><td class="no">不行</td></tr>
-              <tr><th scope="row">文件与整个文件夹，不限大小</th><td class="yes ours">可以</td><td class="partial">不稳定</td><td class="yes">可以</td><td class="partial">要打包，有大小限制</td></tr>
-              <tr><th scope="row">找回之前复制的内容</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="partial">翻聊天记录</td></tr>
-              <tr><th scope="row">只有自己的设备能解密</th><td class="yes ours">是</td><td class="yes">是</td><td class="yes">是</td><td class="some">看软件</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <h2 id="phone-title">手机也能用了。</h2>
+        <p class="intro">同一网络内，用安卓 App 或扫码网页与电脑互传内容。</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="assets/screenshots/web-share-dark.png?v=51b501d9f6" width="2552" height="1632" alt="设备页的手机网页传输：二维码与已登记的手机列表" loading="lazy"><img class="theme-light" src="assets/screenshots/web-share.png?v=7d60aa4c06" width="2552" height="1632" alt="设备页的手机网页传输：二维码与已登记的手机列表" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#phone">了解手机端怎么用 →</a></p>
       </div>
     </section>
 
     <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
-        <h2 id="deploy-title">两台电脑怎么连起来</h2>
-        <p class="intro">同一个网络里装好就能配对。不在一个网络，打开「服务」就行，也可以自建服务器或用 Tailscale。</p>
+        <h2 id="deploy-title">连接方式</h2>
         <div class="paths">
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">家里和公司之间也能用</span>
             <h3>服务</h3>
-            <p>打开一个开关，家里和公司的电脑就能互相同步，不用买服务器。</p>
+            <p>开启「服务」，连接不同网络中的电脑。</p>
             <span class="path-go">开启「服务」 →</span>
           </a>
           <a class="path" href="lan/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-            <span class="path-when">什么都不用装</span>
             <h3>同一网络</h3>
-            <p>连着同一个路由器的两台电脑，装好 App 输入配对码就能用，不需要服务器。</p>
+            <p>同一 Wi-Fi 或有线网络内，输入配对码即可连接。</p>
             <span class="path-go">同一网络教程 →</span>
           </a>
           <a class="path" href="cloud/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">自己的服务器，中转不限量</span>
             <h3>自建公网服务器</h3>
-            <p>一台有公网 IP 的 Linux 云主机，最低配置就够。所有电脑连它，在哪儿都能同步。</p>
+            <p>在自己的 Linux 云主机上部署。</p>
             <span class="path-go">公网服务器部署教程 →</span>
           </a>
           <a class="path" href="tailscale/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-            <span class="path-when">跨网络，不用服务器</span>
             <h3>Tailscale</h3>
-            <p>每台电脑装 Tailscale、登录同一个账号，配对时填对方的 Tailscale 地址。</p>
+            <p>通过已有的 Tailscale 网络配对。</p>
             <span class="path-go">Tailscale 教程 →</span>
           </a>
         </div>
-        <p class="note">第一次用？跟着<a href="start/#server">快速开始</a>走一遍。「服务」免费，中转每天 100 MB，直连不限。</p>
       </div>
     </section>
 
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
-        <h2 class="display" id="closing-title">电脑与手机，内容随手互通。</h2>
+        <h2 class="display" id="closing-title">开始使用隔空贴。</h2>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
         </div>
-        <p class="note">版本 2.13.1，免费开源。macOS 13 及以上；Windows 10、11；Linux（x64 与 ARM64）；安卓 9 及以上。新增界面缩放：文字、图标和间距一起放大或缩小。</p>
-        <a class="start-link" href="start/">第一次用？三步配好 →</a>
+        <a class="start-link" href="start/">快速开始 →</a>
         <div class="star-ask">
-          <p>觉得好用，去 GitHub 点个 Star。</p>
           <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="在 GitHub 上给隔空贴点 Star"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">在 GitHub 上点 Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
         </div>
       </div>

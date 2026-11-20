@@ -22,35 +22,28 @@ C = {'brand': 'PasteFerry',
  'nav_server': 'Möglichkeiten zur Verbindung',
  'nav_download': 'Download',
  'lang_label': 'Sprache',
- 'h1': 'Ihre Computer. Ihr Smartphone.<br>Alles in Reichweite.',
- 'lede': 'Auf einem Computer kopieren, auf einem anderen einfügen. Frühere Einträge wiederfinden und Fotos '
-         'und Dateien zwischen Mac, Windows, Linux und Android übertragen – ohne gemeinsames Konto. Auf dem '
-         'Smartphone lässt sich die Webversion per Code öffnen. Android und die Webversion funktionieren im '
-         'selben Netzwerk.',
+ 'h1': 'Hier kopieren.<br>Dort einfügen.',
+ 'lede': 'Zwischenablage synchronisieren, Verlauf behalten, Fotos und Dateien senden.',
  'dl_button': 'PasteFerry herunterladen',
  'dl_mac': 'Für Mac herunterladen',
  'dl_win': 'Herunterladen für Windows',
  'dl_linux': 'Herunterladen für Linux',
- 'dl_note': 'Version 2.13.1, kostenlos und Open Source. Für macOS 13 oder neuer, Windows 10 und 11, Linux '
-            '(x64 und ARM64) sowie Android 9 oder neuer. Mit der neuen Oberflächengröße lassen sich Text, '
-            'Symbole und Abstände gemeinsam vergrößern oder verkleinern.',
- 'start_link': 'Neu hier? Richten Sie es in drei Schritten ein →',
+ 'dl_note': 'Kostenlos und Open Source · Mac / Windows / Linux / Android',
+ 'start_link': 'Schnellstart →',
  'stage_label': 'Demo: Befehl C auf einem MacBook verwandelt eine Datei in ein Blatt, das über eine direkte '
                 'Verbindung zu einem Windows -Laptop fliegt, wo Ctrl V pastes it',
  'stage_file': 'Q3-Überprüfung – final.pptx',
  'stage_win': 'Windows Laptop',
  'stage_arc': 'Direkt, Ende-zu-Ende-verschlüsselt',
  'replay': 'Spielen Sie noch einmal',
- 'paths_h2': 'So verbinden sich Ihre Computer',
- 'paths_intro': 'Im selben Netzwerk installieren und koppeln. Aktivieren Sie in verschiedenen Netzwerken den '
-                'Dienst oder führen Sie Ihren eigenen Server oder Tailscale aus.',
+ 'paths_h2': 'Verbindungsmöglichkeiten',
+ 'paths_intro': 'Im selben Netzwerk koppeln; sonst den Dienst, einen eigenen Server oder Tailscale nutzen.',
  'paths_after': 'Neu hier? Befolgen Sie die Kurzanleitung <a href="{start}#server"></a>. Der Service ist '
                 'kostenlos: 100 MB Relay pro Tag, Direktverbindungen unbegrenzt.',
  'plans_label': 'Möglichkeiten zur Verbindung',
  'plans': {'lan': {'name': 'Gleiches Netzwerk',
-                   'fit': 'Nichts einzurichten',
-                   'summary': 'Zwei Computer am selben Router: App installieren, Pairing-Code eingeben, '
-                              'fertig. Kein Server erforderlich.',
+                   'fit': 'Ohne Server',
+                   'summary': 'Im selben WLAN oder LAN per Code koppeln.',
                    'go': 'Gleicher Netzwerkführer →',
                    'facts': [('Am besten für',
                               'Zu Hause oder im Büro, wobei beide Computer im selben Wi-Fi- oder '
@@ -61,19 +54,11 @@ C = {'brand': 'PasteFerry',
                               'fortgesetzt, wenn Sie zurückkommen. Wenn sich Kabel und WLAN in '
                               'unterschiedlichen Subnetzen befinden, geben Sie beim Pairing eine zusätzliche '
                               'Adresse ein.')],
-                   'steps': ['Installieren Sie die App auf jedem Computer und klicken Sie auf '
-                             'Hintergrundsynchronisierung aktivieren.',
-                             'Lassen Sie PasteFerry zu, wenn die Windows Firewall oder macOS nach dem '
-                             'lokalen Netzwerk fragt.',
-                             'Zeigen Sie einen Code auf einem Computer vor, geben Sie ihn auf dem anderen '
-                             'ein und vergleichen Sie Fingerabdrücke. Geben Sie in einem anderen Subnetz '
-                             'auch die unter dem Code angezeigte Adresse ein; Weitere Informationen finden '
-                             'Sie im <a href="{lan}#subnet">-Netzwerkhandbuch</a>.'],
+                   'steps': ['Beide Computer mit demselben WLAN oder LAN verbinden.'],
                    'address': 'Es muss keine Serveradresse eingegeben werden.'},
            'cloud': {'name': 'Ihr eigener öffentlicher Server',
                      'fit': 'Ihr Server, unbegrenztes Relay',
-                     'summary': 'Eine Linux -VM mit einer öffentlichen IP; die kleinste Größe reicht aus. '
-                                'Jeder Computer verbindet sich damit und synchronisiert von überall aus.',
+                     'summary': 'Auf einem eigenen Linux-Server betreiben.',
                      'go': 'Leitfaden für öffentliche Server →',
                      'facts': [('Am besten für',
                                 'Betreiben Sie den Server selbst oder leiten Sie viel Datenverkehr weiter.'),
@@ -82,20 +67,13 @@ C = {'brand': 'PasteFerry',
                                 'Die VM kostet Geld und die Relay-Geschwindigkeit wird durch ihre Bandbreite '
                                 'begrenzt. Geben Sie auf dem chinesischen Festland die IP ein, es sei denn, '
                                 'die Domain verfügt über eine ICP-Einreichung.')],
-                     'steps': ['Öffnen Sie in der Sicherheitsgruppe Ihres Cloud-Anbieters TCP 8787, UDP 3478 '
-                               'und UDP 32768–60999.',
-                               'Melden Sie sich mit ssh an, laden Sie das Installationsskript herunter und '
-                               'führen Sie es aus: <code>sudo ./install.sh PUBLIC_IP</code>.',
-                               'Geben Sie unter Einstellungen → Verbindung auf jedem Computer '
-                               '<code>ws://PUBLIC_IP:8787/signal</code>ein, drücken Sie die Eingabetaste und '
-                               'koppeln Sie dann.'],
+                     'steps': ['Den Server nach der <a href="{cloud}">Anleitung</a> installieren.',
+                               'Die erzeugte Serveradresse unter Einstellungen → Verbindung eintragen.'],
                      'address': 'Öffnen Sie <code>http://PUBLIC_IP:8787/healthz</code> in einem Browser. '
                                 'Wenn dort „OK“ steht, läuft es.'},
            'ts': {'name': 'Tailscale',
                   'fit': 'Über Netzwerke hinweg, kein Server',
-                  'summary': 'Installieren Sie Tailscale auf jedem Computer, melden Sie sich bei demselben '
-                             'Konto an und geben Sie beim Koppeln die Tailscale -Adresse des anderen '
-                             'Computers ein.',
+                  'summary': 'Über das Tailscale-Netzwerk koppeln.',
                   'go': 'Tailscale -Anleitung →',
                   'facts': [('Am besten für',
                              'Sie verwenden Tailscale bereits oder möchten nicht auf einen Server angewiesen '
@@ -105,12 +83,9 @@ C = {'brand': 'PasteFerry',
                              'Tailscale muss verbunden bleiben. Wenn zwei Computer nicht direkt verbunden '
                              'werden können, erfolgt die Weiterleitung über eigene Server, was langsam sein '
                              'kann.')],
-                  'steps': ['Installieren Sie Tailscale auf jedem Computer und melden Sie sich bei demselben '
-                            'Konto an.',
-                            'Führen Sie auf dem anderen Computer <code>tailscale ip -4</code> aus und '
-                            'notieren Sie sich die Adresse, die mit 100 beginnt.',
-                            'Klicken Sie beim Koppeln auf In einem anderen Subnetz? und geben Sie diese '
-                            'Adresse ein.'],
+                  'steps': ['Installieren Sie Tailscale auf jedem Computer und melden Sie sich bei demselben Konto an.',
+                            'Führen Sie auf dem anderen Computer <code>tailscale ip -4</code> aus und notieren Sie sich die Adresse, '
+                            'die mit 100 beginnt.'],
                   'address': 'Kein Server erforderlich. Eine Tailscale -Adresse ändert sich nicht, Sie '
                              'müssen sie also beim Pairing einmal eingeben.'}},
  'flow_h2': 'Was passiert beim Kopieren?',
@@ -365,7 +340,7 @@ C = {'brand': 'PasteFerry',
           ['Ja. PasteFerry versucht jeden Uplink.']),
          ('Warum werden .uuremote_-Dateien weiterhin angezeigt, während UU Remote ausgeführt wird?',
           ['Das war ein Fehler in älteren Versionen. Aktualisieren Sie auf die neueste Version.'])],
- 'closing': 'Ihre Geräte. Ihre Inhalte. In Reichweite.',
+ 'closing': 'PasteFerry herunterladen.',
  'footer_license': 'PasteFerry ist Open Source unter der GNU AGPL-3.0.',
  'footer_label': 'Fußzeile',
  'footer_links': [('Alle Veröffentlichungen', 'https://github.com/baiyuze/pasteferry/releases'),
@@ -754,8 +729,7 @@ C = {'brand': 'PasteFerry',
                           'Netzwerk einfach koppeln; Aktivieren Sie in verschiedenen Netzwerken den Dienst. '
                           'Dann auf einen Computer kopieren und auf dem anderen einfügen.',
            'h1': 'Schnellstart',
-           'lede': 'Installieren Sie die App, wählen Sie eine Verbindungsmethode und koppeln Sie Ihre '
-                   'Computer. Im selben Netzwerk dauert es einige Minuten.',
+           'lede': 'App installieren, Geräte verbinden und per Code koppeln.',
            'toc': [('app', 'Installieren Sie die App'),
                    ('server', 'Wählen Sie eine Möglichkeit zur Verbindung'),
                    ('pair', 'Paar'),
@@ -788,9 +762,7 @@ C = {'brand': 'PasteFerry',
            'app_alt': 'PasteFerry beim ersten Öffnen und fordert Sie auf, die Hintergrundsynchronisierung zu '
                       'aktivieren',
            'server_h2': 'Wählen Sie eine Möglichkeit zur Verbindung',
-           'server_intro': 'Im selben Netzwerk installieren und koppeln. Aktivieren Sie in verschiedenen '
-                           'Netzwerken den Dienst. Wenn Sie die volle Kontrolle wünschen, betreiben Sie '
-                           'Ihren eigenen Server oder verwenden Sie Tailscale.',
+           'server_intro': 'Lokal verbinden oder für entfernte Geräte Dienst, eigenen Server oder Tailscale wählen.',
            'pair_h2': 'Koppeln Sie Ihre Computer',
            'pair_intro': 'Einmal zwei beliebige Computer koppeln, fertig.',
            'pair_steps': ['Öffnen Sie auf einem Computer Geräte und klicken Sie auf Gerät hinzufügen. Es '
@@ -1108,8 +1080,7 @@ C = {'brand': 'PasteFerry',
         'source': 'Zurück zum gleichen Netzwerkführer'},
  'download': {'phone': {'title': 'Telefon (Android -App oder die Webseite)',
                         'apk': 'Herunterladen für Android (APK)',
-                        'apk_note': 'Android 9 oder höher, arm64 Telefone. Android fragt vor der '
-                                    'Installation einmal nach.',
+                        'apk_note': 'Android 9 oder neuer · ARM64',
                         'web_h': 'Die Webseite (nichts zu installieren)',
                         'web_note': 'Aktivieren Sie „Geräte › Telefon-Webübertragung“ auf dem Computer und '
                                     'scannen Sie den Code mit Ihrem Telefon.',
@@ -1120,12 +1091,7 @@ C = {'brand': 'PasteFerry',
                                   'Fügen Sie auf dem Telefon ein, was Sie kopiert haben, und senden Sie es. '
                                   'Was Sie auf dem Computer kopieren, erscheint in den '
                                   'Telefonaufzeichnungen.'],
-                        'notes': ['Text, Screenshots und Dateien gehen in beide Richtungen.',
-                                  'Es gibt keine iPhone- oder iPad-App: iOS lässt nicht zu, dass Apps die '
-                                  'Zwischenablage im Hintergrund lesen, und für die Verteilung ist ein '
-                                  'Zertifikat erforderlich. Verwenden Sie stattdessen die Webseite.',
-                                  'Inhalte werden zwischen dem Telefon und dem Computer verschlüsselt; '
-                                  'Verwenden Sie es zu Hause oder in einem Netzwerk, dem Sie vertrauen.'],
+                        'notes': ['Handy und Computer müssen im selben Netzwerk sein.', 'Auf iPhone und iPad die Webversion nutzen.'],
                         'tab': 'Smartphone / Web'},
               'title': 'Laden Sie PasteFerry herunter: Mac (Apple Silicon, Intel), Windows und Linux',
               'description': 'PasteFerry für jedes System: Apple-Silicon- und Intel-Versionen für macOS 13 '
@@ -1133,13 +1099,10 @@ C = {'brand': 'PasteFerry',
                              '10 und 11 sowie .deb- und tar.gz-Pakete für Linux auf x64 und ARM64. Kostenlos '
                              'und Open Source.',
               'h1': 'Laden Sie PasteFerry herunter',
-              'lede': 'Kostenlos und Open Source, Version {version}. Installieren Sie es auf jedem Computer, '
-                      'den Sie synchronisieren möchten. Mac, Windows und Linux können frei gemischt werden.',
+              'lede': 'Kostenlos und Open Source · Version {version}',
               'os_label': 'Wählen Sie Ihr System',
               'win': {'setup': 'Laden Sie das Installationsprogramm herunter',
-                      'portable': 'Möchten Sie lieber kein Installationsprogramm ausführen? Holen Sie sich '
-                                  'die tragbare Zip-Datei <a href="{portable}"></a>, extrahieren Sie sie und '
-                                  'führen Sie von dort aus PasteFerry aus.',
+                      'portable': '<a href="{portable}">Portable Version</a> ohne Installation',
                       'steps': ['Führen Sie PasteFerry-Setup.exe aus. Die Installation erfolgt für den '
                                 'aktuellen Benutzer, es sind keine Administratorrechte erforderlich.<span '
                                 'class="aside">Wenn die Meldung „Windows hat Ihren PC geschützt“ angezeigt '
@@ -1154,14 +1117,9 @@ C = {'brand': 'PasteFerry',
                                 'Benachrichtigungsbereich ausgeführt.']},
               'mac': {'apple': 'Apple-Chip (M1+)',
                       'intel': 'Intel',
-                      'universal': 'Eine universelle Version <a href="{universal}"></a> , die auf beiden '
-                                   'läuft, ist ebenfalls in doppelter Größe erhältlich.',
-                      'homebrew': 'Sie können auch die Desktop-App und die gebündelte CLI mit <code>brew '
-                                  'install --cask baiyuze/tap/pasteferry</code>installieren. Wenn die App '
-                                  'bereits manuell installiert wurde, beenden und verschieben Sie zunächst '
-                                  'die vorhandene App. Bewahren Sie Ihre Bewerbungsdaten auf. Weitere '
-                                  'Informationen finden Sie im Installations- und Upgrade-Handbuch <a '
-                                  'href="{homebrew}"></a>.',
+                      'universal': 'Auch als <a href="{universal}">Universal-Version</a> verfügbar.',
+                      'homebrew': (('Homebrew: <code>brew install --cask baiyuze/tap/pasteferry</code>. <a href="{homebrew}">Installation und '
+                                    'Updates</a>')),
                       'steps': ['Öffnen Sie die heruntergeladene DMG und ziehen Sie PasteFerry in '
                                 '„Anwendungen“.',
                                 'Öffnen Sie es über Anwendungen.<span class="aside">Beim ersten Mal sagt '
@@ -1186,19 +1144,8 @@ C = {'brand': 'PasteFerry',
                         'tar_h': 'Andere Distributionen',
                         'x64': 'x64',
                         'arm64': 'ARM64',
-                        'notes': ['Benötigt einen grafischen Desktop: X11 oder Wayland mit XWayland, das '
-                                  'GNOME, KDE und andere wichtige Desktops standardmäßig enthalten.',
-                                  'Sie sind sich nicht sicher, ob Sie x64 oder ARM64haben? Führen Sie '
-                                  '<code>uname -m</code> in einem Terminal aus: <code>x86_64</code> bedeutet '
-                                  'x64, <code>aarch64</code> bedeutet ARM64.',
-                                  'Die .deb-Datei wird unter /opt/PasteFerry installiert und fügt PasteFerry '
-                                  'zum App-Menü hinzu. Das tar.gz wird überall dort ausgeführt, wo Sie es '
-                                  'extrahieren, und <code>install.sh</code> fügt es dem App-Menü hinzu.',
-                                  'Sobald es geöffnet ist, klicken Sie auf Hintergrundsynchronisierung '
-                                  'aktivieren. Von da an startet es, wenn Sie sich anmelden. GNOME zeigt '
-                                  'standardmäßig kein Taskleistensymbol an, öffnen Sie das Fenster also über '
-                                  'das App-Menü.',
-                                  'Benötigt GTK 3. Getestet auf Ubuntu 24.04 mit GNOME (Wayland).']},
+                        'notes': ['Benötigt GTK 3 sowie X11 oder Wayland mit XWayland.',
+                                  '<code>uname -m</code> ausführen: <code>x86_64</code> = x64, <code>aarch64</code> = ARM64.']},
               'more_h2': 'Mehr',
               'more': [('Server',
                         'Zwei Computer im selben Netzwerk benötigen keinen Server. Die Möglichkeiten zum '
@@ -1257,20 +1204,15 @@ FEATURES = {'nav_features': 'Funktionen',
  'theme_dark': 'Dunkel',
  'badge': '{version}: Oberflächengröße für größere Texte und Symbole →',
  'home_phone_h2': 'Ihr Telefon schaltet sich ein.',
- 'home_phone_intro': 'Verwenden Sie die Android -App, um Stapel von Fotos und Dateien mit einem Computer zu '
-                     'senden und zu empfangen und diese anschließend zu speichern oder zu teilen. Bevorzugen '
-                     'Sie keine Installation? Scannen Sie einen Code für den Verlauf der Zwischenablage, das '
-                     'Senden von Inhalten und separate Dateiübertragungen im Browser.',
+ 'home_phone_intro': 'Im selben Netzwerk Inhalte per Android-App oder QR-Code im Browser mit dem Computer austauschen.',
  'home_phone_points': ['<b>Verwenden Sie den Browser</b> für Verlauf und separate Dateiübertragungen.',
                        '<b>Android sendet und empfängt</b> -Batches mit Speichern und Teilen.',
                        '<b>Gleiches Netzwerk</b>; Lassen Sie die Webseite geöffnet.'],
  'home_phone_link': 'So nutzen Sie das Telefon →',
  'home_send_h2': 'Ziehen Sie es rüber.<br>Es ist da.',
- 'home_send_intro': 'Legen Sie Dateien auf einem Computer ab oder wählen Sie einen Stapel auf Android aus. '
-                    'Fotos und Dateien werden direkt auf ein anderes Gerät übertragen; App-Übertragungen '
-                    'werden nach einer Unterbrechung wieder aufgenommen.',
+ 'home_send_intro': 'Dateien oder Ordner auf das Zielgerät ziehen.',
  'home_send_link': 'Weitere Informationen zum Senden von Dateien →',
- 'home_qp_h2': 'Drücken Sie {key}.<br>Alles, was Sie kopiert haben, genau dort.',
+ 'home_qp_h2': 'Kopiertes<br>wiederfinden.',
  'home_qp_intro': 'Drücken Sie in einer beliebigen App darauf, wählen Sie ein Element aus und es wird '
                   'eingefügt.',
  'home_qp_link': 'Mehr zum Thema Quick Paste →',
@@ -1310,35 +1252,31 @@ FEATURES = {'nav_features': 'Funktionen',
                 'Ihren Verlauf und senden Sie Dateien beliebiger Größe direkt an einen anderen Computer.',
  'eyebrow': 'PasteFerry -Funktionen',
  'h1': 'Kopieren Sie<br>und fügen Sie es so ein, wie es sein sollte.',
- 'lede': 'Eine Zwischenablage für Ihren Mac, Windows - und Linux -Computer.',
+ 'lede': 'Zwischenablage, Verlauf und Dateiübertragung.',
  'hero_alt': 'Der Verlauf von PasteFerry: eine Seitenleiste mit Verlauf, Favoriten, Sendedateien, Geräten '
              'und Einstellungen sowie eine Liste mit Texten, Bildern, Dateien und Links von verschiedenen '
              'Computern',
  'sync_h2': 'Hier kopieren.<br>Dort einfügen.',
- 'sync_intro': '{copy} hier, {paste} dort. Kein gemeinsames Konto erforderlich.',
+ 'sync_intro': 'Text, Bilder, Dateien und Ordner kopieren und einfügen.',
  'sync_facts': [('Texte, Bilder, Dateien, Ordner', 'Lässt sich sauber in Nur-Text-Felder einfügen.'),
                 ('Beim Kopieren werden bis zu 50 MB gesendet',
                  'Größere Artikel auf Anfrage. Der Grenzwert ist einstellbar.'),
                 ('Jederzeit pausieren', 'Pausieren Sie alles oder nur einen Computer.')],
  'send_h2': 'Jede Größe.<br>Ziehen Sie es einfach rüber.',
- 'send_intro': 'Computer in der Nähe und in der Ferne sind auf dem Radar. Ziehen Sie Dateien auf eine, um '
-               'sie zu senden. Kein Cloud-Laufwerk und Ihr Verlauf bleibt sauber.',
+ 'send_intro': 'Dateien oder Ordner auf das Zielgerät ziehen.',
  'send_points': [('Jede Größe', 'Multi-GB-Videos oder Ordner mit Tausenden von Dateien.'),
                  ('Macht dort weiter, wo es aufgehört hat',
                   'Wird nach einer unterbrochenen Verbindung oder einem Ruhezustand fortgesetzt. Jede Datei '
                   'wird überprüft.'),
                  ('Erhalten Sie Dateien an einem Ort',
                   'Standardmäßig unter „Downloads“ gespeichert, nur ein Klick zum Anzeigen.')],
- 'send_note': 'Funktioniert netzwerkübergreifend; Die Weiterleitung über den Dienst ist auf 100 MB pro Tag '
-              'begrenzt. Beide Computer benötigen 2.5 oder höher.',
+ 'send_note': 'Direkte Übertragung unbegrenzt; Dienst-Relay: 100 MB pro Computer und Tag.',
  'send_alt': 'Die Seite „Dateien senden“: ein Radar mit diesem Mac in der Mitte und Geräten im selben '
              'Netzwerk und anderswo in der Nähe; auf der rechten Seite empfangene Dateien mit einem '
              'ankommenden Ordner sowie dessen Fortschritt und Geschwindigkeit',
  'theme_kicker': 'Neu in 2.10',
  'theme_h2': 'Machen Sie es zu Ihrem.<br>Auch in Pixel.',
- 'theme_intro': 'Wählen Sie unter „Einstellungen“ > „Erscheinungsbild“ ein Thema aus: „Standard“ und „Pixel“ '
-                'sind integriert. Duplizieren Sie eines und machen Sie es zu Ihrem eigenen oder bitten Sie '
-                'eine KI, eines zu entwerfen. Hell, dunkel oder passend zum System.',
+ 'theme_intro': 'Neun integrierte Designs. Selbst anpassen oder mit KI erstellen.',
  'theme_points': [('Pixel-Thema',
                    'Bitmap-Typ, gekerbte Blöcke und abgeschrägte Schaltflächen. Eine Nacht- oder Tagesszene '
                    'oben, ein Papierflieger beim Versenden und eine Explosion von Sternen, wenn es fertig '
@@ -1349,11 +1287,7 @@ FEATURES = {'nav_features': 'Funktionen',
                   ('Fragen Sie eine KI',
                    'Fügen Sie <code>pasteferry-cli mcp</code> zu Claude, Cursor und anderen hinzu und sagen '
                    'Sie dann „Mach mir ein Cyberpunk-Thema“. Es wird erstellt und angewendet.')],
- 'theme_note': 'Designs gelten nur für das Gerät, auf dem Sie sie festlegen (auf einem Computer, im '
-               'Hauptfenster und beim schnellen Einfügen). Sie sind nicht synchronisiert. Die Android -App '
-               'verfügt über eigene Einstellungen › Erscheinungsbild. Pixelthemen können CRT-Scanlines '
-               'hinzufügen. Die KI kann nur Themen lesen und schreiben, niemals Ihren Verlauf oder Ihre '
-               'Geräte.',
+ 'theme_note': 'Designs werden nur auf diesem Gerät gespeichert.',
  'theme_alt': 'Die Seite „Darstellung“ in den Einstellungen (Pixel-Design, dunkel): Miniaturansichten der '
               'integrierten Standard- und Pixel-Designs sowie zweier benutzerdefinierter Designs, dann Thema '
               'importieren, AI bitten, ein Design zu erstellen, hell und dunkel und Scanlines',
@@ -1368,8 +1302,7 @@ FEATURES = {'nav_features': 'Funktionen',
                    'ein Zelt und Lagerfeuer am unteren Rand der Seitenleiste und Bitmap-Typ',
  'home_theme_link': 'Mehr zu Themen →',
  'friends_h2': 'Der Computer eines Freundes,<br>, ist genauso einfach.',
- 'friends_intro': 'Fügen Sie sie als Kontakt hinzu, keine Kopplung erforderlich. Die Dateien kommen an, '
-                  'sobald sie angenommen wurden, mit einer optionalen Notiz.',
+ 'friends_intro': 'Freunde hinzufügen und Dateien senden.',
  'friends_points': [('Sie entscheiden, was reinkommt',
                      'Sehen Sie, wer was gesendet hat, bevor Sie es annehmen, oder akzeptieren Sie Personen, '
                      'denen Sie vertrauen, automatisch.'),
@@ -1377,7 +1310,7 @@ FEATURES = {'nav_features': 'Funktionen',
                      'Niemand, nur Kontakte oder alle in Ihrem Netzwerk für 10 Minuten.'),
                     ('Dateien, kein Chat',
                      'Kontakte sehen niemals Ihre Zwischenablage, Ihren Verlauf oder Ihre Geräte.')],
- 'friends_note': 'In verschiedenen Netzwerken aktivieren beide den Dienst. Beide benötigen 2.6 oder höher.',
+ 'friends_note': 'Für entfernte Übertragungen auf beiden Seiten den Dienst aktivieren.',
  'friends_alt': 'Die Seite „Dateien senden“: Avatare der Kontakte unter dem Radar und eine Anfrage in der '
                 'Mitte – ein Kontakt auf einem MacBook Air möchte Ihnen Dateien senden, mit einer Notiz – '
                 'die Sie ablehnen oder annehmen können',
@@ -1385,19 +1318,13 @@ FEATURES = {'nav_features': 'Funktionen',
  'phone_kicker': 'Neu in 2.8',
  'phone_alt': 'Die Geräteseite Telefon-Webübertragung: der Code und die registrierten Telefone',
  'phone_h2': 'Ihr Telefon schaltet sich ein.',
- 'phone_intro': 'Verwenden Sie die Android -App, um Stapel von Fotos und Dateien mit einem Computer zu '
-                'senden und zu empfangen und diese anschließend zu speichern oder zu teilen. Bevorzugen Sie '
-                'keine Installation? Scannen Sie einen Code für den Verlauf der Zwischenablage, das Senden '
-                'von Inhalten und separate Dateiübertragungen im Browser.',
+ 'phone_intro': 'Im selben Netzwerk Inhalte per Android-App oder QR-Code im Browser mit dem Computer austauschen.',
  'phone_points': [('Benutzen Sie den Browser', 'für Verlauf und separate Dateiübertragungen.'),
                   ('Android sendet und empfängt', 'Stapel, mit Speichern und Teilen.'),
                   ('Gleiches Netzwerk', '; Lassen Sie die Webseite geöffnet.')],
- 'phone_note': 'Es gibt keine iPhone- oder iPad-App: iOS lässt nicht zu, dass Apps die Zwischenablage im '
-               'Hintergrund lesen, und für die Verteilung ist ein Zertifikat erforderlich. Diese Geräte '
-               'nutzen die Webseite.',
- 'qp_h2': 'Drücken Sie {key}.<br>Ihr Verlauf, genau dort, wo Sie tippen.',
- 'qp_intro': 'Drücken Sie in einer beliebigen App die Tastenkombination, wählen Sie ein Element aus und es '
-             'wird am Cursor eingefügt.',
+ 'phone_note': 'Auf iPhone und iPad die Webversion geöffnet lassen.',
+ 'qp_h2': '{key} drücken.<br>Auswählen und einfügen.',
+ 'qp_intro': 'Zwischenablage durchsuchen und einen Eintrag einfügen.',
  'qp_steps': [('Drücken Sie {key}', 'Funktioniert in jeder App.'),
               ('Geben Sie ein paar Buchstaben ein',
                'Suchen Sie nach Text und Dateinamen oder drücken Sie {index}.'),
@@ -1424,15 +1351,14 @@ FEATURES = {'nav_features': 'Funktionen',
              ('text', 'Besprechungsnotizen befinden sich im freigegebenen Ordner', 'Gestern', False, True),
              ('text', 'pnpm install', 'Gestern', False, False)],
  'fav_h2': 'Behalten Sie, was Sie wiederverwenden.',
- 'fav_intro': 'Markieren Sie die Dinge, die Sie wiederverwenden. Sie werden als separate Kopie aufbewahrt '
-              'und laufen nie ab.',
+ 'fav_intro': 'Favoriten bleiben erhalten; Dateien werden als Kopie gespeichert.',
  'fav_points': [('Nie aufgeräumt', 'Der Verlauf läuft ab; Favoriten bleiben.'),
                 ('Eine eigene Kopie', 'Das Ändern oder Löschen des Originals hat keine Auswirkungen darauf.'),
                 ('Auch im Schnellklebeverfahren',
                  'Auch in Schnellpaste; Drücken Sie zum Hinzufügen {fav} .')],
  'fav_alt': 'Die Favoritenseite: fünf gespeicherte Elemente, darunter eine Berichtsvorlage, eine '
             'Aktienantwort, ein Download-Link und ein PDF, jeweils mit einem blauen Stern',
- 'details_h2': 'Für die Details hat sich<br>gekümmert.',
+ 'details_h2': 'Weitere Funktionen',
  'filter_title': 'Links erhalten einen eigenen Tab',
  'filter_text': 'Text, Links, Bilder, Dateien: Ein Klick zum Filtern.',
  'filter_rows': [('text', 'Die Sitzung wurde auf Donnerstag, 15 Uhr, verschoben', False),
@@ -1463,8 +1389,7 @@ FEATURES = {'nav_features': 'Funktionen',
  'names_title': 'Namen, die überall funktionieren',
  'names_text': 'Charaktere Windows lassen nicht zu, dass sie zu Doppelgängern in voller Breite werden.',
  'net_h2': 'Zuhause und Büro,<br>direkt verbunden.',
- 'net_intro': 'Gleiches Netzwerk: installieren und koppeln. Verschiedene Netzwerke: Aktivieren Sie den '
-              'Dienst.',
+ 'net_intro': 'Im selben Netzwerk koppeln; sonst den Dienst, einen eigenen Server oder Tailscale nutzen.',
  'net_points': [('Gleiches Netzwerk',
                  'Kein Server. Geben Sie einen Pairing-Code ein und schon sind Sie fertig.'),
                 ('Über Netzwerke hinweg', 'Dienst, Ihr eigener Server oder Tailscale.'),
@@ -1487,7 +1412,7 @@ FEATURES = {'nav_features': 'Funktionen',
              'möglich ist?',
  'security_title': 'Sicherheit und Datenschutz: End-to-End-Verschlüsselung und Paarungsüberprüfung – '
                    'PasteFerry',
- 'security_lede': 'Nur Ihre Geräte können das, was Sie kopieren, entschlüsseln. Der Server kann nicht.',
+ 'security_lede': 'Ende-zu-Ende-Verschlüsselung mit Fingerabgleich beim Koppeln.',
  'privacy_link': 'Datenschutzerklärung →',
  'faq_title': 'FAQ – PasteFerry',
  'faq_lede': 'Sie können keine Antwort finden? Lassen Sie es uns wissen.',
@@ -1575,11 +1500,8 @@ THEMES = {'name': 'Themenführer',
  'title': 'Themenführer – PasteFerry',
  'summary': 'Ändern Sie Themen in PasteFerry, schalten Sie hell und dunkel um, erstellen Sie Ihr eigenes '
             'Thema und lassen Sie KI-Apps wie Claude und Cursor Themen entwerfen und über MCP anwenden.',
- 'fit': 'Ändern Sie es, machen Sie es,<br>oder lassen Sie es von einer KI machen.',
- 'lede': 'PasteFerry 2.12.1 umfasst neun Themen: Default, Pixel, Jazz Records, Space Age, Memphis, Y2K '
-         'Future, Vintage Print, Pixel Arcade und Retro Desktop. Jeder unterstützt den Hell- und '
-         'Dunkelmodus. Kopieren Sie eines, um es anzupassen, oder lassen Sie sich von der KI beim Entwerfen '
-         'eines Themas unterstützen. Die Designs bleiben auf jedem Gerät lokal.',
+ 'fit': 'Designs und Darstellung',
+ 'lede': 'Neun integrierte Designs, helle und dunkle Darstellung, eigene Farben und Hintergründe.',
  'download': 'Laden Sie 2.12.1herunter',
  'jump_ai': 'Springe zu den von KI erstellten Themen ↓',
  'switch_title': 'Ändern Sie das Thema',
@@ -1629,9 +1551,7 @@ THEMES = {'name': 'Themenführer',
                   'angewendet.',
                   'Um ein benutzerdefiniertes Design zu entfernen, wählen Sie <b>Thema löschen</b> im Menü '
                   '<b>⋯</b> . Integrierte Designs können nicht gelöscht werden.'],
- 'custom_note': 'Der Textkontrast wird überprüft, wenn ein Design gespeichert wird. Auf schwer lesbare '
-                'Farben wird hingewiesen, Sie können aber trotzdem sparen. Theme-Dateien können geteilt '
-                'werden: Die andere Person importiert sie einfach.',
+ 'custom_note': 'Designs als Datei exportieren und teilen.',
  'bg_title': 'Verwenden Sie ein Hintergrundbild',
  'bg_steps': ['Öffnen Sie <b>Settings › Appearance</b>, scrollen Sie zu <b>Background image</b>, klicken Sie '
               'auf <b>. Wählen Sie Bild…</b> und wählen Sie ein JPEG, PNG oder GIF.',
@@ -1664,9 +1584,7 @@ THEMES = {'name': 'Themenführer',
  'scene_alt': 'Pixel-Design im dunklen Modus, wobei der Seitenkopf und der untere Rand der Seitenleiste '
               'durch ein Bild von Hügeln bei Sonnenuntergang ersetzt werden',
  'file_title': 'Wie eine Theme-Datei aussieht',
- 'file_intro': 'Ein Thema ist eine JSON -Datei. Schreiben Sie nur das, was Sie ändern möchten; Alles andere '
-               'stammt aus dem in <code>base</code>genannten Thema. Dieses beginnt mit Pixel und ändert den '
-               'Akzent und einige Hintergründe:',
+ 'file_intro': 'Designs verwenden JSON. Dieses Beispiel ändert die Farben des Pixel-Designs:',
  'file_fields_title': 'Gemeinsame Felder',
  'file_fields': [('<code>id</code>',
                   'Die Kennung des Themas: Kleinbuchstaben, Ziffern und <code>-</code>. Es kann nicht '
@@ -1703,10 +1621,7 @@ THEMES = {'name': 'Themenführer',
                   '<code>sidebarDark</code> für den Dunkelmodus.')],
  'file_more': 'Das vollständige Format und wo jede Farbe verwendet wird:',
  'ai_title': 'Lassen Sie eine KI ein Thema erstellen',
- 'ai_intro': 'PasteFerry enthält einen MCP-Server, <code>pasteferry-cli mcp</code>. Fügen Sie es einer '
-             'KI-App hinzu, die MCP unterstützt, wie z. B. Claude Desktop, Claude Code oder Cursor, und '
-             'beschreiben Sie das gewünschte Aussehen in einem Satz. Die KI liest das Theme-Format, wählt '
-             'Farben aus, prüft den Kontrast, speichert dann das Theme und wendet es an.',
+ 'ai_intro': 'Per MCP mit Claude, Cursor oder einer anderen KI-App Designs erstellen und anwenden.',
  'ai_step1': '1. Finden Sie pasteferry-cli',
  'ai_paths': [('Mac',
                '<code>/Applications/PasteFerry.app/Contents/Helpers/pasteferry-cli</code> (mit Homebrew, nur '
@@ -1721,8 +1636,7 @@ THEMES = {'name': 'Themenführer',
  'ai_desktop': 'Claude Desktop (Einstellungen › Entwickler › Konfiguration bearbeiten) und Cursor '
                '(<code>~/.cursor/mcp.json</code>) verwenden dieselbe Konfiguration. Auf einem Mac:',
  'ai_code': 'Führen Sie für Claude Code Folgendes in einem Terminal aus:',
- 'ai_restart': 'Starten Sie die AI-App neu, nachdem Sie ihre Konfiguration geändert haben. Lassen Sie '
-               'PasteFerry laufen: Die KI ändert Themen über ihren Hintergrunddienst auf diesem Computer.',
+ 'ai_restart': 'Nach dem Speichern die KI-App neu starten. PasteFerry geöffnet lassen.',
  'ai_step3': '3. Sagen Sie, was Sie wollen',
  'ai_prompts': ['Machen Sie mir ein Cyberpunk-Thema mit Neonrosa und tiefem Lila und wenden Sie es dann an.',
                 'Beginnen Sie mit dem Pixel-Thema und erstellen Sie eine Sonnenuntergangsversion mit einem '
@@ -1741,10 +1655,7 @@ THEMES = {'name': 'Themenführer',
              'Importieren Sie ein Bild von diesem Computer als Fensterhintergrund oder Szenerie und '
              'analysieren Sie dessen Helligkeit und Hauptfarben.'],
  'ai_safe_title': 'Was es nicht kann',
- 'ai_safe': 'Der MCP-Server läuft nur auf diesem Computer und öffnet keinen Netzwerkport. Es kann nur Themen '
-            'und Hintergrundbilder lesen und schreiben. Es kann Ihren Verlauf, Ihre Geräte oder Freunde '
-            'nicht sehen oder andere Einstellungen ändern. Hintergrundbilder müssen lokale Dateien sein; Es '
-            'wird nichts aus dem Internet heruntergeladen.',
+ 'ai_safe': 'Zugriff nur auf lokale Designs und Hintergründe, nicht auf Zwischenablageverlauf oder Geräte.',
  'faq_title': 'Fragen',
  'faq': [('Werden Themes mit meinen anderen Geräten synchronisiert?',
           'Nein. Ein Design gilt nur für das Gerät, auf dem Sie es festlegen. Um dasselbe Thema an anderer '
@@ -1771,8 +1682,7 @@ OFFICIAL = {'badge': 'In verschiedenen Netzwerken? Schalten Sie „Dienst“ ein
  'name': 'Dienst',
  'fit': 'Funktioniert zwischen Zuhause und Büro',
  'go': 'Schalten Sie den Dienst ein →',
- 'summary': 'Schalten Sie einen Schalter ein und Ihre Heim- und Bürocomputer werden synchronisiert, ohne '
-            'dass Sie einen Server kaufen müssen.',
+ 'summary': 'Dienst aktivieren, um Computer über Netzwerke hinweg zu verbinden.',
  'lede': 'Wenn sich zwei Computer nicht im selben Netzwerk befinden, aktivieren Sie den Dienst und sie '
          'werden synchronisiert.',
  'steps_title': 'So schalten Sie es ein',
@@ -1781,17 +1691,13 @@ OFFICIAL = {'badge': 'In verschiedenen Netzwerken? Schalten Sie „Dienst“ ein
            'Aktivieren Sie „Dienst verwenden“ unter „Einstellungen“ → „Verbindung“.',
            'Koppeln Sie die beiden Computer. Computer, die Sie bereits gekoppelt haben, müssen nicht erneut '
            'gekoppelt werden.'],
- 'routing_title': 'Direkt wann immer möglich',
- 'routing': 'Die Computer stellen eine direkte Verbindung her, wenn sie können, und nutzen den Server nur, '
-            'wenn dies nicht möglich ist. Der Inhalt ist verschlüsselt und der Server kann ihn nicht '
-            'entschlüsseln.',
- 'quota_title': '100 MB Relay pro Tag, direkt unbegrenzt',
- 'quota': 'Die Weiterleitung ist auf 100 MB pro Computer und Tag begrenzt. direkt ist unbegrenzt. Auf der '
-          'Verbrauchsseite wird angezeigt, wie viel noch übrig ist.',
- 'privacy_title': 'Standardmäßig deaktiviert',
- 'privacy': 'Der Dienst ist bei einer Neuinstallation deaktiviert. Der Server erhält niemals das, was Sie '
-            'kopieren; siehe Datenschutzerklärung.',
- 'self_title': 'Sie müssen es nicht verwenden',
+ 'routing_title': 'Übertragung',
+ 'routing': 'Bevorzugt direkt verbinden, sonst verschlüsselte Inhalte weiterleiten.',
+ 'quota_title': 'Datenvolumen',
+ 'quota': '100 MB Relay pro Computer und Tag. Direkte Übertragungen unbegrenzt.',
+ 'privacy_title': 'Aktivierung',
+ 'privacy': 'Standardmäßig aus. Auf jedem Computer aktivieren.',
+ 'self_title': 'Alternativen',
  'self': 'Im selben Netzwerk benötigen Sie es nicht. Sie können auch Ihren eigenen Server betreiben oder '
          'Tailscale verwenden.',
  'settings_alt': 'Verwenden Sie den Dienstschalter unter Einstellungen → Verbindung',

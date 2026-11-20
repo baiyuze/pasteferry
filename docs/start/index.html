@@ -96,7 +96,6 @@
       <div class="wrap">
         <p class="crumb"><a href=".././">隔空贴</a> / 快速开始</p>
         <h1 class="display">快速开始</h1>
-        <p class="lede">装好 App，选一种连接方式，再把两台电脑配对。同一个网络里几分钟就好。</p>
         <ol class="guide-toc">
           <li><a href="#app">安装 App</a></li>
           <li><a href="#server">选连接方式</a></li>
@@ -110,23 +109,22 @@
       <div class="wrap">
         <p class="eyebrow">第 1 步</p>
         <h2 id="app-title">在每台电脑上安装 App</h2>
-        <p class="intro">要同步的每台电脑都装一个，Mac、Windows、Linux 可以混用。</p>
         <div class="os-grid qs-grid">
           <div>
             <div class="qs-app">
               <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>Mac</h3>
               <ol class="steps">
-                <li>下载 DMG，打开后把隔空贴拖进「应用程序」。<span class="aside">Apple 芯片与 Intel 芯片各有一版，下载页会告诉你怎么选。</span></li>
-                <li>从「应用程序」里打开。<span class="aside">第一次会提示「无法验证开发者」：到「系统设置 → 隐私与安全性」，点页面下方的「仍要打开」。</span></li>
-                <li>点「启用后台同步」。系统询问是否允许读取剪贴板、能否查找本地网络上的设备时，都选择允许。</li>
+                <li>下载 DMG，将隔空贴拖入「应用程序」。</li>
+                <li>首次打开受阻时，到「系统设置 → 隐私与安全性」点「仍要打开」。</li>
+                <li>开启后台同步，允许剪贴板和本地网络权限。</li>
               </ol>
               <a class="button" href="../download/#macos"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载 Mac 版</a>
             </div>
             <div class="qs-app">
               <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Windows</h3>
               <ol class="steps">
-                <li>运行 PasteFerry-Setup.exe，不需要管理员权限。<span class="aside">提示「Windows 已保护你的电脑」时，点「更多信息」，再点「仍要运行」。</span></li>
-                <li>打开隔空贴，点「启用后台同步」。防火墙询问时选择允许。关掉窗口后它在右下角的托盘里继续运行。</li>
+                <li>运行安装程序；SmartScreen 拦截时，点「更多信息 → 仍要运行」。</li>
+                <li>开启后台同步，并允许防火墙访问。</li>
               </ol>
               <a class="button" href="../download/#windows"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载 Windows 版</a>
             </div>
@@ -150,7 +148,7 @@
       <div class="wrap">
         <p class="eyebrow">第 2 步</p>
         <h2 id="server-title">选一种连接方式</h2>
-        <p class="intro">在同一个网络里，装好就能配对。不在一个网络，打开「服务」就行。想自己掌控，也可以自建服务器或用 Tailscale。</p>
+        <p class="intro">同一网络直接连接；跨网络请选择「服务」、自建服务器或 Tailscale。</p>
         <div class="os-tabs" data-tabs="plan">
           <div class="tablist" role="tablist" aria-label="连接方式" hidden>
             <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">服务</button>
@@ -164,19 +162,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>每台电脑装好最新版，点「启用后台同步」。</li>
                   <li>在「设置 → 连接」里打开「使用服务」。</li>
-                  <li>两台电脑配对。已经配对过的不用重配。</li>
                 </ol>
-                <p class="plan-address">新装默认关闭。服务器收不到你复制的内容，详见隐私说明。</p>
                 <a class="button quiet" href="../official/">开启「服务」 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>能直连就不中转</dt><dd>能直连就直连，连不上才经服务器转发。内容加密，服务器解不开。</dd></div>
-                  <div><dt>中转每天 100 MB，直连不限</dt><dd>中转每台电脑每天 100 MB，直连不限。用量页能看到还剩多少。</dd></div>
-                </dl>
+                <p>每台电脑每天 100 MB 中转流量，直连不限。</p>
               </div>
             </div>
           </section>
@@ -186,20 +178,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>每台电脑装好 App，点「启用后台同步」。</li>
-                  <li>Windows 防火墙和 macOS「查找本地网络设备」的询问都选允许。</li>
-                  <li>一台显示配对码，另一台输入，核对指纹。不在同一网段时，再填配对码下面的地址，见<a href="../lan/#subnet">同一网络教程</a>。</li>
+                  <li>两台电脑连接同一 Wi-Fi 或有线网络。</li>
                 </ol>
-                <p class="plan-address">不用填服务器地址。</p>
                 <a class="button quiet" href="../lan/">同一网络教程 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-                <dl>
-                  <div><dt>适合</dt><dd>家里或办公室，两台电脑连同一个 Wi‑Fi 或有线网络。</dd></div>
-                  <div><dt>要准备</dt><dd>不用准备，每台电脑装好 App 就行。</dd></div>
-                  <div><dt>要注意</dt><dd>离开这个网络就不同步，回来自动恢复。有线和无线不在一个网段时，配对时多填一个地址。</dd></div>
-                </dl>
+                <p>无需服务器</p>
               </div>
             </div>
           </section>
@@ -209,20 +194,14 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>在云厂商的安全组里放行 TCP 8787、UDP 3478 和 UDP 32768–60999。</li>
-                  <li>ssh 登录服务器，下载并运行安装脚本：<code>sudo ./install.sh 公网IP</code>。</li>
-                  <li>每台电脑在「设置 → 连接」里填 <code>ws://公网IP:8787/signal</code>，按回车，再配对。</li>
+                  <li>按<a href="../cloud/">部署教程</a>安装服务器。</li>
+                  <li>在「设置 → 连接」中填入生成的服务器地址。</li>
                 </ol>
-                <p class="plan-address">浏览器打开 <code>http://公网IP:8787/healthz</code>，显示 ok 就装好了。</p>
                 <a class="button quiet" href="../cloud/">公网服务器部署教程 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>适合</dt><dd>想自己掌控服务器，或者中转流量用得多。</dd></div>
-                  <div><dt>要准备</dt><dd>一台有公网 IP 的 Linux 云主机，需要 root。</dd></div>
-                  <div><dt>要注意</dt><dd>云主机要花钱；中转速度受它的带宽限制。国内域名没备案时，客户端要填 IP。</dd></div>
-                </dl>
+                <p>自己的服务器，中转不限量</p>
               </div>
             </div>
           </section>
@@ -234,18 +213,12 @@
                 <ol class="steps">
                   <li>每台电脑装上 Tailscale，登录同一个账号。</li>
                   <li>在对方电脑上运行 <code>tailscale ip -4</code>，记下 100 开头的地址。</li>
-                  <li>配对时点「不在同一网段？」，填上这个地址。</li>
                 </ol>
-                <p class="plan-address">不需要服务器。Tailscale 地址不会变，配对时填一次就行。</p>
                 <a class="button quiet" href="../tailscale/">Tailscale 教程 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-                <dl>
-                  <div><dt>适合</dt><dd>已经在用 Tailscale，或者不想依赖任何服务器。</dd></div>
-                  <div><dt>要准备</dt><dd>每台电脑都装 Tailscale，登录同一个账号。</dd></div>
-                  <div><dt>要注意</dt><dd>Tailscale 要一直连着。它自己打不通时走境外中转，国内会慢。</dd></div>
-                </dl>
+                <p>跨网络，不用服务器</p>
               </div>
             </div>
           </section>
@@ -257,13 +230,12 @@
       <div class="wrap">
         <p class="eyebrow">第 3 步</p>
         <h2 id="pair-title">把两台电脑配对</h2>
-        <p class="intro">每两台电脑之间配对一次，之后就不用再管了。</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">
-              <li>在一台电脑上打开「设备」，点「添加设备」，会显示一个 6 位配对码，5 分钟内有效，下面是这台电脑的地址。</li>
-              <li>在另一台电脑上点「添加设备 → 输入配对码」。「服务」无需填 IP；仅局域网跨网段或 Tailscale 配对时，展开地址栏填写对方地址。</li>
-              <li>两块屏幕会显示同样的两行安全指纹。逐字核对一致后，再点确认。<span class="aside">这一步防止有人在中间冒充你的设备，不要跳过。</span></li>
+              <li>一台电脑打开「设备 → 添加设备」，显示配对码。</li>
+              <li>另一台输入配对码；跨网段或使用 Tailscale 时，补填对方地址。</li>
+              <li>核对两边的安全指纹一致后确认。</li>
             </ol>
             <figure class="figure-card qs-verify">
               <img class="theme-dark" src="../assets/screenshots/card-verify-dark.png?v=5ab309bc9a" width="1120" height="800" alt="配对时的「核对安全指纹」对话框，显示 R8NF-2WTC-QL5J，要求与另一台电脑上显示的完全一致" loading="lazy"><img class="theme-light" src="../assets/screenshots/card-verify.png?v=b498a86b23" width="1120" height="800" alt="配对时的「核对安全指纹」对话框，显示 R8NF-2WTC-QL5J，要求与另一台电脑上显示的完全一致" loading="lazy">
@@ -279,14 +251,14 @@
     <section class="section" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
         <h2 id="phone-title">手机怎么用</h2>
-        <p class="intro">两台电脑照上面配好之后，手机随时可以加入：扫码用网页版，或者装安卓 App。</p>
+        <p class="intro">手机与电脑连接同一网络，选择安卓 App 或网页版。</p>
         <div class="os-grid qs-grid">
           <div>
             <h3>网页版：不用安装</h3>
             <ol class="steps">
-              <li>电脑：打开「设备 › 手机网页传输」，把开关打开，出现二维码。</li>
-              <li>手机：用相机或浏览器扫这个码，起个名字（比如「我的iPhone」）。</li>
-              <li>之后手机浏览器里就是电脑的复制记录：点「复制」到手机，或在「发送」里把文字、照片、文件发到电脑。</li>
+              <li>电脑打开「设备 › 手机网页传输」。</li>
+              <li>手机扫码，输入设备名称。</li>
+              <li>查看复制记录，或发送文字、照片和文件。</li>
             </ol>
             <h3>安卓 App：像配电脑一样配对</h3>
             <ol class="steps">
@@ -303,7 +275,7 @@
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
         <h2 class="display" id="closing-title">复制试试。</h2>
-        <p class="lede">在一台电脑上复制文字、图片或文件，到另一台按 ⌘V 或 Ctrl+V。两边复制过的内容都在「复制记录」里。</p>
+        <p class="lede">在一台电脑复制，到另一台粘贴。</p>
         <p class="note">遇到问题：<a href="../lan/#faq">同一网络的常见问题</a> · <a href="../tailscale/#faq">Tailscale 的常见问题</a> · <a href="../cloud/#faq">公网服务器的常见问题</a> · <a href="https://github.com/baiyuze/pasteferry/issues">反馈问题</a></p>
       </div>
     </section>

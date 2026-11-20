@@ -349,17 +349,17 @@ def footer(c: dict, code: str, up: str, sub: str = "") -> str:
   </footer>"""
 
 
-def cta(c: dict, base: str, start: str = "", tour_label: str = "") -> str:
+def cta(c: dict, base: str, start: str = "", tour_label: str = "", note: bool = True) -> str:
     """下载按钮，指向下载页：在那里按系统和芯片选安装包。base 是语言根目录的相对路径，
     start 是快速开始页面的地址，给了就在下面加一行链接。"""
     link = f'\n        <a class="start-link" href="{start}">{c["start_link"]}</a>' if start else ""
+    platform_note = f'\n        <p class="note">{c["dl_note"]}</p>' if note else ""
     tour = (f'\n          <a class="button quiet tour-link" href="{base}{TOUR}" data-tour-open aria-haspopup="dialog">'
             f'<span aria-hidden="true">▶</span> {esc(tour_label)} <span class="tour-duration">1:25</span></a>') if tour_label else ""
     return f"""
         <div class="cta">
           <a class="button" href="{base}{DOWNLOAD}">{DOWN}{c["dl_button"]}</a>{tour}
-        </div>
-        <p class="note">{c["dl_note"]}</p>{link}"""
+        </div>{platform_note}{link}"""
 
 
 # 顶栏里标出当前所在的栏目（不是当前页面本身）
@@ -463,13 +463,12 @@ PLANS = [
 
 
 def paths(c: dict, base: str) -> str:
-    """首页上三种连接方式的卡片，样式相同、不分主次。base 是语言根目录（教程页面在它下面）。"""
+    """首页的连接方式卡片。base 是语言根目录（教程页面在它下面）。"""
     cards = []
     for key, page, art in PLANS:
         p = c["plans"][key]
         cards.append(f"""          <a class="path" href="{base}{page}">
             <svg viewBox="0 0 240 112" aria-hidden="true">{art}</svg>
-            <span class="path-when">{p["fit"]}</span>
             <h3>{p["name"]}</h3>
             <p>{p["summary"]}</p>
             <span class="path-go">{p["go"]}</span>
@@ -478,15 +477,14 @@ def paths(c: dict, base: str) -> str:
 
 
 def plan_tabs(c: dict, base: str) -> str:
-    """快速开始第 2 步：三种连接方式分页，由用户自己选。每页是适合谁、要准备什么、要注意什么，
-    精简的步骤，最后一句要点，以及完整教程的链接。"""
+    """快速开始第 2 步：连接步骤与完整教程的链接。"""
     links = {"official": base + OFFICIAL, "lan": base + LAN, "cloud": base + CLOUD, "server": base + GUIDE, "ts": base + TAILSCALE}
     tabs, panels = [], []
     for key, page, art in PLANS:
         p = c["plans"][key]
         tabs.append(f'            <button type="button" role="tab" id="tab-plan-{key}" aria-controls="plan-{key}">{p["name"]}</button>')
-        facts = "\n".join(f"                  <div><dt>{k}</dt><dd>{v}</dd></div>" for k, v in p["facts"])
-        steps = "\n".join(f"                  <li>{fill(x, links)}</li>" for x in p["steps"])
+        actions = p["steps"][1:2] if key == "official" else p["steps"]
+        steps = "\n".join(f"                  <li>{fill(x, links)}</li>" for x in actions)
         panels.append(f"""          <section class="os" id="plan-{key}" role="tabpanel" aria-labelledby="tab-plan-{key}">
             <h3 class="os-title">{p["name"]}</h3>
             <div class="plan-grid">
@@ -494,14 +492,11 @@ def plan_tabs(c: dict, base: str) -> str:
                 <ol class="steps">
 {steps}
                 </ol>
-                <p class="plan-address">{fill(p["address"], links)}</p>
                 <a class="button quiet" href="{base}{page}">{p["go"]}</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true">{art}</svg>
-                <dl>
-{facts}
-                </dl>
+                <p>{c["official"]["quota"] if key == "official" else p["fit"]}</p>
               </div>
             </div>
           </section>""")
@@ -684,25 +679,10 @@ def home(code: str) -> str:
     up = "../" * path.count("/")
     a = up + "assets/"
     shots = shots_dir(code)
-
-    badge = fill(f["badge"], {"version": VERSION})
-    ours = ' class="ours"'
-    compare_head = "".join(
-        f'<th scope="col"{ours if i == 0 else ""}>{h}</th>' for i, h in enumerate(c["compare_cols"]))
-    compare_rows = "\n".join(
-        f'              <tr><th scope="row">{label}</th>' + "".join(
-            f'<td class="{cls}{" ours" if i == 0 else ""}">{val}</td>' for i, (cls, val) in enumerate(cells)) + "</tr>"
-        for label, cells in c["compare_rows"])
-    links = {"official": OFFICIAL, "lan": LAN, "cloud": CLOUD, "server": GUIDE, "ts": TAILSCALE, "start": START, "privacy": PRIVACY}
-    tiles = "\n".join(
-        f"""          <li class="tile">
-            {icon(name)}
-            <h3>{title}{f' <span class="new">{f["new_tag"]}</span>' if new else ""}</h3>
-            <p>{keys(text)}</p>
-          </li>""" for name, title, text, new in f["grid"])
     moved = MOVED_ANCHORS.replace("MOVED", json.dumps({
         "how": HOW, "multi-uplink": HOW + "#multi-uplink", "install": DOWNLOAD,
         "faq": FAQ, "security": SECURITY, "specs": HOW + "#specs",
+        "themes": FEATURES + "#themes", "friends": FEATURES + "#friends", "features": FEATURES, "why": FEATURES,
     }))
 
     return f"""<!doctype html>
@@ -720,59 +700,10 @@ def home(code: str) -> str:
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="{REPO}/releases/tag/v{VERSION}">{keys(badge)}</a>
+        <a class="release-note" href="{REPO}/releases/tag/v{VERSION}">v{VERSION}</a>
         <h1 class="display">{c["h1"]}</h1>
         <p class="lede">{c["lede"]}</p>{cta(c, "", START, tour_ui["watch"])}
         {stage(c, f)}
-      </div>
-    </section>
-
-    <section class="section spotlight" id="themes" aria-labelledby="theme-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">{f["theme_kicker"]}</span></p>
-        <h2 id="theme-title">{f["home_theme_h2"]}</h2>
-        <p class="intro">{f["home_theme_intro"]}</p>
-        <figure class="spot wide" data-reveal>
-          <img src="{up}{shots}pixel-history-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(f["home_theme_alt"])}">
-        </figure>
-        <p class="more"><a href="{FEATURES}#themes">{f["home_theme_link"]}</a><a href="{THEMES}">{THEMES_COPY[code]["name"]} →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="friends" aria-labelledby="friends-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
-        <h2 id="friends-title">{f["friends_h2"]}</h2>
-        <p class="intro">{f["friends_intro"]}</p>
-        <figure class="spot wide" data-reveal>
-          <img src="{up}{shots}incoming-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["friends_alt"])}">
-        </figure>
-        <p class="more"><a href="{FEATURES}#friends">{f["home_friends_link"]}</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
-      <div class="wrap">
-        <h2 id="phone-title">{f["home_phone_h2"]}</h2>
-        <p class="intro">{f["home_phone_intro"]}</p>
-        <figure class="spot wide" data-reveal>
-          <img src="{up}{shots}web-share-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["phone_alt"])}">
-        </figure>
-        <ul class="points">
-{items(f["home_phone_points"], "          ")}
-        </ul>
-        <p class="more"><a href="{FEATURES}#phone">{f["home_phone_link"]}</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="send" aria-labelledby="send-title">
-      <div class="wrap">
-        <h2 id="send-title">{f["home_send_h2"]}</h2>
-        <p class="intro">{f["home_send_intro"]}</p>
-        <figure class="spot wide" data-reveal>
-          <img src="{up}{shots}send-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["send_alt"])}">
-        </figure>
-        <p class="more"><a href="{FEATURES}#send">{f["home_send_link"]}</a></p>
       </div>
     </section>
 
@@ -790,46 +721,39 @@ def home(code: str) -> str:
       </div>
     </section>
 
-    <section class="section" id="features" aria-labelledby="grid-title">
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
-        <h2 id="grid-title">{f["grid_h2"]}</h2>
-        <ul class="tiles">
-{tiles}
-        </ul>
-        <p class="more"><a href="{FEATURES}">{f["grid_more"]}</a></p>
+        <h2 id="send-title">{f["home_send_h2"]}</h2>
+        <p class="intro">{f["home_send_intro"]}</p>
+        <figure class="spot wide" data-reveal>
+          <img src="{up}{shots}send-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["send_alt"])}">
+        </figure>
+        <p class="more"><a href="{FEATURES}#send">{f["home_send_link"]}</a></p>
       </div>
     </section>
 
-    <section class="section" id="why" aria-labelledby="why-title">
+    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
-        <h2 id="why-title">{c["why_h2"]}</h2>
-        <p class="intro">{c["why_intro"]}</p>
-        <div class="block table-scroll">
-          <table class="compare">
-            <caption class="skip">{c["compare_caption"]}</caption>
-            <thead><tr><td></td>{compare_head}</tr></thead>
-            <tbody>
-{compare_rows}
-            </tbody>
-          </table>
-        </div>
+        <h2 id="phone-title">{f["home_phone_h2"]}</h2>
+        <p class="intro">{f["home_phone_intro"]}</p>
+        <figure class="spot wide" data-reveal>
+          <img src="{up}{shots}web-share-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["phone_alt"])}">
+        </figure>
+        <p class="more"><a href="{FEATURES}#phone">{f["home_phone_link"]}</a></p>
       </div>
     </section>
 
     <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
         <h2 id="deploy-title">{c["paths_h2"]}</h2>
-        <p class="intro">{c["paths_intro"]}</p>
         {paths(c, "")}
-        <p class="note">{fill(c["paths_after"], links)}</p>
       </div>
     </section>
 
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
-        <h2 class="display" id="closing-title">{c["closing"]}</h2>{cta(c, "", START)}
+        <h2 class="display" id="closing-title">{c["closing"]}</h2>{cta(c, "", START, note=False)}
         <div class="star-ask">
-          <p>{f["star_ask"]}</p>
           {star_button(f, "gh big", f["star_button"])}
         </div>
       </div>
@@ -952,14 +876,11 @@ def features_page(code: str) -> str:
     _, tour_ui, _ = tour_copy(code, c)
 
     def facts(items: list) -> str:
-        return "\n".join(f'          <li><h3>{keys(t)}</h3><p>{keys(d)}</p></li>' for t, d in items)
+        return "\n".join(f'          <li><h3>{keys(t)}</h3></li>' for t, _ in items)
 
     steps = "\n".join(
-        f'            <li data-step="{i}"><span class="num">{i + 1}</span><h3>{keys(t)}</h3><p>{keys(d)}</p></li>'
-        for i, (t, d) in enumerate(f["qp_steps"]))
-    numbers = "\n".join(
-        f'          <div><dt><b>{esc(n)}</b>{f" <span>{esc(u)}</span>" if u else ""}</dt><dd>{esc(d)}</dd></div>'
-        for n, u, d in f["numbers"])
+        f'            <li data-step="{i}"><span class="num">{i + 1}</span><h3>{keys(t)}</h3></li>'
+        for i, (t, _) in enumerate(f["qp_steps"]))
     hits = "".join(f"<li>{row_icon('file' if i == 0 else 'text')}<span>{esc(h)}</span></li>"
                    for i, h in enumerate(f["search_hits"]))
     n = f["net_label"]
@@ -1000,7 +921,7 @@ def features_page(code: str) -> str:
           <div class="dev"><div class="scr"><span class="doc">{LINES}</span></div><b>Linux</b>{kbd("Ctrl+V", "Ctrl+V")}</div>
         </div>
         <ul class="facts">
-{facts(f["sync_facts"])}
+{facts(f["sync_facts"][1:])}
         </ul>
       </div>
     </section>
@@ -1021,7 +942,6 @@ def features_page(code: str) -> str:
 
     <section class="f-section" id="friends" aria-labelledby="friends-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">{f["kicker_new"]}</span></p>
         <h2 class="f-h2" id="friends-title">{f["friends_h2"]}</h2>
         <p class="f-intro">{f["friends_intro"]}</p>
         <figure class="f-shot" data-reveal>
@@ -1036,34 +956,22 @@ def features_page(code: str) -> str:
 
     <section class="f-section" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">{f["phone_kicker"]}</span></p>
         <h2 class="f-h2" id="phone-title">{f["phone_h2"]}</h2>
         <p class="f-intro">{f["phone_intro"]}</p>
         <figure class="f-shot" data-reveal>
           <img src="{shots}web-share-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["phone_alt"])}">
         </figure>
-        <ul class="facts">
-{facts(f["phone_points"])}
-        </ul>
         <p class="f-note">{f["phone_note"]}</p>
       </div>
     </section>
 
     <section class="f-section" id="themes" aria-labelledby="theme-title">
       <div class="wrap">
-        <p class="kicker"><span class="new">{f["theme_kicker"]}</span></p>
         <h2 class="f-h2" id="theme-title">{f["theme_h2"]}</h2>
         <p class="f-intro">{f["theme_intro"]}</p>
         <figure class="f-shot" data-reveal>
           <img src="{shots}pixel-appearance-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(f["theme_alt"])}">
         </figure>
-        <ul class="facts">
-{facts(f["theme_points"])}
-        </ul>
-        <div class="f-pair" data-reveal>
-          <img src="{shots}pixel-history.png" width="2112" height="1472" loading="lazy" alt="{esc(f["theme_alt_light"])}">
-          <img src="{shots}pixel-send-dark.png" width="2552" height="1632" loading="lazy" alt="{esc(f["theme_alt_send"])}">
-        </div>
         <p class="f-note">{f["theme_note"]}</p>
         <p class="more"><a href="../{THEMES}">{THEMES_COPY[code]["name"]} →</a></p>
       </div>
@@ -1094,9 +1002,6 @@ def features_page(code: str) -> str:
         <figure class="f-shot" data-reveal>
           <img src="{shots}favorites-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(f["fav_alt"])}">
         </figure>
-        <ul class="facts">
-{facts(f["fav_points"])}
-        </ul>
       </div>
     </section>
 
@@ -1140,16 +1045,6 @@ def features_page(code: str) -> str:
               <li>{icon("folder")}fonts</li>
             </ul>
           </article>
-          <article class="cell full" data-reveal>
-            <div>
-              <h3>{f["names_title"]}</h3>
-              <p>{f["names_text"]}</p>
-            </div>
-            <div class="mini names" aria-hidden="true">
-              <div><span>Mac</span><code>{esc(f["names_from"])}</code></div>
-              <div><span>Windows</span><code>{esc(f["names_to"])}</code></div>
-            </div>
-          </article>
         </div>
       </div>
     </section>
@@ -1174,27 +1069,15 @@ def features_page(code: str) -> str:
             <text class="n-note" x="400" y="222" text-anchor="middle">{esc(f["net_direct"])}</text>
           </svg>
         </figure>
-        <ul class="facts">
-{facts(f["net_points"])}
-        </ul>
+        <p class="f-note">{f["net_points"][-1][0]}</p>
         <p class="more"><a href="{base}{START}#server">{f["net_links"]}</a><a href="{base}{HOW}">{f["net_how"]}</a></p>
-      </div>
-    </section>
-
-    <section class="f-section" id="numbers" aria-labelledby="numbers-title">
-      <div class="wrap">
-        <h2 class="f-h2" id="numbers-title">{f["numbers_h2"]}</h2>
-        <dl class="numbers" data-reveal>
-{numbers}
-        </dl>
       </div>
     </section>
 
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
-        <h2 class="display" id="closing-title">{f["closing"]}</h2>{cta(c, base, base + START)}
+        <h2 class="display" id="closing-title">{f["closing"]}</h2>{cta(c, base, base + START, note=False)}
         <div class="star-ask">
-          <p>{f["star_ask"]}</p>
           {star_button(f, "gh big", f["star_button"])}
         </div>
       </div>
@@ -1728,9 +1611,6 @@ cd pasteferry-server-macos
             </g>
           </svg>
         </figure>
-        <ul class="points ports">
-{items(g["overview_points"], "          ")}
-        </ul>
       </div>
     </section>
 
@@ -1948,9 +1828,6 @@ sudo ./install.sh {CLOUD_IP}"""
             </g>
           </svg>
         </figure>
-        <ul class="points ports">
-{items(cl["overview_points"], "          ")}
-        </ul>
       </div>
     </section>
 
@@ -2081,7 +1958,6 @@ def start_page(code: str) -> str:
       <div class="wrap">
         <p class="crumb"><a href="{home_href}">{c["brand"]}</a> / {c["nav_start"]}</p>
         <h1 class="display">{s["h1"]}</h1>
-        <p class="lede">{s["lede"]}</p>
         <ol class="guide-toc">
 {toc_list(s["toc"])}
         </ol>
@@ -2092,7 +1968,6 @@ def start_page(code: str) -> str:
       <div class="wrap">
         {step(1)}
         <h2 id="app-title">{s["app_h2"]}</h2>
-        <p class="intro">{s["app_intro"]}</p>
         <div class="os-grid qs-grid">
           <div>
             <div class="qs-app">
@@ -2137,7 +2012,6 @@ def start_page(code: str) -> str:
       <div class="wrap">
         {step(3)}
         <h2 id="pair-title">{s["pair_h2"]}</h2>
-        <p class="intro">{s["pair_intro"]}</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">
@@ -2245,9 +2119,6 @@ def lan_page(code: str) -> str:
             <text class="d-note" x="480" y="242" text-anchor="middle">{d["direct_note"]}</text>
           </svg>
         </figure>
-        <ul class="points ports">
-{items(ln["overview_points"], "          ")}
-        </ul>
       </div>
     </section>
 
@@ -2390,12 +2261,10 @@ def download_page(code: str) -> str:
                   {button("PasteFerry-Setup.exe", w["setup"])}
                 </div>{mirror_line([(mirror["setup"], "PasteFerry-Setup.exe"), (mirror["portable"], "PasteFerry-windows-x64.zip")]) if mirror else ""}
                 <p class="small">{fill(w["portable"], links)}</p>
-                <ol class="steps">
-{items(w["steps"])}
-                </ol>
+                <p class="more"><a href="{base}{START}#app">{c["nav_start"]} →</a></p>
               </div>
               <ul class="points">
-{items(w["notes"])}
+{items(w["notes"][:1])}
               </ul>
             </div>
           </section>
@@ -2411,14 +2280,12 @@ def download_page(code: str) -> str:
                                     (mirror["universal"], "PasteFerry.dmg")]) if mirror else ""}
                 <p class="small">{fill(m["universal"], links)}</p>
                 <p class="small">{fill(m["homebrew"], links)}</p>
-                <ol class="steps">
-{items(m["steps"])}
-                </ol>
+                <p class="more"><a href="{base}{START}#app">{c["nav_start"]} →</a></p>
               </div>
               <div>
                 <h4>{m["chip_h"]}</h4>
                 <ul class="points">
-{items(m["chip"])}
+{items(m["chip"][:2] + m["chip"][-1:])}
                 </ul>
               </div>
             </div>
@@ -2460,7 +2327,7 @@ def download_page(code: str) -> str:
                 <h4>{ph["web_h"]}</h4>
                 <p class="small">{fill(ph["web_note"], links)}</p>
                 <ol class="steps">
-{items(ph["steps"])}
+{items(ph["steps"][::2])}
                 </ol>
               </div>
               <ul class="points">
@@ -2547,9 +2414,6 @@ def tailscale_page(code: str) -> str:
             <text class="d-note" x="480" y="218" text-anchor="middle">{d["direct_note"]}</text>
           </svg>
         </figure>
-        <ul class="points ports">
-{items(ts["overview_points"], "          ")}
-        </ul>
       </div>
     </section>
 
@@ -3087,8 +2951,7 @@ def themes_page(code: str) -> str:
     shots = up + shots_dir(code)
     ol = lambda xs: "".join(f"<li>{x}</li>" for x in xs)
     dl = lambda rows: "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in rows)
-    builtin = "".join(f"<li><b>{esc(n)}</b>：{esc(d)}</li>" if code.startswith("zh") or code == "ja"
-                      else f"<li><b>{esc(n)}</b>: {esc(d)}</li>" for n, d in t["builtin"])
+    builtin = " · ".join(esc(n) for n, _ in t["builtin"])
     faq = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for q, a in t["faq"])
     more = " · ".join(f'<a href="{REPO}/blob/main/{href}">{esc(label)}</a>' for label, href in t["more_links"])
     return page_top(c, code, THEMES, t["title"], t["summary"]) + f"""
@@ -3102,13 +2965,13 @@ def themes_page(code: str) -> str:
     </div></section>
     <section class="section" id="switch"><div class="wrap">
       <h2>{esc(t['switch_title'])}</h2>
-      <div class="os-grid"><ol class="steps">{ol(t['switch_steps'])}</ol>
+      <div class="os-grid"><ol class="steps">{ol(t['switch_steps'][:3])}</ol>
         <figure class="shot"><img src="{shots}pixel-appearance-dark.png" width="2112" height="1472" alt="{esc(t['switch_alt'])}"></figure>
       </div>
     </div></section>
     <section class="section" id="builtin"><div class="wrap official-copy">
       <h2>{esc(t['builtin_title'])}</h2>
-      <ul>{builtin}</ul>
+      <p class="intro">{builtin}</p>
       <div class="f-pair">
         <img src="{shots}history.png" width="2112" height="1472" loading="lazy" alt="{esc(t['builtin_alt_default'])}">
         <img src="{shots}pixel-history-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(t['builtin_alt_pixel'])}">
@@ -3116,14 +2979,12 @@ def themes_page(code: str) -> str:
     </div></section>
     <section class="section" id="custom"><div class="wrap official-copy">
       <h2>{esc(t['custom_title'])}</h2>
-      <p class="intro">{esc(t['custom_intro'])}</p>
-      <ol class="steps">{ol(t['custom_steps'])}</ol>
+      <ol class="steps">{ol(t['custom_steps'][:4])}</ol>
       <p class="note">{esc(t['custom_note'])}</p>
     </div></section>
     <section class="section" id="background"><div class="wrap official-copy">
       <h2>{esc(t['bg_title'])}</h2>
-      <ol class="steps">{ol(t['bg_steps'])}</ol>
-      <p class="note">{esc(t['bg_note'])}</p>
+      <ol class="steps">{ol(t['bg_steps'][:1] + t['bg_steps'][2:])}</ol>
       <div class="f-pair">
         <img src="{shots}bg-history-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(t['bg_alt'])}">
         <img src="{shots}bg-appearance-background-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(t['bg_alt2'])}">
@@ -3131,7 +2992,7 @@ def themes_page(code: str) -> str:
     </div></section>
     <section class="section" id="scenery"><div class="wrap">
       <h2>{esc(t['scene_title'])}</h2>
-      <div class="os-grid"><ol class="steps">{ol(t['scene_steps'])}</ol>
+      <div class="os-grid"><ol class="steps">{ol(t['scene_steps'][1:])}</ol>
         <figure class="shot"><img src="{shots}bg-scene-history-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(t['scene_alt'])}"></figure>
       </div>
     </div></section>
@@ -3139,8 +3000,6 @@ def themes_page(code: str) -> str:
       <h2>{esc(t['file_title'])}</h2>
       <p class="intro">{t['file_intro']}</p>
       {code_block(c, THEME_EXAMPLE)}
-      <h3>{esc(t['file_fields_title'])}</h3>
-      <dl class="fields">{dl(t['file_fields'])}</dl>
       <p class="note">{esc(t['file_more'])} <a href="{REPO}/blob/main/design/themes.md">design/themes.md</a></p>
     </div></section>
     <section class="section" id="ai"><div class="wrap official-copy">
@@ -3156,9 +3015,7 @@ def themes_page(code: str) -> str:
       {code_block(c, THEME_CLAUDE_CODE)}
       <p class="note">{esc(t['ai_restart'])}</p>
       <h3>{esc(t['ai_step3'])}</h3>
-      <ul class="prompts">{"".join(f"<li>“{esc(x)}”</li>" for x in t['ai_prompts'])}</ul>
-      <h3>{esc(t['ai_does_title'])}</h3>
-      <ul>{"".join(f"<li>{esc(x)}</li>" for x in t['ai_does'])}</ul>
+      <ul class="prompts">{"".join(f"<li>“{esc(x)}”</li>" for x in t['ai_prompts'][:2])}</ul>
       <h3>{esc(t['ai_safe_title'])}</h3>
       <p>{esc(t['ai_safe'])}</p>
     </div></section>
@@ -3179,7 +3036,7 @@ def official_page(code: str) -> str:
     base = up + path
     shots = up + shots_dir(code)
     sections = "\n".join(
-        f'<section class="section"><div class="wrap official-copy"><h2>{esc(o[key + "_title"])}</h2><p class="intro">{esc(o[key])}</p></div></section>'
+        f'<div><dt>{esc(o[key + "_title"])}</dt><dd>{esc(o[key])}</dd></div>'
         for key in ("routing", "quota", "privacy", "self")
     )
     return page_top(c, code, OFFICIAL, o["title"], o["summary"]) + f"""
@@ -3196,7 +3053,7 @@ def official_page(code: str) -> str:
         <figure class="shot"><img src="{shots}official-settings-dark.png" width="2112" height="1472" alt="{esc(o['settings_alt'])}"></figure>
       </div>
     </div></section>
-    {sections}
+    <section class="section"><div class="wrap official-copy"><dl class="fallbacks">{sections}</dl></div></section>
     <section class="section"><div class="wrap official-copy">
       <figure class="shot"><img src="{shots}official-usage-dark.png" width="2112" height="1472" loading="lazy" alt="{esc(o['usage_alt'])}"></figure>
       <p class="note"><a href="{base}{PRIVACY}">{esc(o['privacy_link'])}</a> · <a href="{base}{CLOUD}">{esc(o['self_link'])}</a> · <a href="https://pasteferry.cc/">pasteferry.cc</a></p>

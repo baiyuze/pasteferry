@@ -21,14 +21,14 @@ C = {
     "nav_download": "Download",
     "lang_label": "Language",
 
-    "h1": "Your computers. Your phone.<br>Everything within reach.",
-    "lede": "Copy and paste between computers. Find past clips. Send photos and files between computers and Android. Mac, Windows, Linux and Android, with no shared account. Phones can also scan a code to use the web page. Android and web work on the same network.",
+    "h1": 'Copy here.<br>Paste there.',
+    "lede": 'Sync your clipboard, keep a history, and send photos and files.',
     "dl_button": "Download PasteFerry",
     "dl_mac": "Download for Mac",
     "dl_win": "Download for Windows",
     "dl_linux": "Download for Linux",
-    "dl_note": 'Version 2.13.1, free and open source. macOS 13 or later; Windows 10 and 11; Linux (x64 and ARM64); Android 9 or later. New interface scale makes text, icons and spacing larger or smaller together.',
-    "start_link": "New here? Set it up in three steps →",
+    "dl_note": 'Free and open source · Mac / Windows / Linux / Android',
+    "start_link": 'Quick start →',
     "stage_label": "Demo: Command C on a MacBook turns a file into a sheet that flies over a direct connection to a Windows "
                    "laptop, where Ctrl V pastes it",
     "stage_file": "Q3 review - final.pptx",
@@ -39,15 +39,15 @@ C = {
     # Three ways to connect, on equal footing; the reader picks one. Home cards use name, fit, summary, go;
     # the quick start tabs use name, facts, steps, address, go; the install section uses name, fit.
     # {lan}, {cloud}, {server} and {ts} in steps and address become links to the matching guide.
-    "paths_h2": "How your computers connect",
-    "paths_intro": 'On the same network, install and pair. On different networks, turn on Service, or run your own server or Tailscale.',
+    "paths_h2": 'Ways to connect',
+    "paths_intro": 'Pair on the same network, or use Service, your own server or Tailscale across networks.',
     "paths_after": 'New here? Follow the <a href="{start}#server">quick start</a>. Service is free: 100 MB of relay a day, direct connections unlimited.',
     "plans_label": "Ways to connect",
     "plans": {
         "lan": {
             "name": "Same network",
-            "fit": "Nothing to set up",
-            "summary": "Two computers on the same router: install the app, enter a pairing code, and you're done. No server needed.",
+            "fit": 'No server needed',
+            "summary": 'Pair by code on the same Wi-Fi or wired network.',
             "go": "Same network guide →",
             "facts": [
                 ("Best for", "Home or office, with both computers on the same Wi‑Fi or wired network."),
@@ -55,18 +55,13 @@ C = {
                 ("Keep in mind", "Sync stops when you leave the network and resumes when you're back. If wired and Wi‑Fi are on "
                                  "different subnets, you enter one extra address when pairing."),
             ],
-            "steps": [
-                "Install the app on each computer and click Turn on background sync.",
-                "Allow PasteFerry when Windows Firewall or macOS asks about the local network.",
-                "Show a code on one computer, enter it on the other and compare fingerprints. On a different subnet, also enter the "
-                "address shown under the code; see the <a href=\"{lan}#subnet\">same network guide</a>.",
-            ],
+            "steps": ['Connect both computers to the same Wi-Fi or wired network.'],
             "address": "No server address to enter.",
         },
         "cloud": {
             "name": 'Your own public server',
             "fit": 'Your server, unlimited relay',
-            "summary": "A Linux VM with a public IP; the smallest size is enough. Every computer connects to it and syncs from anywhere.",
+            "summary": 'Host it on your own Linux server.',
             "go": "Public server guide →",
             "facts": [
                 ("Best for", "Running the server yourself, or relaying a lot of traffic."),
@@ -74,18 +69,14 @@ C = {
                 ("Keep in mind", "The VM costs money, and relay speed is limited by its bandwidth. In mainland China, enter the "
                                  "IP unless the domain has an ICP filing."),
             ],
-            "steps": [
-                "In your cloud provider's security group, open TCP 8787, UDP 3478 and UDP 32768–60999.",
-                "Log in with ssh, download the install script and run it: <code>sudo ./install.sh PUBLIC_IP</code>.",
-                "In Settings → Connection on each computer, enter <code>ws://PUBLIC_IP:8787/signal</code>, press Return, then pair.",
-            ],
+            "steps": ['Install the server using the <a href="{cloud}">deployment guide</a>.',
+                      'Enter the generated server address in Settings → Connection.'],
             "address": "Open <code>http://PUBLIC_IP:8787/healthz</code> in a browser. If it says ok, it's running.",
         },
         "ts": {
             "name": "Tailscale",
             "fit": "Across networks, no server",
-            "summary": "Install Tailscale on each computer, sign in to the same account, and enter the other computer's Tailscale "
-                       "address when pairing.",
+            "summary": 'Pair over your Tailscale network.',
             "go": "Tailscale guide →",
             "facts": [
                 ("Best for", "You already use Tailscale, or don't want to depend on any server."),
@@ -93,11 +84,8 @@ C = {
                 ("Keep in mind", "Tailscale has to stay connected. When it can't connect two computers directly, it relays "
                                  "through its own servers, which can be slow."),
             ],
-            "steps": [
-                "Install Tailscale on each computer and sign in to the same account.",
-                "On the other computer, run <code>tailscale ip -4</code> and note the address starting with 100.",
-                "When pairing, click On a different subnet? and enter that address.",
-            ],
+            "steps": ['Install Tailscale on each computer and sign in to the same account.',
+                      'On the other computer, run <code>tailscale ip -4</code> and note the address starting with 100.'],
             "address": "No server needed. A Tailscale address doesn't change, so you enter it once, when pairing.",
         },
     },
@@ -258,7 +246,7 @@ C = {
      ('Why do .uuremote_ files keep appearing while UU Remote is running?',
       ['That was a bug in older versions. Update to the latest one.'])],
 
-    "closing": "Your devices. Your content. Within reach.",
+    "closing": 'Get PasteFerry.',
     "footer_license": "PasteFerry is open source under the GNU AGPL-3.0.",
     "footer_label": "Footer",
     "footer_links": [
@@ -566,7 +554,7 @@ C = {
         "description": "New to PasteFerry? Install the app on each computer. On the same network, just pair; on different "
                        "networks, turn on Service. Then copy on one computer and paste on the other.",
         "h1": "Quick start",
-        "lede": "Install the app, pick a way to connect, and pair your computers. On the same network it takes a few minutes.",
+        "lede": 'Install the app, connect your devices, and pair by code.',
         "toc": [("app", "Install the app"), ("server", "Pick a way to connect"), ("pair", "Pair"), ("phone", "Using a phone")],
         "step": "Step {n}",
 
@@ -594,7 +582,7 @@ C = {
         "app_alt": "PasteFerry the first time it opens, asking you to turn on background sync",
 
         "server_h2": "Pick a way to connect",
-        "server_intro": 'On the same network, install and pair. On different networks, turn on Service. If you want full control, run your own server or use Tailscale.',
+        "server_intro": 'Connect locally, or choose Service, your own server or Tailscale for remote devices.',
 
         "pair_h2": "Pair your computers",
         "pair_intro": "Pair any two computers once, and that's it.",
@@ -867,7 +855,7 @@ C = {
         "phone": {
             "title": "Phone (Android app or the web page)",
             "apk": "Download for Android (APK)",
-            "apk_note": "Android 9 or later, arm64 phones. Android asks once before installing it.",
+            "apk_note": 'Android 9 or later · ARM64',
             "web_h": "The web page (nothing to install)",
             "web_note": "Turn on Devices › Phone web transfer on the computer and scan the code with your phone.",
             "steps": [
@@ -875,21 +863,17 @@ C = {
                 "Or use the web page: turn on Devices › Phone web transfer on the computer and scan the code.",
                 "On the phone, paste what you copied and send it; what you copy on the computer appears in the phone’s records.",
             ],
-            "notes": [
-                "Text, screenshots and files go both ways.",
-                "There is no iPhone or iPad app: iOS does not let apps read the clipboard in the background, and distributing one needs a certificate. Use the web page instead.",
-                "Contents are encrypted between the phone and the computer; use it at home or on a network you trust.",
-            ],
+            "notes": ['Keep the phone and computer on the same network.', 'Use the web version on iPhone and iPad.'],
         },
         "title": "Download PasteFerry: Mac (Apple silicon, Intel), Windows and Linux",
         "description": "PasteFerry for every system: Apple silicon and Intel versions for macOS 13 or later, an installer and a "
                        "portable zip for Windows 10 and 11, and .deb and tar.gz packages for Linux on x64 and ARM64. Free and open source.",
         "h1": "Download PasteFerry",
-        "lede": "Free and open source, version {version}. Install it on each computer you want to sync; Mac, Windows and Linux mix freely.",
+        "lede": 'Free and open source · Version {version}',
         "os_label": "Choose your system",
         "win": {
             "setup": "Download the installer",
-            "portable": "Rather not run an installer? Get the <a href=\"{portable}\">portable zip</a>, extract it and run PasteFerry from there.",
+            "portable": '<a href="{portable}">Portable version</a> — no installation',
             "steps": [
                 "Run PasteFerry-Setup.exe. It installs for the current user, no administrator rights needed."
                 "<span class=\"aside\">If you see \"Windows protected your PC\", click More info, then Run anyway.</span>",
@@ -904,8 +888,9 @@ C = {
         "mac": {
             "apple": "Apple silicon (M1 and later)",
             "intel": "Intel",
-            "universal": "A <a href=\"{universal}\">universal version</a> that runs on both is also available, at twice the size.",
-            "homebrew": 'You can also install the desktop app and bundled CLI with <code>brew install --cask baiyuze/tap/pasteferry</code>. If already installed manually, quit and move the existing app first; keep your application data. See the <a href="{homebrew}">installation and upgrade guide</a>.',
+            "universal": 'Or get the <a href="{universal}">universal build</a>.',
+            "homebrew": (('Homebrew: <code>brew install --cask baiyuze/tap/pasteferry</code>. <a href="{homebrew}">Install and '
+                          'upgrade</a>')),
             "steps": [
                 "Open the DMG you downloaded and drag PasteFerry into Applications.",
                 "Open it from Applications.<span class=\"aside\">The first time, macOS says it can't verify the developer: go to "
@@ -928,16 +913,8 @@ C = {
             "tar_h": "Other distributions",
             "x64": "x64",
             "arm64": "ARM64",
-            "notes": [
-                "Needs a graphical desktop: X11, or Wayland with XWayland, which GNOME, KDE and other major desktops include by default.",
-                "Not sure whether you have x64 or ARM64? Run <code>uname -m</code> in a terminal: <code>x86_64</code> means x64, "
-                "<code>aarch64</code> means ARM64.",
-                "The .deb installs to /opt/PasteFerry and adds PasteFerry to the app menu. The tar.gz runs from wherever you extract "
-                "it, and <code>install.sh</code> adds it to the app menu.",
-                "Once it's open, click Turn on background sync; from then on it starts when you log in. GNOME shows no tray icon "
-                "by default, so open the window from the app menu.",
-                "Needs GTK 3. Tested on Ubuntu 24.04 with GNOME (Wayland).",
-            ],
+            "notes": ['Requires GTK 3 and an X11 desktop or Wayland with XWayland.',
+                      'Run <code>uname -m</code>: <code>x86_64</code> means x64; <code>aarch64</code> means ARM64.'],
         },
         "more_h2": "More",
         "more": [

@@ -96,7 +96,6 @@
       <div class="wrap">
         <p class="crumb"><a href="../../de/">PasteFerry</a> / Schnellstart</p>
         <h1 class="display">Schnellstart</h1>
-        <p class="lede">Installieren Sie die App, wählen Sie eine Verbindungsmethode und koppeln Sie Ihre Computer. Im selben Netzwerk dauert es einige Minuten.</p>
         <ol class="guide-toc">
           <li><a href="#app">Installieren Sie die App</a></li>
           <li><a href="#server">Wählen Sie eine Möglichkeit zur Verbindung</a></li>
@@ -110,7 +109,6 @@
       <div class="wrap">
         <p class="eyebrow">Schritt 1</p>
         <h2 id="app-title">Installieren Sie die App auf jedem Computer</h2>
-        <p class="intro">Eines auf jedem Computer, den Sie synchronisieren möchten. Mac, Windows und Linux können frei gemischt werden.</p>
         <div class="os-grid qs-grid">
           <div>
             <div class="qs-app">
@@ -150,7 +148,7 @@
       <div class="wrap">
         <p class="eyebrow">Schritt 2</p>
         <h2 id="server-title">Wählen Sie eine Möglichkeit zur Verbindung</h2>
-        <p class="intro">Im selben Netzwerk installieren und koppeln. Aktivieren Sie in verschiedenen Netzwerken den Dienst. Wenn Sie die volle Kontrolle wünschen, betreiben Sie Ihren eigenen Server oder verwenden Sie Tailscale.</p>
+        <p class="intro">Lokal verbinden oder für entfernte Geräte Dienst, eigenen Server oder Tailscale wählen.</p>
         <div class="os-tabs" data-tabs="plan">
           <div class="tablist" role="tablist" aria-label="Möglichkeiten zur Verbindung" hidden>
             <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">Dienst</button>
@@ -164,19 +162,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>Installieren Sie die neueste Version auf jedem Computer und klicken Sie auf Hintergrundsynchronisierung aktivieren.</li>
                   <li>Aktivieren Sie „Dienst verwenden“ unter „Einstellungen“ → „Verbindung“.</li>
-                  <li>Koppeln Sie die beiden Computer. Computer, die Sie bereits gekoppelt haben, müssen nicht erneut gekoppelt werden.</li>
                 </ol>
-                <p class="plan-address">Der Dienst ist bei einer Neuinstallation deaktiviert. Der Server erhält niemals das, was Sie kopieren; siehe Datenschutzerklärung.</p>
                 <a class="button quiet" href="../../de/official/">Schalten Sie den Dienst ein →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>Direkt wann immer möglich</dt><dd>Die Computer stellen eine direkte Verbindung her, wenn sie können, und nutzen den Server nur, wenn dies nicht möglich ist. Der Inhalt ist verschlüsselt und der Server kann ihn nicht entschlüsseln.</dd></div>
-                  <div><dt>100 MB Relay pro Tag, direkt unbegrenzt</dt><dd>Die Weiterleitung ist auf 100 MB pro Computer und Tag begrenzt. direkt ist unbegrenzt. Auf der Verbrauchsseite wird angezeigt, wie viel noch übrig ist.</dd></div>
-                </dl>
+                <p>100 MB Relay pro Computer und Tag. Direkte Übertragungen unbegrenzt.</p>
               </div>
             </div>
           </section>
@@ -186,20 +178,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>Installieren Sie die App auf jedem Computer und klicken Sie auf Hintergrundsynchronisierung aktivieren.</li>
-                  <li>Lassen Sie PasteFerry zu, wenn die Windows Firewall oder macOS nach dem lokalen Netzwerk fragt.</li>
-                  <li>Zeigen Sie einen Code auf einem Computer vor, geben Sie ihn auf dem anderen ein und vergleichen Sie Fingerabdrücke. Geben Sie in einem anderen Subnetz auch die unter dem Code angezeigte Adresse ein; Weitere Informationen finden Sie im <a href="../../de/lan/#subnet">-Netzwerkhandbuch</a>.</li>
+                  <li>Beide Computer mit demselben WLAN oder LAN verbinden.</li>
                 </ol>
-                <p class="plan-address">Es muss keine Serveradresse eingegeben werden.</p>
                 <a class="button quiet" href="../../de/lan/">Gleicher Netzwerkführer →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-                <dl>
-                  <div><dt>Am besten für</dt><dd>Zu Hause oder im Büro, wobei beide Computer im selben Wi-Fi- oder kabelgebundenen Netzwerk sind.</dd></div>
-                  <div><dt>Du brauchst</dt><dd>Nichts als die App auf jedem Computer.</dd></div>
-                  <div><dt>Denken Sie daran</dt><dd>Die Synchronisierung stoppt, wenn Sie das Netzwerk verlassen, und wird fortgesetzt, wenn Sie zurückkommen. Wenn sich Kabel und WLAN in unterschiedlichen Subnetzen befinden, geben Sie beim Pairing eine zusätzliche Adresse ein.</dd></div>
-                </dl>
+                <p>Ohne Server</p>
               </div>
             </div>
           </section>
@@ -209,20 +194,14 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>Öffnen Sie in der Sicherheitsgruppe Ihres Cloud-Anbieters TCP 8787, UDP 3478 und UDP 32768–60999.</li>
-                  <li>Melden Sie sich mit ssh an, laden Sie das Installationsskript herunter und führen Sie es aus: <code>sudo ./install.sh PUBLIC_IP</code>.</li>
-                  <li>Geben Sie unter Einstellungen → Verbindung auf jedem Computer <code>ws://PUBLIC_IP:8787/signal</code>ein, drücken Sie die Eingabetaste und koppeln Sie dann.</li>
+                  <li>Den Server nach der <a href="../../de/cloud/">Anleitung</a> installieren.</li>
+                  <li>Die erzeugte Serveradresse unter Einstellungen → Verbindung eintragen.</li>
                 </ol>
-                <p class="plan-address">Öffnen Sie <code>http://PUBLIC_IP:8787/healthz</code> in einem Browser. Wenn dort „OK“ steht, läuft es.</p>
                 <a class="button quiet" href="../../de/cloud/">Leitfaden für öffentliche Server →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>Am besten für</dt><dd>Betreiben Sie den Server selbst oder leiten Sie viel Datenverkehr weiter.</dd></div>
-                  <div><dt>Du brauchst</dt><dd>Eine Linux -VM mit öffentlicher IP und Root-Zugriff.</dd></div>
-                  <div><dt>Denken Sie daran</dt><dd>Die VM kostet Geld und die Relay-Geschwindigkeit wird durch ihre Bandbreite begrenzt. Geben Sie auf dem chinesischen Festland die IP ein, es sei denn, die Domain verfügt über eine ICP-Einreichung.</dd></div>
-                </dl>
+                <p>Ihr Server, unbegrenztes Relay</p>
               </div>
             </div>
           </section>
@@ -234,18 +213,12 @@
                 <ol class="steps">
                   <li>Installieren Sie Tailscale auf jedem Computer und melden Sie sich bei demselben Konto an.</li>
                   <li>Führen Sie auf dem anderen Computer <code>tailscale ip -4</code> aus und notieren Sie sich die Adresse, die mit 100 beginnt.</li>
-                  <li>Klicken Sie beim Koppeln auf In einem anderen Subnetz? und geben Sie diese Adresse ein.</li>
                 </ol>
-                <p class="plan-address">Kein Server erforderlich. Eine Tailscale -Adresse ändert sich nicht, Sie müssen sie also beim Pairing einmal eingeben.</p>
                 <a class="button quiet" href="../../de/tailscale/">Tailscale -Anleitung →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-                <dl>
-                  <div><dt>Am besten für</dt><dd>Sie verwenden Tailscale bereits oder möchten nicht auf einen Server angewiesen sein.</dd></div>
-                  <div><dt>Du brauchst</dt><dd>Tailscale auf jedem Computer, angemeldet bei demselben Konto.</dd></div>
-                  <div><dt>Denken Sie daran</dt><dd>Tailscale muss verbunden bleiben. Wenn zwei Computer nicht direkt verbunden werden können, erfolgt die Weiterleitung über eigene Server, was langsam sein kann.</dd></div>
-                </dl>
+                <p>Über Netzwerke hinweg, kein Server</p>
               </div>
             </div>
           </section>
@@ -257,7 +230,6 @@
       <div class="wrap">
         <p class="eyebrow">Schritt 3</p>
         <h2 id="pair-title">Koppeln Sie Ihre Computer</h2>
-        <p class="intro">Einmal zwei beliebige Computer koppeln, fertig.</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">

@@ -96,7 +96,6 @@
       <div class="wrap">
         <p class="crumb"><a href="../../es/">PasteFerry</a> / Inicio rápido</p>
         <h1 class="display">Inicio rápido</h1>
-        <p class="lede">Instale la aplicación, elija una forma de conectarse y empareje sus computadoras. En la misma red tarda unos minutos.</p>
         <ol class="guide-toc">
           <li><a href="#app">Instalar la aplicación</a></li>
           <li><a href="#server">Elige una forma de conectarte</a></li>
@@ -110,7 +109,6 @@
       <div class="wrap">
         <p class="eyebrow">Paso 1</p>
         <h2 id="app-title">Instale la aplicación en cada computadora</h2>
-        <p class="intro">Uno en cada computadora que quieras sincronizar. Mac, Windows y Linux se mezclan libremente.</p>
         <div class="os-grid qs-grid">
           <div>
             <div class="qs-app">
@@ -150,7 +148,7 @@
       <div class="wrap">
         <p class="eyebrow">Paso 2</p>
         <h2 id="server-title">Elige una forma de conectarte</h2>
-        <p class="intro">En la misma red, instale y empareje. En diferentes redes, active Servicio. Si desea un control total, ejecute su propio servidor o utilice Tailscale.</p>
+        <p class="intro">Conecta en local o elige el Servicio, tu servidor o Tailscale para dispositivos remotos.</p>
         <div class="os-tabs" data-tabs="plan">
           <div class="tablist" role="tablist" aria-label="Formas de conectarse" hidden>
             <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">Servicio</button>
@@ -164,19 +162,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>Instale la última versión en cada computadora y haga clic en Activar sincronización en segundo plano.</li>
                   <li>Active Usar el servicio en Configuración → Conexión.</li>
-                  <li>Empareje las dos computadoras. Las computadoras que ya ha vinculado no necesitan volver a vincularse.</li>
                 </ol>
-                <p class="plan-address">El servicio está desactivado en una nueva instalación. El servidor nunca recibe lo que copias; ver el aviso de privacidad.</p>
                 <a class="button quiet" href="../../es/official/">Activar servicio →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>Directo siempre que sea posible</dt><dd>Las computadoras se conectan directamente cuando pueden y pasan por el servidor solo cuando no pueden. El contenido está cifrado y el servidor no puede descifrarlo.</dd></div>
-                  <div><dt>100 MB de retransmisión al día, directo ilimitado</dt><dd>La retransmisión está limitada a 100 MB por computadora por día; directo es ilimitado. La página de uso muestra cuánto queda.</dd></div>
-                </dl>
+                <p>100 MB de retransmisión por ordenador al día. Transferencias directas ilimitadas.</p>
               </div>
             </div>
           </section>
@@ -186,20 +178,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>Instale la aplicación en cada computadora y haga clic en Activar sincronización en segundo plano.</li>
-                  <li>Permita PasteFerry cuando Windows Firewall o macOS pregunte sobre la red local.</li>
-                  <li>Muestra un código en una computadora, ingrésalo en la otra y compara huellas dactilares. En una subred diferente, ingrese también la dirección que se muestra debajo del código; consulte la misma guía de red <a href="../../es/lan/#subnet"></a>.</li>
+                  <li>Conecta ambos ordenadores a la misma red Wi-Fi o por cable.</li>
                 </ol>
-                <p class="plan-address">No hay dirección de servidor para ingresar.</p>
                 <a class="button quiet" href="../../es/lan/">Misma guía de red →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-                <dl>
-                  <div><dt>Lo mejor para</dt><dd>Casa u oficina, con ambos ordenadores en la misma red Wi‑Fi o cableada.</dd></div>
-                  <div><dt>necesitas</dt><dd>Nada más que la aplicación en cada computadora.</dd></div>
-                  <div><dt>tener en cuenta</dt><dd>La sincronización se detiene cuando sales de la red y se reanuda cuando regresas. Si la conexión por cable y Wi‑Fi están en subredes diferentes, ingresa una dirección adicional al realizar el emparejamiento.</dd></div>
-                </dl>
+                <p>Sin servidor</p>
               </div>
             </div>
           </section>
@@ -209,20 +194,14 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>En el grupo de seguridad de su proveedor de nube, abra TCP 8787, UDP 3478 y UDP 32768–60999.</li>
-                  <li>Inicie sesión con ssh, descargue el script de instalación y ejecútelo: <code>sudo ./install.sh PUBLIC_IP</code>.</li>
-                  <li>En Configuración → Conexión en cada computadora, ingrese <code>ws://PUBLIC_IP:8787/signal</code>, presione Retorno y luego empareje.</li>
+                  <li>Instala el servidor siguiendo la <a href="../../es/cloud/">guía</a>.</li>
+                  <li>Introduce la dirección generada en Ajustes → Conexión.</li>
                 </ol>
-                <p class="plan-address">Abra <code>http://PUBLIC_IP:8787/healthz</code> en un navegador. Si dice ok, está funcionando.</p>
                 <a class="button quiet" href="../../es/cloud/">Guía del servidor público →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>Lo mejor para</dt><dd>Ejecute el servidor usted mismo o transmita una gran cantidad de tráfico.</dd></div>
-                  <div><dt>necesitas</dt><dd>Una máquina virtual Linux con una IP pública y acceso raíz.</dd></div>
-                  <div><dt>tener en cuenta</dt><dd>La VM cuesta dinero y la velocidad de retransmisión está limitada por su ancho de banda. En China continental, ingrese la IP a menos que el dominio tenga una presentación ICP.</dd></div>
-                </dl>
+                <p>Tu servidor, retransmisión ilimitada</p>
               </div>
             </div>
           </section>
@@ -234,18 +213,12 @@
                 <ol class="steps">
                   <li>Instale Tailscale en cada computadora e inicie sesión en la misma cuenta.</li>
                   <li>En la otra computadora, ejecute <code>tailscale ip -4</code> y anote la dirección que comienza con 100.</li>
-                  <li>Al realizar el emparejamiento, haga clic en ¿En una subred diferente? e ingrese esa dirección.</li>
                 </ol>
-                <p class="plan-address">No se necesita servidor. Una dirección Tailscale no cambia, por lo que la ingresa una vez al realizar el emparejamiento.</p>
                 <a class="button quiet" href="../../es/tailscale/">Guía Tailscale →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-                <dl>
-                  <div><dt>Lo mejor para</dt><dd>Ya utilizas Tailscale o no quieres depender de ningún servidor.</dd></div>
-                  <div><dt>necesitas</dt><dd>Tailscale en cada computadora, iniciando sesión en la misma cuenta.</dd></div>
-                  <div><dt>tener en cuenta</dt><dd>Tailscale tiene que permanecer conectado. Cuando no puede conectar dos computadoras directamente, las transmite a través de sus propios servidores, lo que puede ser lento.</dd></div>
-                </dl>
+                <p>A través de redes, sin servidor</p>
               </div>
             </div>
           </section>
@@ -257,7 +230,6 @@
       <div class="wrap">
         <p class="eyebrow">Paso 3</p>
         <h2 id="pair-title">Empareja tus computadoras</h2>
-        <p class="intro">Empareje dos computadoras cualesquiera una vez y listo.</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">

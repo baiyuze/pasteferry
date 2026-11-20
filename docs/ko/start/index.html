@@ -96,7 +96,6 @@
       <div class="wrap">
         <p class="crumb"><a href="../../ko/">PasteFerry</a> / 빠른 시작</p>
         <h1 class="display">빠른 시작</h1>
-        <p class="lede">앱을 설치하고 연결 방법을 선택한 다음 컴퓨터를 페어링하세요. 동일한 네트워크에서는 몇 분 정도 걸립니다.</p>
         <ol class="guide-toc">
           <li><a href="#app">앱 설치</a></li>
           <li><a href="#server">연결 방법 선택</a></li>
@@ -110,7 +109,6 @@
       <div class="wrap">
         <p class="eyebrow">단계 1</p>
         <h2 id="app-title">각 컴퓨터에 앱 설치</h2>
-        <p class="intro">동기화하려는 모든 컴퓨터에 하나씩. Mac, Windows 및 Linux 는 자유롭게 혼합됩니다.</p>
         <div class="os-grid qs-grid">
           <div>
             <div class="qs-app">
@@ -150,7 +148,7 @@
       <div class="wrap">
         <p class="eyebrow">단계 2</p>
         <h2 id="server-title">연결 방법 선택</h2>
-        <p class="intro">동일한 네트워크에 설치하고 페어링하세요. 다른 네트워크에서는 서비스를 켜십시오. 모든 권한을 갖고 싶다면 자체 서버를 실행하거나 Tailscale를 사용하세요.</p>
+        <p class="intro">같은 네트워크에서 연결하거나 서비스, 자체 서버 또는 Tailscale을 선택하세요.</p>
         <div class="os-tabs" data-tabs="plan">
           <div class="tablist" role="tablist" aria-label="연결 방법" hidden>
             <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">서비스</button>
@@ -164,19 +162,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>각 컴퓨터에 최신 버전을 설치하고 백그라운드 동기화 켜기를 클릭합니다.</li>
                   <li>설정 → 연결에서 서비스 사용을 켜주세요.</li>
-                  <li>두 대의 컴퓨터를 페어링합니다. 이미 페어링한 컴퓨터는 다시 페어링할 필요가 없습니다.</li>
                 </ol>
-                <p class="plan-address">새로 설치하면 서비스가 중단됩니다. 서버는 복사한 내용을 절대 수신하지 않습니다. 개인정보 보호정책을 참조하세요.</p>
                 <a class="button quiet" href="../../ko/official/">서비스 켜기 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>가능할 때마다 직접</dt><dd>컴퓨터는 가능한 경우 직접 연결하고, 불가능한 경우에만 서버를 통과합니다. 콘텐츠는 암호화되어 있으며 서버는 이를 해독할 수 없습니다.</dd></div>
-                  <div><dt>하루 100MB 릴레이, 직접 무제한</dt><dd>Relay는 컴퓨터당 하루 100MB로 제한됩니다. 직접 무제한입니다. 사용량 페이지에는 남은 금액이 표시됩니다.</dd></div>
-                </dl>
+                <p>컴퓨터당 하루 100MB 릴레이. 직접 전송은 무제한입니다.</p>
               </div>
             </div>
           </section>
@@ -186,20 +178,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>각 컴퓨터에 앱을 설치하고 백그라운드 동기화 켜기를 클릭합니다.</li>
-                  <li>Windows 방화벽 또는 macOS 가 로컬 네트워크에 대해 묻는 경우 PasteFerry 를 허용합니다.</li>
-                  <li>한 컴퓨터에 코드를 표시하고 다른 컴퓨터에 코드를 입력한 후 지문을 비교하세요. 다른 서브넷에서도 코드 아래에 표시된 주소를 입력합니다. <a href="../../ko/lan/#subnet">동일한 네트워크 가이드</a>를 참조하세요.</li>
+                  <li>두 컴퓨터를 같은 Wi-Fi나 유선 네트워크에 연결하세요.</li>
                 </ol>
-                <p class="plan-address">입력할 서버 주소가 없습니다.</p>
                 <a class="button quiet" href="../../ko/lan/">동일한 네트워크 가이드 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-                <dl>
-                  <div><dt>다음에 가장 적합</dt><dd>집이나 사무실, 두 컴퓨터 모두 동일한 Wi-Fi 또는 유선 네트워크에 연결되어 있습니다.</dd></div>
-                  <div><dt>당신은 필요</dt><dd>각 컴퓨터의 앱 외에는 아무것도 없습니다.</dd></div>
-                  <div><dt>명심하세요</dt><dd>네트워크를 떠나면 동기화가 중지되고 다시 돌아오면 다시 시작됩니다. 유선과 Wi-Fi가 서로 다른 서브넷에 있는 경우 페어링할 때 추가 주소 하나를 입력합니다.</dd></div>
-                </dl>
+                <p>서버 불필요</p>
               </div>
             </div>
           </section>
@@ -209,20 +194,14 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>클라우드 공급자의 보안 그룹에서 TCP 8787, UDP 3478 및 UDP 32768–60999를 엽니다.</li>
-                  <li>SSH로 로그인하고 설치 스크립트를 다운로드한 후 실행하세요: <code>sudo ./install.sh PUBLIC_IP</code>.</li>
-                  <li>각 컴퓨터의 설정 → 연결에서 <code>ws://PUBLIC_IP:8787/signal</code>를 입력하고 Return 키를 누른 다음 페어링합니다.</li>
+                  <li><a href="../../ko/cloud/">배포 가이드</a>에 따라 서버를 설치하세요.</li>
+                  <li>생성된 서버 주소를 설정 → 연결에 입력하세요.</li>
                 </ol>
-                <p class="plan-address">브라우저에서 <code>http://PUBLIC_IP:8787/healthz</code> 를 엽니다. 괜찮다고 하면 실행 중인 것입니다.</p>
                 <a class="button quiet" href="../../ko/cloud/">공용 서버 안내 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>다음에 가장 적합</dt><dd>서버를 직접 운영하거나, 트래픽을 많이 중계하는 경우.</dd></div>
-                  <div><dt>당신은 필요</dt><dd>공용 IP 및 루트 액세스 권한이 있는 Linux VM.</dd></div>
-                  <div><dt>명심하세요</dt><dd>VM에는 비용이 들고 릴레이 속도는 대역폭에 따라 제한됩니다. 중국 본토에서는 도메인에 ICP 서류가 없는 경우 IP를 입력하세요.</dd></div>
-                </dl>
+                <p>당신의 서버, 무제한 릴레이</p>
               </div>
             </div>
           </section>
@@ -234,18 +213,12 @@
                 <ol class="steps">
                   <li>각 컴퓨터에 Tailscale 를 설치하고 동일한 계정으로 로그인합니다.</li>
                   <li>다른 컴퓨터에서 <code>tailscale ip -4</code> 를 실행하고 100으로 시작하는 주소를 기록해 둡니다.</li>
-                  <li>페어링할 때 다른 서브넷에 있습니까?를 클릭합니다. 그리고 그 주소를 입력하세요.</li>
                 </ol>
-                <p class="plan-address">서버가 필요하지 않습니다. Tailscale 주소는 변경되지 않으므로 페어링 시 한 번만 입력하면 됩니다.</p>
                 <a class="button quiet" href="../../ko/tailscale/">Tailscale 가이드 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-                <dl>
-                  <div><dt>다음에 가장 적합</dt><dd>이미 Tailscale를 사용하고 있거나 서버에 의존하고 싶지 않습니다.</dd></div>
-                  <div><dt>당신은 필요</dt><dd>모든 컴퓨터에서Tailscale 가 동일한 계정으로 로그인되어 있습니다.</dd></div>
-                  <div><dt>명심하세요</dt><dd>Tailscale 는 연결을 유지해야 합니다. 두 대의 컴퓨터를 직접 연결할 수 없는 경우 자체 서버를 통해 릴레이하므로 속도가 느려질 수 있습니다.</dd></div>
-                </dl>
+                <p>네트워크 전반에 걸쳐 서버 없음</p>
               </div>
             </div>
           </section>
@@ -257,7 +230,6 @@
       <div class="wrap">
         <p class="eyebrow">단계 3</p>
         <h2 id="pair-title">컴퓨터를 페어링하세요</h2>
-        <p class="intro">두 대의 컴퓨터를 한 번만 페어링하면 끝입니다.</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">

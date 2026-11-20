@@ -53,7 +53,7 @@
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
-      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs"};
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "features": "features/", "why": "features/"};
       var to = moved[location.hash.slice(1)];
       if (to) location.replace(to);
     })();
@@ -193,15 +193,15 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">2.13.1：介面縮放，文字、圖示一起放大 →</a>
-        <h1 class="display">電腦與手機，<br>內容隨手互通。</h1>
-        <p class="lede">電腦間複製貼上、找回記錄；電腦與安卓互傳相片和檔案。Mac、Windows、Linux、安卓都能用，毋須使用同一帳號。手機也能掃碼開啟網頁；安卓與網頁限同一網絡。</p>
+        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">v2.13.1</a>
+        <h1 class="display">跨裝置，<br>複製貼上。</h1>
+        <p class="lede">同步剪貼簿、儲存複製記錄，互傳相片和檔案。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 觀看完整示範 <span class="tour-duration">1:25</span></a>
         </div>
-        <p class="note">版本 2.13.1，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）；安卓 9 或以上。新增介面縮放：文字、圖示和間距一起放大或縮小。</p>
-        <a class="start-link" href="start/">第一次用？三步設定好 →</a>
+        <p class="note">免費開源 · Mac / Windows / Linux / Android</p>
+        <a class="start-link" href="start/">快速入門 →</a>
         <div class="demo" data-demo data-pasted="{item} 已貼上到 Windows 手提電腦">
           <div class="demo-modes" role="radiogroup" aria-label="兩部電腦在哪"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">家裏 ↔ 公司</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">同一個 Wi‑Fi</button></div>
           <div class="stage" data-play data-mode="wan" role="group" aria-label="示範：在 MacBook 上按下 Command C，檔案化成一張紙，經直連飛到 Windows 手提電腦，在那裏按下 Ctrl V 貼上">
@@ -239,60 +239,9 @@
       </div>
     </section>
 
-    <section class="section spotlight" id="themes" aria-labelledby="theme-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">2.10 新功能</span></p>
-        <h2 id="theme-title">換個樣子，<br>像素風也得。</h2>
-        <p class="intro">新增主題：內置像素風，也可以自己做一套，或者讓 AI 幫你配色。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/zh-hk/pixel-history-dark.png?v=14cd2ed298" width="2112" height="1472" alt="像素主題的複製記錄（深色）：頁首是夜裏的遠山、松樹和月亮，側邊欄底下有帳篷和營火，字是點陣字型" loading="lazy"><img class="theme-light" src="../assets/screenshots/zh-hk/pixel-history.png?v=a8e8129db4" width="2112" height="1472" alt="像素主題的複製記錄（深色）：頁首是夜裏的遠山、松樹和月亮，側邊欄底下有帳篷和營火，字是點陣字型" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#themes">了解主題 →</a><a href="themes/">主題教學 →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="friends" aria-labelledby="friends-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">2.6 新功能</span></p>
-        <h2 id="friends-title">好友的電腦，<br>也能拖過去。</h2>
-        <p class="intro">加個好友就能傳，不用配對。對方按接受才開始傳，還可以附一句備註。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/zh-hk/incoming-dark.png?v=61f8155c29" width="2552" height="1632" alt="隔空傳送頁：雷達下方是好友小明、王姐、阿杰的頭像；中間彈出「小明 · MacBook Air 想傳給你檔案」，附有備註，可以拒絕或接受" loading="lazy"><img class="theme-light" src="../assets/screenshots/zh-hk/incoming.png?v=80ec07ff2c" width="2552" height="1632" alt="隔空傳送頁：雷達下方是好友小明、王姐、阿杰的頭像；中間彈出「小明 · MacBook Air 想傳給你檔案」，附有備註，可以拒絕或接受" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#friends">了解給好友傳檔案 →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
-      <div class="wrap">
-        <h2 id="phone-title">手機也能用了。</h2>
-        <p class="intro">安卓 App 可與電腦雙向隔空傳送，相片和檔案一次多選，收到後儲存或分享。不想安裝？掃碼開啟網頁，查看複製記錄、傳送內容，也能獨立收發檔案。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/zh-hk/web-share-dark.png?v=baac6ddfb7" width="2552" height="1632" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表" loading="lazy"><img class="theme-light" src="../assets/screenshots/zh-hk/web-share.png?v=0fc7ddafa6" width="2552" height="1632" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表" loading="lazy">
-        </figure>
-        <ul class="points">
-          <li><b>手機瀏覽器直接用</b>，記錄與獨立檔案收發。</li>
-          <li><b>安卓雙向傳檔案</b>，多選、儲存與分享。</li>
-          <li><b>同一網絡使用</b>，網頁需保持開啟。</li>
-        </ul>
-        <p class="more"><a href="features/#phone">了解手機端怎麼用 →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="send" aria-labelledby="send-title">
-      <div class="wrap">
-        <h2 id="send-title">拖過去，<br>就到了。</h2>
-        <p class="intro">電腦上拖放、安卓上多選，相片和檔案直接傳到另一部裝置。App 傳輸中斷後可繼續。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/zh-hk/send-dark.png?v=6e908b9345" width="2552" height="1632" alt="隔空傳送頁：左邊是雷達，中間是這部 Mac，周圍是同一區域網絡和其他網絡裏的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度" loading="lazy"><img class="theme-light" src="../assets/screenshots/zh-hk/send.png?v=1469b4dc56" width="2552" height="1632" alt="隔空傳送頁：左邊是雷達，中間是這部 Mac，周圍是同一區域網絡和其他網絡裏的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#send">了解隔空傳送 →</a></p>
-      </div>
-    </section>
-
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <h2 id="qp-title">按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>，<br>最近複製的都在手邊。</h2>
+        <h2 id="qp-title">複製記錄，<br>隨時找回。</h2>
         <p class="intro">在任何程式裏按一下，選一項就貼上。</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
@@ -304,116 +253,68 @@
       </div>
     </section>
 
-    <section class="section" id="features" aria-labelledby="grid-title">
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
-        <h2 id="grid-title">不只是同步剪貼簿。</h2>
-        <ul class="tiles">
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
-            <h3>隔空傳送 <span class="new">新</span></h3>
-            <p>把檔案、資料夾拖到另一部電腦或好友那裏，多大都可以。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
-            <h3>快速貼上</h3>
-            <p>按 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> 叫出複製記錄，選取就貼上。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
-            <h3>檔案與資料夾</h3>
-            <p>小檔案複製時就傳好，大的用時再取。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-            <h3>複製記錄與收藏</h3>
-            <p>所有裝置複製過的都在這裏，能搜，能收藏。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
-            <h3>跨網絡</h3>
-            <p>開啟「服務」，家裏和公司之間也能同步。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
-            <h3>端對端加密</h3>
-            <p>優先直連，伺服器看不到你複製了甚麼。</p>
-          </li>
-        </ul>
-        <p class="more"><a href="features/">查看全部功能 →</a></p>
+        <h2 id="send-title">拖過去，<br>就到了。</h2>
+        <p class="intro">將檔案或資料夾拖到目標裝置。</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/zh-hk/send-dark.png?v=6e908b9345" width="2552" height="1632" alt="隔空傳送頁：左邊是雷達，中間是這部 Mac，周圍是同一區域網絡和其他網絡裏的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度" loading="lazy"><img class="theme-light" src="../assets/screenshots/zh-hk/send.png?v=1469b4dc56" width="2552" height="1632" alt="隔空傳送頁：左邊是雷達，中間是這部 Mac，周圍是同一區域網絡和其他網絡裏的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#send">了解隔空傳送 →</a></p>
       </div>
     </section>
 
-    <section class="section" id="why" aria-labelledby="why-title">
+    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
-        <h2 id="why-title">為甚麼不用現有的方法</h2>
-        <p class="intro">「通用剪貼簿」只認同一個 Apple ID，AirDrop 每次都要按接受，Mac 配 Windows 時都用不上。</p>
-        <div class="block table-scroll">
-          <table class="compare">
-            <caption class="skip">隔空貼與其他方式的比較</caption>
-            <thead><tr><td></td><th scope="col" class="ours">隔空貼</th><th scope="col">通用剪貼簿</th><th scope="col">AirDrop</th><th scope="col">通訊軟件</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">毋須帳戶</th><td class="yes ours">毋須</td><td class="no">要同一個 Apple ID</td><td class="partial">只限 Apple 裝置</td><td class="no">要登入</td></tr>
-              <tr><th scope="row">Mac、Windows、Linux 與安卓之間</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">家裏和公司之間</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="yes">可以</td></tr>
-              <tr><th scope="row">沒有外網，同一區域網絡也能用</th><td class="yes ours">可以</td><td class="partial">只限附近裝置</td><td class="yes">可以</td><td class="no">不行</td></tr>
-              <tr><th scope="row">複製後直接貼上，毋須按接受</th><td class="yes ours">可以</td><td class="yes">可以</td><td class="no">不行</td><td class="no">不行</td></tr>
-              <tr><th scope="row">檔案與整個資料夾，不限大小</th><td class="yes ours">可以</td><td class="partial">不穩定</td><td class="yes">可以</td><td class="partial">要先壓縮，有大小限制</td></tr>
-              <tr><th scope="row">找回之前複製的內容</th><td class="yes ours">可以</td><td class="no">不行</td><td class="no">不行</td><td class="partial">翻查聊天記錄</td></tr>
-              <tr><th scope="row">只有自己的裝置能解密</th><td class="yes ours">是</td><td class="yes">是</td><td class="yes">是</td><td class="some">視乎軟件</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <h2 id="phone-title">手機也能用了。</h2>
+        <p class="intro">同一網絡內，用安卓 App 或掃碼網頁與電腦互傳內容。</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/zh-hk/web-share-dark.png?v=baac6ddfb7" width="2552" height="1632" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表" loading="lazy"><img class="theme-light" src="../assets/screenshots/zh-hk/web-share.png?v=0fc7ddafa6" width="2552" height="1632" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#phone">了解手機端怎麼用 →</a></p>
       </div>
     </section>
 
     <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
-        <h2 id="deploy-title">兩部電腦怎樣連起來</h2>
-        <p class="intro">同一個網絡裏裝好就能配對。不在同一個網絡，開啟「服務」就可以，也可以自建伺服器或用 Tailscale。</p>
+        <h2 id="deploy-title">連線方式</h2>
         <div class="paths">
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">家裏和公司之間也能用</span>
             <h3>服務</h3>
-            <p>開啟一個開關，家裏和公司的電腦就能互相同步，不用買伺服器。</p>
+            <p>開啟「服務」，連接不同網絡中的電腦。</p>
             <span class="path-go">開啟「服務」 →</span>
           </a>
           <a class="path" href="lan/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-            <span class="path-when">甚麼都不用裝</span>
             <h3>同一網絡</h3>
-            <p>連着同一部路由器的兩部電腦，裝好 App、輸入配對碼就能用，不需要伺服器。</p>
+            <p>同一 Wi-Fi 或有線網絡內，輸入配對碼即可連線。</p>
             <span class="path-go">同一網絡教學 →</span>
           </a>
           <a class="path" href="cloud/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">自己的伺服器，中轉不限量</span>
             <h3>自建公網伺服器</h3>
-            <p>一部有公網 IP 的 Linux 雲端伺服器，最低配置就夠。所有電腦連到它，在哪裏都能同步。</p>
+            <p>在自己的 Linux 雲端主機上架設。</p>
             <span class="path-go">公網伺服器部署教學 →</span>
           </a>
           <a class="path" href="tailscale/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-            <span class="path-when">跨網絡，不用伺服器</span>
             <h3>Tailscale</h3>
-            <p>每部電腦安裝 Tailscale、登入同一個帳戶，配對時填對方的 Tailscale 地址。</p>
+            <p>透過現有的 Tailscale 網絡配對。</p>
             <span class="path-go">Tailscale 教學 →</span>
           </a>
         </div>
-        <p class="note">第一次用？跟着<a href="start/#server">快速開始</a>做一遍。「服務」免費，中轉每日 100 MB，直連不限。</p>
       </div>
     </section>
 
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
-        <h2 class="display" id="closing-title">電腦與手機，內容隨手互通。</h2>
+        <h2 class="display" id="closing-title">開始使用隔空貼。</h2>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載隔空貼</a>
         </div>
-        <p class="note">版本 2.13.1，免費開源。macOS 13 或以上；Windows 10、11；Linux（x64 與 ARM64）；安卓 9 或以上。新增介面縮放：文字、圖示和間距一起放大或縮小。</p>
-        <a class="start-link" href="start/">第一次用？三步設定好 →</a>
+        <a class="start-link" href="start/">快速入門 →</a>
         <div class="star-ask">
-          <p>覺得好用，到 GitHub 按個 Star。</p>
           <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="在 GitHub 上給隔空貼按 Star"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">在 GitHub 上按 Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
         </div>
       </div>

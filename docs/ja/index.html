@@ -53,7 +53,7 @@
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
-      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs"};
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs", "themes": "features/#themes", "friends": "features/#friends", "features": "features/", "why": "features/"};
       var to = moved[location.hash.slice(1)];
       if (to) location.replace(to);
     })();
@@ -193,15 +193,15 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">2.13.1：表示サイズの設定、文字もアイコンもまとめて拡大 →</a>
-        <h1 class="display">パソコンとスマホを、<br>もっと近くに。</h1>
-        <p class="lede">パソコン間でコピーと貼り付け、過去の履歴を検索。パソコンとAndroid間で写真やファイルを転送。Mac・Windows・Linux・Androidに対応し、共通アカウントは不要。スマホはQRコードでWeb版も使えます。AndroidとWeb版は同一ネットワーク内で使用します。</p>
+        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">v2.13.1</a>
+        <h1 class="display">デバイスをまたいで、<br>コピー＆ペースト。</h1>
+        <p class="lede">クリップボードを同期。コピー履歴を保存し、写真やファイルを転送。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry をダウンロード</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 紹介ムービーを見る <span class="tour-duration">1:25</span></a>
         </div>
-        <p class="note">バージョン 2.13.1、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）、Android 9 以降。表示サイズの設定を追加し、文字・アイコン・余白をまとめて拡大・縮小できるようになりました。</p>
-        <a class="start-link" href="start/">はじめての方は、3 ステップで設定 →</a>
+        <p class="note">無料・オープンソース · Mac / Windows / Linux / Android</p>
+        <a class="start-link" href="start/">はじめに →</a>
         <div class="demo" data-demo data-pasted="{item} を Windows ノート に貼り付けました">
           <div class="demo-modes" role="radiogroup" aria-label="2 台のパソコンはどこに？"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">自宅 ↔ 会社</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">同じ Wi‑Fi</button></div>
           <div class="stage" data-play data-mode="wan" role="group" aria-label="デモ：MacBook で Command C を押すと、ファイルが一枚の紙になって直接接続で Windows ノートへ飛び、そこで Ctrl V を押して貼り付けます">
@@ -239,60 +239,9 @@
       </div>
     </section>
 
-    <section class="section spotlight" id="themes" aria-labelledby="theme-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">2.10 の新機能</span></p>
-        <h2 id="theme-title">見た目も、<br>ピクセルでも。</h2>
-        <p class="intro">テーマに対応：ピクセル風を内蔵。自分で作るのも、AI に配色してもらうのも。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/ja/pixel-history-dark.png?v=06bddfa070" width="2112" height="1472" alt="ピクセルテーマの履歴（ダーク）：上部に夜の山と松と月、サイドバーの下にテントとたき火、文字はドットフォント" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/pixel-history.png?v=7a3ac4f5b1" width="2112" height="1472" alt="ピクセルテーマの履歴（ダーク）：上部に夜の山と松と月、サイドバーの下にテントとたき火、文字はドットフォント" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#themes">テーマについて →</a><a href="themes/">テーマガイド →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="friends" aria-labelledby="friends-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">2.6 の新機能</span></p>
-        <h2 id="friends-title">連絡先のパソコンにも、<br>ドラッグで。</h2>
-        <p class="intro">連絡先に追加するだけで、ペアリングは不要。相手が受け入れると届き、メモも添えられます。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/ja/incoming-dark.png?v=343163e7cd" width="2552" height="1632" alt="ファイル送信ページ：レーダーの下に連絡先のアイコン、中央に MacBook Air の連絡先からファイルを送りたいという依頼とメモ。拒否か受け入れを選べる" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/incoming.png?v=c959cbb881" width="2552" height="1632" alt="ファイル送信ページ：レーダーの下に連絡先のアイコン、中央に MacBook Air の連絡先からファイルを送りたいという依頼とメモ。拒否か受け入れを選べる" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#friends">連絡先への送信について →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
-      <div class="wrap">
-        <h2 id="phone-title">スマホでも使える。</h2>
-        <p class="intro">Androidアプリでパソコンと写真・ファイルを双方向に転送。複数選択、保存、共有に対応。インストール不要のWeb版も、QRコードでコピー履歴・送信・独立したファイル転送を使えます。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/ja/web-share-dark.png?v=5f663678e1" width="2552" height="1632" alt="デバイスページのスマホ向けウェブ転送：QR コードと登録済みのスマホ一覧" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/web-share.png?v=481643d2bc" width="2552" height="1632" alt="デバイスページのスマホ向けウェブ転送：QR コードと登録済みのスマホ一覧" loading="lazy">
-        </figure>
-        <ul class="points">
-          <li><b>ブラウザで使える</b>履歴と独立したファイル転送。</li>
-          <li><b>Androidで双方向転送</b>、複数選択・保存・共有。</li>
-          <li><b>同じネットワーク内</b>で、Webページは開いたまま。</li>
-        </ul>
-        <p class="more"><a href="features/#phone">スマホの使い方 →</a></p>
-      </div>
-    </section>
-
-    <section class="section spotlight" id="send" aria-labelledby="send-title">
-      <div class="wrap">
-        <h2 id="send-title">ドラッグすれば、<br>もう届いている。</h2>
-        <p class="intro">パソコンではドラッグ、Androidでは複数選択。写真やファイルを別のデバイスへ直接転送。アプリでは中断後も再開できます。</p>
-        <figure class="spot wide" data-reveal>
-          <img class="theme-dark" src="../assets/screenshots/ja/send-dark.png?v=763064b6ab" width="2552" height="1632" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/send.png?v=5c66611508" width="2552" height="1632" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示" loading="lazy">
-        </figure>
-        <p class="more"><a href="features/#send">ファイル送信について →</a></p>
-      </div>
-    </section>
-
     <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
       <div class="wrap">
-        <h2 id="qp-title"><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> を押せば、<br>コピーした内容がすぐそこに。</h2>
+        <h2 id="qp-title">コピー履歴を、<br>いつでも。</h2>
         <p class="intro">どのアプリでも、押して選ぶだけで貼り付け。</p>
         <figure class="spot" data-reveal>
           <div class="spot-keys" aria-hidden="true">
@@ -304,116 +253,68 @@
       </div>
     </section>
 
-    <section class="section" id="features" aria-labelledby="grid-title">
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
       <div class="wrap">
-        <h2 id="grid-title">クリップボードの同期だけじゃない。</h2>
-        <ul class="tiles">
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
-            <h3>ファイル送信 <span class="new">新機能</span></h3>
-            <p>ファイルやフォルダを別のパソコンや連絡先へドロップ。サイズ無制限。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
-            <h3>クイックペースト</h3>
-            <p><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> で履歴を呼び出し、選ぶだけでペースト。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
-            <h3>ファイルとフォルダ</h3>
-            <p>小さなファイルはコピー時に、大きなものは必要なときに。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-            <h3>履歴とお気に入り</h3>
-            <p>全デバイスのコピー履歴。検索もお気に入りも。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
-            <h3>ネットワークをまたいで</h3>
-            <p>「サービス」をオンにすれば、自宅と職場の間でも同期。</p>
-          </li>
-          <li class="tile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
-            <h3>エンドツーエンド暗号化</h3>
-            <p>まず直接接続。サーバーはコピーした内容を見られません。</p>
-          </li>
-        </ul>
-        <p class="more"><a href="features/">すべての機能を見る →</a></p>
+        <h2 id="send-title">ドラッグすれば、<br>もう届いている。</h2>
+        <p class="intro">ファイルやフォルダーを送信先のデバイスへドラッグ。</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/ja/send-dark.png?v=763064b6ab" width="2552" height="1632" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/send.png?v=5c66611508" width="2552" height="1632" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#send">ファイル送信について →</a></p>
       </div>
     </section>
 
-    <section class="section" id="why" aria-labelledby="why-title">
+    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
-        <h2 id="why-title">いまある方法では足りない理由</h2>
-        <p class="intro">ユニバーサルクリップボードは同じ Apple ID だけ、AirDrop は毎回受け取りの操作が必要で、Mac と Windows の組み合わせではどちらも使えません。</p>
-        <div class="block table-scroll">
-          <table class="compare">
-            <caption class="skip">PasteFerry とほかの方法の比較</caption>
-            <thead><tr><td></td><th scope="col" class="ours">PasteFerry</th><th scope="col">ユニバーサル<br>クリップボード</th><th scope="col">AirDrop</th><th scope="col">チャットアプリ</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">アカウント不要</th><td class="yes ours">不要</td><td class="no">同じ Apple ID が必要</td><td class="partial">Apple 製品のみ</td><td class="no">ログインが必要</td></tr>
-              <tr><th scope="row">Mac、Windows、Linux、Android のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">自宅と会社のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">インターネットなしで同じネットワーク内</th><td class="yes ours">できる</td><td class="partial">近くの端末のみ</td><td class="yes">できる</td><td class="no">できない</td></tr>
-              <tr><th scope="row">コピーしてすぐ貼り付け、受け取り操作なし</th><td class="yes ours">できる</td><td class="yes">できる</td><td class="no">できない</td><td class="no">できない</td></tr>
-              <tr><th scope="row">ファイルとフォルダまるごと、サイズ無制限</th><td class="yes ours">できる</td><td class="partial">不安定</td><td class="yes">できる</td><td class="partial">先に圧縮、サイズ制限あり</td></tr>
-              <tr><th scope="row">前にコピーしたものを探す</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="partial">履歴をさかのぼる</td></tr>
-              <tr><th scope="row">自分の端末だけが復号できる</th><td class="yes ours">はい</td><td class="yes">はい</td><td class="yes">はい</td><td class="some">アプリによる</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <h2 id="phone-title">スマホでも使える。</h2>
+        <p class="intro">同じネットワークで、Android アプリか QR コードで開く Web 版からパソコンと転送。</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/ja/web-share-dark.png?v=5f663678e1" width="2552" height="1632" alt="デバイスページのスマホ向けウェブ転送：QR コードと登録済みのスマホ一覧" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/web-share.png?v=481643d2bc" width="2552" height="1632" alt="デバイスページのスマホ向けウェブ転送：QR コードと登録済みのスマホ一覧" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#phone">スマホの使い方 →</a></p>
       </div>
     </section>
 
     <section class="section" id="deploy" aria-labelledby="deploy-title">
       <div class="wrap">
-        <h2 id="deploy-title">2 台をどうつなぐか</h2>
-        <p class="intro">同じネットワークなら、入れてペアリングするだけ。別のネットワークなら「サービス」をオンにします。独自サーバーや Tailscale も使えます。</p>
+        <h2 id="deploy-title">接続方法</h2>
         <div class="paths">
           <a class="path" href="official/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">自宅と職場の間でも使える</span>
             <h3>サービス</h3>
-            <p>スイッチをひとつオンにするだけで、自宅と会社のパソコンが同期できます。サーバーの契約は要りません。</p>
+            <p>サービスをオンにして、異なるネットワークのパソコンを接続。</p>
             <span class="path-go">「サービス」をオンにする →</span>
           </a>
           <a class="path" href="lan/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-            <span class="path-when">準備は不要</span>
             <h3>同じネットワーク</h3>
-            <p>同じルーターにつながった 2 台なら、アプリを入れてペアリングコードを入力するだけ。サーバーは要りません。</p>
+            <p>同じ Wi-Fi・有線ネットワークでコードを入力して接続。</p>
             <span class="path-go">同じネットワークでの手順 →</span>
           </a>
           <a class="path" href="cloud/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-            <span class="path-when">自分のサーバーで、中継は無制限</span>
             <h3>独自の公開サーバー</h3>
-            <p>グローバル IP のある Linux クラウドサーバー。最小構成で足ります。すべてのコンピューターがここにつながり、どこからでも同期できます。</p>
+            <p>自分の Linux サーバーに構築。</p>
             <span class="path-go">公開サーバーでの手順 →</span>
           </a>
           <a class="path" href="tailscale/">
             <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-            <span class="path-when">ネットワークをまたぐ、サーバーなし</span>
             <h3>Tailscale</h3>
-            <p>各コンピューターに Tailscale を入れて同じアカウントでサインインし、ペアリング時に相手の Tailscale アドレスを入力します。</p>
+            <p>Tailscale のネットワークでペアリング。</p>
             <span class="path-go">Tailscale での手順 →</span>
           </a>
         </div>
-        <p class="note">はじめての方は<a href="start/#server">はじめかた</a>の手順どおりにどうぞ。「サービス」は無料で、中継は 1 日 100 MB まで、直接接続は無制限です。</p>
       </div>
     </section>
 
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
-        <h2 class="display" id="closing-title">パソコンとスマホ、<br>コンテンツを手元に。</h2>
+        <h2 class="display" id="closing-title">PasteFerry を使ってみる。</h2>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry をダウンロード</a>
         </div>
-        <p class="note">バージョン 2.13.1、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）、Android 9 以降。表示サイズの設定を追加し、文字・アイコン・余白をまとめて拡大・縮小できるようになりました。</p>
-        <a class="start-link" href="start/">はじめての方は、3 ステップで設定 →</a>
+        <a class="start-link" href="start/">はじめに →</a>
         <div class="star-ask">
-          <p>気に入ったら GitHub でスターを。</p>
           <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub で PasteFerry にスターを付ける"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">GitHub でスター</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
         </div>
       </div>

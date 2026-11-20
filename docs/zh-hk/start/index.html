@@ -96,7 +96,6 @@
       <div class="wrap">
         <p class="crumb"><a href="../../zh-hk/">隔空貼</a> / 快速開始</p>
         <h1 class="display">快速開始</h1>
-        <p class="lede">裝好 App，選一種連接方式，再把兩部電腦配對。同一個網絡裏幾分鐘就完成。</p>
         <ol class="guide-toc">
           <li><a href="#app">安裝 App</a></li>
           <li><a href="#server">選擇連接方式</a></li>
@@ -110,23 +109,22 @@
       <div class="wrap">
         <p class="eyebrow">第 1 步</p>
         <h2 id="app-title">在每部電腦上安裝 App</h2>
-        <p class="intro">要同步的每部電腦都安裝一個，Mac、Windows、Linux 可以混合使用。</p>
         <div class="os-grid qs-grid">
           <div>
             <div class="qs-app">
               <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>Mac</h3>
               <ol class="steps">
-                <li>下載 DMG，開啟後把隔空貼拖進「應用程式」。<span class="aside">Apple 晶片與 Intel 處理器的 Mac 各有一個版本，下載頁會告訴你怎樣選擇。</span></li>
-                <li>從「應用程式」裏開啟。<span class="aside">第一次會提示「無法驗證開發者」：到「系統設定 → 私隱與保安」，按頁面下方的「強制開啟」。</span></li>
-                <li>按「啟用背景同步」。系統詢問是否允許讀取剪貼簿、能否尋找本地網絡上的裝置時，都選擇允許。</li>
+                <li>下載 DMG，將隔空貼拖入「應用程式」。</li>
+                <li>首次開啟受阻時，到「系統設定 → 私隱與保安」按「照樣開啟」。</li>
+                <li>啟用背景同步，允許剪貼簿及本機網絡權限。</li>
               </ol>
               <a class="button" href="../../zh-hk/download/#macos"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載 Mac 版</a>
             </div>
             <div class="qs-app">
               <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Windows</h3>
               <ol class="steps">
-                <li>執行 PasteFerry-Setup.exe，不需要管理員權限。<span class="aside">提示「Windows 已保護您的電腦」時，按「其他資訊」，再按「仍要執行」。</span></li>
-                <li>開啟隔空貼，按「啟用背景同步」。防火牆詢問時選擇允許。關閉視窗後，它會在右下角的系統匣裏繼續執行。</li>
+                <li>執行安裝程式；SmartScreen 阻擋時，按「其他資訊 → 仍要執行」。</li>
+                <li>啟用背景同步，並允許防火牆存取。</li>
               </ol>
               <a class="button" href="../../zh-hk/download/#windows"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下載 Windows 版</a>
             </div>
@@ -150,7 +148,7 @@
       <div class="wrap">
         <p class="eyebrow">第 2 步</p>
         <h2 id="server-title">選擇一種連接方式</h2>
-        <p class="intro">在同一個網絡裏，裝好就能配對。不在同一個網絡，開啟「服務」就可以。想自己掌控，也可以自建伺服器或用 Tailscale。</p>
+        <p class="intro">同一網絡直接連線；跨網絡請選「服務」、自設伺服器或 Tailscale。</p>
         <div class="os-tabs" data-tabs="plan">
           <div class="tablist" role="tablist" aria-label="連接方式" hidden>
             <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">服務</button>
@@ -164,19 +162,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>每部電腦裝好最新版，按「啟用背景同步」。</li>
                   <li>在「設定 → 連接」裏開啟「使用服務」。</li>
-                  <li>兩部電腦配對。已經配對過的不用重新配對。</li>
                 </ol>
-                <p class="plan-address">新安裝預設關閉。伺服器收不到你複製的內容，詳見私隱說明。</p>
                 <a class="button quiet" href="../../zh-hk/official/">開啟「服務」 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>能直連就不中轉</dt><dd>能直連就直連，連不上才經伺服器中轉。內容加密，伺服器解不開。</dd></div>
-                  <div><dt>中轉每日 100 MB，直連不限</dt><dd>中轉每部電腦每日 100 MB，直連不限。用量頁能看到還剩多少。</dd></div>
-                </dl>
+                <p>每部電腦每天 100 MB 中繼流量，直連不限。</p>
               </div>
             </div>
           </section>
@@ -186,20 +178,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>每部電腦裝好 App，按「啟用背景同步」。</li>
-                  <li>Windows 防火牆和 macOS「尋找本地網絡上的裝置」的詢問都選允許。</li>
-                  <li>一部顯示配對碼，另一部輸入，核對指紋。不在同一網段時，再填配對碼下面的地址，見<a href="../../zh-hk/lan/#subnet">同一網絡教學</a>。</li>
+                  <li>兩部電腦連接同一 Wi-Fi 或有線網絡。</li>
                 </ol>
-                <p class="plan-address">不用填伺服器地址。</p>
                 <a class="button quiet" href="../../zh-hk/lan/">同一網絡教學 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-                <dl>
-                  <div><dt>適合</dt><dd>家裏或辦公室，兩部電腦連同一個 Wi‑Fi 或有線網絡。</dd></div>
-                  <div><dt>要準備</dt><dd>不用準備，每部電腦裝好 App 就可以。</dd></div>
-                  <div><dt>要注意</dt><dd>離開這個網絡就不會同步，回來後自動恢復。有線和無線不在同一網段時，配對時要多填一個地址。</dd></div>
-                </dl>
+                <p>無需伺服器</p>
               </div>
             </div>
           </section>
@@ -209,20 +194,14 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>在雲端供應商的安全群組裏開放 TCP 8787、UDP 3478 和 UDP 32768–60999。</li>
-                  <li>用 ssh 登入伺服器，下載並執行安裝腳本：<code>sudo ./install.sh 公網IP</code>。</li>
-                  <li>每部電腦在「設定 → 連接」裏填 <code>ws://公網IP:8787/signal</code>，按 Enter，再配對。</li>
+                  <li>依<a href="../../zh-hk/cloud/">架設教學</a>安裝伺服器。</li>
+                  <li>在「設定 → 連線」填入產生的伺服器位址。</li>
                 </ol>
-                <p class="plan-address">用瀏覽器開啟 <code>http://公網IP:8787/healthz</code>，顯示 ok 就裝好了。</p>
                 <a class="button quiet" href="../../zh-hk/cloud/">公網伺服器部署教學 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>適合</dt><dd>想自己掌控伺服器，或者中轉流量用得多。</dd></div>
-                  <div><dt>要準備</dt><dd>一部有公網 IP 的 Linux 雲端伺服器，需要 root 權限。</dd></div>
-                  <div><dt>要注意</dt><dd>雲端伺服器要付費；中轉速度受它的頻寬限制。用內地的雲端伺服器而域名未有 ICP 備案時，用戶端要填 IP。</dd></div>
-                </dl>
+                <p>自己的伺服器，中轉不限量</p>
               </div>
             </div>
           </section>
@@ -234,18 +213,12 @@
                 <ol class="steps">
                   <li>每部電腦裝上 Tailscale，登入同一個帳戶。</li>
                   <li>在對方電腦上執行 <code>tailscale ip -4</code>，記下以 100 開頭的地址。</li>
-                  <li>配對時按「不在同一網段？」，填上這個地址。</li>
                 </ol>
-                <p class="plan-address">不需要伺服器。Tailscale 地址不會改變，配對時填一次就可以。</p>
                 <a class="button quiet" href="../../zh-hk/tailscale/">Tailscale 教學 →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-                <dl>
-                  <div><dt>適合</dt><dd>已經在用 Tailscale，或者不想依賴任何伺服器。</dd></div>
-                  <div><dt>要準備</dt><dd>每部電腦都安裝 Tailscale，登入同一個帳戶。</dd></div>
-                  <div><dt>要注意</dt><dd>Tailscale 要一直保持連線。它本身打不通時會經境外中轉，在內地會比較慢。</dd></div>
-                </dl>
+                <p>跨網絡，不用伺服器</p>
               </div>
             </div>
           </section>
@@ -257,13 +230,12 @@
       <div class="wrap">
         <p class="eyebrow">第 3 步</p>
         <h2 id="pair-title">把兩部電腦配對</h2>
-        <p class="intro">每兩部電腦之間配對一次，之後就不用再理會了。</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">
-              <li>在一部電腦上開啟「裝置」，按「新增裝置」，會顯示一個 6 位配對碼，5 分鐘內有效，下面是這部電腦的地址。</li>
-              <li>在另一部電腦上按「新增裝置 → 輸入配對碼」。用「服務」時不用填 IP；只有區域網絡跨網段或用 Tailscale 時，才要展開地址欄填對方的地址。</li>
-              <li>兩邊螢幕會顯示同樣的兩行安全指紋。逐字核對一致後，再按確認。<span class="aside">這一步防止有人在中間冒充你的裝置，不要略過。</span></li>
+              <li>一部電腦開啟「裝置 → 新增裝置」，顯示配對碼。</li>
+              <li>另一部輸入配對碼；跨網段或使用 Tailscale 時，補填對方位址。</li>
+              <li>核對兩邊的安全指紋一致後確認。</li>
             </ol>
             <figure class="figure-card qs-verify">
               <img class="theme-dark" src="../../assets/screenshots/zh-hk/card-verify-dark.png?v=1a083f711d" width="1120" height="800" alt="配對時的「核對安全指紋」對話框，顯示 R8NF-2WTC-QL5J，要求與另一部電腦上顯示的完全一致" loading="lazy"><img class="theme-light" src="../../assets/screenshots/zh-hk/card-verify.png?v=966f32dd42" width="1120" height="800" alt="配對時的「核對安全指紋」對話框，顯示 R8NF-2WTC-QL5J，要求與另一部電腦上顯示的完全一致" loading="lazy">
@@ -279,14 +251,14 @@
     <section class="section" id="phone" aria-labelledby="phone-title">
       <div class="wrap">
         <h2 id="phone-title">手機怎麼用</h2>
-        <p class="intro">兩部電腦照上面配好之後，手機隨時可以加入：掃碼用網頁版，或者裝安卓 App。</p>
+        <p class="intro">手機與電腦連接同一網絡，選擇安卓 App 或網頁版。</p>
         <div class="os-grid qs-grid">
           <div>
             <h3>網頁版：不用安裝</h3>
             <ol class="steps">
-              <li>電腦：打開「裝置 › 手機網頁傳輸」，把開關打開，出現 QR 碼。</li>
-              <li>手機：用相機或瀏覽器掃這個碼，起個名字（比如「我的iPhone」）。</li>
-              <li>之後手機瀏覽器裏就是電腦的複製記錄：按「複製」到手機，或在「傳送」裏把文字、照片、檔案傳到電腦。</li>
+              <li>電腦開啟「裝置 › 手機網頁傳輸」。</li>
+              <li>手機掃碼，輸入裝置名稱。</li>
+              <li>查看複製記錄，或傳送文字、相片及檔案。</li>
             </ol>
             <h3>安卓 App：像配電腦一樣配對</h3>
             <ol class="steps">
@@ -303,7 +275,7 @@
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
         <h2 class="display" id="closing-title">複製試試看。</h2>
-        <p class="lede">在一部電腦上複製文字、圖片或檔案，到另一部按 ⌘V 或 Ctrl+V。兩邊複製過的內容都在「複製記錄」裏。</p>
+        <p class="lede">在一部電腦複製，到另一部貼上。</p>
         <p class="note">遇到問題：<a href="../../zh-hk/lan/#faq">同一網絡的常見問題</a> · <a href="../../zh-hk/tailscale/#faq">Tailscale 的常見問題</a> · <a href="../../zh-hk/cloud/#faq">公網伺服器的常見問題</a> · <a href="https://github.com/baiyuze/pasteferry/issues">回報問題</a></p>
       </div>
     </section>

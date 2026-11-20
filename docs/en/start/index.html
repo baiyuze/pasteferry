@@ -96,7 +96,6 @@
       <div class="wrap">
         <p class="crumb"><a href="../../en/">PasteFerry</a> / Quick start</p>
         <h1 class="display">Quick start</h1>
-        <p class="lede">Install the app, pick a way to connect, and pair your computers. On the same network it takes a few minutes.</p>
         <ol class="guide-toc">
           <li><a href="#app">Install the app</a></li>
           <li><a href="#server">Pick a way to connect</a></li>
@@ -110,7 +109,6 @@
       <div class="wrap">
         <p class="eyebrow">Step 1</p>
         <h2 id="app-title">Install the app on each computer</h2>
-        <p class="intro">One on every computer you want to sync. Mac, Windows and Linux mix freely.</p>
         <div class="os-grid qs-grid">
           <div>
             <div class="qs-app">
@@ -150,7 +148,7 @@
       <div class="wrap">
         <p class="eyebrow">Step 2</p>
         <h2 id="server-title">Pick a way to connect</h2>
-        <p class="intro">On the same network, install and pair. On different networks, turn on Service. If you want full control, run your own server or use Tailscale.</p>
+        <p class="intro">Connect locally, or choose Service, your own server or Tailscale for remote devices.</p>
         <div class="os-tabs" data-tabs="plan">
           <div class="tablist" role="tablist" aria-label="Ways to connect" hidden>
             <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">Service</button>
@@ -164,19 +162,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>Install the latest version on each computer and click Turn on background sync.</li>
                   <li>Turn on Use the service in Settings → Connection.</li>
-                  <li>Pair the two computers. Computers you've already paired don't need to pair again.</li>
                 </ol>
-                <p class="plan-address">Service is off in a new install. The server never receives what you copy; see the privacy notice.</p>
                 <a class="button quiet" href="../../en/official/">Turn on Service →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>Direct whenever possible</dt><dd>The computers connect directly when they can and go through the server only when they can't. Content is encrypted, and the server can't decrypt it.</dd></div>
-                  <div><dt>100 MB of relay a day, direct unlimited</dt><dd>Relay is limited to 100 MB per computer per day; direct is unlimited. The usage page shows how much is left.</dd></div>
-                </dl>
+                <p>100 MB of relay per computer per day. Direct transfers are unlimited.</p>
               </div>
             </div>
           </section>
@@ -186,20 +178,13 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>Install the app on each computer and click Turn on background sync.</li>
-                  <li>Allow PasteFerry when Windows Firewall or macOS asks about the local network.</li>
-                  <li>Show a code on one computer, enter it on the other and compare fingerprints. On a different subnet, also enter the address shown under the code; see the <a href="../../en/lan/#subnet">same network guide</a>.</li>
+                  <li>Connect both computers to the same Wi-Fi or wired network.</li>
                 </ol>
-                <p class="plan-address">No server address to enter.</p>
                 <a class="button quiet" href="../../en/lan/">Same network guide →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
-                <dl>
-                  <div><dt>Best for</dt><dd>Home or office, with both computers on the same Wi‑Fi or wired network.</dd></div>
-                  <div><dt>You need</dt><dd>Nothing but the app on each computer.</dd></div>
-                  <div><dt>Keep in mind</dt><dd>Sync stops when you leave the network and resumes when you're back. If wired and Wi‑Fi are on different subnets, you enter one extra address when pairing.</dd></div>
-                </dl>
+                <p>No server needed</p>
               </div>
             </div>
           </section>
@@ -209,20 +194,14 @@
             <div class="plan-grid">
               <div>
                 <ol class="steps">
-                  <li>In your cloud provider's security group, open TCP 8787, UDP 3478 and UDP 32768–60999.</li>
-                  <li>Log in with ssh, download the install script and run it: <code>sudo ./install.sh PUBLIC_IP</code>.</li>
-                  <li>In Settings → Connection on each computer, enter <code>ws://PUBLIC_IP:8787/signal</code>, press Return, then pair.</li>
+                  <li>Install the server using the <a href="../../en/cloud/">deployment guide</a>.</li>
+                  <li>Enter the generated server address in Settings → Connection.</li>
                 </ol>
-                <p class="plan-address">Open <code>http://PUBLIC_IP:8787/healthz</code> in a browser. If it says ok, it's running.</p>
                 <a class="button quiet" href="../../en/cloud/">Public server guide →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
-                <dl>
-                  <div><dt>Best for</dt><dd>Running the server yourself, or relaying a lot of traffic.</dd></div>
-                  <div><dt>You need</dt><dd>A Linux VM with a public IP and root access.</dd></div>
-                  <div><dt>Keep in mind</dt><dd>The VM costs money, and relay speed is limited by its bandwidth. In mainland China, enter the IP unless the domain has an ICP filing.</dd></div>
-                </dl>
+                <p>Your server, unlimited relay</p>
               </div>
             </div>
           </section>
@@ -234,18 +213,12 @@
                 <ol class="steps">
                   <li>Install Tailscale on each computer and sign in to the same account.</li>
                   <li>On the other computer, run <code>tailscale ip -4</code> and note the address starting with 100.</li>
-                  <li>When pairing, click On a different subnet? and enter that address.</li>
                 </ol>
-                <p class="plan-address">No server needed. A Tailscale address doesn't change, so you enter it once, when pairing.</p>
                 <a class="button quiet" href="../../en/tailscale/">Tailscale guide →</a>
               </div>
               <div class="plan-card">
                 <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
-                <dl>
-                  <div><dt>Best for</dt><dd>You already use Tailscale, or don't want to depend on any server.</dd></div>
-                  <div><dt>You need</dt><dd>Tailscale on every computer, signed in to the same account.</dd></div>
-                  <div><dt>Keep in mind</dt><dd>Tailscale has to stay connected. When it can't connect two computers directly, it relays through its own servers, which can be slow.</dd></div>
-                </dl>
+                <p>Across networks, no server</p>
               </div>
             </div>
           </section>
@@ -257,7 +230,6 @@
       <div class="wrap">
         <p class="eyebrow">Step 3</p>
         <h2 id="pair-title">Pair your computers</h2>
-        <p class="intro">Pair any two computers once, and that's it.</p>
         <div class="os-grid qs-grid">
           <div>
             <ol class="steps">
