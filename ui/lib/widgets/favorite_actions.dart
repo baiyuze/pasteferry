@@ -7,6 +7,7 @@ import '../gen/pasteferry/v1/daemon.pb.dart';
 import '../i18n.dart';
 import '../platform.dart';
 import '../records.dart';
+import '../theme.dart' show textContextMenu;
 import 'common.dart';
 
 /// 要整份复制、超过这个大小时先确认。见 design/quick-paste-and-favorites.md 第 3.2 节。
@@ -117,6 +118,7 @@ class _RenameDialogState extends State<_RenameDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
+              contextMenuBuilder: textContextMenu,
               controller: _name,
               autofocus: true,
               maxLength: 100,

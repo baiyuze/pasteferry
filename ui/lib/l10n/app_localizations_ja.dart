@@ -2591,6 +2591,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get themeScanlinesDesc => 'ウインドウ全体に薄い CRT 走査線を重ねます。ピクセルテーマのみ';
 
   @override
+  String get uiScale => '表示サイズ';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return '文字・アイコン・余白をまとめて拡大・縮小します。メインウインドウとクイックペーストウィンドウに適用されます。ショートカット：$keys';
+  }
+
+  @override
   String get themeBackground => '背景画像';
 
   @override

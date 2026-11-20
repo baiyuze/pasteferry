@@ -220,6 +220,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
       child: SingleChildScrollView(
         padding: const EdgeInsetsDirectional.fromSTEB(Insets.md, Insets.sm, 36, Insets.sm),
         child: SelectableText(
+          contextMenuBuilder: textContextMenu,
           _report!,
           style: context.text.bodySmall?.copyWith(fontFamily: context.typography.mono, fontSize: 11, height: 1.45, color: context.palette.text),
         ),

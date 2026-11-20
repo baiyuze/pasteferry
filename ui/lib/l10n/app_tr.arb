@@ -742,6 +742,8 @@
   "themeAskAiCopied": "Yapılandırma kopyalandı",
   "themeScanlines": "Tarama çizgileri",
   "themeScanlinesDesc": "Pencerenin üzerine soluk CRT tarama çizgileri ekler. Yalnızca piksel temalarda.",
+  "uiScale": "Arayüz boyutu",
+  "uiScaleDesc": "Metni, simgeleri ve boşlukları birlikte büyütür veya küçültür; bu pencerede ve hızlı yapıştır penceresinde geçerlidir. Kısayollar: {keys}",
   "themeBackground": "Arka plan görseli",
   "themeBackgroundDesc": "Kenar çubuğunun ve sayfaların arkasında pencereyi doldurur. Üstteki örtü metni okunur tutar.",
   "themeBackgroundChoose": "Görsel Seç…",

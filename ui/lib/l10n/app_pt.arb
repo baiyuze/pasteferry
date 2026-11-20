@@ -742,6 +742,8 @@
   "themeAskAiCopied": "Configuração copiada",
   "themeScanlines": "Linhas de varredura",
   "themeScanlinesDesc": "Sobrepõe à janela linhas de varredura de CRT bem suaves. Só nos temas pixel.",
+  "uiScale": "Tamanho da interface",
+  "uiScaleDesc": "Aumenta ou diminui juntos o texto, os ícones e os espaçamentos, nesta janela e na janela de colagem rápida. Atalhos: {keys}",
   "themeBackground": "Imagem de fundo",
   "themeBackgroundDesc": "Preenche a janela atrás da barra lateral e das páginas. Uma camada por cima mantém o texto legível.",
   "themeBackgroundChoose": "Escolher imagem…",

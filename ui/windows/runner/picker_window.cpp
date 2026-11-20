@@ -41,6 +41,12 @@ bool BoolArg(const flutter::MethodCall<EncodableValue>& call, const char* key) {
   return b && *b;
 }
 
+double DoubleArg(const flutter::MethodCall<EncodableValue>& call, const char* key, double fallback) {
+  const auto* v = Arg(call, key);
+  const auto* d = v ? std::get_if<double>(v) : nullptr;
+  return d ? *d : fallback;
+}
+
 std::string StringArg(const flutter::MethodCall<EncodableValue>& call, const char* key) {
   const auto* v = Arg(call, key);
   const auto* s = v ? std::get_if<std::string>(v) : nullptr;
@@ -309,6 +315,17 @@ void PickerWindow::HandleMethodCall(const flutter::MethodCall<EncodableValue>& c
       Show();
     }
     result->Success();
+  } else if (m == "setScale") {
+    // 界面缩放：收起时也先调好大小，Flutter 那边趁这时按新大小排好版，呼出时不闪
+    const double scale = DoubleArg(call, "scale", 1.0);
+    ui_scale_ = scale > 0 ? scale : 1.0;
+    if (::IsWindowVisible(hwnd_)) {
+      Place();
+    } else {
+      const SIZE size = SizeFor(::MonitorFromWindow(hwnd_, MONITOR_DEFAULTTOPRIMARY));
+      ::SetWindowPos(hwnd_, nullptr, 0, 0, size.cx, size.cy, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+    }
+    result->Success();
   } else if (m == "quit") {
     // 关掉了快捷粘贴：结束消息循环，进程正常退出，后台服务不再拉起它
     result->Success();
@@ -380,13 +397,27 @@ void PickerWindow::Place() {
   HMONITOR monitor = ::MonitorFromPoint(cursor, MONITOR_DEFAULTTONEAREST);
   MONITORINFO info{sizeof(info)};
   ::GetMonitorInfo(monitor, &info);
-  const double scale = FlutterDesktopGetDpiForMonitor(monitor) / 96.0;
-  const int w = static_cast<int>(kWidth * scale);
-  const int h = static_cast<int>(kHeight * scale);
+  const SIZE size = SizeFor(monitor);
+  const int w = size.cx;
+  const int h = size.cy;
   const RECT& work = info.rcWork;
   const int x = work.left + (work.right - work.left - w) / 2;
   const int y = work.top + static_cast<int>((work.bottom - work.top) * 0.22);
   ::SetWindowPos(hwnd_, HWND_TOPMOST, x, std::min<int>(y, work.bottom - h), w, h, SWP_NOACTIVATE);
+}
+
+// 窗口在 [monitor] 上的大小（物理像素）：560×460 乘以屏幕缩放和界面缩放，不超出工作区。
+// 屏幕太小时 Flutter 那边自己降倍数
+SIZE PickerWindow::SizeFor(HMONITOR monitor) const {
+  const double scale = FlutterDesktopGetDpiForMonitor(monitor) / 96.0 * ui_scale_;
+  LONG w = static_cast<LONG>(kWidth * scale);
+  LONG h = static_cast<LONG>(kHeight * scale);
+  MONITORINFO info{sizeof(info)};
+  if (::GetMonitorInfo(monitor, &info)) {
+    w = std::min<LONG>(w, info.rcWork.right - info.rcWork.left);
+    h = std::min<LONG>(h, info.rcWork.bottom - info.rcWork.top);
+  }
+  return {w, h};
 }
 
 void PickerWindow::Hide(bool notify, bool restore) {

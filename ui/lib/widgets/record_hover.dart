@@ -84,7 +84,8 @@ class _RecordHoverState extends State<RecordHover> {
     final box = this.context.findRenderObject() as RenderBox?;
     if (box == null || !box.attached) return const SizedBox.shrink();
     final screen = MediaQuery.sizeOf(context);
-    final top = box.localToGlobal(Offset.zero);
+    // 按提示框所在浮层的坐标算（界面缩放时与窗口坐标差一个倍数），与 screen 对得上
+    final top = overlayPosition(context, box.localToGlobal(Offset.zero));
     const margin = 12.0;
     const estimatedHeight = 300.0;
     final below = screen.height - (top.dy + box.size.height) >= estimatedHeight + margin ||

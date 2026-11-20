@@ -78,7 +78,7 @@ class QuickPasteSection extends StatelessWidget {
                         context: context,
                         builder: (ctx) => AlertDialog(
                           title: Text(l.quickPasteStartupFailed),
-                          content: SelectableText(recovery.error!),
+                          content: SelectableText(recovery.error!, contextMenuBuilder: textContextMenu),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(ctx),

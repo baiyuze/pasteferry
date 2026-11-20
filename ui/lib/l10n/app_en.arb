@@ -1806,6 +1806,15 @@
   "themeAskAiCopied": "Configuration copied",
   "themeScanlines": "Scanlines",
   "themeScanlinesDesc": "Overlay faint CRT scanlines on the window. Pixel themes only.",
+  "uiScale": "Interface scale",
+  "uiScaleDesc": "Make text, icons and spacing larger or smaller together, in this window and the quick paste window. Shortcuts: {keys}",
+  "@uiScaleDesc": {
+    "placeholders": {
+      "keys": {
+        "type": "String"
+      }
+    }
+  },
   "@themeCopyName": {
     "placeholders": {
       "name": {

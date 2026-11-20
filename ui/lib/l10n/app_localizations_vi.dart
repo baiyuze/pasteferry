@@ -2677,6 +2677,14 @@ class AppLocalizationsVi extends AppLocalizations {
       'Phủ các đường quét CRT mờ lên cửa sổ. Chỉ dùng cho chủ đề Pixel.';
 
   @override
+  String get uiScale => 'Cỡ giao diện';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Phóng to hoặc thu nhỏ cùng lúc chữ, biểu tượng và khoảng cách, trong cửa sổ này và cửa sổ dán nhanh. Phím tắt: $keys';
+  }
+
+  @override
   String get themeBackground => 'Ảnh nền';
 
   @override

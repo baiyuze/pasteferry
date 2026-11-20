@@ -2856,6 +2856,14 @@ class AppLocalizationsUk extends AppLocalizations {
       'Накласти на вікно ледь помітні лінії розгортки CRT. Лише для піксельних тем.';
 
   @override
+  String get uiScale => 'Масштаб інтерфейсу';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Збільшує або зменшує текст, значки й відступи разом — у цьому вікні та у вікні швидкої вставки. Сполучення клавіш: $keys';
+  }
+
+  @override
   String get themeBackground => 'Фонове зображення';
 
   @override

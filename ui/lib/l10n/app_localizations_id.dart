@@ -2783,6 +2783,14 @@ class AppLocalizationsId extends AppLocalizations {
       'Lapisi jendela dengan garis pindai CRT yang samar. Hanya untuk tema piksel.';
 
   @override
+  String get uiScale => 'Ukuran antarmuka';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Perbesar atau perkecil teks, ikon, dan jarak sekaligus, di jendela ini dan jendela tempel cepat. Pintasan: $keys';
+  }
+
+  @override
   String get themeBackground => 'Gambar latar';
 
   @override

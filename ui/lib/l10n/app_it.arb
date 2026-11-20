@@ -742,6 +742,8 @@
   "themeAskAiCopied": "Configurazione copiata",
   "themeScanlines": "Linee di scansione",
   "themeScanlinesDesc": "Sovrappone alla finestra delle tenui linee di scansione CRT. Solo per i temi pixel.",
+  "uiScale": "Dimensione interfaccia",
+  "uiScaleDesc": "Ingrandisce o riduce insieme testo, icone e spaziature, in questa finestra e nella finestra Incolla rapido. Scorciatoie: {keys}",
   "themeBackground": "Immagine di sfondo",
   "themeBackgroundDesc": "Riempie la finestra dietro la barra laterale e le pagine. Un velo sovrapposto mantiene leggibile il testo.",
   "themeBackgroundChoose": "Scegli immagine…",

@@ -2839,6 +2839,14 @@ class AppLocalizationsIt extends AppLocalizations {
       'Sovrappone alla finestra delle tenui linee di scansione CRT. Solo per i temi pixel.';
 
   @override
+  String get uiScale => 'Dimensione interfaccia';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Ingrandisce o riduce insieme testo, icone e spaziature, in questa finestra e nella finestra Incolla rapido. Scorciatoie: $keys';
+  }
+
+  @override
   String get themeBackground => 'Immagine di sfondo';
 
   @override

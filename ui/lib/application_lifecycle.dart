@@ -10,6 +10,23 @@ final appNavigatorKey = GlobalKey<NavigatorState>();
 const _channel = MethodChannel('com.pasteferry.app/lifecycle');
 bool _busy = false;
 
+/// 主窗口的界面在 100% 时至少要有多大，界面缩放时窗口装不下它乘以倍数就降倍数（见 UiScale）。
+/// 原生外壳的最小窗口是 760×520（MainFlutterWindow.swift、flutter_window.cpp、my_application.cc），
+/// 界面缩放时乘以倍数；Windows 上那是连边框的大小，里面的内容区小一圈，所以这里留了余量
+const mainContentMinSize = Size(740, 480);
+
+/// 告诉原生外壳界面缩放的倍数：最小尺寸跟着放大，窗口比它小时放大窗口。
+/// 旧版外壳没有这个方法，不报错（界面那边窗口装不下时自己降倍数，见 UiScale）
+Future<void> setWindowUiScale(double scale) async {
+  try {
+    await _channel.invokeMethod<void>('setUiScale', {'scale': scale});
+  } on MissingPluginException {
+    // 测试里、旧版外壳
+  } on PlatformException catch (e) {
+    debugPrint('setUiScale: $e');
+  }
+}
+
 void installApplicationLifecycle(AppState state) {
   _channel.setMethodCallHandler((call) async {
     final context = appNavigatorKey.currentContext;

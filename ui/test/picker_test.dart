@@ -404,4 +404,24 @@ void main() {
     expect(s.query, '');
     expect(tester.widget<TextField>(find.byType(TextField)).controller!.text, '');
   });
+
+  testWidgets('界面缩放：告诉原生外壳放大窗口，里面按 560×460 排版、整体放大', (tester) async {
+    final s = await open(tester);
+    s.debugEvent(Event(configChanged: Config(language: 'zh-Hans', uiScalePercent: 125)));
+    await tester.pump();
+    final set = calls.where((c) => c.method == 'setScale').toList();
+    expect(set.single.arguments, {'scale': 1.25});
+    // 原生外壳把窗口放大到 700×575
+    tester.view.physicalSize = const Size(700, 575);
+    await tester.pump();
+    final field = find.byType(TextField);
+    expect(MediaQuery.sizeOf(tester.element(field)), PickerView.windowSize);
+    expect(tester.getRect(field).height, closeTo(tester.getSize(field).height * 1.25, 0.01));
+    expect(find.textContaining('docker compose'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    // 倍数没变不再通知
+    s.debugEvent(Event(configChanged: Config(language: 'zh-Hans', uiScalePercent: 125)));
+    await tester.pump();
+    expect(calls.where((c) => c.method == 'setScale'), hasLength(1));
+  });
 }

@@ -38,6 +38,34 @@ func TestThemeModeRoundTrip(t *testing.T) {
 	}
 }
 
+func TestUIScaleRoundTrip(t *testing.T) {
+	if got := configToProto(config.Default()).GetUiScalePercent(); got != 100 {
+		t.Fatalf("默认应当是 100%%，得到 %d", got)
+	}
+	s, cfg, _ := themeServer(t)
+	for _, c := range []struct{ in, stored, out int32 }{
+		{125, 125, 125},
+		{120, 125, 125}, // 不在档位里的归到最近的一档
+		{100, 0, 100},   // 100% 不写进配置文件
+		{999, 150, 150},
+		{50, 90, 90},
+	} {
+		in := configToProto(*cfg)
+		in.UiScalePercent = c.in
+		out, err := s.UpdateConfig(context.Background(), in)
+		if err != nil || int32(cfg.UIScalePercent) != c.stored || out.GetUiScalePercent() != c.out {
+			t.Fatalf("设成 %d：%v 存的是 %d，返回 %d", c.in, err, cfg.UIScalePercent, out.GetUiScalePercent())
+		}
+	}
+	// 旧界面不带这一项（0）时不改
+	cfg.UIScalePercent = 110
+	in := configToProto(*cfg)
+	in.UiScalePercent = 0
+	if _, err := s.UpdateConfig(context.Background(), in); err != nil || cfg.UIScalePercent != 110 {
+		t.Fatalf("旧界面不该改掉缩放：%v %d", err, cfg.UIScalePercent)
+	}
+}
+
 func TestUpdateConfigRejectsUnknownTheme(t *testing.T) {
 	s, cfg, _ := themeServer(t)
 	in := configToProto(*cfg)

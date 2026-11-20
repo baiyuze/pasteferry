@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math' as math;
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'gen/pasteferry/v1/daemon.pb.dart' as pb;
 import 'gen/pasteferry/v1/daemon.pbgrpc.dart' show DaemonServiceClient;
@@ -127,6 +128,14 @@ class ThemeController extends ChangeNotifier {
       };
 
   bool get scanlines => _scanlines;
+
+  int _uiScalePercent = 100;
+
+  /// 界面缩放的百分比（「外观」→「界面缩放」），只用在电脑上，见 [UiScale]
+  int get uiScalePercent => _uiScalePercent;
+
+  /// 界面缩放的倍数，1 是 100%
+  double get uiScale => _uiScalePercent / 100;
 
   // ── 背景图（design/themes.md 第 7 节）：图片和分析结果按 sha256 从后台服务取来缓存 ──
 
@@ -340,14 +349,23 @@ class ThemeController extends ChangeNotifier {
 
   void detach() => _client = null;
 
-  /// 配置变了：换主题、深浅模式或扫描线
+  /// 配置变了：换主题、深浅模式、扫描线或界面缩放
   Future<void> applyConfig(pb.Config config) async {
     final changed = config.themeId != _id || config.themeMode != _mode || config.themeScanlines != _scanlines;
+    // 旧版后台服务没有这一项，读出来是 0
+    final percent = config.uiScalePercent > 0 ? UiScale.snap(config.uiScalePercent) : 100;
+    final scaled = percent != _uiScalePercent;
     _id = config.themeId;
     _mode = config.themeMode;
     _scanlines = config.themeScanlines;
+    _uiScalePercent = percent;
     if (!AppThemeSpec.builtins.containsKey(id) && !_custom.containsKey(id)) await _load(id);
-    if (changed) _changed();
+    if (changed) {
+      _changed();
+    } else if (scaled) {
+      // 缩放不换 ThemeData，不用像换主题那样整棵树重建
+      notifyListeners();
+    }
   }
 
   /// 有主题被保存或删掉：重新取列表，正在用的那套内容也重新取
@@ -434,6 +452,15 @@ class ThemeController extends ChangeNotifier {
     await applyConfig(cfg);
   }
 
+  Future<void> setUiScale(int percent) async {
+    final cfg = await _update((c) => c..uiScalePercent = UiScale.snap(percent));
+    await applyConfig(cfg);
+  }
+
+  /// 放大（[delta] 为 1）、缩小（-1）一档，或者回到 100%（0）。快捷键用
+  Future<void> zoom(int delta) =>
+      setUiScale(delta == 0 ? 100 : UiScale.step(_uiScalePercent, delta));
+
   /// 保存一份主题 JSON，返回它的 id 与对比度警告。格式不对时后台服务报错，消息可以直接给用户看
   Future<pb.PutThemeResponse> save(String json) async {
     final res = await _client!.putTheme(pb.PutThemeRequest(json: json));
@@ -495,5 +522,39 @@ class ThemeController extends ChangeNotifier {
     await _client!.deleteTheme(pb.ThemeRef(id: themeId));
     _custom.remove(themeId);
     await refreshList();
+  }
+}
+
+/// 界面缩放的快捷键，与浏览器一致：Ctrl（Mac 上 ⌘）加 = 或 + 放大、加 - 缩小、加 0 回到 100%。
+/// 包在主窗口的界面外面（焦点在输入框里时也管用：输入框不用这几个组合键）。
+class ZoomShortcuts extends StatelessWidget {
+  const ZoomShortcuts({super.key, required this.theme, required this.child});
+
+  final ThemeController theme;
+  final Widget child;
+
+  /// 显示给用户看的快捷键，比如设置里的说明
+  static String get labels => Platform.isMacOS ? '⌘+ / ⌘− / ⌘0' : 'Ctrl + + / Ctrl + − / Ctrl + 0';
+
+  @override
+  Widget build(BuildContext context) {
+    final mac = Platform.isMacOS;
+    SingleActivator key(LogicalKeyboardKey k, {bool shift = false}) =>
+        SingleActivator(k, meta: mac, control: !mac, shift: shift);
+    void zoom(int delta) => theme.zoom(delta).catchError((Object e) => debugPrint('zoom: $e'));
+    return CallbackShortcuts(
+      bindings: {
+        key(LogicalKeyboardKey.equal): () => zoom(1),
+        // 美式键盘上 + 要按 Shift
+        key(LogicalKeyboardKey.equal, shift: true): () => zoom(1),
+        key(LogicalKeyboardKey.add): () => zoom(1),
+        key(LogicalKeyboardKey.numpadAdd): () => zoom(1),
+        key(LogicalKeyboardKey.minus): () => zoom(-1),
+        key(LogicalKeyboardKey.numpadSubtract): () => zoom(-1),
+        key(LogicalKeyboardKey.digit0): () => zoom(0),
+        key(LogicalKeyboardKey.numpad0): () => zoom(0),
+      },
+      child: child,
+    );
   }
 }

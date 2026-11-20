@@ -38,6 +38,7 @@ class PickerWindow {
   void Hide(bool notify, bool restore);
   void Toggle();
   void Place();
+  SIZE SizeFor(HMONITOR monitor) const;
   void ResizeChild();
 
   flutter::EncodableMap SetHotkey(const std::string& name, bool enabled);
@@ -58,6 +59,8 @@ class PickerWindow {
   UINT modifiers_ = 0;
   UINT vk_ = 0;
   DWORD hotkey_error_ = 0;
+  // 界面缩放的倍数（setScale），窗口按它放大
+  double ui_scale_ = 1.0;
 };
 
 #endif  // RUNNER_PICKER_WINDOW_H_

@@ -162,6 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: SizedBox(
                   width: 220,
                   child: TextField(
+                    contextMenuBuilder: textContextMenu,
                     controller: _nameController,
                     decoration: InputDecoration(
                       suffixIcon: _nameDirty
@@ -245,6 +246,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     children: [
                       Expanded(
                         child: TextField(
+                          contextMenuBuilder: textContextMenu,
                           controller: _serverController,
                           style: context.text.bodyMedium?.copyWith(
                             fontFamily: context.typography.mono,

@@ -3846,6 +3846,10 @@ type Config struct {
 	ThemeMode ThemeMode `protobuf:"varint,36,opt,name=theme_mode,json=themeMode,proto3,enum=pasteferry.v1.ThemeMode" json:"theme_mode,omitempty"`
 	// 像素主题的 CRT 扫描线效果，默认关
 	ThemeScanlines bool `protobuf:"varint,37,opt,name=theme_scanlines,json=themeScanlines,proto3" json:"theme_scanlines,omitempty"`
+	// 电脑上整个界面（文字、图标、间距、窗口）放大或缩小的百分比（2.13.1）：
+	// 90、100、110、125、150 之一，其他值归到最近的一档。0 表示没设置：
+	// 旧界面不带这一项时不改；读出来时 0 就是 100%。手机跟随系统的字体大小，不用这一项
+	UiScalePercent int32 `protobuf:"varint,38,opt,name=ui_scale_percent,json=uiScalePercent,proto3" json:"ui_scale_percent,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -4137,6 +4141,13 @@ func (x *Config) GetThemeScanlines() bool {
 		return x.ThemeScanlines
 	}
 	return false
+}
+
+func (x *Config) GetUiScalePercent() int32 {
+	if x != nil {
+		return x.UiScalePercent
+	}
+	return 0
 }
 
 type OfficialUsage struct {
@@ -7709,7 +7720,7 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\x04kind\x18\x01 \x01(\x0e2\x1d.pasteferry.v1.ConnectionKindR\x04kind\"P\n" +
 	"\x17SetDeviceAddressRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x18\n" +
-	"\aaddress\x18\x02 \x01(\tR\aaddress\"\xd2\f\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddress\"\xfc\f\n" +
 	"\x06Config\x129\n" +
 	"\x19auto_sync_threshold_bytes\x18\x01 \x01(\x03R\x16autoSyncThresholdBytes\x12.\n" +
 	"\x13history_ttl_seconds\x18\x02 \x01(\x03R\x11historyTtlSeconds\x12*\n" +
@@ -7752,7 +7763,8 @@ const file_pasteferry_v1_daemon_proto_rawDesc = "" +
 	"\btheme_id\x18# \x01(\tR\athemeId\x127\n" +
 	"\n" +
 	"theme_mode\x18$ \x01(\x0e2\x18.pasteferry.v1.ThemeModeR\tthemeMode\x12'\n" +
-	"\x0ftheme_scanlines\x18% \x01(\bR\x0ethemeScanlines\"\xd8\x02\n" +
+	"\x0ftheme_scanlines\x18% \x01(\bR\x0ethemeScanlines\x12(\n" +
+	"\x10ui_scale_percent\x18& \x01(\x05R\x0euiScalePercent\"\xd8\x02\n" +
 	"\rOfficialUsage\x12\x1c\n" +
 	"\tavailable\x18\x01 \x01(\bR\tavailable\x12\x10\n" +
 	"\x03day\x18\x02 \x01(\tR\x03day\x12\x1f\n" +

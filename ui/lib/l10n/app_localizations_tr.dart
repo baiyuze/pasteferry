@@ -2775,6 +2775,14 @@ class AppLocalizationsTr extends AppLocalizations {
       'Pencerenin üzerine soluk CRT tarama çizgileri ekler. Yalnızca piksel temalarda.';
 
   @override
+  String get uiScale => 'Arayüz boyutu';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Metni, simgeleri ve boşlukları birlikte büyütür veya küçültür; bu pencerede ve hızlı yapıştır penceresinde geçerlidir. Kısayollar: $keys';
+  }
+
+  @override
   String get themeBackground => 'Arka plan görseli';
 
   @override

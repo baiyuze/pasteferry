@@ -4424,6 +4424,7 @@ class Config extends $pb.GeneratedMessage {
     $core.String? themeId,
     ThemeMode? themeMode,
     $core.bool? themeScanlines,
+    $core.int? uiScalePercent,
   }) {
     final result = Config._();
     if (autoSyncThresholdBytes != null)
@@ -4473,6 +4474,7 @@ class Config extends $pb.GeneratedMessage {
     if (themeId != null) result.themeId = themeId;
     if (themeMode != null) result.themeMode = themeMode;
     if (themeScanlines != null) result.themeScanlines = themeScanlines;
+    if (uiScalePercent != null) result.uiScalePercent = uiScalePercent;
     return result;
   }
 
@@ -4528,6 +4530,7 @@ class Config extends $pb.GeneratedMessage {
     ..aE<ThemeMode>(36, _omitFieldNames ? '' : 'themeMode',
         enumValues: ThemeMode.values)
     ..aOB(37, _omitFieldNames ? '' : 'themeScanlines')
+    ..aI(38, _omitFieldNames ? '' : 'uiScalePercent')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4904,6 +4907,18 @@ class Config extends $pb.GeneratedMessage {
   $core.bool hasThemeScanlines() => $_has(36);
   @$pb.TagNumber(37)
   void clearThemeScanlines() => $_clearField(37);
+
+  /// 电脑上整个界面（文字、图标、间距、窗口）放大或缩小的百分比（2.13.1）：
+  /// 90、100、110、125、150 之一，其他值归到最近的一档。0 表示没设置：
+  /// 旧界面不带这一项时不改；读出来时 0 就是 100%。手机跟随系统的字体大小，不用这一项
+  @$pb.TagNumber(38)
+  $core.int get uiScalePercent => $_getIZ(37);
+  @$pb.TagNumber(38)
+  set uiScalePercent($core.int value) => $_setSignedInt32(37, value);
+  @$pb.TagNumber(38)
+  $core.bool hasUiScalePercent() => $_has(37);
+  @$pb.TagNumber(38)
+  void clearUiScalePercent() => $_clearField(38);
 }
 
 class OfficialUsage extends $pb.GeneratedMessage {

@@ -62,6 +62,9 @@ class PickerState extends ChangeNotifier implements RecordDetails {
   // ── 原生外壳报上来的 ──
   HotkeyResult? _hotkey;
   String _registered = '';
+
+  /// 已经告诉原生外壳的界面缩放倍数
+  double _scale = 1;
   PasteStatus _paste = const PasteStatus(available: false, reason: 'unsupported');
   QuickPasteStatus? _lastSent;
 
@@ -203,6 +206,12 @@ class PickerState extends ChangeNotifier implements RecordDetails {
       await host.setHotkey('', enabled: false);
       await host.quit();
       return;
+    }
+    // 界面缩放：原生外壳按倍数调窗口大小。原生外壳一开始是 1
+    final scale = theme.uiScale;
+    if (scale != _scale) {
+      _scale = scale;
+      await host.setScale(scale);
     }
     final hk = (Hotkey.parse(c.quickPasteHotkey) ?? Hotkey.fallback).canonical;
     if (hk != _registered) {

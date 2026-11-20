@@ -25,7 +25,13 @@ class FlutterWindow : public Win32Window {
                          LPARAM const lparam) noexcept override;
 
  private:
+  // 界面缩放（设置 →「外观」）：最小尺寸跟着放大，窗口比它小时放大窗口
+  void ApplyUiScale(double scale);
+  // 窗口（含边框）的最小尺寸，物理像素：760×520 乘以屏幕缩放和界面缩放，不超出工作区
+  SIZE MinTrackSize(HWND hwnd) const;
+
   std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> lifecycle_channel_;
+  double ui_scale_ = 1.0;
 
   // The project to run.
   flutter::DartProject project_;

@@ -570,6 +570,122 @@ class ThemeTextScale extends StatelessWidget {
   }
 }
 
+/// 界面缩放（设置 →「外观」→「界面缩放」）：文字、图标、间距一起按同一个倍数放大或缩小，
+/// 像浏览器里按 Ctrl 加号。只用在电脑上；手机跟随系统的字体大小与显示大小。
+///
+/// 下面的界面按「窗口大小 ÷ 倍数」排版，再整体放大画出来，排版的比例不变。放在 MaterialApp.builder 里，
+/// 对话框、菜单、提示框都在里面，跟着一起缩放。
+///
+/// 坐标：缩放以后，窗口坐标（globalPosition、localToGlobal 得到的）与里面浮层的坐标差一个倍数，
+/// 在浮层里定位要先用 [overlayPosition] 换算。输入框、可选文字的右键菜单要用 [textContextMenu]。
+///
+/// 窗口装不下 [minSize] 乘以倍数时（屏幕太小），实际的倍数降到刚好装得下，但不小于 1，免得挤坏排版。
+/// 结构不随倍数变：从 100% 换到别的倍数，页面状态（在哪一页、开着的对话框）不丢。
+class UiScale extends StatelessWidget {
+  const UiScale({super.key, required this.scale, required this.minSize, required this.child});
+
+  final double scale;
+
+  /// 界面在 100% 时至少要多大（窗口的最小尺寸）
+  final Size minSize;
+  final Widget child;
+
+  /// 能选的几档（百分比），与后台服务的 config.UIScaleSteps 一致
+  static const steps = [90, 100, 110, 125, 150];
+
+  /// 离 [percent] 最近的一档
+  static int snap(int percent) =>
+      steps.reduce((a, b) => (percent - a).abs() <= (percent - b).abs() ? a : b);
+
+  /// 从 [percent] 往大（[delta] 为正）或往小挪一档，到头了不动
+  static int step(int percent, int delta) {
+    final i = steps.indexOf(snap(percent)) + delta;
+    return steps[i.clamp(0, steps.length - 1)];
+  }
+
+  /// 窗口有 [window] 大时实际用的倍数
+  static double effective(double scale, Size window, Size minSize) {
+    if (scale <= 1 || window.isEmpty) return scale;
+    final fit = math.min(window.width / minSize.width, window.height / minSize.height);
+    return fit.clamp(1.0, scale);
+  }
+
+  /// 实际的倍数；不在 UiScale 下面时是 1
+  static double of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_UiScaleScope>()?.scale ?? 1;
+
+  @override
+  Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    final s = effective(scale, mq.size, minSize);
+    final size = mq.size / s;
+    return MediaQuery(
+      data: mq.copyWith(
+        size: size,
+        padding: mq.padding / s,
+        viewPadding: mq.viewPadding / s,
+        viewInsets: mq.viewInsets / s,
+        systemGestureInsets: mq.systemGestureInsets / s,
+      ),
+      child: _UiScaleScope(
+        scale: s,
+        child: Transform.scale(
+          scale: s,
+          alignment: Alignment.topLeft,
+          child: OverflowBox(
+            alignment: Alignment.topLeft,
+            minWidth: size.width,
+            maxWidth: size.width,
+            minHeight: size.height,
+            maxHeight: size.height,
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _UiScaleScope extends InheritedWidget {
+  const _UiScaleScope({required this.scale, required super.child});
+
+  final double scale;
+
+  @override
+  bool updateShouldNotify(_UiScaleScope oldWidget) => scale != oldWidget.scale;
+}
+
+/// 把窗口坐标（手势的 globalPosition、localToGlobal 的结果）换成 [context] 所在浮层
+/// （showMenu、OverlayPortal 用的那一层）里的坐标。没有界面缩放时两者相同。
+Offset overlayPosition(BuildContext context, Offset global) {
+  final box = Overlay.maybeOf(context)?.context.findRenderObject();
+  return box is RenderBox && box.attached ? box.globalToLocal(global) : global;
+}
+
+/// 输入框（TextField）、可选文字（SelectableText）的右键菜单，给它们的 contextMenuBuilder 用。
+///
+/// Flutter 按窗口坐标摆菜单，菜单却挂在输入框上、跟着输入框一起缩放：界面缩放时菜单偏到一边
+/// （离输入框左上角越远偏得越多），判断「右边放不放得下」也按错的范围算。这里先把菜单的坐标系挪回
+/// 浮层的坐标系，再按浮层坐标给位置，缩放时也落在点的地方。没有缩放时与 Flutter 默认的菜单一样。
+Widget textContextMenu(BuildContext context, EditableTextState state) {
+  var anchors = state.contextMenuAnchors;
+  var shift = Offset.zero;
+  final box = state.renderEditable;
+  final overlay = Overlay.maybeOf(context)?.context.findRenderObject();
+  if (overlay is RenderBox && overlay.attached && box.attached) {
+    // 菜单的原点 = 输入框左上角的窗口坐标；挪掉它与浮层坐标的差，菜单的坐标就是浮层坐标
+    shift = box.localToGlobal(Offset.zero) - box.localToGlobal(Offset.zero, ancestor: overlay);
+    anchors = TextSelectionToolbarAnchors(
+      primaryAnchor: overlay.globalToLocal(anchors.primaryAnchor),
+      secondaryAnchor: anchors.secondaryAnchor == null ? null : overlay.globalToLocal(anchors.secondaryAnchor!),
+    );
+  }
+  return Transform.translate(
+    offset: shift,
+    child: AdaptiveTextSelectionToolbar.buttonItems(anchors: anchors, buttonItems: state.contextMenuButtonItems),
+  );
+}
+
 extension PaletteAccess on BuildContext {
   AppPalette get palette => Theme.of(this).extension<AppPalette>()!;
   TextTheme get text => Theme.of(this).textTheme;

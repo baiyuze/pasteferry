@@ -2839,6 +2839,14 @@ class AppLocalizationsRu extends AppLocalizations {
       'Накладывает на окно едва заметные линии развёртки, как на ЭЛТ-экране. Только для пиксельных тем.';
 
   @override
+  String get uiScale => 'Масштаб интерфейса';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Увеличивает или уменьшает текст, значки и отступы вместе — в этом окне и в окне быстрой вставки. Сочетания клавиш: $keys';
+  }
+
+  @override
   String get themeBackground => 'Фоновое изображение';
 
   @override

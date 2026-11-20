@@ -49,7 +49,10 @@ class PickerApp extends StatelessWidget {
           localeListResolutionCallback: (preferred, _) => resolveLocale(preferred),
           builder: (context, child) {
             appL10n = context.l10n;
-            return ThemeTextScale(child: child!);
+            // 窗口由原生外壳按倍数放大（setScale），放大之前这里先按 100% 画
+            return ThemeTextScale(
+              child: UiScale(scale: state.theme.uiScale, minSize: PickerView.windowSize, child: child!),
+            );
           },
           home: PickerView(state: state),
         );
@@ -65,6 +68,9 @@ class PickerView extends StatefulWidget {
 
   /// 每一行的高度
   static const rowHeight = 36.0;
+
+  /// 窗口在 100% 时的大小，与原生外壳里的一致（Picker/main.swift、picker_window.cpp、picker_application.cc）
+  static const windowSize = Size(560, 460);
 
   @override
   State<PickerView> createState() => _PickerViewState();
@@ -269,6 +275,7 @@ class _PickerViewState extends State<PickerView> {
           const SizedBox(width: Insets.sm),
           Expanded(
             child: TextField(
+              contextMenuBuilder: textContextMenu,
               controller: _search,
               focusNode: _focus,
               autofocus: true,
@@ -605,9 +612,11 @@ class _PickerRow extends StatelessWidget {
     final l = context.l10n;
     final r = record;
     final favorited = r.favorite || r.favorited;
+    // at 是窗口坐标，界面缩放时要换成菜单所在浮层的坐标
+    final pos = overlayPosition(context, at);
     final choice = await showMenu<String>(
       context: context,
-      position: RelativeRect.fromLTRB(at.dx, at.dy, at.dx, at.dy),
+      position: RelativeRect.fromLTRB(pos.dx, pos.dy, pos.dx, pos.dy),
       items: [
         if (PickerState.selectable(r)) PopupMenuItem(value: 'copy', height: 30, child: Text(l.pickerCopyOnly)),
         PopupMenuItem(value: 'favorite', height: 30, child: Text(favorited ? l.unfavoriteAction : l.favoriteAction)),

@@ -1131,9 +1131,11 @@ class _TransferRowState extends State<_TransferRow> {
     final state = AppScope.read(context);
     final reveal = !_out && t.status == 'done' && _present.isNotEmpty;
     final path = _present.firstOrNull ?? (t.paths.isNotEmpty ? t.paths.first : null);
+    // at 是窗口坐标，界面缩放时要换成菜单所在浮层的坐标
+    final pos = overlayPosition(context, at);
     final choice = await showMenu<String>(
       context: context,
-      position: RelativeRect.fromLTRB(at.dx, at.dy, at.dx, at.dy),
+      position: RelativeRect.fromLTRB(pos.dx, pos.dy, pos.dx, pos.dy),
       items: [
         if (reveal) PopupMenuItem(value: 'reveal', child: Text(revealLabel(l))),
         if (path != null) PopupMenuItem(value: 'copy', child: Text(l.transferCopyPath)),
@@ -1224,6 +1226,7 @@ class ProfileChip extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
+                contextMenuBuilder: textContextMenu,
                 controller: c,
                 autofocus: true,
                 maxLength: 32,

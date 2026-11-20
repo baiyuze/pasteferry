@@ -36,6 +36,7 @@ struct _PickerApplication {
   gboolean dart_ready;
   gboolean pending_show;
   gboolean suspended;
+  double ui_scale;  // 界面缩放的倍数（setScale），窗口按它放大
 
   // 快捷键
   gchar* hotkey;  // 设置里的写法，如 "alt+v"
@@ -421,16 +422,46 @@ static void portal_start(PickerApplication* self) {
 
 // ─────────────────────────── 窗口 ───────────────────────────
 
+// 窗口大小：560×460 乘以界面缩放，不超出 [monitor] 的工作区（屏幕太小时 Flutter 那边自己降倍数）。
+// 窗口不能拖动改大小，跟着 view 的 size request 走
+static void resize(PickerApplication* self, GdkMonitor* monitor, int* width) {
+  const double scale = self->ui_scale > 0 ? self->ui_scale : 1.0;
+  int w = static_cast<int>(kWidth * scale + 0.5);
+  int h = static_cast<int>(kHeight * scale + 0.5);
+  if (monitor != nullptr) {
+    GdkRectangle area;
+    gdk_monitor_get_workarea(monitor, &area);
+    w = MIN(w, area.width);
+    h = MIN(h, area.height);
+  }
+  gtk_widget_set_size_request(GTK_WIDGET(self->view), w, h);
+  gtk_window_resize(self->window, w, h);
+  if (width != nullptr) *width = w;
+}
+
+// 窗口现在所在的屏幕；还没有时用主屏幕（Wayland 上可能也没有，那就不限制大小）
+static GdkMonitor* window_monitor(PickerApplication* self) {
+  GdkDisplay* display = gdk_display_get_default();
+  GdkWindow* gdk_window = gtk_widget_get_window(GTK_WIDGET(self->window));
+  return gdk_window != nullptr ? gdk_display_get_monitor_at_window(display, gdk_window)
+                               : gdk_display_get_primary_monitor(display);
+}
+
 static void place(PickerApplication* self) {
-  if (!is_x11()) return;  // Wayland 上窗口位置由系统决定
+  if (!is_x11()) {  // Wayland 上窗口位置由系统决定，只调大小
+    resize(self, window_monitor(self), nullptr);
+    return;
+  }
   GdkDisplay* display = gdk_display_get_default();
   GdkSeat* seat = gdk_display_get_default_seat(display);
   int x = 0, y = 0;
   gdk_device_get_position(gdk_seat_get_pointer(seat), nullptr, &x, &y);
   GdkMonitor* monitor = gdk_display_get_monitor_at_point(display, x, y);
+  int w = kWidth;
+  resize(self, monitor, &w);
   GdkRectangle area;
   gdk_monitor_get_workarea(monitor, &area);
-  gtk_window_move(self->window, area.x + (area.width - kWidth) / 2, area.y + area.height * 22 / 100);
+  gtk_window_move(self->window, area.x + (area.width - w) / 2, area.y + area.height * 22 / 100);
 }
 
 static void show(PickerApplication* self, guint32 time) {
@@ -582,6 +613,12 @@ static gboolean lookup_bool(FlValue* args, const gchar* key) {
   return v != nullptr && fl_value_get_type(v) == FL_VALUE_TYPE_BOOL && fl_value_get_bool(v);
 }
 
+static double lookup_double(FlValue* args, const gchar* key, double fallback) {
+  FlValue* v = args != nullptr && fl_value_get_type(args) == FL_VALUE_TYPE_MAP ? fl_value_lookup_string(args, key)
+                                                                              : nullptr;
+  return v != nullptr && fl_value_get_type(v) == FL_VALUE_TYPE_FLOAT ? fl_value_get_float(v) : fallback;
+}
+
 static const gchar* lookup_string(FlValue* args, const gchar* key) {
   FlValue* v = args != nullptr && fl_value_get_type(args) == FL_VALUE_TYPE_MAP ? fl_value_lookup_string(args, key)
                                                                               : nullptr;
@@ -629,6 +666,15 @@ static void method_call_cb(FlMethodChannel*, FlMethodCall* call, gpointer data) 
       self->pending_show = FALSE;
       self->toggle_on_ready = FALSE;
       show(self, GDK_CURRENT_TIME);
+    }
+    respond(call, nullptr);
+  } else if (g_strcmp0(m, "setScale") == 0) {
+    // 界面缩放：收起时也先调好大小，Flutter 那边趁这时按新大小排好版，呼出时不闪
+    self->ui_scale = lookup_double(args, "scale", 1.0);
+    if (gtk_widget_get_visible(GTK_WIDGET(self->window))) {
+      place(self);
+    } else {
+      resize(self, window_monitor(self), nullptr);
     }
     respond(call, nullptr);
   } else if (g_strcmp0(m, "quit") == 0) {

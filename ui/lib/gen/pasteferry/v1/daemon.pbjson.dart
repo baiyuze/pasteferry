@@ -1400,6 +1400,7 @@ const Config$json = {
       '10': 'themeMode'
     },
     {'1': 'theme_scanlines', '3': 37, '4': 1, '5': 8, '10': 'themeScanlines'},
+    {'1': 'ui_scale_percent', '3': 38, '4': 1, '5': 5, '10': 'uiScalePercent'},
   ],
 };
 
@@ -1434,7 +1435,7 @@ final $typed_data.Uint8List configDescriptor = $convert.base64Decode(
     'ZXISLgoTc2VudF9yZXRlbnRpb25fZGF5cxgiIAEoBVIRc2VudFJldGVudGlvbkRheXMSGQoIdG'
     'hlbWVfaWQYIyABKAlSB3RoZW1lSWQSNwoKdGhlbWVfbW9kZRgkIAEoDjIYLnBhc3RlZmVycnku'
     'djEuVGhlbWVNb2RlUgl0aGVtZU1vZGUSJwoPdGhlbWVfc2NhbmxpbmVzGCUgASgIUg50aGVtZV'
-    'NjYW5saW5lcw==');
+    'NjYW5saW5lcxIoChB1aV9zY2FsZV9wZXJjZW50GCYgASgFUg51aVNjYWxlUGVyY2VudA==');
 
 @$core.Deprecated('Use officialUsageDescriptor instead')
 const OfficialUsage$json = {

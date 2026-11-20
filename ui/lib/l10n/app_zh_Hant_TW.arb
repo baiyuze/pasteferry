@@ -742,6 +742,8 @@
   "themeAskAiCopied": "設定已複製",
   "themeScanlines": "掃描線",
   "themeScanlinesDesc": "整個視窗疊一層很淡的 CRT 掃描線，只在像素主題裡有效",
+  "uiScale": "介面縮放",
+  "uiScaleDesc": "文字、圖示和間距一起放大或縮小，主視窗和快速貼上視窗都會套用。快速鍵：{keys}",
   "themeBackground": "背景圖",
   "themeBackgroundDesc": "鋪滿側邊欄和頁面後面。圖上蓋一層遮罩，文字照樣看得清楚。",
   "themeBackgroundChoose": "選擇圖片…",

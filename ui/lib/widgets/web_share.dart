@@ -455,6 +455,7 @@ class _WebShareDialogState extends State<WebShareDialog> {
                       const SizedBox(height: Insets.md),
                       if (_invite != null)
                         SelectableText(
+                          contextMenuBuilder: textContextMenu,
                           _invite!.url.split('#').first,
                           textAlign: TextAlign.center,
                           style: context.text.bodySmall?.copyWith(

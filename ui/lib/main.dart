@@ -20,6 +20,7 @@ import 'pages/official_service_page.dart';
 import 'mobile/mobile_app.dart';
 import 'picker/picker_main.dart';
 import 'theme.dart';
+import 'theme_controller.dart' show ZoomShortcuts;
 import 'widgets/common.dart';
 import 'widgets/pairing_dialog.dart';
 import 'widgets/friends_dialog.dart';
@@ -63,11 +64,22 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
   /// 按界面语言缓存的浅色、深色主题：Windows 上中文和日文的汉字用不同的字体
   final _themes = <String, (ThemeData, ThemeData)>{};
 
+  /// 告诉原生窗口的界面缩放倍数（原生窗口按它放大最小尺寸）；原生窗口一开始是 1
+  double _windowScale = 1;
+
+  void _syncWindowScale() {
+    final s = _state.theme.uiScale;
+    if (s == _windowScale) return;
+    _windowScale = s;
+    unawaited(setWindowUiScale(s));
+  }
+
   @override
   void initState() {
     super.initState();
     _state = widget.state ?? (AppState()..connect());
     if (widget.state == null) installApplicationLifecycle(_state);
+    if (widget.state == null) _state.theme.addListener(_syncWindowScale);
     if (widget.state == null) {
       unawaited(
         _shares.start().catchError((Object e) {
@@ -80,6 +92,7 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
   @override
   void dispose() {
     _shares.dispose();
+    _state.theme.removeListener(_syncWindowScale);
     if (widget.state == null) _state.dispose();
     super.dispose();
   }
@@ -128,13 +141,20 @@ class _PasteFerryAppState extends State<PasteFerryApp> {
               return ThemeTextScale(
                 child: PixelScanlinesLayer(
                   on: theme.scanlines,
-                  child: ExternalShareHost(
-                    shares: _shares,
-                    state: _state,
-                    child: ThemedBackdrop(
-                      controller: theme,
-                      window: 'main',
-                      child: child!,
+                  child: UiScale(
+                    scale: theme.uiScale,
+                    minSize: mainContentMinSize,
+                    child: ZoomShortcuts(
+                      theme: theme,
+                      child: ExternalShareHost(
+                        shares: _shares,
+                        state: _state,
+                        child: ThemedBackdrop(
+                          controller: theme,
+                          window: 'main',
+                          child: child!,
+                        ),
+                      ),
                     ),
                   ),
                 ),

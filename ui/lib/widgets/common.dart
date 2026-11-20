@@ -559,6 +559,7 @@ class _SearchFieldState extends State<SearchField> {
         child: ListenableBuilder(
           listenable: controller,
           builder: (context, _) => TextField(
+            contextMenuBuilder: textContextMenu,
             controller: controller,
             focusNode: focusNode,
             style: context.text.bodyMedium,

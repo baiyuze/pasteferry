@@ -94,6 +94,15 @@ class AppearanceSection extends StatelessWidget {
                       onChanged: (m) => _run(context, () => theme.setMode(m)),
                     ),
                   ),
+                  SettingRow(
+                    title: l.uiScale,
+                    description: l.uiScaleDesc(ZoomShortcuts.labels),
+                    child: Segmented<int>(
+                      value: theme.uiScalePercent,
+                      segments: [for (final p in UiScale.steps) (p, '$p%')],
+                      onChanged: (p) => _run(context, () => theme.setUiScale(p)),
+                    ),
+                  ),
                   if (theme.spec.shape.pixel)
                     SettingRow(
                       title: l.themeScanlines,
@@ -549,6 +558,7 @@ class _AskAiDialog extends StatelessWidget {
               padding: const EdgeInsets.all(Insets.md),
               decoration: context.shape.box(color: p.fill, border: p.border, radius: context.shape.sm),
               child: SelectableText(
+                contextMenuBuilder: textContextMenu,
                 config,
                 style: TextStyle(fontFamily: context.typography.mono, fontSize: 12, color: p.text, height: 1.5),
               ),

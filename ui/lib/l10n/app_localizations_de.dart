@@ -2830,6 +2830,14 @@ class AppLocalizationsDe extends AppLocalizations {
       'Legt dezente CRT-Scanlines über das Fenster. Nur bei Pixel-Themen.';
 
   @override
+  String get uiScale => 'Oberflächengröße';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Text, Symbole und Abstände gemeinsam vergrößern oder verkleinern, in diesem Fenster und im Schnelleinfügen-Fenster. Tastenkürzel: $keys';
+  }
+
+  @override
   String get themeBackground => 'Hintergrundbild';
 
   @override

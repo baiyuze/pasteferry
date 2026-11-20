@@ -218,7 +218,8 @@ Future<void> showFriendMenu(BuildContext context, Friend friend, Offset at, {boo
   final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
   final v = await showMenu<String>(
     context: context,
-    position: RelativeRect.fromRect(at & const Size(1, 1), Offset.zero & overlay.size),
+    // at 是窗口坐标，界面缩放时要换成浮层里的坐标
+    position: RelativeRect.fromRect(overlay.globalToLocal(at) & const Size(1, 1), Offset.zero & overlay.size),
     items: [
       PopupMenuItem(value: 'send', height: 34, child: Text(l.friendSendAction)),
       if (!detail) PopupMenuItem(value: 'history', height: 34, child: Text(l.friendHistory)),
@@ -455,6 +456,7 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
                       children: [
                         Expanded(
                           child: TextField(
+                            contextMenuBuilder: textContextMenu,
                             controller: _input,
                             enabled: !_redeeming,
                             textCapitalization: TextCapitalization.characters,

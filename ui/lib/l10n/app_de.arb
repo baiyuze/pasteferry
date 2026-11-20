@@ -742,6 +742,8 @@
   "themeAskAiCopied": "Konfiguration kopiert",
   "themeScanlines": "Scanlines",
   "themeScanlinesDesc": "Legt dezente CRT-Scanlines über das Fenster. Nur bei Pixel-Themen.",
+  "uiScale": "Oberflächengröße",
+  "uiScaleDesc": "Text, Symbole und Abstände gemeinsam vergrößern oder verkleinern, in diesem Fenster und im Schnelleinfügen-Fenster. Tastenkürzel: {keys}",
   "themeBackground": "Hintergrundbild",
   "themeBackgroundDesc": "Füllt das Fenster hinter Seitenleiste und Seiten. Ein Schleier darüber hält Text lesbar.",
   "themeBackgroundChoose": "Bild auswählen…",

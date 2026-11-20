@@ -742,6 +742,8 @@
   "themeAskAiCopied": "設定をコピーしました",
   "themeScanlines": "走査線",
   "themeScanlinesDesc": "ウインドウ全体に薄い CRT 走査線を重ねます。ピクセルテーマのみ",
+  "uiScale": "表示サイズ",
+  "uiScaleDesc": "文字・アイコン・余白をまとめて拡大・縮小します。メインウインドウとクイックペーストウィンドウに適用されます。ショートカット：{keys}",
   "themeBackground": "背景画像",
   "themeBackgroundDesc": "サイドバーとページの後ろに敷きます。上に重ねるスクリムで文字は読みやすいままです。",
   "themeBackgroundChoose": "画像を選択…",

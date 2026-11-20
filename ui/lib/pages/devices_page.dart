@@ -331,6 +331,7 @@ class _DeviceMenu extends StatelessWidget {
               Text(l.setAddressBody(device.name)),
               const SizedBox(height: Insets.lg),
               TextField(
+                contextMenuBuilder: textContextMenu,
                 controller: controller,
                 autofocus: true,
                 style: TextStyle(fontFamily: context.typography.mono, fontSize: 14),

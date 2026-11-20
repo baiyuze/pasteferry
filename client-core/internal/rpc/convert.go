@@ -101,7 +101,16 @@ func configToProto(c config.Config) *pb.Config {
 		ThemeId:                 c.ThemeID,
 		ThemeMode:               themeModeToProto(c.ThemeMode),
 		ThemeScanlines:          c.ThemeScanlines,
+		UiScalePercent:          int32(uiScaleOrDefault(c.UIScalePercent)),
 	}
+}
+
+// uiScaleOrDefault 把配置里的 0（没设置）换成 100，界面拿到的总是实际的百分比
+func uiScaleOrDefault(p int) int {
+	if p == 0 {
+		return 100
+	}
+	return p
 }
 
 func themeModeToProto(m string) pb.ThemeMode {
@@ -210,6 +219,10 @@ func configFromProto(in *pb.Config, base config.Config) config.Config {
 	c.ThemeID = in.GetThemeId()
 	c.ThemeMode = themeModeFromProto(in.GetThemeMode())
 	c.ThemeScanlines = in.GetThemeScanlines()
+	// 旧界面不带这一项，不改；100 由 Validate 记成 0
+	if p := in.GetUiScalePercent(); p > 0 {
+		c.UIScalePercent = int(p)
+	}
 	// 空字符串就是系统的「下载」文件夹
 	c.ReceiveDir = in.GetReceiveDir()
 	c.ReceiveDisabled = in.GetReceiveDisabled()

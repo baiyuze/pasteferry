@@ -91,6 +91,7 @@ class OfficialServicePage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: SelectableText(
+                              contextMenuBuilder: textContextMenu,
                               state.status?.deviceId ?? state.self?.id ?? '',
                               style: context.text.bodyMedium?.copyWith(fontFamily: context.typography.mono),
                             ),
@@ -160,7 +161,7 @@ class OfficialServicePage extends StatelessWidget {
       child: Row(
         children: [
           Expanded(child: Text(title, style: context.text.bodyMedium?.copyWith(color: p.textDim))),
-          SelectableText(value, style: context.text.bodyMedium?.copyWith(fontFeatures: figures)),
+          SelectableText(value, style: context.text.bodyMedium?.copyWith(fontFeatures: figures), contextMenuBuilder: textContextMenu),
         ],
       ),
     );

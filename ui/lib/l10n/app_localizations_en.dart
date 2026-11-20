@@ -2782,6 +2782,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Overlay faint CRT scanlines on the window. Pixel themes only.';
 
   @override
+  String get uiScale => 'Interface scale';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Make text, icons and spacing larger or smaller together, in this window and the quick paste window. Shortcuts: $keys';
+  }
+
+  @override
   String get themeBackground => 'Background image';
 
   @override

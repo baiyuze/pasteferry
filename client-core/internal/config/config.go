@@ -108,6 +108,35 @@ type Config struct {
 	ThemeMode string `json:"theme_mode,omitempty"`
 	// ThemeScanlines 打开像素主题的 CRT 扫描线效果，默认关
 	ThemeScanlines bool `json:"theme_scanlines,omitempty"`
+	// UIScalePercent 是电脑上整个界面放大或缩小的百分比，取 [UIScaleSteps] 里的一档；0 表示 100%
+	UIScalePercent int `json:"ui_scale_percent,omitempty"`
+}
+
+// UIScaleSteps 是界面缩放能选的几档（百分比）
+var UIScaleSteps = []int{90, 100, 110, 125, 150}
+
+// NormalizeUIScale 把界面缩放归到最近的一档；100% 记作 0（配置文件里不写这一项）
+func NormalizeUIScale(p int) int {
+	if p <= 0 {
+		return 0
+	}
+	best := UIScaleSteps[0]
+	for _, s := range UIScaleSteps[1:] {
+		if abs(s-p) < abs(best-p) {
+			best = s
+		}
+	}
+	if best == 100 {
+		return 0
+	}
+	return best
+}
+
+func abs(n int) int {
+	if n < 0 {
+		return -n
+	}
+	return n
 }
 
 // 谁可以给我发文件
@@ -251,6 +280,7 @@ func (c *Config) Validate() {
 	default:
 		c.ThemeMode = ""
 	}
+	c.UIScalePercent = NormalizeUIScale(c.UIScalePercent)
 }
 
 // ValidThemeID 报告 id 能不能当主题的 id 用：小写字母、数字和连字符，最长 40 个字符。空字符串也算（默认主题）

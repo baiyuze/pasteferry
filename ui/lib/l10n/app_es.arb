@@ -742,6 +742,8 @@
   "themeAskAiCopied": "Configuración copiada",
   "themeScanlines": "Líneas de escaneo",
   "themeScanlinesDesc": "Superpone tenues líneas de escaneo de CRT en la ventana. Solo en temas de píxeles.",
+  "uiScale": "Tamaño de la interfaz",
+  "uiScaleDesc": "Amplía o reduce a la vez el texto, los iconos y los espacios, en esta ventana y en la ventana de pegado rápido. Atajos: {keys}",
   "themeBackground": "Imagen de fondo",
   "themeBackgroundDesc": "Llena la ventana detrás de la barra lateral y las páginas. Una capa encima mantiene el texto legible.",
   "themeBackgroundChoose": "Elegir imagen…",

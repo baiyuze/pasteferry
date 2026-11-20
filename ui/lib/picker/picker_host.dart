@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 ///   commit {paste} → {pasted, reason}   隐藏窗口、还原焦点，paste 时再模拟粘贴键
 ///   ready                          Dart 准备好了；之前按下的快捷键这时才显示窗口
 ///   quit                           关掉快捷粘贴时退出进程
+///   setScale {scale}               界面缩放的倍数：窗口按 560×460 乘以它（2.13.1）
 /// 原生 → Dart：
 ///   onShow                         窗口刚显示出来
 ///   onHide                         窗口被收起（点了窗口外面、切到别的程序）
@@ -66,6 +67,7 @@ class PickerHost {
   Future<void> hide() => _invoke('hide');
   Future<void> ready() => _invoke('ready');
   Future<void> quit() => _invoke('quit');
+  Future<void> setScale(double scale) => _invoke('setScale', {'scale': scale});
 
   Future<CommitResult> commit({required bool paste}) async {
     final r = await _invoke('commit', {'paste': paste});

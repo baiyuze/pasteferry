@@ -2860,6 +2860,14 @@ class AppLocalizationsPl extends AppLocalizations {
       'Nakłada na okno delikatne linie skanowania jak w monitorze CRT. Tylko w motywach pikselowych.';
 
   @override
+  String get uiScale => 'Rozmiar interfejsu';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Powiększa lub pomniejsza razem tekst, ikony i odstępy w tym oknie i w oknie szybkiego wklejania. Skróty: $keys';
+  }
+
+  @override
   String get themeBackground => 'Obraz tła';
 
   @override

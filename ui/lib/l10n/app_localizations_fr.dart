@@ -2841,6 +2841,14 @@ class AppLocalizationsFr extends AppLocalizations {
       'Superpose de légères lignes de balayage CRT sur la fenêtre. Thèmes pixel uniquement.';
 
   @override
+  String get uiScale => 'Taille de l’interface';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Agrandit ou réduit ensemble le texte, les icônes et les espacements, dans cette fenêtre et dans la fenêtre de collage rapide. Raccourcis : $keys';
+  }
+
+  @override
   String get themeBackground => 'Image de fond';
 
   @override

@@ -326,6 +326,7 @@ class _JoinTabState extends State<_JoinTab> {
             Text(l.enterCodeShown, style: context.text.bodySmall, textAlign: TextAlign.center),
             const SizedBox(height: Insets.lg),
             TextField(
+              contextMenuBuilder: textContextMenu,
               controller: _controller,
               maxLength: 6,
               textCapitalization: TextCapitalization.characters,
@@ -354,6 +355,7 @@ class _JoinTabState extends State<_JoinTab> {
             const SizedBox(height: Insets.sm),
             if (_showAddress)
               TextField(
+                contextMenuBuilder: textContextMenu,
                 controller: _addressController,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontFamily: context.typography.mono, fontSize: 14),

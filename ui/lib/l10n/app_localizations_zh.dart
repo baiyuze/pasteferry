@@ -2562,6 +2562,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get themeScanlinesDesc => '整个窗口叠一层很淡的 CRT 扫描线，只在像素主题里有效';
 
   @override
+  String get uiScale => '界面缩放';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return '文字、图标和间距一起放大或缩小，主窗口和快捷粘贴窗口都生效。快捷键：$keys';
+  }
+
+  @override
   String get themeBackground => '背景图';
 
   @override
@@ -5280,6 +5288,14 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get themeScanlinesDesc => '整個視窗疊一層很淡的 CRT 掃描線，只在像素主題裏有效';
 
   @override
+  String get uiScale => '介面縮放';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return '文字、圖示和間距一起放大或縮小，主視窗和快速貼上視窗都會套用。快速鍵：$keys';
+  }
+
+  @override
   String get themeBackground => '背景圖';
 
   @override
@@ -7996,6 +8012,14 @@ class AppLocalizationsZhHantTw extends AppLocalizationsZh {
 
   @override
   String get themeScanlinesDesc => '整個視窗疊一層很淡的 CRT 掃描線，只在像素主題裡有效';
+
+  @override
+  String get uiScale => '介面縮放';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return '文字、圖示和間距一起放大或縮小，主視窗和快速貼上視窗都會套用。快速鍵：$keys';
+  }
 
   @override
   String get themeBackground => '背景圖';

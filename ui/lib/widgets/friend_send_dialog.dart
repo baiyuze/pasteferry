@@ -269,6 +269,7 @@ class _FriendSendDialogState extends State<FriendSendDialog> {
                         Text(l.noteLabel, style: context.text.labelLarge),
                         const SizedBox(height: Insets.xs),
                         TextField(
+                          contextMenuBuilder: textContextMenu,
                           controller: _note,
                           enabled: _staged.isNotEmpty,
                           maxLength: 200,

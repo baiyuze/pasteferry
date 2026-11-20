@@ -4588,6 +4588,18 @@ abstract class AppLocalizations {
   /// **'Overlay faint CRT scanlines on the window. Pixel themes only.'**
   String get themeScanlinesDesc;
 
+  /// No description provided for @uiScale.
+  ///
+  /// In en, this message translates to:
+  /// **'Interface scale'**
+  String get uiScale;
+
+  /// No description provided for @uiScaleDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Make text, icons and spacing larger or smaller together, in this window and the quick paste window. Shortcuts: {keys}'**
+  String uiScaleDesc(String keys);
+
   /// No description provided for @themeBackground.
   ///
   /// In en, this message translates to:

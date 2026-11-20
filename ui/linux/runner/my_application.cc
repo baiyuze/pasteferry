@@ -49,10 +49,39 @@ static gboolean close_window(GtkWidget*, GdkEvent*, gpointer data) {
   return TRUE;
 }
 
+// 界面缩放（设置 →「外观」）：最小尺寸跟着放大。窗口比它小时 GTK 会把窗口放大到装得下 view。
+// 不超出屏幕的工作区（留出标题栏），屏幕放不下时 Flutter 那边自己降倍数
+static void apply_ui_scale(MyApplication* self, double scale) {
+  if (self->window == nullptr) return;
+  GtkWidget* view = gtk_bin_get_child(GTK_BIN(self->window));
+  if (view == nullptr) return;
+  if (scale <= 0) scale = 1.0;
+  int w = static_cast<int>(kMinWidth * scale + 0.5);
+  int h = static_cast<int>(kMinHeight * scale + 0.5);
+  GdkDisplay* display = gtk_widget_get_display(GTK_WIDGET(self->window));
+  GdkWindow* gdk_window = gtk_widget_get_window(GTK_WIDGET(self->window));
+  GdkMonitor* monitor = gdk_window != nullptr ? gdk_display_get_monitor_at_window(display, gdk_window)
+                                              : gdk_display_get_primary_monitor(display);
+  if (monitor != nullptr) {
+    GdkRectangle area;
+    gdk_monitor_get_workarea(monitor, &area);
+    w = MIN(w, area.width);
+    h = MIN(h, area.height - 64);
+  }
+  gtk_widget_set_size_request(view, w, h);
+}
+
 static void lifecycle_method(FlMethodChannel*, FlMethodCall* call, gpointer data) {
   auto* self = MY_APPLICATION(data);
   if (g_strcmp0(fl_method_call_get_name(call), "hideWindow") == 0) {
     gtk_widget_hide(GTK_WIDGET(self->window));
+    fl_method_call_respond_success(call, nullptr, nullptr);
+  } else if (g_strcmp0(fl_method_call_get_name(call), "setUiScale") == 0) {
+    FlValue* args = fl_method_call_get_args(call);
+    FlValue* v = args != nullptr && fl_value_get_type(args) == FL_VALUE_TYPE_MAP
+                     ? fl_value_lookup_string(args, "scale")
+                     : nullptr;
+    apply_ui_scale(self, v != nullptr && fl_value_get_type(v) == FL_VALUE_TYPE_FLOAT ? fl_value_get_float(v) : 1.0);
     fl_method_call_respond_success(call, nullptr, nullptr);
   } else {
     fl_method_call_respond_not_implemented(call, nullptr);

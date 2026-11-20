@@ -2850,6 +2850,14 @@ class AppLocalizationsEs extends AppLocalizations {
       'Superpone tenues líneas de escaneo de CRT en la ventana. Solo en temas de píxeles.';
 
   @override
+  String get uiScale => 'Tamaño de la interfaz';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Amplía o reduce a la vez el texto, los iconos y los espacios, en esta ventana y en la ventana de pegado rápido. Atajos: $keys';
+  }
+
+  @override
   String get themeBackground => 'Imagen de fondo';
 
   @override

@@ -2608,6 +2608,14 @@ class AppLocalizationsKo extends AppLocalizations {
       '윈도우에 희미한 CRT 스캔라인을 겹쳐 표시합니다. 픽셀 테마에서만 적용됩니다.';
 
   @override
+  String get uiScale => '화면 크기';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return '글자, 아이콘, 여백을 함께 확대하거나 축소합니다. 기본 창과 빠른 붙여넣기 창에 적용됩니다. 단축키: $keys';
+  }
+
+  @override
   String get themeBackground => '배경 이미지';
 
   @override

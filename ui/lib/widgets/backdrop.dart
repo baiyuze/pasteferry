@@ -63,7 +63,8 @@ class _BackdropImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dpr = MediaQuery.devicePixelRatioOf(context);
+    // 界面缩放时图按放大以后的大小取，不然放大了会糊
+    final dpr = MediaQuery.devicePixelRatioOf(context) * UiScale.of(context);
     final fade = opacity < 1 ? AlwaysStoppedAnimation(opacity) : null;
     if (background.fit == BackgroundFit.tile) {
       // 平铺的多是像素画：只按整数倍放大，不插值
@@ -186,7 +187,7 @@ class _SceneImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dpr = MediaQuery.devicePixelRatioOf(context);
+    final dpr = MediaQuery.devicePixelRatioOf(context) * UiScale.of(context);
     final width = ((MediaQuery.sizeOf(context).width * dpr / 512).ceil() * 512).clamp(512, 4096);
     return Image(
       image: ResizeImage(MemoryImage(bytes), width: width, policy: ResizeImagePolicy.fit),

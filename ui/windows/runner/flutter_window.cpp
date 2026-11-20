@@ -3,6 +3,7 @@
 #include <flutter_windows.h>
 #include <flutter/standard_method_codec.h>
 
+#include <algorithm>
 #include <optional>
 
 #include "flutter/generated_plugin_registrant.h"
@@ -75,6 +76,16 @@ bool FlutterWindow::OnCreate() {
     if (call.method_name() == "hideWindow") {
       ::ShowWindow(GetHandle(), SW_HIDE);
       result->Success();
+    } else if (call.method_name() == "setUiScale") {
+      double scale = 1.0;
+      if (const auto* args = std::get_if<flutter::EncodableMap>(call.arguments())) {
+        const auto it = args->find(flutter::EncodableValue("scale"));
+        if (it != args->end()) {
+          if (const auto* v = std::get_if<double>(&it->second)) scale = *v;
+        }
+      }
+      ApplyUiScale(scale);
+      result->Success();
     } else {
       result->NotImplemented();
     }
@@ -133,11 +144,10 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
       flutter_controller_->engine()->ReloadSystemFonts();
       break;
     case WM_GETMINMAXINFO: {
-      const double scale =
-          FlutterDesktopGetDpiForMonitor(::MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST)) / 96.0;
+      const SIZE min = MinTrackSize(hwnd);
       auto* info = reinterpret_cast<MINMAXINFO*>(lparam);
-      info->ptMinTrackSize.x = static_cast<LONG>(kMinWidth * scale);
-      info->ptMinTrackSize.y = static_cast<LONG>(kMinHeight * scale);
+      info->ptMinTrackSize.x = min.cx;
+      info->ptMinTrackSize.y = min.cy;
       return 0;
     }
     case WM_CLOSE:
@@ -146,4 +156,43 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
   }
 
   return Win32Window::MessageHandler(hwnd, message, wparam, lparam);
+}
+
+SIZE FlutterWindow::MinTrackSize(HWND hwnd) const {
+  HMONITOR monitor = ::MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+  const double scale = FlutterDesktopGetDpiForMonitor(monitor) / 96.0 * ui_scale_;
+  LONG w = static_cast<LONG>(kMinWidth * scale);
+  LONG h = static_cast<LONG>(kMinHeight * scale);
+  // 屏幕放不下时以工作区为准，Flutter 那边自己降倍数
+  MONITORINFO info{sizeof(info)};
+  if (::GetMonitorInfo(monitor, &info)) {
+    w = std::min<LONG>(w, info.rcWork.right - info.rcWork.left);
+    h = std::min<LONG>(h, info.rcWork.bottom - info.rcWork.top);
+  }
+  return {w, h};
+}
+
+void FlutterWindow::ApplyUiScale(double scale) {
+  ui_scale_ = scale > 0 ? scale : 1.0;
+  HWND hwnd = GetHandle();
+  // 最大化、最小化时不动：还原以后系统按 WM_GETMINMAXINFO 的新最小尺寸来
+  if (!hwnd || ::IsZoomed(hwnd) || ::IsIconic(hwnd)) return;
+  RECT rect;
+  if (!::GetWindowRect(hwnd, &rect)) return;
+  const SIZE min = MinTrackSize(hwnd);
+  int w = rect.right - rect.left;
+  int h = rect.bottom - rect.top;
+  if (w >= min.cx && h >= min.cy) return;
+  w = std::max<int>(w, min.cx);
+  h = std::max<int>(h, min.cy);
+  // 左上角不动；放大以后超出工作区的话往回挪
+  int x = rect.left;
+  int y = rect.top;
+  MONITORINFO info{sizeof(info)};
+  if (::GetMonitorInfo(::MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST), &info)) {
+    const RECT& work = info.rcWork;
+    x = std::max<int>(std::min<int>(x, work.right - w), work.left);
+    y = std::max<int>(std::min<int>(y, work.bottom - h), work.top);
+  }
+  ::SetWindowPos(hwnd, nullptr, x, y, w, h, SWP_NOZORDER | SWP_NOACTIVATE);
 }

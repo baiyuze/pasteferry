@@ -139,13 +139,16 @@ final class PickerPanel: NSPanel {
 }
 
 final class PickerController: NSObject, NSWindowDelegate {
-    static let size = NSSize(width: 560, height: 460)
+    /// 100% 时的大小，与 Dart 那边的 PickerView.windowSize 一致；界面缩放时乘以 [scale]
+    static let baseSize = NSSize(width: 560, height: 460)
 
     let engine: FlutterEngine
     let flutter: FlutterViewController
     let panel: PickerPanel
     let channel: FlutterMethodChannel
 
+    /// 界面缩放的倍数（setScale）
+    private var scale: CGFloat = 1
     private var dartReady = false
     private var pendingShow = false
     private var suspended = false
@@ -160,13 +163,13 @@ final class PickerController: NSObject, NSWindowDelegate {
         flutter = FlutterViewController(engine: engine, nibName: nil, bundle: nil)
         flutter.backgroundColor = .clear
         flutter.mouseTrackingMode = .always
-        panel = PickerPanel(contentRect: NSRect(origin: .zero, size: Self.size),
+        panel = PickerPanel(contentRect: NSRect(origin: .zero, size: Self.baseSize),
                             styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
         channel = FlutterMethodChannel(name: "pasteferry/picker", binaryMessenger: engine.binaryMessenger)
         super.init()
 
         panel.contentViewController = flutter
-        panel.setContentSize(Self.size)
+        panel.setContentSize(Self.baseSize)
         panel.isOpaque = false
         panel.backgroundColor = .clear
         panel.hasShadow = true
@@ -210,6 +213,13 @@ final class PickerController: NSObject, NSWindowDelegate {
             dartReady = true
             NSLog("快捷粘贴窗口已就绪")
             if pendingShow { pendingShow = false; show() }
+            result(nil)
+        case "setScale":
+            // 收起时也先调好大小：Flutter 那边趁这时按新大小排好版，呼出时不闪
+            scale = CGFloat(args["scale"] as? Double ?? 1)
+            let screen = panel.isVisible ? panel.screen : NSScreen.main
+            if let area = (screen ?? NSScreen.main)?.visibleFrame { resize(in: area) }
+            if panel.isVisible { place() }
             result(nil)
         case "quit":
             GlobalHotkey.shared.unregister()
@@ -293,9 +303,19 @@ final class PickerController: NSObject, NSWindowDelegate {
         let mouse = NSEvent.mouseLocation
         let screen = NSScreen.screens.first { NSMouseInRect(mouse, $0.frame, false) } ?? NSScreen.main
         guard let area = screen?.visibleFrame else { return }
-        let x = area.midX - Self.size.width / 2
-        let y = area.maxY - area.height * 0.22 - Self.size.height
+        let size = resize(in: area)
+        let x = area.midX - size.width / 2
+        let y = area.maxY - area.height * 0.22 - size.height
         panel.setFrameOrigin(NSPoint(x: x.rounded(), y: max(area.minY, y).rounded()))
+    }
+
+    /// 按界面缩放调窗口大小，不超出 [area]（屏幕太小时 Flutter 那边自己降倍数）
+    @discardableResult
+    private func resize(in area: NSRect) -> NSSize {
+        let size = NSSize(width: min((Self.baseSize.width * scale).rounded(), area.width),
+                          height: min((Self.baseSize.height * scale).rounded(), area.height))
+        if panel.frame.size != size { panel.setContentSize(size) }
+        return size
     }
 
     private func hide(notify: Bool) {

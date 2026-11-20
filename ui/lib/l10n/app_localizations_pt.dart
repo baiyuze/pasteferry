@@ -2845,6 +2845,14 @@ class AppLocalizationsPt extends AppLocalizations {
       'Sobrepõe à janela linhas de varredura de CRT bem suaves. Só nos temas pixel.';
 
   @override
+  String get uiScale => 'Tamanho da interface';
+
+  @override
+  String uiScaleDesc(String keys) {
+    return 'Aumenta ou diminui juntos o texto, os ícones e os espaçamentos, nesta janela e na janela de colagem rápida. Atalhos: $keys';
+  }
+
+  @override
   String get themeBackground => 'Imagem de fundo';
 
   @override
