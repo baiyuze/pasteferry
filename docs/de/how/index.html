@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>So funktioniert PasteFerry : Direktverbindungen, Multi-Uplink-Prüfung und Fehlerbehandlung</title>
+  <meta name="description" content="Was passiert beim Kopieren, wie verbinden sich Computer und was passiert, wenn dies nicht möglich ist?">
+  <link rel="canonical" href="https://pasteferry.cc/de/how/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/how/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/how/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/how/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/how/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/how/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/how/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/how/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/how/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/how/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="So funktioniert PasteFerry : Direktverbindungen, Multi-Uplink-Prüfung und Fehlerbehandlung">
+  <meta property="og:description" content="Was passiert beim Kopieren, wie verbinden sich Computer und was passiert, wenn dies nicht möglich ist?">
+  <meta property="og:url" content="https://pasteferry.cc/de/how/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="de_DE">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Zum Inhalt springen</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../de/" aria-label="PasteFerry Startseite"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Seite">
+        <a class="mid" href="../../de/features/">Funktionen</a>
+        <a class="mid" href="../../de/start/">Schnellstart</a>
+        <a class="wide" href="../../de/start/#server">Möglichkeiten zur Verbindung</a>
+        <a href="../../de/download/">Download</a>
+        <details class="menu">
+          <summary aria-label="Weitere Seiten" class="current"><span>Mehr</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../de/features/">Funktionen</a></li>
+            <li class="narrow"><a href="../../de/start/">Schnellstart</a></li>
+            <li class="narrow"><a href="../../de/start/#server">Möglichkeiten zur Verbindung</a></li>
+            <li><a href="../../de/themes/">Themenführer</a></li>
+            <li><a href="./" aria-current="page">Wie es funktioniert</a></li>
+            <li><a href="../../de/security/">Sicherheit</a></li>
+            <li><a href="../../de/faq/">FAQ</a></li>
+            <li><a href="../../de/feedback/">Diskussion & Feedback</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Änderungsprotokoll</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Stern PasteFerry auf GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Erscheinungsbild" title="Erscheinungsbild"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Systemeinstellung folgen</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Hell</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Dunkel</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Sprache：Deutsch"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>Deutsch</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/how/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/how/" hreflang="de" lang="de" data-lang="de" aria-current="page">Deutsch</a></li>
+            <li><a href="../../fr/how/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/how/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../de/">PasteFerry</a></p>
+        <h1 class="display">Wie es funktioniert</h1>
+        <p class="lede">Was passiert beim Kopieren, wie verbinden sich Computer und was passiert, wenn dies nicht möglich ist?</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="flow-title">
+      <div class="wrap">
+        <h2 id="flow-title">Was passiert beim Kopieren?</h2>
+        <p class="intro">Texte, Bilder und Dateien nehmen alle denselben Weg.</p>
+        <ol class="flow">
+          <li><h3>Hinweis</h3><p>Der Hintergrunddienst erkennt, dass sich die Zwischenablage geändert hat.</p></li>
+          <li><h3>Senden</h3><p>Texte und Dateien bis zu 50 MB werden sofort übernommen. Größere Exemplare werden zunächst als Datensatz versendet.</p></li>
+          <li><h3>Einfügen</h3><p>Der andere Computer speichert es lokal und legt es in der Zwischenablage ab. Sie fügen eine echte Datei ein.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="diagram" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title">Wie PasteFerry eine Verbindung herstellt</h2>
+        <p class="intro">Im selben Netzwerk finden sich die Computer direkt zueinander. In verschiedenen Netzwerken stellt ein Server sie vor, sodass sie versuchen können, eine direkte Verbindung herzustellen, und leitet sie nur weiter, wenn dies fehlschlägt. Inhalte werden immer verschlüsselt.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
+            <title id="diagram-title">Wie PasteFerry eine Verbindung herstellt</title>
+            <desc id="diagram-desc">Computer A und Computer B verbinden sich direkt über WebRTC. Beide stellen zur Signalisierung eine Verbindung zum Server her. Wenn die direkte Verbindung fehlschlägt, werden die Daten über den TURN-Dienst des Servers weitergeleitet.</desc>
+            <rect class="d-box" x="360" y="24" width="240" height="96" rx="14"/>
+            <text class="d-title" x="480" y="64" text-anchor="middle">Signalisierungs- und Relaisdienst</text>
+            <text class="d-sub" x="480" y="92" text-anchor="middle">Signalisierung, STUN, TURN-Relais</text>
+            <path class="d-sig" d="M140 210V58H360"/>
+            <path class="d-sig" d="M820 210V58H600"/>
+            <path class="d-relay" d="M196 210V100H360"/>
+            <path class="d-relay" d="M764 210V100H600"/>
+            <text class="d-note" x="210" y="50">Signalisierung: Verbindungsdetails</text>
+            <text class="d-note" x="210" y="128">Relais: nur bei direktem Ausfall</text>
+            <rect class="d-box" x="40" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="160" y="262" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="160" y="290" text-anchor="middle">Du kopierst hierher</text>
+            <rect class="d-box" x="680" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="800" y="262" text-anchor="middle">Mac, Windows oder Linux</text>
+            <text class="d-sub" x="800" y="290" text-anchor="middle">Sie fügen hier ein</text>
+            <path class="d-direct" d="M280 270H680"/>
+            <text class="d-label" x="480" y="256" text-anchor="middle">Direkte WebRTC-, DTLS -Verschlüsselung</text>
+            <text class="d-note" x="480" y="298" text-anchor="middle">Daten werden nur zwischen Ihren Computern übertragen</text>
+            <g class="d-legend" transform="translate(40 372)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">Daten (direkt)</text>
+              <path class="d-relay" d="M210 0H238"/><text x="248" y="5">Daten (Relay, Fallback)</text>
+              <path class="d-sig" d="M470 0H498"/><text x="508" y="5">Signalisierung</text>
+            </g>
+          </svg>
+          <ul class="points diagram-text">
+            <li><strong>Direkte WebRTC-, DTLS -Verschlüsselung</strong> Daten werden nur zwischen Ihren Computern übertragen</li>
+            <li><strong>Signalisierungs- und Relaisdienst</strong> Signalisierung, STUN, TURN-Relais</li>
+            <li>Relais: nur bei direktem Ausfall</li>
+          </ul>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="multi-uplink" aria-labelledby="multi-title">
+      <div class="wrap">
+        <h2 id="multi-title">Auch direkt in Büronetzwerken</h2>
+        <p class="intro">Früher liefen Büronetzwerke mit mehreren Uplinks über das Relay. PasteFerry findet jeden Uplink und lässt die andere Seite jeden einzelnen ausprobieren.</p>
+        <div class="cols">
+          <div>
+            <h3>Was es bewirkt</h3>
+            <ul class="points">
+              <li><strong>Ein gemeinsamer Port.</strong>Alle Verbindungen verwenden denselben UDP -Port.</li>
+              <li><strong>Jeder Uplink wurde untersucht.</strong>Es fragt sieben Server gleichzeitig an und erhält eine Adresse pro Uplink.</li>
+              <li><strong>Alle wurden auf die andere Seite geschickt.</strong>Der andere Computer probiert jeden aus, bis einer durchkommt.</li>
+              <li><strong>Im Leerlauf direkt erneut versuchen.</strong>Das Relais sorgt dafür, dass alles funktioniert, und schaltet im Leerlauf auf Direktbetrieb.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Getestet an realen Netzwerk-Setups</h3>
+            <p class="small">Jeder Commit wird automatisch in simulierten Netzwerken getestet.</p>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th scope="col">Szenario</th><th scope="col">Ergebnis</th></tr></thead>
+                <tbody>
+                <tr><td>Einzelner Uplink ↔ Heimrouter</td><td>Direkt</td></tr>
+                <tr><td>Zwei Uplinks, Vorgängerversion (Steuerung)</td><td>Relay</td></tr>
+                <tr><td>Vier Uplinks ↔ Heimrouter</td><td>Direkt</td></tr>
+                <tr><td>Zwei Uplinks ↔ zwei Uplinks</td><td>Direkt</td></tr>
+                <tr><td>Zwei Uplinks ↔ NAT, das Ports randomisiert</td><td>Relay</td></tr>
+                <tr><td>Zunächst blockiert, das Netzwerk wird später wiederhergestellt</td><td>Weiterleiten, dann direkt</td></tr>
+                <tr><td>Kein Server, dasselbe Subnetz</td><td>Direkt</td></tr>
+                <tr><td>Kein Server, voneinander isolierte Subnetze</td><td>Keine Verbindung</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="small">Gemessen: ein Mac in einem 4-Uplink-Büronetzwerk und einer zu Hause, zuvor mit 0,6 MB/s weitergeleitet. Jetzt verbinden sie sich direkt.</p>
+            <p class="small">Einzelheiten finden Sie im <a href="../../design/nat-traversal.html">-Designdokument</a> (auf Chinesisch).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="fallbacks" aria-labelledby="fallback-title">
+      <div class="wrap">
+        <h2 id="fallback-title">Wenn etwas schief geht</h2>
+        <p class="intro">Die häufigsten Fälle werden behandelt.</p>
+        <dl class="fallbacks">
+          <div><dt>Der andere Computer im Netzwerk kann nicht gefunden werden</dt><dd>Geben Sie beim Pairing die Adresse ein. man erinnert sich später daran.</dd></div>
+          <div><dt>Keine direkte Verbindung</dt><dd>Die Daten werden weiterhin verschlüsselt über den Server weitergeleitet.</dd></div>
+          <div><dt>Der andere Computer geht in den Ruhezustand oder bricht ab</dt><dd>Es stellt die Verbindung von selbst wieder her, wenn es zurück ist.</dd></div>
+          <div><dt>Beim Senden von Dateien wurde die Verbindung unterbrochen</dt><dd>Die Übertragung wird dort fortgesetzt, wo sie gestoppt wurde.</dd></div>
+          <div><dt>Ein Dateiname, der Windows nicht zulässt</dt><dd>Schlechte Zeichen werden zu Zeichen voller Breite, sodass der Name immer noch derselbe lautet.</dd></div>
+          <div><dt>Ein Passwort kopieren</dt><dd>Bei Windows wird alles, was von einem Passwort-Manager kopiert wird, übersprungen.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="specs" aria-labelledby="specs-title">
+      <div class="wrap">
+        <h2 id="specs-title">Spezifikationen</h2>
+        <div class="table-scroll">
+          <table class="specs">
+            <tbody>
+            <tr><th scope="row">Version</th><td>2.13.1, veröffentlicht <time datetime="2026-11-20">20. November 2026</time></td></tr>
+            <tr><th scope="row">Mac-App</th><td>macOS 13 Ventura oder höher; separate Downloads für Apple Silicon und Intel, jeweils ca. 25 MB, kein Rosetta; eine Universalversion für beide ist etwa 47 MB groß</td></tr>
+            <tr><th scope="row">Windows -App</th><td>Windows 10 und Windows 11, x64; Installation pro Benutzer, keine Administratorrechte; ca. 23 MB Download</td></tr>
+            <tr><th scope="row">Linux -App</th><td>x64 und ARM64; .deb (Debian, Ubuntu und ähnlich) oder tar.gz (andere Distributionen), ca. 22 MB; benötigt einen X11-Desktop oder einen Wayland-Desktop mit XWayland (GNOME, KDE und andere enthalten ihn standardmäßig); GTK 3</td></tr>
+            <tr><th scope="row">Server</th><td>Beim Service oder im selben Netzwerk nicht erforderlich. So führen Sie Ihr eigenes aus: Linux x86_64/ARM64, macOS oder Windows 10/11 x64.</td></tr>
+            <tr><th scope="row">Sprachen</th><td>18 Sprachen: Englisch, vereinfachtes und traditionelles Chinesisch (Taiwan und Hongkong), Japanisch, Koreanisch, Arabisch (von rechts nach links), Deutsch, Französisch, Spanisch, Portugiesisch (Brasilien), Italienisch, Russisch, Ukrainisch, Polnisch, Türkisch, Vietnamesisch und Indonesisch; folgt standardmäßig dem System und kann in den Einstellungen umgeschaltet werden</td></tr>
+            <tr><th scope="row">Inhalt</th><td>Nur-Text, Rich-Text, Bilder und Screenshots, Dateien, Ordner; Jeder Typ kann ausgeschaltet werden</td></tr>
+            <tr><th scope="row">Transport</th><td>WebRTC Datenkanäle, direkt zuerst mit TURN-Relais-Fallback; im selben Netzwerk, mDNS-Erkennung und Verbindungsdetails über UDP 8788; jeder in Multi-Uplink-Netzwerken untersuchte Uplink; Dateien werden als tar + zstd gestreamt</td></tr>
+            <tr><th scope="row">Verschlüsselung und Identität</th><td>End-to-End DTLS; Ed25519 Geräteschlüssel; Jede Signalisierungsnachricht wird signiert</td></tr>
+            <tr><th scope="row">Paarung</th><td>6-stelliger Code, gültig für 5 Minuten, unter Verwendung eines Alphabets ohne Doppelgänger wie 0/O und 1/I; von Ihnen überprüfte Fingerabdrücke</td></tr>
+            <tr><th scope="row">Auto-Sync-Limit</th><td>Standardmäßig 50 MB, einstellbar von 1 MB bis 1 GB</td></tr>
+            <tr><th scope="row">Dateien senden</th><td>Auf ein Gerät, jede Größe, Dateien oder ganze Ordner; im lokalen Netzwerk über eine verschlüsselte TCP -Verbindung (beide Seiten benötigen 2.5.1), wobei auf WebRTC zurückgegriffen wird, wenn diese nicht verfügbar ist; WebRTC über das Internet und Relay; wird nach einer Verbindungsunterbrechung fortgesetzt; SHA-256 pro Datei. Gemessener Mac an Linux VM, 1 GB: 144,3 MB/s; Die tatsächliche Geschwindigkeit hängt vom Netzwerk und den Festplatten ab.</td></tr>
+            <tr><th scope="row">Kontakte</th><td>7-stelliger Kontaktcode, der mit F beginnt und über das lokale Netzwerk oder den Dienst ausgetauscht wird, mit optionaler Sicherheitscodeprüfung; Kontakte können sich gegenseitig nur Dateien und Bilder mit einer Notiz von bis zu 200 Zeichen senden, und jeder Stapel muss akzeptiert werden; Kontakte sehen nie Ihre Zwischenablage, Ihren Verlauf oder Ihre Geräte; Empfangene Dateien verlieren das ausführbare Bit und werden auf einem Mac unter Quarantäne gestellt. beide Seiten benötigen 2.6 oder höher</td></tr>
+            <tr><th scope="row">Verlauf</th><td>Standardmäßig 3 Tage, einstellbar von 1 Stunde bis 30 Tagen; Abgelaufene Artikel werden automatisch entfernt</td></tr>
+            <tr><th scope="row">Gemessene Geschwindigkeit</th><td>Eine 20-MB-Datei wird in etwa 330 ms über eine direkte LAN-Verbindung übertragen, wobei die Prüfsummen übereinstimmen</td></tr>
+            <tr><th scope="row">Gebaut mit</th><td>Entscheiden Sie sich für den Hintergrunddienst und Server (reines Go, das Win32 auf Windows aufruft und das X11-Protokoll auf Linux spricht), Flutter für die App (eine Codebasis für alle drei Systeme), Protokollpuffer für Nachrichten</td></tr>
+            <tr><th scope="row">Lizenz</th><td><a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">GNU AGPL-3.0</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry ist Open Source unter der GNU AGPL-3.0.</p>
+      <nav aria-label="Fußzeile">
+        <a href="https://github.com/baiyuze/pasteferry/releases">Alle Veröffentlichungen</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Änderungsprotokoll</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Designhinweise (Chinesisch)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">Lizenz</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Melden Sie ein Problem</a>
+        <a href="../../de/privacy/">Privatsphäre</a>
+        <a href="../../de/feedback/">Diskussion & Feedback</a>
+      </nav>
+      <nav aria-label="Sprache">
+        <a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/how/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/how/" hreflang="de" lang="de" data-lang="de" aria-current="page">Deutsch</a>
+        <a href="../../fr/how/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/how/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

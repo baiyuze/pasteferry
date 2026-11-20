@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FAQ — PasteFerry</title>
+  <meta name="description" content="답을 찾을 수 없나요? 우리에게 알려주세요.">
+  <link rel="canonical" href="https://pasteferry.cc/ko/faq/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/faq/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/faq/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/faq/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/faq/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/faq/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/faq/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/faq/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/faq/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/faq/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="FAQ — PasteFerry">
+  <meta property="og:description" content="답을 찾을 수 없나요? 우리에게 알려주세요.">
+  <meta property="og:url" content="https://pasteferry.cc/ko/faq/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "이것이 범용 클립보드와 어떻게 다릅니까?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "범용 클립보드는 동일한 Apple ID에 있는 근처 Apple 장치 사이에서만 작동합니다. PasteFerry 는 계정에 신경 쓰지 않고 Mac, Windows 및 Linux, 집과 사무실 사이에서 작동합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "이것이 AirDrop와 어떻게 다른가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AirDrop 는 근처의 Apple 장치 사이에서만 작동합니다. PasteFerry의 파일 보내기는 네트워크를 통해 Mac, Windows 및 Linux간에도 작동합니다. AirDrop와 통신하지 않습니다. 양쪽 모두 PasteFerry가 필요합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "나만의 서버가 필요합니까?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "아니요. 동일한 네트워크에 설치하고 페어링하세요. 다른 네트워크에서 서비스를 켜세요. 자체 서버 또는 Tailscale를 사용할 수도 있습니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "집에는 공개 IP가 없습니다. 집과 사무실을 동기화할 수 있나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "예, 서비스를 활성화합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "내가 복사한 내용을 서버가 볼 수 있나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "아니요, 콘텐츠는 엔드투엔드 암호화됩니다. 개인정보 보호정책을 참조하세요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "릴레이는 얼마나 받나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "하루에 컴퓨터당 100MB; 직접 연결은 포함되지 않습니다. 소진되어도 direct는 계속 작동합니다. 제한 없이 는 자체 서버를 실행합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "두 컴퓨터 모두 동일한 네트워크에 있습니다. 왜 그들은 서로를 찾을 수 없습니까?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "일반적으로 서로 다른 서브넷에 있거나 방화벽이 이를 차단하고 있습니다. 페어링할 때 다른 서브넷에 있습니까?를 클릭합니다. 그리고 다른 주소를 입력하세요. 동일한 네트워크 가이드에서 자세한 내용을 확인하세요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "다른 사람의 컴퓨터로 파일을 보낼 수 있나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "그렇습니다. 2.6부터는 페어링이 필요 없이 연락처로 추가할 수 있습니다. 수락하면 전송이 시작됩니다. 연락처는 클립보드나 기록을 볼 수 없습니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "대용량 파일은 어떻습니까?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "복사할 때 최대 50MB가 전송됩니다. 필요할 때 더 큰 파일을 가져오거나 크기 제한이 없는 파일 보내기를 사용하세요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Windows? Linux? 아이폰?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Windows 10 및 11, x64 및 ARM64의 Linux . iPhone 및 iPad는 지원되지 않습니다. iOS 는 앱이 백그라운드에서 클립보드를 읽을 수 없도록 합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "시스템이 처음으로 경고하는 이유는 무엇입니까?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PasteFerry 는 아직 Apple에서 공증을 받지 않았거나 Windows 에 대해 코드 서명되지 않았습니다. Mac에서는 시스템 설정 → 개인 정보 보호 및 보안에서 어쨌든 열기를 클릭하세요. Windows에서 추가 정보 → 실행을 클릭합니다. 이 작업은 한 번만 수행합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "무료인가요? 우리 회사에서 사용할 수 있나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "네, 개인과 회사 모두 무료입니다. PasteFerry 는 GNU AGPL-3.0의 오픈 소스입니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "여러 업링크가 있는 사무실 네트워크에 직접 연결됩니까?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "그렇습니다. PasteFerry 는 모든 업링크를 시도합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "UU Remote가 실행되는 동안 .uuremote_ 파일이 계속 나타나는 이유는 무엇입니까?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "이전 버전의 버그였습니다. 최신으로 업데이트하세요."
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">콘텐츠로 건너뛰기</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ko/" aria-label="PasteFerry 홈"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="페이지">
+        <a class="mid" href="../../ko/features/">특징</a>
+        <a class="mid" href="../../ko/start/">빠른 시작</a>
+        <a class="wide" href="../../ko/start/#server">연결 방법</a>
+        <a href="../../ko/download/">다운로드</a>
+        <details class="menu">
+          <summary aria-label="더 많은 페이지" class="current"><span>더 보기</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../ko/features/">특징</a></li>
+            <li class="narrow"><a href="../../ko/start/">빠른 시작</a></li>
+            <li class="narrow"><a href="../../ko/start/#server">연결 방법</a></li>
+            <li><a href="../../ko/themes/">테마 가이드</a></li>
+            <li><a href="../../ko/how/">작동 원리</a></li>
+            <li><a href="../../ko/security/">보안</a></li>
+            <li><a href="./" aria-current="page">FAQ</a></li>
+            <li><a href="../../ko/feedback/">토론 및 피드백</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub의 별 PasteFerry"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="모양" title="모양"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>시스템 설정 따르기</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>라이트</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>다크</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="언어：한국어"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>한국어</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../faq/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/faq/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/faq/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/faq/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/faq/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/faq/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a></li>
+            <li><a href="../../de/faq/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/faq/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/faq/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../ko/">PasteFerry</a></p>
+        <h1 class="display">질문</h1>
+        <p class="lede">답을 찾을 수 없나요? 우리에게 알려주세요.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="faq">
+          <details>
+            <summary>이것이 범용 클립보드와 어떻게 다릅니까?</summary>
+            <div class="answer"><p>범용 클립보드는 동일한 Apple ID에 있는 근처 Apple 장치 사이에서만 작동합니다. PasteFerry 는 계정에 신경 쓰지 않고 Mac, Windows 및 Linux, 집과 사무실 사이에서 작동합니다.</p></div>
+          </details>
+          <details>
+            <summary>이것이 AirDrop와 어떻게 다른가요?</summary>
+            <div class="answer"><p>AirDrop 는 근처의 Apple 장치 사이에서만 작동합니다. PasteFerry의 파일 보내기는 네트워크를 통해 Mac, Windows 및 Linux간에도 작동합니다. AirDrop와 통신하지 않습니다. 양쪽 모두 PasteFerry가 필요합니다.</p></div>
+          </details>
+          <details>
+            <summary>나만의 서버가 필요합니까?</summary>
+            <div class="answer"><p>아니요. 동일한 네트워크에 설치하고 페어링하세요. 다른 네트워크에서 <a href="../../ko/official/">서비스</a>를 켜세요. <a href="../../ko/cloud/">자체 서버</a> 또는 <a href="../../ko/tailscale/">Tailscale</a>를 사용할 수도 있습니다.</p></div>
+          </details>
+          <details>
+            <summary>집에는 공개 IP가 없습니다. 집과 사무실을 동기화할 수 있나요?</summary>
+            <div class="answer"><p>예, <a href="../../ko/official/">서비스</a>를 활성화합니다.</p></div>
+          </details>
+          <details>
+            <summary>내가 복사한 내용을 서버가 볼 수 있나요?</summary>
+            <div class="answer"><p>아니요, 콘텐츠는 엔드투엔드 암호화됩니다. <a href="../../ko/privacy/">개인정보 보호정책</a>을 참조하세요.</p></div>
+          </details>
+          <details>
+            <summary>릴레이는 얼마나 받나요?</summary>
+            <div class="answer"><p>하루에 컴퓨터당 100MB; 직접 연결은 포함되지 않습니다. 소진되어도 direct는 계속 작동합니다. 제한 없이 <a href="../../ko/cloud/">는 자체 서버</a>를 실행합니다.</p></div>
+          </details>
+          <details>
+            <summary>두 컴퓨터 모두 동일한 네트워크에 있습니다. 왜 그들은 서로를 찾을 수 없습니까?</summary>
+            <div class="answer"><p>일반적으로 서로 다른 서브넷에 있거나 방화벽이 이를 차단하고 있습니다. 페어링할 때 다른 서브넷에 있습니까?를 클릭합니다. 그리고 다른 주소를 입력하세요. <a href="../../ko/lan/#faq">동일한 네트워크 가이드</a>에서 자세한 내용을 확인하세요.</p></div>
+          </details>
+          <details>
+            <summary>다른 사람의 컴퓨터로 파일을 보낼 수 있나요?</summary>
+            <div class="answer"><p>그렇습니다. 2.6부터는 페어링이 필요 없이 연락처로 추가할 수 있습니다. 수락하면 전송이 시작됩니다. 연락처는 클립보드나 기록을 볼 수 없습니다.</p></div>
+          </details>
+          <details>
+            <summary>대용량 파일은 어떻습니까?</summary>
+            <div class="answer"><p>복사할 때 최대 50MB가 전송됩니다. 필요할 때 더 큰 파일을 가져오거나 크기 제한이 없는 파일 보내기를 사용하세요.</p></div>
+          </details>
+          <details>
+            <summary>Windows? Linux? 아이폰?</summary>
+            <div class="answer"><p>Windows 10 및 11, x64 및 ARM64의 Linux . iPhone 및 iPad는 지원되지 않습니다. iOS 는 앱이 백그라운드에서 클립보드를 읽을 수 없도록 합니다.</p></div>
+          </details>
+          <details>
+            <summary>시스템이 처음으로 경고하는 이유는 무엇입니까?</summary>
+            <div class="answer"><p>PasteFerry 는 아직 Apple에서 공증을 받지 않았거나 Windows 에 대해 코드 서명되지 않았습니다. Mac에서는 시스템 설정 → 개인 정보 보호 및 보안에서 어쨌든 열기를 클릭하세요. Windows에서 추가 정보 → 실행을 클릭합니다. 이 작업은 한 번만 수행합니다.</p></div>
+          </details>
+          <details>
+            <summary>무료인가요? 우리 회사에서 사용할 수 있나요?</summary>
+            <div class="answer"><p>네, 개인과 회사 모두 무료입니다. PasteFerry 는 GNU AGPL-3.0의 오픈 소스입니다.</p></div>
+          </details>
+          <details>
+            <summary>여러 업링크가 있는 사무실 네트워크에 직접 연결됩니까?</summary>
+            <div class="answer"><p>그렇습니다. PasteFerry 는 모든 업링크를 시도합니다.</p></div>
+          </details>
+          <details>
+            <summary>UU Remote가 실행되는 동안 .uuremote_ 파일이 계속 나타나는 이유는 무엇입니까?</summary>
+            <div class="answer"><p>이전 버전의 버그였습니다. 최신으로 업데이트하세요.</p></div>
+          </details>
+        </div>
+        <p class="more"><a href="../../ko/feedback/">토론 및 피드백 →</a><a href="https://github.com/baiyuze/pasteferry/issues">문제 신고 →</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry 는 GNU AGPL-3.0의 오픈 소스입니다.</p>
+      <nav aria-label="바닥글">
+        <a href="https://github.com/baiyuze/pasteferry/releases">모든 릴리스</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">디자인 노트(중국어)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">라이센스</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">문제 신고</a>
+        <a href="../../ko/privacy/">개인 정보 보호</a>
+        <a href="../../ko/feedback/">토론 및 피드백</a>
+      </nav>
+      <nav aria-label="언어">
+        <a href="../../faq/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/faq/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/faq/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/faq/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/faq/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/faq/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a>
+        <a href="../../de/faq/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/faq/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/faq/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 /* PasteFerry 官网。由 tools/site/build.py 生成的页面共用这一份样式。
  *
- * 整页一种深色：石墨底，系统蓝只给按钮、链接、直连的线和「被复制的那张纸」。
+ * 浅色与深色跟随系统，系统蓝用于按钮、链接、直连的线和「被复制的那张纸」。
  * 区块之间靠留白分开。首屏演示与按需打开的宣传片展示复制过程。
  * 不加载网页字体：Mac 上是 SF Pro、苹方、冬青，Windows 上是 Segoe UI、微软雅黑、Meiryo。
  * 从手机宽度写起，宽屏再放开；标题与引言居中，正文、列表、表格左对齐。
@@ -21,6 +21,14 @@
   --blue: #3d8bea;
   --blue-hi: #6ea9f1;
   --blue-wash: rgba(61, 139, 234, 0.13);
+  --bar: rgba(20, 20, 22, 0.74);
+  --bar-rule: rgba(255, 255, 255, 0.06);
+  --pop-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+  --button-hover: #2f7ad6;
+  --device-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+  --key-bg: linear-gradient(#2e2e33, #232327);
+  --key-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 0 #111, 0 6px 16px rgba(0, 0, 0, 0.45);
+  --key-rule: #3a3a40;
 
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI",
     "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
@@ -35,12 +43,101 @@
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
 }
 
+/* 浅色。默认跟随系统；顶栏的外观菜单可以固定成浅色或深色（<html data-theme>，由 <head> 里的脚本设置）。
+ * 没有脚本时按系统设置。App 的界面截图在浅色下换成浅色截图（有的话），界面演示与终端保持深色。 */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ground: #ffffff;
+  --surface: #f5f5f7;
+  --surface-2: #ebebef;
+  --rule: #e4e4e9;
+  --rule-strong: #d1d1d6;
+  --ink: #1d1d1f;
+  --ink-2: #3a3a3c;
+  --dim: #6e6e73;
+  --faint: #a1a1a6;
+  --blue: #0a66d8;
+  --blue-hi: #0a62cf;
+  --blue-wash: rgba(10, 102, 216, 0.08);
+  --bar: rgba(255, 255, 255, 0.78);
+  --bar-rule: rgba(0, 0, 0, 0.08);
+  --pop-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+  --button-hover: #0b57b8;
+  --device-shadow: 0 40px 70px -42px rgba(0, 0, 0, 0.45);
+  --key-bg: linear-gradient(#ffffff, #f2f2f4);
+  --key-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.06), 0 1px 0 rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.08);
+  --key-rule: #d1d1d6;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --ground: #ffffff;
+    --surface: #f5f5f7;
+    --surface-2: #ebebef;
+    --rule: #e4e4e9;
+    --rule-strong: #d1d1d6;
+    --ink: #1d1d1f;
+    --ink-2: #3a3a3c;
+    --dim: #6e6e73;
+    --faint: #a1a1a6;
+    --blue: #0a66d8;
+    --blue-hi: #0a62cf;
+    --blue-wash: rgba(10, 102, 216, 0.08);
+    --bar: rgba(255, 255, 255, 0.78);
+    --bar-rule: rgba(0, 0, 0, 0.08);
+    --pop-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+    --button-hover: #0b57b8;
+    --device-shadow: 0 40px 70px -42px rgba(0, 0, 0, 0.45);
+    --key-bg: linear-gradient(#ffffff, #f2f2f4);
+    --key-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.06), 0 1px 0 rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.08);
+    --key-rule: #d1d1d6;
+  }
+}
+
+/* 一张截图的深色版与浅色版，只显示与当前外观相符的那一张 */
+.theme-light {
+  display: none !important;
+}
+
+:root[data-theme="light"] .theme-light {
+  display: block !important;
+}
+
+:root[data-theme="light"] .theme-dark {
+  display: none !important;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .theme-light {
+    display: block !important;
+  }
+
+  :root:not([data-theme]) .theme-dark {
+    display: none !important;
+  }
+}
+
 /* 日文用日文字形：冬青与 Meiryo 排在中文字体前面 */
 :lang(ja) {
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI",
     "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, "Noto Sans CJK JP", sans-serif;
   --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display",
     "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, "Noto Sans CJK JP", sans-serif;
+}
+
+/* 韩文标题按词换行，避免把一个动词拆成两行。 */
+:lang(ko) h1,
+:lang(ko) h2 {
+  word-break: keep-all;
+}
+
+/* 韩文用韩文字形 */
+:lang(ko) {
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI",
+    "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans CJK KR", sans-serif;
+  --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display",
+    "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans CJK KR", sans-serif;
 }
 
 /* 繁体用繁体字形：苹方的繁体版与微软正黑排在简体字体前面 */
@@ -150,8 +247,8 @@ caption.skip {
   z-index: 10;
   backdrop-filter: saturate(1.4) blur(16px);
   -webkit-backdrop-filter: saturate(1.4) blur(16px);
-  background: rgba(20, 20, 22, 0.74);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--bar);
+  border-bottom: 1px solid var(--bar-rule);
 }
 
 .bar .wrap {
@@ -198,17 +295,24 @@ caption.skip {
   text-decoration: none;
 }
 
-/* 窄屏只留快速开始、连接方式、下载与语言菜单；手机上连接方式也收起来（快速开始里就有），
-   最窄的手机上品牌只留图标。英文、日文的导航字数多，按它们算的宽度，不然会撑出横向滚动 */
+/* 窄屏将功能和快速开始收进「更多」，保留下载、外观和语言菜单。
+   最窄的手机上品牌只留图标，给较长的译文留出空间。 */
 @media (max-width: 46rem) {
   .bar nav .wide {
     display: none;
   }
 }
 
+.bar nav .mobile-only {
+  display: none;
+}
+
 @media (max-width: 30rem) {
   .bar nav .mid {
     display: none;
+  }
+  .bar nav .mobile-only {
+    display: block;
   }
 }
 
@@ -282,7 +386,7 @@ caption.skip {
   background: var(--surface-2);
   border: 1px solid var(--rule-strong);
   border-radius: 10px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--pop-shadow);
 }
 
 /* 每种语言用自己的字体显示，繁体不借简体的字形 */
@@ -306,6 +410,76 @@ caption.skip {
 
 /* 当前语言前面打勾 */
 .lang ul a[aria-current]::before {
+  content: "";
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  width: 0.3rem;
+  height: 0.6rem;
+  margin-top: -0.4rem;
+  border: solid currentColor;
+  border-width: 0 1.6px 1.6px 0;
+  transform: rotate(45deg);
+}
+
+/* 外观菜单：图标显示当前的选择；菜单项是按钮，选中的打勾。要脚本才能切换，没有脚本不显示 */
+:root:not(.js) .appearance {
+  display: none;
+}
+
+.appearance-now {
+  display: flex;
+  font-style: normal;
+}
+
+.appearance-now svg {
+  display: none;
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+:root:not([data-theme-pref]) .appearance-now svg:nth-child(1),
+:root[data-theme-pref="system"] .appearance-now svg:nth-child(1),
+:root[data-theme-pref="light"] .appearance-now svg:nth-child(2),
+:root[data-theme-pref="dark"] .appearance-now svg:nth-child(3) {
+  display: block;
+}
+
+.appearance ul {
+  min-width: 10rem;
+}
+
+.appearance ul button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.3rem 0.75rem 0.3rem 1.75rem;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  line-height: 1.6;
+  text-align: left;
+  cursor: pointer;
+}
+
+.appearance ul button svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+.appearance ul button:hover,
+.appearance ul button:focus-visible {
+  background: var(--blue);
+  color: #fff;
+  outline: none;
+}
+
+.appearance ul button[aria-pressed="true"]::before {
   content: "";
   position: absolute;
   left: 0.65rem;
@@ -437,18 +611,20 @@ code {
   justify-content: center;
   gap: 0.5rem;
   min-height: 3rem;
-  padding: 0 1.4rem;
+  padding: 0.65rem 1.4rem;
   border-radius: 999px;
   background: var(--blue);
   color: #fff;
   font-weight: 600;
   font-size: 1rem;
-  white-space: nowrap;
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
   transition: background-color 0.15s, box-shadow 0.15s, transform 0.15s;
 }
 
 .button:hover {
-  background: #2f7ad6;
+  background: var(--button-hover);
   text-decoration: none;
 }
 
@@ -533,7 +709,7 @@ code {
   aspect-ratio: 16 / 10.4;
   border-radius: clamp(8px, 1.2vw, 14px) clamp(8px, 1.2vw, 14px) 3px 3px;
   background: #0b0b0d;
-  box-shadow: inset 0 0 0 clamp(4px, 0.7vw, 8px) #2d2d32, 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0 0 0 clamp(4px, 0.7vw, 8px) #2d2d32, var(--device-shadow);
   overflow: hidden;
 }
 
@@ -721,7 +897,7 @@ kbd {
   pointer-events: none;
 }
 
-.arc path {
+.arc .direct {
   fill: none;
   stroke: var(--blue);
   stroke-width: 1.5;
@@ -753,6 +929,255 @@ kbd {
   color: var(--ink);
 }
 
+/* 可以点的演示：Mac 桌面上四样东西，点哪样就复制哪样；上面切换两台电脑在家里和公司，还是同一个 Wi‑Fi。
+ * 跨网络时先经服务器交换连接信息（灰色点线），再直连（蓝色弧线），整段往后推 --t0 */
+.demo {
+  margin: clamp(3rem, 7vw, 4.5rem) auto 0;
+  max-width: 62rem;
+}
+
+.demo .stage {
+  margin-top: clamp(8rem, 16vw, 12.5rem);
+}
+
+.stage {
+  --t0: 0s;
+}
+
+.stage[data-mode="wan"] {
+  --t0: 0.8s;
+}
+
+.demo-modes {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.demo-modes button {
+  padding: 0.4rem 1.05rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--dim);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.demo-modes button:hover {
+  color: var(--ink);
+}
+
+.demo-modes button[aria-checked="true"] {
+  background: var(--surface-2);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.demo-hint {
+  margin: 1.75rem 0 0;
+  font-size: 0.85rem;
+  color: var(--dim);
+  text-align: center;
+}
+
+.stage[data-mode="wan"] .lan,
+.stage[data-mode="lan"] .wan {
+  display: none;
+}
+
+.device {
+  position: relative;
+}
+
+.device figcaption .net {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--faint);
+}
+
+/* 网络：同一个 Wi‑Fi 时一个虚线框把两台都圈起来，跨网络时各圈各的 */
+.stage::before,
+.device::before {
+  content: "";
+  position: absolute;
+  border: 1px dashed var(--rule-strong);
+  border-radius: 22px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+
+.stage::before {
+  inset: -4.5rem -1.6rem -0.9rem;
+  transform: scale(0.97);
+}
+
+.device::before {
+  inset: -1.1rem -11% -0.5rem;
+  transform: scale(0.94);
+}
+
+.stage[data-mode="lan"]::before,
+.stage[data-mode="wan"] .device::before {
+  opacity: 1;
+  transform: none;
+}
+
+/* Mac 桌面上的四样东西 */
+.mac .files {
+  position: absolute;
+  inset: 13% 7% 20%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 5% 6%;
+  place-items: center;
+}
+
+.mac .files .file {
+  position: static;
+  transform: none;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #ececee;
+  font: inherit;
+  font-size: clamp(0.45rem, 0.95vw, 0.72rem);
+  cursor: pointer;
+}
+
+.mac .files .file .doc {
+  width: clamp(1.05rem, 2.7vw, 2.15rem);
+  transition: transform 0.2s var(--ease);
+}
+
+.mac .files .file:hover .doc {
+  transform: translateY(-2px);
+}
+
+.mac .files .file:hover .name {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.mac .files .file:focus-visible {
+  outline: 2px solid var(--blue-hi);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* 截图、一段文字、文件夹 */
+.file .doc.pic {
+  background:
+    radial-gradient(circle at 70% 30%, #ffd66b 0 9%, transparent 10%),
+    linear-gradient(150deg, transparent 58%, #4d8f5a 58%),
+    linear-gradient(#a9cdf6, #e6f0fb);
+  box-shadow: inset 0 0 0 2px #fff, 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.file .doc.pic .lines,
+.file .doc.folder .lines {
+  display: none;
+}
+
+.file .doc.note {
+  background: #fff3b0;
+}
+
+.file .doc.note .lines {
+  color: #8d7a2b;
+}
+
+.file .doc.folder {
+  aspect-ratio: 1.3;
+  border-radius: 9%;
+  background: linear-gradient(#69adf3, #4a93e6);
+}
+
+.file .doc.folder::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -11%;
+  width: 44%;
+  height: 18%;
+  border-radius: 30% 30% 0 0;
+  background: #69adf3;
+}
+
+/* 跨网络时的服务器：只交换连接信息 */
+.server {
+  position: absolute;
+  left: var(--px, 50%);
+  top: var(--py, 0);
+  transform: translate(-50%, -1rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--dim);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease);
+}
+
+.server svg {
+  width: 2rem;
+  height: 2rem;
+  padding: 0.3rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.stage[data-mode="wan"] .server {
+  opacity: 1;
+}
+
+.stage.play[data-mode="wan"] .server svg {
+  animation: ping 0.9s var(--ease) both;
+}
+
+.arc .sig {
+  fill: none;
+  stroke: var(--dim);
+  stroke-width: 1.3;
+  stroke-dasharray: 1 5;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.stage[data-mode="wan"] .arc .sig {
+  opacity: 0.55;
+}
+
+.stage.play[data-mode="wan"] .arc .sig {
+  animation: sig 0.9s linear both;
+}
+
+@keyframes ping {
+  25%, 65% { color: #fff; background: var(--blue); border-color: var(--blue); }
+}
+
+@keyframes sig {
+  0% { opacity: 0; stroke-dashoffset: 30; }
+  25% { opacity: 0.9; }
+  100% { opacity: 0.55; stroke-dashoffset: 0; }
+}
+
 /* 编排：一次复制、一次粘贴，约 3.6 秒 */
 .stage.play .mac kbd {
   animation: press 0.32s var(--ease) both;
@@ -762,32 +1187,32 @@ kbd {
   animation-delay: 0.12s;
 }
 
-.stage.play .mac .file .name {
+.stage.play .mac .file.sel .name {
   animation: select 3.6s both;
 }
 
 .stage.play .sheet-fly {
-  animation: fly 1.5s var(--ease) 0.55s both;
+  animation: fly 1.5s var(--ease) calc(var(--t0) + 0.55s) both;
 }
 
-.stage.play .arc path {
-  animation: arc 3.6s both;
+.stage.play .arc .direct {
+  animation: arc 3.6s var(--t0) both;
 }
 
 .stage.play .arc-label {
-  animation: label 3.6s both;
+  animation: label 3.6s var(--t0) both;
 }
 
 .stage.play .win kbd {
-  animation: press 0.32s var(--ease) 2.1s both;
+  animation: press 0.32s var(--ease) calc(var(--t0) + 2.1s) both;
 }
 
 .stage.play .win kbd:nth-child(2) {
-  animation-delay: 2.22s;
+  animation-delay: calc(var(--t0) + 2.22s);
 }
 
 .stage.play .win .file {
-  animation: land 0.6s var(--ease) 2.45s both;
+  animation: land 0.6s var(--ease) calc(var(--t0) + 2.45s) both;
 }
 
 @keyframes press {
@@ -2188,7 +2613,7 @@ td {
 
 .path:hover {
   text-decoration: none;
-  background: #202024;
+  background: var(--surface-2);
   box-shadow: inset 0 0 0 1px var(--rule-strong);
 }
 
@@ -2357,7 +2782,7 @@ td {
 .listing th,
 .listing td {
   padding: 0.7rem 1rem;
-  border-bottom-color: #222226;
+  border-bottom-color: var(--rule);
 }
 
 .listing tbody tr:last-child td {
@@ -2635,7 +3060,7 @@ td {
   background: var(--surface-2);
   border: 1px solid var(--rule-strong);
   border-radius: 10px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--pop-shadow);
 }
 
 .bar nav .menu ul a {
@@ -2771,9 +3196,9 @@ kbd {
   height: 3.4rem;
   padding: 0 0.9rem;
   border-radius: 12px;
-  background: linear-gradient(#2e2e33, #232327);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 0 #111, 0 6px 16px rgba(0, 0, 0, 0.45);
-  border: 1px solid #3a3a40;
+  background: var(--key-bg);
+  box-shadow: var(--key-shadow);
+  border: 1px solid var(--key-rule);
   color: var(--ink);
   font-size: 1.35rem;
   font-weight: 500;

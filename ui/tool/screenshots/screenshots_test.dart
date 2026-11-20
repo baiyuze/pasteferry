@@ -41,6 +41,14 @@ import 'package:flutter_test/flutter_test.dart';
 /// 截图的界面语言：zh、zh-tw、zh-hk、en 或 ja，由 render.sh 设置。演示数据里的文件名、文字也跟着换。
 final _lang = Platform.environment['SCREENSHOT_LANG'] ?? 'zh';
 final _locale = switch (_lang) { 'zh-tw' => zhHantTW, 'zh-hk' => zhHantHK, _ => Locale(_lang) };
+/// SCREENSHOT_LIGHT_PASS=1：把只拍了深色的截图（名字以 -dark 结尾）改用浅色拍一张，名字去掉 -dark。
+/// 官网在浅色外观下显示它们，由 tools/screenshots/render-light.sh 用 --name 挑出要补的几张来跑
+final _lightPass = Platform.environment['SCREENSHOT_LIGHT_PASS'] == '1';
+
+/// 浅色补拍时：-dark 的截图换成浅色、去掉 -dark；其余截图照原样
+(String, Brightness) _variant(String name, Brightness brightness) =>
+    _lightPass && name.endsWith('-dark') ? (name.substring(0, name.length - 5), Brightness.light) : (name, brightness);
+
 String _t(String zh, String en, String ja, {required String tw, required String hk}) =>
     switch (_lang) { 'en' => en, 'ja' => ja, 'zh-tw' => tw, 'zh-hk' => hk, _ => zh };
 
@@ -460,6 +468,7 @@ Future<void> _shoot(
   bool settle = true,
   Size window = const Size(960, 640),
 }) async {
+  (name, brightness) = _variant(name, brightness);
   // 默认 960×640 的窗口，按 Retina 2 倍渲染
   tester.view.physicalSize = window * 2;
   tester.view.devicePixelRatio = 2;
@@ -1062,11 +1071,13 @@ List<ClipRecord> _pickerRecords() => [
     ];
 
 Future<void> _shootPicker(WidgetTester tester, String name, {String query = ''}) async {
+  final Brightness brightness;
+  (name, brightness) = _variant(name, Brightness.dark);
   // 窗口 560×460，四周留出阴影的位置
   const pad = 40.0;
   tester.view.physicalSize = const Size((560 + pad * 2) * 2, (460 + pad * 2) * 2);
   tester.view.devicePixelRatio = 2;
-  tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
+  tester.platformDispatcher.platformBrightnessTestValue = brightness;
   addTearDown(tester.view.reset);
   addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(_pickerChannel, (c) async {
@@ -1084,7 +1095,7 @@ Future<void> _shootPicker(WidgetTester tester, String name, {String query = ''})
         records: _pickerRecords(),
         favorites: _favorites(),
       );
-    final theme = _theme(Brightness.dark).copyWith(
+    final theme = _theme(brightness).copyWith(
       scaffoldBackgroundColor: Colors.transparent,
       canvasColor: Colors.transparent,
     );

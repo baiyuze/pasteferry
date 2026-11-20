@@ -115,7 +115,18 @@ C = {
                  "between a Mac and a Windows PC.",
     "compare_caption": "PasteFerry compared with other options",
     "compare_cols": ["PasteFerry", "Universal Clipboard", "AirDrop", "Chat apps"],
+    # 首页的对比表。宣传片（tour/）里的对比沿用旧的一份（tour_compare_rows），两边各改各的
     "compare_rows": [
+        ("No account needed", [("yes", "Yes"), ("no", "Same Apple ID"), ("partial", "Apple devices only"), ("no", "Sign-in needed")]),
+        ("Between Mac, Windows, Linux and Android", [("yes", "Yes"), ("no", "No"), ("no", "No"), ("yes", "Yes")]),
+        ("Between home and the office", [("yes", "Yes"), ("no", "No"), ("no", "No"), ("yes", "Yes")]),
+        ("On a local network with no internet", [("yes", "Yes"), ("partial", "Nearby only"), ("yes", "Yes"), ("no", "No")]),
+        ("Paste right after copying, nothing to accept", [("yes", "Yes"), ("yes", "Yes"), ("no", "No"), ("no", "No")]),
+        ("Files and whole folders, any size", [("yes", "Yes"), ("partial", "Unreliable"), ("yes", "Yes"), ("partial", "Zip first, size limits")]),
+        ("Find something you copied earlier", [("yes", "Yes"), ("no", "No"), ("no", "No"), ("partial", "Scroll back")]),
+        ("Only your devices can decrypt", [("yes", "Yes"), ("yes", "Yes"), ("yes", "Yes"), ("some", "Depends on the app")]),
+    ],
+    "tour_compare_rows": [
         ("Different Apple IDs", [("yes", "Yes"), ("no", "No"), ("partial", "Needs accepting"), ("yes", "Yes")]),
         ("Between Mac, Windows and Linux", [("yes", "Yes"), ("no", "No"), ("no", "No"), ("yes", "Yes")]),
         ("Between home and the office", [("yes", "Yes"), ("no", "No"), ("no", "No"), ("yes", "Yes")]),

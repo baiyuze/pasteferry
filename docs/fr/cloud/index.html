@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exécutez le serveur PasteFerry sur un serveur public : guide des VM cloud</title>
+  <meta name="description" content="Un script installe le serveur de signalisation et TURN de PasteFerry sur une VM Linux avec une adresse IP publique. Chaque ordinateur s&#x27;y connecte directement, de sorte que le presse-papiers se synchronise à la maison, au bureau et partout ailleurs. Couvre le groupe de sécurité, la vérification, la configuration des applications et les domaines en Chine continentale.">
+  <link rel="canonical" href="https://pasteferry.cc/fr/cloud/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/cloud/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/cloud/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/cloud/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/cloud/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/cloud/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/cloud/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/cloud/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/cloud/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/cloud/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Exécutez le serveur PasteFerry sur un serveur public : guide des VM cloud">
+  <meta property="og:description" content="Un script installe le serveur de signalisation et TURN de PasteFerry sur une VM Linux avec une adresse IP publique. Chaque ordinateur s&#x27;y connecte directement, de sorte que le presse-papiers se synchronise à la maison, au bureau et partout ailleurs. Couvre le groupe de sécurité, la vérification, la configuration des applications et les domaines en Chine continentale.">
+  <meta property="og:url" content="https://pasteferry.cc/fr/cloud/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-fr.png">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Passer au contenu</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../fr/" aria-label="Accueil PasteFerry"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Pages">
+        <a class="mid" href="../../fr/features/">Caractéristiques</a>
+        <a class="mid" href="../../fr/start/">Démarrage rapide</a>
+        <a class="wide" href="../../fr/start/#server" aria-current="true">Façons de se connecter</a>
+        <a href="../../fr/download/">Réception</a>
+        <details class="menu">
+          <summary aria-label="Plus de pages"><span>Plus</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../fr/features/">Caractéristiques</a></li>
+            <li class="narrow"><a href="../../fr/start/">Démarrage rapide</a></li>
+            <li class="narrow"><a href="../../fr/start/#server">Façons de se connecter</a></li>
+            <li><a href="../../fr/themes/">Guide des thèmes</a></li>
+            <li><a href="../../fr/how/">Comment ça marche</a></li>
+            <li><a href="../../fr/security/">Sécurité</a></li>
+            <li><a href="../../fr/faq/">FAQ</a></li>
+            <li><a href="../../fr/feedback/">Discussions et commentaires</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Journal des modifications</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Étoile PasteFerry sur GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Apparence" title="Apparence"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Suivre le système</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Clair</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Sombre</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Langue：Français"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>Français</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../cloud/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/cloud/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/cloud/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/cloud/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/cloud/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/cloud/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/cloud/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/cloud/" hreflang="fr" lang="fr" data-lang="fr" aria-current="page">Français</a></li>
+            <li><a href="../../es/cloud/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../fr/">PasteFerry</a> / <a href="../../fr/start/#server">Façons de se connecter</a></p>
+        <h1 class="display">Exécutez-le sur un serveur public</h1>
+        <p class="lede">Une VM Linux avec une IP publique ; le plus petit suffit. Chaque ordinateur s'y connecte directement et se synchronise à la maison, au bureau ou ailleurs, sans rien de plus à installer.</p>
+        <ol class="guide-toc">
+          <li><a href="#prepare">Avant de commencer</a></li>
+          <li><a href="#ports">Ports ouverts</a></li>
+          <li><a href="#install">Installer</a></li>
+          <li><a href="#check">Vérifier</a></li>
+          <li><a href="#clients">Configurer les applications</a></li>
+          <li><a href="#faq">Questions</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="overview" aria-labelledby="overview-title">
+      <div class="wrap">
+        <h2 id="overview-title">Chaque ordinateur s'y connecte</h2>
+        <p class="intro">Le serveur est sur Internet public, donc chaque ordinateur peut y accéder depuis n'importe quel réseau sur lequel il se trouve. Ce que vous copiez va directement entre les deux ordinateurs lorsque cela est possible ; lorsque cela échoue, il est relayé via le serveur, toujours crypté.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 460" role="img" aria-labelledby="cloud-title cloud-desc">
+            <title id="cloud-title">PasteFerry avec un serveur public</title>
+            <desc id="cloud-desc">Le serveur public se trouve à 203.0.113.10. Un Mac sur un réseau de bureau et un PC Windows sur un réseau domestique s'y connectent tous deux pour la signalisation ; le contenu copié passe directement entre eux et passe par le relais du serveur en cas d'échec.</desc>
+            <rect class="d-box" x="340" y="24" width="280" height="118" rx="14"/>
+            <text class="d-title" x="480" y="62" text-anchor="middle">Serveur public</text>
+            <text class="d-sub" x="480" y="90" text-anchor="middle">VM cloud avec une adresse IP publique</text>
+            <text class="d-ip" x="480" y="124" text-anchor="middle">203.0.113.10</text>
+            <rect class="d-lan" x="8" y="196" width="412" height="212" rx="22"/>
+            <text class="d-lan-label" x="32" y="228">Réseau de bureau</text>
+            <rect class="d-lan" x="540" y="196" width="412" height="212" rx="22"/>
+            <text class="d-lan-label" x="564" y="228">Réseau domestique</text>
+            <path class="d-sig" d="M150 250V68H340"/>
+            <path class="d-sig" d="M810 250V68H620"/>
+            <path class="d-relay" d="M210 250V112H340"/>
+            <path class="d-relay" d="M750 250V112H620"/>
+            <text class="d-note" x="164" y="58">Signalisation, TCP 8787</text>
+            <text class="d-note" x="224" y="170">Relais sur UDP, en cas d'échec direct</text>
+            <rect class="d-box" x="60" y="250" width="240" height="120" rx="14"/>
+            <text class="d-title" x="180" y="302" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="180" y="330" text-anchor="middle">Exécution de PasteFerry</text>
+            <rect class="d-box" x="660" y="250" width="240" height="120" rx="14"/>
+            <text class="d-title" x="780" y="302" text-anchor="middle">Windows</text>
+            <text class="d-sub" x="780" y="330" text-anchor="middle">Exécution de PasteFerry</text>
+            <path class="d-direct" d="M300 316H660"/>
+            <text class="d-label" x="480" y="302" text-anchor="middle">Direct</text>
+            <g class="d-legend" transform="translate(40 444)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">Données (directes)</text>
+              <path class="d-relay" d="M250 0H278"/><text x="288" y="5">Données (relais, secours)</text>
+              <path class="d-sig" d="M560 0H588"/><text x="598" y="5">Signalisation</text>
+            </g>
+          </svg>
+        </figure>
+        <ul class="points ports">
+          <li>Signalisation<strong>, TCP 8787.</strong> Chaque ordinateur y reste connecté pour trouver les autres, s'associer et échanger les détails de connexion.</li>
+          <li><strong>Direct.</strong> Les ordinateurs sur différents réseaux se connectent directement via la perforation NAT, qui fonctionne sur la plupart des réseaux domestiques et professionnels.</li>
+          <li>Relais<strong>, UDP 3478 et ports relais.</strong> Lorsqu'un chemin direct échoue, le serveur transmet le trafic, toujours chiffré et limité par sa bande passante.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="prepare" aria-labelledby="prepare-title">
+      <div class="wrap">
+        <h2 id="prepare-title">Avant de commencer</h2>
+        <dl class="fallbacks">
+          <div><dt>Une VM cloud</dt><dd>Linux sur x86_64 ou ARM64; la plus petite taille suffit, car le serveur utilise environ 15 Mo de RAM. Vous avez besoin de root.</dd></div>
+          <div><dt>Une IP publique</dt><dd>La propre adresse IP publique de la VM fonctionne ; un statique (élastique) est le meilleur. Si cela change, chaque ordinateur doit être mis à jour.</dd></div>
+          <div><dt>Un moyen d'entrer</dt><dd>ssh, ou le terminal Web dans la console de votre fournisseur.</dd></div>
+          <div><dt>Machines virtuelles en Chine continentale</dt><dd>Sans dépôt ICP pour le domaine, entrez l'adresse IP dans les applications, pas le domaine ; voir les questions <a href="#faq"></a>.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="ports" aria-labelledby="ports-title">
+      <div class="wrap">
+        <p class="eyebrow">Étape 1</p>
+        <h2 id="ports-title">Ouvrez les ports dans le groupe de sécurité</h2>
+        <p class="intro">Dans la console de votre fournisseur cloud, ajoutez ces trois règles entrantes au groupe de sécurité de la VM.</p>
+        <div class="os-grid qs-grid">
+          <div class="os-figures">
+            <figure class="browser listing" role="img" aria-label="Règles entrantes dans un groupe de sécurité cloud (illustration) : TCP 8787 pour la signalisation, UDP 3478 pour STUN et TURN, UDP 32768-60999 pour les ports relais, toutes à partir de 0.0.0.0/0">
+              <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">Cloud Console > Groupe de sécurité > Règles entrantes</span></div>
+              <table>
+                <thead><tr><th scope="col">Protocole</th><th scope="col">Plage de ports</th><th scope="col">Source</th><th scope="col">Objectif</th></tr></thead>
+                <tbody>
+                <tr><td>TCP</td><td>8787</td><td>0.0.0.0/0</td><td>Signalisation</td></tr>
+                <tr><td>UDP</td><td>3478</td><td>0.0.0.0/0</td><td>STUN et TOUR</td></tr>
+                <tr><td>UDP</td><td>32768-60999</td><td>0.0.0.0/0</td><td>Ports relais</td></tr>
+                </tbody>
+              </table>
+            </figure>
+          </div>
+          <ul class="points">
+            <li><strong>Différents noms :</strong> certains fournisseurs l'appellent un pare-feu ou une ACL réseau ; c'est le même réglage.</li>
+            <li><strong>Les ports relais</strong> sont attribués par le système d'exploitation ; la plage dépend du serveur. Exécutez <code>cat /proc/sys/net/ipv4/ip_local_port_range</code> pour le voir ; le script d'installation l'imprime également.</li>
+            <li><strong>Pare-feu système :</strong> si ufw ou firewalld est actif, ouvrez-y les mêmes ports ; le script d'installation imprime les commandes.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install" aria-labelledby="install-title">
+      <div class="wrap">
+        <p class="eyebrow">Étape 2</p>
+        <h2 id="install-title">Exécutez le script d'installation</h2>
+        <p class="intro">Donnez au script l'adresse IP publique. Il installe le serveur, enregistre un service systemd qui démarre au démarrage et imprime l'adresse à saisir dans les applications.</p>
+        <div class="os-grid qs-grid">
+          <div class="os-steps">
+            <ol class="steps">
+              <li>Connectez-vous avec ssh, par exemple <code>ssh root@203.0.113.10</code> avec votre IP publique.</li>
+              <li>Exécutez ces lignes, avec votre IP publique sur la dernière :<span class="aside">Sur ARM, remplacez <code>amd64</code> par <code>arm64</code>.</span>
+                <div class="code">
+                  <button class="copy" type="button" data-done="Copié">Copier</button>
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-linux-amd64.tar.gz
+tar xzf pasteferry-server-linux-amd64.tar.gz
+cd pasteferry-server-linux-amd64
+sudo ./install.sh 203.0.113.10</code></pre>
+                </div></li>
+              <li>L'adresse <code>ws://203.0.113.10:8787/signal</code> à la fin est celle que vous saisissez dans les applications.</li>
+            </ol>
+            <ul class="points">
+              <li><strong>Enregistre un service systemd</strong> qui démarre au démarrage ; la configuration est <code>/etc/pasteferry/server.env</code>.</li>
+              <li>Mise à niveau<strong>:</strong> téléchargez la nouvelle version, extrayez-la et exécutez à nouveau <code>sudo ./install.sh</code> ; votre config est conservée.</li>
+              <li><strong>Docker fonctionne également :</strong> consultez le guide de déploiement du serveur <a href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md"></a>.</li>
+            </ul>
+          </div>
+          <div class="os-figures">
+            <figure class="term" role="img" aria-label="Sortie de sudo ./install.sh 203.0.113.10 : il installe, écrit l&#x27;unité systemd et la configuration et démarre le serveur, puis imprime l&#x27;adresse ws://203.0.113.10:8787/signal">
+                <div class="t-bar mac"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="t-title">ssh root@203.0.113.10</span></div>
+<pre class="t-body"><span class="t-prompt">$</span> sudo ./install.sh 203.0.113.10
+<span class="t-step">▶ Installing the binary to /usr/local/bin</span>
+<span class="t-step">▶ Writing the systemd unit</span>
+<span class="t-step">▶ Writing /etc/pasteferry/server.env (relay address 203.0.113.10)</span>
+<span class="t-step">▶ Starting</span>
+  ✓ Running
+
+Installed: pasteferry-server 2.13.1
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
+
+    <span class="t-url">ws://203.0.113.10:8787/signal</span>
+
+  Config     /etc/pasteferry/server.env
+  Logs       journalctl -u pasteferry-server -f
+  Restart    systemctl restart pasteferry-server
+  Uninstall  sudo ./install.sh uninstall
+
+Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768-60999 (relay ports, assigned by the OS)</pre>
+              </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="check" aria-labelledby="check-title">
+      <div class="wrap">
+        <p class="eyebrow">Étape 3</p>
+        <h2 id="check-title">Vérifiez qu'il est accessible</h2>
+        <p class="intro">Ouvrez <code>http://203.0.113.10:8787/healthz</code> (avec votre adresse IP publique) dans un navigateur sur n'importe quel ordinateur. Si vous voyez cette ligne, cela fonctionne.</p>
+        <figure class="browser" role="img" aria-label="Un navigateur affichant http://203.0.113.10:8787/healthz, avec le statut du serveur ok et sa version">
+          <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">http://203.0.113.10:8787/healthz</span></div>
+          <pre class="b-body">{"status":"ok","version":"2.13.1"}</pre>
+        </figure>
+        <p class="note">S'il ne se charge pas, consultez les questions <a href="#faq"></a> ci-dessous.</p>
+      </div>
+    </section>
+
+    <section class="section" id="clients" aria-labelledby="clients-title">
+      <div class="wrap">
+        <p class="eyebrow">Étape 4</p>
+        <h2 id="clients-title">Entrez l'adresse sur chaque ordinateur</h2>
+        <ol class="flow">
+          <li><h3>Ouvrir les paramètres</h3><p>Ouvrez PasteFerry sur chaque ordinateur et accédez à Paramètres → Connexion.</p></li>
+          <li><h3>Entrez l'adresse publique</h3><p>Sous Serveur personnalisé, saisissez <code>ws://203.0.113.10:8787/signal</code> avec votre adresse IP publique et appuyez sur Retour ou Entrée.</p></li>
+          <li><h3>Vérifier l'état</h3><p>Lorsque Connection affiche un vert Connecté, vous êtes prêt. Si vous n'avez pas encore effectué l'association, effectuez l'association sous Appareils.</p></li>
+        </ol>
+        <figure class="shot">
+          <img class="theme-dark" src="../../assets/screenshots/en/settings-cloud-dark.png?v=bad7315042" width="2112" height="1472" alt="Paramètres PasteFerry → Connexion : Le serveur personnalisé est ws://203.0.113.10:8787/signal et l&#x27;état de la connexion indique Connecté" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/settings-cloud.png?v=71c342588d" width="2112" height="1472" alt="Paramètres PasteFerry → Connexion : Le serveur personnalisé est ws://203.0.113.10:8787/signal et l&#x27;état de la connexion indique Connecté" loading="lazy">
+        </figure>
+        <p class="note">Vous n'avez pas encore installé l'application ? Voir le démarrage rapide <a href="../../fr/start/"></a>.</p>
+        <div class="table-scroll">
+                <table class="manage">
+                  <caption>Pour plus tard</caption>
+                  <tbody>
+                  <tr><th scope="row">Statut</th><td><code>systemctl status pasteferry-server</code></td></tr>
+                  <tr><th scope="row">Journaux</th><td><code>journalctl -u pasteferry-server -f</code></td></tr>
+                  <tr><th scope="row">Redémarrer</th><td><code>sudo systemctl restart pasteferry-server</code></td></tr>
+                  <tr><th scope="row">Configuration</th><td><code>/etc/pasteferry/server.env</code>; redémarrer le service après l'édition</td></tr>
+                  <tr><th scope="row">Mise à niveau</th><td>Téléchargez la nouvelle version, extrayez-la et exécutez à nouveau <code>sudo ./install.sh</code> ; ta config est conservée</td></tr>
+                  <tr><th scope="row">Désinstaller</th><td><code>sudo ./install.sh uninstall</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <h2 id="faq-title">Questions</h2>
+        <div class="faq">
+          <details>
+            <summary>Cela fonctionne par IP mais pas par domaine</summary>
+            <div class="answer"><p>Les fournisseurs de cloud en Chine continentale interceptent les requêtes simples HTTP pour des domaines sans dépôt ICP et répondent par une redirection vers une page de blocage ; dans nos tests qui incluaient des ports non standard tels que 8787. La poignée de main WebSocket est également une requête HTTP , elle est donc interceptée et l'application affiche Non connecté.</p><p>Saisissez plutôt l'adresse IP du serveur, comme dans <code>ws://server-ip:8787/signal</code>, ou enregistrez le domaine.</p></div>
+          </details>
+          <details>
+            <summary>De quelle taille de serveur ai-je besoin ?</summary>
+            <div class="answer"><p>Le plus petit. Le serveur utilise environ 15 Mo de RAM et ne transmet normalement que quelques messages de signalisation. Le contenu passe directement entre les ordinateurs lorsque cela est possible ; seuls les transferts relayés sont limités par la bande passante du serveur.</p></div>
+          </details>
+          <details>
+            <summary>Les appareils affichent Relay au lieu de Direct</summary>
+            <div class="answer"><p>Relayer juste après la connexion, puis Direct un peu plus tard, c'est normal : le relais vous lance et le chemin direct prend le relais au repos. Rester sur Relay signifie que les deux ordinateurs ne peuvent pas se joindre directement, généralement à cause d'un NAT qui randomise les ports ou d'un pare-feu strict. C'est toujours crypté, juste limité par la bande passante du serveur.</p></div>
+          </details>
+          <details>
+            <summary>Puis-je utiliser HTTPS (wss://) ?</summary>
+            <div class="answer"><p>Oui, derrière un proxy inverse HTTPS prenant en charge les mises à niveau WebSocket ; saisissez une adresse commençant par <code>wss://</code>. Les domaines en Chine continentale nécessitent un dépôt ICP. STUN et TURN utilisent UDP et contournent le proxy, alors gardez ces ports ouverts.</p></div>
+          </details>
+          <details>
+            <summary>Ma connexion domestique a une IP publique. Puis-je utiliser ça ?</summary>
+            <div class="answer"><p>Oui, mais c'est plus de travail qu'une VM : transférez TCP 8787, UDP 3478 et une large gamme de ports relais UDP vers cet ordinateur, et une adresse IP domestique peut changer. Si tous vos ordinateurs sont à la maison, ils n'ont besoin d'aucun serveur sur le même réseau <a href="../../fr/lan/"></a>; pour synchroniser sur les réseaux sans redirection de port, voir <a href="../../fr/tailscale/">Tailscale</a>.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">Une VM cloud,<br>, synchronisée depuis n'importe où.</h2>
+        <div class="cta">
+          <a class="button" href="../../fr/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Télécharger PasteFerry</a>
+        </div>
+        <p class="note">Version 2.13.1, gratuite et open source. Pour macOS 13 ou version ultérieure, Windows 10 et 11, Linux (x64 et ARM64) et Android 9 ou version ultérieure. Le nouveau réglage de taille agrandit ou réduit le texte, les icônes et les espacements ensemble.</p>
+        <a class="source" href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md">Guide complet du serveur, comprenant Docker et toutes les options</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry est open source sous GNU AGPL-3.0.</p>
+      <nav aria-label="Pied de page">
+        <a href="https://github.com/baiyuze/pasteferry/releases">Toutes les versions</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Journal des modifications</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Notes de conception (chinois)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">Licence</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Signaler un problème</a>
+        <a href="../../fr/privacy/">Confidentialité</a>
+        <a href="../../fr/feedback/">Discussions et commentaires</a>
+      </nav>
+      <nav aria-label="Langue">
+        <a href="../../cloud/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/cloud/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/cloud/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/cloud/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/cloud/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/cloud/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/cloud/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/cloud/" hreflang="fr" lang="fr" data-lang="fr" aria-current="page">Français</a>
+        <a href="../../es/cloud/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

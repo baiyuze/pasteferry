@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ejecute un servidor PasteFerry en su LAN: Windows, Mac y Linux</title>
+  <meta name="description" content="Cuando sus computadoras comparten una red, no necesita un servidor en la nube. Ejecute el servidor TURN y de señalización de PasteFerry en cualquier máquina Windows, Mac o Linux siempre activa con un script; comienza en el arranque. Incluye configuración de aplicaciones y solución de problemas.">
+  <link rel="canonical" href="https://pasteferry.cc/es/server/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/server/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/server/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/server/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/server/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/server/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/server/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/server/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/server/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/server/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Ejecute un servidor PasteFerry en su LAN: Windows, Mac y Linux">
+  <meta property="og:description" content="Cuando sus computadoras comparten una red, no necesita un servidor en la nube. Ejecute el servidor TURN y de señalización de PasteFerry en cualquier máquina Windows, Mac o Linux siempre activa con un script; comienza en el arranque. Incluye configuración de aplicaciones y solución de problemas.">
+  <meta property="og:url" content="https://pasteferry.cc/es/server/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-es.png">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../es/" aria-label="PasteFerry casa"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Página">
+        <a class="mid" href="../../es/features/">Características</a>
+        <a class="mid" href="../../es/start/">Inicio rápido</a>
+        <a class="wide" href="../../es/start/#server" aria-current="true">Formas de conectarse</a>
+        <a href="../../es/download/">Descarga</a>
+        <details class="menu">
+          <summary aria-label="Más páginas"><span>Más</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../es/features/">Características</a></li>
+            <li class="narrow"><a href="../../es/start/">Inicio rápido</a></li>
+            <li class="narrow"><a href="../../es/start/#server">Formas de conectarse</a></li>
+            <li><a href="../../es/themes/">guía de temas</a></li>
+            <li><a href="../../es/how/">como funciona</a></li>
+            <li><a href="../../es/security/">Seguridad</a></li>
+            <li><a href="../../es/faq/">Preguntas frecuentes</a></li>
+            <li><a href="../../es/feedback/">Discusión y comentarios</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Registro de cambios</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Estrella PasteFerry en GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Apariencia" title="Apariencia"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Seguir el sistema</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Claro</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Oscuro</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Idioma：Español"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>Español</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../server/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/server/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/server/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/server/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/server/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/server/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/server/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/server/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/server/" hreflang="es" lang="es" data-lang="es" aria-current="page">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../es/">PasteFerry</a> / <a href="../../es/start/#server">Formas de conectarse</a></p>
+        <h1 class="display">Ejecute el servidor en su LAN</h1>
+        <p class="lede">Si sus computadoras están en la misma red doméstica o de oficina, no necesita un servidor en la nube. Elija una computadora que permanezca encendida, descargue y ejecute un script, luego ingrese la dirección que imprime en PasteFerry en cada computadora.</p>
+        <p class="notice"><strong>En la misma red ya no necesitas un servidor:</strong> instala la aplicación y vincula; consulte la misma guía de red <a href="../../es/lan/"></a>. Esta guía sigue siendo útil cuando dos subredes no pueden comunicarse entre sí y el tráfico tiene que pasar a través de una computadora a la que ambas puedan llegar.</p>
+        <ol class="guide-toc">
+          <li><a href="#prepare">Antes de empezar</a></li>
+          <li><a href="#install">Instalar</a></li>
+          <li><a href="#check">comprobar</a></li>
+          <li><a href="#clients">Configurar las aplicaciones</a></li>
+          <li><a href="#faq">Preguntas</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="overview" aria-labelledby="overview-title">
+      <div class="wrap">
+        <h2 id="overview-title">El servidor sólo introduce dispositivos</h2>
+        <p class="intro">Cada computadora permanece conectada al servidor, que es la forma en que se encuentran e intercambian detalles de conexión. Una vez conectado, lo que copias va directamente entre las dos computadoras. Sólo cuando eso falla pasa a través del servidor, aún encriptado.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 440" role="img" aria-labelledby="lan-title lan-desc">
+            <title id="lan-title">PasteFerry en una LAN</title>
+            <desc id="lan-desc">En una LAN, una Mac y una PC Windows se conectan al servidor en 192.168.1.20 para señalización. El contenido copiado viaja directamente entre las dos computadoras y a través del relé TURN del servidor solo si falla la conexión directa.</desc>
+            <rect class="d-lan" x="8" y="8" width="944" height="384" rx="22"/>
+            <text class="d-lan-label" x="32" y="42">Tu LAN: la misma red Wi‑Fi o cableada</text>
+            <rect class="d-box" x="340" y="64" width="280" height="104" rx="14"/>
+            <text class="d-title" x="480" y="106" text-anchor="middle">Servidor</text>
+            <text class="d-ip" x="480" y="138" text-anchor="middle">192.168.1.20</text>
+            <path class="d-sig" d="M150 250V96H340"/>
+            <path class="d-sig" d="M810 250V96H620"/>
+            <path class="d-relay" d="M206 250V140H340"/>
+            <path class="d-relay" d="M754 250V140H620"/>
+            <text class="d-note" x="164" y="86">Señalización, TCP 8787</text>
+            <text class="d-note" x="220" y="200">Relé, UDP 3478, si falla el directo</text>
+            <rect class="d-box" x="40" y="250" width="240" height="112" rx="14"/>
+            <text class="d-title" x="160" y="300" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="160" y="328" text-anchor="middle">Ejecutando PasteFerry</text>
+            <rect class="d-box" x="680" y="250" width="240" height="112" rx="14"/>
+            <text class="d-title" x="800" y="300" text-anchor="middle">Windows</text>
+            <text class="d-sub" x="800" y="328" text-anchor="middle">Ejecutando PasteFerry</text>
+            <path class="d-direct" d="M280 306H680"/>
+            <text class="d-label" x="480" y="292" text-anchor="middle">Cifrado directo de extremo a extremo</text>
+            <text class="d-note" x="480" y="336" text-anchor="middle">El contenido permanece entre las dos computadoras.</text>
+            <g class="d-legend" transform="translate(40 424)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">Datos (directos)</text>
+              <path class="d-relay" d="M250 0H278"/><text x="288" y="5">Datos (retransmisión, reserva)</text>
+              <path class="d-sig" d="M560 0H588"/><text x="598" y="5">Señalización</text>
+            </g>
+          </svg>
+        </figure>
+        <ul class="points ports">
+          <li>Señalización<strong>, TCP 8787.</strong> Cada computadora permanece conectada a ella para encontrar las demás, emparejarlas e intercambiar detalles de conexión.</li>
+          <li><strong>Directo.</strong> En una LAN, el contenido casi siempre va directamente entre las dos computadoras, a la velocidad de su red.</li>
+          <li><strong>Relé, UDP 3478.</strong> Solo se usa cuando los dispositivos no pueden comunicarse entre sí: redes de invitados, Wi-Fi con aislamiento de cliente, subredes separadas.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="prepare" aria-labelledby="prepare-title">
+      <div class="wrap">
+        <h2 id="prepare-title">Antes de empezar</h2>
+        <dl class="fallbacks">
+          <div><dt>Una computadora que permanece encendida</dt><dd>Windows 10 u 11, macOS 13 o posterior, o cualquier Linux, incluida una de las dos computadoras que sincroniza. La sincronización se detiene mientras está apagado o dormido y se reanuda cuando se despierta. Lo ideal es un NAS, un enrutador doméstico o un Mac mini; el servidor utiliza alrededor de 15 MB de RAM.</dd></div>
+          <div><dt>una dirección fija</dt><dd>Reserve una dirección para él en la configuración DHCP de su enrutador (a menudo llamada reserva DHCP o arrendamiento estático). De lo contrario, cuando el enrutador proporcione una nueva dirección, todas las computadoras deberán actualizarse.</dd></div>
+          <div><dt>la misma red</dt><dd>Los dispositivos solo necesitan estar en la misma red Wi-Fi o cableada. Las redes de invitados y Wi‑Fi con aislamiento de cliente (AP) impiden que los dispositivos se comuniquen entre sí; utilice otra red o desactive el aislamiento.</dd></div>
+          <div><dt>No hay sincronización fuera de él</dt><dd>Solo se puede acceder al servidor en su LAN, por lo que una computadora portátil llevada a otro lugar se pone al día cuando regresa.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="install" aria-labelledby="install-title">
+      <div class="wrap">
+        <h2 id="install-title">Instalar el servidor</h2>
+        <p class="intro">Elija el sistema de la computadora que ejecutará el servidor. El script encuentra la dirección LAN de la computadora, configura el servidor para que se inicie automáticamente e imprime la dirección para ingresar en las aplicaciones.</p>
+        <div class="os-tabs" data-tabs="os">
+          <div class="tablist" role="tablist" aria-label="Sistema de la computadora servidor" hidden>
+            <button type="button" role="tab" id="tab-windows" aria-controls="windows">Windows</button>
+            <button type="button" role="tab" id="tab-macos" aria-controls="macos">macOS</button>
+            <button type="button" role="tab" id="tab-linux" aria-controls="linux">Linux</button>
+          </div>
+
+          <section class="os" id="windows" role="tabpanel" aria-labelledby="tab-windows">
+            <h3 class="os-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Windows</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <ol class="steps">
+                <li>Descargue <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-windows-amd64.zip">pasteferry-server-windows-amd64.zip</a> y elija Extraer todo.</li>
+                <li>Abra la carpeta extraída y haga doble clic en <code>install.cmd</code>.<span class="aside">Si ve "Windows protegió su PC", haga clic en Más información y luego en Ejecutar de todos modos; Cuando el Control de cuentas de usuario lo solicite, haga clic en Sí. El servidor aún no tiene el código firmado, por lo que Windows pregunta una vez.</span></li>
+                <li>La instalación continúa en una nueva ventana. La dirección <code>ws://…/signal</code> al final es la que ingresas en las aplicaciones.</li>
+                </ol>
+                <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Descargue el servidor Windows</a>
+                <ul class="points">
+                <li><strong>Se ejecuta como un servicio Windows :</strong> comienza con Windows, no es necesario iniciar sesión ni abrir ventanas. Aparece como Servidor PasteFerry en Servicios.</li>
+                <li><strong>Firewall ya permitido:</strong> el script agrega una regla de entrada solo para pasteferry-server.exe, por lo que no hay puertos para abrir.</li>
+                <li><strong>Dirección incorrecta seleccionada</strong> (varios adaptadores de red, digamos de una VM o VPN): escriba <code>cmd</code> en la barra de direcciones de la carpeta extraída, presione Entrar y ejecute <code>install.cmd 192.168.1.20</code> con su dirección.</li>
+                <li>Windows 10 y 11, x64.</li>
+                </ul>
+              </div>
+              <div class="os-figures">
+                <figure class="explorer" role="img" aria-label="La carpeta extraída contiene pasteferry-server.exe, install.cmd, install.ps1, README.md y uninstall.cmd; haga doble clic en instalar.cmd">
+                  <div class="t-bar win"><span class="t-tab folder">pasteferry-server-windows-amd64</span><span class="t-ctl" aria-hidden="true"><i></i><i></i><i></i></span></div>
+                  <ul class="files">
+                  <li><span class="f-icon exe" aria-hidden="true"></span><span class="f-name">pasteferry-server.exe</span></li>
+                  <li class="hl"><span class="f-icon cmd" aria-hidden="true"></span><span class="f-name">install.cmd</span><em>Haga doble clic</em></li>
+                  <li><span class="f-icon doc" aria-hidden="true"></span><span class="f-name">install.ps1</span></li>
+                  <li><span class="f-icon doc" aria-hidden="true"></span><span class="f-name">README.md</span></li>
+                  <li><span class="f-icon cmd" aria-hidden="true"></span><span class="f-name">uninstall.cmd</span></li>
+                  </ul>
+                </figure>
+                <figure class="term" role="img" aria-label="La ventana después de install.cmd finaliza: detiene la versión anterior, la instala, registra el servicio, lo permite a través del firewall y lo inicia, luego imprime la dirección ws://192.168.1.20:8787/signal">
+                <div class="t-bar win"><span class="t-tab"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.5v7H3zM11.5 4.4 21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.4z"/></svg>Administrador: Windows PowerShell</span><span class="t-ctl" aria-hidden="true"><i></i><i></i><i></i></span></div>
+<pre class="t-body"><span class="t-step">&gt; Stopping the running version</span>
+<span class="t-step">&gt; Installing to C:\Program Files\PasteFerry Server</span>
+<span class="t-step">&gt; Registering the service PasteFerryServer (relay address 192.168.1.20)</span>
+<span class="t-step">&gt; Allowing it through Windows Firewall</span>
+<span class="t-step">&gt; Starting</span>
+  √ Running
+
+Installed: pasteferry-server 2.13.1. It runs as a Windows service and starts with Windows.
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
+
+    <span class="t-url">ws://192.168.1.20:8787/signal</span>
+
+  Program    C:\Program Files\PasteFerry Server
+  Logs       C:\ProgramData\PasteFerry Server\server.log
+  Restart    Restart-Service PasteFerryServer (in an administrator PowerShell)
+  Uninstall  double-click uninstall.cmd</pre>
+              </figure>
+              </div>
+            </div>
+            <div class="table-scroll">
+                <table class="manage">
+                  <caption>Para más tarde</caption>
+                  <tbody>
+                  <tr><th scope="row">Estado</th><td><code>Get-Service PasteFerryServer</code> en un administrador PowerShell, o busque el servidor PasteFerry en Servicios</td></tr>
+                  <tr><th scope="row">Registros</th><td><code>C:\ProgramData\PasteFerry Server\server.log</code></td></tr>
+                  <tr><th scope="row">Reiniciar</th><td><code>Restart-Service PasteFerryServer</code> en un administrador PowerShell</td></tr>
+                  <tr><th scope="row">Actualizar</th><td>Descargue la nueva versión, extráigala y haga doble clic en <code>install.cmd</code> nuevamente; Tus configuraciones se mantienen.</td></tr>
+                  <tr><th scope="row">Desinstalar</th><td>Haga doble clic en <code>uninstall.cmd</code>; elimina el servicio, la regla de firewall y los archivos</td></tr>
+                  </tbody>
+                </table>
+              </div>
+          </section>
+
+          <section class="os" id="macos" role="tabpanel" aria-labelledby="tab-macos">
+            <h3 class="os-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>macOS</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <ol class="steps">
+                  <li>Abra Terminal y ejecute estas líneas:
+                <div class="code">
+                  <button class="copy" type="button" data-done="Copiado">Copiar</button>
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-macos.tar.gz
+tar xzf pasteferry-server-macos.tar.gz
+cd pasteferry-server-macos
+./install.sh</code></pre>
+                </div></li>
+                <li>La dirección <code>ws://…/signal</code> al final es la que ingresas en las aplicaciones.</li>
+                </ol>
+                <ul class="points">
+                <li><strong>No se necesitan derechos de administrador.</strong> Se ejecuta en segundo plano cada vez que inicia sesión y macOS lo reinicia si sale.</li>
+                <li><strong>Mantenga esta Mac despierta:</strong> en Configuración del sistema → Energía (Batería → Opciones en una computadora portátil), active la opción que evita la suspensión automática.</li>
+                <li><strong>Si el firewall macOS está activado,</strong> el script termina con el comando para permitir el servidor Pasterferry.</li>
+                <li>Intel y Apple Silicon, macOS 13 o posterior.</li>
+                </ul>
+              </div>
+              <div class="os-figures">
+                <figure class="term" role="img" aria-label="Salida de ./install.sh en Terminal: instala, escribe LaunchAgent e inicia el servidor, luego imprime la dirección ws://192.168.1.20:8787/signal">
+                <div class="t-bar mac"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="t-title">pasteferry-server-macos — zsh</span></div>
+<pre class="t-body"><span class="t-prompt">%</span> ./install.sh
+<span class="t-step">▶ Stopping the running version</span>
+<span class="t-step">▶ Installing to /Users/me/Library/Application Support/PasteFerry Server</span>
+<span class="t-step">▶ Writing the LaunchAgent (relay address 192.168.1.20)</span>
+<span class="t-step">▶ Starting</span>
+  ✓ Running
+
+Installed: pasteferry-server 2.13.1. It starts whenever you log in to this Mac.
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
+
+    <span class="t-url">ws://192.168.1.20:8787/signal</span>
+
+  Logs       /Users/me/Library/Logs/PasteFerry/server.log
+  Restart    launchctl kickstart -k gui/501/com.pasteferry.server
+  Uninstall  ./install.sh uninstall</pre>
+              </figure>
+              </div>
+            </div>
+            <div class="table-scroll">
+                <table class="manage">
+                  <caption>Para más tarde</caption>
+                  <tbody>
+                  <tr><th scope="row">Registros</th><td><code>~/Library/Logs/PasteFerry/server.log</code></td></tr>
+                  <tr><th scope="row">Reiniciar</th><td><code>launchctl kickstart -k gui/$(id -u)/com.pasteferry.server</code></td></tr>
+                  <tr><th scope="row">Actualizar</th><td>Descargue la nueva versión, extráigala y ejecute <code>./install.sh</code> nuevamente; Tus configuraciones se mantienen.</td></tr>
+                  <tr><th scope="row">Desinstalar</th><td><code>./install.sh uninstall</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+          </section>
+
+          <section class="os" id="linux" role="tabpanel" aria-labelledby="tab-linux">
+            <h3 class="os-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg>Linux</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <ol class="steps">
+                  <li>En la propia máquina, o a través de ssh, ejecute estas líneas:<span class="aside">En ARM, como una Raspberry Pi con un sistema operativo de 64 bits, reemplace <code>amd64</code> con <code>arm64</code>.</span>
+                <div class="code">
+                  <button class="copy" type="button" data-done="Copiado">Copiar</button>
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-linux-amd64.tar.gz
+tar xzf pasteferry-server-linux-amd64.tar.gz
+cd pasteferry-server-linux-amd64
+sudo ./install.sh</code></pre>
+                </div></li>
+                <li>La dirección <code>ws://…/signal</code> al final es la que ingresas en las aplicaciones.</li>
+                </ol>
+                <ul class="points">
+                <li><strong>Registra un servicio systemd</strong> que se inicia al arrancar. Necesita raíz.</li>
+                <li><strong>Si ufw o firewalld están activos,</strong> el script finaliza con los comandos para abrir los puertos.</li>
+                <li><strong>Docker también funciona:</strong> copie <code>env.example</code> a <code>.env</code>, configure <code>TURN_IP</code> en la dirección LAN de la máquina y ejecute <code>docker compose up -d</code>. Necesita una red de host, por lo que solo Linux .</li>
+                </ul>
+              </div>
+              <div class="os-figures">
+                <figure class="term" role="img" aria-label="Salida de sudo ./install.sh: instala, escribe la unidad systemd y la configuración e inicia el servidor, luego imprime la dirección ws://192.168.1.20:8787/signal">
+                <div class="t-bar mac"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="t-title">ssh 192.168.1.20</span></div>
+<pre class="t-body"><span class="t-prompt">$</span> sudo ./install.sh
+<span class="t-step">▶ Installing the binary to /usr/local/bin</span>
+<span class="t-step">▶ Writing the systemd unit</span>
+<span class="t-step">▶ Writing /etc/pasteferry/server.env (relay address 192.168.1.20)</span>
+<span class="t-step">▶ Starting</span>
+  ✓ Running
+
+Installed: pasteferry-server 2.13.1
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
+
+    <span class="t-url">ws://192.168.1.20:8787/signal</span>
+
+  Config     /etc/pasteferry/server.env
+  Logs       journalctl -u pasteferry-server -f
+  Restart    systemctl restart pasteferry-server
+  Uninstall  sudo ./install.sh uninstall
+
+Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768-60999 (relay ports, assigned by the OS)</pre>
+              </figure>
+              </div>
+            </div>
+            <div class="table-scroll">
+                <table class="manage">
+                  <caption>Para más tarde</caption>
+                  <tbody>
+                  <tr><th scope="row">Estado</th><td><code>systemctl status pasteferry-server</code></td></tr>
+                  <tr><th scope="row">Registros</th><td><code>journalctl -u pasteferry-server -f</code></td></tr>
+                  <tr><th scope="row">Reiniciar</th><td><code>sudo systemctl restart pasteferry-server</code></td></tr>
+                  <tr><th scope="row">configuración</th><td><code>/etc/pasteferry/server.env</code>; reiniciar el servicio después de editar</td></tr>
+                  <tr><th scope="row">Actualizar</th><td>Descargue la nueva versión, extráigala y ejecute <code>sudo ./install.sh</code> nuevamente; tu configuración se mantiene</td></tr>
+                  <tr><th scope="row">Desinstalar</th><td><code>sudo ./install.sh uninstall</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+          </section>
+
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="check" aria-labelledby="check-title">
+      <div class="wrap">
+        <h2 id="check-title">Compruebe que otras computadoras puedan alcanzarlo.</h2>
+        <p class="intro">En otra computadora, abra <code>http://192.168.1.20:8787/healthz</code> en un navegador (con su dirección). Si ve esta línea, la ruta de red funciona.</p>
+        <figure class="browser" role="img" aria-label="Un navegador que muestra http://192.168.1.20:8787/healthz, con el estado del servidor ok y su versión.">
+          <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">http://192.168.1.20:8787/healthz</span></div>
+          <pre class="b-body">{"status":"ok","version":"2.13.1"}</pre>
+        </figure>
+        <p class="note">Si no se carga, consulte las preguntas <a href="#faq"></a> a continuación.</p>
+      </div>
+    </section>
+
+    <section class="section" id="clients" aria-labelledby="clients-title">
+      <div class="wrap">
+        <h2 id="clients-title">Ingrese la dirección en cada computadora</h2>
+        <ol class="flow">
+          <li><h3>Abrir configuración</h3><p>Abra PasteFerry en cada computadora, incluida la que ejecuta el servidor, y vaya a Configuración → Conexión.</p></li>
+          <li><h3>Introduzca la dirección</h3><p>En Servidor personalizado, ingrese <code>ws://192.168.1.20:8787/signal</code> con su dirección y presione Retorno o Intro.</p></li>
+          <li><h3>comprobar el estado</h3><p>Cuando Conexión muestra un Conectado verde, estás listo. Empareje sus dispositivos en Dispositivos y la copia comenzará a sincronizarse.</p></li>
+        </ol>
+        <figure class="shot">
+          <img class="theme-dark" src="../../assets/screenshots/en/settings-lan-dark.png?v=773b46ba58" width="2112" height="1472" alt="Configuración de PasteFerry → Conexión: El servidor personalizado es ws://192.168.1.20:8787/signal y el estado de la conexión muestra Conectado" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/settings-lan.png?v=8714a95531" width="2112" height="1472" alt="Configuración de PasteFerry → Conexión: El servidor personalizado es ws://192.168.1.20:8787/signal y el estado de la conexión muestra Conectado" loading="lazy">
+        </figure>
+        <p class="note">¿Aún no has instalado la aplicación? Consulte el inicio rápido de <a href="../../es/start/"></a>.</p>
+      </div>
+    </section>
+
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <h2 id="faq-title">Preguntas</h2>
+        <div class="faq">
+          <details>
+            <summary>El estado permanece en No conectado</summary>
+            <div class="answer"><p>Primero verifique la dirección: comienza con <code>ws://</code>, usa el puerto 8787, termina en <code>/signal</code>y presionó Retorno después de escribirla.</p><p>Luego abra <code>http://server-address:8787/healthz</code> en un navegador en esa computadora. Si no se carga, la ruta de la red está rota: el servidor no está funcionando, su computadora está inactiva, un firewall la bloquea o su dirección cambió.</p><p>El script Windows ya permite que el servidor atraviese el firewall. En una Mac con el firewall activado, ejecute el comando que el script imprimió al final; lo mismo ocurre con ufw y firewalld en Linux.</p></div>
+          </details>
+          <details>
+            <summary>Los dispositivos muestran Retransmisión en lugar de Directo</summary>
+            <div class="answer"><p>En una LAN las conexiones casi siempre son directas. La retransmisión significa que UDP no puede comunicarse entre las dos computadoras, generalmente debido a una red de invitados, aislamiento del cliente Wi-Fi o subredes separadas con un firewall en el medio. El contenido transmitido todavía está cifrado; simplemente está limitado por la red de la computadora servidor.</p></div>
+          </details>
+          <details>
+            <summary>La dirección del servidor cambió.</summary>
+            <div class="answer"><p>Ejecute el script nuevamente con la nueva dirección: <code>install.cmd new-address</code> en Windows, <code>./install.sh new-address</code> en una Mac. En Linux, edite <code>-turn-ip</code> en <code>/etc/pasteferry/server.env</code> y reinicie el servicio. Luego actualice la dirección en cada computadora.</p><p>Reservar la dirección en su enrutador evita esto.</p></div>
+          </details>
+          <details>
+            <summary>¿Se sincroniza fuera de la LAN?</summary>
+            <div class="answer"><p>No, solo se puede acceder al servidor en su LAN. Para sincronizar entre redes, active el servicio <a href="../../es/official/"></a>o utilice un servidor público <a href="../../es/cloud/"></a> o <a href="../../es/tailscale/">Tailscale</a>.</p></div>
+          </details>
+          <details>
+            <summary>La computadora servidor también ejecuta PasteFerry. ¿Qué dirección?</summary>
+            <div class="answer"><p>La misma dirección LAN funciona, al igual que <code>ws://127.0.0.1:8787/signal</code>. El servidor y la aplicación no interfieren.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">Una computadora que permanece encendida es suficiente.</h2>
+        <div class="cta">
+          <a class="button" href="../../es/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Descargar PasteFerry</a>
+        </div>
+        <p class="note">Versión 2.13.1, gratuita y de código abierto. Compatible con macOS 13 o posterior, Windows 10 y 11, Linux (x64 y ARM64) y Android 9 o posterior. El nuevo ajuste de tamaño permite ampliar o reducir el texto, los iconos y el espaciado a la vez.</p>
+        <a class="source" href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md">Guía completa de servidores, incluidos servidores públicos y Docker</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry es de código abierto bajo GNU AGPL-3.0.</p>
+      <nav aria-label="Pie de página">
+        <a href="https://github.com/baiyuze/pasteferry/releases">Todos los lanzamientos</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Registro de cambios</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Notas de diseño (chino)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">Licencia</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Informar un problema</a>
+        <a href="../../es/privacy/">Privacidad</a>
+        <a href="../../es/feedback/">Discusión y comentarios</a>
+      </nav>
+      <nav aria-label="Idioma">
+        <a href="../../server/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/server/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/server/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/server/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/server/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/server/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/server/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/server/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/server/" hreflang="es" lang="es" data-lang="es" aria-current="page">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

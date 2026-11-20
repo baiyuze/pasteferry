@@ -31,60 +31,122 @@
     });
   }
 
+  // 首屏演示：点 Mac 桌面上的一样东西（或选中后按 ⌘C / Ctrl+C）就复制，化作一张纸飞到 Windows 笔记本上粘贴。
+  // 上面切换两台电脑在家里和公司（先经服务器交换连接信息，再直连），还是同一个 Wi‑Fi（不用服务器）。
+  // 第一次滚动到可见时自动演示一次，之后等访客自己点
   var stage = document.querySelector("[data-play]");
-
-  // 按两台设备实际的位置算出纸飞行的起点、终点与弧线
-  function layout() {
-    var src = stage.querySelector(".mac .doc");
-    var dst = stage.querySelector(".win .doc");
-    var sheet = stage.querySelector(".sheet-fly");
-    var path = stage.querySelector(".arc path");
-    var label = stage.querySelector(".arc-label");
-    var box = stage.getBoundingClientRect();
-    var a = src.getBoundingClientRect();
-    var b = dst.getBoundingClientRect();
-    var w = sheet.offsetWidth;
-    var h = sheet.offsetHeight;
-    var sx = a.left + a.width / 2 - box.left;
-    var sy = a.top + a.height / 2 - box.top;
-    var tx = b.left + b.width / 2 - box.left;
-    var ty = b.top + b.height / 2 - box.top;
-    var lift = Math.max(40, (tx - sx) * 0.28);
-    stage.style.setProperty("--sx", sx - w / 2 + "px");
-    stage.style.setProperty("--sy", sy - h / 2 + "px");
-    stage.style.setProperty("--tx", tx - w / 2 + "px");
-    stage.style.setProperty("--ty", ty - h / 2 + "px");
-    stage.style.setProperty("--lift", lift + "px");
-    var peak = Math.min(sy, ty) - lift * 1.6;
-    path.setAttribute("d", "M" + sx + " " + (sy - a.height / 2) +
-      " Q" + (sx + tx) / 2 + " " + peak + " " + tx + " " + (ty - b.height / 2));
-    label.style.setProperty("--ly", peak + lift * 0.55 - 8 + "px");
-  }
-
-  function play() {
-    layout();
-    stage.classList.remove("play");
-    void stage.offsetWidth; // 强制重排，让动画从头再来
-    stage.classList.add("play");
-  }
-
   if (stage) {
+    var demo = stage.closest("[data-demo]");
+    var files = Array.prototype.slice.call(stage.querySelectorAll(".mac .file"));
+    var landed = stage.querySelector(".win .file");
+    var status = demo.querySelector("[data-demo-status]");
+    var current = files[0];
+    var announce;
+
+    // 按两台设备实际的位置算出纸飞行的起点、终点与弧线，以及服务器的位置和两条交换连接信息的点线
+    var layout = function () {
+      var src = current.querySelector(".doc");
+      var dst = landed.querySelector(".doc");
+      var sheet = stage.querySelector(".sheet-fly");
+      var path = stage.querySelector(".arc .direct");
+      var sig = stage.querySelector(".arc .sig");
+      var label = stage.querySelector(".arc-label");
+      var box = stage.getBoundingClientRect();
+      var a = src.getBoundingClientRect();
+      var b = dst.getBoundingClientRect();
+      var ma = stage.querySelector(".mac .screen").getBoundingClientRect();
+      var wa = stage.querySelector(".win .screen").getBoundingClientRect();
+      var w = sheet.offsetWidth;
+      var h = sheet.offsetHeight;
+      var sx = a.left + a.width / 2 - box.left;
+      var sy = a.top + a.height / 2 - box.top;
+      var tx = b.left + b.width / 2 - box.left;
+      var ty = b.top + b.height / 2 - box.top;
+      var mx = (ma.left + ma.right) / 2 - box.left;
+      var wx = (wa.left + wa.right) / 2 - box.left;
+      var top = Math.min(ma.top, wa.top) - box.top;
+      // 弧线的控制点在屏幕顶上 rise 处；纸飞到弧线顶附近；服务器在弧线上方
+      var rise = Math.min(Math.max(30, (tx - sx) * 0.18), 100);
+      var peak = top - rise;
+      var startY = sy - a.height / 2;
+      var endY = ty - b.height / 2;
+      var apex = (startY + 2 * peak + endY) / 4;
+      stage.style.setProperty("--sx", sx - w / 2 + "px");
+      stage.style.setProperty("--sy", sy - h / 2 + "px");
+      stage.style.setProperty("--tx", tx - w / 2 + "px");
+      stage.style.setProperty("--ty", ty - h / 2 + "px");
+      stage.style.setProperty("--lift", Math.min(sy, ty) - apex + h * 0.2 + "px");
+      path.setAttribute("d", "M" + sx + " " + startY + " Q" + (sx + tx) / 2 + " " + peak + " " + tx + " " + endY);
+      label.style.setProperty("--ly", apex - 26 + "px");
+      var px = (mx + wx) / 2;
+      var py = peak - 46;
+      stage.style.setProperty("--px", px + "px");
+      stage.style.setProperty("--py", py + "px");
+      sig.setAttribute("d", "M" + mx + " " + top + " Q" + mx + " " + py + " " + (px - 24) + " " + py +
+        " M" + (px + 24) + " " + py + " Q" + wx + " " + py + " " + wx + " " + top);
+    };
+
+    var play = function (file) {
+      current = file;
+      files.forEach(function (f) { f.classList.toggle("sel", f === file); });
+      // 落在 Windows 上的那一样换成刚复制的；动画开始时它先藏着，落地时才出现
+      landed.querySelector(".doc").className = file.querySelector(".doc").className;
+      landed.querySelector(".name").textContent = file.getAttribute("data-name");
+      layout();
+      stage.classList.remove("play");
+      void stage.offsetWidth; // 强制重排，让动画从头再来
+      stage.classList.add("play");
+      clearTimeout(announce);
+      announce = setTimeout(function () {
+        status.textContent = demo.getAttribute("data-pasted").replace("{item}", file.getAttribute("data-name"));
+      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 :
+        stage.getAttribute("data-mode") === "wan" ? 3100 : 2300);
+    };
+
+    files.forEach(function (file) {
+      file.addEventListener("click", function () { play(file); });
+      file.addEventListener("keydown", function (e) {
+        if ((e.metaKey || e.ctrlKey) && (e.key === "c" || e.key === "C")) {
+          e.preventDefault();
+          play(file);
+        }
+      });
+    });
+
+    var modes = Array.prototype.slice.call(demo.querySelectorAll("[data-mode]")).filter(function (b) { return b !== stage; });
+    modes.forEach(function (button) {
+      button.addEventListener("click", function () {
+        modes.forEach(function (b) {
+          b.setAttribute("aria-checked", b === button ? "true" : "false");
+          b.tabIndex = b === button ? 0 : -1;
+        });
+        stage.setAttribute("data-mode", button.getAttribute("data-mode"));
+        play(current);
+      });
+      button.addEventListener("keydown", function (e) {
+        var step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        e.preventDefault();
+        var next = modes[(modes.indexOf(button) + step + modes.length) % modes.length];
+        next.focus();
+        next.click();
+      });
+    });
+
     layout();
     window.addEventListener("resize", layout);
     // 滚动到可见时才开始，免得还没看到就播完了
     if ("IntersectionObserver" in window) {
       var seen = new IntersectionObserver(function (entries) {
         if (entries[0].isIntersecting) {
-          play();
+          play(current);
           seen.disconnect();
         }
       }, { threshold: 0.35 });
       seen.observe(stage);
     } else {
-      play();
+      play(current);
     }
-    var replay = document.querySelector(".replay");
-    if (replay) replay.addEventListener("click", play);
   }
 
   document.querySelectorAll(".code").forEach(function (block) {
@@ -167,7 +229,29 @@
     } catch (e) {}
   }
 
-  // 语言菜单与「更多」菜单：点菜单外面或按 Esc 收起，打开一个时收起另一个
+  // 外观菜单：跟随系统、浅色、深色。选择存在 localStorage，由 <head> 里的脚本（反馈页是 platform.js）
+  // 在下次打开时先于绘制应用
+  var themeButtons = document.querySelectorAll("[data-theme-set]");
+  function markTheme() {
+    var pref = document.documentElement.getAttribute("data-theme-pref") || "system";
+    themeButtons.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-theme-set") === pref ? "true" : "false");
+    });
+  }
+  themeButtons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (window.pfSetTheme) window.pfSetTheme(b.getAttribute("data-theme-set"));
+      markTheme();
+      var menu = b.closest("details");
+      if (menu) {
+        menu.open = false;
+        menu.querySelector("summary").focus();
+      }
+    });
+  });
+  markTheme();
+
+  // 语言菜单、外观菜单与「更多」菜单：点菜单外面或按 Esc 收起，打开一个时收起另一个
   var menus = document.querySelectorAll("details.lang, details.menu");
   menus.forEach(function (menu) {
     document.addEventListener("click", function (e) {

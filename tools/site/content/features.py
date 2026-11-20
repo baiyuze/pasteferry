@@ -27,6 +27,28 @@ COPY = {
         '気に入ったら GitHub でスターを。',
     ),
     "star_button": ("在 GitHub 上点 Star", "在 GitHub 上點 Star", "在 GitHub 上按 Star", "Star on GitHub", "GitHub でスター"),
+    # 首屏演示：点 Mac 上的一项复制，飞到另一台电脑粘贴；上面切换两台电脑在同一网络还是在家里和公司
+    "demo_where": ("两台电脑在哪", "兩台電腦在哪", "兩部電腦在哪", "Where are the two computers?", "2 台のパソコンはどこに？"),
+    "demo_wan": ("家里 ↔ 公司", "家裡 ↔ 公司", "家裏 ↔ 公司", "Home ↔ office", "自宅 ↔ 会社"),
+    "demo_lan": ("同一个 Wi‑Fi", "同一個 Wi‑Fi", "同一個 Wi‑Fi", "Same Wi‑Fi", "同じ Wi‑Fi"),
+    "net_home": ("家里的网络", "家裡的網路", "家裏的網絡", "Home network", "自宅のネットワーク"),
+    "net_office": ("公司的网络", "公司的網路", "公司的網絡", "Office network", "会社のネットワーク"),
+    "net_wifi": ("家里的 Wi‑Fi", "家裡的 Wi‑Fi", "家裏的 Wi‑Fi", "Home Wi‑Fi", "自宅の Wi‑Fi"),
+    "demo_server": ("服务器只负责介绍", "伺服器只負責介紹", "伺服器只負責介紹", "The server only introduces them", "サーバーは仲介するだけ"),
+    "demo_no_server": ("在局域网里直接找到，不用服务器", "在區域網路裡直接找到，不用伺服器", "在區域網絡裏直接找到，毋須伺服器",
+                       "Found on the local network, no server", "ローカルネットワークで直接見つかり、サーバーは不要"),
+    "demo_hint": ("点 Mac 上的任意一项，复制到另一台电脑", "點 Mac 上的任一項目，複製到另一台電腦", "按 Mac 上任何一項，複製到另一部電腦",
+                  "Click anything on the Mac to copy it over", "Mac の項目をクリックすると、もう一台にコピーされます"),
+    "demo_image": ("截图.png", "截圖.png", "截圖.png", "Screenshot.png", "スクリーンショット.png"),
+    "demo_text": ("会议改到 3:30，4B 会议室", "會議改到 3:30，4B 會議室", "會議改到 3:30，4B 會議室", "Meeting moved to 3:30, room 4B", "会議は 3:30 から、4B 会議室"),
+    "demo_folder": ("品牌素材", "品牌素材", "品牌素材", "brand-assets", "ブランド素材"),
+    "demo_copy": ("复制 {item}", "複製 {item}", "複製 {item}", "Copy {item}", "{item} をコピー"),
+    "demo_pasted": ("{item} 已粘贴到 {device}", "{item} 已貼上到 {device}", "{item} 已貼上到 {device}", "{item} pasted on the {device}", "{item} を {device} に貼り付けました"),
+    # 顶栏的外观菜单：默认跟随系统，也可以固定浅色或深色
+    "theme_menu": ("外观", "外觀", "外觀", "Appearance", "外観"),
+    "theme_system": ("跟随系统", "跟隨系統", "跟隨系統", "Match system", "システムに合わせる"),
+    "theme_light": ("浅色", "淺色", "淺色", "Light", "ライト"),
+    "theme_dark": ("深色", "深色", "深色", "Dark", "ダーク"),
 
     # ── 首页 ──
     # {version} 由官网 VERSION 生成；每次发版同步更新功能摘要。
@@ -637,6 +659,9 @@ COPY = {
 
 
 def localized(code: str) -> dict:
-    """某种语言的全部文案。"""
+    """某种语言的全部文案。后加的语言（content/packs.py）各自一个文件。"""
+    if code not in LANGUAGES:
+        from content.packs import pack
+        return dict(pack(code).FEATURES)
     i = LANGUAGES.index(code)
     return {k: v[i] for k, v in COPY.items()}

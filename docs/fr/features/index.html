@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fonctionnalités : envoi de fichiers, collage rapide, favoris, historique sur tous les appareils – PasteFerry</title>
+  <meta name="description" content="PasteFerry synchronise le presse-papiers entre Mac, Windows et Linux: copiez du texte, des images, des fichiers ou des dossiers et collez-les sur l&#x27;autre ordinateur. Appuyez sur ⌥V or Alt+V for quick paste, conservez vos favoris, recherchez ou filtrez votre historique et envoyez des fichiers de n&#x27;importe quelle taille directement vers un autre ordinateur.">
+  <link rel="canonical" href="https://pasteferry.cc/fr/features/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/features/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/features/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/features/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/features/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/features/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/features/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/features/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/features/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/features/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Fonctionnalités : envoi de fichiers, collage rapide, favoris, historique sur tous les appareils – PasteFerry">
+  <meta property="og:description" content="PasteFerry synchronise le presse-papiers entre Mac, Windows et Linux: copiez du texte, des images, des fichiers ou des dossiers et collez-les sur l&#x27;autre ordinateur. Appuyez sur ⌥V or Alt+V for quick paste, conservez vos favoris, recherchez ou filtrez votre historique et envoyez des fichiers de n&#x27;importe quelle taille directement vers un autre ordinateur.">
+  <meta property="og:url" content="https://pasteferry.cc/fr/features/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-fr.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="zh_HK">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <link rel="stylesheet" href="../../assets/features.css?v=684aa5d98b">
+</head>
+<body class="features">
+  <a class="skip" href="#main">Passer au contenu</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../fr/" aria-label="Accueil PasteFerry"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Pages">
+        <a class="mid" href="./" aria-current="page">Caractéristiques</a>
+        <a class="mid" href="../../fr/start/">Démarrage rapide</a>
+        <a class="wide" href="../../fr/start/#server">Façons de se connecter</a>
+        <a href="../../fr/download/">Réception</a>
+        <details class="menu">
+          <summary aria-label="Plus de pages"><span>Plus</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="./" aria-current="page">Caractéristiques</a></li>
+            <li class="narrow"><a href="../../fr/start/">Démarrage rapide</a></li>
+            <li class="narrow"><a href="../../fr/start/#server">Façons de se connecter</a></li>
+            <li><a href="../../fr/themes/">Guide des thèmes</a></li>
+            <li><a href="../../fr/how/">Comment ça marche</a></li>
+            <li><a href="../../fr/security/">Sécurité</a></li>
+            <li><a href="../../fr/faq/">FAQ</a></li>
+            <li><a href="../../fr/feedback/">Discussions et commentaires</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Journal des modifications</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Étoile PasteFerry sur GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Apparence" title="Apparence"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Suivre le système</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Clair</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Sombre</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Langue：Français"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>Français</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/features/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/features/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/features/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/features/" hreflang="fr" lang="fr" data-lang="fr" aria-current="page">Français</a></li>
+            <li><a href="../../es/features/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="f-hero">
+      <div class="wrap">
+        <p class="eyebrow">Caractéristiques du PasteFerry</p>
+        <h1 class="display">Copiez et collez<br>comme il se doit.</h1>
+        <p class="lede">Un presse-papiers pour vos ordinateurs Mac, Windows et Linux .</p>
+        <div class="cta">
+          <a class="button" href="../../fr/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Télécharger PasteFerry</a>
+          <a class="button quiet" href="../../fr/tour/"><span aria-hidden="true">▶</span> Regardez la tournée complète</a>
+        </div>
+      </div>
+      <figure class="f-hero-shot" data-zoom>
+        <img class="theme-dark" src="../../assets/screenshots/en/history-dark.png?v=b55e2f1f6d" width="2112" height="1472" alt="Historique de PasteFerry: une barre latérale avec l&#x27;historique, les favoris, l&#x27;envoi de fichiers, les appareils et les paramètres, ainsi qu&#x27;une liste de textes, d&#x27;images, de fichiers et de liens provenant de différents ordinateurs." loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/history.png?v=8c41b3d9ce" width="2112" height="1472" alt="Historique de PasteFerry: une barre latérale avec l&#x27;historique, les favoris, l&#x27;envoi de fichiers, les appareils et les paramètres, ainsi qu&#x27;une liste de textes, d&#x27;images, de fichiers et de liens provenant de différents ordinateurs." loading="lazy">
+      </figure>
+    </section>
+
+    <section class="f-section" id="sync" aria-labelledby="sync-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="sync-title">Copiez ici.<br>Collez-y.</h2>
+        <p class="f-intro"><span class="k-mac">⌘C</span><span class="k-pc">Ctrl+C</span> ici, <span class="k-mac">⌘V</span><span class="k-pc">Ctrl+V</span> là. Aucun compte partagé n'est nécessaire.</p>
+        <div class="trio" data-reveal aria-hidden="true">
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>MacBook</b><kbd>⌘C</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Windows</b><kbd>Ctrl+V</kbd></div>
+          <div class="dev"><div class="scr"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span></div><b>Linux</b><kbd>Ctrl+V</kbd></div>
+        </div>
+        <ul class="facts">
+          <li><h3>Texte, images, fichiers, dossiers</h3><p>Se colle proprement dans les champs de texte brut.</p></li>
+          <li><h3>Jusqu'à 50 Mo sont envoyés lors de la copie</h3><p>Articles plus grands sur demande. La limite est réglable.</p></li>
+          <li><h3>Faites une pause à tout moment</h3><p>Mettez tout en pause, ou juste un ordinateur.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section" id="send" aria-labelledby="send-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="send-title">N'importe quelle taille.<br>Faites-le simplement glisser.</h2>
+        <p class="f-intro">Les ordinateurs proches et lointains sont sur le radar. Faites glisser les fichiers sur un pour les envoyer. Pas de lecteur cloud et votre historique reste propre.</p>
+        <figure class="f-shot" data-reveal>
+          <img class="theme-dark" src="../../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" alt="La page Envoyer des fichiers : un radar avec ce Mac au milieu et des appareils sur le même réseau et ailleurs autour de lui ; à droite, les fichiers reçus, avec un dossier arrivant et son avancement et sa rapidité" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/send.png?v=740f8bec78" width="2552" height="1632" alt="La page Envoyer des fichiers : un radar avec ce Mac au milieu et des appareils sur le même réseau et ailleurs autour de lui ; à droite, les fichiers reçus, avec un dossier arrivant et son avancement et sa rapidité" loading="lazy">
+        </figure>
+        <ul class="facts">
+          <li><h3>N'importe quelle taille</h3><p>Vidéos de plusieurs Go ou dossiers contenant des milliers de fichiers.</p></li>
+          <li><h3>Reprend là où il s'est arrêté</h3><p>Reprise après une interruption de connexion ou une mise en veille. Chaque fichier est vérifié.</p></li>
+          <li><h3>Fichiers reçus en un seul endroit</h3><p>Enregistré dans les téléchargements par défaut, un clic pour afficher.</p></li>
+        </ul>
+        <p class="f-note">Fonctionne sur les réseaux ; le relais via le Service est limité à 100 Mo par jour. Les deux ordinateurs ont besoin de la version 2.5 ou ultérieure.</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="friends" aria-labelledby="friends-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">Nouveau en 2.6</span></p>
+        <h2 class="f-h2" id="friends-title">L'ordinateur d'un ami,<br>, tout aussi simple.</h2>
+        <p class="f-intro">Ajoutez-les en tant que contact, aucun couplage n'est nécessaire. Les fichiers arrivent une fois acceptés, avec une note facultative.</p>
+        <figure class="f-shot" data-reveal>
+          <img class="theme-dark" src="../../assets/screenshots/en/incoming-dark.png?v=3c9bf5f227" width="2552" height="1632" alt="La page Envoyer des fichiers : les avatars des contacts sous le radar et une demande au milieu : un contact sur un MacBook Air souhaite vous envoyer des fichiers, avec une note - que vous pouvez refuser ou accepter" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/incoming.png?v=c40261a11c" width="2552" height="1632" alt="La page Envoyer des fichiers : les avatars des contacts sous le radar et une demande au milieu : un contact sur un MacBook Air souhaite vous envoyer des fichiers, avec une note - que vous pouvez refuser ou accepter" loading="lazy">
+        </figure>
+        <ul class="facts">
+          <li><h3>Ils décident de ce qui entre</h3><p>Découvrez qui a envoyé quoi avant d'accepter ou acceptez automatiquement les personnes en qui vous avez confiance.</p></li>
+          <li><h3>Vous décidez qui peut envoyer</h3><p>Personne, contacts uniquement ou tout le monde sur votre réseau pendant 10 minutes.</p></li>
+          <li><h3>Des fichiers, pas du chat</h3><p>Les contacts ne voient jamais votre presse-papiers, votre historique ou vos appareils.</p></li>
+        </ul>
+        <p class="f-note">Sur différents réseaux, les deux activent le service. Les deux nécessitent la version 2.6 ou ultérieure.</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="phone" aria-labelledby="phone-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">Nouveau en 2.8</span></p>
+        <h2 class="f-h2" id="phone-title">Votre téléphone participe.</h2>
+        <p class="f-intro">Utilisez l'application Android pour envoyer et recevoir des lots de photos et de fichiers avec un ordinateur, puis enregistrez-les ou partagez-les. Vous préférez ne pas installer ? Scannez un code pour connaître l'historique du presse-papiers, l'envoi de contenu et les transferts de fichiers séparés dans le navigateur.</p>
+        <figure class="f-shot" data-reveal>
+          <img class="theme-dark" src="../../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" alt="La page des appareils transfert web téléphone : le code et les téléphones enregistrés" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/web-share.png?v=29f0d60dd1" width="2552" height="1632" alt="La page des appareils transfert web téléphone : le code et les téléphones enregistrés" loading="lazy">
+        </figure>
+        <ul class="facts">
+          <li><h3>Utilisez le navigateur</h3><p>pour l'historique et les transferts de fichiers séparés.</p></li>
+          <li><h3>Android envoie et reçoit</h3><p>lots, avec sauvegarde et partage.</p></li>
+          <li><h3>Même réseau</h3><p>; garder la page Web ouverte.</p></li>
+        </ul>
+        <p class="f-note">Il n'existe pas d'application iPhone ou iPad : iOS ne permet pas aux applications de lire le presse-papiers en arrière-plan et sa distribution nécessite un certificat. Ces appareils utilisent la page Web.</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="themes" aria-labelledby="theme-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">Nouveau dans 2.10</span></p>
+        <h2 class="f-h2" id="theme-title">Faites-le vôtre.<br>Même en pixels.</h2>
+        <p class="f-intro">Choisissez un thème dans Paramètres > Apparence : Par défaut et Pixel sont intégrés. Dupliquez-en un et personnalisez-le, ou demandez à une IA d'en concevoir un. Clair, foncé ou assorti au système.</p>
+        <figure class="f-shot" data-reveal>
+          <img class="theme-dark" src="../../assets/screenshots/en/pixel-appearance-dark.png?v=3f1dca08ee" width="2112" height="1472" alt="La page Apparence dans Paramètres (thème Pixel, sombre) : vignettes des thèmes intégrés par défaut et Pixel et deux thèmes personnalisés, puis Importer le thème, Demander à l&#x27;IA de créer un thème, clair et sombre, et lignes de balayage." loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/pixel-appearance.png?v=d9e6d35ef9" width="2112" height="1472" alt="La page Apparence dans Paramètres (thème Pixel, sombre) : vignettes des thèmes intégrés par défaut et Pixel et deux thèmes personnalisés, puis Importer le thème, Demander à l&#x27;IA de créer un thème, clair et sombre, et lignes de balayage." loading="lazy">
+        </figure>
+        <ul class="facts">
+          <li><h3>Thème des pixels</h3><p>Type bitmap, blocs crantés et boutons biseautés. Une scène de nuit ou de jour en haut, un avion en papier lors de l'envoi et un éclat d'étoiles une fois terminé.</p></li>
+          <li><h3>Thèmes personnalisés</h3><p>Dupliquez un thème intégré, importez ou exportez des fichiers de thème. Vous êtes averti lorsque le texte est difficile à lire.</p></li>
+          <li><h3>Demandez à une IA</h3><p>Ajoutez <code>pasteferry-cli mcp</code> à Claude, Cursor et autres, puis dites « faites-moi un thème cyberpunk ». Il est créé et appliqué.</p></li>
+        </ul>
+        <div class="f-pair" data-reveal>
+          <img src="../../assets/screenshots/en/pixel-history.png?v=c0311ff88d" width="2112" height="1472" loading="lazy" alt="Histoire dans le thème Pixel (lumière) : nuages et collines dans l&#x27;en-tête, et une petite maison en bas de la barre latérale">
+          <img class="theme-dark" src="../../assets/screenshots/en/pixel-send-dark.png?v=30d0886626" width="2552" height="1632" alt="Envoyer des fichiers dans le thème Pixel (sombre) : montagnes nocturnes et lune dans l&#x27;en-tête, radar en pointillés et appareils de blocage de pixels" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/pixel-send.png?v=702e089833" width="2552" height="1632" alt="Envoyer des fichiers dans le thème Pixel (sombre) : montagnes nocturnes et lune dans l&#x27;en-tête, radar en pointillés et appareils de blocage de pixels" loading="lazy">
+        </div>
+        <p class="f-note">Les thèmes s'appliquent uniquement à l'appareil sur lequel vous les configurez (sur un ordinateur, la fenêtre principale et le collage rapide) ; ils ne sont pas synchronisés. L'application Android possède ses propres paramètres > Apparence. Les thèmes de pixels peuvent ajouter des lignes de balayage CRT. L'IA ne peut lire et écrire que des thèmes, jamais votre historique ou vos appareils.</p>
+        <p class="more"><a href="../themes/">Guide des thèmes →</a></p>
+      </div>
+    </section>
+
+    <section class="f-section qp" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="qp-title">Appuyez sur <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>.<br>Votre historique, là où vous tapez.</h2>
+        <p class="f-intro">Appuyez sur le raccourci dans n'importe quelle application, choisissez un élément et il est collé au niveau du curseur.</p>
+      </div>
+      <div class="qp-track" data-scene>
+        <div class="qp-sticky">
+          <div class="qp-stage" role="img" aria-label="Démo : lors de la rédaction d&#x27;un email, appuyez sur ⌥V; la fenêtre de collage rapide s&#x27;ouvre, en tapant « réunion » trouve le lien de la réunion et Retour le colle dans l&#x27;e-mail" data-typing="[[&quot;m&quot;, false], [&quot;moi&quot;, false], [&quot;moi&quot;, false], [&quot;rencontrer&quot;, false], [&quot;réunion&quot;, false]]">
+            <div class="mail">
+              <div class="mail-bar"><i></i><i></i><i></i><span>Nouveau message</span></div>
+              <div class="mail-field"><span>Pour :</span><b>Équipe</b></div>
+              <div class="mail-field"><span>Sujet :</span><b>Synchronisation hebdomadaire déplacée</b></div>
+              <div class="mail-body"><p>Salut à tous,</p><p>La synchronisation hebdomadaire se déplace au jeudi 15h. Lien :</p><p class="mail-line"><span class="pasted">Lien de la réunion : https://meeting.example.com/j/8823</span><i class="caret"></i></p></div>
+            </div>
+            <div class="press press-open" aria-hidden="true"><span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span></div>
+            <div class="press press-enter" aria-hidden="true"><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd></div>
+            <div class="picker">
+              <div class="qp-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="field"><span class="q">réunion</span><i class="caret"></i><span class="ph">Rechercher</span></span></div>
+              <div class="qp-tabs"><span class="on">Tout</span><span>Texte</span><span>Liens</span><span>Images</span><span>Fichiers</span><span>Favoris</span></div>
+              <ol class="qp-rows"><li class="qp-row top"><span class="n n-all"><span class="k-mac">⌥1</span><span class="k-pc">Alt+1</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Envoyez-moi le deck avant 19h</span><span class="m">À l’instant</span></li><li class="qp-row"><span class="n n-all"><span class="k-mac">⌥2</span><span class="k-pc">Alt+2</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span><span class="m">il y a 2 minutes</span></li><li class="qp-row"><span class="n n-all"><span class="k-mac">⌥3</span><span class="k-pc">Alt+3</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">Image</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>Windows PC · il y a 5 minutes</span></li><li class="qp-row"><span class="n n-all"><span class="k-mac">⌥4</span><span class="k-pc">Alt+4</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 4.5V3.2c0-.5.4-.9.9-.9h3.8l2.6 2.6v6.4c0 .5-.4.9-.9.9h-1.4"/><path d="M3.5 5.6c0-.5.4-.9.9-.9h3.6l2.5 2.5v5.9c0 .5-.4.9-.9.9H4.4a.9.9 0 0 1-.9-.9z"/></svg><span class="t">contrat-signé.pdf et 2 de plus</span><span class="m">il y a 52 minutes</span></li><li class="qp-row hit first"><span class="n n-all"><span class="k-mac">⌥5</span><span class="k-pc">Alt+5</span></span><span class="n n-hit"><span class="k-mac">⌥1</span><span class="k-pc">Alt+1</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Lien de la réunion : https://meeting.example.com/j/8823</span><span class="m"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>il y a 1 heure</span></li><li class="qp-row"><span class="n n-all"><span class="k-mac">⌥6</span><span class="k-pc">Alt+6</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">docker compose up -d --build</span><span class="m">il y a 1 heure</span></li><li class="qp-row hit"><span class="n n-all"><span class="k-mac">⌥7</span><span class="k-pc">Alt+7</span></span><span class="n n-hit"><span class="k-mac">⌥2</span><span class="k-pc">Alt+2</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Les notes de réunion sont dans le dossier partagé</span><span class="m">Hier</span></li><li class="qp-row"><span class="n n-all"><span class="k-mac">⌥8</span><span class="k-pc">Alt+8</span></span><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">pnpm install</span><span class="m">Hier</span></li></ol>
+              <div class="qp-foot"><span><kbd class="k-mac">↩</kbd><kbd class="k-pc">Enter</kbd>Coller</span><span><kbd class="k-mac">⇧↩</kbd><kbd class="k-pc">Shift+Enter</kbd>Texte brut</span><span><kbd class="k-mac">⌘↩</kbd><kbd class="k-pc">Ctrl+Enter</kbd>Copier seulement</span><span><kbd class="k-mac">⌘D</kbd><kbd class="k-pc">Ctrl+D</kbd>Ajouter aux favoris</span><span><kbd class="k-mac">esc</kbd><kbd class="k-pc">Esc</kbd>Fermer</span></div>
+            </div>
+          </div>
+          <ol class="qp-steps">
+            <li data-step="0"><span class="num">1</span><h3>Appuyez sur <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span></h3><p>Fonctionne dans n'importe quelle application.</p></li>
+            <li data-step="1"><span class="num">2</span><h3>Tapez quelques lettres</h3><p>Recherchez du texte et des noms de fichiers ou appuyez sur <span class="k-mac">⌥1–9</span><span class="k-pc">Alt+1–9</span>.</p></li>
+            <li data-step="2"><span class="num">3</span><h3>Appuyez sur <span class="k-mac">↩</span><span class="k-pc">Enter</span>. Fait.</h3><p><span class="k-mac">⇧↩</span><span class="k-pc">Shift+Enter</span> pour le texte brut, <span class="k-mac">⌘↩</span><span class="k-pc">Ctrl+Enter</span> pour la copie uniquement.</p></li>
+          </ol>
+        </div>
+      </div>
+      <div class="wrap">
+        <p class="f-note">Vous pouvez modifier ou désactiver le raccourci. Le collage pour vous sur un Mac nécessite une autorisation d'accessibilité.</p>
+      </div>
+    </section>
+
+    <section class="f-section" id="favorites" aria-labelledby="fav-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="fav-title">Gardez ce que vous réutilisez.</h2>
+        <p class="f-intro">Mettez en avant les choses que vous réutilisez. Ils sont conservés dans une copie distincte et n’expirent jamais.</p>
+        <figure class="f-shot" data-reveal>
+          <img class="theme-dark" src="../../assets/screenshots/en/favorites-dark.png?v=3b235c7eb1" width="2112" height="1472" alt="La page Favoris : cinq éléments enregistrés, dont un modèle de rapport, une réponse standard, un lien de téléchargement et un PDF, chacun avec une étoile bleue" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/favorites.png?v=8f0aa4a80e" width="2112" height="1472" alt="La page Favoris : cinq éléments enregistrés, dont un modèle de rapport, une réponse standard, un lien de téléchargement et un PDF, chacun avec une étoile bleue" loading="lazy">
+        </figure>
+        <ul class="facts">
+          <li><h3>Jamais nettoyé</h3><p>L'historique expire ; les favoris restent.</p></li>
+          <li><h3>Une copie à elle seule</h3><p>La modification ou la suppression de l’original ne l’affecte pas.</p></li>
+          <li><h3>En pâte rapide aussi</h3><p>Également en pâte rapide ; appuyez sur <span class="k-mac">⌘D</span><span class="k-pc">Ctrl+D</span> pour ajouter.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="f-section" id="details" aria-labelledby="details-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="details-title">Les détails,<br>pris en charge.</h2>
+        <div class="bento">
+          <article class="cell wide" data-reveal data-filter>
+            <h3>Les liens ont leur propre onglet</h3>
+            <p>Textes, liens, images, fichiers : un clic pour filtrer.</p>
+            <div class="mini" aria-hidden="true"><div class="seg"><span data-tab="all" class="on">Tout</span><span data-tab="text">Texte</span><span data-tab="link">Liens</span><span data-tab="image">Images</span><span data-tab="file">Fichiers</span><span data-tab="fav">Favoris</span></div><ul class="mini-rows"><li data-kind="text"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Réunion déplacée au jeudi 15h</span></li><li data-kind="link"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://github.com/baiyuze/pasteferry</span></li><li data-kind="image"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg><span class="t">Image · 2,4 Mo</span></li><li data-kind="file"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span class="t">Bilan du troisième trimestre - final.key</span></li><li data-kind="link" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 9.4a2.6 2.6 0 0 0 3.7 0l2.2-2.2a2.6 2.6 0 0 0-3.7-3.7L7.7 4.6"/><path d="M9.4 6.6a2.6 2.6 0 0 0-3.7 0L3.5 8.8a2.6 2.6 0 0 0 3.7 3.7l1.1-1.1"/></svg><span class="t">https://pasteferry.cc/download/</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li><li data-kind="text" data-fav><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span class="t">Rapport hebdomadaire : terminé / la semaine prochaine</span><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.6 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg></li></ul></div>
+          </article>
+          <article class="cell wide hover-cell" data-reveal>
+            <h3>Survolez pour tout voir</h3>
+            <p>Passez la souris pour voir l'ensemble de l'article.</p>
+            <div class="crop"><img class="theme-dark" src="../../assets/screenshots/en/hover-dark.png?v=106b635a43" width="2112" height="1472" alt="Le pointeur repose sur des notes de réunion et une carte affiche le texte intégral : propriétaires, fenêtre de publication et suivi." loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/hover.png?v=126e91a7a5" width="2112" height="1472" alt="Le pointeur repose sur des notes de réunion et une carte affiche le texte intégral : propriétaires, fenêtre de publication et suivi." loading="lazy"></div>
+          </article>
+          <article class="cell" data-reveal data-search>
+            <h3>Recherchez ce que vous avez copié</h3>
+            <p>Recherchez par texte ou par nom de fichier. Conservé 3 jours par défaut, jusqu'à 30.</p>
+            <div class="mini" aria-hidden="true">
+              <div class="mini-search"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.4 3.4"/></svg><span class="q" data-q="contrat">contrat</span><i class="caret"></i></div>
+              <ul class="mini-rows hits"><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><span>contrat-signé.pdf</span></li><li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6.5"/></svg><span>Clause 3 du contrat : passage aux paiements trimestriels</span></li></ul>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>Des fichiers volumineux, quand vous en avez besoin</h3>
+            <p>Plus de 50 Mo sont d'abord synchronisés sous forme d'enregistrement ; cliquez sur Recevoir pour transférer.</p>
+            <div class="mini big" aria-hidden="true">
+              <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.6c0-.5.4-.9.9-.9h4.3L12 4.5v8.9c0 .5-.4.9-.9.9H4.9a.9.9 0 0 1-.9-.9z"/><path d="M9 1.8v3h3"/></svg><div><b>lancement-demo.mov</b><span>Depuis Mac mini · 1,3 Go</span><i class="bar"><i></i></i></div>
+              <span class="receive">Recevoir</span>
+            </div>
+          </article>
+          <article class="cell" data-reveal>
+            <h3>Des dossiers entiers aussi</h3>
+            <p>Copiez un dossier, collez le même dossier.</p>
+            <ul class="mini tree" aria-hidden="true">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>design-assets</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>logo.svg</li>
+              <li><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1.6"/><circle cx="5.6" cy="6.4" r="1.1"/><path d="m2.4 12 3.8-3.6 2.6 2.4 2-1.8 2.8 2.6"/></svg>banner@2x.png</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>fonts</li>
+            </ul>
+          </article>
+          <article class="cell full" data-reveal>
+            <div>
+              <h3>Des noms qui fonctionnent partout</h3>
+              <p>Les caractères Windows ne permettent pas de se ressembler en pleine largeur.</p>
+            </div>
+            <div class="mini names" aria-hidden="true">
+              <div><span>Mac</span><code>Notes 10h30?.md</code></div>
+              <div><span>Windows</span><code>Notes 10：30？.md</code></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="f-section" id="network" aria-labelledby="net-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="net-title">Maison et bureau,<br>connecté directement.</h2>
+        <p class="f-intro">Même réseau : installer et appairer. Différents réseaux : activez le service.</p>
+        <figure class="net" data-reveal>
+          <svg viewBox="0 0 800 330" role="img" aria-label="Schéma : deux ordinateurs sur un réseau domestique et un ordinateur de bureau se trouvent via le service, puis se connectent directement">
+            <rect class="n-svc" x="300" y="14" width="200" height="56" rx="14"/>
+            <text class="n-title" x="400" y="49" text-anchor="middle">Service</text>
+            <rect class="n-net" x="20" y="130" width="300" height="180" rx="22"/>
+            <rect class="n-net" x="480" y="130" width="300" height="180" rx="22"/>
+            <text class="n-label" x="44" y="164">Accueil</text>
+            <text class="n-label" x="756" y="164" text-anchor="end">Bureau</text>
+            <path class="n-sig" d="M170 200V42H300"/>
+            <path class="n-sig" d="M630 200V42H500"/>
+            <rect class="n-dev" x="120" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M105 278h130"/>
+            <rect class="n-dev" x="580" y="205" width="100" height="62" rx="7"/><path class="n-dev" d="M565 278h130"/>
+            <path class="n-direct" d="M235 236H565"/>
+            <text class="n-note" x="400" y="222" text-anchor="middle">Direct · chiffré de bout en bout</text>
+          </svg>
+        </figure>
+        <ul class="facts">
+          <li><h3>Même réseau</h3><p>Pas de serveur. Entrez un code d'appairage et vous avez terminé.</p></li>
+          <li><h3>À travers les réseaux</h3><p>Service, votre propre serveur ou Tailscale.</p></li>
+          <li><h3>Chiffré de bout en bout</h3><p>Vérifiez les empreintes digitales lors du couplage ; le serveur ne voit jamais votre contenu.</p></li>
+        </ul>
+        <p class="more"><a href="../../fr/start/#server">Choisissez comment vous connecter →</a><a href="../../fr/how/">Comment ça marche →</a></p>
+      </div>
+    </section>
+
+    <section class="f-section" id="numbers" aria-labelledby="numbers-title">
+      <div class="wrap">
+        <h2 class="f-h2" id="numbers-title">Par les chiffres.</h2>
+        <dl class="numbers" data-reveal>
+          <div><dt><b>3</b> <span>systèmes</span></dt><dd>macOS, Windows, Linux</dd></div>
+          <div><dt><b>50 MB</b></dt><dd>envoyé pendant que vous copiez</dd></div>
+          <div><dt><b>≈330 ms</b></dt><dd>pour un fichier de 20 Mo sur un réseau local</dd></div>
+          <div><dt><b>0</b> <span>comptes</span></dt><dd>pas d&#x27;inscription, juste une paire</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">Essayez-le maintenant.</h2>
+        <div class="cta">
+          <a class="button" href="../../fr/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Télécharger PasteFerry</a>
+        </div>
+        <p class="note">Version 2.13.1, gratuite et open source. Pour macOS 13 ou version ultérieure, Windows 10 et 11, Linux (x64 et ARM64) et Android 9 ou version ultérieure. Le nouveau réglage de taille agrandit ou réduit le texte, les icônes et les espacements ensemble.</p>
+        <a class="start-link" href="../../fr/start/">Nouveau ici ? Configurez-le en trois étapes →</a>
+        <div class="star-ask">
+          <p>Vous aimez ça ? Mettez-le en vedette sur GitHub.</p>
+          <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Étoile PasteFerry sur GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Ajouter une étoile sur GitHub</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry est open source sous GNU AGPL-3.0.</p>
+      <nav aria-label="Pied de page">
+        <a href="https://github.com/baiyuze/pasteferry/releases">Toutes les versions</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Journal des modifications</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Notes de conception (chinois)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">Licence</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Signaler un problème</a>
+        <a href="../../fr/privacy/">Confidentialité</a>
+        <a href="../../fr/feedback/">Discussions et commentaires</a>
+      </nav>
+      <nav aria-label="Langue">
+        <a href="../../features/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/features/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/features/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/features/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/features/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/features/" hreflang="fr" lang="fr" data-lang="fr" aria-current="page">Français</a>
+        <a href="../../es/features/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="../../assets/features.js?v=e31ed6ea0e" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

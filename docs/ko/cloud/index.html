@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>공용 서버에서 PasteFerry 서버 실행: 클라우드 VM 가이드</title>
+  <meta name="description" content="하나의 스크립트는 공용 IP를 사용하여 Linux VM에 PasteFerry의 신호 및 TURN 서버를 설치합니다. 모든 컴퓨터가 직접 연결되므로 클립보드는 집, 사무실 및 기타 어디에서나 동기화됩니다. 중국 본토의 보안 그룹, 확인, 앱 설정 및 도메인을 다룹니다.">
+  <link rel="canonical" href="https://pasteferry.cc/ko/cloud/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/cloud/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/cloud/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/cloud/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/cloud/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/cloud/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/cloud/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/cloud/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/cloud/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/cloud/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="공용 서버에서 PasteFerry 서버 실행: 클라우드 VM 가이드">
+  <meta property="og:description" content="하나의 스크립트는 공용 IP를 사용하여 Linux VM에 PasteFerry의 신호 및 TURN 서버를 설치합니다. 모든 컴퓨터가 직접 연결되므로 클립보드는 집, 사무실 및 기타 어디에서나 동기화됩니다. 중국 본토의 보안 그룹, 확인, 앱 설정 및 도메인을 다룹니다.">
+  <meta property="og:url" content="https://pasteferry.cc/ko/cloud/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">콘텐츠로 건너뛰기</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ko/" aria-label="PasteFerry 홈"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="페이지">
+        <a class="mid" href="../../ko/features/">특징</a>
+        <a class="mid" href="../../ko/start/">빠른 시작</a>
+        <a class="wide" href="../../ko/start/#server" aria-current="true">연결 방법</a>
+        <a href="../../ko/download/">다운로드</a>
+        <details class="menu">
+          <summary aria-label="더 많은 페이지"><span>더 보기</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../ko/features/">특징</a></li>
+            <li class="narrow"><a href="../../ko/start/">빠른 시작</a></li>
+            <li class="narrow"><a href="../../ko/start/#server">연결 방법</a></li>
+            <li><a href="../../ko/themes/">테마 가이드</a></li>
+            <li><a href="../../ko/how/">작동 원리</a></li>
+            <li><a href="../../ko/security/">보안</a></li>
+            <li><a href="../../ko/faq/">FAQ</a></li>
+            <li><a href="../../ko/feedback/">토론 및 피드백</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub의 별 PasteFerry"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="모양" title="모양"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>시스템 설정 따르기</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>라이트</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>다크</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="언어：한국어"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>한국어</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../cloud/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/cloud/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/cloud/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/cloud/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/cloud/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/cloud/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a></li>
+            <li><a href="../../de/cloud/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/cloud/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/cloud/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../ko/">PasteFerry</a> / <a href="../../ko/start/#server">연결 방법</a></p>
+        <h1 class="display">공개 서버에서 실행</h1>
+        <p class="lede">공용 IP가 있는 Linux VM 가장 작은 것만으로도 충분합니다. 모든 컴퓨터는 직접 연결되어 집, 사무실 또는 다른 곳 어디에서나 추가 설치 없이 동기화됩니다.</p>
+        <ol class="guide-toc">
+          <li><a href="#prepare">시작하기 전에</a></li>
+          <li><a href="#ports">열린 포트</a></li>
+          <li><a href="#install">설치</a></li>
+          <li><a href="#check">확인</a></li>
+          <li><a href="#clients">앱 설정</a></li>
+          <li><a href="#faq">질문</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="overview" aria-labelledby="overview-title">
+      <div class="wrap">
+        <h2 id="overview-title">모든 컴퓨터가 여기에 연결됩니다.</h2>
+        <p class="intro">서버는 공용 인터넷에 있으므로 모든 컴퓨터는 어떤 네트워크에 있든 서버에 연결할 수 있습니다. 복사한 내용은 가능하면 두 컴퓨터 간에 직접 이동됩니다. 실패하면 여전히 암호화된 상태로 서버를 통해 중계됩니다.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 460" role="img" aria-labelledby="cloud-title cloud-desc">
+            <title id="cloud-title">공용 서버가 있는PasteFerry</title>
+            <desc id="cloud-desc">공용 서버는 203.0.113.10에 있습니다. 사무실 네트워크의 Mac과 홈 네트워크의 Windows PC는 모두 신호를 위해 연결됩니다. 복사된 콘텐츠는 둘 사이에 직접 전달되며, 실패할 경우 서버의 릴레이를 통해 전달됩니다.</desc>
+            <rect class="d-box" x="340" y="24" width="280" height="118" rx="14"/>
+            <text class="d-title" x="480" y="62" text-anchor="middle">공용 서버</text>
+            <text class="d-sub" x="480" y="90" text-anchor="middle">공개 IP가 있는 Cloud VM</text>
+            <text class="d-ip" x="480" y="124" text-anchor="middle">203.0.113.10</text>
+            <rect class="d-lan" x="8" y="196" width="412" height="212" rx="22"/>
+            <text class="d-lan-label" x="32" y="228">사무실 네트워크</text>
+            <rect class="d-lan" x="540" y="196" width="412" height="212" rx="22"/>
+            <text class="d-lan-label" x="564" y="228">홈 네트워크</text>
+            <path class="d-sig" d="M150 250V68H340"/>
+            <path class="d-sig" d="M810 250V68H620"/>
+            <path class="d-relay" d="M210 250V112H340"/>
+            <path class="d-relay" d="M750 250V112H620"/>
+            <text class="d-note" x="164" y="58">신호, TCP 8787</text>
+            <text class="d-note" x="224" y="170">직접 실패할 경우 UDP를 통한 릴레이</text>
+            <rect class="d-box" x="60" y="250" width="240" height="120" rx="14"/>
+            <text class="d-title" x="180" y="302" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="180" y="330" text-anchor="middle">PasteFerry실행</text>
+            <rect class="d-box" x="660" y="250" width="240" height="120" rx="14"/>
+            <text class="d-title" x="780" y="302" text-anchor="middle">Windows</text>
+            <text class="d-sub" x="780" y="330" text-anchor="middle">PasteFerry실행</text>
+            <path class="d-direct" d="M300 316H660"/>
+            <text class="d-label" x="480" y="302" text-anchor="middle">직접 연결</text>
+            <g class="d-legend" transform="translate(40 444)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">데이터(직접)</text>
+              <path class="d-relay" d="M250 0H278"/><text x="288" y="5">데이터(릴레이, 폴백)</text>
+              <path class="d-sig" d="M560 0H588"/><text x="598" y="5">신호 보내기</text>
+            </g>
+          </svg>
+        </figure>
+        <ul class="points ports">
+          <li><strong>신호, TCP 8787.</strong> 모든 컴퓨터는 연결 상태를 유지하여 다른 컴퓨터를 찾고 연결 세부 정보를 쌍으로 교환합니다.</li>
+          <li><strong>다이렉트.</strong> 다른 네트워크에 있는 컴퓨터는 대부분의 가정 및 사무실 네트워크에서 작동하는 NAT 홀 펀칭을 통해 직접 연결됩니다.</li>
+          <li><strong>릴레이, UDP 3478 및 릴레이 포트.</strong> 직접 경로가 실패하면 서버는 여전히 암호화되어 있고 대역폭에 의해 제한되는 트래픽을 전달합니다.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="prepare" aria-labelledby="prepare-title">
+      <div class="wrap">
+        <h2 id="prepare-title">시작하기 전에</h2>
+        <dl class="fallbacks">
+          <div><dt>클라우드 VM</dt><dd>x86_64 또는 ARM64의Linux ; 서버는 약 15MB의 RAM을 사용하므로 가장 작은 크기로도 충분합니다. 루트가 필요합니다.</dd></div>
+          <div><dt>공개 IP</dt><dd>VM의 자체 공용 IP가 작동합니다. 정적(탄력적)이 가장 좋습니다. 변경되면 모든 컴퓨터를 업데이트해야 합니다.</dd></div>
+          <div><dt>들어가는 길</dt><dd>ssh 또는 공급자 콘솔의 웹 터미널.</dd></div>
+          <div><dt>중국 본토의 VM</dt><dd>도메인에 대한 ICP 제출이 없으면 도메인이 아닌 앱에 IP를 입력하세요. <a href="#faq">질문</a>를 참조하세요.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="ports" aria-labelledby="ports-title">
+      <div class="wrap">
+        <p class="eyebrow">단계 1</p>
+        <h2 id="ports-title">보안 그룹의 포트 열기</h2>
+        <p class="intro">클라우드 공급자의 콘솔에서 이러한 세 가지 인바운드 규칙을 VM의 보안 그룹에 추가합니다.</p>
+        <div class="os-grid qs-grid">
+          <div class="os-figures">
+            <figure class="browser listing" role="img" aria-label="클라우드 보안 그룹의 인바운드 규칙(그림): 신호용 TCP 8787, STUN 및 TURN용 UDP 3478, 릴레이 포트용 UDP 32768-60999, 모두 0.0.0.0/0에서">
+              <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">클라우드 콘솔 › 보안 그룹 › 인바운드 규칙</span></div>
+              <table>
+                <thead><tr><th scope="col">프로토콜</th><th scope="col">포트 범위</th><th scope="col">소스</th><th scope="col">목적</th></tr></thead>
+                <tbody>
+                <tr><td>TCP</td><td>8787</td><td>0.0.0.0/0</td><td>신호 보내기</td></tr>
+                <tr><td>UDP</td><td>3478</td><td>0.0.0.0/0</td><td>STUN 및 회전</td></tr>
+                <tr><td>UDP</td><td>32768-60999</td><td>0.0.0.0/0</td><td>릴레이 포트</td></tr>
+                </tbody>
+              </table>
+            </figure>
+          </div>
+          <ul class="points">
+            <li><strong>다른 이름:</strong> 일부 공급자는 이를 방화벽 또는 네트워크 ACL이라고 부릅니다. 같은 설정이에요.</li>
+            <li><strong>릴레이 포트</strong> 는 OS에 의해 할당됩니다. 범위는 서버에 따라 다릅니다. <code>cat /proc/sys/net/ipv4/ip_local_port_range</code> 를 실행하여 확인하세요. 설치 스크립트도 이를 인쇄합니다.</li>
+            <li><strong>시스템 방화벽:</strong> ufw 또는 Firewalld가 활성화된 경우 그곳에서 동일한 포트를 엽니다. 설치 스크립트는 명령을 인쇄합니다.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install" aria-labelledby="install-title">
+      <div class="wrap">
+        <p class="eyebrow">단계 2</p>
+        <h2 id="install-title">설치 스크립트 실행</h2>
+        <p class="intro">스크립트에 공용 IP를 제공합니다. 서버를 설치하고, 부팅 시 시작되는 systemd 서비스를 등록하고, 앱에 입력할 주소를 인쇄합니다.</p>
+        <div class="os-grid qs-grid">
+          <div class="os-steps">
+            <ol class="steps">
+              <li>공용 IP를 사용하여 SSH(예: <code>ssh root@203.0.113.10</code> )로 로그인합니다.</li>
+              <li>마지막 공용 IP를 사용하여 다음 줄을 실행합니다.<span class="aside">ARM에서는 <code>amd64</code> 를 <code>arm64</code>로 바꿉니다.</span>
+                <div class="code">
+                  <button class="copy" type="button" data-done="복사됨">복사</button>
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-linux-amd64.tar.gz
+tar xzf pasteferry-server-linux-amd64.tar.gz
+cd pasteferry-server-linux-amd64
+sudo ./install.sh 203.0.113.10</code></pre>
+                </div></li>
+              <li>끝에 있는 <code>ws://203.0.113.10:8787/signal</code> 주소는 앱에 입력하는 주소입니다.</li>
+            </ol>
+            <ul class="points">
+              <li><strong>부팅 시 시작되는 시스템 서비스</strong> 를 등록합니다. 구성은 <code>/etc/pasteferry/server.env</code>입니다.</li>
+              <li><strong>업그레이드:</strong> 새 버전을 다운로드하고 압축을 푼 후 <code>sudo ./install.sh</code> 를 다시 실행하세요. 구성이 유지됩니다.</li>
+              <li><strong>Docker 도 작동합니다.</strong> <a href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md">서버 배포 가이드</a>를 참조하세요.</li>
+            </ul>
+          </div>
+          <div class="os-figures">
+            <figure class="term" role="img" aria-label="sudo ./install.sh 203.0.113.10의 출력: 설치하고 systemd 장치 및 구성을 작성하고 서버를 시작한 다음 주소 ws://203.0.113.10:8787/signal을 인쇄합니다.">
+                <div class="t-bar mac"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="t-title">ssh root@203.0.113.10</span></div>
+<pre class="t-body"><span class="t-prompt">$</span> sudo ./install.sh 203.0.113.10
+<span class="t-step">▶ Installing the binary to /usr/local/bin</span>
+<span class="t-step">▶ Writing the systemd unit</span>
+<span class="t-step">▶ Writing /etc/pasteferry/server.env (relay address 203.0.113.10)</span>
+<span class="t-step">▶ Starting</span>
+  ✓ Running
+
+Installed: pasteferry-server 2.13.1
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
+
+    <span class="t-url">ws://203.0.113.10:8787/signal</span>
+
+  Config     /etc/pasteferry/server.env
+  Logs       journalctl -u pasteferry-server -f
+  Restart    systemctl restart pasteferry-server
+  Uninstall  sudo ./install.sh uninstall
+
+Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768-60999 (relay ports, assigned by the OS)</pre>
+              </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="check" aria-labelledby="check-title">
+      <div class="wrap">
+        <p class="eyebrow">단계 3</p>
+        <h2 id="check-title">도달 가능한지 확인하세요</h2>
+        <p class="intro">모든 컴퓨터의 브라우저에서 <code>http://203.0.113.10:8787/healthz</code> (공용 IP 사용)를 엽니다. 이 줄이 보이면 제대로 작동하는 것입니다.</p>
+        <figure class="browser" role="img" aria-label="서버 상태가 정상인 http://203.0.113.10:8787/healthz, 와 해당 버전을 표시하는 브라우저">
+          <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">http://203.0.113.10:8787/healthz</span></div>
+          <pre class="b-body">{"status":"ok","version":"2.13.1"}</pre>
+        </figure>
+        <p class="note">로드되지 않으면 아래 <a href="#faq">질문</a> 를 참조하세요.</p>
+      </div>
+    </section>
+
+    <section class="section" id="clients" aria-labelledby="clients-title">
+      <div class="wrap">
+        <p class="eyebrow">단계 4</p>
+        <h2 id="clients-title">각 컴퓨터의 주소를 입력하세요.</h2>
+        <ol class="flow">
+          <li><h3>설정 열기</h3><p>각 컴퓨터에서 PasteFerry 를 열고 설정 → 연결로 이동합니다.</p></li>
+          <li><h3>공개 주소를 입력하세요.</h3><p>사용자 지정 서버에서 공용 IP와 함께 <code>ws://203.0.113.10:8787/signal</code> 를 입력하고 Return 또는 Enter를 누릅니다.</p></li>
+          <li><h3>상태를 확인하세요</h3><p>Connection에 녹색 연결됨이 표시되면 설정된 것입니다. 아직 페어링하지 않았다면 장치에서 페어링하세요.</p></li>
+        </ol>
+        <figure class="shot">
+          <img class="theme-dark" src="../../assets/screenshots/en/settings-cloud-dark.png?v=bad7315042" width="2112" height="1472" alt="PasteFerry 설정 → 연결: 사용자 정의 서버는 ws://203.0.113.10:8787/signal 이고 연결 상태는 연결됨으로 표시됩니다." loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/settings-cloud.png?v=71c342588d" width="2112" height="1472" alt="PasteFerry 설정 → 연결: 사용자 정의 서버는 ws://203.0.113.10:8787/signal 이고 연결 상태는 연결됨으로 표시됩니다." loading="lazy">
+        </figure>
+        <p class="note">아직 앱을 설치하지 않으셨나요? <a href="../../ko/start/">빠른 시작</a>를 참조하세요.</p>
+        <div class="table-scroll">
+                <table class="manage">
+                  <caption>나중에</caption>
+                  <tbody>
+                  <tr><th scope="row">상태</th><td><code>systemctl status pasteferry-server</code></td></tr>
+                  <tr><th scope="row">로그</th><td><code>journalctl -u pasteferry-server -f</code></td></tr>
+                  <tr><th scope="row">다시 시작</th><td><code>sudo systemctl restart pasteferry-server</code></td></tr>
+                  <tr><th scope="row">구성</th><td><code>/etc/pasteferry/server.env</code>; 편집 후 서비스를 다시 시작하십시오</td></tr>
+                  <tr><th scope="row">업그레이드</th><td>새 버전을 다운로드하고 압축을 푼 후 <code>sudo ./install.sh</code> 를 다시 실행하세요. 구성이 유지됩니다</td></tr>
+                  <tr><th scope="row">제거</th><td><code>sudo ./install.sh uninstall</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <h2 id="faq-title">질문</h2>
+        <div class="faq">
+          <details>
+            <summary>IP로는 작동하지만 도메인으로는 작동하지 않습니다.</summary>
+            <div class="answer"><p>중국 본토의 클라우드 제공업체는 ICP 제출 없이 도메인에 대한 일반 HTTP 요청을 가로채고 차단 페이지로 리디렉션하여 응답합니다. 8787과 같은 비표준 포트가 포함된 테스트에서. WebSocket 핸드셰이크도 HTTP 요청이므로 가로채고 앱에 연결되지 않음이 표시됩니다.</p><p>대신 <code>ws://server-ip:8787/signal</code>와 같이 서버의 IP를 입력하거나 도메인을 파일로 등록하세요.</p></div>
+          </details>
+          <details>
+            <summary>얼마나 큰 서버가 필요합니까?</summary>
+            <div class="answer"><p>가장 작은 것. 서버는 약 15MB의 RAM을 사용하며 일반적으로 몇 개의 신호 메시지만 전달합니다. 콘텐츠는 가능한 경우 컴퓨터 간에 직접 이동됩니다. 릴레이된 전송만 서버의 대역폭에 의해 제한됩니다.</p></div>
+          </details>
+          <details>
+            <summary>장치에 직접 대신 릴레이가 표시됨</summary>
+            <div class="answer"><p>연결 직후에 릴레이를 사용하고 조금 후에 Direct를 사용하는 것이 정상입니다. 릴레이가 사용자를 안내하고 유휴 상태에서는 직접 경로가 대신합니다. 릴레이 상태를 유지한다는 것은 일반적으로 포트를 무작위로 지정하는 NAT나 엄격한 방화벽으로 인해 두 컴퓨터가 서로 직접 연결할 수 없음을 의미합니다. 여전히 암호화되어 있으며 서버 대역폭에 의해 제한됩니다.</p></div>
+          </details>
+          <details>
+            <summary>HTTPS (wss://)를 사용할 수 있나요?</summary>
+            <div class="answer"><p>예, WebSocket 업그레이드를 지원하는 HTTPS 리버스 프록시 뒤에 있습니다. <code>wss://</code>로 시작하는 주소를 입력하세요. 중국 본토에 있는 도메인에는 ICP 제출이 필요합니다. STUN 및 TURN은 UDP 를 사용하고 프록시를 우회하므로 해당 포트를 열어 두십시오.</p></div>
+          </details>
+          <details>
+            <summary>내 집 연결에는 공개 IP가 있습니다. 그걸 사용해도 될까요?</summary>
+            <div class="answer"><p>예, 하지만 VM보다 작업이 더 많습니다. TCP 8787, UDP 3478 및 광범위한 UDP 릴레이 포트를 해당 컴퓨터로 전달하면 홈 IP가 변경될 수 있습니다. 모든 컴퓨터가 집에 있는 경우 <a href="../../ko/lan/">동일한 네트워크</a>에 서버가 전혀 필요하지 않습니다. 포트 전달 없이 네트워크 간에 동기화하려면 <a href="../../ko/tailscale/">Tailscale</a>를 참조하세요.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">하나의 클라우드 VM,<br>는 어디서나 동기화됩니다.</h2>
+        <div class="cta">
+          <a class="button" href="../../ko/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry 다운로드</a>
+        </div>
+        <p class="note">버전 2.13.1, 무료 오픈 소스. macOS 13 이상, Windows 10·11, Linux(x64·ARM64), Android 9 이상을 지원합니다. 새 화면 크기 설정으로 글자, 아이콘, 여백을 함께 확대하거나 축소할 수 있습니다.</p>
+        <a class="source" href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md">Docker 및 모든 옵션을 포함한 전체 서버 가이드</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry 는 GNU AGPL-3.0의 오픈 소스입니다.</p>
+      <nav aria-label="바닥글">
+        <a href="https://github.com/baiyuze/pasteferry/releases">모든 릴리스</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">디자인 노트(중국어)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">라이센스</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">문제 신고</a>
+        <a href="../../ko/privacy/">개인 정보 보호</a>
+        <a href="../../ko/feedback/">토론 및 피드백</a>
+      </nav>
+      <nav aria-label="언어">
+        <a href="../../cloud/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/cloud/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/cloud/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/cloud/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/cloud/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/cloud/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a>
+        <a href="../../de/cloud/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/cloud/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/cloud/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

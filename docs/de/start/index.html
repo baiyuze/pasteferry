@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Schnellstart: Richten Sie PasteFerry in drei Schritten ein</title>
+  <meta name="description" content="Neu bei PasteFerry? Installieren Sie die App auf jedem Computer. Im selben Netzwerk einfach koppeln; Aktivieren Sie in verschiedenen Netzwerken den Dienst. Dann auf einen Computer kopieren und auf dem anderen einfügen.">
+  <link rel="canonical" href="https://pasteferry.cc/de/start/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/start/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/start/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/start/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/start/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/start/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/start/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/start/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/start/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/start/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Schnellstart: Richten Sie PasteFerry in drei Schritten ein">
+  <meta property="og:description" content="Neu bei PasteFerry? Installieren Sie die App auf jedem Computer. Im selben Netzwerk einfach koppeln; Aktivieren Sie in verschiedenen Netzwerken den Dienst. Dann auf einen Computer kopieren und auf dem anderen einfügen.">
+  <meta property="og:url" content="https://pasteferry.cc/de/start/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="de_DE">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Zum Inhalt springen</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../de/" aria-label="PasteFerry Startseite"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Seite">
+        <a class="mid" href="../../de/features/">Funktionen</a>
+        <a class="mid" href="./" aria-current="page">Schnellstart</a>
+        <a class="wide" href="#server">Möglichkeiten zur Verbindung</a>
+        <a href="../../de/download/">Download</a>
+        <details class="menu">
+          <summary aria-label="Weitere Seiten"><span>Mehr</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../de/features/">Funktionen</a></li>
+            <li class="narrow"><a href="./" aria-current="page">Schnellstart</a></li>
+            <li class="narrow"><a href="#server">Möglichkeiten zur Verbindung</a></li>
+            <li><a href="../../de/themes/">Themenführer</a></li>
+            <li><a href="../../de/how/">Wie es funktioniert</a></li>
+            <li><a href="../../de/security/">Sicherheit</a></li>
+            <li><a href="../../de/faq/">FAQ</a></li>
+            <li><a href="../../de/feedback/">Diskussion & Feedback</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Änderungsprotokoll</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Stern PasteFerry auf GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Erscheinungsbild" title="Erscheinungsbild"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Systemeinstellung folgen</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Hell</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Dunkel</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Sprache：Deutsch"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>Deutsch</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../start/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/start/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/start/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/start/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/start/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/start/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/start/" hreflang="de" lang="de" data-lang="de" aria-current="page">Deutsch</a></li>
+            <li><a href="../../fr/start/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/start/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../de/">PasteFerry</a> / Schnellstart</p>
+        <h1 class="display">Schnellstart</h1>
+        <p class="lede">Installieren Sie die App, wählen Sie eine Verbindungsmethode und koppeln Sie Ihre Computer. Im selben Netzwerk dauert es einige Minuten.</p>
+        <ol class="guide-toc">
+          <li><a href="#app">Installieren Sie die App</a></li>
+          <li><a href="#server">Wählen Sie eine Möglichkeit zur Verbindung</a></li>
+          <li><a href="#pair">Paar</a></li>
+          <li><a href="#phone">Mit einem Telefon</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="app" aria-labelledby="app-title">
+      <div class="wrap">
+        <p class="eyebrow">Schritt 1</p>
+        <h2 id="app-title">Installieren Sie die App auf jedem Computer</h2>
+        <p class="intro">Eines auf jedem Computer, den Sie synchronisieren möchten. Mac, Windows und Linux können frei gemischt werden.</p>
+        <div class="os-grid qs-grid">
+          <div>
+            <div class="qs-app">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>Mac</h3>
+              <ol class="steps">
+                <li>Laden Sie die DMG herunter, öffnen Sie sie und ziehen Sie PasteFerry in „Anwendungen“.<span class="aside">Es gibt eines für Apple-Silizium und eines für Intel; Die Download-Seite hilft Ihnen bei der Auswahl.</span></li>
+                <li>Öffnen Sie es über Anwendungen.<span class="aside">Beim ersten Mal sagt macOS , dass der Entwickler nicht überprüft werden kann: Gehen Sie zu Systemeinstellungen → Datenschutz und Sicherheit und klicken Sie unten auf Trotzdem öffnen.</span></li>
+                <li>Klicken Sie auf Hintergrundsynchronisierung aktivieren. Wenn macOS nach dem Zugriff auf die Zwischenablage und der Suche nach Geräten in Ihrem lokalen Netzwerk fragt, lassen Sie beides zu.</li>
+              </ol>
+              <a class="button" href="../../de/download/#macos"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Für Mac herunterladen</a>
+            </div>
+            <div class="qs-app">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Windows</h3>
+              <ol class="steps">
+                <li>Führen Sie PasteFerry-Setup.exe aus; Es sind keine Administratorrechte erforderlich.<span class="aside">Wenn die Meldung „Windows hat Ihren PC geschützt“ angezeigt wird, klicken Sie auf „Weitere Informationen“ und dann auf „Trotzdem ausführen“.</span></li>
+                <li>Öffnen Sie PasteFerry und klicken Sie auf Hintergrundsynchronisierung aktivieren. Lassen Sie es zu, wenn die Windows Firewall danach fragt. Nachdem Sie das Fenster geschlossen haben, läuft es im Benachrichtigungsbereich weiter.</li>
+              </ol>
+              <a class="button" href="../../de/download/#windows"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Herunterladen für Windows</a>
+            </div>
+            <div class="qs-app">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Linux</h3>
+              <ol class="steps">
+                <li>Installieren Sie auf Ubuntu, Debian und ähnlichem die .deb; Extrahieren Sie bei anderen Distributionen die Datei tar.gz und führen Sie darin <code>install.sh</code> aus.</li>
+                <li>Öffnen Sie PasteFerry im App-Menü und klicken Sie auf Hintergrundsynchronisierung aktivieren.</li>
+              </ol>
+              <a class="button" href="../../de/download/#linux"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Herunterladen für Linux</a>
+            </div>
+          </div>
+          <figure class="shot">
+            <img class="theme-dark" src="../../assets/screenshots/en/welcome-dark.png?v=3d4d07f16e" width="2112" height="1472" alt="PasteFerry beim ersten Öffnen und fordert Sie auf, die Hintergrundsynchronisierung zu aktivieren" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/welcome.png?v=53d7b84001" width="2112" height="1472" alt="PasteFerry beim ersten Öffnen und fordert Sie auf, die Hintergrundsynchronisierung zu aktivieren" loading="lazy">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="server" aria-labelledby="server-title">
+      <div class="wrap">
+        <p class="eyebrow">Schritt 2</p>
+        <h2 id="server-title">Wählen Sie eine Möglichkeit zur Verbindung</h2>
+        <p class="intro">Im selben Netzwerk installieren und koppeln. Aktivieren Sie in verschiedenen Netzwerken den Dienst. Wenn Sie die volle Kontrolle wünschen, betreiben Sie Ihren eigenen Server oder verwenden Sie Tailscale.</p>
+        <div class="os-tabs" data-tabs="plan">
+          <div class="tablist" role="tablist" aria-label="Möglichkeiten zur Verbindung" hidden>
+            <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">Dienst</button>
+            <button type="button" role="tab" id="tab-plan-lan" aria-controls="plan-lan">Gleiches Netzwerk</button>
+            <button type="button" role="tab" id="tab-plan-cloud" aria-controls="plan-cloud">Ihr eigener öffentlicher Server</button>
+            <button type="button" role="tab" id="tab-plan-ts" aria-controls="plan-ts">Tailscale</button>
+          </div>
+
+          <section class="os" id="plan-official" role="tabpanel" aria-labelledby="tab-plan-official">
+            <h3 class="os-title">Dienst</h3>
+            <div class="plan-grid">
+              <div>
+                <ol class="steps">
+                  <li>Installieren Sie die neueste Version auf jedem Computer und klicken Sie auf Hintergrundsynchronisierung aktivieren.</li>
+                  <li>Aktivieren Sie „Dienst verwenden“ unter „Einstellungen“ → „Verbindung“.</li>
+                  <li>Koppeln Sie die beiden Computer. Computer, die Sie bereits gekoppelt haben, müssen nicht erneut gekoppelt werden.</li>
+                </ol>
+                <p class="plan-address">Der Dienst ist bei einer Neuinstallation deaktiviert. Der Server erhält niemals das, was Sie kopieren; siehe Datenschutzerklärung.</p>
+                <a class="button quiet" href="../../de/official/">Schalten Sie den Dienst ein →</a>
+              </div>
+              <div class="plan-card">
+                <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
+                <dl>
+                  <div><dt>Direkt wann immer möglich</dt><dd>Die Computer stellen eine direkte Verbindung her, wenn sie können, und nutzen den Server nur, wenn dies nicht möglich ist. Der Inhalt ist verschlüsselt und der Server kann ihn nicht entschlüsseln.</dd></div>
+                  <div><dt>100 MB Relay pro Tag, direkt unbegrenzt</dt><dd>Die Weiterleitung ist auf 100 MB pro Computer und Tag begrenzt. direkt ist unbegrenzt. Auf der Verbrauchsseite wird angezeigt, wie viel noch übrig ist.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </section>
+
+          <section class="os" id="plan-lan" role="tabpanel" aria-labelledby="tab-plan-lan">
+            <h3 class="os-title">Gleiches Netzwerk</h3>
+            <div class="plan-grid">
+              <div>
+                <ol class="steps">
+                  <li>Installieren Sie die App auf jedem Computer und klicken Sie auf Hintergrundsynchronisierung aktivieren.</li>
+                  <li>Lassen Sie PasteFerry zu, wenn die Windows Firewall oder macOS nach dem lokalen Netzwerk fragt.</li>
+                  <li>Zeigen Sie einen Code auf einem Computer vor, geben Sie ihn auf dem anderen ein und vergleichen Sie Fingerabdrücke. Geben Sie in einem anderen Subnetz auch die unter dem Code angezeigte Adresse ein; Weitere Informationen finden Sie im <a href="../../de/lan/#subnet">-Netzwerkhandbuch</a>.</li>
+                </ol>
+                <p class="plan-address">Es muss keine Serveradresse eingegeben werden.</p>
+                <a class="button quiet" href="../../de/lan/">Gleicher Netzwerkführer →</a>
+              </div>
+              <div class="plan-card">
+                <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
+                <dl>
+                  <div><dt>Am besten für</dt><dd>Zu Hause oder im Büro, wobei beide Computer im selben Wi-Fi- oder kabelgebundenen Netzwerk sind.</dd></div>
+                  <div><dt>Du brauchst</dt><dd>Nichts als die App auf jedem Computer.</dd></div>
+                  <div><dt>Denken Sie daran</dt><dd>Die Synchronisierung stoppt, wenn Sie das Netzwerk verlassen, und wird fortgesetzt, wenn Sie zurückkommen. Wenn sich Kabel und WLAN in unterschiedlichen Subnetzen befinden, geben Sie beim Pairing eine zusätzliche Adresse ein.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </section>
+
+          <section class="os" id="plan-cloud" role="tabpanel" aria-labelledby="tab-plan-cloud">
+            <h3 class="os-title">Ihr eigener öffentlicher Server</h3>
+            <div class="plan-grid">
+              <div>
+                <ol class="steps">
+                  <li>Öffnen Sie in der Sicherheitsgruppe Ihres Cloud-Anbieters TCP 8787, UDP 3478 und UDP 32768–60999.</li>
+                  <li>Melden Sie sich mit ssh an, laden Sie das Installationsskript herunter und führen Sie es aus: <code>sudo ./install.sh PUBLIC_IP</code>.</li>
+                  <li>Geben Sie unter Einstellungen → Verbindung auf jedem Computer <code>ws://PUBLIC_IP:8787/signal</code>ein, drücken Sie die Eingabetaste und koppeln Sie dann.</li>
+                </ol>
+                <p class="plan-address">Öffnen Sie <code>http://PUBLIC_IP:8787/healthz</code> in einem Browser. Wenn dort „OK“ steht, läuft es.</p>
+                <a class="button quiet" href="../../de/cloud/">Leitfaden für öffentliche Server →</a>
+              </div>
+              <div class="plan-card">
+                <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
+                <dl>
+                  <div><dt>Am besten für</dt><dd>Betreiben Sie den Server selbst oder leiten Sie viel Datenverkehr weiter.</dd></div>
+                  <div><dt>Du brauchst</dt><dd>Eine Linux -VM mit öffentlicher IP und Root-Zugriff.</dd></div>
+                  <div><dt>Denken Sie daran</dt><dd>Die VM kostet Geld und die Relay-Geschwindigkeit wird durch ihre Bandbreite begrenzt. Geben Sie auf dem chinesischen Festland die IP ein, es sei denn, die Domain verfügt über eine ICP-Einreichung.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </section>
+
+          <section class="os" id="plan-ts" role="tabpanel" aria-labelledby="tab-plan-ts">
+            <h3 class="os-title">Tailscale</h3>
+            <div class="plan-grid">
+              <div>
+                <ol class="steps">
+                  <li>Installieren Sie Tailscale auf jedem Computer und melden Sie sich bei demselben Konto an.</li>
+                  <li>Führen Sie auf dem anderen Computer <code>tailscale ip -4</code> aus und notieren Sie sich die Adresse, die mit 100 beginnt.</li>
+                  <li>Klicken Sie beim Koppeln auf In einem anderen Subnetz? und geben Sie diese Adresse ein.</li>
+                </ol>
+                <p class="plan-address">Kein Server erforderlich. Eine Tailscale -Adresse ändert sich nicht, Sie müssen sie also beim Pairing einmal eingeben.</p>
+                <a class="button quiet" href="../../de/tailscale/">Tailscale -Anleitung →</a>
+              </div>
+              <div class="plan-card">
+                <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
+                <dl>
+                  <div><dt>Am besten für</dt><dd>Sie verwenden Tailscale bereits oder möchten nicht auf einen Server angewiesen sein.</dd></div>
+                  <div><dt>Du brauchst</dt><dd>Tailscale auf jedem Computer, angemeldet bei demselben Konto.</dd></div>
+                  <div><dt>Denken Sie daran</dt><dd>Tailscale muss verbunden bleiben. Wenn zwei Computer nicht direkt verbunden werden können, erfolgt die Weiterleitung über eigene Server, was langsam sein kann.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pair" aria-labelledby="pair-title">
+      <div class="wrap">
+        <p class="eyebrow">Schritt 3</p>
+        <h2 id="pair-title">Koppeln Sie Ihre Computer</h2>
+        <p class="intro">Einmal zwei beliebige Computer koppeln, fertig.</p>
+        <div class="os-grid qs-grid">
+          <div>
+            <ol class="steps">
+              <li>Öffnen Sie auf einem Computer Geräte und klicken Sie auf Gerät hinzufügen. Es zeigt einen 6-stelligen Code, der 5 Minuten gültig ist, und darunter die Adresse dieses Computers.</li>
+              <li>Wählen Sie auf dem anderen Computer Gerät hinzufügen → Code eingeben. Beim Service muss keine IP eingegeben werden; Nur über Subnetze hinweg oder mit Tailscale öffnen Sie das Adressfeld und geben die Adresse des anderen Computers ein.</li>
+              <li>Auf beiden Bildschirmen werden die gleichen zwei Fingerabdrucklinien angezeigt. Überprüfen Sie sie Zeichen für Zeichen und bestätigen Sie dann.<span class="aside">Dadurch wird verhindert, dass jemand in der Mitte sich als Ihr Gerät ausgibt. Überspringen Sie es nicht.</span></li>
+            </ol>
+            <figure class="figure-card qs-verify">
+              <img class="theme-dark" src="../../assets/screenshots/en/card-verify-dark.png?v=0f0a9ff3bc" width="1120" height="800" alt="Die Fingerabdruckprüfung während der Kopplung zeigt R8NF-2WTC-QL5J an und fordert Sie auf, zu bestätigen, dass er genau mit dem anderen Computer übereinstimmt" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/card-verify.png?v=45fcb31aee" width="1120" height="800" alt="Die Fingerabdruckprüfung während der Kopplung zeigt R8NF-2WTC-QL5J an und fordert Sie auf, zu bestätigen, dass er genau mit dem anderen Computer übereinstimmt" loading="lazy">
+            </figure>
+          </div>
+          <figure class="shot">
+            <img class="theme-dark" src="../../assets/screenshots/en/pairing-dark.png?v=f3e8ad175d" width="2112" height="1472" alt="Gerät hinzufügen: den Kopplungscode K7MP2X, mit der Adresse dieses Computers 192.168.1.20 darunter" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/pairing.png?v=2a0a5d6bd8" width="2112" height="1472" alt="Gerät hinzufügen: den Kopplungscode K7MP2X, mit der Adresse dieses Computers 192.168.1.20 darunter" loading="lazy">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="phone" aria-labelledby="phone-title">
+      <div class="wrap">
+        <h2 id="phone-title">Mit einem Telefon</h2>
+        <p class="intro">Sobald die Computer wie oben beschrieben gekoppelt sind, kann ein Telefon jederzeit beitreten: Scannen Sie einen Code für die Webseite oder installieren Sie die Android -App.</p>
+        <div class="os-grid qs-grid">
+          <div>
+            <h3>Die Webseite: nichts zu installieren</h3>
+            <ol class="steps">
+              <li>Computer: Öffnen Sie Geräte › Telefon-Webübertragung, schalten Sie den Schalter ein und ein Code wird angezeigt.</li>
+              <li>Telefon: Scannen Sie den Code mit der Kamera oder einem Browser und geben Sie dem Telefon einen Namen.</li>
+              <li>Der Browser des Telefons zeigt dann die Aufzeichnungen des Computers an: Tippen Sie auf „Kopieren“, um eine Textnachricht auf das Telefon zu übertragen, oder verwenden Sie „Senden“, um Text, Fotos und Dateien auf den Computer zu übertragen.</li>
+            </ol>
+            <h3>Die Android -App: Pairing wie ein anderer Computer</h3>
+            <ol class="steps">
+              <li>Telefon: <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-android-arm64.apk">Laden Sie die APK</a> herunter und installieren Sie sie (erlauben Sie die Installation von unbekannten Quellen, wenn Sie dazu aufgefordert werden).</li>
+              <li>Computer: Geräte → Gerät hinzufügen → Code anzeigen.</li>
+              <li>Telefon: Geben Sie den Code ein und bestätigen Sie, wenn die beiden Fingerabdrücke übereinstimmen.</li>
+              <li>Was Sie auf dem Computer kopieren, erscheint dann in den Aufzeichnungen und in der Zwischenablage des Telefons.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">Kopieren Sie jetzt etwas.</h2>
+        <p class="lede">Kopieren Sie Text, ein Bild oder eine Datei auf einen Computer und drücken Sie ⌘V or Ctrl+V on the other. Alles, was auf beiden Seiten kopiert wurde, steht in der Geschichte.</p>
+        <p class="note">Brauchen Sie Hilfe? <a href="../../de/lan/#faq">Fragen zum gleichen Netzwerk</a> · <a href="../../de/tailscale/#faq">Tailscale Fragen</a> · <a href="../../de/cloud/#faq">Fragen zum öffentlichen Server</a> · <a href="https://github.com/baiyuze/pasteferry/issues">Problem melden</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry ist Open Source unter der GNU AGPL-3.0.</p>
+      <nav aria-label="Fußzeile">
+        <a href="https://github.com/baiyuze/pasteferry/releases">Alle Veröffentlichungen</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Änderungsprotokoll</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Designhinweise (Chinesisch)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">Lizenz</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Melden Sie ein Problem</a>
+        <a href="../../de/privacy/">Privatsphäre</a>
+        <a href="../../de/feedback/">Diskussion & Feedback</a>
+      </nav>
+      <nav aria-label="Sprache">
+        <a href="../../start/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/start/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/start/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/start/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/start/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/start/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/start/" hreflang="de" lang="de" data-lang="de" aria-current="page">Deutsch</a>
+        <a href="../../fr/start/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/start/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

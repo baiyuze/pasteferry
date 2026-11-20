@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comment fonctionne le PasteFerry : connexions directes, sondages multi-liaison montante et gestion des pannes</title>
+  <meta name="description" content="Que se passe-t-il lorsque vous copiez, comment les ordinateurs se connectent et que se passe-t-il lorsqu&#x27;ils ne le peuvent pas.">
+  <link rel="canonical" href="https://pasteferry.cc/fr/how/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/how/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/how/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/how/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/how/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/how/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/how/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/how/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/how/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/how/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Comment fonctionne le PasteFerry : connexions directes, sondages multi-liaison montante et gestion des pannes">
+  <meta property="og:description" content="Que se passe-t-il lorsque vous copiez, comment les ordinateurs se connectent et que se passe-t-il lorsqu&#x27;ils ne le peuvent pas.">
+  <meta property="og:url" content="https://pasteferry.cc/fr/how/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-fr.png">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Passer au contenu</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../fr/" aria-label="Accueil PasteFerry"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Pages">
+        <a class="mid" href="../../fr/features/">Caractéristiques</a>
+        <a class="mid" href="../../fr/start/">Démarrage rapide</a>
+        <a class="wide" href="../../fr/start/#server">Façons de se connecter</a>
+        <a href="../../fr/download/">Réception</a>
+        <details class="menu">
+          <summary aria-label="Plus de pages" class="current"><span>Plus</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../fr/features/">Caractéristiques</a></li>
+            <li class="narrow"><a href="../../fr/start/">Démarrage rapide</a></li>
+            <li class="narrow"><a href="../../fr/start/#server">Façons de se connecter</a></li>
+            <li><a href="../../fr/themes/">Guide des thèmes</a></li>
+            <li><a href="./" aria-current="page">Comment ça marche</a></li>
+            <li><a href="../../fr/security/">Sécurité</a></li>
+            <li><a href="../../fr/faq/">FAQ</a></li>
+            <li><a href="../../fr/feedback/">Discussions et commentaires</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Journal des modifications</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Étoile PasteFerry sur GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Apparence" title="Apparence"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Suivre le système</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Clair</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Sombre</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Langue：Français"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>Français</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/how/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/how/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/how/" hreflang="fr" lang="fr" data-lang="fr" aria-current="page">Français</a></li>
+            <li><a href="../../es/how/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../fr/">PasteFerry</a></p>
+        <h1 class="display">Comment ça marche</h1>
+        <p class="lede">Que se passe-t-il lorsque vous copiez, comment les ordinateurs se connectent et que se passe-t-il lorsqu'ils ne le peuvent pas.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="flow-title">
+      <div class="wrap">
+        <h2 id="flow-title">Que se passe-t-il lorsque vous copiez</h2>
+        <p class="intro">Le texte, les images et les fichiers empruntent tous le même chemin.</p>
+        <ol class="flow">
+          <li><h3>Avis</h3><p>Le service en arrière-plan voit que le presse-papiers a changé.</p></li>
+          <li><h3>Envoyer</h3><p>Les textes et fichiers jusqu'à 50 Mo sont immédiatement transmis. Les plus grands sont d'abord envoyés sous forme d'enregistrement.</p></li>
+          <li><h3>Coller</h3><p>L'autre ordinateur l'enregistre localement et le place dans le presse-papiers. Vous collez un vrai fichier.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="diagram" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title">Comment PasteFerry se connecte</h2>
+        <p class="intro">Sur un même réseau, les ordinateurs se retrouvent directement. Sur différents réseaux, un serveur les introduit afin qu'ils puissent essayer de se connecter directement, et les relaye uniquement en cas d'échec. Le contenu est toujours crypté.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
+            <title id="diagram-title">Comment PasteFerry se connecte</title>
+            <desc id="diagram-desc">L'ordinateur A et l'ordinateur B se connectent directement via WebRTC. Les deux se connectent au serveur pour la signalisation. Si la connexion directe échoue, les données sont relayées via le service TURN du serveur.</desc>
+            <rect class="d-box" x="360" y="24" width="240" height="96" rx="14"/>
+            <text class="d-title" x="480" y="64" text-anchor="middle">Service de signalisation et de relais</text>
+            <text class="d-sub" x="480" y="92" text-anchor="middle">Signalisation, STUN, relais TOUR</text>
+            <path class="d-sig" d="M140 210V58H360"/>
+            <path class="d-sig" d="M820 210V58H600"/>
+            <path class="d-relay" d="M196 210V100H360"/>
+            <path class="d-relay" d="M764 210V100H600"/>
+            <text class="d-note" x="210" y="50">Signalisation : détails de connexion</text>
+            <text class="d-note" x="210" y="128">Relais : uniquement en cas d'échec direct</text>
+            <rect class="d-box" x="40" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="160" y="262" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="160" y="290" text-anchor="middle">Tu copies ici</text>
+            <rect class="d-box" x="680" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="800" y="262" text-anchor="middle">Mac, Windows ou Linux</text>
+            <text class="d-sub" x="800" y="290" text-anchor="middle">Tu colles ici</text>
+            <path class="d-direct" d="M280 270H680"/>
+            <text class="d-label" x="480" y="256" text-anchor="middle">Direct WebRTC, DTLS crypté</text>
+            <text class="d-note" x="480" y="298" text-anchor="middle">Les données se déplacent uniquement entre vos ordinateurs</text>
+            <g class="d-legend" transform="translate(40 372)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">Données (directes)</text>
+              <path class="d-relay" d="M210 0H238"/><text x="248" y="5">Données (relais, secours)</text>
+              <path class="d-sig" d="M470 0H498"/><text x="508" y="5">Signalisation</text>
+            </g>
+          </svg>
+          <ul class="points diagram-text">
+            <li><strong>Direct WebRTC, DTLS crypté</strong> Les données se déplacent uniquement entre vos ordinateurs</li>
+            <li><strong>Service de signalisation et de relais</strong> Signalisation, STUN, relais TOUR</li>
+            <li>Relais : uniquement en cas d'échec direct</li>
+          </ul>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="multi-uplink" aria-labelledby="multi-title">
+      <div class="wrap">
+        <h2 id="multi-title">Directement sur les réseaux de bureau également</h2>
+        <p class="intro">Les réseaux de bureau avec plusieurs liaisons montantes passaient par le relais. PasteFerry trouve chaque liaison montante et permet à l'autre côté de les essayer chacune.</p>
+        <div class="cols">
+          <div>
+            <h3>Ce que ça fait</h3>
+            <ul class="points">
+              <li><strong>Un port partagé.</strong>Toutes les connexions utilisent le même port UDP .</li>
+              <li><strong>Chaque liaison montante a été sondée.</strong>Il demande sept serveurs à la fois et obtient une adresse par liaison montante.</li>
+              <li><strong>Tous envoyés de l’autre côté.</strong>L'autre ordinateur essaie chacun d'eux jusqu'à ce que l'un d'entre eux réussisse.</li>
+              <li><strong>Réessayez directement en mode inactif.</strong>Le relais maintient le fonctionnement et passe en mode direct lorsqu'il est inactif.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Testé sur des configurations réseau réelles</h3>
+            <p class="small">Chaque commit est testé automatiquement sur des réseaux simulés.</p>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th scope="col">Scénario</th><th scope="col">Résultat</th></tr></thead>
+                <tbody>
+                <tr><td>Liaison montante unique ↔ routeur domestique</td><td>Direct</td></tr>
+                <tr><td>Deux liaisons montantes, version précédente (contrôle)</td><td>Relais</td></tr>
+                <tr><td>Quatre liaisons montantes ↔ routeur domestique</td><td>Direct</td></tr>
+                <tr><td>Deux liaisons montantes ↔ deux liaisons montantes</td><td>Direct</td></tr>
+                <tr><td>Deux liaisons montantes ↔ NAT qui randomise les ports</td><td>Relais</td></tr>
+                <tr><td>Bloqué au début, le réseau récupère plus tard</td><td>Relais, puis direct</td></tr>
+                <tr><td>Pas de serveur, même sous-réseau</td><td>Direct</td></tr>
+                <tr><td>Pas de serveur, sous-réseaux isolés les uns des autres</td><td>Aucune connexion</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="small">Mesuré : un Mac sur un réseau de bureau à 4 liaisons montantes et un à la maison relayé à 0,6 Mo/s auparavant. Désormais, ils se connectent directement.</p>
+            <p class="small">Les détails figurent dans le document de conception <a href="../../design/nat-traversal.html"></a> (en chinois).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="fallbacks" aria-labelledby="fallback-title">
+      <div class="wrap">
+        <h2 id="fallback-title">Quand les choses tournent mal</h2>
+        <p class="intro">Les cas courants sont traités.</p>
+        <dl class="fallbacks">
+          <div><dt>Impossible de trouver l'autre ordinateur sur le réseau</dt><dd>Entrez son adresse lors de l'appairage ; on s'en souvient après.</dd></div>
+          <div><dt>Pas de connexion directe</dt><dd>Les données sont relayées via le serveur, toujours cryptées.</dd></div>
+          <div><dt>L'autre ordinateur se met en veille ou s'éteint</dt><dd>Il se reconnecte tout seul à son retour.</dd></div>
+          <div><dt>Déconnecté lors de l'envoi de fichiers</dt><dd>Le transfert reprend là où il s'était arrêté.</dd></div>
+          <div><dt>Un nom de fichier Windows ne permet pas</dt><dd>Les mauvais caractères deviennent des caractères pleine chasse, donc le nom se lit toujours de la même manière.</dd></div>
+          <div><dt>Copier un mot de passe</dt><dd>Sur Windows, tout ce qui est copié à partir d'un gestionnaire de mots de passe est ignoré.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="specs" aria-labelledby="specs-title">
+      <div class="wrap">
+        <h2 id="specs-title">Spécifications</h2>
+        <div class="table-scroll">
+          <table class="specs">
+            <tbody>
+            <tr><th scope="row">Version</th><td>2.13.1, publié <time datetime="2026-11-20">le 20 novembre 2026</time></td></tr>
+            <tr><th scope="row">Application Mac</th><td>macOS 13 Ventura ou version ultérieure ; téléchargements séparés pour Apple Silicon et Intel, environ 25 Mo chacun, pas de Rosetta ; une version universelle pour les deux fait environ 47 Mo</td></tr>
+            <tr><th scope="row">Application Windows</th><td>Windows 10 et Windows 11, x64; installations par utilisateur, aucun droit d'administrateur ; environ 23 Mo de téléchargement</td></tr>
+            <tr><th scope="row">Application Linux</th><td>x64 et ARM64; .deb (Debian, Ubuntu et similaires) ou tar.gz (autres distributions), environ 22 Mo ; nécessite un bureau X11 ou un bureau Wayland avec XWayland (GNOME, KDE et autres l'incluent par défaut) ; GTK3</td></tr>
+            <tr><th scope="row">Serveur</th><td>Non nécessaire avec le service ou sur le même réseau. Pour exécuter le vôtre : Linux x86_64/ARM64, macOS ou Windows 10/11 x64.</td></tr>
+            <tr><th scope="row">Langues</th><td>18 langues : anglais, chinois simplifié et traditionnel (Taiwan et Hong Kong), japonais, coréen, arabe (de droite à gauche), allemand, français, espagnol, portugais (Brésil), italien, russe, ukrainien, polonais, turc, vietnamien et indonésien ; suit le système par défaut, commutable dans Paramètres</td></tr>
+            <tr><th scope="row">Contenu</th><td>Texte brut, texte enrichi, images et captures d'écran, fichiers, dossiers ; chaque type peut être désactivé</td></tr>
+            <tr><th scope="row">Transports</th><td>Canaux de données WebRTC , directs en premier avec repli du relais TURN ; sur le même réseau, découverte mDNS et détails de connexion sur UDP 8788 ; chaque liaison montante sondée sur des réseaux multi-liaison montante ; fichiers diffusés au format tar + zstd</td></tr>
+            <tr><th scope="row">Chiffrement et identité</th><td>De bout en bout DTLS;  Clés de périphérique Ed25519 ; chaque message de signalisation signé</td></tr>
+            <tr><th scope="row">Couplage</th><td>Code à 6 caractères valable 5 minutes, utilisant un alphabet sans sosies tels que 0/O et 1/I ; empreintes digitales vérifiées par vos soins</td></tr>
+            <tr><th scope="row">Limite de synchronisation auto</th><td>50 Mo par défaut, réglable de 1 Mo à 1 Go</td></tr>
+            <tr><th scope="row">Envoi de fichiers</th><td>Vers un appareil, n’importe quelle taille, fichiers ou dossiers entiers ; sur le réseau local via une liaison cryptée TCP (les deux parties ont besoin de 2.5.1), en revenant à WebRTC lorsque celle-ci n'est pas disponible ; WebRTC via Internet et relais ; reprend après une déconnexion ; SHA-256 par fichier. Mac mesuré sur VM Linux , 1 Go : 144,3 Mo/s ; la vitesse réelle dépend du réseau et des disques.</td></tr>
+            <tr><th scope="row">Contacts</th><td>Code de contact à 7 caractères commençant par F, échangé sur le réseau local ou le Service, avec vérification optionnelle du code de sécurité ; les contacts ne peuvent s'envoyer que des fichiers et des images, avec une note de 200 caractères maximum, et chaque lot doit être accepté ; les contacts ne voient jamais votre presse-papiers, votre historique ou vos appareils ; les fichiers reçus perdent le bit exécutable et sont mis en quarantaine sur un Mac ; les deux côtés ont besoin de 2.6 ou version ultérieure</td></tr>
+            <tr><th scope="row">Historique</th><td>3 jours par défaut, réglable de 1 heure à 30 jours ; éléments expirés supprimés automatiquement</td></tr>
+            <tr><th scope="row">Vitesse mesurée</th><td>Un fichier de 20 Mo est transféré en 330 ms environ via une connexion LAN directe, les sommes de contrôle correspondant</td></tr>
+            <tr><th scope="row">Construit avec</th><td>Optez pour le service et le serveur d'arrière-plan (Go pur appelant Win32 sur Windows et parlant le protocole X11 sur Linux), Flutter pour l'application (une base de code pour les trois systèmes), des tampons de protocole pour les messages</td></tr>
+            <tr><th scope="row">Licence</th><td><a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">GNU AGPL-3.0</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry est open source sous GNU AGPL-3.0.</p>
+      <nav aria-label="Pied de page">
+        <a href="https://github.com/baiyuze/pasteferry/releases">Toutes les versions</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Journal des modifications</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Notes de conception (chinois)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">Licence</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Signaler un problème</a>
+        <a href="../../fr/privacy/">Confidentialité</a>
+        <a href="../../fr/feedback/">Discussions et commentaires</a>
+      </nav>
+      <nav aria-label="Langue">
+        <a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/how/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/how/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/how/" hreflang="fr" lang="fr" data-lang="fr" aria-current="page">Français</a>
+        <a href="../../es/how/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

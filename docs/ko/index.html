@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PasteFerry: 장치 간 클립보드, 기록 및 파일 전송</title>
+  <meta name="description" content="컴퓨터 간에 복사하여 붙여넣고, 클립보드 기록을 찾고, 컴퓨터와 Android간에 사진과 파일을 보낼 수 있습니다. Mac, Windows, Linux, Android 및 전화 웹페이지. Android 와 웹은 동일한 네트워크에서 작동합니다. 무료이며 오픈 소스입니다.">
+  <link rel="canonical" href="https://pasteferry.cc/ko/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/">
+  <link rel="alternate" hreflang="x-default" href="https://pasteferry.cc/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="PasteFerry: 장치 간 클립보드, 기록 및 파일 전송">
+  <meta property="og:description" content="컴퓨터 간에 복사하여 붙여넣고, 클립보드 기록을 찾고, 컴퓨터와 Android간에 사진과 파일을 보낼 수 있습니다. Mac, Windows, Linux, Android 및 전화 웹페이지. Android 와 웹은 동일한 네트워크에서 작동합니다. 무료이며 오픈 소스입니다.">
+  <meta property="og:url" content="https://pasteferry.cc/ko/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="zh_HK">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:locale:alternate" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <script>
+    (function () {
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs"};
+      var to = moved[location.hash.slice(1)];
+      if (to) location.replace(to);
+    })();
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://pasteferry.cc/#organization",
+        "name": "PasteFerry",
+        "url": "https://pasteferry.cc/",
+        "logo": "https://pasteferry.cc/assets/icon.png",
+        "sameAs": [
+          "https://github.com/baiyuze/pasteferry"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://pasteferry.cc/#website",
+        "name": "PasteFerry",
+        "url": "https://pasteferry.cc/",
+        "inLanguage": [
+          "zh-CN",
+          "zh-TW",
+          "zh-HK",
+          "en",
+          "ja",
+          "ko",
+          "de",
+          "fr",
+          "es"
+        ],
+        "publisher": {
+          "@id": "https://pasteferry.cc/#organization"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://pasteferry.cc/#app",
+        "name": "PasteFerry",
+        "alternateName": [
+          "隔空贴",
+          "CopySync"
+        ],
+        "description": "컴퓨터 간에 복사하여 붙여넣고, 클립보드 기록을 찾고, 컴퓨터와 Android간에 사진과 파일을 보낼 수 있습니다. Mac, Windows, Linux, Android 및 전화 웹페이지. Android 와 웹은 동일한 네트워크에서 작동합니다. 무료이며 오픈 소스입니다.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "macOS 13 이상(Intel 및 Apple 실리콘); Windows 10, Windows 11(x64); Linux (x64, ARM64)",
+        "softwareVersion": "2.13.1",
+        "datePublished": "2026-11-20",
+        "inLanguage": "ko",
+        "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "downloadUrl": "https://pasteferry.cc/ko/download/",
+        "codeRepository": "https://github.com/baiyuze/pasteferry",
+        "publisher": {
+          "@id": "https://pasteferry.cc/#organization"
+        },
+        "image": "https://pasteferry.cc/assets/icon.png",
+        "screenshot": "https://pasteferry.cc/assets/screenshots/en/history-dark.png",
+        "featureList": [
+          "일반 텍스트, 서식 있는 텍스트, 이미지, 파일 및 폴더를 동기화합니다.",
+          "네트워크를 통해 공유 계정 없이 Mac, Windows 및 Linux간에 작동합니다.",
+          "자동 mDNS 검색을 통해 동일한 네트워크에 서버가 필요하지 않습니다.",
+          "자동 TURN 릴레이 폴백을 통한 직접 WebRTC 연결",
+          "페어링 시 사람이 검증한 지문을 사용한 엔드투엔드 DTLS 암호화",
+          "50MB 미만의 항목은 복사 시 푸시되고 더 큰 파일은 요청 시 가져옵니다.",
+          "이미지 미리보기가 포함된 지난 3일간의 기록",
+          "아랍어를 포함한 18개 언어로 인터페이스(오른쪽에서 왼쪽으로)"
+        ],
+        "author": {
+          "@type": "Person",
+          "name": "baiyuze",
+          "url": "https://github.com/baiyuze"
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">콘텐츠로 건너뛰기</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="./" aria-label="PasteFerry 홈"><img src="../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="페이지">
+        <a class="mid" href="features/">특징</a>
+        <a class="mid" href="start/">빠른 시작</a>
+        <a class="wide" href="start/#server">연결 방법</a>
+        <a href="download/">다운로드</a>
+        <details class="menu">
+          <summary aria-label="더 많은 페이지"><span>더 보기</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="features/">특징</a></li>
+            <li class="narrow"><a href="start/">빠른 시작</a></li>
+            <li class="narrow"><a href="start/#server">연결 방법</a></li>
+            <li><a href="themes/">테마 가이드</a></li>
+            <li><a href="how/">작동 원리</a></li>
+            <li><a href="security/">보안</a></li>
+            <li><a href="faq/">FAQ</a></li>
+            <li><a href="feedback/">토론 및 피드백</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub의 별 PasteFerry"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="모양" title="모양"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>시스템 설정 따르기</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>라이트</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>다크</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="언어：한국어"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>한국어</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href=".././" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../zh-tw/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../zh-hk/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../en/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../ja/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../ko/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a></li>
+            <li><a href="../de/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../es/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
+        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">2.13.1: 화면 크기 설정으로 글자와 아이콘을 함께 확대 →</a>
+        <h1 class="display">컴퓨터와 휴대폰.<br>콘텐츠를 손쉽게 주고받으세요.</h1>
+        <p class="lede">한 컴퓨터에서 복사하고 다른 컴퓨터에서 붙여넣으세요. 이전에 복사한 내용을 찾고, 컴퓨터와 Android 기기 사이에 사진과 파일을 보내세요. Mac, Windows, Linux, Android를 같은 계정 없이 연결합니다. 휴대폰에서 코드를 스캔하면 웹으로도 사용할 수 있습니다. Android와 웹 전송은 같은 네트워크에서 작동합니다.</p>
+        <div class="cta">
+          <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry 다운로드</a>
+          <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 전체 둘러보기 <span class="tour-duration">1:25</span></a>
+        </div>
+        <p class="note">버전 2.13.1, 무료 오픈 소스. macOS 13 이상, Windows 10·11, Linux(x64·ARM64), Android 9 이상을 지원합니다. 새 화면 크기 설정으로 글자, 아이콘, 여백을 함께 확대하거나 축소할 수 있습니다.</p>
+        <a class="start-link" href="start/">여기 새로 왔나요? 3단계로 설정 →</a>
+        <div class="demo" data-demo data-pasted="{item} 항목을 Windows 노트북에 붙여넣었습니다.">
+          <div class="demo-modes" role="radiogroup" aria-label="컴퓨터 두 대는 어디에 있나요?"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">집 ⇔ 사무실</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">동일한 Wi-Fi</button></div>
+          <div class="stage" data-play data-mode="wan" role="group" aria-label="데모: MacBook의 명령 C는 파일을 Windows 노트북에 직접 연결되는 시트로 변환합니다. 여기서 Ctrl V pastes it는">
+            <figure class="device mac">
+              <div class="screen"><div class="desk">
+                <div class="files">
+                <button type="button" class="file sel" data-name="3분기 검토 - final.pptx" aria-label="3분기 검토 - final.pptx 복사"><span class="doc doc"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">3분기 검토 - final.pptx</span></button>
+                <button type="button" class="file" data-name="스크린샷.png" aria-label="스크린샷.png 복사"><span class="doc pic"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">스크린샷.png</span></button>
+                <button type="button" class="file" data-name="회의가 3시 30분 4B실로 변경되었습니다." aria-label="회의가 3시 30분 4B실로 변경되었습니다. 복사"><span class="doc note"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">회의가 3시 30분 4B실로 변경되었습니다.</span></button>
+                <button type="button" class="file" data-name="브랜드 자산" aria-label="브랜드 자산 복사"><span class="doc folder"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">브랜드 자산</span></button>
+                </div>
+                <div class="keys" aria-hidden="true"><kbd>⌘</kbd><kbd>C</kbd></div>
+              </div></div>
+              <div class="base"></div>
+              <figcaption>MacBook<span class="net"><span class="wan">홈</span><span class="lan">홈 Wi-Fi</span></span></figcaption>
+            </figure>
+            <div></div>
+            <figure class="device win">
+              <div class="screen"><div class="desk">
+                <div class="file landed" aria-hidden="true"><span class="doc doc"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">3분기 검토 - final.pptx</span></div>
+                <div class="keys" aria-hidden="true"><kbd>Ctrl</kbd><kbd>V</kbd></div>
+                <div class="taskbar"><i></i><i></i><i></i><i></i><i></i></div>
+              </div></div>
+              <div class="base"></div>
+              <figcaption>Windows 노트북<span class="net"><span class="wan">사무실</span><span class="lan">홈 Wi-Fi</span></span></figcaption>
+            </figure>
+            <svg class="arc" aria-hidden="true"><path class="sig" d=""/><path class="direct" d=""/></svg>
+            <span class="server" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg><span>서버에서는 소개만 해준다</span></span>
+            <span class="arc-label" aria-hidden="true"><span class="wan">직접, 종단 간 암호화</span><span class="lan">로컬 네트워크에서 발견되었으나 서버가 없습니다.</span></span>
+            <span class="sheet-fly" aria-hidden="true"><span class="lines"><i></i><i></i><i></i></span></span>
+          </div>
+          <p class="demo-hint">Mac에서 아무 항목이나 클릭하여 복사하세요.</p>
+          <p class="skip" aria-live="polite" data-demo-status></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="themes" aria-labelledby="theme-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.10의 새로운 기능</span></p>
+        <h2 id="theme-title">그것을 당신의 것으로 만드십시오.<br>픽셀 단위로도 가능합니다.</h2>
+        <p class="intro">테마는 내장된 픽셀 모양, 나만의 테마, AI가 디자인한 테마 등이 있습니다.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/pixel-history-dark.png?v=aaa7f233a7" width="2112" height="1472" alt="픽셀 테마의 역사(어두움): 헤더에 밤산, 소나무, 달, 사이드바 하단에 텐트와 모닥불, 비트맵 형식" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/pixel-history.png?v=c0311ff88d" width="2112" height="1472" alt="픽셀 테마의 역사(어두움): 헤더에 밤산, 소나무, 달, 사이드바 하단에 텐트와 모닥불, 비트맵 형식" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#themes">테마에 대해 자세히 알아보기 →</a><a href="themes/">테마 가이드 →</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="friends" aria-labelledby="friends-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">2.6의 새로운 기능</span></p>
+        <h2 id="friends-title">친구의 컴퓨터,<br>도 마찬가지로 쉽습니다.</h2>
+        <p class="intro">연락처로 추가하세요. 페어링이 필요하지 않습니다. 파일이 수락되면 선택적 메모와 함께 도착합니다.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/incoming-dark.png?v=3c9bf5f227" width="2552" height="1632" alt="파일 보내기 페이지: 레이더 아래에 있는 연락처의 아바타와 중간에 있는 요청(MacBook Air의 연락처가 메모와 함께 파일을 보내려고 함)은 거부하거나 수락할 수 있습니다." loading="lazy"><img class="theme-light" src="../assets/screenshots/en/incoming.png?v=c40261a11c" width="2552" height="1632" alt="파일 보내기 페이지: 레이더 아래에 있는 연락처의 아바타와 중간에 있는 요청(MacBook Air의 연락처가 메모와 함께 파일을 보내려고 함)은 거부하거나 수락할 수 있습니다." loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#friends">연락처로 보내기에 대해 자세히 알아보기 →</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
+      <div class="wrap">
+        <h2 id="phone-title">귀하의 휴대전화가 합류합니다.</h2>
+        <p class="intro">Android 앱을 사용하여 컴퓨터로 사진과 파일을 일괄적으로 보내고 받은 후 저장하거나 공유할 수 있습니다. 설치하지 않는 것을 선호하시나요? 브라우저에서 클립보드 기록, 콘텐츠 전송 및 별도의 파일 전송에 대한 코드를 스캔하세요.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" alt="장치 페이지 전화 웹 전송: 코드 및 등록된 전화" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/web-share.png?v=29f0d60dd1" width="2552" height="1632" alt="장치 페이지 전화 웹 전송: 코드 및 등록된 전화" loading="lazy">
+        </figure>
+        <ul class="points">
+          <li><b>기록 및 별도의 파일 전송을 위해 브라우저</b> 를 사용하십시오.</li>
+          <li><b>Android 는 저장 및 공유와 함께</b> 배치를 보내고 받습니다.</li>
+          <li><b>동일한 네트워크</b>; 웹페이지를 열어두세요.</li>
+        </ul>
+        <p class="more"><a href="features/#phone">전화사용방법 →</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
+      <div class="wrap">
+        <h2 id="send-title">위로 드래그하세요.<br>거기 있어요.</h2>
+        <p class="intro">컴퓨터에 파일을 삭제하거나 Android에서 배치를 선택하세요. 사진과 파일은 다른 장치로 바로 이동됩니다. 중단 후 앱 전송이 재개됩니다.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" alt="파일 보내기 페이지: 중앙에 이 Mac이 있고 동일한 네트워크 및 주변의 다른 장치에 있는 레이더입니다. 오른쪽에는 수신된 파일과 폴더 도착, 진행 상황 및 속도가 표시됩니다." loading="lazy"><img class="theme-light" src="../assets/screenshots/en/send.png?v=740f8bec78" width="2552" height="1632" alt="파일 보내기 페이지: 중앙에 이 Mac이 있고 동일한 네트워크 및 주변의 다른 장치에 있는 레이더입니다. 오른쪽에는 수신된 파일과 폴더 도착, 진행 상황 및 속도가 표시됩니다." loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#send">파일 보내기에 대해 자세히 알아보기 →</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <h2 id="qp-title"><span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>를 누르세요.<br>복사한 모든 내용이 바로 여기에 있습니다.</h2>
+        <p class="intro">아무 앱에서나 누르고 항목을 선택하면 붙여넣어집니다.</p>
+        <figure class="spot" data-reveal>
+          <div class="spot-keys" aria-hidden="true">
+            <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
+          </div>
+          <img class="theme-dark" src="../assets/screenshots/en/card-picker-dark.png?v=5a62fb383c" width="1280" height="1080" alt="빠른 붙여넣기 창: 검색 필드 및 6개 탭(전체, 텍스트, 링크, 이미지, 파일, 즐겨찾기), 번호가 매겨진 기록 항목 및 하단의 주요 힌트" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/card-picker.png?v=1eed66a247" width="1280" height="1080" alt="빠른 붙여넣기 창: 검색 필드 및 6개 탭(전체, 텍스트, 링크, 이미지, 파일, 즐겨찾기), 번호가 매겨진 기록 항목 및 하단의 주요 힌트" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#quick-paste">빠른 붙여넣기에 대해 자세히 알아보기 →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="grid-title">
+      <div class="wrap">
+        <h2 id="grid-title">공유 클립보드 그 이상입니다.</h2>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
+            <h3>파일 보내기 <span class="new">새로운 기능</span></h3>
+            <p>파일이나 폴더를 다른 컴퓨터나 연락처에 놓습니다. 모든 크기.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
+            <h3>빠른 붙여넣기</h3>
+            <p>기록을 보려면 <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> 를 누르세요. 항목을 선택하면 붙여넣어집니다.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
+            <h3>파일 및 폴더</h3>
+            <p>작은 파일은 복사할 때 동기화되고, 큰 파일은 필요할 때 동기화됩니다.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+            <h3>역사와 즐겨찾기</h3>
+            <p>모든 장치에 복사된 모든 내용은 검색 가능합니다.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
+            <h3>네트워크 전반에 걸쳐</h3>
+            <p>집과 직장을 동기화하려면 서비스를 켜세요.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            <h3>엔드 투 엔드 암호화</h3>
+            <p>먼저 직접. 서버는 귀하가 복사한 내용을 볼 수 없습니다.</p>
+          </li>
+        </ul>
+        <p class="more"><a href="features/">모든 기능 보기 →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="why" aria-labelledby="why-title">
+      <div class="wrap">
+        <h2 id="why-title">이미 가지고 있는 것을 활용해 보는 것은 어떨까요?</h2>
+        <p class="intro">범용 클립보드에는 동일한 Apple ID가 필요합니다. AirDrop 를 사용하면 매번 허용되며 Mac과 Windows PC 간에는 둘 다 작동하지 않습니다.</p>
+        <div class="block table-scroll">
+          <table class="compare">
+            <caption class="skip">다른 옵션과 비교한PasteFerry</caption>
+            <thead><tr><td></td><th scope="col" class="ours">PasteFerry</th><th scope="col">범용 클립보드</th><th scope="col">AirDrop</th><th scope="col">채팅 앱</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">계정이 필요하지 않습니다</th><td class="yes ours">예</td><td class="no">동일 Apple ID</td><td class="partial">Apple 기기만 해당</td><td class="no">로그인이 필요합니다</td></tr>
+              <tr><th scope="row">Mac, Windows, Linux 및 Android사이</th><td class="yes ours">예</td><td class="no">아니요</td><td class="no">아니요</td><td class="yes">예</td></tr>
+              <tr><th scope="row">집과 사무실 사이</th><td class="yes ours">예</td><td class="no">아니요</td><td class="no">아니요</td><td class="yes">예</td></tr>
+              <tr><th scope="row">인터넷이 없는 로컬 네트워크에서</th><td class="yes ours">예</td><td class="partial">주변만</td><td class="yes">예</td><td class="no">아니요</td></tr>
+              <tr><th scope="row">복사 후 바로 붙여넣기, 받아들일 것이 없습니다.</th><td class="yes ours">예</td><td class="yes">예</td><td class="no">아니요</td><td class="no">아니요</td></tr>
+              <tr><th scope="row">모든 크기의 파일 및 전체 폴더</th><td class="yes ours">예</td><td class="partial">신뢰할 수 없음</td><td class="yes">예</td><td class="partial">우선 우편번호, 크기 제한</td></tr>
+              <tr><th scope="row">이전에 복사한 항목 찾기</th><td class="yes ours">예</td><td class="no">아니요</td><td class="no">아니요</td><td class="partial">뒤로 스크롤</td></tr>
+              <tr><th scope="row">귀하의 기기만 암호를 해독할 수 있습니다.</th><td class="yes ours">예</td><td class="yes">예</td><td class="yes">예</td><td class="some">앱에 따라 다름</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="deploy" aria-labelledby="deploy-title">
+      <div class="wrap">
+        <h2 id="deploy-title">컴퓨터가 연결되는 방법</h2>
+        <p class="intro">동일한 네트워크에 설치하고 페어링하세요. 다른 네트워크에서 서비스를 켜거나 자체 서버 또는 Tailscale를 실행하세요.</p>
+        <div class="paths">
+          <a class="path" href="official/">
+            <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
+            <span class="path-when">집과 사무실 사이에서 일함</span>
+            <h3>서비스</h3>
+            <p>서버를 구입할 필요 없이 스위치 하나만 켜면 집과 사무실 컴퓨터가 동기화됩니다.</p>
+            <span class="path-go">서비스 켜기 →</span>
+          </a>
+          <a class="path" href="lan/">
+            <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
+            <span class="path-when">설정할 항목이 없습니다.</span>
+            <h3>같은 네트워크</h3>
+            <p>동일한 라우터에 있는 두 대의 컴퓨터: 앱을 설치하고 페어링 코드를 입력하면 완료됩니다. 서버가 필요하지 않습니다.</p>
+            <span class="path-go">동일한 네트워크 가이드 →</span>
+          </a>
+          <a class="path" href="cloud/">
+            <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
+            <span class="path-when">당신의 서버, 무제한 릴레이</span>
+            <h3>나만의 공개 서버</h3>
+            <p>공용 IP가 있는 Linux VM 가장 작은 크기로 충분합니다. 모든 컴퓨터가 여기에 연결되어 어디서나 동기화됩니다.</p>
+            <span class="path-go">공용 서버 안내 →</span>
+          </a>
+          <a class="path" href="tailscale/">
+            <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
+            <span class="path-when">네트워크 전반에 걸쳐 서버 없음</span>
+            <h3>Tailscale</h3>
+            <p>각 컴퓨터에 Tailscale 를 설치하고 동일한 계정으로 로그인한 후 페어링 시 다른 컴퓨터의 Tailscale 주소를 입력하세요.</p>
+            <span class="path-go">Tailscale 가이드 →</span>
+          </a>
+        </div>
+        <p class="note">여기 새로 왔나요? <a href="start/#server">빠른 시작</a>를 따르세요. 서비스는 무료입니다. 하루 100MB의 릴레이, 무제한 직접 연결.</p>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">당신의 장치. 귀하의 콘텐츠. 손이 닿는 곳에 있습니다.</h2>
+        <div class="cta">
+          <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry 다운로드</a>
+        </div>
+        <p class="note">버전 2.13.1, 무료 오픈 소스. macOS 13 이상, Windows 10·11, Linux(x64·ARM64), Android 9 이상을 지원합니다. 새 화면 크기 설정으로 글자, 아이콘, 여백을 함께 확대하거나 축소할 수 있습니다.</p>
+        <a class="start-link" href="start/">여기 새로 왔나요? 3단계로 설정 →</a>
+        <div class="star-ask">
+          <p>마음에 드나요? GitHub에 별표를 표시하세요.</p>
+          <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub의 별 PasteFerry"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">GitHub에서 별표 누르기</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry 는 GNU AGPL-3.0의 오픈 소스입니다.</p>
+      <nav aria-label="바닥글">
+        <a href="https://github.com/baiyuze/pasteferry/releases">모든 릴리스</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">디자인 노트(중국어)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">라이센스</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">문제 신고</a>
+        <a href="../ko/privacy/">개인 정보 보호</a>
+        <a href="../ko/feedback/">토론 및 피드백</a>
+      </nav>
+      <nav aria-label="언어">
+        <a href=".././" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../zh-tw/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../zh-hk/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../en/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../ja/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../ko/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a>
+        <a href="../de/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../es/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="tour-dialog" aria-label="85초 안에 PasteFerry 를 만나보세요">
+    <form method="dialog"><button class="tour-close" aria-label="둘러보기 닫기">×</button></form>
+    <iframe title="85초 안에 PasteFerry 를 만나보세요" data-src="tour/?embed" allow="fullscreen" allowfullscreen></iframe>
+  </dialog>
+  <script src="../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

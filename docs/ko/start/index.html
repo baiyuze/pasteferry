@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>빠른 시작: 3단계로 PasteFerry 설정</title>
+  <meta name="description" content="PasteFerry를 처음 사용하시나요? 각 컴퓨터에 앱을 설치합니다. 동일한 네트워크에서는 페어링만 하면 됩니다. 다른 네트워크에서는 서비스를 켜십시오. 그런 다음 한 컴퓨터에서 복사하여 다른 컴퓨터에 붙여넣습니다.">
+  <link rel="canonical" href="https://pasteferry.cc/ko/start/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/start/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/start/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/start/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/start/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/start/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/start/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/start/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/start/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/start/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="빠른 시작: 3단계로 PasteFerry 설정">
+  <meta property="og:description" content="PasteFerry를 처음 사용하시나요? 각 컴퓨터에 앱을 설치합니다. 동일한 네트워크에서는 페어링만 하면 됩니다. 다른 네트워크에서는 서비스를 켜십시오. 그런 다음 한 컴퓨터에서 복사하여 다른 컴퓨터에 붙여넣습니다.">
+  <meta property="og:url" content="https://pasteferry.cc/ko/start/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">콘텐츠로 건너뛰기</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ko/" aria-label="PasteFerry 홈"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="페이지">
+        <a class="mid" href="../../ko/features/">특징</a>
+        <a class="mid" href="./" aria-current="page">빠른 시작</a>
+        <a class="wide" href="#server">연결 방법</a>
+        <a href="../../ko/download/">다운로드</a>
+        <details class="menu">
+          <summary aria-label="더 많은 페이지"><span>더 보기</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../ko/features/">특징</a></li>
+            <li class="narrow"><a href="./" aria-current="page">빠른 시작</a></li>
+            <li class="narrow"><a href="#server">연결 방법</a></li>
+            <li><a href="../../ko/themes/">테마 가이드</a></li>
+            <li><a href="../../ko/how/">작동 원리</a></li>
+            <li><a href="../../ko/security/">보안</a></li>
+            <li><a href="../../ko/faq/">FAQ</a></li>
+            <li><a href="../../ko/feedback/">토론 및 피드백</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub의 별 PasteFerry"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="모양" title="모양"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>시스템 설정 따르기</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>라이트</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>다크</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="언어：한국어"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>한국어</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../start/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/start/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/start/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/start/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/start/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/start/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a></li>
+            <li><a href="../../de/start/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/start/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/start/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../ko/">PasteFerry</a> / 빠른 시작</p>
+        <h1 class="display">빠른 시작</h1>
+        <p class="lede">앱을 설치하고 연결 방법을 선택한 다음 컴퓨터를 페어링하세요. 동일한 네트워크에서는 몇 분 정도 걸립니다.</p>
+        <ol class="guide-toc">
+          <li><a href="#app">앱 설치</a></li>
+          <li><a href="#server">연결 방법 선택</a></li>
+          <li><a href="#pair">쌍</a></li>
+          <li><a href="#phone">전화 사용</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="app" aria-labelledby="app-title">
+      <div class="wrap">
+        <p class="eyebrow">단계 1</p>
+        <h2 id="app-title">각 컴퓨터에 앱 설치</h2>
+        <p class="intro">동기화하려는 모든 컴퓨터에 하나씩. Mac, Windows 및 Linux 는 자유롭게 혼합됩니다.</p>
+        <div class="os-grid qs-grid">
+          <div>
+            <div class="qs-app">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>Mac</h3>
+              <ol class="steps">
+                <li>DMG를 다운로드하여 열고 PasteFerry 를 응용 프로그램으로 드래그합니다.<span class="aside">Apple 실리콘용과 Intel용이 하나씩 있습니다. 다운로드 페이지에서 선택하는 데 도움이 됩니다.</span></li>
+                <li>응용 프로그램에서 엽니다.<span class="aside">처음으로 macOS 는 개발자를 확인할 수 없다고 말합니다. 시스템 설정 → 개인 정보 보호 및 보안으로 이동하여 하단 근처에 있는 어쨌든 열기를 클릭합니다.</span></li>
+                <li>백그라운드 동기화 켜기를 클릭하세요. macOS 가 클립보드 액세스 및 로컬 네트워크에서 장치 찾기에 대해 묻는 경우 두 가지를 모두 허용하세요.</li>
+              </ol>
+              <a class="button" href="../../ko/download/#macos"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Mac용 다운로드</a>
+            </div>
+            <div class="qs-app">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Windows</h3>
+              <ol class="steps">
+                <li>PasteFerry-Setup.exe를 실행합니다. 관리자 권한이 필요하지 않습니다.<span class="aside">"Windows 가 PC를 보호했습니다."가 표시되면 추가 정보를 클릭한 다음 어쨌든 실행을 클릭합니다.</span></li>
+                <li>PasteFerry 를 열고 백그라운드 동기화 켜기를 클릭합니다. Windows 방화벽이 요청하면 허용합니다. 창을 닫은 후에도 알림 영역에서 계속 실행됩니다.</li>
+              </ol>
+              <a class="button" href="../../ko/download/#windows"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Windows용 다운로드</a>
+            </div>
+            <div class="qs-app">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Linux</h3>
+              <ol class="steps">
+                <li>Ubuntu, Debian 및 이와 유사한 경우 .deb를 설치하십시오. 다른 배포판에서는 tar.gz를 추출하고 내부에서 <code>install.sh</code> 를 실행하세요.</li>
+                <li>앱 메뉴에서 PasteFerry 를 열고 백그라운드 동기화 켜기를 클릭하세요.</li>
+              </ol>
+              <a class="button" href="../../ko/download/#linux"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Linux용 다운로드</a>
+            </div>
+          </div>
+          <figure class="shot">
+            <img class="theme-dark" src="../../assets/screenshots/en/welcome-dark.png?v=3d4d07f16e" width="2112" height="1472" alt="PasteFerry 가 처음 열릴 때 백그라운드 동기화를 켜라고 요청합니다." loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/welcome.png?v=53d7b84001" width="2112" height="1472" alt="PasteFerry 가 처음 열릴 때 백그라운드 동기화를 켜라고 요청합니다." loading="lazy">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="server" aria-labelledby="server-title">
+      <div class="wrap">
+        <p class="eyebrow">단계 2</p>
+        <h2 id="server-title">연결 방법 선택</h2>
+        <p class="intro">동일한 네트워크에 설치하고 페어링하세요. 다른 네트워크에서는 서비스를 켜십시오. 모든 권한을 갖고 싶다면 자체 서버를 실행하거나 Tailscale를 사용하세요.</p>
+        <div class="os-tabs" data-tabs="plan">
+          <div class="tablist" role="tablist" aria-label="연결 방법" hidden>
+            <button type="button" role="tab" id="tab-plan-official" aria-controls="plan-official">서비스</button>
+            <button type="button" role="tab" id="tab-plan-lan" aria-controls="plan-lan">같은 네트워크</button>
+            <button type="button" role="tab" id="tab-plan-cloud" aria-controls="plan-cloud">나만의 공개 서버</button>
+            <button type="button" role="tab" id="tab-plan-ts" aria-controls="plan-ts">Tailscale</button>
+          </div>
+
+          <section class="os" id="plan-official" role="tabpanel" aria-labelledby="tab-plan-official">
+            <h3 class="os-title">서비스</h3>
+            <div class="plan-grid">
+              <div>
+                <ol class="steps">
+                  <li>각 컴퓨터에 최신 버전을 설치하고 백그라운드 동기화 켜기를 클릭합니다.</li>
+                  <li>설정 → 연결에서 서비스 사용을 켜주세요.</li>
+                  <li>두 대의 컴퓨터를 페어링합니다. 이미 페어링한 컴퓨터는 다시 페어링할 필요가 없습니다.</li>
+                </ol>
+                <p class="plan-address">새로 설치하면 서비스가 중단됩니다. 서버는 복사한 내용을 절대 수신하지 않습니다. 개인정보 보호정책을 참조하세요.</p>
+                <a class="button quiet" href="../../ko/official/">서비스 켜기 →</a>
+              </div>
+              <div class="plan-card">
+                <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
+                <dl>
+                  <div><dt>가능할 때마다 직접</dt><dd>컴퓨터는 가능한 경우 직접 연결하고, 불가능한 경우에만 서버를 통과합니다. 콘텐츠는 암호화되어 있으며 서버는 이를 해독할 수 없습니다.</dd></div>
+                  <div><dt>하루 100MB 릴레이, 직접 무제한</dt><dd>Relay는 컴퓨터당 하루 100MB로 제한됩니다. 직접 무제한입니다. 사용량 페이지에는 남은 금액이 표시됩니다.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </section>
+
+          <section class="os" id="plan-lan" role="tabpanel" aria-labelledby="tab-plan-lan">
+            <h3 class="os-title">같은 네트워크</h3>
+            <div class="plan-grid">
+              <div>
+                <ol class="steps">
+                  <li>각 컴퓨터에 앱을 설치하고 백그라운드 동기화 켜기를 클릭합니다.</li>
+                  <li>Windows 방화벽 또는 macOS 가 로컬 네트워크에 대해 묻는 경우 PasteFerry 를 허용합니다.</li>
+                  <li>한 컴퓨터에 코드를 표시하고 다른 컴퓨터에 코드를 입력한 후 지문을 비교하세요. 다른 서브넷에서도 코드 아래에 표시된 주소를 입력합니다. <a href="../../ko/lan/#subnet">동일한 네트워크 가이드</a>를 참조하세요.</li>
+                </ol>
+                <p class="plan-address">입력할 서버 주소가 없습니다.</p>
+                <a class="button quiet" href="../../ko/lan/">동일한 네트워크 가이드 →</a>
+              </div>
+              <div class="plan-card">
+                <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
+                <dl>
+                  <div><dt>다음에 가장 적합</dt><dd>집이나 사무실, 두 컴퓨터 모두 동일한 Wi-Fi 또는 유선 네트워크에 연결되어 있습니다.</dd></div>
+                  <div><dt>당신은 필요</dt><dd>각 컴퓨터의 앱 외에는 아무것도 없습니다.</dd></div>
+                  <div><dt>명심하세요</dt><dd>네트워크를 떠나면 동기화가 중지되고 다시 돌아오면 다시 시작됩니다. 유선과 Wi-Fi가 서로 다른 서브넷에 있는 경우 페어링할 때 추가 주소 하나를 입력합니다.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </section>
+
+          <section class="os" id="plan-cloud" role="tabpanel" aria-labelledby="tab-plan-cloud">
+            <h3 class="os-title">나만의 공개 서버</h3>
+            <div class="plan-grid">
+              <div>
+                <ol class="steps">
+                  <li>클라우드 공급자의 보안 그룹에서 TCP 8787, UDP 3478 및 UDP 32768–60999를 엽니다.</li>
+                  <li>SSH로 로그인하고 설치 스크립트를 다운로드한 후 실행하세요: <code>sudo ./install.sh PUBLIC_IP</code>.</li>
+                  <li>각 컴퓨터의 설정 → 연결에서 <code>ws://PUBLIC_IP:8787/signal</code>를 입력하고 Return 키를 누른 다음 페어링합니다.</li>
+                </ol>
+                <p class="plan-address">브라우저에서 <code>http://PUBLIC_IP:8787/healthz</code> 를 엽니다. 괜찮다고 하면 실행 중인 것입니다.</p>
+                <a class="button quiet" href="../../ko/cloud/">공용 서버 안내 →</a>
+              </div>
+              <div class="plan-card">
+                <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
+                <dl>
+                  <div><dt>다음에 가장 적합</dt><dd>서버를 직접 운영하거나, 트래픽을 많이 중계하는 경우.</dd></div>
+                  <div><dt>당신은 필요</dt><dd>공용 IP 및 루트 액세스 권한이 있는 Linux VM.</dd></div>
+                  <div><dt>명심하세요</dt><dd>VM에는 비용이 들고 릴레이 속도는 대역폭에 따라 제한됩니다. 중국 본토에서는 도메인에 ICP 서류가 없는 경우 IP를 입력하세요.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </section>
+
+          <section class="os" id="plan-ts" role="tabpanel" aria-labelledby="tab-plan-ts">
+            <h3 class="os-title">Tailscale</h3>
+            <div class="plan-grid">
+              <div>
+                <ol class="steps">
+                  <li>각 컴퓨터에 Tailscale 를 설치하고 동일한 계정으로 로그인합니다.</li>
+                  <li>다른 컴퓨터에서 <code>tailscale ip -4</code> 를 실행하고 100으로 시작하는 주소를 기록해 둡니다.</li>
+                  <li>페어링할 때 다른 서브넷에 있습니까?를 클릭합니다. 그리고 그 주소를 입력하세요.</li>
+                </ol>
+                <p class="plan-address">서버가 필요하지 않습니다. Tailscale 주소는 변경되지 않으므로 페어링 시 한 번만 입력하면 됩니다.</p>
+                <a class="button quiet" href="../../ko/tailscale/">Tailscale 가이드 →</a>
+              </div>
+              <div class="plan-card">
+                <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
+                <dl>
+                  <div><dt>다음에 가장 적합</dt><dd>이미 Tailscale를 사용하고 있거나 서버에 의존하고 싶지 않습니다.</dd></div>
+                  <div><dt>당신은 필요</dt><dd>모든 컴퓨터에서Tailscale 가 동일한 계정으로 로그인되어 있습니다.</dd></div>
+                  <div><dt>명심하세요</dt><dd>Tailscale 는 연결을 유지해야 합니다. 두 대의 컴퓨터를 직접 연결할 수 없는 경우 자체 서버를 통해 릴레이하므로 속도가 느려질 수 있습니다.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pair" aria-labelledby="pair-title">
+      <div class="wrap">
+        <p class="eyebrow">단계 3</p>
+        <h2 id="pair-title">컴퓨터를 페어링하세요</h2>
+        <p class="intro">두 대의 컴퓨터를 한 번만 페어링하면 끝입니다.</p>
+        <div class="os-grid qs-grid">
+          <div>
+            <ol class="steps">
+              <li>한 컴퓨터에서 장치를 열고 장치 추가를 클릭합니다. 5분간 유효한 6자리 코드와 그 아래에 이 컴퓨터의 주소가 표시됩니다.</li>
+              <li>다른 컴퓨터에서 장치 추가 → 코드 입력을 선택합니다. 서비스를 사용하면 입력할 IP가 없습니다. 서브넷을 통해서만 또는 Tailscale 를 사용하여 주소 필드를 열고 다른 컴퓨터의 주소를 입력하십시오.</li>
+              <li>두 화면 모두 동일한 두 개의 지문 라인을 표시합니다. 문자별로 확인한 후 확인하세요.<span class="aside">이렇게 하면 중간에 있는 사람이 귀하의 장치인 것처럼 가장하는 것을 방지할 수 있습니다. 건너뛰지 마세요.</span></li>
+            </ol>
+            <figure class="figure-card qs-verify">
+              <img class="theme-dark" src="../../assets/screenshots/en/card-verify-dark.png?v=0f0a9ff3bc" width="1120" height="800" alt="페어링 중 지문 검사에 R8NF-2WTC-QL5J가 표시되며 다른 컴퓨터와 정확히 일치하는지 확인하라는 메시지가 표시됩니다." loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/card-verify.png?v=45fcb31aee" width="1120" height="800" alt="페어링 중 지문 검사에 R8NF-2WTC-QL5J가 표시되며 다른 컴퓨터와 정확히 일치하는지 확인하라는 메시지가 표시됩니다." loading="lazy">
+            </figure>
+          </div>
+          <figure class="shot">
+            <img class="theme-dark" src="../../assets/screenshots/en/pairing-dark.png?v=f3e8ad175d" width="2112" height="1472" alt="장치 추가: 페어링 코드 K7MP2X, 그 아래에 이 컴퓨터의 주소 192.168.1.20 포함" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/pairing.png?v=2a0a5d6bd8" width="2112" height="1472" alt="장치 추가: 페어링 코드 K7MP2X, 그 아래에 이 컴퓨터의 주소 192.168.1.20 포함" loading="lazy">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="phone" aria-labelledby="phone-title">
+      <div class="wrap">
+        <h2 id="phone-title">전화 사용</h2>
+        <p class="intro">위에서 컴퓨터가 페어링되면 휴대폰은 언제든지 참여할 수 있습니다. 웹 페이지의 코드를 스캔하거나 Android 앱을 설치하세요.</p>
+        <div class="os-grid qs-grid">
+          <div>
+            <h3>웹페이지: 설치할 것이 없습니다.</h3>
+            <ol class="steps">
+              <li>컴퓨터: 장치 > 전화 웹 전송을 열고 스위치를 켜면 코드가 나타납니다.</li>
+              <li>전화: 카메라나 브라우저로 코드를 스캔하고 전화 이름을 지정합니다.</li>
+              <li>그러면 휴대폰의 브라우저에 컴퓨터 기록이 표시됩니다. 복사를 탭하여 휴대폰으로 문자 메시지를 보내거나 보내기를 사용하여 텍스트, 사진, 파일을 컴퓨터로 푸시할 수 있습니다.</li>
+            </ol>
+            <h3>Android 앱: 다른 컴퓨터처럼 페어링됩니다.</h3>
+            <ol class="steps">
+              <li>전화: <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/PasteFerry-android-arm64.apk">APK</a> 를 다운로드하여 설치합니다(요청 시 알 수 없는 소스에서 설치 허용).</li>
+              <li>컴퓨터: 장치 → 장치 추가 → 코드 표시.</li>
+              <li>전화: 코드를 입력하고 두 지문이 일치하는지 확인하세요.</li>
+              <li>컴퓨터에서 복사한 내용이 휴대폰의 기록과 클립보드에 나타납니다.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">이제 뭔가를 복사해 보세요.</h2>
+        <p class="lede">한 컴퓨터에 텍스트, 이미지 또는 파일을 복사하고 ⌘V or Ctrl+V on the other를 누르세요. 양쪽에 복사된 모든 내용은 기록에 남습니다.</p>
+        <p class="note">도움이 필요하신가요? <a href="../../ko/lan/#faq">동일한 네트워크 질문</a> · <a href="../../ko/tailscale/#faq">Tailscale 질문</a> · <a href="../../ko/cloud/#faq">공용 서버 질문</a> · <a href="https://github.com/baiyuze/pasteferry/issues">문제 신고</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry 는 GNU AGPL-3.0의 오픈 소스입니다.</p>
+      <nav aria-label="바닥글">
+        <a href="https://github.com/baiyuze/pasteferry/releases">모든 릴리스</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">디자인 노트(중국어)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">라이센스</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">문제 신고</a>
+        <a href="../../ko/privacy/">개인 정보 보호</a>
+        <a href="../../ko/feedback/">토론 및 피드백</a>
+      </nav>
+      <nav aria-label="언어">
+        <a href="../../start/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/start/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/start/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/start/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/start/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/start/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a>
+        <a href="../../de/start/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/start/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/start/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

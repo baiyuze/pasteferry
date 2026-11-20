@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Confidentialité — PasteFerry</title>
+  <meta name="description" content="Ce que vous copiez, les fichiers que vous envoyez, leurs noms et vos notes voyagent cryptés de bout en bout entre vos propres appareils. Nous ne pouvons pas les voir et ne les stockons pas.">
+  <link rel="canonical" href="https://pasteferry.cc/fr/privacy/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/privacy/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/privacy/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/privacy/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/privacy/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/privacy/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/privacy/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/privacy/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/privacy/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/privacy/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Confidentialité — PasteFerry">
+  <meta property="og:description" content="Ce que vous copiez, les fichiers que vous envoyez, leurs noms et vos notes voyagent cryptés de bout en bout entre vos propres appareils. Nous ne pouvons pas les voir et ne les stockons pas.">
+  <meta property="og:url" content="https://pasteferry.cc/fr/privacy/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-fr.png">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Passer au contenu</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../fr/" aria-label="Accueil PasteFerry"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Pages">
+        <a class="mid" href="../../fr/features/">Caractéristiques</a>
+        <a class="mid" href="../../fr/start/">Démarrage rapide</a>
+        <a class="wide" href="../../fr/start/#server">Façons de se connecter</a>
+        <a href="../../fr/download/">Réception</a>
+        <details class="menu">
+          <summary aria-label="Plus de pages"><span>Plus</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../fr/features/">Caractéristiques</a></li>
+            <li class="narrow"><a href="../../fr/start/">Démarrage rapide</a></li>
+            <li class="narrow"><a href="../../fr/start/#server">Façons de se connecter</a></li>
+            <li><a href="../../fr/themes/">Guide des thèmes</a></li>
+            <li><a href="../../fr/how/">Comment ça marche</a></li>
+            <li><a href="../../fr/security/">Sécurité</a></li>
+            <li><a href="../../fr/faq/">FAQ</a></li>
+            <li><a href="../../fr/feedback/">Discussions et commentaires</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Journal des modifications</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Étoile PasteFerry sur GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Apparence" title="Apparence"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Suivre le système</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Clair</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Sombre</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Langue：Français"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>Français</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../privacy/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/privacy/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/privacy/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/privacy/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/privacy/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/privacy/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/privacy/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/privacy/" hreflang="fr" lang="fr" data-lang="fr" aria-current="page">Français</a></li>
+            <li><a href="../../es/privacy/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+<main id="main" class="wrap" style="max-width:850px;padding-top:5rem;padding-bottom:5rem;line-height:1.9"><h1>Confidentialité</h1><section><h2>En bref</h2><p>Ce que vous copiez, les fichiers que vous envoyez, leurs noms et vos notes voyagent cryptés de bout en bout entre vos propres appareils. Nous ne pouvons pas les voir et ne les stockons pas.</p></section>
+<section><h2>Service (lorsqu&#x27;il est activé)</h2><p>Les nouvelles installations utilisent uniquement le réseau local. Lorsque vous activez le service, vos appareils se connectent au serveur officiel afin qu&#x27;ils puissent se retrouver sur les réseaux. Nous conservons un numéro d&#x27;appareil pseudonyme, les premières et dernières heures de connexion ainsi que l&#x27;utilisation quotidienne du relais. Ce n&#x27;est que lorsqu&#x27;une connexion directe échoue et qu&#x27;un relais est nécessaire que l&#x27;application dérive un résumé de machine spécifique à PasteFerry, de sorte qu&#x27;un ordinateur partage une allocation de relais. Les vrais noms d’appareils, les identifiants bruts du système et le contenu ne sont jamais téléchargés.</p></section>
+<section><h2>Mettre à jour les contrôles</h2><p>L&#x27;application vérifie les mises à jour une fois par jour, récupérant une liste de mises à jour signée sur le site Web PasteFerry , GitHub et Gitee. La demande au site Web inclut la version, le système et la langue, et s&#x27;il s&#x27;agit de la première vérification du jour, de la semaine ou du mois, pour fournir la bonne mise à jour et planifier les versions futures. Aucun identifiant d&#x27;appareil ou compte n&#x27;est inclus et les adresses IP ne sont pas stockées. Les vérifications automatiques peuvent être désactivées dans Paramètres → À propos. Les mises à jour ne s&#x27;installent qu&#x27;après confirmation et uniquement si elles correspondent à une liste signée avec la clé de version PasteFerry .</p></section>
+<section><h2>Contacts</h2><p>Un contact voit le nom d&#x27;affichage et l&#x27;avatar que vous définissez, le nom et le système de l&#x27;ordinateur à partir duquel vous envoyez, et si vous utilisez le réseau local, le service ou votre propre serveur (pour votre propre serveur, seulement un résumé de son adresse). Votre presse-papiers, votre historique et vos autres appareils ne sont jamais partagés avec vos contacts, et leurs fichiers n&#x27;arrivent qu&#x27;après que vous les ayez acceptés.</p></section>
+<section><h2>Site web</h2><p>Ce site Web utilise Cloudflare Web Analytics et conserve ses propres totaux de pages vues et de clics de téléchargement (date, chemin d&#x27;accès à la page, langue de la page, version et fichier téléchargé). Aucun cookie d&#x27;analyse ni identifiant de visiteur persistant n&#x27;est utilisé, et les adresses IP et les identifiants de navigateur ne sont pas stockés. Lorsque Do Not Track ou Global Privacy Control est activé, les propres compteurs du site Web ne sont pas envoyés.</p></section>
+<section><h2>Discussion et commentaires</h2><p>Les surnoms et les textes que vous soumettez sont stockés sur le serveur pour examen et assistance, et deviennent publics après approbation. Lorsque l&#x27;examen par l&#x27;IA est activé, le texte nécessaire est envoyé à un service d&#x27;IA tiers tel que DeepSeek selon les conditions de traitement des données de ce fournisseur ; les administrateurs peuvent également lire et gérer les soumissions. Votre navigateur enregistre les brouillons, les enregistrements de soumission et les identifiants d&#x27;accès par message pendant 30 jours maximum. La suppression des données locales ne supprime pas les messages du serveur ; utilisez le navigateur d&#x27;origine pour les retirer. Le contenu non publié, retiré et masqué est supprimé après 90 jours ; le contenu public demeure jusqu’à son retrait ou sa suppression. La prévention des abus utilise des résumés de sources temporaires plutôt que de stocker les adresses IP brutes. Ne soumettez pas de mots de passe, de clés API ou d’informations privées.</p></section>
+<section><h2>Comment il est utilisé</h2><p>Ces informations sont utilisées pour fournir et améliorer le service, publier des mises à jour, assurer la sécurité du service et prévenir les abus, mesurer et planifier et respecter les obligations légales. Nous ne le vendons pas et ne l&#x27;utilisons pas à des fins publicitaires.</p></section>
+<section><h2>Tiers</h2><p>GitHub, Gitee, Cloudflare et tout serveur que vous choisissez traitent vos demandes selon leurs propres politiques de confidentialité.</p></section>
+<section><h2>Rétention</h2><p>Les détails quotidiens par appareil pour le Service sont conservés pendant 90 jours ; les totaux quotidiens sans identité personnelle sont conservés indéfiniment.</p></section>
+<section><h2>Vos choix</h2><p>Vous pouvez utiliser uniquement le réseau local, désactiver le service, désactiver les vérifications automatiques des mises à jour ou exécuter votre propre serveur. Le client et le serveur PasteFerry sont open source.</p></section>
+<section><h2>Avis de non-responsabilité et modifications</h2><p>PasteFerry et le Service sont fournis gratuitement et tels quels ; Les autorisations et fonctionnalités de relais peuvent changer ou être suspendues. Nous ne sommes pas responsables de la perte de données ou des échecs de synchronisation causés par les réseaux, les appareils, les services tiers ou les serveurs auto-hébergés. Les modifications apportées à cet avis prennent effet dès leur publication sur le site Web ; continuer à utiliser PasteFerry signifie que vous les acceptez.</p></section>
+<section><h2>Contacter</h2><p>Questions sur cet avis : ouvrez un ticket sur github.com/baiyuze/pasteferry/issues.</p></section><p><a href="https://github.com/baiyuze/pasteferry/blob/main/PRIVACY.md">PRIVACY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/SECURITY.md">SECURITY.md</a> · <a href="https://github.com/baiyuze/pasteferry/blob/main/design/official-gateway.md">Gateway protocol v1</a></p></main>
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry est open source sous GNU AGPL-3.0.</p>
+      <nav aria-label="Pied de page">
+        <a href="https://github.com/baiyuze/pasteferry/releases">Toutes les versions</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Journal des modifications</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Notes de conception (chinois)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">Licence</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Signaler un problème</a>
+        <a href="../../fr/privacy/">Confidentialité</a>
+        <a href="../../fr/feedback/">Discussions et commentaires</a>
+      </nav>
+      <nav aria-label="Langue">
+        <a href="../../privacy/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/privacy/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/privacy/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/privacy/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/privacy/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/privacy/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/privacy/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/privacy/" hreflang="fr" lang="fr" data-lang="fr" aria-current="page">Français</a>
+        <a href="../../es/privacy/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

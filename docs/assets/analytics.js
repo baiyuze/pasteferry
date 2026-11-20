@@ -3,7 +3,7 @@
   'use strict';
   if (location.hostname !== 'pasteferry.cc' || window.top !== window.self ||
       navigator.doNotTrack === '1' || navigator.globalPrivacyControl) return;
-  var languages = {'zh-CN': 'zh', 'zh-TW': 'zh-tw', 'zh-HK': 'zh-hk', en: 'en', ja: 'ja'};
+  var languages = {'zh-CN': 'zh', 'zh-TW': 'zh-tw', 'zh-HK': 'zh-hk', en: 'en', ja: 'ja', ko: 'ko', de: 'de', fr: 'fr', es: 'es'};
   var lang = languages[document.documentElement.lang];
   if (!lang || !crypto.randomUUID) return;
   function send(kind, version, source, asset) {

@@ -22,6 +22,7 @@ from content.themes import COPY as THEMES_COPY, EXAMPLE as THEME_EXAMPLE, DESKTO
 from content.official import COPY as OFFICIAL_COPY
 from content.features import localized as features_copy
 from content.feedback import COPY as FEEDBACK_COPY
+from content.packs import PACKS, pack
 
 ROOT = Path(__file__).resolve().parents[2]
 DOCS = ROOT / "docs"
@@ -46,10 +47,28 @@ LANGS = {
     "en": ("en/", "en", "en_US", "English"),
     "ja": ("ja/", "ja", "ja_JP", "日本語"),
 }
+# 后加的语言：文案各一个文件（content/packs.py），截图用英文界面的
+PACK_LANGS = {
+    "ko": ("ko/", "ko", "ko_KR", "한국어"),
+    "de": ("de/", "de", "de_DE", "Deutsch"),
+    "fr": ("fr/", "fr", "fr_FR", "Français"),
+    "es": ("es/", "es", "es_ES", "Español"),
+}
+for _code in PACKS:
+    if (Path(__file__).parent / "content" / f"{_code}.py").exists():
+        LANGS[_code] = PACK_LANGS[_code]
+        _p = pack(_code)
+        THEMES_COPY[_code] = _p.THEMES
+        OFFICIAL_COPY[_code] = _p.OFFICIAL
+        PRIVACY_COPY[_code] = _p.PRIVACY
+        FEEDBACK_COPY[_code] = _p.FEEDBACK
 
 
 def shots_dir(code: str) -> str:
-    """截图目录：简体中文的在 screenshots/ 下，其他语言在 screenshots/<语言>/ 下，由 tools/screenshots/render.sh 生成。"""
+    """截图目录：简体中文的在 screenshots/ 下，其他语言在 screenshots/<语言>/ 下，由 tools/screenshots/render.sh 生成。
+    后加的语言还没有自己的截图，用英文界面的。"""
+    if code in PACKS:
+        code = "en"
     return "assets/screenshots/" + ("" if code == "zh" else code + "/")
 
 ANALYTICS = ('  <script src="/assets/analytics.js" defer></script>\n'
@@ -146,6 +165,39 @@ PLATFORM = ('  <script>document.documentElement.classList.add("js");'
             'document.documentElement.classList.add("pc");</script>\n')
 
 
+# 外观：默认跟随系统的浅色或深色，顶栏的外观菜单可以固定其中一种（存在 localStorage）。
+# 在第一次绘制前给 <html> 写上 data-theme，避免先闪一下另一种颜色。反馈页的内容安全策略不允许内联脚本，
+# 同样的逻辑在 docs/assets/platform.js 里；宣传片页（tour/）像视频一样一直是深色，不加。
+THEME_KEY = "pasteferry-theme"
+THEME_SCRIPT = ('  <script>(function(){var d=document.documentElement,k="' + THEME_KEY + '",p,'
+                'm=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");'
+                'try{p=localStorage.getItem(k)}catch(e){}'
+                'function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");'
+                'd.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}'
+                'a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});'
+                'window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}'
+                '})();</script>\n')
+THEME_COLOR = ('  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">\n'
+               '  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">\n')
+DARK_IMG = re.compile(r'<img ([^>]*?)src="([^"]*?)-dark\.png"([^>]*)>')
+
+
+def light_shots(path: Path, text: str) -> str:
+    """有浅色版的截图（同名去掉 -dark）各放两张，由样式按外观显示一张。两张都延迟加载：
+    被隐藏的那张不会下载。"""
+    def swap(m: re.Match) -> str:
+        before, src, after = m.groups()
+        light = (path.parent / (src + ".png")).resolve()
+        if not light.exists():
+            return m.group(0)
+        attrs = (before + after).replace(' loading="lazy"', "").strip()
+        attrs = (" " + attrs) if attrs else ""
+        dark = f'<img class="theme-dark" src="{src}-dark.png"{attrs} loading="lazy">'
+        # 两张的说明文字一样，读屏软件只读显示出来的那张
+        return dark + f'<img class="theme-light" src="{src}.png"{attrs} loading="lazy">'
+    return DARK_IMG.sub(swap, text)
+
+
 def keys(text: str) -> str:
     """把文案里的 {key}、{enter} 这类按键占位换成两种写法。"""
     for k, (mac, pc) in KEYS.items():
@@ -166,6 +218,11 @@ def app_strings(code: str) -> dict:
     spec = importlib.util.spec_from_file_location("app_strings", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    if code in PACKS:
+        # 后加的语言：App 的译文在 ui/lib/l10n/app_<语言>.arb，缺的条目用英文
+        english = {row[0]: row[1] for row in module.S}
+        arb = json.loads((ROOT / "ui" / "lib" / "l10n" / f"app_{code}.arb").read_text(encoding="utf-8"))
+        return {k: arb.get(k, v) for k, v in english.items()}
     col = {"en": 1, "zh": 2, "ja": 3, "zh-tw": 4, "zh-hk": 5}[code]
     return {row[0]: row[col] for row in module.S}
 
@@ -199,8 +256,7 @@ REDIRECT = """  <script>
             if (/^zh-(hk|mo|hant-hk|hant-mo)\\b/.test(l)) pick = "zh-hk";
             else if (/^zh-(tw|hant)\\b/.test(l)) pick = "zh-tw";
             else if (l.indexOf("zh") === 0) pick = "zh";
-            else if (l.indexOf("ja") === 0) pick = "ja";
-            else if (l.indexOf("en") === 0) pick = "en";
+            else if (paths.hasOwnProperty(l.split("-")[0])) pick = l.split("-")[0];
           }
           pick = pick || "en";
         }
@@ -252,6 +308,25 @@ def lang_menu(c: dict, code: str, up: str, sub: str = "") -> str:
           <ul>
             {(chr(10) + "            ").join(items)}
           </ul>
+        </details>"""
+
+
+# 外观菜单的三个图标：跟随系统（半边实心的圆）、浅色（太阳）、深色（月亮）
+THEME_ICONS = {
+    "system": '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>',
+    "light": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>',
+    "dark": '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>',
+}
+
+
+def theme_menu(f: dict) -> str:
+    """顶栏的外观菜单：跟随系统、浅色、深色。要脚本才能切换，没有脚本时不显示（样式里藏起来）。"""
+    items = "".join(
+        f'<li><button type="button" data-theme-set="{k}" aria-pressed="false">{THEME_ICONS[k]}{esc(f["theme_" + k])}</button></li>'
+        for k in ("system", "light", "dark"))
+    return f"""<details class="lang appearance">
+          <summary aria-label="{esc(f["theme_menu"])}" title="{esc(f["theme_menu"])}"><i class="appearance-now" aria-hidden="true">{THEME_ICONS["system"]}{THEME_ICONS["light"]}{THEME_ICONS["dark"]}</i></summary>
+          <ul>{items}</ul>
         </details>"""
 
 
@@ -313,6 +388,7 @@ def header(c: dict, code: str, up: str, sub: str = "") -> str:
     server = f'{base}{START}#server' if sub != START else "#server"
     deploy = f'<a class="wide" href="{server}"{IN_SECTION if sub in DEPLOY_PAGES else ""}>{c["nav_server"]}</a>'
     more = [
+        f'<li class="mobile-only">{link(FEATURES, f["nav_features"])}</li>',
         f'<li class="narrow">{link(START, c["nav_start"])}</li>',
         f'<li class="narrow"><a href="{server}">{c["nav_server"]}</a></li>',
         f'<li>{link(THEMES, THEMES_COPY[code]["name"])}</li>',
@@ -330,7 +406,7 @@ def header(c: dict, code: str, up: str, sub: str = "") -> str:
     <div class="wrap">
       <a class="brand" href="{home or "./"}" aria-label="{c["home_label"]}"><img src="{up}assets/icon.svg" alt="" width="26" height="26">{c["brand"]}</a>
       <nav aria-label="{c["nav_label"]}">
-        {link(FEATURES, f["nav_features"])}
+        {link(FEATURES, f["nav_features"], "mid")}
         {link(START, c["nav_start"], "mid")}
         {deploy}
         {link(DOWNLOAD, c["nav_download"])}
@@ -341,6 +417,7 @@ def header(c: dict, code: str, up: str, sub: str = "") -> str:
           </ul>
         </details>
         {star_button(f)}
+        {theme_menu(f)}
         {lang_menu(c, code, up, sub)}
       </nav>
     </div>
@@ -443,6 +520,22 @@ def jsonld(c: dict, code: str, path: str, shots: str) -> str:
         "@context": "https://schema.org",
         "@graph": [
             {
+                "@type": "Organization",
+                "@id": SITE + "#organization",
+                "name": "PasteFerry",
+                "url": SITE,
+                "logo": SITE + "assets/icon.png",
+                "sameAs": [REPO],
+            },
+            {
+                "@type": "WebSite",
+                "@id": SITE + "#website",
+                "name": "PasteFerry",
+                "url": SITE,
+                "inLanguage": [language[1] for language in LANGS.values()],
+                "publisher": {"@id": SITE + "#organization"},
+            },
+            {
                 "@type": "SoftwareApplication",
                 "@id": SITE + "#app",
                 "name": c["brand"],
@@ -458,6 +551,7 @@ def jsonld(c: dict, code: str, path: str, shots: str) -> str:
                 "offers": {"@type": "Offer", "price": "0", "priceCurrency": c["ld_currency"]},
                 "downloadUrl": SITE + LANGS[code][0] + DOWNLOAD,
                 "codeRepository": REPO,
+                "publisher": {"@id": SITE + "#organization"},
                 "image": SITE + "assets/icon.png",
                 "screenshot": SITE + shots + "history-dark.png",
                 "featureList": c["ld_features"],
@@ -531,6 +625,58 @@ MOVED_ANCHORS = """  <script>
 """
 
 
+def stage(c: dict, f: dict) -> str:
+    """首屏演示：Mac 桌面上四样东西（文件、截图、一段文字、文件夹），点一样就复制，化作一张纸飞到 Windows
+    笔记本上粘贴出来。上面切换两台电脑在家里和公司（服务器只介绍，内容直连），还是在同一个 Wi‑Fi（不用服务器）。
+    动画由 site.js 驱动；没有脚本时停在复制完成的样子。"""
+    items = [("doc", c["stage_file"]), ("pic", f["demo_image"]), ("note", f["demo_text"]), ("folder", f["demo_folder"])]
+    files = "\n".join(
+        f'                <button type="button" class="file{" sel" if i == 0 else ""}" data-name="{esc(name)}" '
+        f'aria-label="{esc(f["demo_copy"].replace("{item}", name))}"><span class="doc {kind}">{LINES}</span>'
+        f'<span class="name">{esc(name)}</span></button>'
+        for i, (kind, name) in enumerate(items))
+    modes = "".join(
+        f'<button type="button" role="radio" aria-checked="{"true" if i == 0 else "false"}" tabindex="{0 if i == 0 else -1}" data-mode="{m}">{esc(f["demo_" + m])}</button>'
+        for i, m in enumerate(("wan", "lan")))
+
+    def net(device: str) -> str:
+        wan = f["net_home"] if device == "mac" else f["net_office"]
+        return f'<span class="net"><span class="wan">{esc(wan)}</span><span class="lan">{esc(f["net_wifi"])}</span></span>'
+
+    pasted = esc(f["demo_pasted"].replace("{device}", c["stage_win"]))
+    return f"""<div class="demo" data-demo data-pasted="{pasted}">
+          <div class="demo-modes" role="radiogroup" aria-label="{esc(f["demo_where"])}">{modes}</div>
+          <div class="stage" data-play data-mode="wan" role="group" aria-label="{esc(c["stage_label"])}">
+            <figure class="device mac">
+              <div class="screen"><div class="desk">
+                <div class="files">
+{files}
+                </div>
+                <div class="keys" aria-hidden="true"><kbd>⌘</kbd><kbd>C</kbd></div>
+              </div></div>
+              <div class="base"></div>
+              <figcaption>MacBook{net("mac")}</figcaption>
+            </figure>
+            <div></div>
+            <figure class="device win">
+              <div class="screen"><div class="desk">
+                <div class="file landed" aria-hidden="true"><span class="doc doc">{LINES}</span><span class="name">{esc(c["stage_file"])}</span></div>
+                <div class="keys" aria-hidden="true"><kbd>Ctrl</kbd><kbd>V</kbd></div>
+                <div class="taskbar"><i></i><i></i><i></i><i></i><i></i></div>
+              </div></div>
+              <div class="base"></div>
+              <figcaption>{c["stage_win"]}{net("win")}</figcaption>
+            </figure>
+            <svg class="arc" aria-hidden="true"><path class="sig" d=""/><path class="direct" d=""/></svg>
+            <span class="server" aria-hidden="true">{SERVER}<span>{esc(f["demo_server"])}</span></span>
+            <span class="arc-label" aria-hidden="true"><span class="wan">{c["stage_arc"]}</span><span class="lan">{esc(f["demo_no_server"])}</span></span>
+            <span class="sheet-fly" aria-hidden="true">{LINES}</span>
+          </div>
+          <p class="demo-hint">{esc(f["demo_hint"])}</p>
+          <p class="skip" aria-live="polite" data-demo-status></p>
+        </div>"""
+
+
 def home(code: str) -> str:
     c = load(code)
     f = features_copy(code)
@@ -578,30 +724,7 @@ def home(code: str) -> str:
         <a class="release-note" href="{REPO}/releases/tag/v{VERSION}">{keys(badge)}</a>
         <h1 class="display">{c["h1"]}</h1>
         <p class="lede">{c["lede"]}</p>{cta(c, "", START, tour_ui["watch"])}
-        <div class="stage" data-play role="img" aria-label="{esc(c["stage_label"])}">
-          <figure class="device mac">
-            <div class="screen"><div class="desk">
-              <div class="file"><span class="doc">{LINES}</span><span class="name">{c["stage_file"]}</span></div>
-              <div class="keys"><kbd>⌘</kbd><kbd>C</kbd></div>
-            </div></div>
-            <div class="base"></div>
-            <figcaption>MacBook</figcaption>
-          </figure>
-          <div></div>
-          <figure class="device win">
-            <div class="screen"><div class="desk">
-              <div class="file"><span class="doc">{LINES}</span><span class="name">{c["stage_file"]}</span></div>
-              <div class="keys"><kbd>Ctrl</kbd><kbd>V</kbd></div>
-              <div class="taskbar"><i></i><i></i><i></i><i></i><i></i></div>
-            </div></div>
-            <div class="base"></div>
-            <figcaption>{c["stage_win"]}</figcaption>
-          </figure>
-          <svg class="arc" aria-hidden="true"><path d=""/></svg>
-          <span class="arc-label" aria-hidden="true">{c["stage_arc"]}</span>
-          <span class="sheet-fly" aria-hidden="true">{LINES}</span>
-        </div>
-        <button class="replay" type="button">{c["replay"]}</button>
+        {stage(c, f)}
       </div>
     </section>
 
@@ -2877,6 +3000,12 @@ def write(path: Path, text: str) -> None:
         if path.parent.name != 'feedback':
             text = text.replace('  <meta charset="utf-8">\n',
                                 '  <meta charset="utf-8">\n' + GITHUB_PAGES_REDIRECT, 1)
+        # 外观：宣传片页一直是深色，其余页面跟随系统或访问者的选择
+        if path.parent.name != TOUR.strip("/"):
+            text = text.replace('  <meta name="theme-color" content="#141416">\n', THEME_COLOR, 1)
+            if path.parent.name != 'feedback':
+                text = text.replace('  <meta charset="utf-8">\n', '  <meta charset="utf-8">\n' + THEME_SCRIPT, 1)
+            text = light_shots(path, text)
         text = versioned(path, text)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")

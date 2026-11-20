@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
   <script>
     (function () {
       if (location.hostname !== "baiyuze.github.io") return;
@@ -20,8 +21,13 @@
   <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/">
   <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/">
   <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/">
   <link rel="alternate" hreflang="x-default" href="https://pasteferry.cc/">
-  <meta name="theme-color" content="#141416">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PasteFerry">
   <meta property="og:title" content="PasteFerry：デバイス間のクリップボード・履歴・ファイル転送">
@@ -35,11 +41,15 @@
   <meta property="og:locale:alternate" content="zh_TW">
   <meta property="og:locale:alternate" content="zh_HK">
   <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:locale:alternate" content="es_ES">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../assets/site.css?v=dbae55d27c">
+  <link rel="stylesheet" href="../assets/site.css?v=cfbc242d54">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
@@ -52,6 +62,36 @@
   {
     "@context": "https://schema.org",
     "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://pasteferry.cc/#organization",
+        "name": "PasteFerry",
+        "url": "https://pasteferry.cc/",
+        "logo": "https://pasteferry.cc/assets/icon.png",
+        "sameAs": [
+          "https://github.com/baiyuze/pasteferry"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://pasteferry.cc/#website",
+        "name": "PasteFerry",
+        "url": "https://pasteferry.cc/",
+        "inLanguage": [
+          "zh-CN",
+          "zh-TW",
+          "zh-HK",
+          "en",
+          "ja",
+          "ko",
+          "de",
+          "fr",
+          "es"
+        ],
+        "publisher": {
+          "@id": "https://pasteferry.cc/#organization"
+        }
+      },
       {
         "@type": "SoftwareApplication",
         "@id": "https://pasteferry.cc/#app",
@@ -75,6 +115,9 @@
         },
         "downloadUrl": "https://pasteferry.cc/ja/download/",
         "codeRepository": "https://github.com/baiyuze/pasteferry",
+        "publisher": {
+          "@id": "https://pasteferry.cc/#organization"
+        },
         "image": "https://pasteferry.cc/assets/icon.png",
         "screenshot": "https://pasteferry.cc/assets/screenshots/ja/history-dark.png",
         "featureList": [
@@ -104,13 +147,14 @@
     <div class="wrap">
       <a class="brand" href="./" aria-label="PasteFerry ホーム"><img src="../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
       <nav aria-label="ページ内の移動">
-        <a href="features/">機能</a>
+        <a class="mid" href="features/">機能</a>
         <a class="mid" href="start/">はじめかた</a>
         <a class="wide" href="start/#server">接続方法</a>
         <a href="download/">ダウンロード</a>
         <details class="menu">
           <summary aria-label="その他のページ"><span>その他</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
+            <li class="mobile-only"><a href="features/">機能</a></li>
             <li class="narrow"><a href="start/">はじめかた</a></li>
             <li class="narrow"><a href="start/#server">接続方法</a></li>
             <li><a href="themes/">テーマガイド</a></li>
@@ -124,6 +168,10 @@
           </ul>
         </details>
         <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub で PasteFerry にスターを付ける"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="外観" title="外観"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>システムに合わせる</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>ライト</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>ダーク</button></li></ul>
+        </details>
         <details class="lang">
           <summary aria-label="言語：日本語"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>日本語</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
@@ -132,6 +180,10 @@
             <li><a href="../zh-hk/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
             <li><a href="../en/" hreflang="en" lang="en" data-lang="en">English</a></li>
             <li><a href="../ja/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a></li>
+            <li><a href="../ko/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../de/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../es/" hreflang="es" lang="es" data-lang="es">Español</a></li>
           </ul>
         </details>
       </nav>
@@ -150,30 +202,40 @@
         </div>
         <p class="note">バージョン 2.13.1、無料・オープンソース。macOS 13 以降、Windows 10・11、Linux（x64 と ARM64）、Android 9 以降。表示サイズの設定を追加し、文字・アイコン・余白をまとめて拡大・縮小できるようになりました。</p>
         <a class="start-link" href="start/">はじめての方は、3 ステップで設定 →</a>
-        <div class="stage" data-play role="img" aria-label="デモ：MacBook で Command C を押すと、ファイルが一枚の紙になって直接接続で Windows ノートへ飛び、そこで Ctrl V を押して貼り付けます">
-          <figure class="device mac">
-            <div class="screen"><div class="desk">
-              <div class="file"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">四半期報告_最終版.pptx</span></div>
-              <div class="keys"><kbd>⌘</kbd><kbd>C</kbd></div>
-            </div></div>
-            <div class="base"></div>
-            <figcaption>MacBook</figcaption>
-          </figure>
-          <div></div>
-          <figure class="device win">
-            <div class="screen"><div class="desk">
-              <div class="file"><span class="doc"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">四半期報告_最終版.pptx</span></div>
-              <div class="keys"><kbd>Ctrl</kbd><kbd>V</kbd></div>
-              <div class="taskbar"><i></i><i></i><i></i><i></i><i></i></div>
-            </div></div>
-            <div class="base"></div>
-            <figcaption>Windows ノート</figcaption>
-          </figure>
-          <svg class="arc" aria-hidden="true"><path d=""/></svg>
-          <span class="arc-label" aria-hidden="true">直接接続、エンドツーエンド暗号化</span>
-          <span class="sheet-fly" aria-hidden="true"><span class="lines"><i></i><i></i><i></i></span></span>
+        <div class="demo" data-demo data-pasted="{item} を Windows ノート に貼り付けました">
+          <div class="demo-modes" role="radiogroup" aria-label="2 台のパソコンはどこに？"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">自宅 ↔ 会社</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">同じ Wi‑Fi</button></div>
+          <div class="stage" data-play data-mode="wan" role="group" aria-label="デモ：MacBook で Command C を押すと、ファイルが一枚の紙になって直接接続で Windows ノートへ飛び、そこで Ctrl V を押して貼り付けます">
+            <figure class="device mac">
+              <div class="screen"><div class="desk">
+                <div class="files">
+                <button type="button" class="file sel" data-name="四半期報告_最終版.pptx" aria-label="四半期報告_最終版.pptx をコピー"><span class="doc doc"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">四半期報告_最終版.pptx</span></button>
+                <button type="button" class="file" data-name="スクリーンショット.png" aria-label="スクリーンショット.png をコピー"><span class="doc pic"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">スクリーンショット.png</span></button>
+                <button type="button" class="file" data-name="会議は 3:30 から、4B 会議室" aria-label="会議は 3:30 から、4B 会議室 をコピー"><span class="doc note"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">会議は 3:30 から、4B 会議室</span></button>
+                <button type="button" class="file" data-name="ブランド素材" aria-label="ブランド素材 をコピー"><span class="doc folder"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">ブランド素材</span></button>
+                </div>
+                <div class="keys" aria-hidden="true"><kbd>⌘</kbd><kbd>C</kbd></div>
+              </div></div>
+              <div class="base"></div>
+              <figcaption>MacBook<span class="net"><span class="wan">自宅</span><span class="lan">自宅の Wi‑Fi</span></span></figcaption>
+            </figure>
+            <div></div>
+            <figure class="device win">
+              <div class="screen"><div class="desk">
+                <div class="file landed" aria-hidden="true"><span class="doc doc"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">四半期報告_最終版.pptx</span></div>
+                <div class="keys" aria-hidden="true"><kbd>Ctrl</kbd><kbd>V</kbd></div>
+                <div class="taskbar"><i></i><i></i><i></i><i></i><i></i></div>
+              </div></div>
+              <div class="base"></div>
+              <figcaption>Windows ノート<span class="net"><span class="wan">職場</span><span class="lan">自宅の Wi‑Fi</span></span></figcaption>
+            </figure>
+            <svg class="arc" aria-hidden="true"><path class="sig" d=""/><path class="direct" d=""/></svg>
+            <span class="server" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg><span>サーバーは仲介するだけ</span></span>
+            <span class="arc-label" aria-hidden="true"><span class="wan">直接接続、エンドツーエンド暗号化</span><span class="lan">ローカルネットワークで直接見つかり、サーバーは不要</span></span>
+            <span class="sheet-fly" aria-hidden="true"><span class="lines"><i></i><i></i><i></i></span></span>
+          </div>
+          <p class="demo-hint">Mac の項目をクリックすると、もう一台にコピーされます</p>
+          <p class="skip" aria-live="polite" data-demo-status></p>
         </div>
-        <button class="replay" type="button">もう一度再生</button>
       </div>
     </section>
 
@@ -183,7 +245,7 @@
         <h2 id="theme-title">見た目も、<br>ピクセルでも。</h2>
         <p class="intro">テーマに対応：ピクセル風を内蔵。自分で作るのも、AI に配色してもらうのも。</p>
         <figure class="spot wide" data-reveal>
-          <img src="../assets/screenshots/ja/pixel-history-dark.png?v=06bddfa070" width="2112" height="1472" loading="lazy" alt="ピクセルテーマの履歴（ダーク）：上部に夜の山と松と月、サイドバーの下にテントとたき火、文字はドットフォント">
+          <img class="theme-dark" src="../assets/screenshots/ja/pixel-history-dark.png?v=06bddfa070" width="2112" height="1472" alt="ピクセルテーマの履歴（ダーク）：上部に夜の山と松と月、サイドバーの下にテントとたき火、文字はドットフォント" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/pixel-history.png?v=7a3ac4f5b1" width="2112" height="1472" alt="ピクセルテーマの履歴（ダーク）：上部に夜の山と松と月、サイドバーの下にテントとたき火、文字はドットフォント" loading="lazy">
         </figure>
         <p class="more"><a href="features/#themes">テーマについて →</a><a href="themes/">テーマガイド →</a></p>
       </div>
@@ -195,7 +257,7 @@
         <h2 id="friends-title">連絡先のパソコンにも、<br>ドラッグで。</h2>
         <p class="intro">連絡先に追加するだけで、ペアリングは不要。相手が受け入れると届き、メモも添えられます。</p>
         <figure class="spot wide" data-reveal>
-          <img src="../assets/screenshots/ja/incoming-dark.png?v=343163e7cd" width="2552" height="1632" loading="lazy" alt="ファイル送信ページ：レーダーの下に連絡先のアイコン、中央に MacBook Air の連絡先からファイルを送りたいという依頼とメモ。拒否か受け入れを選べる">
+          <img class="theme-dark" src="../assets/screenshots/ja/incoming-dark.png?v=343163e7cd" width="2552" height="1632" alt="ファイル送信ページ：レーダーの下に連絡先のアイコン、中央に MacBook Air の連絡先からファイルを送りたいという依頼とメモ。拒否か受け入れを選べる" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/incoming.png?v=c959cbb881" width="2552" height="1632" alt="ファイル送信ページ：レーダーの下に連絡先のアイコン、中央に MacBook Air の連絡先からファイルを送りたいという依頼とメモ。拒否か受け入れを選べる" loading="lazy">
         </figure>
         <p class="more"><a href="features/#friends">連絡先への送信について →</a></p>
       </div>
@@ -206,7 +268,7 @@
         <h2 id="phone-title">スマホでも使える。</h2>
         <p class="intro">Androidアプリでパソコンと写真・ファイルを双方向に転送。複数選択、保存、共有に対応。インストール不要のWeb版も、QRコードでコピー履歴・送信・独立したファイル転送を使えます。</p>
         <figure class="spot wide" data-reveal>
-          <img src="../assets/screenshots/ja/web-share-dark.png?v=5f663678e1" width="2552" height="1632" loading="lazy" alt="デバイスページのスマホ向けウェブ転送：QR コードと登録済みのスマホ一覧">
+          <img class="theme-dark" src="../assets/screenshots/ja/web-share-dark.png?v=5f663678e1" width="2552" height="1632" alt="デバイスページのスマホ向けウェブ転送：QR コードと登録済みのスマホ一覧" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/web-share.png?v=481643d2bc" width="2552" height="1632" alt="デバイスページのスマホ向けウェブ転送：QR コードと登録済みのスマホ一覧" loading="lazy">
         </figure>
         <ul class="points">
           <li><b>ブラウザで使える</b>履歴と独立したファイル転送。</li>
@@ -222,7 +284,7 @@
         <h2 id="send-title">ドラッグすれば、<br>もう届いている。</h2>
         <p class="intro">パソコンではドラッグ、Androidでは複数選択。写真やファイルを別のデバイスへ直接転送。アプリでは中断後も再開できます。</p>
         <figure class="spot wide" data-reveal>
-          <img src="../assets/screenshots/ja/send-dark.png?v=763064b6ab" width="2552" height="1632" loading="lazy" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示">
+          <img class="theme-dark" src="../assets/screenshots/ja/send-dark.png?v=763064b6ab" width="2552" height="1632" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/send.png?v=5c66611508" width="2552" height="1632" alt="ファイル送信ページ：左はこの Mac を中心にしたレーダーで、同じネットワークとほかのネットワークのデバイスが周りに。右は受信したファイルの一覧で、フォルダを受信中、進み具合と速度を表示" loading="lazy">
         </figure>
         <p class="more"><a href="features/#send">ファイル送信について →</a></p>
       </div>
@@ -236,7 +298,7 @@
           <div class="spot-keys" aria-hidden="true">
             <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
           </div>
-          <img src="../assets/screenshots/ja/card-picker-dark.png?v=2c3c5d381e" width="1280" height="1080" loading="lazy" alt="クイックペーストウィンドウ：上に検索欄と「すべて・テキスト・リンク・画像・ファイル・お気に入り」のタブ、番号付きの履歴、下にキーの説明">
+          <img class="theme-dark" src="../assets/screenshots/ja/card-picker-dark.png?v=2c3c5d381e" width="1280" height="1080" alt="クイックペーストウィンドウ：上に検索欄と「すべて・テキスト・リンク・画像・ファイル・お気に入り」のタブ、番号付きの履歴、下にキーの説明" loading="lazy"><img class="theme-light" src="../assets/screenshots/ja/card-picker.png?v=8e2af777e9" width="1280" height="1080" alt="クイックペーストウィンドウ：上に検索欄と「すべて・テキスト・リンク・画像・ファイル・お気に入り」のタブ、番号付きの履歴、下にキーの説明" loading="lazy">
         </figure>
         <p class="more"><a href="features/#quick-paste">クイックペーストについて →</a></p>
       </div>
@@ -290,11 +352,12 @@
             <caption class="skip">PasteFerry とほかの方法の比較</caption>
             <thead><tr><td></td><th scope="col" class="ours">PasteFerry</th><th scope="col">ユニバーサル<br>クリップボード</th><th scope="col">AirDrop</th><th scope="col">チャットアプリ</th></tr></thead>
             <tbody>
-              <tr><th scope="row">別々の Apple ID のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="partial">受け取り操作が必要</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">Mac と Windows、Linux のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
+              <tr><th scope="row">アカウント不要</th><td class="yes ours">不要</td><td class="no">同じ Apple ID が必要</td><td class="partial">Apple 製品のみ</td><td class="no">ログインが必要</td></tr>
+              <tr><th scope="row">Mac、Windows、Linux、Android のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
               <tr><th scope="row">自宅と会社のあいだ</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="yes">できる</td></tr>
-              <tr><th scope="row">コピーしてすぐ貼り付け</th><td class="yes ours">できる</td><td class="yes">できる</td><td class="no">できない</td><td class="no">できない</td></tr>
-              <tr><th scope="row">ファイルとフォルダまるごと</th><td class="yes ours">できる</td><td class="partial">不安定</td><td class="yes">できる</td><td class="partial">先に圧縮</td></tr>
+              <tr><th scope="row">インターネットなしで同じネットワーク内</th><td class="yes ours">できる</td><td class="partial">近くの端末のみ</td><td class="yes">できる</td><td class="no">できない</td></tr>
+              <tr><th scope="row">コピーしてすぐ貼り付け、受け取り操作なし</th><td class="yes ours">できる</td><td class="yes">できる</td><td class="no">できない</td><td class="no">できない</td></tr>
+              <tr><th scope="row">ファイルとフォルダまるごと、サイズ無制限</th><td class="yes ours">できる</td><td class="partial">不安定</td><td class="yes">できる</td><td class="partial">先に圧縮、サイズ制限あり</td></tr>
               <tr><th scope="row">前にコピーしたものを探す</th><td class="yes ours">できる</td><td class="no">できない</td><td class="no">できない</td><td class="partial">履歴をさかのぼる</td></tr>
               <tr><th scope="row">自分の端末だけが復号できる</th><td class="yes ours">はい</td><td class="yes">はい</td><td class="yes">はい</td><td class="some">アプリによる</td></tr>
             </tbody>
@@ -375,6 +438,10 @@
         <a href="../zh-hk/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
         <a href="../en/" hreflang="en" lang="en" data-lang="en">English</a>
         <a href="../ja/" hreflang="ja" lang="ja" data-lang="ja" aria-current="page">日本語</a>
+        <a href="../ko/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../de/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../es/" hreflang="es" lang="es" data-lang="es">Español</a>
       </nav>
     </div>
   </footer>
@@ -383,8 +450,8 @@
     <form method="dialog"><button class="tour-close" aria-label="ムービーを閉じる">×</button></form>
     <iframe title="85 秒でわかる PasteFerry" data-src="tour/?embed" allow="fullscreen" allowfullscreen></iframe>
   </dialog>
-  <script src="../assets/site.js?v=fb60f6e5ce" defer></script>
-  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
+  <script src="../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
 </html>

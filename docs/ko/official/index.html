@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>서비스: 자체 서버 없이 집과 사무실 간 동기화 — PasteFerry</title>
+  <meta name="description" content="서버를 구입할 필요 없이 스위치 하나만 켜면 집과 사무실 컴퓨터가 동기화됩니다.">
+  <link rel="canonical" href="https://pasteferry.cc/ko/official/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/official/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/official/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/official/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/official/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/official/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/official/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/official/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/official/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/official/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="서비스: 자체 서버 없이 집과 사무실 간 동기화 — PasteFerry">
+  <meta property="og:description" content="서버를 구입할 필요 없이 스위치 하나만 켜면 집과 사무실 컴퓨터가 동기화됩니다.">
+  <meta property="og:url" content="https://pasteferry.cc/ko/official/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">콘텐츠로 건너뛰기</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ko/" aria-label="PasteFerry 홈"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="페이지">
+        <a class="mid" href="../../ko/features/">특징</a>
+        <a class="mid" href="../../ko/start/">빠른 시작</a>
+        <a class="wide" href="../../ko/start/#server">연결 방법</a>
+        <a href="../../ko/download/">다운로드</a>
+        <details class="menu">
+          <summary aria-label="더 많은 페이지"><span>더 보기</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../ko/features/">특징</a></li>
+            <li class="narrow"><a href="../../ko/start/">빠른 시작</a></li>
+            <li class="narrow"><a href="../../ko/start/#server">연결 방법</a></li>
+            <li><a href="../../ko/themes/">테마 가이드</a></li>
+            <li><a href="../../ko/how/">작동 원리</a></li>
+            <li><a href="../../ko/security/">보안</a></li>
+            <li><a href="../../ko/faq/">FAQ</a></li>
+            <li><a href="../../ko/feedback/">토론 및 피드백</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub의 별 PasteFerry"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="모양" title="모양"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>시스템 설정 따르기</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>라이트</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>다크</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="언어：한국어"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>한국어</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../official/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/official/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/official/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/official/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/official/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/official/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a></li>
+            <li><a href="../../de/official/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/official/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/official/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero"><div class="wrap">
+      <p class="crumb"><a href="../../ko/">PasteFerry</a> / 서비스</p>
+      <h1 class="display">집과 사무실 사이에서 일함</h1>
+      <p class="lede">두 대의 컴퓨터가 동일한 네트워크에 있지 않은 경우 서비스를 켜면 동기화됩니다.</p>
+      <a class="button" href="../../ko/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>최신 버전을 다운로드하세요</a>
+    </div></section>
+    <section class="section"><div class="wrap">
+      <h2>켜는 방법</h2>
+      <div class="os-grid"><ol class="steps">                <li>각 컴퓨터에 최신 버전을 설치하고 백그라운드 동기화 켜기를 클릭합니다.</li>
+                <li>설정 → 연결에서 서비스 사용을 켜주세요.</li>
+                <li>두 대의 컴퓨터를 페어링합니다. 이미 페어링한 컴퓨터는 다시 페어링할 필요가 없습니다.</li></ol>
+        <figure class="shot"><img class="theme-dark" src="../../assets/screenshots/en/official-settings-dark.png?v=ad31d522a6" width="2112" height="1472" alt="설정 → 연결에서 서비스 사용 스위치" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/official-settings.png?v=5def23d976" width="2112" height="1472" alt="설정 → 연결에서 서비스 사용 스위치" loading="lazy"></figure>
+      </div>
+    </div></section>
+    <section class="section"><div class="wrap official-copy"><h2>가능할 때마다 직접</h2><p class="intro">컴퓨터는 가능한 경우 직접 연결하고, 불가능한 경우에만 서버를 통과합니다. 콘텐츠는 암호화되어 있으며 서버는 이를 해독할 수 없습니다.</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>하루 100MB 릴레이, 직접 무제한</h2><p class="intro">Relay는 컴퓨터당 하루 100MB로 제한됩니다. 직접 무제한입니다. 사용량 페이지에는 남은 금액이 표시됩니다.</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>기본적으로 꺼짐</h2><p class="intro">새로 설치하면 서비스가 중단됩니다. 서버는 복사한 내용을 절대 수신하지 않습니다. 개인정보 보호정책을 참조하세요.</p></div></section>
+<section class="section"><div class="wrap official-copy"><h2>꼭 사용하지 않아도 돼요</h2><p class="intro">동일한 네트워크에서는 필요하지 않습니다. 자체 서버를 실행하거나 Tailscale를 사용할 수도 있습니다.</p></div></section>
+    <section class="section"><div class="wrap official-copy">
+      <figure class="shot"><img class="theme-dark" src="../../assets/screenshots/en/official-usage-dark.png?v=53ec74c6e2" width="2112" height="1472" alt="일일 허용량 100.00MB, 남은 용량 80.00MB를 보여주는 서비스의 데모 사용량 페이지" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/official-usage.png?v=0d4aefa62d" width="2112" height="1472" alt="일일 허용량 100.00MB, 남은 용량 80.00MB를 보여주는 서비스의 데모 사용량 페이지" loading="lazy"></figure>
+      <p class="note"><a href="../../ko/privacy/">개인정보 보호정책</a> · <a href="../../ko/cloud/">셀프 호스팅 가이드</a> · <a href="https://pasteferry.cc/">pasteferry.cc</a></p>
+    </div></section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry 는 GNU AGPL-3.0의 오픈 소스입니다.</p>
+      <nav aria-label="바닥글">
+        <a href="https://github.com/baiyuze/pasteferry/releases">모든 릴리스</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">디자인 노트(중국어)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">라이센스</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">문제 신고</a>
+        <a href="../../ko/privacy/">개인 정보 보호</a>
+        <a href="../../ko/feedback/">토론 및 피드백</a>
+      </nav>
+      <nav aria-label="언어">
+        <a href="../../official/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/official/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/official/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/official/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/official/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/official/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a>
+        <a href="../../de/official/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/official/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/official/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

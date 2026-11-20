@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
   <script>
     (function () {
       if (location.hostname !== "baiyuze.github.io") return;
@@ -15,9 +16,10 @@
   <title>局域网直连：不用服务器也能配对和同步：隔空贴技术方案</title>
   <meta name="description" content="状态：已实现，随 1.4.0 发布；「搜索附近设备」随 1.5.0 发布">
   <link rel="canonical" href="https://pasteferry.cc/design/lan-mode.html">
-  <meta name="theme-color" content="#141416">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
-  <link rel="stylesheet" href="../assets/site.css?v=dbae55d27c">
+  <link rel="stylesheet" href="../assets/site.css?v=cfbc242d54">
 </head>
 <body>
   <a class="skip" href="#main">跳到正文</a>
@@ -128,10 +130,14 @@
         <a href="../zh-hk/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
         <a href="../en/" hreflang="en" lang="en" data-lang="en">English</a>
         <a href="../ja/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../ko/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../de/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../es/" hreflang="es" lang="es" data-lang="es">Español</a>
       </nav>
     </div>
   </footer>
-  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
 </html>

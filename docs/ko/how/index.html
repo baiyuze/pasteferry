@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PasteFerry 작동 방식: 직접 연결, 다중 업링크 검색 및 오류 처리</title>
+  <meta name="description" content="복사하면 어떻게 되는지, 컴퓨터는 어떻게 연결되는지, 복사할 수 없으면 어떻게 되는지 알아보세요.">
+  <link rel="canonical" href="https://pasteferry.cc/ko/how/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/how/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/how/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/how/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/how/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/how/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/how/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/how/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/how/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/how/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="PasteFerry 작동 방식: 직접 연결, 다중 업링크 검색 및 오류 처리">
+  <meta property="og:description" content="복사하면 어떻게 되는지, 컴퓨터는 어떻게 연결되는지, 복사할 수 없으면 어떻게 되는지 알아보세요.">
+  <meta property="og:url" content="https://pasteferry.cc/ko/how/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">콘텐츠로 건너뛰기</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ko/" aria-label="PasteFerry 홈"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="페이지">
+        <a class="mid" href="../../ko/features/">특징</a>
+        <a class="mid" href="../../ko/start/">빠른 시작</a>
+        <a class="wide" href="../../ko/start/#server">연결 방법</a>
+        <a href="../../ko/download/">다운로드</a>
+        <details class="menu">
+          <summary aria-label="더 많은 페이지" class="current"><span>더 보기</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../ko/features/">특징</a></li>
+            <li class="narrow"><a href="../../ko/start/">빠른 시작</a></li>
+            <li class="narrow"><a href="../../ko/start/#server">연결 방법</a></li>
+            <li><a href="../../ko/themes/">테마 가이드</a></li>
+            <li><a href="./" aria-current="page">작동 원리</a></li>
+            <li><a href="../../ko/security/">보안</a></li>
+            <li><a href="../../ko/faq/">FAQ</a></li>
+            <li><a href="../../ko/feedback/">토론 및 피드백</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub의 별 PasteFerry"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="모양" title="모양"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>시스템 설정 따르기</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>라이트</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>다크</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="언어：한국어"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>한국어</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/how/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a></li>
+            <li><a href="../../de/how/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/how/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/how/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../ko/">PasteFerry</a></p>
+        <h1 class="display">작동 원리</h1>
+        <p class="lede">복사하면 어떻게 되는지, 컴퓨터는 어떻게 연결되는지, 복사할 수 없으면 어떻게 되는지 알아보세요.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="flow-title">
+      <div class="wrap">
+        <h2 id="flow-title">복사하면 어떻게 되나요?</h2>
+        <p class="intro">텍스트, 이미지, 파일은 모두 동일한 경로를 사용합니다.</p>
+        <ol class="flow">
+          <li><h3>공지사항</h3><p>백그라운드 서비스는 클립보드가 변경되었음을 확인합니다.</p></li>
+          <li><h3>보내기</h3><p>최대 50MB의 텍스트와 파일이 바로 넘어갑니다. 더 큰 것들은 먼저 레코드로 전송됩니다.</p></li>
+          <li><h3>붙여넣기</h3><p>다른 컴퓨터는 이를 로컬에 저장하고 클립보드에 넣습니다. 실제 파일을 붙여넣습니다.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="diagram" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title">PasteFerry 연결 방법</h2>
+        <p class="intro">동일한 네트워크에서 컴퓨터는 서로를 직접 찾습니다. 다른 네트워크에서는 서버가 이를 소개하여 직접 연결을 시도하고 연결이 실패한 경우에만 중계합니다. 콘텐츠는 항상 암호화됩니다.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 400" role="img" aria-labelledby="diagram-title diagram-desc">
+            <title id="diagram-title">PasteFerry 연결 방법</title>
+            <desc id="diagram-desc">컴퓨터 A와 컴퓨터 B는 WebRTC를 통해 직접 연결됩니다. 둘 다 신호를 보내기 위해 서버에 연결됩니다. 직접 연결에 실패하면 서버의 TURN 서비스를 통해 데이터가 중계됩니다.</desc>
+            <rect class="d-box" x="360" y="24" width="240" height="96" rx="14"/>
+            <text class="d-title" x="480" y="64" text-anchor="middle">시그널링 및 중계 서비스</text>
+            <text class="d-sub" x="480" y="92" text-anchor="middle">신호, STUN, TURN 릴레이</text>
+            <path class="d-sig" d="M140 210V58H360"/>
+            <path class="d-sig" d="M820 210V58H600"/>
+            <path class="d-relay" d="M196 210V100H360"/>
+            <path class="d-relay" d="M764 210V100H600"/>
+            <text class="d-note" x="210" y="50">신호: 연결 세부정보</text>
+            <text class="d-note" x="210" y="128">릴레이: 직접 실패하는 경우에만</text>
+            <rect class="d-box" x="40" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="160" y="262" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="160" y="290" text-anchor="middle">여기에 복사하세요</text>
+            <rect class="d-box" x="680" y="210" width="240" height="120" rx="14"/>
+            <text class="d-title" x="800" y="262" text-anchor="middle">맥, Windows 또는 Linux</text>
+            <text class="d-sub" x="800" y="290" text-anchor="middle">여기에 붙여넣으세요</text>
+            <path class="d-direct" d="M280 270H680"/>
+            <text class="d-label" x="480" y="256" text-anchor="middle">직접 WebRTC, DTLS 암호화됨</text>
+            <text class="d-note" x="480" y="298" text-anchor="middle">데이터는 컴퓨터 간에만 이동됩니다.</text>
+            <g class="d-legend" transform="translate(40 372)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">데이터(직접)</text>
+              <path class="d-relay" d="M210 0H238"/><text x="248" y="5">데이터(릴레이, 폴백)</text>
+              <path class="d-sig" d="M470 0H498"/><text x="508" y="5">신호 보내기</text>
+            </g>
+          </svg>
+          <ul class="points diagram-text">
+            <li><strong>직접 WebRTC, DTLS 암호화됨</strong> 데이터는 컴퓨터 간에만 이동됩니다.</li>
+            <li><strong>시그널링 및 중계 서비스</strong> 신호, STUN, TURN 릴레이</li>
+            <li>릴레이: 직접 실패하는 경우에만</li>
+          </ul>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="multi-uplink" aria-labelledby="multi-title">
+      <div class="wrap">
+        <h2 id="multi-title">사무실 네트워크에서도 직접 사용 가능</h2>
+        <p class="intro">릴레이를 통과하는 데 사용되는 여러 업링크가 있는 사무실 네트워크. PasteFerry 는 모든 업링크를 찾아 상대방이 각각을 시도하도록 합니다.</p>
+        <div class="cols">
+          <div>
+            <h3>기능</h3>
+            <ul class="points">
+              <li><strong>하나의 공유 포트.</strong>모든 연결은 동일한 UDP 포트를 사용합니다.</li>
+              <li><strong>모든 업링크가 조사되었습니다.</strong>한 번에 7개의 서버에 요청하고 업링크당 하나의 주소를 얻습니다.</li>
+              <li><strong>모두 반대편으로 보냈습니다.</strong>다른 컴퓨터는 한 컴퓨터가 통과할 때까지 각 컴퓨터를 시도합니다.</li>
+              <li><strong>유휴 상태에서 직접 재시도하세요.</strong>릴레이는 계속 작동하며 유휴 상태에서는 직접 전환됩니다.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>실제 네트워크 설정에서 테스트됨</h3>
+            <p class="small">모든 커밋은 시뮬레이션된 네트워크에서 자동으로 테스트됩니다.</p>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th scope="col">시나리오</th><th scope="col">결과</th></tr></thead>
+                <tbody>
+                <tr><td>단일 업링크 ⇔ 홈 라우터</td><td>직접 연결</td></tr>
+                <tr><td>업링크 2개, 이전 버전(제어)</td><td>중계</td></tr>
+                <tr><td>업링크 4개 ⇔ 홈 라우터</td><td>직접 연결</td></tr>
+                <tr><td>업링크 2개 ← 업링크 2개</td><td>직접 연결</td></tr>
+                <tr><td>2개의 업링크 ⇔ 포트를 무작위로 지정하는 NAT</td><td>중계</td></tr>
+                <tr><td>처음에는 차단되었다가 나중에 네트워크가 복구됨</td><td>릴레이 후 직접</td></tr>
+                <tr><td>서버 없음, 동일한 서브넷</td><td>직접 연결</td></tr>
+                <tr><td>서버 없음, 서브넷이 서로 분리됨</td><td>연결되지 않음</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="small">측정됨: 4업링크 사무실 네트워크의 Mac과 이전에 0.6MB/s로 릴레이된 집의 Mac. 이제 그들은 직접 연결됩니다.</p>
+            <p class="small">자세한 내용은 <a href="../../design/nat-traversal.html">설계 문서</a> (중국어)에 나와 있습니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="fallbacks" aria-labelledby="fallback-title">
+      <div class="wrap">
+        <h2 id="fallback-title">일이 잘못될 때</h2>
+        <p class="intro">일반적인 경우를 처리합니다.</p>
+        <dl class="fallbacks">
+          <div><dt>네트워크에서 다른 컴퓨터를 찾을 수 없습니다</dt><dd>페어링할 때 주소를 입력하세요. 나중에 생각나네요.</dd></div>
+          <div><dt>직접 연결 없음</dt><dd>데이터는 암호화된 상태로 서버를 통해 중계됩니다.</dd></div>
+          <div><dt>다른 컴퓨터가 잠자기 상태이거나 꺼집니다.</dt><dd>돌아오면 저절로 다시 연결됩니다.</dd></div>
+          <div><dt>파일 전송 중 연결이 끊어졌습니다.</dt><dd>전송이 중지된 위치에서 다시 시작됩니다.</dd></div>
+          <div><dt>파일 이름 Windows 는 허용되지 않습니다.</dt><dd>잘못된 문자는 전자 문자가 되므로 이름은 여전히 동일하게 읽혀집니다.</dd></div>
+          <div><dt>비밀번호 복사</dt><dd>Windows에서는 비밀번호 관리자에서 복사된 모든 내용을 건너뜁니다.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="specs" aria-labelledby="specs-title">
+      <div class="wrap">
+        <h2 id="specs-title">사양</h2>
+        <div class="table-scroll">
+          <table class="specs">
+            <tbody>
+            <tr><th scope="row">버전</th><td>2.13.1, 2026년 11월 20일 <time datetime="2026-11-20">출시</time></td></tr>
+            <tr><th scope="row">맥 앱</th><td>macOS 13 벤츄라 이상; Apple Silicon 및 Intel용 개별 다운로드(각각 약 25MB, Rosetta 없음) 둘 다의 범용 버전은 약 47MB입니다.</td></tr>
+            <tr><th scope="row">Windows 앱</th><td>Windows 10 및 Windows 11, x64; 사용자별로 설치하며 관리자 권한은 없습니다. 다운로드 약 23MB</td></tr>
+            <tr><th scope="row">Linux 앱</th><td>x64 및 ARM64; .deb (Debian, Ubuntu 및 유사) 또는 tar.gz (기타 배포판), 약 22MB X11 데스크탑 또는 XWayland가 있는 Wayland 데스크탑이 필요합니다(GNOME, KDE 및 기타 제품에는 기본적으로 포함되어 있음). GTK 3</td></tr>
+            <tr><th scope="row">서버</th><td>서비스 또는 동일한 네트워크에서는 필요하지 않습니다. 직접 실행하려면: Linux x86_64/ARM64, macOS또는 Windows 10/11 x64.</td></tr>
+            <tr><th scope="row">언어</th><td>18개 언어: 영어, 중국어 간체 및 번체(대만 및 홍콩), 일본어, 한국어, 아랍어(오른쪽에서 왼쪽으로), 독일어, 프랑스어, 스페인어, 포르투갈어(브라질), 이탈리아어, 러시아어, 우크라이나어, 폴란드어, 터키어, 베트남어, 인도네시아어 기본적으로 시스템을 따르며 설정에서 전환 가능</td></tr>
+            <tr><th scope="row">내용</th><td>일반 텍스트, 서식 있는 텍스트, 이미지 및 스크린샷, 파일, 폴더 각 유형을 끌 수 있습니다</td></tr>
+            <tr><th scope="row">운송</th><td>WebRTC 데이터 채널, TURN 릴레이 폴백을 통한 직접 우선; 동일한 네트워크에서 UDP 8788을 통한 mDNS 검색 및 연결 세부 정보 다중 업링크 네트워크에서 모든 업링크를 조사합니다. tar + zstd로 스트리밍되는 파일</td></tr>
+            <tr><th scope="row">암호화 및 ID</th><td>엔드 투 엔드 DTLS; Ed25519 장치 키; 모든 신호 메시지에 서명됨</td></tr>
+            <tr><th scope="row">페어링</th><td>0/O 및 1/I와 같은 유사 문자가 없는 알파벳을 사용하여 5분간 유효한 6자리 코드입니다. 당신이 확인한 지문</td></tr>
+            <tr><th scope="row">자동 동기화 한도</th><td>기본적으로 50MB, 1MB에서 1GB까지 조정 가능</td></tr>
+            <tr><th scope="row">파일 보내기</th><td>하나의 장치, 모든 크기, 파일 또는 전체 폴더에; 암호화된 TCP 링크(양쪽 모두 2.5.1필요)를 통해 로컬 네트워크에서 사용할 수 없는 경우 WebRTC 로 대체됩니다.  인터넷 및 중계를 통한 WebRTC ; 연결이 끊어진 후 다시 시작됩니다. 파일당 SHA-256. 측정된 Mac에서 Linux VM, 1GB: 144.3MB/s; 실제 속도는 네트워크와 디스크에 따라 다릅니다.</td></tr>
+            <tr><th scope="row">연락처</th><td>F로 시작하는 7자리 연락처 코드는 로컬 네트워크나 서비스를 통해 교환되며 선택적인 안전 코드 확인도 가능합니다. 연락처는 최대 200자의 메모를 포함하여 서로 파일과 이미지만 보낼 수 있으며 각 일괄 처리를 수락해야 합니다. 상대방은 귀하의 클립보드, 기록 또는 장치를 절대 볼 수 없습니다. 수신된 파일은 실행 비트가 손실되고 Mac에 격리됩니다. 양쪽 모두 2.6 이상이 필요합니다</td></tr>
+            <tr><th scope="row">기록</th><td>기본적으로 3일이며, 1시간에서 30일까지 조정 가능합니다. 만료된 항목은 자동으로 제거됩니다.</td></tr>
+            <tr><th scope="row">측정된 속도</th><td>20MB 파일은 직접 LAN 연결을 통해 약 330ms 내에 전송되며 체크섬은 일치합니다.</td></tr>
+            <tr><th scope="row">다음으로 제작됨</th><td>백그라운드 서비스 및 서버( Windows 에서 Win32를 호출하고 Linux에서 X11 프로토콜을 말하는 순수 Go), 앱용 Flutter (세 시스템 모두에 대해 하나의 코드베이스), 메시지용 프로토콜 버퍼로 이동합니다.</td></tr>
+            <tr><th scope="row">라이센스</th><td><a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">GNU AGPL-3.0</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry 는 GNU AGPL-3.0의 오픈 소스입니다.</p>
+      <nav aria-label="바닥글">
+        <a href="https://github.com/baiyuze/pasteferry/releases">모든 릴리스</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">디자인 노트(중국어)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">라이센스</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">문제 신고</a>
+        <a href="../../ko/privacy/">개인 정보 보호</a>
+        <a href="../../ko/feedback/">토론 및 피드백</a>
+      </nav>
+      <nav aria-label="언어">
+        <a href="../../how/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/how/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/how/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/how/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/how/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/how/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a>
+        <a href="../../de/how/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/how/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/how/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

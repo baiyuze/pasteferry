@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Utilice PasteFerry en redes con Tailscale: sin servidor, hogar y oficina sincronizados</title>
+  <meta name="description" content="Instale Tailscale en cada computadora bajo una cuenta e ingrese la dirección Tailscale de la otra computadora al realizar el emparejamiento: sin IP pública, sin servidor y sin computadora que deba permanecer encendida. El portapapeles se sincroniza desde la oficina o desde cualquier otro lugar.">
+  <link rel="canonical" href="https://pasteferry.cc/es/tailscale/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/tailscale/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/tailscale/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/tailscale/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/tailscale/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/tailscale/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/tailscale/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/tailscale/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/tailscale/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/tailscale/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="Utilice PasteFerry en redes con Tailscale: sin servidor, hogar y oficina sincronizados">
+  <meta property="og:description" content="Instale Tailscale en cada computadora bajo una cuenta e ingrese la dirección Tailscale de la otra computadora al realizar el emparejamiento: sin IP pública, sin servidor y sin computadora que deba permanecer encendida. El portapapeles se sincroniza desde la oficina o desde cualquier otro lugar.">
+  <meta property="og:url" content="https://pasteferry.cc/es/tailscale/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-es.png">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../es/" aria-label="PasteFerry casa"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Página">
+        <a class="mid" href="../../es/features/">Características</a>
+        <a class="mid" href="../../es/start/">Inicio rápido</a>
+        <a class="wide" href="../../es/start/#server" aria-current="true">Formas de conectarse</a>
+        <a href="../../es/download/">Descarga</a>
+        <details class="menu">
+          <summary aria-label="Más páginas"><span>Más</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../es/features/">Características</a></li>
+            <li class="narrow"><a href="../../es/start/">Inicio rápido</a></li>
+            <li class="narrow"><a href="../../es/start/#server">Formas de conectarse</a></li>
+            <li><a href="../../es/themes/">guía de temas</a></li>
+            <li><a href="../../es/how/">como funciona</a></li>
+            <li><a href="../../es/security/">Seguridad</a></li>
+            <li><a href="../../es/faq/">Preguntas frecuentes</a></li>
+            <li><a href="../../es/feedback/">Discusión y comentarios</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Registro de cambios</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Estrella PasteFerry en GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Apariencia" title="Apariencia"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Seguir el sistema</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Claro</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Oscuro</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Idioma：Español"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>Español</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../tailscale/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/tailscale/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/tailscale/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/tailscale/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/tailscale/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/tailscale/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/tailscale/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/tailscale/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/tailscale/" hreflang="es" lang="es" data-lang="es" aria-current="page">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../es/">PasteFerry</a> / <a href="../../es/start/#server">Formas de conectarse</a></p>
+        <h1 class="display">A través de redes con Tailscale</h1>
+        <p class="lede">¿No tienes una IP pública y no deseas ejecutar un servidor? Instale Tailscale en cada computadora e ingrese la dirección Tailscale de la otra computadora al realizar el emparejamiento. Se sincroniza en casa y en la oficina.</p>
+        <ol class="guide-toc">
+          <li><a href="#join">Instalar Tailscale</a></li>
+          <li><a href="#address">Encuentra la dirección</a></li>
+          <li><a href="#pair">par</a></li>
+          <li><a href="#faq">Preguntas</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="overview" aria-labelledby="overview-title">
+      <div class="wrap">
+        <h2 id="overview-title">Como si estuviera en una LAN</h2>
+        <p class="intro">Tailscale conecta sus dispositivos a una red privada: cada dispositivo que inicia sesión en la misma cuenta obtiene una dirección fija que comienza con 100, accesible desde los demás dondequiera que estén. PasteFerry recuerda la dirección de la otra computadora cuando se empareja y se conecta como si ambas estuvieran en una red.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 330" role="img" aria-labelledby="ts-title ts-desc">
+            <title id="ts-title">PasteFerry sobre Tailscale</title>
+            <desc id="ts-desc">Una Mac en la oficina y una PC Windows en casa ejecutan Tailscale y cada una tiene una dirección que comienza con 100 en la misma red privada. El contenido copiado va directamente entre ellos; no hay servidor.</desc>
+            <rect class="d-ts" x="8" y="8" width="944" height="314" rx="22"/>
+            <text class="d-ts-label" x="32" y="42">Red Tailscale : cada dispositivo tiene una dirección 100.x</text>
+            <rect class="d-box" x="40" y="100" width="240" height="160" rx="14"/>
+            <text class="d-title" x="160" y="146" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="160" y="174" text-anchor="middle">en la oficina</text>
+            <text class="d-ip" x="160" y="226" text-anchor="middle">100.88.20.5</text>
+            <rect class="d-box" x="680" y="100" width="240" height="160" rx="14"/>
+            <text class="d-title" x="800" y="146" text-anchor="middle">Windows</text>
+            <text class="d-sub" x="800" y="174" text-anchor="middle">en casa</text>
+            <text class="d-ip" x="800" y="226" text-anchor="middle">100.92.41.17</text>
+            <path class="d-direct" d="M280 190H680"/>
+            <text class="d-label" x="480" y="176" text-anchor="middle">Directo, cifrado dos veces</text>
+            <text class="d-note" x="480" y="218" text-anchor="middle">El contenido permanece entre las dos computadoras.</text>
+          </svg>
+        </figure>
+        <ul class="points ports">
+          <li><strong>Sin servidor,</strong> y sin computadora que deba permanecer encendida: dos computadoras que están encendidas y conectadas a Tailscale se sincronizan.</li>
+          <li><strong>Introduzca la dirección una vez.</strong> Una dirección Tailscale no cambia; lo ingresa al emparejar y las dos computadoras se encuentran a partir de ese momento.</li>
+          <li><strong>Cifrado dos veces.</strong> Dentro del túnel WireGuard de Tailscale se ejecuta la propia conexión cifrada de extremo a extremo de PasteFerry. Tailscale no puede ver el contenido.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="prepare" aria-labelledby="prepare-title">
+      <div class="wrap">
+        <h2 id="prepare-title">Antes de empezar</h2>
+        <dl class="fallbacks">
+          <div><dt>Una cuenta Tailscale</dt><dd>Gratis para uso personal; inicie sesión con Google, Microsoft, GitHub o Apple. Utilice la misma cuenta en todos los dispositivos.</dd></div>
+          <div><dt>Tailscale en cada computadora</dt><dd>Hay clientes para Windows, macOS y Linux. Cada computadora que ejecuta PasteFerry lo necesita, conectado.</dd></div>
+          <div><dt>PasteFerry instalado</dt><dd>La aplicación en cada computadora con sincronización en segundo plano activada; consulte el inicio rápido de <a href="../../es/start/#app"></a>. Deje la dirección del servidor vacía.</dd></div>
+          <div><dt>ZeroTier también funciona</dt><dd>Lo mismo ocurre con cualquier herramienta que proporcione a cada dispositivo una dirección virtual fija: ingrese esa dirección al realizar el emparejamiento. Esta guía utiliza Tailscale.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="join" aria-labelledby="join-title">
+      <div class="wrap">
+        <p class="eyebrow">Paso 1</p>
+        <h2 id="join-title">Instale Tailscale en cada computadora</h2>
+        <p class="intro">En cada computadora que sincronices, instálala e inicia sesión en la misma cuenta.</p>
+        <div class="os-grid qs-grid">
+          <div class="os-steps">
+            <ol class="steps">
+              <li>Descargue el cliente para su sistema desde el sitio web Tailscale e instálelo.<span class="aside">En Linux, ejecute <code>curl -fsSL https://tailscale.com/install.sh | sh</code>, entonces <code>sudo tailscale up</code>y abra el enlace que imprime para iniciar sesión.</span></li>
+              <li>Abra Tailscale e inicie sesión con la misma cuenta en todas las computadoras.</li>
+              <li>Luego, la consola de administración Tailscale enumera todos sus dispositivos, cada uno con una dirección que comienza con 100.</li>
+            </ol>
+            <a class="button" href="https://tailscale.com/download"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Descargar Tailscale</a>
+          </div>
+          <div class="os-figures">
+            <figure class="browser listing" role="img" aria-label="Lista de máquinas de la consola de administración Tailscale (ilustración): macbook-pro es 100.88.20.5 y home-pc es 100.92.41.17">
+              <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">login.tailscale.com/admin/machines</span></div>
+              <table>
+                <thead><tr><th scope="col">maquina</th><th scope="col">Dirección Tailscale</th><th scope="col">SO</th></tr></thead>
+                <tbody>
+                <tr><td>macbook-pro</td><td>100.88.20.5</td><td>macOS</td></tr>
+                <tr><td>home-pc</td><td>100.92.41.17</td><td>Windows</td></tr>
+                </tbody>
+              </table>
+            </figure>
+          </div>
+        </div>
+        <div class="server-notes">
+          <h3>Mantenga Tailscale conectado</h3>
+          <ul class="points">
+            <li><strong>Windows:</strong> , haga clic derecho en el ícono Tailscale en el área de notificación y marque Ejecutar desatendido en Preferencias, para que permanezca conectado después de cerrar sesión.</li>
+            <li><strong>Mac:</strong> asegúrese de que Tailscale se abra al iniciar sesión.</li>
+            <li><strong>Deshabilitar la caducidad de la clave:</strong> de forma predeterminada Tailscale solicita a los dispositivos que inicien sesión nuevamente cada 180 días. Para una computadora que rara vez cambia, abra el menú al final de su fila en la página Máquinas y elija Desactivar la caducidad de la clave.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="address" aria-labelledby="address-title">
+      <div class="wrap">
+        <p class="eyebrow">Paso 2</p>
+        <h2 id="address-title">Encuentre la dirección Tailscale de la otra computadora</h2>
+        <p class="intro">En la computadora con la que se emparejará, haga clic en el ícono Tailscale (en la barra de menú en una Mac, en el área de notificación en Windows) para ver su dirección, o ejecute <code>tailscale ip -4</code> en una terminal.</p>
+        <div class="address-term">
+          <figure class="term" role="img" aria-label="Al ejecutar tailscale ip -4 en PowerShell se imprime la dirección Tailscale de la computadora, 100.92.41.17">
+                <div class="t-bar mac"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="t-title">home-pc — PowerShell</span></div>
+<pre class="t-body"><span class="t-prompt">&gt;</span> tailscale ip -4
+<span class="t-url">100.92.41.17</span></pre>
+              </figure>
+        </div>
+        <p class="note">Los pasos siguientes utilizan <code>100.92.41.17</code>, la PC Windows en casa. Utilice su propia dirección.</p>
+      </div>
+    </section>
+
+    <section class="section" id="pair" aria-labelledby="pair-title">
+      <div class="wrap">
+        <p class="eyebrow">Paso 3</p>
+        <h2 id="pair-title">Ingrese la dirección al emparejar</h2>
+        <p class="intro">Es como emparejar en una red, con una dirección adicional.</p>
+        <div class="os-grid qs-grid">
+          <div>
+            <ol class="steps">
+              <li>En la PC Windows de su hogar, abra Dispositivos, haga clic en Agregar dispositivo y anote el código de 6 caracteres.</li>
+              <li>En la Mac de la oficina, haga clic en Agregar dispositivo, cambie a Ingresar un código y escríbalo; luego haga clic en ¿En una subred diferente?, ingrese <code>100.92.41.17</code> y haga clic en Continuar.</li>
+              <li>Ambas pantallas muestran las mismas dos líneas de huellas dactilares. Compruébelos y luego confirme. Las dos computadoras ahora se sincronizan dondequiera que estén.</li>
+            </ol>
+          </div>
+          <figure class="shot">
+            <img class="theme-dark" src="../../assets/screenshots/en/pairing-join-ts-dark.png?v=cd573058a3" width="2112" height="1472" alt="Ingrese un código: el código K7MP2X, con la dirección Tailscale 100.92.41.17 en el campo de dirección" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/pairing-join-ts.png?v=46de42ef3e" width="2112" height="1472" alt="Ingrese un código: el código K7MP2X, con la dirección Tailscale 100.92.41.17 en el campo de dirección" loading="lazy">
+          </figure>
+        </div>
+        <p class="note">Cuando ambas computadoras están en casa, PasteFerry también encuentra la otra en la LAN directamente, por lo que los datos no se desvían.</p>
+      </div>
+    </section>
+
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <h2 id="faq-title">Preguntas</h2>
+        <div class="faq">
+          <details>
+            <summary>Los dispositivos muestran Direct, pero es lento</summary>
+            <div class="answer"><p>Directo en PasteFerry significa que las dos computadoras se conectan directamente en la red Tailscale . Cuando Tailscale no puede conectarlos de igual a igual, los transmite a través de sus servidores DERP, que pueden estar muy lejos.</p><p>Ejecute <code>tailscale ping other-address</code> en una terminal: a través de DERP significa que Tailscale está retransmitiendo; a través de una IP y un puerto significa que es de igual a igual. Las redes de oficinas y campus se transmiten con mayor frecuencia; puede ejecutar su propio servidor DERP o probar con otra VPN de malla.</p></div>
+          </details>
+          <details>
+            <summary>El emparejamiento no puede encontrar la otra computadora</summary>
+            <div class="answer"><p>Primero asegúrese de que Tailscale esté conectado en ambos: ejecute <code>tailscale ping other-address</code> e inténtelo nuevamente una vez que responda.</p><p>Si el ping funciona pero el emparejamiento no, es probable que el firewall de la otra computadora lo esté bloqueando. En Windows, haga clic en Permitir en Configuración → Conexión en PasteFerry; en una Mac, active PasteFerry Daemon en Configuración del sistema → Privacidad y seguridad → Red local.</p></div>
+          </details>
+          <details>
+            <summary>¿Todas las computadoras necesitan Tailscale?</summary>
+            <div class="answer"><p>Sí, una computadora sin él no puede alcanzar las direcciones 100.x. Las computadoras en la misma red no lo necesitan; consulte la misma guía de red <a href="../../es/lan/"></a>.</p></div>
+          </details>
+          <details>
+            <summary>Configuré un servidor en casa con la guía anterior. ¿Aún lo necesito?</summary>
+            <div class="answer"><p>No. Borre la dirección del servidor en Configuración → Conexión en cada computadora y desinstale el servidor en casa; Los dispositivos emparejados permanecen emparejados. Conservarlo tampoco hace daño: un servidor y Tailscale trabajan juntos.</p></div>
+          </details>
+          <details>
+            <summary>¿Puede Tailscale ver lo que copio?</summary>
+            <div class="answer"><p>No. Las conexiones Tailscale están cifradas de extremo a extremo con WireGuard y en su interior se ejecuta la conexión cifrada PasteFerry propia de DTLS; sólo sus dos computadoras pueden abrir cualquiera de las capas.  Los servidores de Tailscale solo intercambian claves y direcciones de dispositivos, y sus retransmisiones reenvían paquetes cifrados.</p></div>
+          </details>
+          <details>
+            <summary>¿Cambiará una dirección Tailscale ?</summary>
+            <div class="answer"><p>Generalmente no. La dirección pertenece al dispositivo y sobrevive a reinicios y cambios de red; solo cambia si elimina el dispositivo de Tailscale y lo agrega nuevamente. Si es así, ingréselo una vez más en Dispositivos.</p></div>
+          </details>
+          <details>
+            <summary>Tengo un servidor público. ¿Necesito Tailscale?</summary>
+            <div class="answer"><p>No. Ejecute el servidor en la máquina con la IP pública e ingrese esa dirección en cada computadora; consulte la guía del servidor público <a href="../../es/cloud/"></a>.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">Sin servidor.<br>Su portapapeles viene con usted.</h2>
+        <div class="cta">
+          <a class="button" href="../../es/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Descargar PasteFerry</a>
+        </div>
+        <p class="note">Versión 2.13.1, gratuita y de código abierto. Compatible con macOS 13 o posterior, Windows 10 y 11, Linux (x64 y ARM64) y Android 9 o posterior. El nuevo ajuste de tamaño permite ampliar o reducir el texto, los iconos y el espaciado a la vez.</p>
+        <a class="source" href="../../es/lan/">Volver a la misma guía de red</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry es de código abierto bajo GNU AGPL-3.0.</p>
+      <nav aria-label="Pie de página">
+        <a href="https://github.com/baiyuze/pasteferry/releases">Todos los lanzamientos</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Registro de cambios</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Notas de diseño (chino)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">Licencia</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Informar un problema</a>
+        <a href="../../es/privacy/">Privacidad</a>
+        <a href="../../es/feedback/">Discusión y comentarios</a>
+      </nav>
+      <nav aria-label="Idioma">
+        <a href="../../tailscale/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/tailscale/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/tailscale/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/tailscale/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/tailscale/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/tailscale/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/tailscale/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/tailscale/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/tailscale/" hreflang="es" lang="es" data-lang="es" aria-current="page">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

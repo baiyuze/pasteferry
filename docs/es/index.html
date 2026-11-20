@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PasteFerry: portapapeles, historial y transferencia de archivos entre dispositivos</title>
+  <meta name="description" content="Copie y pegue entre computadoras, busque el historial del portapapeles y envíe fotos y archivos entre computadoras y Android. Mac, Windows, Linux, Android y una página web de teléfono. Android y web funcionan en la misma red. Gratis y de código abierto.">
+  <link rel="canonical" href="https://pasteferry.cc/es/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/">
+  <link rel="alternate" hreflang="x-default" href="https://pasteferry.cc/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="PasteFerry: portapapeles, historial y transferencia de archivos entre dispositivos">
+  <meta property="og:description" content="Copie y pegue entre computadoras, busque el historial del portapapeles y envíe fotos y archivos entre computadoras y Android. Mac, Windows, Linux, Android y una página web de teléfono. Android y web funcionan en la misma red. Gratis y de código abierto.">
+  <meta property="og:url" content="https://pasteferry.cc/es/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-es.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="zh_HK">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+  <script>
+    (function () {
+      var moved = {"how": "how/", "multi-uplink": "how/#multi-uplink", "install": "download/", "faq": "faq/", "security": "security/", "specs": "how/#specs"};
+      var to = moved[location.hash.slice(1)];
+      if (to) location.replace(to);
+    })();
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://pasteferry.cc/#organization",
+        "name": "PasteFerry",
+        "url": "https://pasteferry.cc/",
+        "logo": "https://pasteferry.cc/assets/icon.png",
+        "sameAs": [
+          "https://github.com/baiyuze/pasteferry"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://pasteferry.cc/#website",
+        "name": "PasteFerry",
+        "url": "https://pasteferry.cc/",
+        "inLanguage": [
+          "zh-CN",
+          "zh-TW",
+          "zh-HK",
+          "en",
+          "ja",
+          "ko",
+          "de",
+          "fr",
+          "es"
+        ],
+        "publisher": {
+          "@id": "https://pasteferry.cc/#organization"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://pasteferry.cc/#app",
+        "name": "PasteFerry",
+        "alternateName": [
+          "隔空贴",
+          "CopySync"
+        ],
+        "description": "Copie y pegue entre computadoras, busque el historial del portapapeles y envíe fotos y archivos entre computadoras y Android. Mac, Windows, Linux, Android y una página web de teléfono. Android y web funcionan en la misma red. Gratis y de código abierto.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "macOS 13 o posterior (Intel y Apple Silicon); Windows 10, Windows 11 (x64); Linux (x64, ARM64)",
+        "softwareVersion": "2.13.1",
+        "datePublished": "2026-11-20",
+        "inLanguage": "es",
+        "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "downloadUrl": "https://pasteferry.cc/es/download/",
+        "codeRepository": "https://github.com/baiyuze/pasteferry",
+        "publisher": {
+          "@id": "https://pasteferry.cc/#organization"
+        },
+        "image": "https://pasteferry.cc/assets/icon.png",
+        "screenshot": "https://pasteferry.cc/assets/screenshots/en/history-dark.png",
+        "featureList": [
+          "Sincroniza texto sin formato, texto enriquecido, imágenes, archivos y carpetas",
+          "Funciona entre Mac, Windows y Linux, sin cuenta compartida, a través de redes",
+          "No se necesita servidor en la misma red, con descubrimiento automático de mDNS",
+          "Conexión directa WebRTC con retroceso automático del relé TURN",
+          "Cifrado DTLS de extremo a extremo con huellas dactilares verificadas por humanos en el emparejamiento",
+          "Los elementos de menos de 50 MB se envían mediante copia, los archivos más grandes se obtienen según demanda",
+          "Historial de los últimos 3 días, con vistas previas de imágenes.",
+          "Interfaz en 18 idiomas, incluido árabe (de derecha a izquierda)"
+        ],
+        "author": {
+          "@type": "Person",
+          "name": "baiyuze",
+          "url": "https://github.com/baiyuze"
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="./" aria-label="PasteFerry casa"><img src="../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="Página">
+        <a class="mid" href="features/">Características</a>
+        <a class="mid" href="start/">Inicio rápido</a>
+        <a class="wide" href="start/#server">Formas de conectarse</a>
+        <a href="download/">Descarga</a>
+        <details class="menu">
+          <summary aria-label="Más páginas"><span>Más</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="features/">Características</a></li>
+            <li class="narrow"><a href="start/">Inicio rápido</a></li>
+            <li class="narrow"><a href="start/#server">Formas de conectarse</a></li>
+            <li><a href="themes/">guía de temas</a></li>
+            <li><a href="how/">como funciona</a></li>
+            <li><a href="security/">Seguridad</a></li>
+            <li><a href="faq/">Preguntas frecuentes</a></li>
+            <li><a href="feedback/">Discusión y comentarios</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Registro de cambios</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Estrella PasteFerry en GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Apariencia" title="Apariencia"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Seguir el sistema</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Claro</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Oscuro</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="Idioma：Español"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>Español</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href=".././" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../zh-tw/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../zh-hk/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../en/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../ja/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../ko/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../de/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../es/" hreflang="es" lang="es" data-lang="es" aria-current="page">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
+        <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.1">2.13.1: ajusta el tamaño del texto y los iconos a la vez →</a>
+        <h1 class="display">Tus ordenadores. Tu teléfono.<br>Todo a tu alcance.</h1>
+        <p class="lede">Copia en un ordenador y pega en otro. Recupera tu historial y envía fotos y archivos entre Mac, Windows, Linux y Android, sin compartir una cuenta. En el teléfono también puedes escanear un código para abrir la versión web. Android y la versión web funcionan en la misma red.</p>
+        <div class="cta">
+          <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Descargar PasteFerry</a>
+          <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> Mira el recorrido completo <span class="tour-duration">1:25</span></a>
+        </div>
+        <p class="note">Versión 2.13.1, gratuita y de código abierto. Compatible con macOS 13 o posterior, Windows 10 y 11, Linux (x64 y ARM64) y Android 9 o posterior. El nuevo ajuste de tamaño permite ampliar o reducir el texto, los iconos y el espaciado a la vez.</p>
+        <a class="start-link" href="start/">¿Nuevo aquí? Configúralo en tres pasos →</a>
+        <div class="demo" data-demo data-pasted="{item} pegado en portátil Windows">
+          <div class="demo-modes" role="radiogroup" aria-label="¿Dónde están las dos computadoras?"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">Hogar ↔ oficina</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">Mismo wifi</button></div>
+          <div class="stage" data-play data-mode="wan" role="group" aria-label="Demostración: el comando C en una MacBook convierte un archivo en una hoja que sobrevuela una conexión directa a una computadora portátil Windows , donde Ctrl V pastes it">
+            <figure class="device mac">
+              <div class="screen"><div class="desk">
+                <div class="files">
+                <button type="button" class="file sel" data-name="Revisión del tercer trimestre - final.pptx" aria-label="Copiar Revisión del tercer trimestre - final.pptx"><span class="doc doc"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">Revisión del tercer trimestre - final.pptx</span></button>
+                <button type="button" class="file" data-name="Captura de pantalla.png" aria-label="Copiar Captura de pantalla.png"><span class="doc pic"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">Captura de pantalla.png</span></button>
+                <button type="button" class="file" data-name="La reunión se trasladó a las 3:30, salón 4B" aria-label="Copiar La reunión se trasladó a las 3:30, salón 4B"><span class="doc note"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">La reunión se trasladó a las 3:30, salón 4B</span></button>
+                <button type="button" class="file" data-name="activos de marca" aria-label="Copiar activos de marca"><span class="doc folder"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">activos de marca</span></button>
+                </div>
+                <div class="keys" aria-hidden="true"><kbd>⌘</kbd><kbd>C</kbd></div>
+              </div></div>
+              <div class="base"></div>
+              <figcaption>MacBook<span class="net"><span class="wan">Inicio</span><span class="lan">Wi‑Fi doméstico</span></span></figcaption>
+            </figure>
+            <div></div>
+            <figure class="device win">
+              <div class="screen"><div class="desk">
+                <div class="file landed" aria-hidden="true"><span class="doc doc"><span class="lines"><i></i><i></i><i></i></span></span><span class="name">Revisión del tercer trimestre - final.pptx</span></div>
+                <div class="keys" aria-hidden="true"><kbd>Ctrl</kbd><kbd>V</kbd></div>
+                <div class="taskbar"><i></i><i></i><i></i><i></i><i></i></div>
+              </div></div>
+              <div class="base"></div>
+              <figcaption>portátil Windows<span class="net"><span class="wan">Oficina</span><span class="lan">Wi‑Fi doméstico</span></span></figcaption>
+            </figure>
+            <svg class="arc" aria-hidden="true"><path class="sig" d=""/><path class="direct" d=""/></svg>
+            <span class="server" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg><span>El servidor solo los presenta.</span></span>
+            <span class="arc-label" aria-hidden="true"><span class="wan">Cifrado directo de extremo a extremo</span><span class="lan">Encontrado en la red local, sin servidor.</span></span>
+            <span class="sheet-fly" aria-hidden="true"><span class="lines"><i></i><i></i><i></i></span></span>
+          </div>
+          <p class="demo-hint">Haga clic en cualquier cosa en Mac para copiarlo</p>
+          <p class="skip" aria-live="polite" data-demo-status></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="themes" aria-labelledby="theme-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">Nuevo en 2.10</span></p>
+        <h2 id="theme-title">Hazlo tuyo.<br>Incluso en píxeles.</h2>
+        <p class="intro">Los temas están aquí: una apariencia de píxeles incorporada, sus propios temas o uno que una IA diseña para usted.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/pixel-history-dark.png?v=aaa7f233a7" width="2112" height="1472" alt="Historia en el tema Pixel (oscuro): montañas nocturnas, pinos y una luna en el encabezado, una tienda de campaña y una fogata en la parte inferior de la barra lateral y tipo de mapa de bits" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/pixel-history.png?v=c0311ff88d" width="2112" height="1472" alt="Historia en el tema Pixel (oscuro): montañas nocturnas, pinos y una luna en el encabezado, una tienda de campaña y una fogata en la parte inferior de la barra lateral y tipo de mapa de bits" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#themes">Más sobre temas →</a><a href="themes/">guía de temas →</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="friends" aria-labelledby="friends-title">
+      <div class="wrap">
+        <p class="kicker"><span class="new">Nuevo en 2.6</span></p>
+        <h2 id="friends-title">La computadora de un amigo,<br>, igual de fácil.</h2>
+        <p class="intro">Agréguelos como contacto, no es necesario vincularlos. Los archivos llegan una vez que los aceptan, con una nota opcional.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/incoming-dark.png?v=3c9bf5f227" width="2552" height="1632" alt="La página Enviar archivos: los avatares de los contactos debajo del radar y una solicitud en el medio (un contacto en una MacBook Air quiere enviarle archivos, con una nota) que puede rechazar o aceptar." loading="lazy"><img class="theme-light" src="../assets/screenshots/en/incoming.png?v=c40261a11c" width="2552" height="1632" alt="La página Enviar archivos: los avatares de los contactos debajo del radar y una solicitud en el medio (un contacto en una MacBook Air quiere enviarle archivos, con una nota) que puede rechazar o aceptar." loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#friends">Más sobre enviar a contactos →</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="phone" aria-labelledby="phone-title">
+      <div class="wrap">
+        <h2 id="phone-title">Tu teléfono se une.</h2>
+        <p class="intro">Utilice la aplicación Android para enviar y recibir lotes de fotos y archivos con una computadora, luego guárdelos o compártalos. ¿Prefieres ninguna instalación? Escanee un código para consultar el historial del portapapeles, enviar contenido y transferir archivos por separado en el navegador.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" alt="La página de dispositivos transferencia web telefónica: el código y los teléfonos registrados" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/web-share.png?v=29f0d60dd1" width="2552" height="1632" alt="La página de dispositivos transferencia web telefónica: el código y los teléfonos registrados" loading="lazy">
+        </figure>
+        <ul class="points">
+          <li><b>Utilice el navegador</b> para el historial y transferencias de archivos separados.</li>
+          <li><b>Android envía y recibe lotes</b> , con guardar y compartir.</li>
+          <li><b>Misma red</b>; mantenga la página web abierta.</li>
+        </ul>
+        <p class="more"><a href="features/#phone">Cómo usar el teléfono →</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="send" aria-labelledby="send-title">
+      <div class="wrap">
+        <h2 id="send-title">Arrástrelo.<br>Está ahí.</h2>
+        <p class="intro">Suelte archivos en una computadora o seleccione un lote en Android. Las fotos y los archivos van directamente a otro dispositivo; Las transferencias de aplicaciones se reanudan después de una interrupción.</p>
+        <figure class="spot wide" data-reveal>
+          <img class="theme-dark" src="../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" alt="La página Enviar archivos: un radar con esta Mac en el medio y dispositivos en la misma red y en otros lugares a su alrededor; a la derecha, archivos recibidos, con una carpeta que llega y su progreso y velocidad" loading="lazy"><img class="theme-light" src="../assets/screenshots/en/send.png?v=740f8bec78" width="2552" height="1632" alt="La página Enviar archivos: un radar con esta Mac en el medio y dispositivos en la misma red y en otros lugares a su alrededor; a la derecha, archivos recibidos, con una carpeta que llega y su progreso y velocidad" loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#send">Más sobre Enviar archivos →</a></p>
+      </div>
+    </section>
+
+    <section class="section spotlight" id="quick-paste" aria-labelledby="qp-title">
+      <div class="wrap">
+        <h2 id="qp-title">Presione <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span>.<br>Todo lo que copiaste, ahí mismo.</h2>
+        <p class="intro">Presiónelo en cualquier aplicación, elija un elemento y se pegará.</p>
+        <figure class="spot" data-reveal>
+          <div class="spot-keys" aria-hidden="true">
+            <span class="k-mac"><kbd>⌥</kbd><kbd>V</kbd></span><span class="k-pc"><kbd>Alt</kbd><kbd>V</kbd></span>
+          </div>
+          <img class="theme-dark" src="../assets/screenshots/en/card-picker-dark.png?v=5a62fb383c" width="1280" height="1080" alt="La ventana de pegado rápido: un campo de búsqueda y seis pestañas (Todos, Texto, Enlaces, Imágenes, Archivos, Favoritos), elementos del historial numerados y sugerencias clave en la parte inferior." loading="lazy"><img class="theme-light" src="../assets/screenshots/en/card-picker.png?v=1eed66a247" width="1280" height="1080" alt="La ventana de pegado rápido: un campo de búsqueda y seis pestañas (Todos, Texto, Enlaces, Imágenes, Archivos, Favoritos), elementos del historial numerados y sugerencias clave en la parte inferior." loading="lazy">
+        </figure>
+        <p class="more"><a href="features/#quick-paste">Más sobre pegado rápido →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="grid-title">
+      <div class="wrap">
+        <h2 id="grid-title">Más que un portapapeles compartido.</h2>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/></svg>
+            <h3>Enviar archivos <span class="new">Novedades</span></h3>
+            <p>Suelte archivos o carpetas en otra computadora o en un contacto. Cualquier tamaño.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg>
+            <h3>Pegado rápido</h3>
+            <p>Presione <span class="k-mac">⌥V</span><span class="k-pc">Alt+V</span> para ver su historial; Elija un elemento y se pegará.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
+            <h3>Archivos y carpetas</h3>
+            <p>Los archivos pequeños se sincronizan a medida que los copia y los grandes cuando los necesita.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+            <h3>Historia y favoritos</h3>
+            <p>Todo copiado en cada dispositivo, con capacidad de búsqueda.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
+            <h3>A través de redes</h3>
+            <p>Active el Servicio para sincronizar entre el hogar y el trabajo.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            <h3>Cifrado de extremo a extremo</h3>
+            <p>Directo primero. El servidor no puede ver lo que copias.</p>
+          </li>
+        </ul>
+        <p class="more"><a href="features/">Ver todas las funciones →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="why" aria-labelledby="why-title">
+      <div class="wrap">
+        <h2 id="why-title">¿Por qué no usar lo que ya tienes?</h2>
+        <p class="intro">Universal Clipboard necesita el mismo Apple ID, AirDrop te hace aceptar siempre y ninguno funciona entre una Mac y una PC Windows .</p>
+        <div class="block table-scroll">
+          <table class="compare">
+            <caption class="skip">PasteFerry comparado con otras opciones</caption>
+            <thead><tr><td></td><th scope="col" class="ours">PasteFerry</th><th scope="col">Portapapeles universal</th><th scope="col">AirDrop</th><th scope="col">Aplicaciones de chat</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">No se necesita cuenta</th><td class="yes ours">si</td><td class="no">Mismo Apple ID</td><td class="partial">Solo dispositivos Apple</td><td class="no">Es necesario iniciar sesión</td></tr>
+              <tr><th scope="row">Entre Mac, Windows, Linux y Android</th><td class="yes ours">si</td><td class="no">No</td><td class="no">No</td><td class="yes">si</td></tr>
+              <tr><th scope="row">Entre casa y la oficina</th><td class="yes ours">si</td><td class="no">No</td><td class="no">No</td><td class="yes">si</td></tr>
+              <tr><th scope="row">En una red local sin internet</th><td class="yes ours">si</td><td class="partial">Sólo cerca</td><td class="yes">si</td><td class="no">No</td></tr>
+              <tr><th scope="row">Pegar inmediatamente después de copiar, no hay nada que aceptar.</th><td class="yes ours">si</td><td class="yes">si</td><td class="no">No</td><td class="no">No</td></tr>
+              <tr><th scope="row">Archivos y carpetas completas, de cualquier tamaño.</th><td class="yes ours">si</td><td class="partial">poco confiable</td><td class="yes">si</td><td class="partial">Zip primero, límites de tamaño</td></tr>
+              <tr><th scope="row">Encuentra algo que copiaste antes</th><td class="yes ours">si</td><td class="no">No</td><td class="no">No</td><td class="partial">Desplazarse hacia atrás</td></tr>
+              <tr><th scope="row">Sólo tus dispositivos pueden descifrar</th><td class="yes ours">si</td><td class="yes">si</td><td class="yes">si</td><td class="some">Depende de la aplicación</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="deploy" aria-labelledby="deploy-title">
+      <div class="wrap">
+        <h2 id="deploy-title">Cómo se conectan tus computadoras</h2>
+        <p class="intro">En la misma red, instale y empareje. En diferentes redes, active el Servicio o ejecute su propio servidor o Tailscale.</p>
+        <div class="paths">
+          <a class="path" href="official/">
+            <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
+            <span class="path-when">Funciona entre casa y oficina.</span>
+            <h3>Servicio</h3>
+            <p>Encienda un interruptor y las computadoras de su hogar y oficina se sincronizarán, sin necesidad de comprar un servidor.</p>
+            <span class="path-go">Activar servicio →</span>
+          </a>
+          <a class="path" href="lan/">
+            <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-net" x="6" y="6" width="228" height="100" rx="14"/><path class="p-data" d="M82 52h76"/><rect class="p-dev" x="39" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M34 69h48"/><rect class="p-dev" x="163" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M158 69h48"/></svg>
+            <span class="path-when">Nada que configurar</span>
+            <h3>Misma red</h3>
+            <p>Dos computadoras en el mismo enrutador: instala la aplicación, ingresa un código de emparejamiento y listo. No se necesita servidor.</p>
+            <span class="path-go">Misma guía de red →</span>
+          </a>
+          <a class="path" href="cloud/">
+            <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-dev" x="98" y="8" width="44" height="12" rx="3"/><rect class="p-dev" x="98" y="23" width="44" height="12" rx="3"/><rect class="p-net" x="6" y="50" width="100" height="56" rx="10"/><rect class="p-net" x="134" y="50" width="100" height="56" rx="10"/><path class="p-sig" d="M56 64V22h42M184 64V22h-42"/><path class="p-data" d="M80 80h80"/><rect class="p-dev" x="37" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M32 93h48"/><rect class="p-dev" x="165" y="64" width="38" height="24" rx="3"/><path class="p-dev" d="M160 93h48"/></svg>
+            <span class="path-when">Tu servidor, retransmisión ilimitada</span>
+            <h3>Tu propio servidor público</h3>
+            <p>Una máquina virtual Linux con una IP pública; El tamaño más pequeño es suficiente. Cada computadora se conecta a él y se sincroniza desde cualquier lugar.</p>
+            <span class="path-go">Guía del servidor público →</span>
+          </a>
+          <a class="path" href="tailscale/">
+            <svg viewBox="0 0 240 112" aria-hidden="true"><rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/><rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/><rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/><path class="p-data" d="M85 52h71"/><rect class="p-dev" x="42" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M37 69h48"/><rect class="p-dev" x="161" y="40" width="38" height="24" rx="3"/><path class="p-dev" d="M156 69h48"/></svg>
+            <span class="path-when">A través de redes, sin servidor</span>
+            <h3>Tailscale</h3>
+            <p>Instale Tailscale en cada computadora, inicie sesión en la misma cuenta e ingrese la dirección Tailscale de la otra computadora al realizar el emparejamiento.</p>
+            <span class="path-go">Guía Tailscale →</span>
+          </a>
+        </div>
+        <p class="note">¿Nuevo aquí? Siga el inicio rápido de <a href="start/#server"></a>. El servicio es gratuito: 100 MB de retransmisión al día, conexiones directas ilimitadas.</p>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">Tus dispositivos. Tu contenido. Al alcance.</h2>
+        <div class="cta">
+          <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Descargar PasteFerry</a>
+        </div>
+        <p class="note">Versión 2.13.1, gratuita y de código abierto. Compatible con macOS 13 o posterior, Windows 10 y 11, Linux (x64 y ARM64) y Android 9 o posterior. El nuevo ajuste de tamaño permite ampliar o reducir el texto, los iconos y el espaciado a la vez.</p>
+        <a class="start-link" href="start/">¿Nuevo aquí? Configúralo en tres pasos →</a>
+        <div class="star-ask">
+          <p>¿Te gusta? Destacalo en GitHub.</p>
+          <a class="gh big" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Estrella PasteFerry en GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Dar una estrella en GitHub</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry es de código abierto bajo GNU AGPL-3.0.</p>
+      <nav aria-label="Pie de página">
+        <a href="https://github.com/baiyuze/pasteferry/releases">Todos los lanzamientos</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">Registro de cambios</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">Notas de diseño (chino)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">Licencia</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">Informar un problema</a>
+        <a href="../es/privacy/">Privacidad</a>
+        <a href="../es/feedback/">Discusión y comentarios</a>
+      </nav>
+      <nav aria-label="Idioma">
+        <a href=".././" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../zh-tw/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../zh-hk/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../en/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../ja/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../ko/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../de/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../es/" hreflang="es" lang="es" data-lang="es" aria-current="page">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="tour-dialog" aria-label="Conozca PasteFerry en 85 segundos">
+    <form method="dialog"><button class="tour-close" aria-label="Cerrar recorrido">×</button></form>
+    <iframe title="Conozca PasteFerry en 85 segundos" data-src="tour/?embed" allow="fullscreen" allowfullscreen></iframe>
+  </dialog>
+  <script src="../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>

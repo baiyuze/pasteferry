@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
   <script>
     (function () {
       if (location.hostname !== "baiyuze.github.io") return;
@@ -20,7 +21,12 @@
   <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/themes/">
   <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/themes/">
   <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/themes/">
-  <meta name="theme-color" content="#141416">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/themes/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/themes/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/themes/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/themes/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PasteFerry">
   <meta property="og:title" content="Themes guide — PasteFerry">
@@ -32,7 +38,7 @@
   <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
 </head>
 <body>
@@ -42,13 +48,14 @@
     <div class="wrap">
       <a class="brand" href="../../en/" aria-label="PasteFerry home"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
       <nav aria-label="Page">
-        <a href="../../en/features/">Features</a>
+        <a class="mid" href="../../en/features/">Features</a>
         <a class="mid" href="../../en/start/">Quick start</a>
         <a class="wide" href="../../en/start/#server">Ways to connect</a>
         <a href="../../en/download/">Download</a>
         <details class="menu">
           <summary aria-label="More pages" class="current"><span>More</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
+            <li class="mobile-only"><a href="../../en/features/">Features</a></li>
             <li class="narrow"><a href="../../en/start/">Quick start</a></li>
             <li class="narrow"><a href="../../en/start/#server">Ways to connect</a></li>
             <li><a href="./" aria-current="page">Themes guide</a></li>
@@ -62,6 +69,10 @@
           </ul>
         </details>
         <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Star PasteFerry on GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Appearance" title="Appearance"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Match system</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Light</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Dark</button></li></ul>
+        </details>
         <details class="lang">
           <summary aria-label="Language：English"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>English</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
@@ -70,6 +81,10 @@
             <li><a href="../../zh-hk/themes/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
             <li><a href="../../en/themes/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a></li>
             <li><a href="../../ja/themes/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/themes/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/themes/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/themes/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/themes/" hreflang="es" lang="es" data-lang="es">Español</a></li>
           </ul>
         </details>
       </nav>
@@ -87,7 +102,7 @@
     <section class="section" id="switch"><div class="wrap">
       <h2>Change the theme</h2>
       <div class="os-grid"><ol class="steps"><li>Open PasteFerry and go to <b>Settings › Appearance</b>.</li><li>Click a theme under Built in or Custom. The window changes right away, and so does Quick Paste.</li><li>Under Light and dark, choose <b>Match system</b>, <b>Light</b> or <b>Dark</b>.</li><li>With a pixel theme you can also turn on <b>Scanlines</b>, faint CRT lines over the whole window.</li><li>On Android, choose in the app’s own <b>Settings › Appearance</b>; computers and phones don’t affect each other.</li></ol>
-        <figure class="shot"><img src="../../assets/screenshots/en/pixel-appearance-dark.png?v=3f1dca08ee" width="2112" height="1472" alt="Settings › Appearance: the built-in Default and Pixel themes, two custom themes, Import theme, Ask AI to make a theme, light and dark, and scanlines"></figure>
+        <figure class="shot"><img class="theme-dark" src="../../assets/screenshots/en/pixel-appearance-dark.png?v=3f1dca08ee" width="2112" height="1472" alt="Settings › Appearance: the built-in Default and Pixel themes, two custom themes, Import theme, Ask AI to make a theme, light and dark, and scanlines" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/pixel-appearance.png?v=d9e6d35ef9" width="2112" height="1472" alt="Settings › Appearance: the built-in Default and Pixel themes, two custom themes, Import theme, Ask AI to make a theme, light and dark, and scanlines" loading="lazy"></figure>
       </div>
     </div></section>
     <section class="section" id="builtin"><div class="wrap official-copy">
@@ -95,7 +110,7 @@
       <ul><li><b>Default</b>: The quiet, system-style look PasteFerry has always had.</li><li><b>Pixel</b>: Bitmap type, notched borders and bevelled buttons, graphite and paper palettes with pixel green. A night or daytime scene up top, a paper plane while sending and a burst of stars when it arrives.</li><li><b>Jazz Records</b>: Record-sleeve geometry, cobalt blue, warm paper and condensed headings.</li><li><b>Space Age</b>: Orange enamel, silver tones, orbital illustrations and capsule controls.</li><li><b>Memphis</b>: Pink and yellow, geometric collage and strong outlines.</li><li><b>Y2K Future</b>: Electric blue, chrome stars and rounded digital controls.</li><li><b>Vintage Print</b>: Cream and warm red, halftone dots and ticket illustrations.</li><li><b>Pixel Arcade</b>: Handheld green, bitmap type and notched inventory-like controls.</li><li><b>Retro Desktop</b>: Teal and gray, square beveled buttons and classic window illustrations.</li></ul>
       <div class="f-pair">
         <img src="../../assets/screenshots/en/history.png?v=8c41b3d9ce" width="2112" height="1472" loading="lazy" alt="History in the Default theme (light)">
-        <img src="../../assets/screenshots/en/pixel-history-dark.png?v=aaa7f233a7" width="2112" height="1472" loading="lazy" alt="History in the Pixel theme (dark): mountains and a moon in the header, a tent and campfire at the bottom of the sidebar">
+        <img class="theme-dark" src="../../assets/screenshots/en/pixel-history-dark.png?v=aaa7f233a7" width="2112" height="1472" alt="History in the Pixel theme (dark): mountains and a moon in the header, a tent and campfire at the bottom of the sidebar" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/pixel-history.png?v=c0311ff88d" width="2112" height="1472" alt="History in the Pixel theme (dark): mountains and a moon in the header, a tent and campfire at the bottom of the sidebar" loading="lazy">
       </div>
     </div></section>
     <section class="section" id="custom"><div class="wrap official-copy">
@@ -109,14 +124,14 @@
       <ol class="steps"><li>Open <b>Settings › Appearance</b>, scroll to <b>Background image</b>, click <b>Choose Image…</b> and pick a JPEG, PNG or GIF.</li><li>The image fills the window behind the sidebar and pages, and the sidebar and lists become translucent. If a built-in theme is in use, a copy is made first; the built-in theme itself stays the same.</li><li><b>Blur</b>, <b>Scrim</b> and <b>Panels</b> have three steps each. <b>Use image colors</b> takes the accent color from the image, and <b>Also show in Quick Paste</b> shows it there too.</li><li>Click <b>Remove</b> to go back. On Android, pick a photo under <b>Settings › Appearance › Background image</b>.</li></ol>
       <p class="note">Text always stays readable: PasteFerry works out how strong the scrim must be for the theme&#x27;s text colors on this image and never shows it lighter. Dark images with dark mode, and light images with light mode, show the most of the picture.</p>
       <div class="f-pair">
-        <img src="../../assets/screenshots/en/bg-history-dark.png?v=f0dce04080" width="2112" height="1472" loading="lazy" alt="Pixel theme in dark mode with a sunset hills background: the sidebar and list are translucent and the picture shows through">
-        <img src="../../assets/screenshots/en/bg-appearance-background-dark.png?v=e0e6e129df" width="2112" height="1472" loading="lazy" alt="Settings › Appearance › Background image: change, remove, three steps for blur, scrim and panels, use image colors, also show in Quick Paste">
+        <img class="theme-dark" src="../../assets/screenshots/en/bg-history-dark.png?v=f0dce04080" width="2112" height="1472" alt="Pixel theme in dark mode with a sunset hills background: the sidebar and list are translucent and the picture shows through" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/bg-history.png?v=9981074b9d" width="2112" height="1472" alt="Pixel theme in dark mode with a sunset hills background: the sidebar and list are translucent and the picture shows through" loading="lazy">
+        <img class="theme-dark" src="../../assets/screenshots/en/bg-appearance-background-dark.png?v=e0e6e129df" width="2112" height="1472" alt="Settings › Appearance › Background image: change, remove, three steps for blur, scrim and panels, use image colors, also show in Quick Paste" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/bg-appearance-background.png?v=3f50bc2fac" width="2112" height="1472" alt="Settings › Appearance › Background image: change, remove, three steps for blur, scrim and panels, use image colors, also show in Quick Paste" loading="lazy">
       </div>
     </div></section>
     <section class="section" id="scenery"><div class="wrap">
       <h2>Change the scenery</h2>
       <div class="os-grid"><ol class="steps"><li>The scenery is the wide picture at the top of pages and the small one at the bottom of the sidebar. The pixel theme draws a pixel landscape and a small camp there; other themes have none.</li><li>Under <b>Settings › Appearance › Scenery</b>, click <b>Choose Image…</b> next to <b>Page header</b> or <b>Sidebar bottom</b> to use your own pictures, with any theme. A scrim is added under the page title so it stays readable.</li><li><b>Reset</b> brings back the original; turn off <b>Show scenery</b> to hide both. Scenery is hidden while a background image fills the window.</li></ol>
-        <figure class="shot"><img src="../../assets/screenshots/en/bg-scene-history-dark.png?v=9038deb323" width="2112" height="1472" loading="lazy" alt="Pixel theme in dark mode with the page header and sidebar bottom replaced by a sunset hills picture"></figure>
+        <figure class="shot"><img class="theme-dark" src="../../assets/screenshots/en/bg-scene-history-dark.png?v=9038deb323" width="2112" height="1472" alt="Pixel theme in dark mode with the page header and sidebar bottom replaced by a sunset hills picture" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/bg-scene-history.png?v=2d19eadf7b" width="2112" height="1472" alt="Pixel theme in dark mode with the page header and sidebar bottom replaced by a sunset hills picture" loading="lazy"></figure>
       </div>
     </div></section>
     <section class="section" id="format"><div class="wrap official-copy">
@@ -196,12 +211,16 @@
         <a href="../../zh-hk/themes/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
         <a href="../../en/themes/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a>
         <a href="../../ja/themes/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/themes/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/themes/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/themes/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/themes/" hreflang="es" lang="es" data-lang="es">Español</a>
       </nav>
     </div>
   </footer>
 
-  <script src="../../assets/site.js?v=fb60f6e5ce" defer></script>
-  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
 </html>

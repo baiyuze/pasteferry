@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
   <script>
     (function () {
       if (location.hostname !== "baiyuze.github.io") return;
@@ -20,7 +21,12 @@
   <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/features/">
   <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/features/">
   <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/features/">
-  <meta name="theme-color" content="#141416">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/features/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/features/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/features/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/features/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PasteFerry">
   <meta property="og:title" content="Features: Send Files, quick paste, favorites, history across devices — PasteFerry">
@@ -34,13 +40,17 @@
   <meta property="og:locale:alternate" content="zh_TW">
   <meta property="og:locale:alternate" content="zh_HK">
   <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:locale:alternate" content="es_ES">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
-  <link rel="stylesheet" href="../../assets/features.css?v=b757480e81">
+  <link rel="stylesheet" href="../../assets/features.css?v=684aa5d98b">
 </head>
 <body class="features">
   <a class="skip" href="#main">Skip to content</a>
@@ -49,13 +59,14 @@
     <div class="wrap">
       <a class="brand" href="../../en/" aria-label="PasteFerry home"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
       <nav aria-label="Page">
-        <a href="./" aria-current="page">Features</a>
+        <a class="mid" href="./" aria-current="page">Features</a>
         <a class="mid" href="../../en/start/">Quick start</a>
         <a class="wide" href="../../en/start/#server">Ways to connect</a>
         <a href="../../en/download/">Download</a>
         <details class="menu">
           <summary aria-label="More pages"><span>More</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
+            <li class="mobile-only"><a href="./" aria-current="page">Features</a></li>
             <li class="narrow"><a href="../../en/start/">Quick start</a></li>
             <li class="narrow"><a href="../../en/start/#server">Ways to connect</a></li>
             <li><a href="../../en/themes/">Themes guide</a></li>
@@ -69,6 +80,10 @@
           </ul>
         </details>
         <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="Star PasteFerry on GitHub"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="Appearance" title="Appearance"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>Match system</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>Light</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>Dark</button></li></ul>
+        </details>
         <details class="lang">
           <summary aria-label="Language：English"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>English</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
@@ -77,6 +92,10 @@
             <li><a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
             <li><a href="../../en/features/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a></li>
             <li><a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/features/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/features/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/features/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/features/" hreflang="es" lang="es" data-lang="es">Español</a></li>
           </ul>
         </details>
       </nav>
@@ -95,7 +114,7 @@
         </div>
       </div>
       <figure class="f-hero-shot" data-zoom>
-        <img src="../../assets/screenshots/en/history-dark.png?v=b55e2f1f6d" width="2112" height="1472" alt="PasteFerry’s history: a sidebar with History, Favorites, Send Files, Devices and Settings, and a list of text, images, files and links from different computers">
+        <img class="theme-dark" src="../../assets/screenshots/en/history-dark.png?v=b55e2f1f6d" width="2112" height="1472" alt="PasteFerry’s history: a sidebar with History, Favorites, Send Files, Devices and Settings, and a list of text, images, files and links from different computers" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/history.png?v=8c41b3d9ce" width="2112" height="1472" alt="PasteFerry’s history: a sidebar with History, Favorites, Send Files, Devices and Settings, and a list of text, images, files and links from different computers" loading="lazy">
       </figure>
     </section>
 
@@ -121,7 +140,7 @@
         <h2 class="f-h2" id="send-title">Any size.<br>Just drag it over.</h2>
         <p class="f-intro">Computers near and far are on the radar. Drag files onto one to send them. No cloud drive, and your history stays clean.</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" loading="lazy" alt="The Send Files page: a radar with this Mac in the middle and devices on the same network and elsewhere around it; on the right, received files, with a folder arriving and its progress and speed">
+          <img class="theme-dark" src="../../assets/screenshots/en/send-dark.png?v=8c89b79c7d" width="2552" height="1632" alt="The Send Files page: a radar with this Mac in the middle and devices on the same network and elsewhere around it; on the right, received files, with a folder arriving and its progress and speed" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/send.png?v=740f8bec78" width="2552" height="1632" alt="The Send Files page: a radar with this Mac in the middle and devices on the same network and elsewhere around it; on the right, received files, with a folder arriving and its progress and speed" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>Any size</h3><p>Multi-GB videos or folders with thousands of files.</p></li>
@@ -138,7 +157,7 @@
         <h2 class="f-h2" id="friends-title">A friend’s computer,<br>just as easy.</h2>
         <p class="f-intro">Add them as a contact, no pairing needed. Files arrive once they accept, with an optional note.</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/en/incoming-dark.png?v=3c9bf5f227" width="2552" height="1632" loading="lazy" alt="The Send Files page: contacts’ avatars below the radar, and a request in the middle — a contact on a MacBook Air wants to send you files, with a note — that you can decline or accept">
+          <img class="theme-dark" src="../../assets/screenshots/en/incoming-dark.png?v=3c9bf5f227" width="2552" height="1632" alt="The Send Files page: contacts’ avatars below the radar, and a request in the middle — a contact on a MacBook Air wants to send you files, with a note — that you can decline or accept" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/incoming.png?v=c40261a11c" width="2552" height="1632" alt="The Send Files page: contacts’ avatars below the radar, and a request in the middle — a contact on a MacBook Air wants to send you files, with a note — that you can decline or accept" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>They decide what comes in</h3><p>See who sent what before accepting, or auto-accept people you trust.</p></li>
@@ -155,7 +174,7 @@
         <h2 class="f-h2" id="phone-title">Your phone joins in.</h2>
         <p class="f-intro">Use the Android app to send and receive batches of photos and files with a computer, then save or share them. Prefer no installation? Scan a code for clipboard history, sending content and separate file transfers in the browser.</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" loading="lazy" alt="The devices page phone web transfer: the code and the registered phones">
+          <img class="theme-dark" src="../../assets/screenshots/en/web-share-dark.png?v=bed6be3a9c" width="2552" height="1632" alt="The devices page phone web transfer: the code and the registered phones" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/web-share.png?v=29f0d60dd1" width="2552" height="1632" alt="The devices page phone web transfer: the code and the registered phones" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>Use the browser</h3><p>for history and separate file transfers.</p></li>
@@ -172,7 +191,7 @@
         <h2 class="f-h2" id="theme-title">Make it yours.<br>Even in pixels.</h2>
         <p class="f-intro">Pick a theme in Settings › Appearance: Default and Pixel are built in. Duplicate one and make it yours, or ask an AI to design one. Light, dark or match the system.</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/en/pixel-appearance-dark.png?v=3f1dca08ee" width="2112" height="1472" loading="lazy" alt="The Appearance page in Settings (Pixel theme, dark): thumbnails of the built-in Default and Pixel themes and two custom themes, then Import theme, Ask AI to make a theme, light and dark, and scanlines">
+          <img class="theme-dark" src="../../assets/screenshots/en/pixel-appearance-dark.png?v=3f1dca08ee" width="2112" height="1472" alt="The Appearance page in Settings (Pixel theme, dark): thumbnails of the built-in Default and Pixel themes and two custom themes, then Import theme, Ask AI to make a theme, light and dark, and scanlines" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/pixel-appearance.png?v=d9e6d35ef9" width="2112" height="1472" alt="The Appearance page in Settings (Pixel theme, dark): thumbnails of the built-in Default and Pixel themes and two custom themes, then Import theme, Ask AI to make a theme, light and dark, and scanlines" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>Pixel theme</h3><p>Bitmap type, notched blocks and bevelled buttons. A night or daytime scene up top, a paper plane while sending and a burst of stars when it’s done.</p></li>
@@ -181,7 +200,7 @@
         </ul>
         <div class="f-pair" data-reveal>
           <img src="../../assets/screenshots/en/pixel-history.png?v=c0311ff88d" width="2112" height="1472" loading="lazy" alt="History in the Pixel theme (light): clouds and hills in the header, and a small house at the bottom of the sidebar">
-          <img src="../../assets/screenshots/en/pixel-send-dark.png?v=30d0886626" width="2552" height="1632" loading="lazy" alt="Send Files in the Pixel theme (dark): night mountains and a moon in the header, a dotted radar and pixel-block devices">
+          <img class="theme-dark" src="../../assets/screenshots/en/pixel-send-dark.png?v=30d0886626" width="2552" height="1632" alt="Send Files in the Pixel theme (dark): night mountains and a moon in the header, a dotted radar and pixel-block devices" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/pixel-send.png?v=702e089833" width="2552" height="1632" alt="Send Files in the Pixel theme (dark): night mountains and a moon in the header, a dotted radar and pixel-block devices" loading="lazy">
         </div>
         <p class="f-note">Themes apply only to the device you set them on (on a computer, the main window and quick paste); they aren’t synced. The Android app has its own Settings › Appearance. Pixel themes can add CRT scanlines. The AI can only read and write themes, never your history or devices.</p>
         <p class="more"><a href="../themes/">Themes guide →</a></p>
@@ -228,7 +247,7 @@
         <h2 class="f-h2" id="fav-title">Keep what you reuse.</h2>
         <p class="f-intro">Star the things you reuse. They’re kept as a separate copy and never expire.</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/en/favorites-dark.png?v=3b235c7eb1" width="2112" height="1472" loading="lazy" alt="The Favorites page: five saved items including a report template, a stock reply, a download link and a PDF, each with a blue star">
+          <img class="theme-dark" src="../../assets/screenshots/en/favorites-dark.png?v=3b235c7eb1" width="2112" height="1472" alt="The Favorites page: five saved items including a report template, a stock reply, a download link and a PDF, each with a blue star" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/favorites.png?v=8f0aa4a80e" width="2112" height="1472" alt="The Favorites page: five saved items including a report template, a stock reply, a download link and a PDF, each with a blue star" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>Never cleaned up</h3><p>History expires; favorites stay.</p></li>
@@ -250,7 +269,7 @@
           <article class="cell wide hover-cell" data-reveal>
             <h3>Hover to see it all</h3>
             <p>Hover to see the whole item.</p>
-            <div class="crop"><img src="../../assets/screenshots/en/hover-dark.png?v=106b635a43" width="2112" height="1472" loading="lazy" alt="The pointer rests on meeting notes and a card shows the full text: owners, release window and monitoring"></div>
+            <div class="crop"><img class="theme-dark" src="../../assets/screenshots/en/hover-dark.png?v=106b635a43" width="2112" height="1472" alt="The pointer rests on meeting notes and a card shows the full text: owners, release window and monitoring" loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/hover.png?v=126e91a7a5" width="2112" height="1472" alt="The pointer rests on meeting notes and a card shows the full text: owners, release window and monitoring" loading="lazy"></div>
           </article>
           <article class="cell" data-reveal data-search>
             <h3>Search what you copied</h3>
@@ -367,13 +386,17 @@
         <a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
         <a href="../../en/features/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a>
         <a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/features/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/features/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/features/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/features/" hreflang="es" lang="es" data-lang="es">Español</a>
       </nav>
     </div>
   </footer>
 
-  <script src="../../assets/site.js?v=fb60f6e5ce" defer></script>
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
   <script src="../../assets/features.js?v=e31ed6ea0e" defer></script>
-  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
 </html>

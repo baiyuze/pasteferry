@@ -10,7 +10,7 @@ const copy = JSON.parse(html.match(/id="feedback-copy">([^<]+)<\/script>/)[1]);
 const flush = () => new Promise(resolve => setImmediate(resolve));
 
 test('all feedback languages enforce CSP before scripts and contain no inline JavaScript', () => {
-  for (const lang of ['', 'en/', 'ja/', 'zh-tw/', 'zh-hk/']) {
+  for (const lang of ['', 'en/', 'ja/', 'zh-tw/', 'zh-hk/', 'ko/', 'de/', 'fr/', 'es/']) {
     const page = fs.readFileSync(path.join(__dirname, '../../docs', lang, 'feedback/index.html'), 'utf8');
     assert.ok(page.indexOf('Content-Security-Policy') < page.indexOf('<script'));
     for (const match of page.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {

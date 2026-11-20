@@ -91,9 +91,15 @@ CHAPTERS = (
 
 
 def localized(code, site):
-    column = LANGUAGES.index(code)
-    copy = {key: row[column] for key, row in COPY.items()}
-    ui = {key: row[column] for key, row in UI.items()}
+    if code in LANGUAGES:
+        column = LANGUAGES.index(code)
+        copy = {key: row[column] for key, row in COPY.items()}
+        ui = {key: row[column] for key, row in UI.items()}
+        chapters = [row[column] for row in CHAPTERS]
+    else:  # 后加的语言（content/packs.py）各自一个文件
+        from content.packs import pack
+        p = pack(code)
+        copy, ui, chapters = dict(p.TOUR), dict(p.TOUR_UI), list(p.TOUR_CHAPTERS)
     copy.update(brand=site["brand"], file=site["stage_file"],
                 windows=site["stage_win"], direct=site["stage_arc"],
                 lan=site["plans"]["lan"]["name"], cloud=site["plans"]["cloud"]["name"],
@@ -101,9 +107,10 @@ def localized(code, site):
     # Reuse the carefully localized website comparison, including ✓/— labels.
     keys = ("apple_ids", "cross_platform", "different_networks", "instant",
             "files_folders", "history", "privacy")
-    for key, (label, _) in zip(keys, site["compare_rows"]):
+    rows = site.get("tour_compare_rows", site["compare_rows"])
+    for key, (label, _) in zip(keys, rows):
         copy[key] = label
     for key, row, col in (("accept", 0, 2), ("unreliable", 4, 1),
                           ("zipped", 4, 3), ("scroll", 5, 3)):
-        copy[key] = site["compare_rows"][row][1][col][1]
-    return copy, ui, [row[column] for row in CHAPTERS]
+        copy[key] = rows[row][1][col][1]
+    return copy, ui, chapters

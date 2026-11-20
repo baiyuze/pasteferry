@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
   <script>
     (function () {
       if (location.hostname !== "baiyuze.github.io") return;
@@ -20,7 +21,12 @@
   <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/features/">
   <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/features/">
   <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/features/">
-  <meta name="theme-color" content="#141416">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/features/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/features/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/features/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/features/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="隔空贴">
   <meta property="og:title" content="功能：隔空传送、快捷粘贴、收藏、跨设备复制记录 — 隔空贴">
@@ -34,13 +40,17 @@
   <meta property="og:locale:alternate" content="zh_HK">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:locale:alternate" content="es_ES">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../assets/site.css?v=dbae55d27c">
+  <link rel="stylesheet" href="../assets/site.css?v=cfbc242d54">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
-  <link rel="stylesheet" href="../assets/features.css?v=b757480e81">
+  <link rel="stylesheet" href="../assets/features.css?v=684aa5d98b">
 </head>
 <body class="features">
   <a class="skip" href="#main">跳到正文</a>
@@ -49,13 +59,14 @@
     <div class="wrap">
       <a class="brand" href=".././" aria-label="隔空贴首页"><img src="../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">隔空贴</a>
       <nav aria-label="页面导航">
-        <a href="./" aria-current="page">功能</a>
+        <a class="mid" href="./" aria-current="page">功能</a>
         <a class="mid" href="../start/">快速开始</a>
         <a class="wide" href="../start/#server">连接方式</a>
         <a href="../download/">下载</a>
         <details class="menu">
           <summary aria-label="更多页面"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
+            <li class="mobile-only"><a href="./" aria-current="page">功能</a></li>
             <li class="narrow"><a href="../start/">快速开始</a></li>
             <li class="narrow"><a href="../start/#server">连接方式</a></li>
             <li><a href="../themes/">主题教程</a></li>
@@ -69,6 +80,10 @@
           </ul>
         </details>
         <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="在 GitHub 上给隔空贴点 Star"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="外观" title="外观"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>跟随系统</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>浅色</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>深色</button></li></ul>
+        </details>
         <details class="lang">
           <summary aria-label="语言：简体中文"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>简体中文</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
@@ -77,6 +92,10 @@
             <li><a href="../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
             <li><a href="../en/features/" hreflang="en" lang="en" data-lang="en">English</a></li>
             <li><a href="../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../ko/features/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../de/features/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../fr/features/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../es/features/" hreflang="es" lang="es" data-lang="es">Español</a></li>
           </ul>
         </details>
       </nav>
@@ -95,7 +114,7 @@
         </div>
       </div>
       <figure class="f-hero-shot" data-zoom>
-        <img src="../assets/screenshots/history-dark.png?v=4889746d4b" width="2112" height="1472" alt="隔空贴的复制记录：侧边栏有复制记录、收藏、隔空传送、设备、设置，列表里是来自不同电脑的文字、图片、文件和链接">
+        <img class="theme-dark" src="../assets/screenshots/history-dark.png?v=4889746d4b" width="2112" height="1472" alt="隔空贴的复制记录：侧边栏有复制记录、收藏、隔空传送、设备、设置，列表里是来自不同电脑的文字、图片、文件和链接" loading="lazy"><img class="theme-light" src="../assets/screenshots/history.png?v=d423d47d82" width="2112" height="1472" alt="隔空贴的复制记录：侧边栏有复制记录、收藏、隔空传送、设备、设置，列表里是来自不同电脑的文字、图片、文件和链接" loading="lazy">
       </figure>
     </section>
 
@@ -121,7 +140,7 @@
         <h2 class="f-h2" id="send-title">文件再大，<br>拖过去就行。</h2>
         <p class="f-intro">近处和别处的电脑都在雷达上，拖过去就发。不经网盘，不进复制记录。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../assets/screenshots/send-dark.png?v=8b0c48de8e" width="2552" height="1632" loading="lazy" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度">
+          <img class="theme-dark" src="../assets/screenshots/send-dark.png?v=8b0c48de8e" width="2552" height="1632" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度" loading="lazy"><img class="theme-light" src="../assets/screenshots/send.png?v=2fad04b678" width="2552" height="1632" alt="隔空传送页：左边是雷达，中间是这台 Mac，周围是同一局域网和其他网络里的设备；右边是收到的文件列表，一个文件夹正在传输，显示进度和速度" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>不限大小</h3><p>几 GB 的视频、上万个文件，一次发完。</p></li>
@@ -138,7 +157,7 @@
         <h2 class="f-h2" id="friends-title">好友的电脑，<br>也能拖过去。</h2>
         <p class="f-intro">加个好友就能发，不用配对。对方点接受才开始传，还能附一句备注。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../assets/screenshots/incoming-dark.png?v=82995fe46c" width="2552" height="1632" loading="lazy" alt="隔空传送页：雷达下方是好友小明、王姐、阿杰的头像；中间弹出「小明 · MacBook Air 想发给你文件」，附有备注「合同第 3 页要签字」，可以拒绝或接受">
+          <img class="theme-dark" src="../assets/screenshots/incoming-dark.png?v=82995fe46c" width="2552" height="1632" alt="隔空传送页：雷达下方是好友小明、王姐、阿杰的头像；中间弹出「小明 · MacBook Air 想发给你文件」，附有备注「合同第 3 页要签字」，可以拒绝或接受" loading="lazy"><img class="theme-light" src="../assets/screenshots/incoming.png?v=c9cd3b08df" width="2552" height="1632" alt="隔空传送页：雷达下方是好友小明、王姐、阿杰的头像；中间弹出「小明 · MacBook Air 想发给你文件」，附有备注「合同第 3 页要签字」，可以拒绝或接受" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>收不收，对方说了算</h3><p>看清谁发的、发了什么再接受，也可以设成自动接收。</p></li>
@@ -155,7 +174,7 @@
         <h2 class="f-h2" id="phone-title">手机也能用了。</h2>
         <p class="f-intro">安卓 App 可与电脑双向隔空传送，照片和文件一次多选，收到后保存或分享。不想安装？扫码打开网页，查看复制记录、发送内容，也能独立收发文件。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../assets/screenshots/web-share-dark.png?v=51b501d9f6" width="2552" height="1632" loading="lazy" alt="设备页的手机网页传输：二维码与已登记的手机列表">
+          <img class="theme-dark" src="../assets/screenshots/web-share-dark.png?v=51b501d9f6" width="2552" height="1632" alt="设备页的手机网页传输：二维码与已登记的手机列表" loading="lazy"><img class="theme-light" src="../assets/screenshots/web-share.png?v=7d60aa4c06" width="2552" height="1632" alt="设备页的手机网页传输：二维码与已登记的手机列表" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>手机浏览器直接用</h3><p>记录与独立文件收发。</p></li>
@@ -172,7 +191,7 @@
         <h2 class="f-h2" id="theme-title">换个样子，<br>像素风也行。</h2>
         <p class="f-intro">在「设置 › 外观」里换主题：自带默认与像素两套，也能复制一份改成自己的，或者让 AI 帮你配一套。浅色、深色、跟随系统随你选。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../assets/screenshots/pixel-appearance-dark.png?v=a89e1bbb7e" width="2112" height="1472" loading="lazy" alt="设置里的外观页（像素主题、深色）：自带的默认与像素主题、两套自定义主题的缩略图，下面是导入主题、让 AI 帮你做主题，以及浅色与深色、扫描线开关">
+          <img class="theme-dark" src="../assets/screenshots/pixel-appearance-dark.png?v=a89e1bbb7e" width="2112" height="1472" alt="设置里的外观页（像素主题、深色）：自带的默认与像素主题、两套自定义主题的缩略图，下面是导入主题、让 AI 帮你做主题，以及浅色与深色、扫描线开关" loading="lazy"><img class="theme-light" src="../assets/screenshots/pixel-appearance.png?v=762a95af39" width="2112" height="1472" alt="设置里的外观页（像素主题、深色）：自带的默认与像素主题、两套自定义主题的缩略图，下面是导入主题、让 AI 帮你做主题，以及浅色与深色、扫描线开关" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>像素主题</h3><p>点阵字体、切角方块、按钮斜面；页眉是夜景或白天，发送时纸飞机飞过去，完成时迸出星星。</p></li>
@@ -181,7 +200,7 @@
         </ul>
         <div class="f-pair" data-reveal>
           <img src="../assets/screenshots/pixel-history.png?v=ae7e69fecf" width="2112" height="1472" loading="lazy" alt="像素主题的复制记录（浅色）：页眉是白天的云和丘陵，侧边栏底下有一间小房子">
-          <img src="../assets/screenshots/pixel-send-dark.png?v=b2de0529a7" width="2552" height="1632" loading="lazy" alt="像素主题的隔空传送页（深色）：页眉是夜里的远山和月亮，雷达是点阵圆圈，设备是像素小方块">
+          <img class="theme-dark" src="../assets/screenshots/pixel-send-dark.png?v=b2de0529a7" width="2552" height="1632" alt="像素主题的隔空传送页（深色）：页眉是夜里的远山和月亮，雷达是点阵圆圈，设备是像素小方块" loading="lazy"><img class="theme-light" src="../assets/screenshots/pixel-send.png?v=f4c0e0354c" width="2552" height="1632" alt="像素主题的隔空传送页（深色）：页眉是夜里的远山和月亮，雷达是点阵圆圈，设备是像素小方块" loading="lazy">
         </div>
         <p class="f-note">主题只作用于这一台设备（电脑上包括主窗口和快捷粘贴窗口），不在设备之间同步；安卓 App 在自己的「设置 › 外观」里单独选。像素主题还能打开 CRT 扫描线。AI 只能读写主题，看不到复制记录和设备。</p>
         <p class="more"><a href="../themes/">主题教程 →</a></p>
@@ -228,7 +247,7 @@
         <h2 class="f-h2" id="fav-title">常用的，<br>收藏起来。</h2>
         <p class="f-intro">常用的点一下星标，另存一份，不会过期。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../assets/screenshots/favorites-dark.png?v=a92b7706e3" width="2112" height="1472" loading="lazy" alt="收藏页：周报模板、常用回复、下载链接、营业执照.pdf 等五条收藏，每条右边是蓝色的星标">
+          <img class="theme-dark" src="../assets/screenshots/favorites-dark.png?v=a92b7706e3" width="2112" height="1472" alt="收藏页：周报模板、常用回复、下载链接、营业执照.pdf 等五条收藏，每条右边是蓝色的星标" loading="lazy"><img class="theme-light" src="../assets/screenshots/favorites.png?v=71b7442585" width="2112" height="1472" alt="收藏页：周报模板、常用回复、下载链接、营业执照.pdf 等五条收藏，每条右边是蓝色的星标" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>不会被清理</h3><p>复制记录会过期，收藏一直留着。</p></li>
@@ -250,7 +269,7 @@
           <article class="cell wide hover-cell" data-reveal>
             <h3>停一下，就看到全文</h3>
             <p>鼠标停一下，就能看到完整内容。</p>
-            <div class="crop"><img src="../assets/screenshots/hover-dark.png?v=96ce1d6b96" width="2112" height="1472" loading="lazy" alt="鼠标停在一条会议记录上，弹出的提示框显示它的全文：负责人、发布窗口和监控要求"></div>
+            <div class="crop"><img class="theme-dark" src="../assets/screenshots/hover-dark.png?v=96ce1d6b96" width="2112" height="1472" alt="鼠标停在一条会议记录上，弹出的提示框显示它的全文：负责人、发布窗口和监控要求" loading="lazy"><img class="theme-light" src="../assets/screenshots/hover.png?v=4879fc0818" width="2112" height="1472" alt="鼠标停在一条会议记录上，弹出的提示框显示它的全文：负责人、发布窗口和监控要求" loading="lazy"></div>
           </article>
           <article class="cell" data-reveal data-search>
             <h3>三天里复制的，搜得到</h3>
@@ -367,13 +386,17 @@
         <a href="../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
         <a href="../en/features/" hreflang="en" lang="en" data-lang="en">English</a>
         <a href="../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../ko/features/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../de/features/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../fr/features/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../es/features/" hreflang="es" lang="es" data-lang="es">Español</a>
       </nav>
     </div>
   </footer>
 
-  <script src="../assets/site.js?v=fb60f6e5ce" defer></script>
+  <script src="../assets/site.js?v=0d77f62813" defer></script>
   <script src="../assets/features.js?v=e31ed6ea0e" defer></script>
-  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
 </html>

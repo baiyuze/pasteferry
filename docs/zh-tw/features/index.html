@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
   <script>
     (function () {
       if (location.hostname !== "baiyuze.github.io") return;
@@ -20,7 +21,12 @@
   <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/features/">
   <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/features/">
   <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/features/">
-  <meta name="theme-color" content="#141416">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/features/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/features/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/features/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/features/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="隔空貼">
   <meta property="og:title" content="功能：隔空傳送、快速貼上、收藏、跨裝置複製記錄 — 隔空貼">
@@ -34,13 +40,17 @@
   <meta property="og:locale:alternate" content="zh_HK">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:locale:alternate" content="es_ES">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../../assets/site.css?v=dbae55d27c">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
-  <link rel="stylesheet" href="../../assets/features.css?v=b757480e81">
+  <link rel="stylesheet" href="../../assets/features.css?v=684aa5d98b">
 </head>
 <body class="features">
   <a class="skip" href="#main">跳到主要內容</a>
@@ -49,13 +59,14 @@
     <div class="wrap">
       <a class="brand" href="../../zh-tw/" aria-label="隔空貼首頁"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">隔空貼</a>
       <nav aria-label="頁面導覽">
-        <a href="./" aria-current="page">功能</a>
+        <a class="mid" href="./" aria-current="page">功能</a>
         <a class="mid" href="../../zh-tw/start/">快速入門</a>
         <a class="wide" href="../../zh-tw/start/#server">連線方式</a>
         <a href="../../zh-tw/download/">下載</a>
         <details class="menu">
           <summary aria-label="更多頁面"><span>更多</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
+            <li class="mobile-only"><a href="./" aria-current="page">功能</a></li>
             <li class="narrow"><a href="../../zh-tw/start/">快速入門</a></li>
             <li class="narrow"><a href="../../zh-tw/start/#server">連線方式</a></li>
             <li><a href="../../zh-tw/themes/">主題教學</a></li>
@@ -69,6 +80,10 @@
           </ul>
         </details>
         <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="在 GitHub 上給隔空貼點 Star"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="外觀" title="外觀"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>跟隨系統</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>淺色</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>深色</button></li></ul>
+        </details>
         <details class="lang">
           <summary aria-label="語言：繁體中文（台灣）"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>繁體中文（台灣）</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
           <ul>
@@ -77,6 +92,10 @@
             <li><a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
             <li><a href="../../en/features/" hreflang="en" lang="en" data-lang="en">English</a></li>
             <li><a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/features/" hreflang="ko" lang="ko" data-lang="ko">한국어</a></li>
+            <li><a href="../../de/features/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/features/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/features/" hreflang="es" lang="es" data-lang="es">Español</a></li>
           </ul>
         </details>
       </nav>
@@ -95,7 +114,7 @@
         </div>
       </div>
       <figure class="f-hero-shot" data-zoom>
-        <img src="../../assets/screenshots/zh-tw/history-dark.png?v=94c3cc98b8" width="2112" height="1472" alt="隔空貼的複製記錄：側邊欄有複製記錄、收藏、隔空傳送、裝置、設定，列表裡是來自不同電腦的文字、圖片、檔案和連結">
+        <img class="theme-dark" src="../../assets/screenshots/zh-tw/history-dark.png?v=94c3cc98b8" width="2112" height="1472" alt="隔空貼的複製記錄：側邊欄有複製記錄、收藏、隔空傳送、裝置、設定，列表裡是來自不同電腦的文字、圖片、檔案和連結" loading="lazy"><img class="theme-light" src="../../assets/screenshots/zh-tw/history.png?v=bb5b4ab8cc" width="2112" height="1472" alt="隔空貼的複製記錄：側邊欄有複製記錄、收藏、隔空傳送、裝置、設定，列表裡是來自不同電腦的文字、圖片、檔案和連結" loading="lazy">
       </figure>
     </section>
 
@@ -121,7 +140,7 @@
         <h2 class="f-h2" id="send-title">檔案再大，<br>拖過去就行。</h2>
         <p class="f-intro">近處和別處的電腦都在雷達上，拖過去就傳。不經雲端硬碟，不進複製記錄。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/zh-tw/send-dark.png?v=80ceaf9caf" width="2552" height="1632" loading="lazy" alt="隔空傳送頁：左邊是雷達，中間是這台 Mac，周圍是同一區域網路和其他網路裡的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度">
+          <img class="theme-dark" src="../../assets/screenshots/zh-tw/send-dark.png?v=80ceaf9caf" width="2552" height="1632" alt="隔空傳送頁：左邊是雷達，中間是這台 Mac，周圍是同一區域網路和其他網路裡的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度" loading="lazy"><img class="theme-light" src="../../assets/screenshots/zh-tw/send.png?v=8b9bbb5b6d" width="2552" height="1632" alt="隔空傳送頁：左邊是雷達，中間是這台 Mac，周圍是同一區域網路和其他網路裡的裝置；右邊是收到的檔案列表，一個資料夾正在傳輸，顯示進度和速度" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>不限大小</h3><p>幾 GB 的影片、上萬個檔案，一次傳完。</p></li>
@@ -138,7 +157,7 @@
         <h2 class="f-h2" id="friends-title">好友的電腦，<br>也能拖過去。</h2>
         <p class="f-intro">加個好友就能傳，不用配對。對方點接受才開始傳，還能附一句備註。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/zh-tw/incoming-dark.png?v=3183d5b996" width="2552" height="1632" loading="lazy" alt="隔空傳送頁：雷達下方是好友小明、王姐、阿杰的頭像；中間跳出「小明 · MacBook Air 想傳給你檔案」，附有備註，可以拒絕或接受">
+          <img class="theme-dark" src="../../assets/screenshots/zh-tw/incoming-dark.png?v=3183d5b996" width="2552" height="1632" alt="隔空傳送頁：雷達下方是好友小明、王姐、阿杰的頭像；中間跳出「小明 · MacBook Air 想傳給你檔案」，附有備註，可以拒絕或接受" loading="lazy"><img class="theme-light" src="../../assets/screenshots/zh-tw/incoming.png?v=a4ec05899b" width="2552" height="1632" alt="隔空傳送頁：雷達下方是好友小明、王姐、阿杰的頭像；中間跳出「小明 · MacBook Air 想傳給你檔案」，附有備註，可以拒絕或接受" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>收不收，對方說了算</h3><p>看清誰傳的、傳了什麼再接受，也可以設成自動接收。</p></li>
@@ -155,7 +174,7 @@
         <h2 class="f-h2" id="phone-title">手機也能用了。</h2>
         <p class="f-intro">安卓 App 可與電腦雙向隔空傳送，照片和檔案一次多選，收到後儲存或分享。不想安裝？掃碼開啟網頁，查看複製記錄、傳送內容，也能獨立收發檔案。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/zh-tw/web-share-dark.png?v=e478580e3a" width="2552" height="1632" loading="lazy" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表">
+          <img class="theme-dark" src="../../assets/screenshots/zh-tw/web-share-dark.png?v=e478580e3a" width="2552" height="1632" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表" loading="lazy"><img class="theme-light" src="../../assets/screenshots/zh-tw/web-share.png?v=122ff0f8ec" width="2552" height="1632" alt="裝置頁的手機網頁傳輸：QR 碼與已登記的手機列表" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>手機瀏覽器直接用</h3><p>記錄與獨立檔案收發。</p></li>
@@ -172,7 +191,7 @@
         <h2 class="f-h2" id="theme-title">換個樣子，<br>像素風也行。</h2>
         <p class="f-intro">在「設定 › 外觀」裡換主題：內建預設與像素兩套，也能複製一份改成自己的，或者讓 AI 幫你配一套。淺色、深色、跟隨系統隨你選。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/zh-tw/pixel-appearance-dark.png?v=15888aa7b9" width="2112" height="1472" loading="lazy" alt="設定裡的外觀頁（像素主題、深色）：內建的預設與像素主題、兩套自訂主題的縮圖，下面是匯入主題、讓 AI 幫你做主題，以及淺色與深色、掃描線開關">
+          <img class="theme-dark" src="../../assets/screenshots/zh-tw/pixel-appearance-dark.png?v=15888aa7b9" width="2112" height="1472" alt="設定裡的外觀頁（像素主題、深色）：內建的預設與像素主題、兩套自訂主題的縮圖，下面是匯入主題、讓 AI 幫你做主題，以及淺色與深色、掃描線開關" loading="lazy"><img class="theme-light" src="../../assets/screenshots/zh-tw/pixel-appearance.png?v=03f04bdf7f" width="2112" height="1472" alt="設定裡的外觀頁（像素主題、深色）：內建的預設與像素主題、兩套自訂主題的縮圖，下面是匯入主題、讓 AI 幫你做主題，以及淺色與深色、掃描線開關" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>像素主題</h3><p>點陣字型、切角方塊、按鈕斜面；頁首是夜景或白天，傳送時紙飛機飛過去，完成時迸出星星。</p></li>
@@ -181,7 +200,7 @@
         </ul>
         <div class="f-pair" data-reveal>
           <img src="../../assets/screenshots/zh-tw/pixel-history.png?v=6f33fa6298" width="2112" height="1472" loading="lazy" alt="像素主題的複製記錄（淺色）：頁首是白天的雲和丘陵，側邊欄底下有一間小房子">
-          <img src="../../assets/screenshots/zh-tw/pixel-send-dark.png?v=32499e2fd1" width="2552" height="1632" loading="lazy" alt="像素主題的隔空傳送頁（深色）：頁首是夜裡的遠山和月亮，雷達是點陣圓圈，裝置是像素小方塊">
+          <img class="theme-dark" src="../../assets/screenshots/zh-tw/pixel-send-dark.png?v=32499e2fd1" width="2552" height="1632" alt="像素主題的隔空傳送頁（深色）：頁首是夜裡的遠山和月亮，雷達是點陣圓圈，裝置是像素小方塊" loading="lazy"><img class="theme-light" src="../../assets/screenshots/zh-tw/pixel-send.png?v=c4edcf7581" width="2552" height="1632" alt="像素主題的隔空傳送頁（深色）：頁首是夜裡的遠山和月亮，雷達是點陣圓圈，裝置是像素小方塊" loading="lazy">
         </div>
         <p class="f-note">主題只作用於這一台裝置（電腦上包括主視窗和快速貼上視窗），不在裝置之間同步；安卓 App 在自己的「設定 › 外觀」裡單獨選。像素主題還能開啟 CRT 掃描線。AI 只能讀寫主題，看不到複製記錄和裝置。</p>
         <p class="more"><a href="../themes/">主題教學 →</a></p>
@@ -228,7 +247,7 @@
         <h2 class="f-h2" id="fav-title">常用的，<br>收藏起來。</h2>
         <p class="f-intro">常用的點一下星號，另存一份，不會過期。</p>
         <figure class="f-shot" data-reveal>
-          <img src="../../assets/screenshots/zh-tw/favorites-dark.png?v=64c9136ea1" width="2112" height="1472" loading="lazy" alt="收藏頁：週報範本、常用回覆、下載連結、公司登記證明.pdf 等五筆收藏，每筆右邊是藍色的星號">
+          <img class="theme-dark" src="../../assets/screenshots/zh-tw/favorites-dark.png?v=64c9136ea1" width="2112" height="1472" alt="收藏頁：週報範本、常用回覆、下載連結、公司登記證明.pdf 等五筆收藏，每筆右邊是藍色的星號" loading="lazy"><img class="theme-light" src="../../assets/screenshots/zh-tw/favorites.png?v=7e8fb746f4" width="2112" height="1472" alt="收藏頁：週報範本、常用回覆、下載連結、公司登記證明.pdf 等五筆收藏，每筆右邊是藍色的星號" loading="lazy">
         </figure>
         <ul class="facts">
           <li><h3>不會被清除</h3><p>複製記錄會過期，收藏一直留著。</p></li>
@@ -250,7 +269,7 @@
           <article class="cell wide hover-cell" data-reveal>
             <h3>停一下，就看到全文</h3>
             <p>滑鼠停一下，就能看到完整內容。</p>
-            <div class="crop"><img src="../../assets/screenshots/zh-tw/hover-dark.png?v=2f64a85673" width="2112" height="1472" loading="lazy" alt="滑鼠停在一筆會議記錄上，彈出的提示框顯示它的全文：負責人、發布時段和監控要求"></div>
+            <div class="crop"><img class="theme-dark" src="../../assets/screenshots/zh-tw/hover-dark.png?v=2f64a85673" width="2112" height="1472" alt="滑鼠停在一筆會議記錄上，彈出的提示框顯示它的全文：負責人、發布時段和監控要求" loading="lazy"><img class="theme-light" src="../../assets/screenshots/zh-tw/hover.png?v=a517b9489e" width="2112" height="1472" alt="滑鼠停在一筆會議記錄上，彈出的提示框顯示它的全文：負責人、發布時段和監控要求" loading="lazy"></div>
           </article>
           <article class="cell" data-reveal data-search>
             <h3>三天裡複製的，搜得到</h3>
@@ -367,13 +386,17 @@
         <a href="../../zh-hk/features/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
         <a href="../../en/features/" hreflang="en" lang="en" data-lang="en">English</a>
         <a href="../../ja/features/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/features/" hreflang="ko" lang="ko" data-lang="ko">한국어</a>
+        <a href="../../de/features/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/features/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/features/" hreflang="es" lang="es" data-lang="es">Español</a>
       </nav>
     </div>
   </footer>
 
-  <script src="../../assets/site.js?v=fb60f6e5ce" defer></script>
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
   <script src="../../assets/features.js?v=e31ed6ea0e" defer></script>
-  <script src="/assets/analytics.js?v=e2777f714d" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
 </html>

@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}})();</script>
+  <script>
+    (function () {
+      if (location.hostname !== "baiyuze.github.io") return;
+      var prefix = /^\/(?:pasteferry|copysync)(?=\/|$)/.exec(location.pathname);
+      if (!prefix) return;
+      var path = location.pathname.slice(prefix[0].length) || "/";
+      location.replace("https://pasteferry.cc" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAN에서 PasteFerry 서버 실행: Windows, Mac 및 Linux</title>
+  <meta name="description" content="컴퓨터가 네트워크를 공유하면 클라우드 서버가 필요하지 않습니다. 하나의 스크립트를 사용하여 항상 켜져 있는 Windows, Mac 또는 Linux 시스템에서 PasteFerry의 신호 및 TURN 서버를 실행하세요. 부팅시 시작됩니다. 앱 설정 및 문제 해결이 포함됩니다.">
+  <link rel="canonical" href="https://pasteferry.cc/ko/server/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/server/">
+  <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/server/">
+  <link rel="alternate" hreflang="zh-HK" href="https://pasteferry.cc/zh-hk/server/">
+  <link rel="alternate" hreflang="en" href="https://pasteferry.cc/en/server/">
+  <link rel="alternate" hreflang="ja" href="https://pasteferry.cc/ja/server/">
+  <link rel="alternate" hreflang="ko" href="https://pasteferry.cc/ko/server/">
+  <link rel="alternate" hreflang="de" href="https://pasteferry.cc/de/server/">
+  <link rel="alternate" hreflang="fr" href="https://pasteferry.cc/fr/server/">
+  <link rel="alternate" hreflang="es" href="https://pasteferry.cc/es/server/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="PasteFerry">
+  <meta property="og:title" content="LAN에서 PasteFerry 서버 실행: Windows, Mac 및 Linux">
+  <meta property="og:description" content="컴퓨터가 네트워크를 공유하면 클라우드 서버가 필요하지 않습니다. 하나의 스크립트를 사용하여 항상 켜져 있는 Windows, Mac 또는 Linux 시스템에서 PasteFerry의 신호 및 TURN 서버를 실행하세요. 부팅시 시작됩니다. 앱 설정 및 문제 해결이 포함됩니다.">
+  <meta property="og:url" content="https://pasteferry.cc/ko/server/">
+  <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
+  <link rel="stylesheet" href="../../assets/site.css?v=cfbc242d54">
+  <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
+</head>
+<body>
+  <a class="skip" href="#main">콘텐츠로 건너뛰기</a>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="../../ko/" aria-label="PasteFerry 홈"><img src="../../assets/icon.svg?v=65a69999e0" alt="" width="26" height="26">PasteFerry</a>
+      <nav aria-label="페이지">
+        <a class="mid" href="../../ko/features/">특징</a>
+        <a class="mid" href="../../ko/start/">빠른 시작</a>
+        <a class="wide" href="../../ko/start/#server" aria-current="true">연결 방법</a>
+        <a href="../../ko/download/">다운로드</a>
+        <details class="menu">
+          <summary aria-label="더 많은 페이지"><span>더 보기</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li class="mobile-only"><a href="../../ko/features/">특징</a></li>
+            <li class="narrow"><a href="../../ko/start/">빠른 시작</a></li>
+            <li class="narrow"><a href="../../ko/start/#server">연결 방법</a></li>
+            <li><a href="../../ko/themes/">테마 가이드</a></li>
+            <li><a href="../../ko/how/">작동 원리</a></li>
+            <li><a href="../../ko/security/">보안</a></li>
+            <li><a href="../../ko/faq/">FAQ</a></li>
+            <li><a href="../../ko/feedback/">토론 및 피드백</a></li>
+            <li class="sep" role="separator"></li>
+            <li><a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a></li>
+            <li class="narrow-gh"><a href="https://github.com/baiyuze/pasteferry">GitHub</a></li>
+          </ul>
+        </details>
+        <a class="gh" href="https://github.com/baiyuze/pasteferry" data-gh-stars aria-label="GitHub의 별 PasteFerry"><svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-label">Star</span><span class="gh-count" hidden><svg class="gh-star" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><b></b></span></a>
+        <details class="lang appearance">
+          <summary aria-label="모양" title="모양"><i class="appearance-now" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg></i></summary>
+          <ul><li><button type="button" data-theme-set="system" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>시스템 설정 따르기</button></li><li><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 2.2v1.9M10 15.9v1.9M2.2 10h1.9M15.9 10h1.9M4.5 4.5l1.3 1.3M14.2 14.2l1.3 1.3M4.5 15.5l1.3-1.3M14.2 5.8l1.3-1.3"/></svg>라이트</button></li><li><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M16.2 12.4A6.7 6.7 0 0 1 7.6 3.8a6.7 6.7 0 1 0 8.6 8.6z"/></svg>다크</button></li></ul>
+        </details>
+        <details class="lang">
+          <summary aria-label="언어：한국어"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M2.75 10h14.5M10 2.75c-2.1 2-3.1 4.4-3.1 7.25s1 5.25 3.1 7.25M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg><span>한국어</span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg></summary>
+          <ul>
+            <li><a href="../../server/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a></li>
+            <li><a href="../../zh-tw/server/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a></li>
+            <li><a href="../../zh-hk/server/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a></li>
+            <li><a href="../../en/server/" hreflang="en" lang="en" data-lang="en">English</a></li>
+            <li><a href="../../ja/server/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li>
+            <li><a href="../../ko/server/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a></li>
+            <li><a href="../../de/server/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li>
+            <li><a href="../../fr/server/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li>
+            <li><a href="../../es/server/" hreflang="es" lang="es" data-lang="es">Español</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero guide-hero">
+      <div class="wrap">
+        <p class="crumb"><a href="../../ko/">PasteFerry</a> / <a href="../../ko/start/#server">연결 방법</a></p>
+        <h1 class="display">LAN에서 서버 실행</h1>
+        <p class="lede">컴퓨터가 동일한 홈 또는 사무실 네트워크에 있는 경우 클라우드 서버가 필요하지 않습니다. 켜져 있는 컴퓨터를 선택하고 하나의 스크립트를 다운로드하여 실행한 다음 각 컴퓨터의 PasteFerry 에 인쇄되는 주소를 입력하세요.</p>
+        <p class="notice"><strong>동일한 네트워크에서는 더 이상 서버가 필요하지 않습니다.</strong> 앱을 설치하고 페어링합니다. <a href="../../ko/lan/">동일한 네트워크 가이드</a>를 참조하세요. 이 가이드는 두 개의 서브넷이 서로 연결할 수 없고 트래픽이 둘 다 연결할 수 있는 컴퓨터를 통과해야 하는 경우에도 도움이 됩니다.</p>
+        <ol class="guide-toc">
+          <li><a href="#prepare">시작하기 전에</a></li>
+          <li><a href="#install">설치</a></li>
+          <li><a href="#check">확인</a></li>
+          <li><a href="#clients">앱 설정</a></li>
+          <li><a href="#faq">질문</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="overview" aria-labelledby="overview-title">
+      <div class="wrap">
+        <h2 id="overview-title">서버는 장치만 소개합니다.</h2>
+        <p class="intro">각 컴퓨터는 서버에 연결된 상태를 유지하므로 이를 통해 서로를 찾고 연결 세부 정보를 교환합니다. 일단 연결되면 복사한 내용이 두 컴퓨터 간에 바로 전달됩니다. 실패한 경우에만 암호화된 상태로 서버를 통과합니다.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 960 440" role="img" aria-labelledby="lan-title lan-desc">
+            <title id="lan-title">LAN의PasteFerry</title>
+            <desc id="lan-desc">하나의 LAN에서 Mac과 Windows PC는 신호를 보내기 위해 192.168.1.20의 서버에 연결됩니다. 복사된 콘텐츠는 두 컴퓨터 간에 직접 이동하며, 직접 연결이 실패한 경우에만 서버의 TURN 릴레이를 통해 이동합니다.</desc>
+            <rect class="d-lan" x="8" y="8" width="944" height="384" rx="22"/>
+            <text class="d-lan-label" x="32" y="42">LAN: 동일한 Wi-Fi 또는 유선 네트워크</text>
+            <rect class="d-box" x="340" y="64" width="280" height="104" rx="14"/>
+            <text class="d-title" x="480" y="106" text-anchor="middle">서버</text>
+            <text class="d-ip" x="480" y="138" text-anchor="middle">192.168.1.20</text>
+            <path class="d-sig" d="M150 250V96H340"/>
+            <path class="d-sig" d="M810 250V96H620"/>
+            <path class="d-relay" d="M206 250V140H340"/>
+            <path class="d-relay" d="M754 250V140H620"/>
+            <text class="d-note" x="164" y="86">신호, TCP 8787</text>
+            <text class="d-note" x="220" y="200">릴레이, UDP 3478, 직접 실패할 경우</text>
+            <rect class="d-box" x="40" y="250" width="240" height="112" rx="14"/>
+            <text class="d-title" x="160" y="300" text-anchor="middle">Mac</text>
+            <text class="d-sub" x="160" y="328" text-anchor="middle">PasteFerry실행</text>
+            <rect class="d-box" x="680" y="250" width="240" height="112" rx="14"/>
+            <text class="d-title" x="800" y="300" text-anchor="middle">Windows</text>
+            <text class="d-sub" x="800" y="328" text-anchor="middle">PasteFerry실행</text>
+            <path class="d-direct" d="M280 306H680"/>
+            <text class="d-label" x="480" y="292" text-anchor="middle">직접, 종단 간 암호화</text>
+            <text class="d-note" x="480" y="336" text-anchor="middle">콘텐츠는 두 컴퓨터 사이에 유지됩니다.</text>
+            <g class="d-legend" transform="translate(40 424)">
+              <path class="d-direct" d="M0 0H28"/><text x="38" y="5">데이터(직접)</text>
+              <path class="d-relay" d="M250 0H278"/><text x="288" y="5">데이터(릴레이, 폴백)</text>
+              <path class="d-sig" d="M560 0H588"/><text x="598" y="5">신호 보내기</text>
+            </g>
+          </svg>
+        </figure>
+        <ul class="points ports">
+          <li><strong>신호, TCP 8787.</strong> 모든 컴퓨터는 연결 상태를 유지하여 다른 컴퓨터를 찾고 연결 세부 정보를 쌍으로 교환합니다.</li>
+          <li><strong>다이렉트.</strong> LAN에서는 콘텐츠가 거의 항상 네트워크 속도로 두 컴퓨터 간에 바로 전달됩니다.</li>
+          <li><strong>릴레이, UDP 3478.</strong> 장치가 서로 연결할 수 없는 경우에만 사용됩니다: 게스트 네트워크, 클라이언트 격리가 포함된 Wi-Fi, 별도의 서브넷.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="prepare" aria-labelledby="prepare-title">
+      <div class="wrap">
+        <h2 id="prepare-title">시작하기 전에</h2>
+        <dl class="fallbacks">
+          <div><dt>계속 켜져 있는 컴퓨터</dt><dd>Windows 10 또는 11, macOS 13 이상 또는 Linux(동기화하는 두 컴퓨터 중 하나 포함). 동기화는 꺼져 있거나 잠자기 상태일 때 일시 중지되었다가 깨어나면 다시 시작됩니다. NAS, 홈 라우터 또는 Mac mini가 이상적입니다. 서버는 약 15MB의 RAM을 사용합니다.</dd></div>
+          <div><dt>고정된 주소</dt><dd>라우터의 DHCP 설정에서 해당 주소를 예약하세요(DHCP 예약 또는 정적 임대라고도 함). 그렇지 않으면 라우터가 새 주소를 전달할 때 모든 컴퓨터를 업데이트해야 합니다.</dd></div>
+          <div><dt>동일한 네트워크</dt><dd>기기가 동일한 Wi-Fi 또는 유선 네트워크에 연결되어 있으면 됩니다. 클라이언트(AP) 격리를 갖춘 게스트 네트워크와 Wi-Fi는 장치가 서로 연결되지 않도록 차단합니다. 다른 네트워크를 사용하거나 격리를 끄십시오.</dd></div>
+          <div><dt>동기화되지 않음</dt><dd>서버는 LAN에서만 연결할 수 있으므로 다른 곳으로 가져간 노트북이 돌아왔을 때 따라잡을 수 있습니다.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="install" aria-labelledby="install-title">
+      <div class="wrap">
+        <h2 id="install-title">서버 설치</h2>
+        <p class="intro">서버를 실행할 컴퓨터의 시스템을 선택합니다. 스크립트는 컴퓨터의 LAN 주소를 찾고, 서버가 자동으로 시작되도록 설정하고, 앱에 입력할 주소를 인쇄합니다.</p>
+        <div class="os-tabs" data-tabs="os">
+          <div class="tablist" role="tablist" aria-label="서버 컴퓨터의 시스템" hidden>
+            <button type="button" role="tab" id="tab-windows" aria-controls="windows">Windows</button>
+            <button type="button" role="tab" id="tab-macos" aria-controls="macos">macOS</button>
+            <button type="button" role="tab" id="tab-linux" aria-controls="linux">Linux</button>
+          </div>
+
+          <section class="os" id="windows" role="tabpanel" aria-labelledby="tab-windows">
+            <h3 class="os-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Windows</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <ol class="steps">
+                <li><a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-windows-amd64.zip">페이스트페리-서버-windows-amd64.zip</a> 를 다운로드하고 모두 추출을 선택합니다.</li>
+                <li>추출된 폴더를 열고 <code>install.cmd</code>를 두 번 클릭합니다.<span class="aside">"Windows 가 PC를 보호했습니다."가 표시되면 추가 정보를 클릭한 다음 어쨌든 실행을 클릭합니다. 사용자 계정 컨트롤이 묻는 메시지가 나타나면 예를 클릭합니다. 서버가 아직 코드 서명되지 않았기 때문에 Windows 가 한 번 요청합니다.</span></li>
+                <li>새 창에서 설치가 계속됩니다. 끝에 있는 <code>ws://…/signal</code> 주소는 앱에 입력하는 주소입니다.</li>
+                </ol>
+                <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Windows 서버 다운로드</a>
+                <ul class="points">
+                <li><strong> Windows 서비스로 실행됩니다.</strong> 는 Windows로 시작하며 로그인이 필요하지 않으며 창이 없습니다. 서비스에서는 PasteFerry 서버로 나타납니다.</li>
+                <li><strong>방화벽이 이미 허용됨:</strong> 스크립트는pasteferry-server.exe에 대해서만 인바운드 규칙을 추가하므로 열 수 있는 포트가 없습니다.</li>
+                <li><strong>잘못된 주소 선택</strong> (예: VM 또는 VPN의 여러 네트워크 어댑터): 추출된 폴더의 주소 표시줄에 <code>cmd</code> 를 입력하고 Enter 키를 누른 다음 주소로 <code>install.cmd 192.168.1.20</code> 를 실행합니다.</li>
+                <li>Windows 10 및 11, x64.</li>
+                </ul>
+              </div>
+              <div class="os-figures">
+                <figure class="explorer" role="img" aria-label="추출된 폴더에는 paleferry-server.exe, install.cmd, install.ps1, README.md 및 uninstall.cmd가 들어 있습니다. install.cmd를 두 번 클릭합니다.">
+                  <div class="t-bar win"><span class="t-tab folder">pasteferry-server-windows-amd64</span><span class="t-ctl" aria-hidden="true"><i></i><i></i><i></i></span></div>
+                  <ul class="files">
+                  <li><span class="f-icon exe" aria-hidden="true"></span><span class="f-name">pasteferry-server.exe</span></li>
+                  <li class="hl"><span class="f-icon cmd" aria-hidden="true"></span><span class="f-name">install.cmd</span><em>두 번 클릭</em></li>
+                  <li><span class="f-icon doc" aria-hidden="true"></span><span class="f-name">install.ps1</span></li>
+                  <li><span class="f-icon doc" aria-hidden="true"></span><span class="f-name">README.md</span></li>
+                  <li><span class="f-icon cmd" aria-hidden="true"></span><span class="f-name">uninstall.cmd</span></li>
+                  </ul>
+                </figure>
+                <figure class="term" role="img" aria-label="install.cmd가 완료된 후의 창: 이전 버전을 중지하고, 설치하고, 서비스를 등록하고, 방화벽을 통과하도록 허용하고 시작한 다음 주소 ws://192.168.1.20:8787/signal을 인쇄합니다.">
+                <div class="t-bar win"><span class="t-tab"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.5v7H3zM11.5 4.4 21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.4z"/></svg>관리자: Windows 파워셸</span><span class="t-ctl" aria-hidden="true"><i></i><i></i><i></i></span></div>
+<pre class="t-body"><span class="t-step">&gt; Stopping the running version</span>
+<span class="t-step">&gt; Installing to C:\Program Files\PasteFerry Server</span>
+<span class="t-step">&gt; Registering the service PasteFerryServer (relay address 192.168.1.20)</span>
+<span class="t-step">&gt; Allowing it through Windows Firewall</span>
+<span class="t-step">&gt; Starting</span>
+  √ Running
+
+Installed: pasteferry-server 2.13.1. It runs as a Windows service and starts with Windows.
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
+
+    <span class="t-url">ws://192.168.1.20:8787/signal</span>
+
+  Program    C:\Program Files\PasteFerry Server
+  Logs       C:\ProgramData\PasteFerry Server\server.log
+  Restart    Restart-Service PasteFerryServer (in an administrator PowerShell)
+  Uninstall  double-click uninstall.cmd</pre>
+              </figure>
+              </div>
+            </div>
+            <div class="table-scroll">
+                <table class="manage">
+                  <caption>나중에</caption>
+                  <tbody>
+                  <tr><th scope="row">상태</th><td>관리자 PowerShell에서<code>Get-Service PasteFerryServer</code> 를 찾거나 서비스에서 PasteFerry 서버를 찾습니다.</td></tr>
+                  <tr><th scope="row">로그</th><td><code>C:\ProgramData\PasteFerry Server\server.log</code></td></tr>
+                  <tr><th scope="row">다시 시작</th><td>관리자 PowerShell의<code>Restart-Service PasteFerryServer</code></td></tr>
+                  <tr><th scope="row">업그레이드</th><td>새 버전을 다운로드하고 압축을 푼 다음 <code>install.cmd</code> 를 다시 두 번 클릭합니다. 설정이 유지됩니다</td></tr>
+                  <tr><th scope="row">제거</th><td><code>uninstall.cmd</code>를 두 번 클릭합니다. 서비스, 방화벽 규칙 및 파일을 제거합니다.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+          </section>
+
+          <section class="os" id="macos" role="tabpanel" aria-labelledby="tab-macos">
+            <h3 class="os-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>macOS</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <ol class="steps">
+                  <li>터미널을 열고 다음 줄을 실행하세요.
+                <div class="code">
+                  <button class="copy" type="button" data-done="복사됨">복사</button>
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-macos.tar.gz
+tar xzf pasteferry-server-macos.tar.gz
+cd pasteferry-server-macos
+./install.sh</code></pre>
+                </div></li>
+                <li>끝에 있는 <code>ws://…/signal</code> 주소는 앱에 입력하는 주소입니다.</li>
+                </ol>
+                <ul class="points">
+                <li><strong>관리자 권한이 필요하지 않습니다.</strong> 로그인할 때마다 백그라운드에서 실행되며, 종료되면 macOS 가 다시 시작합니다.</li>
+                <li><strong>이 Mac을 깨우세요:</strong> 시스템 설정 → 에너지(배터리 → 노트북의 옵션)에서 자동 잠자기 방지 옵션을 켜세요.</li>
+                <li><strong> macOS 방화벽이 켜져 있는 경우</strong> 스크립트는 Pasterry-server를 허용하는 명령으로 끝납니다.</li>
+                <li>Intel 및 Apple 실리콘, macOS 13 이상.</li>
+                </ul>
+              </div>
+              <div class="os-figures">
+                <figure class="term" role="img" aria-label="터미널의 ./install.sh 출력: 설치하고 LaunchAgent를 작성하고 서버를 시작한 다음 주소 ws://192.168.1.20:8787/signal을 인쇄합니다.">
+                <div class="t-bar mac"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="t-title">pasteferry-server-macos — zsh</span></div>
+<pre class="t-body"><span class="t-prompt">%</span> ./install.sh
+<span class="t-step">▶ Stopping the running version</span>
+<span class="t-step">▶ Installing to /Users/me/Library/Application Support/PasteFerry Server</span>
+<span class="t-step">▶ Writing the LaunchAgent (relay address 192.168.1.20)</span>
+<span class="t-step">▶ Starting</span>
+  ✓ Running
+
+Installed: pasteferry-server 2.13.1. It starts whenever you log in to this Mac.
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
+
+    <span class="t-url">ws://192.168.1.20:8787/signal</span>
+
+  Logs       /Users/me/Library/Logs/PasteFerry/server.log
+  Restart    launchctl kickstart -k gui/501/com.pasteferry.server
+  Uninstall  ./install.sh uninstall</pre>
+              </figure>
+              </div>
+            </div>
+            <div class="table-scroll">
+                <table class="manage">
+                  <caption>나중에</caption>
+                  <tbody>
+                  <tr><th scope="row">로그</th><td><code>~/Library/Logs/PasteFerry/server.log</code></td></tr>
+                  <tr><th scope="row">다시 시작</th><td><code>launchctl kickstart -k gui/$(id -u)/com.pasteferry.server</code></td></tr>
+                  <tr><th scope="row">업그레이드</th><td>새 버전을 다운로드하고 압축을 푼 후 <code>./install.sh</code> 를 다시 실행하세요. 설정이 유지됩니다</td></tr>
+                  <tr><th scope="row">제거</th><td><code>./install.sh uninstall</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+          </section>
+
+          <section class="os" id="linux" role="tabpanel" aria-labelledby="tab-linux">
+            <h3 class="os-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg>Linux</h3>
+            <div class="os-grid">
+              <div class="os-steps">
+                <ol class="steps">
+                  <li>머신 자체에서 또는 SSH를 통해 다음 라인을 실행합니다.<span class="aside">64비트 OS가 설치된 Raspberry Pi와 같은 ARM에서는 <code>amd64</code> 를 <code>arm64</code>로 바꿉니다.</span>
+                <div class="code">
+                  <button class="copy" type="button" data-done="복사됨">복사</button>
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-linux-amd64.tar.gz
+tar xzf pasteferry-server-linux-amd64.tar.gz
+cd pasteferry-server-linux-amd64
+sudo ./install.sh</code></pre>
+                </div></li>
+                <li>끝에 있는 <code>ws://…/signal</code> 주소는 앱에 입력하는 주소입니다.</li>
+                </ol>
+                <ul class="points">
+                <li><strong>부팅 시 시작되는 시스템 서비스</strong> 를 등록합니다. 루트가 필요합니다.</li>
+                <li><strong>ufw 또는 Firewalld가 활성화된 경우</strong> 스크립트는 포트를 여는 명령으로 끝납니다.</li>
+                <li><strong>Docker 도 작동합니다.</strong> <code>env.example</code> 를 <code>.env</code>로 복사하고 <code>TURN_IP</code> 를 시스템의 LAN 주소로 설정하고 <code>docker compose up -d</code>를 실행합니다. 호스트 네트워킹이 필요하므로 Linux 만 필요합니다.</li>
+                </ul>
+              </div>
+              <div class="os-figures">
+                <figure class="term" role="img" aria-label="sudo ./install.sh 출력: 설치하고 systemd 장치 및 구성을 작성하고 서버를 시작한 다음 주소 ws://192.168.1.20:8787/signal을 인쇄합니다.">
+                <div class="t-bar mac"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="t-title">ssh 192.168.1.20</span></div>
+<pre class="t-body"><span class="t-prompt">$</span> sudo ./install.sh
+<span class="t-step">▶ Installing the binary to /usr/local/bin</span>
+<span class="t-step">▶ Writing the systemd unit</span>
+<span class="t-step">▶ Writing /etc/pasteferry/server.env (relay address 192.168.1.20)</span>
+<span class="t-step">▶ Starting</span>
+  ✓ Running
+
+Installed: pasteferry-server 2.13.1
+In PasteFerry on each computer, set Settings → Connection → Custom server to:
+
+    <span class="t-url">ws://192.168.1.20:8787/signal</span>
+
+  Config     /etc/pasteferry/server.env
+  Logs       journalctl -u pasteferry-server -f
+  Restart    systemctl restart pasteferry-server
+  Uninstall  sudo ./install.sh uninstall
+
+Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768-60999 (relay ports, assigned by the OS)</pre>
+              </figure>
+              </div>
+            </div>
+            <div class="table-scroll">
+                <table class="manage">
+                  <caption>나중에</caption>
+                  <tbody>
+                  <tr><th scope="row">상태</th><td><code>systemctl status pasteferry-server</code></td></tr>
+                  <tr><th scope="row">로그</th><td><code>journalctl -u pasteferry-server -f</code></td></tr>
+                  <tr><th scope="row">다시 시작</th><td><code>sudo systemctl restart pasteferry-server</code></td></tr>
+                  <tr><th scope="row">구성</th><td><code>/etc/pasteferry/server.env</code>; 편집 후 서비스를 다시 시작하십시오</td></tr>
+                  <tr><th scope="row">업그레이드</th><td>새 버전을 다운로드하고 압축을 푼 후 <code>sudo ./install.sh</code> 를 다시 실행하세요. 구성이 유지됩니다</td></tr>
+                  <tr><th scope="row">제거</th><td><code>sudo ./install.sh uninstall</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+          </section>
+
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="check" aria-labelledby="check-title">
+      <div class="wrap">
+        <h2 id="check-title">다른 컴퓨터가 연결할 수 있는지 확인하세요.</h2>
+        <p class="intro">다른 컴퓨터의 브라우저에서 <code>http://192.168.1.20:8787/healthz</code> 를 엽니다(주소 포함). 이 줄이 표시되면 네트워크 경로가 작동하는 것입니다.</p>
+        <figure class="browser" role="img" aria-label="서버 상태가 정상인 http://192.168.1.20:8787/healthz, 와 해당 버전을 표시하는 브라우저">
+          <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">http://192.168.1.20:8787/healthz</span></div>
+          <pre class="b-body">{"status":"ok","version":"2.13.1"}</pre>
+        </figure>
+        <p class="note">로드되지 않으면 아래 <a href="#faq">질문</a> 를 참조하세요.</p>
+      </div>
+    </section>
+
+    <section class="section" id="clients" aria-labelledby="clients-title">
+      <div class="wrap">
+        <h2 id="clients-title">각 컴퓨터의 주소를 입력하세요.</h2>
+        <ol class="flow">
+          <li><h3>설정 열기</h3><p>서버를 실행하는 컴퓨터를 포함하여 각 컴퓨터에서 PasteFerry 를 열고 설정 → 연결로 이동합니다.</p></li>
+          <li><h3>주소를 입력하세요</h3><p>사용자 정의 서버에서 주소와 함께 <code>ws://192.168.1.20:8787/signal</code> 를 입력하고 Return 또는 Enter를 누르십시오.</p></li>
+          <li><h3>상태를 확인하세요</h3><p>Connection에 녹색 연결됨이 표시되면 설정된 것입니다. 장치 아래에서 장치를 페어링하면 복사가 동기화를 시작합니다.</p></li>
+        </ol>
+        <figure class="shot">
+          <img class="theme-dark" src="../../assets/screenshots/en/settings-lan-dark.png?v=773b46ba58" width="2112" height="1472" alt="PasteFerry 설정 → 연결: 사용자 정의 서버는 ws://192.168.1.20:8787/signal 이고 연결 상태는 연결됨으로 표시됩니다." loading="lazy"><img class="theme-light" src="../../assets/screenshots/en/settings-lan.png?v=8714a95531" width="2112" height="1472" alt="PasteFerry 설정 → 연결: 사용자 정의 서버는 ws://192.168.1.20:8787/signal 이고 연결 상태는 연결됨으로 표시됩니다." loading="lazy">
+        </figure>
+        <p class="note">아직 앱을 설치하지 않으셨나요? <a href="../../ko/start/">빠른 시작</a>를 참조하세요.</p>
+      </div>
+    </section>
+
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <h2 id="faq-title">질문</h2>
+        <div class="faq">
+          <details>
+            <summary>상태는 연결되지 않음으로 유지됩니다.</summary>
+            <div class="answer"><p>먼저 주소를 확인하세요. 주소는 <code>ws://</code>로 시작하고, 포트 8787을 사용하고, <code>/signal</code>로 끝나며, 주소를 입력한 후 Return 키를 눌렀습니다.</p><p>그런 다음 해당 컴퓨터의 브라우저에서 <code>http://server-address:8787/healthz</code> 를 엽니다. 로드되지 않으면 네트워크 경로가 손상된 것입니다. 즉, 서버가 실행되지 않거나 컴퓨터가 잠자기 상태이거나 방화벽이 서버를 차단하거나 주소가 변경된 것입니다.</p><p>Windows 스크립트는 이미 방화벽을 통한 서버를 허용합니다. 방화벽이 켜져 있는 Mac에서는 끝에 인쇄된 스크립트 명령을 실행하세요. Linux의 ufw 및 방화벽도 마찬가지입니다.</p></div>
+          </details>
+          <details>
+            <summary>장치에 직접 대신 릴레이가 표시됨</summary>
+            <div class="answer"><p>LAN 연결에서는 거의 항상 직접 연결됩니다. 릴레이는 일반적으로 게스트 네트워크, Wi-Fi 클라이언트 격리 또는 사이에 방화벽이 있는 별도의 서브넷으로 인해 UDP 가 두 컴퓨터 간에 이동할 수 없음을 의미합니다. 릴레이된 콘텐츠는 여전히 암호화되어 있습니다. 단지 서버 컴퓨터의 네트워크에 의해 제한될 뿐입니다.</p></div>
+          </details>
+          <details>
+            <summary>서버 주소가 변경되었습니다</summary>
+            <div class="answer"><p>새 주소인 <code>install.cmd new-address</code> ( Windows), <code>./install.sh new-address</code> (Mac)로 스크립트를 다시 실행하세요. Linux에서 <code>/etc/pasteferry/server.env</code> 의 <code>-turn-ip</code> 를 편집하고 서비스를 다시 시작합니다. 그런 다음 각 컴퓨터의 주소를 업데이트합니다.</p><p>라우터에 주소를 예약하면 이를 방지할 수 있습니다.</p></div>
+          </details>
+          <details>
+            <summary>LAN과 동기화되지 않나요?</summary>
+            <div class="answer"><p>아니요, 서버는 LAN에서만 연결할 수 있습니다. 네트워크 간에 동기화하려면 <a href="../../ko/official/">서비스</a>를 켜거나 <a href="../../ko/cloud/">공용 서버</a> 또는 <a href="../../ko/tailscale/">Tailscale</a>를 사용하세요.</p></div>
+          </details>
+          <details>
+            <summary>서버 컴퓨터는 PasteFerry도 실행합니다. 어느 주소인가요?</summary>
+            <div class="answer"><p>동일한 LAN 주소가 작동하며 <code>ws://127.0.0.1:8787/signal</code>도 작동합니다. 서버와 앱은 간섭하지 않습니다.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap">
+        <h2 class="display" id="closing-title">켜져 있는 컴퓨터 한 대이면 충분합니다.</h2>
+        <div class="cta">
+          <a class="button" href="../../ko/download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry 다운로드</a>
+        </div>
+        <p class="note">버전 2.13.1, 무료 오픈 소스. macOS 13 이상, Windows 10·11, Linux(x64·ARM64), Android 9 이상을 지원합니다. 새 화면 크기 설정으로 글자, 아이콘, 여백을 함께 확대하거나 축소할 수 있습니다.</p>
+        <a class="source" href="https://github.com/baiyuze/pasteferry/blob/main/server/deploy/README.md">공용 서버 및 Docker를 포함한 전체 서버 가이드</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>PasteFerry 는 GNU AGPL-3.0의 오픈 소스입니다.</p>
+      <nav aria-label="바닥글">
+        <a href="https://github.com/baiyuze/pasteferry/releases">모든 릴리스</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/CHANGELOG.md">변경 내역</a>
+        <a href="https://pasteferry.cc/design/nat-traversal.html">디자인 노트(중국어)</a>
+        <a href="https://github.com/baiyuze/pasteferry/blob/main/LICENSING.md">라이센스</a>
+        <a href="https://github.com/baiyuze/pasteferry/issues">문제 신고</a>
+        <a href="../../ko/privacy/">개인 정보 보호</a>
+        <a href="../../ko/feedback/">토론 및 피드백</a>
+      </nav>
+      <nav aria-label="언어">
+        <a href="../../server/" hreflang="zh-CN" lang="zh-CN" data-lang="zh">简体中文</a>
+        <a href="../../zh-tw/server/" hreflang="zh-TW" lang="zh-TW" data-lang="zh-tw">繁體中文（台灣）</a>
+        <a href="../../zh-hk/server/" hreflang="zh-HK" lang="zh-HK" data-lang="zh-hk">繁體中文（香港）</a>
+        <a href="../../en/server/" hreflang="en" lang="en" data-lang="en">English</a>
+        <a href="../../ja/server/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        <a href="../../ko/server/" hreflang="ko" lang="ko" data-lang="ko" aria-current="page">한국어</a>
+        <a href="../../de/server/" hreflang="de" lang="de" data-lang="de">Deutsch</a>
+        <a href="../../fr/server/" hreflang="fr" lang="fr" data-lang="fr">Français</a>
+        <a href="../../es/server/" hreflang="es" lang="es" data-lang="es">Español</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../../assets/site.js?v=0d77f62813" defer></script>
+  <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
+</body>
+</html>
