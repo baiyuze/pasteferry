@@ -1,65 +1,161 @@
 {
   "schema": 1,
-  "latest": "2.13.0",
+  "latest": "2.13.1",
   "date": "2026-11-20",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.13.0/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.13.1/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.13.0/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 29335806,
-      "sha256": "f43abfadee9b0140e63db724f771d6e1b6b7333bf20a93feb23cc31fe7e677d3"
+      "size": 29661691,
+      "sha256": "3572fa2598fa24ac3c51640f3275fa815503bb8d7d1e0da02e707bb7d34f5c66"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 31529487,
-      "sha256": "65e79eef1646d2cce90ad3c142702d61fea511538500199d0920825950770ee3"
+      "size": 31532160,
+      "sha256": "609ed88e145f6f5e9cd6ce1304995757d60fef94ac87abdfb318e6e337fae428"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 57609045,
-      "sha256": "ed5ec3472f243ac79b4b20cc96208baa629ae0218bd78abe9667209737350ef3"
+      "size": 57624969,
+      "sha256": "55e7bef480feca4c2c24e31f9404191fdece8b85793a722bf54d0666cc0b6f3e"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 27460475,
-      "sha256": "5f0c28c06a9dd82e039f020e19b0d9e0ba01893a208fd5c98447c2c27bef418f"
+      "size": 27461554,
+      "sha256": "e3c9e5b0052d63f2eef9ef5dfe677384254aa2d29ff04f908be9bd70d327d188"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 35473541,
-      "sha256": "0295d000122c1f5388748a47ce362af453e10d7ca9fa64e6f697c3900ccf28af"
+      "size": 35475484,
+      "sha256": "90bc61f7edb6f17a52d407e04de31163d12b44a756861410f1906ece05336e13"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 26926684,
-      "sha256": "36a4bd14d987c73a023dfabe719690cf353d4547a4fe0b09aeec2684350c1e72"
+      "size": 26933776,
+      "sha256": "214c30f5a5da070800b4e108d6d9063d13182a9ecc81f0418bf460a646a3814b"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 25268842,
-      "sha256": "468bf3f8348ebae712ba01d11e8a5a24b940f34f43a4af9db1ef805136d6ea03"
+      "size": 25269954,
+      "sha256": "aa1656d2b6de5d87b581c5f553bc0eed77499d4ff971d77954b165dcb3d8c757"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 32984247,
-      "sha256": "025a5a45a9c89561cf92f070e436910c195f59f5ae24177fe01e94aa627524d3"
+      "size": 32991051,
+      "sha256": "256d3093736d8693401070352671fa0da783bf64f5c7a9b6d70abeda981ee518"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 31167897,
-      "sha256": "c681bb4ea4ceab9b910dd2daf7fb6fcfae70a00b7fc17846589871961fe84747"
+      "size": 31178326,
+      "sha256": "48ca92b9d8a66666a0eeb66d83219ed196222068f6bbf1ff5c5abd5a335144cd"
     }
   },
   "releases": [
+    {
+      "version": "2.13.1",
+      "date": "2026-11-20",
+      "notes": {
+        "en": {
+          "changes": [
+            "Interface scale: Make text, icons and spacing larger or smaller together, from 90% to 150%, in Settings > Appearance or with Ctrl (⌘ on Mac) and =, - or 0. The main window and the quick paste window change together."
+          ]
+        },
+        "zh-Hans": {
+          "changes": [
+            "界面缩放：在「设置 → 外观」里把文字、图标和间距一起放大或缩小，从 90% 到 150%；也可以按 Ctrl（Mac 上是 ⌘）加 =、- 或 0。主窗口和快捷粘贴窗口一起变。"
+          ]
+        },
+        "ja": {
+          "changes": [
+            "表示サイズ：「設定 → 外観」で文字・アイコン・余白をまとめて 90% から 150% まで拡大・縮小できます。Ctrl（Mac では ⌘）と =、-、0 でも変えられます。メインウインドウとクイックペーストウィンドウに一緒に適用されます。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "changes": [
+            "介面縮放：在「設定 → 外觀」裡把文字、圖示和間距一起放大或縮小，從 90% 到 150%；也可以按 Ctrl（Mac 上是 ⌘）加 =、- 或 0。主視窗和快速貼上視窗會一起變。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "changes": [
+            "介面縮放：在「設定 → 外觀」裏把文字、圖示和間距一起放大或縮小，由 90% 到 150%；亦可以按 Ctrl（Mac 上是 ⌘）加 =、- 或 0。主視窗和快速貼上視窗會一起變。"
+          ]
+        },
+        "ar": {
+          "changes": [
+            "حجم الواجهة: كبّر النصوص والأيقونات والمسافات أو صغّرها معًا من 90% إلى 150% من الإعدادات > المظهر، أو باستخدام Ctrl (⌘ على Mac) مع = أو - أو 0. تتغير النافذة الرئيسية ونافذة اللصق السريع معًا."
+          ]
+        },
+        "de": {
+          "changes": [
+            "Oberflächengröße: Text, Symbole und Abstände gemeinsam von 90 % bis 150 % vergrößern oder verkleinern – unter Einstellungen > Erscheinungsbild oder mit Strg (⌘ auf dem Mac) und =, - oder 0. Hauptfenster und Schnelleinfügen-Fenster ändern sich gemeinsam."
+          ]
+        },
+        "es": {
+          "changes": [
+            "Tamaño de la interfaz: amplía o reduce a la vez el texto, los iconos y los espacios, del 90 % al 150 %, en Configuración > Apariencia o con Ctrl (⌘ en Mac) y =, - o 0. La ventana principal y la de pegado rápido cambian juntas."
+          ]
+        },
+        "fr": {
+          "changes": [
+            "Taille de l’interface : agrandissez ou réduisez ensemble le texte, les icônes et les espacements, de 90 % à 150 %, dans Réglages > Apparence ou avec Ctrl (⌘ sur Mac) et =, - ou 0. La fenêtre principale et celle du collage rapide changent ensemble."
+          ]
+        },
+        "id": {
+          "changes": [
+            "Ukuran antarmuka: Perbesar atau perkecil teks, ikon, dan jarak sekaligus, dari 90% hingga 150%, di Pengaturan > Tampilan atau dengan Ctrl (⌘ di Mac) dan =, - atau 0. Jendela utama dan jendela tempel cepat berubah bersama."
+          ]
+        },
+        "it": {
+          "changes": [
+            "Dimensione interfaccia: ingrandisci o riduci insieme testo, icone e spaziature, dal 90% al 150%, in Impostazioni > Aspetto o con Ctrl (⌘ su Mac) e =, - o 0. La finestra principale e quella di Incolla rapido cambiano insieme."
+          ]
+        },
+        "ko": {
+          "changes": [
+            "화면 크기: 설정 > 모양에서 글자, 아이콘, 여백을 90%부터 150%까지 함께 확대하거나 축소할 수 있습니다. Ctrl(Mac에서는 ⌘)과 =, -, 0으로도 바꿀 수 있습니다. 기본 창과 빠른 붙여넣기 창이 함께 바뀝니다."
+          ]
+        },
+        "pl": {
+          "changes": [
+            "Rozmiar interfejsu: powiększaj lub pomniejszaj razem tekst, ikony i odstępy, od 90% do 150%, w Ustawienia > Wygląd albo skrótem Ctrl (⌘ na Macu) z =, - lub 0. Okno główne i okno szybkiego wklejania zmieniają się razem."
+          ]
+        },
+        "pt-BR": {
+          "changes": [
+            "Tamanho da interface: aumente ou diminua juntos o texto, os ícones e os espaçamentos, de 90% a 150%, em Configurações > Aparência ou com Ctrl (⌘ no Mac) e =, - ou 0. A janela principal e a de colagem rápida mudam juntas."
+          ]
+        },
+        "ru": {
+          "changes": [
+            "Масштаб интерфейса: увеличивайте или уменьшайте текст, значки и отступы вместе — от 90% до 150% — в «Настройки > Оформление» или сочетаниями Ctrl (⌘ на Mac) с =, - или 0. Главное окно и окно быстрой вставки меняются вместе."
+          ]
+        },
+        "tr": {
+          "changes": [
+            "Arayüz boyutu: Metni, simgeleri ve boşlukları birlikte %90 ile %150 arasında büyütün veya küçültün; Ayarlar > Görünüm’den ya da Ctrl (Mac’te ⌘) ile =, - veya 0 tuşlarıyla. Ana pencere ve hızlı yapıştır penceresi birlikte değişir."
+          ]
+        },
+        "uk": {
+          "changes": [
+            "Масштаб інтерфейсу: збільшуйте або зменшуйте текст, значки й відступи разом — від 90% до 150% — у «Налаштування > Оформлення» або сполученнями Ctrl (⌘ на Mac) з =, - чи 0. Головне вікно й вікно швидкої вставки змінюються разом."
+          ]
+        },
+        "vi": {
+          "changes": [
+            "Cỡ giao diện: Phóng to hoặc thu nhỏ cùng lúc chữ, biểu tượng và khoảng cách, từ 90% đến 150%, trong Cài đặt > Giao diện hoặc bằng Ctrl (⌘ trên Mac) và =, - hoặc 0. Cửa sổ chính và cửa sổ dán nhanh thay đổi cùng nhau."
+          ]
+        }
+      }
+    },
     {
       "version": "2.13.0",
       "date": "2026-11-20",
@@ -876,67 +972,6 @@
           "fixes": [
             "主題裏的背景圖（包括 AI 透過 MCP 設定的）以前儲存了卻不顯示，現在會顯示出來。",
             "文字看得清楚所需的遮罩濃度以前計得偏淡；現在按介面實際的畫法、用主題自己的文字顏色來計，背景圖和頁首圖上的文字都達到 4.5:1。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.10.0",
-      "date": "2026-11-06",
-      "notes": {
-        "en": {
-          "changes": [
-            "Themes: Settings › Appearance lists the built-in themes and your custom themes, with light, dark or system appearance. Themes apply to the main window and Quick Paste on this device and are not synced to other devices. The Android app has its own Appearance setting.",
-            "Pixel theme: a built-in pixel-art theme with a bitmap font, notched borders, bevelled buttons, neutral graphite and paper palettes with a pixel-green accent, page-header scenes, pixel illustrations, game-style menu cursors and loading squares, and optional CRT scanlines.",
-            "Custom themes: duplicate a built-in theme, import or export theme files, and delete themes you no longer need. Text contrast is checked when a theme is saved, and low-contrast colors are reported.",
-            "AI-designed themes: `pasteferry-cli mcp` runs an MCP server so AI apps such as Claude and Cursor can read the theme format, design a palette, check contrast, save and apply themes. It only provides theme and background tools, not clipboard history, devices or friends."
-          ],
-          "fixes": [
-            "Malformed compressed data from another device can no longer crash the background service (compression library updated for GO-2026-6865)."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "主题：「设置 › 外观」列出软件自带的主题和你的自定义主题，可选浅色、深色或跟随系统。主题用于这台设备的主窗口和快捷粘贴窗口，不同步到其他设备；Android App 在自己的「外观」里设置。",
-            "像素主题：自带的像素风主题，点阵字体、切角粗边、凸起的按钮，石墨与纸两套中性配色加像素绿；页眉有夜景和白天的场景，空页面有像素插画，还有游戏式的菜单光标、四格加载，可选 CRT 扫描线。",
-            "自定义主题：可以复制一份自带主题、导入或导出主题文件、删除不用的主题；保存时会检查文字对比度，看不清的颜色会提示出来。",
-            "让 AI 做主题：`pasteferry-cli mcp` 是一个 MCP 服务，Claude、Cursor 等 AI 应用可以读取主题格式、配色、检查对比度，再保存并应用主题。它只提供主题和背景图相关的功能，不开放复制记录、设备和好友。"
-          ],
-          "fixes": [
-            "其他设备发来损坏的压缩数据时，后台服务不会再崩溃（压缩库已更新，修复 GO-2026-6865）。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "テーマ：「設定 › 外観」で内蔵テーマとカスタムテーマを選べ、ライト・ダーク・システムに合わせるも設定できます。テーマはこのデバイスのメインウインドウとクイックペーストに適用され、他のデバイスには同期されません。Android アプリは独自の「外観」で設定します。",
-            "ピクセルテーマ：ドット文字、切り欠きの太枠、立体的なボタン、グラファイトとペーパーの落ち着いた配色にピクセルグリーンを合わせた内蔵テーマ。ページ上部の風景、ピクセルイラスト、ゲーム風のメニューカーソルと読み込み表示、任意の CRT 走査線も備えています。",
-            "カスタムテーマ：内蔵テーマの複製、テーマファイルの読み込みと書き出し、不要なテーマの削除ができます。保存時に文字のコントラストを確認し、読みにくい色を知らせます。",
-            "AI でテーマ作成：`pasteferry-cli mcp` は MCP サーバーで、Claude や Cursor などの AI アプリがテーマ形式を読み、配色を考え、コントラストを確認して保存・適用できます。提供するのはテーマと背景画像の機能のみで、コピー履歴・デバイス・友だちは公開しません。"
-          ],
-          "fixes": [
-            "ほかのデバイスから壊れた圧縮データが届いても、バックグラウンドサービスが停止しないよう修正しました（圧縮ライブラリを更新、GO-2026-6865）。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "主題：「設定 › 外觀」列出內建主題和你的自訂主題，可選淺色、深色或跟隨系統。主題用於這台裝置的主視窗和快速貼上視窗，不會同步到其他裝置；Android App 在自己的「外觀」裡設定。",
-            "像素主題：內建的像素風主題，點陣字型、切角粗邊、凸起的按鈕，石墨與紙兩套中性配色加像素綠；頁首有夜景和白天的場景，空頁面有像素插畫，還有遊戲式的選單游標、四格載入，可選 CRT 掃描線。",
-            "自訂主題：可以複製一份內建主題、匯入或匯出主題檔案、刪除不用的主題；儲存時會檢查文字對比度，看不清楚的顏色會提示出來。",
-            "讓 AI 做主題：`pasteferry-cli mcp` 是一個 MCP 服務，Claude、Cursor 等 AI 應用程式可以讀取主題格式、配色、檢查對比度，再儲存並套用主題。它只提供主題和背景圖相關的功能，不開放複製記錄、裝置和好友。"
-          ],
-          "fixes": [
-            "其他裝置傳來損壞的壓縮資料時，背景服務不會再當機（壓縮函式庫已更新，修正 GO-2026-6865）。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "主題：「設定 › 外觀」列出內置主題和你的自訂主題，可選淺色、深色或跟隨系統。主題用於這部裝置的主視窗和快速貼上視窗，不會同步到其他裝置；Android App 在自己的「外觀」裏設定。",
-            "像素主題：內置的像素風主題，點陣字型、切角粗邊、凸起的按鈕，石墨與紙兩套中性配色加像素綠；頁首有夜景和白天的場景，空頁面有像素插畫，還有遊戲式的選單游標、四格載入，可選 CRT 掃描線。",
-            "自訂主題：可以複製一份內置主題、匯入或匯出主題檔案、刪除不用的主題；儲存時會檢查文字對比度，看不清楚的顏色會提示出來。",
-            "讓 AI 做主題：`pasteferry-cli mcp` 是一個 MCP 服務，Claude、Cursor 等 AI 應用程式可以讀取主題格式、配色、檢查對比度，再儲存並套用主題。它只提供主題和背景圖相關的功能，不開放複製記錄、裝置和好友。"
-          ],
-          "fixes": [
-            "其他裝置傳來損壞的壓縮資料時，背景服務不會再停止運作（壓縮程式庫已更新，修正 GO-2026-6865）。"
           ]
         }
       }
