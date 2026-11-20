@@ -12,6 +12,20 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.13.1',
+ 'date': '2026-11-20',
+ 'changes': [('Interface scale: Make text, icons and spacing larger or smaller together, from 90% '
+              'to 150%, in Settings > Appearance or with Ctrl (⌘ on Mac) and =, - or 0. The main '
+              'window and the quick paste window change together.',
+              '界面缩放：在「设置 → 外观」里把文字、图标和间距一起放大或缩小，从 90% 到 150%；也可以按 Ctrl（Mac 上是 ⌘）加 =、- 或 '
+              '0。主窗口和快捷粘贴窗口一起变。',
+              '表示サイズ：「設定 → 外観」で文字・アイコン・余白をまとめて 90% から 150% まで拡大・縮小できます。Ctrl（Mac では ⌘）と =、-、0 '
+              'でも変えられます。メインウインドウとクイックペーストウィンドウに一緒に適用されます。',
+              '介面縮放：在「設定 → 外觀」裡把文字、圖示和間距一起放大或縮小，從 90% 到 150%；也可以按 Ctrl（Mac 上是 ⌘）加 =、- 或 '
+              '0。主視窗和快速貼上視窗會一起變。',
+              '介面縮放：在「設定 → 外觀」裏把文字、圖示和間距一起放大或縮小，由 90% 到 150%；亦可以按 Ctrl（Mac 上是 ⌘）加 =、- 或 '
+              '0。主視窗和快速貼上視窗會一起變。')],
+ 'fixes': []},
 {'version': '2.13.0',
  'date': '2026-11-20',
  'changes': [('Direct connections on mobile networks: Devices behind carrier networks that assign '

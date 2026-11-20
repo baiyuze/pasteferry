@@ -8,6 +8,61 @@ Older releases without these translations continue to fall back to English.
 EXTRA_LANGS = ["ar", "de", "es", "fr", "id", "it", "ko", "pl", "pt-BR", "ru", "tr", "uk", "vi"]
 
 EXTRA_NOTES = {
+    "2.13.1": {'ar': {'changes': ['حجم الواجهة: كبّر النصوص والأيقونات والمسافات أو صغّرها معًا من 90% إلى 150% '
+                        'من الإعدادات > المظهر، أو باستخدام Ctrl (⌘ على Mac) مع = أو - أو 0. تتغير '
+                        'النافذة الرئيسية ونافذة اللصق السريع معًا.'],
+            'fixes': []},
+     'de': {'changes': ['Oberflächengröße: Text, Symbole und Abstände gemeinsam von 90 % bis 150 % '
+                        'vergrößern oder verkleinern – unter Einstellungen > Erscheinungsbild oder mit '
+                        'Strg (⌘ auf dem Mac) und =, - oder 0. Hauptfenster und '
+                        'Schnelleinfügen-Fenster ändern sich gemeinsam.'],
+            'fixes': []},
+     'es': {'changes': ['Tamaño de la interfaz: amplía o reduce a la vez el texto, los iconos y los '
+                        'espacios, del 90 % al 150 %, en Configuración > Apariencia o con Ctrl (⌘ en '
+                        'Mac) y =, - o 0. La ventana principal y la de pegado rápido cambian juntas.'],
+            'fixes': []},
+     'fr': {'changes': ['Taille de l’interface : agrandissez ou réduisez ensemble le texte, les icônes '
+                        'et les espacements, de 90 % à 150 %, dans Réglages > Apparence ou avec Ctrl '
+                        '(⌘ sur Mac) et =, - ou 0. La fenêtre principale et celle du collage rapide '
+                        'changent ensemble.'],
+            'fixes': []},
+     'id': {'changes': ['Ukuran antarmuka: Perbesar atau perkecil teks, ikon, dan jarak sekaligus, '
+                        'dari 90% hingga 150%, di Pengaturan > Tampilan atau dengan Ctrl (⌘ di Mac) '
+                        'dan =, - atau 0. Jendela utama dan jendela tempel cepat berubah bersama.'],
+            'fixes': []},
+     'it': {'changes': ['Dimensione interfaccia: ingrandisci o riduci insieme testo, icone e '
+                        'spaziature, dal 90% al 150%, in Impostazioni > Aspetto o con Ctrl (⌘ su Mac) '
+                        'e =, - o 0. La finestra principale e quella di Incolla rapido cambiano '
+                        'insieme.'],
+            'fixes': []},
+     'ko': {'changes': ['화면 크기: 설정 > 모양에서 글자, 아이콘, 여백을 90%부터 150%까지 함께 확대하거나 축소할 수 있습니다. Ctrl(Mac에서는 '
+                        '⌘)과 =, -, 0으로도 바꿀 수 있습니다. 기본 창과 빠른 붙여넣기 창이 함께 바뀝니다.'],
+            'fixes': []},
+     'pl': {'changes': ['Rozmiar interfejsu: powiększaj lub pomniejszaj razem tekst, ikony i odstępy, '
+                        'od 90% do 150%, w Ustawienia > Wygląd albo skrótem Ctrl (⌘ na Macu) z =, - '
+                        'lub 0. Okno główne i okno szybkiego wklejania zmieniają się razem.'],
+            'fixes': []},
+     'pt-BR': {'changes': ['Tamanho da interface: aumente ou diminua juntos o texto, os ícones e os '
+                           'espaçamentos, de 90% a 150%, em Configurações > Aparência ou com Ctrl (⌘ '
+                           'no Mac) e =, - ou 0. A janela principal e a de colagem rápida mudam '
+                           'juntas.'],
+               'fixes': []},
+     'ru': {'changes': ['Масштаб интерфейса: увеличивайте или уменьшайте текст, значки и отступы '
+                        'вместе — от 90% до 150% — в «Настройки > Оформление» или сочетаниями Ctrl (⌘ '
+                        'на Mac) с =, - или 0. Главное окно и окно быстрой вставки меняются вместе.'],
+            'fixes': []},
+     'tr': {'changes': ['Arayüz boyutu: Metni, simgeleri ve boşlukları birlikte %90 ile %150 arasında '
+                        'büyütün veya küçültün; Ayarlar > Görünüm’den ya da Ctrl (Mac’te ⌘) ile =, - '
+                        'veya 0 tuşlarıyla. Ana pencere ve hızlı yapıştır penceresi birlikte değişir.'],
+            'fixes': []},
+     'uk': {'changes': ['Масштаб інтерфейсу: збільшуйте або зменшуйте текст, значки й відступи разом — '
+                        'від 90% до 150% — у «Налаштування > Оформлення» або сполученнями Ctrl (⌘ на '
+                        'Mac) з =, - чи 0. Головне вікно й вікно швидкої вставки змінюються разом.'],
+            'fixes': []},
+     'vi': {'changes': ['Cỡ giao diện: Phóng to hoặc thu nhỏ cùng lúc chữ, biểu tượng và khoảng cách, '
+                        'từ 90% đến 150%, trong Cài đặt > Giao diện hoặc bằng Ctrl (⌘ trên Mac) và =, '
+                        '- hoặc 0. Cửa sổ chính và cửa sổ dán nhanh thay đổi cùng nhau.'],
+            'fixes': []}},
     "2.13.0": {'ar': {'changes': ['اتصال مباشر عبر شبكات الجوال: يمكن الآن للأجهزة خلف شبكات المشغّلين التي '
                     'توزّع المنافذ بالتسلسل، كما في أجهزة Wi-Fi المحمولة وبيانات الجوال، أن تتصل '
                     'مباشرة بدل الاعتماد على الترحيل وحده. يكفي تحديث الجهاز الموجود على تلك '

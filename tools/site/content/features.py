@@ -30,7 +30,7 @@ COPY = {
 
     # ── 首页 ──
     # {version} 由官网 VERSION 生成；每次发版同步更新功能摘要。
-    "badge": ('{version}：随身 WiFi、手机网络也能直连，支持 IPv6 →', '{version}：隨身 Wi-Fi、行動網路也能直連，支援 IPv6 →', '{version}：隨身 Wi-Fi、流動網絡也能直連，支援 IPv6 →', '{version}: direct connections on mobile networks and over IPv6 →', '{version}：モバイル回線でも直接接続、IPv6 に対応 →'),
+    "badge": ('{version}：界面缩放，文字、图标一起放大 →', '{version}：介面縮放，文字、圖示一起放大 →', '{version}：介面縮放，文字、圖示一起放大 →', '{version}: interface scale for larger text and icons →', '{version}：表示サイズの設定、文字もアイコンもまとめて拡大 →'),
     # 首页手机区块（2.7）
     "home_phone_h2": ("手机也能用了。", "手機也能用了。", "手機也能用了。", "Your phone joins in.", "スマホでも使える。"),
     "home_phone_intro": ('安卓 App 可与电脑双向隔空传送，照片和文件一次多选，收到后保存或分享。不想安装？扫码打开网页，查看复制记录、发送内容，也能独立收发文件。',

@@ -1,5 +1,20 @@
 # 更新记录 / Changelog
 
+## 2.13.1 — 2026-11-20
+
+Scale the whole interface on Mac, Windows and Linux.
+
+### Changes
+
+- Interface scale: Make text, icons and spacing larger or smaller together, from 90% to 150%, in Settings > Appearance or with Ctrl (⌘ on Mac) and =, - or 0. The main window and the quick paste window change together.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional; update to use interface scale.
+- **Android**: no update needed. The app follows the system font size and display size.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.13.0 — 2026-11-20
 
 Keep devices on mobile networks and portable Wi-Fi connected: more of them connect directly, and relayed connections ride out brief network stalls.
