@@ -1,8 +1,6 @@
-"""首页重点与近期升级。各列依次为九种官网语言；版本亮点须与发布记录一致。"""
+"""首页产品重点。各列依次为九种官网语言。"""
 
 LANGUAGES = ("zh", "zh-tw", "zh-hk", "en", "ja", "ko", "de", "fr", "es")
-FEATURED_VERSION = "2.13.1"
-RECENT_VERSIONS = ("2.13.0", "2.12.2", "2.12.0")
 
 COPY = {
     "hero": (
@@ -15,60 +13,6 @@ COPY = {
         "Die Zwischenablage zwischen Mac, Windows und Linux synchronisieren, ohne gemeinsames Konto. Kopiertes suchen und als Favorit sichern oder Dateien und Ordner auf ein anderes Gerät ziehen.",
         "Synchronisez le presse-papiers entre Mac, Windows et Linux sans compte commun. Recherchez et conservez vos copies, ou glissez des fichiers et dossiers vers un autre appareil.",
         "Sincroniza el portapapeles entre Mac, Windows y Linux sin compartir cuenta. Busca y guarda tus copias, o arrastra archivos y carpetas a otro dispositivo.",
-    ),
-    "release_kicker": ("最新升级", "最新升級", "最新升級", "Latest update", "最新アップデート", "최신 업데이트", "Neues Update", "Dernière mise à jour", "Última actualización"),
-    "release_title": (
-        "文字、图标，<br>一起调到舒服的大小。",
-        "文字、圖示，<br>一起調到舒適的大小。",
-        "文字、圖示，<br>一起調到舒適的大小。",
-        "Make everything<br>the right size for you.",
-        "文字もアイコンも、<br>見やすい大きさに。",
-        "글자와 아이콘을<br>편안한 크기로.",
-        "Alles in der Größe,<br>die für dich passt.",
-        "Tout à la taille<br>qui vous convient.",
-        "Todo al tamaño<br>que te resulte cómodo.",
-    ),
-    "release_intro": (
-        "2.13.1 新增 90%–150% 界面缩放，文字、图标和间距一起调整，主窗口与快捷粘贴窗口同步生效。Mac、Windows、Linux 都能在「设置 → 外观」中调整，也支持快捷键。",
-        "2.13.1 新增 90%–150% 介面縮放，文字、圖示和間距一起調整，主視窗與快速貼上視窗同步生效。Mac、Windows、Linux 都能在「設定 → 外觀」調整，也支援快捷鍵。",
-        "2.13.1 新增 90%–150% 介面縮放，文字、圖示及間距一起調整，主視窗與快速貼上視窗同步生效。Mac、Windows、Linux 均可在「設定 → 外觀」調整，亦支援快捷鍵。",
-        "New in 2.13.1: scale text, icons and spacing together from 90% to 150%. The main and quick paste windows stay in sync. On Mac, Windows and Linux, adjust it in Settings → Appearance or use keyboard shortcuts.",
-        "2.13.1 では表示サイズを 90%〜150% に調整できます。文字・アイコン・余白が一緒に変わり、メインとクイックペーストの両ウィンドウに反映。Mac・Windows・Linux の「設定 → 外観」かショートカットで変更できます。",
-        "2.13.1에서는 글자, 아이콘, 여백을 90%–150%로 함께 조절합니다. 기본 창과 빠른 붙여넣기 창에 동시에 적용됩니다. Mac, Windows, Linux의 설정 → 외관이나 단축키로 변경하세요.",
-        "Neu in 2.13.1: Text, Symbole und Abstände gemeinsam von 90 % bis 150 % skalieren. Hauptfenster und Schnelleinfügen ändern sich zusammen. Auf Mac, Windows und Linux unter Einstellungen → Darstellung oder per Tastenkürzel anpassen.",
-        "Nouveau dans 2.13.1 : ajustez textes, icônes et espacements de 90 % à 150 %. La fenêtre principale et le collage rapide suivent le même réglage. Sur Mac, Windows et Linux, utilisez Paramètres → Apparence ou les raccourcis clavier.",
-        "Nuevo en 2.13.1: ajusta texto, iconos y espacios del 90 % al 150 %. La ventana principal y el pegado rápido cambian a la vez. En Mac, Windows y Linux, usa Ajustes → Apariencia o los atajos de teclado.",
-    ),
-    "release_more": ("查看完整更新 →", "查看完整更新 →", "查看完整更新 →", "Read the release notes →", "更新内容を見る →", "업데이트 내용 보기 →", "Alle Änderungen →", "Voir les nouveautés →", "Ver todos los cambios →"),
-    "recent_heading": ("近期还有这些升级", "近期還有這些升級", "近期還有這些升級", "Other recent improvements", "最近の主な改善", "최근 주요 개선", "Weitere aktuelle Verbesserungen", "Autres améliorations récentes", "Otras mejoras recientes"),
-    "recent": (
-        [("移动网络连接更稳", "随身 Wi-Fi 更容易建立直连，新增 IPv6 直连，中转也能应对短暂的网络拥塞。"),
-         ("从系统菜单发送文件", "Finder、Windows 右键和安卓分享菜单，都能直接把文件交给隔空贴发送。"),
-         ("远程大文件传输加速", "跨网络直连支持并行加速，发送和接收两端更新后启用。")],
-        [("行動網路連線更穩", "行動 Wi-Fi 更容易建立直連，新增 IPv6 直連，中繼也能應對短暫的網路壅塞。"),
-         ("從系統選單傳送檔案", "Finder、Windows 右鍵與安卓分享選單，都能直接將檔案交給隔空貼傳送。"),
-         ("遠端大檔案傳輸加速", "跨網路直連支援平行加速，傳送與接收兩端更新後啟用。")],
-        [("流動網絡連線更穩", "流動 Wi-Fi 更容易建立直連，新增 IPv6 直連，中繼亦能應對短暫的網絡擠塞。"),
-         ("從系統選單傳送檔案", "Finder、Windows 右鍵及安卓分享選單，均可直接將檔案交給隔空貼傳送。"),
-         ("遠端大檔案傳輸加速", "跨網絡直連支援平行加速，傳送及接收兩端更新後啟用。")],
-        [("Steadier mobile connections", "More portable Wi-Fi networks can connect directly, with IPv6 direct connections and relays that recover from brief congestion."),
-         ("Send from system menus", "Send files from Finder, the Windows context menu or Android’s share sheet."),
-         ("Faster remote file transfers", "Parallel transfers can speed up slow direct connections across networks. Update both computers to enable them.")],
-        [("モバイル回線でも安定", "モバイル Wi-Fi での直接接続を改善。IPv6 での直接接続と、一時的な混雑から復帰できる中継にも対応。"),
-         ("システムメニューから送信", "Finder、Windows の右クリック、Android の共有メニューからファイルを送信できます。"),
-         ("離れた相手への大容量転送を高速化", "低速な直接接続で並列転送を試します。送信側・受信側の両方を更新すると有効になります。")],
-        [("더 안정적인 모바일 연결", "휴대용 Wi-Fi에서 직접 연결이 쉬워지고 IPv6 직접 연결과 일시적인 혼잡에서 복구되는 릴레이를 지원합니다."),
-         ("시스템 메뉴에서 파일 보내기", "Finder, Windows 우클릭 메뉴, Android 공유 메뉴에서 파일을 보낼 수 있습니다."),
-         ("원격 대용량 파일 전송 가속", "느린 네트워크 간 직접 연결에서 병렬 전송으로 속도를 높입니다. 양쪽 컴퓨터를 업데이트하면 활성화됩니다.")],
-        [("Stabiler im Mobilfunknetz", "Direktverbindungen über mobiles WLAN gelingen häufiger. IPv6 und Relays mit Erholung bei kurzen Netzengpässen kommen hinzu."),
-         ("Aus Systemmenüs senden", "Dateien direkt aus Finder, dem Windows-Kontextmenü oder dem Android-Teilen-Menü senden."),
-         ("Schnellere Fernübertragung", "Parallele Übertragung kann langsame Direktverbindungen zwischen Netzwerken beschleunigen. Dafür beide Computer aktualisieren.")],
-        [("Connexions mobiles plus stables", "Davantage de connexions directes via Wi-Fi mobile, prise en charge d’IPv6 et relais plus résistants aux brèves congestions."),
-         ("Envoyer depuis les menus système", "Envoyez des fichiers depuis Finder, le menu contextuel Windows ou le partage Android."),
-         ("Transferts distants plus rapides", "Les transferts parallèles peuvent accélérer les connexions directes lentes entre réseaux. Mettez les deux ordinateurs à jour.")],
-        [("Conexiones móviles más estables", "Más conexiones directas con Wi-Fi portátil, conexión directa por IPv6 y retransmisiones que se recuperan de congestiones breves."),
-         ("Envía desde los menús del sistema", "Envía archivos desde Finder, el menú contextual de Windows o el menú Compartir de Android."),
-         ("Transferencias remotas más rápidas", "La transferencia en paralelo puede acelerar conexiones directas lentas entre redes. Actualiza ambos ordenadores para activarla.")],
     ),
     "history": (
         "按 {key} 打开复制记录，搜索并选中一条，直接粘贴到当前 App。常用内容可以收藏，文件会另存副本。",

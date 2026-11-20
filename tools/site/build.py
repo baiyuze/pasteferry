@@ -21,7 +21,7 @@ from content.privacy import COPY as PRIVACY_COPY
 from content.themes import COPY as THEMES_COPY, EXAMPLE as THEME_EXAMPLE, DESKTOP_CONFIG as THEME_DESKTOP, CLAUDE_CODE as THEME_CLAUDE_CODE
 from content.official import COPY as OFFICIAL_COPY
 from content.features import localized as features_copy
-from content.home import localized as home_copy, FEATURED_VERSION, RECENT_VERSIONS
+from content.home import localized as home_copy
 from content.feedback import COPY as FEEDBACK_COPY
 from content.packs import PACKS, pack
 
@@ -676,22 +676,12 @@ def home(code: str) -> str:
     c = load(code)
     f = features_copy(code)
     h = home_copy(code)
-    if FEATURED_VERSION != VERSION:
-        raise ValueError(f"Update content/home.py for release {VERSION}")
     _, tour_ui, _ = tour_copy(code, c)
     path, hl, _, _ = LANGS[code]
     up = "../" * path.count("/")
     a = up + "assets/"
     shots = shots_dir(code)
     badge = fill(f["badge"], {"version": VERSION})
-    recent = "\n".join(
-        f'''          <li class="tile">
-            <span class="new">{version}</span>
-            <h3><a href="{REPO}/releases/tag/v{version}">{esc(title)}</a></h3>
-            <p>{esc(text)}</p>
-          </li>'''
-        for version, (title, text) in zip(RECENT_VERSIONS, h["recent"])
-    )
     destinations = (("send", FEATURES + "#friends"), ("star", THEMES), ("lock", SECURITY))
     extras = "\n".join(
         f'''          <li class="tile">
@@ -722,25 +712,10 @@ def home(code: str) -> str:
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <a class="release-note" href="#latest">{keys(badge)}</a>
+        <a class="release-note" href="{REPO}/releases/tag/v{VERSION}">{keys(badge)}</a>
         <h1 class="display">{c["h1"]}</h1>
         <p class="lede">{esc(h["hero"])}</p>{cta(c, "", START, tour_ui["watch"])}
         {stage(c, f)}
-      </div>
-    </section>
-
-    <section class="section" id="latest" aria-labelledby="latest-title">
-      <div class="wrap">
-        <p class="kicker"><span class="new">{esc(h["release_kicker"])} · {VERSION}</span></p>
-        <h2 id="latest-title">{h["release_title"]}</h2>
-        <p class="intro">{esc(h["release_intro"])}</p>
-        <p class="more"><a href="{REPO}/releases/tag/v{VERSION}">{esc(h["release_more"])}</a></p>
-        <div class="block">
-          <h3 class="kicker">{esc(h["recent_heading"])}</h3>
-          <ul class="tiles" aria-label="{esc(h['recent_heading'])}">
-{recent}
-          </ul>
-        </div>
       </div>
     </section>
 
