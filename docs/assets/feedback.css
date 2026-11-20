@@ -8,7 +8,7 @@
 .feedback-shell textarea {resize:vertical; min-height:10rem; line-height:1.7}
 .feedback-shell :focus-visible {outline:2px solid var(--blue-hi); outline-offset:3px}
 .feedback-shell button {cursor:pointer; border:1px solid var(--rule-strong); border-radius:.65rem; padding:.65rem 1rem; background:var(--surface-2); color:var(--ink); font:inherit}
-.feedback-shell button.primary {background:var(--blue); border-color:var(--blue); color:white}
+.feedback-shell button.primary {background:var(--action); border-color:var(--action); color:white}
 .feedback-shell button:disabled {opacity:.55; cursor:wait}
 .feedback-card,.feedback-form {padding:1.5rem; margin:1rem 0; background:var(--surface); border:1px solid var(--rule); border-radius:1rem}
 .feedback-card h3 {font-size:1.15rem; margin:.75rem 0}

@@ -17,14 +17,16 @@
   --ink: #f3f3f1;
   --ink-2: #cfcfcb;
   --dim: #95959b;
-  --faint: #66666c;
+  --faint: #8c8c92;
   --blue: #3d8bea;
   --blue-hi: #6ea9f1;
+  /* 白字操作使用独立底色，链接和示意线仍保留较亮的蓝色。 */
+  --action: #0a66d8;
   --blue-wash: rgba(61, 139, 234, 0.13);
   --bar: rgba(20, 20, 22, 0.74);
   --bar-rule: rgba(255, 255, 255, 0.06);
   --pop-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
-  --button-hover: #2f7ad6;
+  --button-hover: #0756bb;
   --device-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
   --key-bg: linear-gradient(#2e2e33, #232327);
   --key-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 0 #111, 0 6px 16px rgba(0, 0, 0, 0.45);
@@ -44,7 +46,7 @@
 }
 
 /* 浅色。默认跟随系统；顶栏的外观菜单可以固定成浅色或深色（<html data-theme>，由 <head> 里的脚本设置）。
- * 没有脚本时按系统设置。App 的界面截图在浅色下换成浅色截图（有的话），界面演示与终端保持深色。 */
+ * 没有脚本时按系统设置。截图、代码块和示意窗口也使用对应外观。 */
 :root[data-theme="light"] {
   color-scheme: light;
   --ground: #ffffff;
@@ -54,8 +56,8 @@
   --rule-strong: #d1d1d6;
   --ink: #1d1d1f;
   --ink-2: #3a3a3c;
-  --dim: #6e6e73;
-  --faint: #a1a1a6;
+  --dim: #65656b;
+  --faint: #68686e;
   --blue: #0a66d8;
   --blue-hi: #0a62cf;
   --blue-wash: rgba(10, 102, 216, 0.08);
@@ -79,8 +81,8 @@
     --rule-strong: #d1d1d6;
     --ink: #1d1d1f;
     --ink-2: #3a3a3c;
-    --dim: #6e6e73;
-    --faint: #a1a1a6;
+    --dim: #65656b;
+    --faint: #68686e;
     --blue: #0a66d8;
     --blue-hi: #0a62cf;
     --blue-wash: rgba(10, 102, 216, 0.08);
@@ -402,7 +404,7 @@ caption.skip {
 
 .lang ul a:hover,
 .lang ul a:focus-visible {
-  background: var(--blue);
+  background: var(--action);
   color: #fff;
   text-decoration: none;
   outline: none;
@@ -474,7 +476,7 @@ caption.skip {
 
 .appearance ul button:hover,
 .appearance ul button:focus-visible {
-  background: var(--blue);
+  background: var(--action);
   color: #fff;
   outline: none;
 }
@@ -613,7 +615,7 @@ code {
   min-height: 3rem;
   padding: 0.65rem 1.4rem;
   border-radius: 999px;
-  background: var(--blue);
+  background: var(--action);
   color: #fff;
   font-weight: 600;
   font-size: 1rem;
@@ -1169,7 +1171,7 @@ kbd {
 }
 
 @keyframes ping {
-  25%, 65% { color: #fff; background: var(--blue); border-color: var(--blue); }
+  25%, 65% { color: #fff; background: var(--action); border-color: var(--action); }
 }
 
 @keyframes sig {
@@ -1767,7 +1769,7 @@ td {
   margin: 0;
   padding: 1rem 1.1rem;
   border-radius: 12px;
-  background: #0d0d0f;
+  background: var(--surface);
   box-shadow: inset 0 0 0 1px var(--rule);
   color: var(--ink-2);
   font: 0.8rem/1.7 var(--mono);
@@ -1779,6 +1781,7 @@ td {
 .article pre code {
   padding: 0;
   background: none;
+  color: inherit;
   font-size: inherit;
 }
 
@@ -2308,8 +2311,8 @@ td {
   margin: 0;
   border-radius: 12px;
   overflow: hidden;
-  background: #0c0c0e;
-  box-shadow: 0 0 0 1px var(--rule-strong), 0 24px 60px rgba(0, 0, 0, 0.45);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--rule-strong), var(--device-shadow);
 }
 
 .t-bar,
@@ -2319,8 +2322,8 @@ td {
   align-items: center;
   height: 2.3rem;
   padding: 0 0.85rem;
-  background: #232327;
-  border-bottom: 1px solid #2e2e33;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--rule-strong);
   color: var(--dim);
   font-size: 0.78rem;
   white-space: nowrap;
@@ -2358,7 +2361,6 @@ td {
 .t-bar.win {
   justify-content: space-between;
   padding-right: 0;
-  background: #202020;
 }
 
 .t-tab {
@@ -2452,10 +2454,6 @@ td {
   font-weight: 600;
 }
 
-.explorer {
-  background: #191919;
-}
-
 .files {
   margin: 0;
   padding: 0.5rem;
@@ -2528,7 +2526,7 @@ td {
   min-width: 0;
   padding: 0.2rem 0.8rem;
   border-radius: 7px;
-  background: #141416;
+  background: var(--ground);
   color: var(--ink-2);
   font-size: 0.8rem;
   overflow: hidden;
@@ -3073,7 +3071,7 @@ td {
 
 .bar nav .menu ul a:hover,
 .bar nav .menu ul a:focus-visible {
-  background: var(--blue);
+  background: var(--action);
   color: #fff;
   outline: none;
 }

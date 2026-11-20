@@ -5,7 +5,7 @@
   --mac-line: #2c2c2e;
   --mac-ink: #f5f5f7;
   --mac-dim: #98989d;
-  --mac-faint: #636366;
+  --mac-faint: #96969c;
   --mac-rule: #3a3a3c;
   --mac-panel: #2a2a2c;
   --mac-sep: #333335;
@@ -28,8 +28,8 @@
   --mac-bar: #f6f6f6;
   --mac-line: #e5e5ea;
   --mac-ink: #1d1d1f;
-  --mac-dim: #8e8e93;
-  --mac-faint: #aeaeb2;
+  --mac-dim: #65656b;
+  --mac-faint: #68686e;
   --mac-rule: #e3e3e8;
   --mac-panel: #fbfbfd;
   --mac-sep: #e5e5ea;
@@ -53,8 +53,8 @@
     --mac-bar: #f6f6f6;
     --mac-line: #e5e5ea;
     --mac-ink: #1d1d1f;
-    --mac-dim: #8e8e93;
-    --mac-faint: #aeaeb2;
+    --mac-dim: #65656b;
+    --mac-faint: #68686e;
     --mac-rule: #e3e3e8;
     --mac-panel: #fbfbfd;
     --mac-sep: #e5e5ea;
@@ -345,7 +345,7 @@
 
 @keyframes key-hit {
   0%, 3% { background: var(--surface-2); color: var(--ink-2); border-color: var(--rule-strong); }
-  6%, 14% { background: var(--blue); color: #fff; border-color: var(--blue); }
+  6%, 14% { background: var(--action); color: #fff; border-color: var(--action); }
   22%, 100% { background: var(--surface-2); color: var(--ink-2); border-color: var(--rule-strong); }
 }
 
@@ -730,14 +730,14 @@
 .qp-stage:not(.live) .qp-row.first,
 .qp-stage.filtered .qp-row.first,
 .qp-stage.live:not(.filtered) .qp-row.top {
-  background: var(--mac-blue);
+  background: var(--action);
   color: #fff;
 }
 
 .qp-stage:not(.live) .qp-row.first :is(.n, .ico, .m, .star),
 .qp-stage.filtered .qp-row.first :is(.n, .ico, .m, .star),
 .qp-stage.live:not(.filtered) .qp-row.top :is(.n, .ico, .m, .star) {
-  color: rgba(255, 255, 255, 0.85);
+  color: inherit;
 }
 
 .qp-foot {
@@ -905,8 +905,8 @@
 }
 
 .qp-steps.live li.on .num {
-  border-color: var(--blue);
-  background: var(--blue);
+  border-color: var(--action);
+  background: var(--action);
   color: #fff;
 }
 
@@ -1210,7 +1210,7 @@
 
 @keyframes receive-press {
   0%, 6% { background: transparent; }
-  9%, 13% { background: var(--blue); border-color: var(--blue); color: #fff; }
+  9%, 13% { background: var(--action); border-color: var(--action); color: #fff; }
   18%, 100% { background: transparent; }
 }
 
