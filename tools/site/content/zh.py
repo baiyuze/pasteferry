@@ -887,3 +887,6 @@ C = {
         "界面支持 18 种语言，包括从右到左的阿拉伯文",
     ],
 }
+
+# Label of the mobile/web tab on the download page.
+C["download"]["phone"]["tab"] = '手机 / 网页版'

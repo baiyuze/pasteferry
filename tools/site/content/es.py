@@ -18,7 +18,7 @@ C = {'brand': 'PasteFerry',
  'nav_how': 'como funciona',
  'nav_faq': 'Preguntas frecuentes',
  'nav_server': 'Formas de conectarse',
- 'nav_download': 'Descarga',
+ 'nav_download': 'Descargar',
  'lang_label': 'Idioma',
  'h1': 'Tus ordenadores. Tu teléfono.<br>Todo a tu alcance.',
  'lede': 'Copia en un ordenador y pega en otro. Recupera tu historial y envía fotos y archivos entre Mac, '
@@ -1054,7 +1054,8 @@ C = {'brand': 'PasteFerry',
                                   'aplicaciones lean el portapapeles en segundo plano y para distribuir una '
                                   'se necesita un certificado. Utilice la página web en su lugar.',
                                   'Los contenidos están cifrados entre el teléfono y la computadora; Úselo '
-                                  'en casa o en una red de confianza.']},
+                                  'en casa o en una red de confianza.'],
+                        'tab': 'Teléfono / web'},
               'title': 'Descargar PasteFerry: Mac (Apple Silicon, Intel), Windows y Linux',
               'description': 'PasteFerry para cada sistema: versiones Apple Silicon e Intel para macOS 13 o '
                              'posterior, un instalador y un zip portátil para Windows 10 y 11, y paquetes '

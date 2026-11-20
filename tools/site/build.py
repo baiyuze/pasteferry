@@ -120,7 +120,6 @@ GLOBE = ('<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-widt
          'M10 2.75c2.1 2 3.1 4.4 3.1 7.25s-1 5.25-3.1 7.25"/></svg>')
 CHEVRON = ('<svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" '
            'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 4.5 3 3 3-3"/></svg>')
-PHONE_LABEL = "手机 / 网页版"
 PHONE_ICON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
              'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
              '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/>'
@@ -2380,7 +2379,7 @@ def download_page(code: str) -> str:
             <button type="button" role="tab" id="tab-windows" aria-controls="windows">Windows</button>
             <button type="button" role="tab" id="tab-macos" aria-controls="macos">macOS</button>
             <button type="button" role="tab" id="tab-linux" aria-controls="linux">Linux</button>
-            <button type="button" role="tab" id="tab-phone" aria-controls="phone">{PHONE_LABEL}</button>
+            <button type="button" role="tab" id="tab-phone" aria-controls="phone">{esc(ph["tab"])}</button>
           </div>
 
           <section class="os" id="windows" role="tabpanel" aria-labelledby="tab-windows">

@@ -897,3 +897,6 @@ C = {
         "表示言語は 18 言語（右から左に書くアラビア語を含む）",
     ],
 }
+
+# Label of the mobile/web tab on the download page.
+C["download"]["phone"]["tab"] = 'スマホ / Web'

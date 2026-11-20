@@ -1125,7 +1125,8 @@ C = {'brand': 'PasteFerry',
                                   'Zwischenablage im Hintergrund lesen, und für die Verteilung ist ein '
                                   'Zertifikat erforderlich. Verwenden Sie stattdessen die Webseite.',
                                   'Inhalte werden zwischen dem Telefon und dem Computer verschlüsselt; '
-                                  'Verwenden Sie es zu Hause oder in einem Netzwerk, dem Sie vertrauen.']},
+                                  'Verwenden Sie es zu Hause oder in einem Netzwerk, dem Sie vertrauen.'],
+                        'tab': 'Smartphone / Web'},
               'title': 'Laden Sie PasteFerry herunter: Mac (Apple Silicon, Intel), Windows und Linux',
               'description': 'PasteFerry für jedes System: Apple-Silicon- und Intel-Versionen für macOS 13 '
                              'oder höher, ein Installationsprogramm und eine tragbare Zip-Datei für Windows '

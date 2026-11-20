@@ -963,3 +963,6 @@ C = {
         "Interface in 18 languages, including Arabic (right to left)",
     ],
 }
+
+# Label of the mobile/web tab on the download page.
+C["download"]["phone"]["tab"] = 'Phone / web'
