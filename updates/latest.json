@@ -1,65 +1,161 @@
 {
   "schema": 1,
-  "latest": "2.13.1",
-  "date": "2026-11-20",
+  "latest": "2.13.2",
+  "date": "2026-11-21",
   "mirrors": [
     {
       "source": "gitee",
-      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.13.1/"
+      "base": "https://gitee.com/baiyuze/pasteferry/releases/download/v2.13.2/"
     },
     {
       "source": "github",
-      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/"
+      "base": "https://github.com/baiyuze/pasteferry/releases/download/v2.13.2/"
     }
   ],
   "assets": {
     "mac-arm64": {
       "name": "PasteFerry-mac-apple-silicon.dmg",
-      "size": 29661691,
-      "sha256": "3572fa2598fa24ac3c51640f3275fa815503bb8d7d1e0da02e707bb7d34f5c66"
+      "size": 29343007,
+      "sha256": "95f7c7d130092e0ae4cb4de54ea4b0ef88549e36060a7e4267a1a6be7f12c46b"
     },
     "mac-x64": {
       "name": "PasteFerry-mac-intel.dmg",
-      "size": 31532160,
-      "sha256": "609ed88e145f6f5e9cd6ce1304995757d60fef94ac87abdfb318e6e337fae428"
+      "size": 31529736,
+      "sha256": "289386f192bab4c37cd04b66e3ffd22c97a5f2ffe423e11f4212304c2edc0905"
     },
     "mac-universal": {
       "name": "PasteFerry.dmg",
-      "size": 57624969,
-      "sha256": "55e7bef480feca4c2c24e31f9404191fdece8b85793a722bf54d0666cc0b6f3e"
+      "size": 57622272,
+      "sha256": "2c6ee3cde2fa1e863693baaf7c7541ac31ed2c2354b19336736169ccc077eb2f"
     },
     "windows-setup": {
       "name": "PasteFerry-Setup.exe",
-      "size": 27461554,
-      "sha256": "e3c9e5b0052d63f2eef9ef5dfe677384254aa2d29ff04f908be9bd70d327d188"
+      "size": 27463270,
+      "sha256": "8e552b057e877bdfcce85aab45be59dfcee997ed28c568e8f88d70947e09f6a3"
     },
     "windows-portable": {
       "name": "PasteFerry-windows-x64.zip",
-      "size": 35475484,
-      "sha256": "90bc61f7edb6f17a52d407e04de31163d12b44a756861410f1906ece05336e13"
+      "size": 35475675,
+      "sha256": "192ea4d8163e60324545a331538ebe9cf6e8a6701f0e802c6853f122f9479857"
     },
     "linux-amd64-deb": {
       "name": "PasteFerry-linux-amd64.deb",
-      "size": 26933776,
-      "sha256": "214c30f5a5da070800b4e108d6d9063d13182a9ecc81f0418bf460a646a3814b"
+      "size": 26934428,
+      "sha256": "186de48ed5107cb94b72628c7638084aec8473ae211804cc560e8fc378543f0e"
     },
     "linux-arm64-deb": {
       "name": "PasteFerry-linux-arm64.deb",
-      "size": 25269954,
-      "sha256": "aa1656d2b6de5d87b581c5f553bc0eed77499d4ff971d77954b165dcb3d8c757"
+      "size": 25269578,
+      "sha256": "9c33d9fc71fc2564adab6707737b235ccf236d94e2553e3ef61da827c867c10b"
     },
     "linux-amd64-tar": {
       "name": "PasteFerry-linux-amd64.tar.gz",
-      "size": 32991051,
-      "sha256": "256d3093736d8693401070352671fa0da783bf64f5c7a9b6d70abeda981ee518"
+      "size": 32990900,
+      "sha256": "35249d7909572dd3117c6b2c5be935a6cc188a82ea862172f60e0fa1e7d23dc2"
     },
     "linux-arm64-tar": {
       "name": "PasteFerry-linux-arm64.tar.gz",
-      "size": 31178326,
-      "sha256": "48ca92b9d8a66666a0eeb66d83219ed196222068f6bbf1ff5c5abd5a335144cd"
+      "size": 31179061,
+      "sha256": "64a87a6bbac3d99efc4f45f79943a793bd4a28bd54c996d904d1a769d33957d3"
     }
   },
   "releases": [
+    {
+      "version": "2.13.2",
+      "date": "2026-11-21",
+      "notes": {
+        "en": {
+          "fixes": [
+            "Reopening the desktop app after quitting from the tray now starts the background service automatically instead of repeatedly loading until Restart is clicked."
+          ]
+        },
+        "zh-Hans": {
+          "fixes": [
+            "从托盘退出后重新打开桌面应用，现在会自动启动后台服务，不再反复加载、必须手动点击“重新启动”。"
+          ]
+        },
+        "ja": {
+          "fixes": [
+            "トレイから終了したデスクトップアプリを開き直すと、バックグラウンドサービスが自動で起動します。「再起動」をクリックするまで読み込みを繰り返す問題を修正しました。"
+          ]
+        },
+        "zh-Hant-TW": {
+          "fixes": [
+            "從系統匣結束後重新開啟桌面應用程式，現在會自動啟動背景服務，不再反覆載入、必須手動按「重新啟動」。"
+          ]
+        },
+        "zh-Hant-HK": {
+          "fixes": [
+            "從系統匣退出後重新開啟桌面應用程式，現在會自動啟動背景服務，不再反覆載入、必須手動按「重新啟動」。"
+          ]
+        },
+        "ar": {
+          "fixes": [
+            "عند فتح تطبيق سطح المكتب مجددًا بعد الخروج من علبة النظام، تبدأ خدمة الخلفية تلقائيًا بدلًا من تكرار التحميل حتى النقر على إعادة التشغيل."
+          ]
+        },
+        "de": {
+          "fixes": [
+            "Beim erneuten Öffnen der Desktop-App nach dem Beenden über das Infobereich-Symbol startet der Hintergrunddienst automatisch, statt bis zum Klick auf Neustart wiederholt zu laden."
+          ]
+        },
+        "es": {
+          "fixes": [
+            "Al volver a abrir la aplicación de escritorio después de salir desde la bandeja del sistema, el servicio en segundo plano se inicia automáticamente, sin repetir la carga hasta pulsar Reiniciar."
+          ]
+        },
+        "fr": {
+          "fixes": [
+            "Après avoir quitté l’application de bureau depuis la zone de notification, sa réouverture démarre automatiquement le service en arrière-plan, sans chargement en boucle jusqu’au clic sur Redémarrer."
+          ]
+        },
+        "id": {
+          "fixes": [
+            "Saat aplikasi desktop dibuka kembali setelah keluar dari baki sistem, layanan latar belakang kini dimulai otomatis, tanpa terus memuat hingga Mulai ulang diklik."
+          ]
+        },
+        "it": {
+          "fixes": [
+            "Riaprendo l’app desktop dopo averla chiusa dall’area di notifica, il servizio in background si avvia automaticamente senza ripetere il caricamento fino al clic su Riavvia."
+          ]
+        },
+        "ko": {
+          "fixes": [
+            "트레이에서 종료한 데스크톱 앱을 다시 열면 백그라운드 서비스가 자동으로 시작됩니다. 다시 시작을 누를 때까지 로딩이 반복되던 문제를 수정했습니다."
+          ]
+        },
+        "pl": {
+          "fixes": [
+            "Po ponownym otwarciu aplikacji po zamknięciu jej z zasobnika systemowego usługa w tle uruchamia się automatycznie, zamiast wielokrotnie się ładować do kliknięcia Uruchom ponownie."
+          ]
+        },
+        "pt-BR": {
+          "fixes": [
+            "Ao reabrir o aplicativo após sair pela bandeja do sistema, o serviço em segundo plano inicia automaticamente, sem repetir o carregamento até clicar em Reiniciar."
+          ]
+        },
+        "ru": {
+          "fixes": [
+            "При повторном открытии приложения после выхода через системный трей фоновая служба запускается автоматически, без бесконечной загрузки до нажатия «Перезапустить»."
+          ]
+        },
+        "tr": {
+          "fixes": [
+            "Sistem tepsisinden kapatılan masaüstü uygulaması yeniden açıldığında arka plan hizmeti artık otomatik başlar; Yeniden başlat tıklanana kadar yükleme tekrarlanmaz."
+          ]
+        },
+        "uk": {
+          "fixes": [
+            "Після повторного відкриття застосунку після виходу через системний трей фонова служба запускається автоматично, без повторного завантаження до натискання «Перезапустити»."
+          ]
+        },
+        "vi": {
+          "fixes": [
+            "Khi mở lại ứng dụng sau khi thoát từ khay hệ thống, dịch vụ nền tự khởi động, không còn tải lặp lại cho đến khi nhấn Khởi động lại."
+          ]
+        }
+      }
+    },
     {
       "version": "2.13.1",
       "date": "2026-11-20",
@@ -911,67 +1007,6 @@
         "zh-Hant-HK": {
           "changes": [
             "GitHub Star 邀請：用滿 3 日、同步過 20 項以後，複製記錄列表上方會出現一條小橫額，問你覺得隔空貼好不好用，喜歡的話可以到 GitHub 點個 Star。「以後再說」7 日後再出現一次，「去點 Star」或 × 之後不再出現。「設定 › 關於」裏一直有點 Star 的入口。計數只存在本機，不會上傳。"
-          ]
-        }
-      }
-    },
-    {
-      "version": "2.10.1",
-      "date": "2026-11-07",
-      "notes": {
-        "en": {
-          "changes": [
-            "Background images: Settings › Appearance › Background image fills the window behind the sidebar and pages with a picture. The sidebar and lists become translucent, and blur, scrim and panel opacity have three steps each. Use image colors takes the accent from the picture. It can also show in Quick Paste, and the Android app can pick a background photo.",
-            "Custom scenery: Settings › Appearance › Scenery replaces the picture behind the page header and the one at the bottom of the sidebar with your own, in any theme; in the pixel theme these are the pixel landscape and camp. Scenery can also be turned off.",
-            "AI: the MCP theme format now describes background, scenery and scene, so AI apps can set a background image or replace the scenery with pictures imported through background_import."
-          ],
-          "fixes": [
-            "Background images saved in a theme, including by AI through MCP, were accepted but never shown. They now appear in the app.",
-            "The minimum scrim for readable text was calculated too light. It is now measured the way the app draws it, against the theme's own text colors, and text on a background image or header picture always reaches 4.5:1."
-          ]
-        },
-        "zh-Hans": {
-          "changes": [
-            "背景图：「设置 › 外观 › 背景图」用一张图铺满侧边栏和页面后面，侧边栏和列表底板变成半透明；模糊、遮罩、面板各有三档，「用图片配色」用图片的主色作强调色。也可以在快捷粘贴窗口显示，Android App 可以选一张照片作背景。",
-            "自定义风景：「设置 › 外观 › 风景」把页面顶部和侧边栏底部的图换成你自己的，任何主题都能用；像素主题里这两处是像素风景和小营地。也可以关掉风景。",
-            "AI：MCP 的主题格式加入了 background、scenery、scene 的说明，AI 应用可以设置背景图，或用 background_import 导入的图换掉风景。"
-          ],
-          "fixes": [
-            "主题里的背景图（包括 AI 通过 MCP 设置的）以前保存了却不显示，现在会显示出来。",
-            "文字看得清所需的遮罩浓度以前算得偏淡；现在按界面实际的画法、用主题自己的文字颜色来算，背景图和页眉图上的文字都达到 4.5:1。"
-          ]
-        },
-        "ja": {
-          "changes": [
-            "背景画像：「設定 › 外観 › 背景画像」でサイドバーとページの後ろに画像を敷けます。サイドバーとリストは半透明になり、ぼかし・スクリム・パネルはそれぞれ 3 段階。「画像の色を使う」で画像の主な色をアクセントにします。クイックペーストにも表示でき、Android アプリでは写真を背景にできます。",
-            "カスタム風景：「設定 › 外観 › 風景」でページ上部とサイドバー下部の画像を自分の画像に変えられます（どのテーマでも可）。ピクセルテーマではここがピクセルの風景とキャンプです。風景をオフにもできます。",
-            "AI：MCP のテーマ形式に background、scenery、scene の説明を追加しました。AI アプリが背景画像を設定したり、background_import で読み込んだ画像で風景を置き換えたりできます。"
-          ],
-          "fixes": [
-            "テーマに保存した背景画像（MCP 経由で AI が設定したものを含む）が表示されていなかった問題を修正しました。",
-            "文字を読みやすくするためのスクリムの濃さが薄く計算されていました。実際の描画方法とテーマの文字色で計算するようにし、背景画像やページ上部の画像の上の文字は常に 4.5:1 以上になります。"
-          ]
-        },
-        "zh-Hant-TW": {
-          "changes": [
-            "背景圖：「設定 › 外觀 › 背景圖」用一張圖鋪滿側邊欄和頁面後面，側邊欄和列表底板變成半透明；模糊、遮罩、面板各有三檔，「用圖片配色」用圖片的主色作為強調色。也可以在快速貼上視窗顯示，Android App 可以選一張照片作背景。",
-            "自訂風景：「設定 › 外觀 › 風景」把頁面頂部和側邊欄底部的圖換成你自己的，任何主題都能用；像素主題裡這兩處是像素風景和小營地。也可以關掉風景。",
-            "AI：MCP 的主題格式加入了 background、scenery、scene 的說明，AI 應用程式可以設定背景圖，或用 background_import 匯入的圖換掉風景。"
-          ],
-          "fixes": [
-            "主題裡的背景圖（包括 AI 透過 MCP 設定的）以前儲存了卻不顯示，現在會顯示出來。",
-            "文字看得清楚所需的遮罩濃度以前算得偏淡；現在按介面實際的畫法、用主題自己的文字顏色來算，背景圖和頁首圖上的文字都達到 4.5:1。"
-          ]
-        },
-        "zh-Hant-HK": {
-          "changes": [
-            "背景圖：「設定 › 外觀 › 背景圖」用一張圖鋪滿側邊欄和頁面後面，側邊欄和列表底板變成半透明；模糊、遮罩、面板各有三檔，「用圖片配色」用圖片的主色作強調色。亦可以在快速貼上視窗顯示，Android App 可以揀一張相片做背景。",
-            "自訂風景：「設定 › 外觀 › 風景」把頁面頂部和側邊欄底部的圖換成你自己的，任何主題都可以用；像素主題裏這兩處是像素風景和小營地。亦可以關掉風景。",
-            "AI：MCP 的主題格式加入了 background、scenery、scene 的說明，AI 應用程式可以設定背景圖，或用 background_import 匯入的圖換掉風景。"
-          ],
-          "fixes": [
-            "主題裏的背景圖（包括 AI 透過 MCP 設定的）以前儲存了卻不顯示，現在會顯示出來。",
-            "文字看得清楚所需的遮罩濃度以前計得偏淡；現在按介面實際的畫法、用主題自己的文字顏色來計，背景圖和頁首圖上的文字都達到 4.5:1。"
           ]
         }
       }
