@@ -482,13 +482,22 @@ class AppState extends ChangeNotifier implements RecordDetails {
       unawaited(_syncQuickPaste());
       _historySearch.schedule(Duration.zero);
       _favoriteSearch.schedule(Duration.zero);
-    } on DaemonNotRunning {
+    } catch (e) {
+      // A forced Windows exit can leave daemon.json pointing at a dead port.
+      // Recover failed handshakes as well as missing endpoints, using the same
+      // install action as the service page's restart button. Only try once so
+      // a slow startup is not interrupted by every connection retry.
       if (!_sessionStartTried && service.available && !_quitting) {
         _sessionStartTried = true;
         try {
           final current = await service.state();
           if (current != ServiceState.mustMove &&
-              current != ServiceState.unavailable) {
+              current != ServiceState.unavailable &&
+              !_quitting) {
+            final previous = _conn;
+            _conn = null;
+            theme.detach();
+            await previous?.close();
             await service.install();
             await _connect();
             return;
@@ -498,10 +507,9 @@ class AppState extends ChangeNotifier implements RecordDetails {
         }
       }
       await _refreshServiceState();
-      _scheduleRetry(appL10n.linkServiceNotRunning);
-    } catch (e) {
-      await _refreshServiceState();
-      _scheduleRetry(_describe(e));
+      _scheduleRetry(
+        e is DaemonNotRunning ? appL10n.linkServiceNotRunning : _describe(e),
+      );
     }
   }
 

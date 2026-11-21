@@ -19,6 +19,32 @@ class _Service implements BackgroundService {
       throw StateError('$invocation');
 }
 
+class _RecoverableService implements BackgroundService {
+  _RecoverableService(this.onInstall, {this.current = ServiceState.stopped});
+
+  final Future<void> Function() onInstall;
+  final ServiceState current;
+  int installs = 0;
+
+  @override
+  bool get available => true;
+  @override
+  Future<ServiceState> state() async => current;
+  @override
+  Future<bool> removeLegacy() async => false;
+  @override
+  Future<bool> launchAtLogin() async => false;
+  @override
+  Future<void> install() async {
+    installs++;
+    await onInstall();
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw StateError('$invocation');
+}
+
 class _Daemon extends DaemonServiceBase {
   final statusStarted = Completer<void>();
   final statusResult = Completer<Status>();
@@ -104,6 +130,137 @@ void main() {
   }) => DaemonConnection.connect(
     dataDir: dir.path,
     requestTimeout: requestTimeout,
+  );
+
+  for (final current in [ServiceState.stopped, ServiceState.running]) {
+    test('reopening recovers a stale endpoint with service $current', () async {
+      daemon.statusResult.complete(Status(deviceId: 'self'));
+      final endpoint = File('${dir.path}/daemon.json');
+      final currentEndpoint = await endpoint.readAsString();
+      final oldPort = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      await endpoint.writeAsString(
+        jsonEncode({'port': oldPort.port, 'token': 'old-session'}),
+      );
+      await oldPort.close();
+      final service = _RecoverableService(() async {
+        await endpoint.writeAsString(currentEndpoint);
+      }, current: current);
+      final state = AppState(service: service, connectDaemon: () => connect());
+      addTearDown(state.dispose);
+
+      await state.connect().timeout(const Duration(seconds: 10));
+
+      expect(service.installs, 1);
+      expect(state.link, LinkState.online);
+      expect(state.status?.deviceId, 'self');
+    });
+  }
+
+  test(
+    'reopening repairs an unreadable endpoint using the startup action',
+    () async {
+      daemon.statusResult.complete(Status(deviceId: 'self'));
+      final endpoint = File('${dir.path}/daemon.json');
+      final currentEndpoint = await endpoint.readAsString();
+      await endpoint.writeAsString('{incomplete');
+      final service = _RecoverableService(() async {
+        await endpoint.writeAsString(currentEndpoint);
+      });
+      final state = AppState(service: service, connectDaemon: () => connect());
+      addTearDown(state.dispose);
+
+      await state.connect();
+
+      expect(service.installs, 1);
+      expect(state.link, LinkState.online);
+    },
+  );
+
+  test('reopening starts the service when its endpoint was removed', () async {
+    daemon.statusResult.complete(Status(deviceId: 'self'));
+    final endpoint = File('${dir.path}/daemon.json');
+    final currentEndpoint = await endpoint.readAsString();
+    await endpoint.delete();
+    final service = _RecoverableService(() async {
+      await endpoint.writeAsString(currentEndpoint);
+    });
+    final state = AppState(service: service, connectDaemon: () => connect());
+    addTearDown(state.dispose);
+
+    await state.connect();
+
+    expect(service.installs, 1);
+    expect(state.link, LinkState.online);
+  });
+
+  test(
+    'slow startup reconnects automatically without repeatedly restarting',
+    () async {
+      daemon.statusResult.complete(Status(deviceId: 'self'));
+      final endpoint = File('${dir.path}/daemon.json');
+      final currentEndpoint = await endpoint.readAsString();
+      await endpoint.delete();
+      // Detached process creation completes before the daemon publishes its port.
+      final service = _RecoverableService(() async {});
+      final state = AppState(service: service, connectDaemon: () => connect());
+      addTearDown(state.dispose);
+
+      await state.connect();
+      expect(state.link, LinkState.offline);
+      expect(service.installs, 1);
+
+      final online = Completer<void>();
+      state.addListener(() {
+        if (state.isOnline && !online.isCompleted) online.complete();
+      });
+      await endpoint.writeAsString(currentEndpoint);
+      await online.future.timeout(const Duration(seconds: 10));
+
+      expect(state.link, LinkState.online);
+      expect(service.installs, 1);
+    },
+  );
+
+  for (final current in [ServiceState.mustMove, ServiceState.unavailable]) {
+    test('automatic recovery respects $current', () async {
+      await File('${dir.path}/daemon.json').delete();
+      final service = _RecoverableService(() async {}, current: current);
+      final state = AppState(service: service, connectDaemon: () => connect());
+      addTearDown(state.dispose);
+
+      await state.connect();
+      await state.connect();
+
+      expect(service.installs, 0);
+      expect(state.link, LinkState.offline);
+    });
+  }
+
+  test(
+    'failed automatic startup stays bounded and manual repair still works',
+    () async {
+      daemon.statusResult.complete(Status(deviceId: 'self'));
+      final endpoint = File('${dir.path}/daemon.json');
+      final currentEndpoint = await endpoint.readAsString();
+      await endpoint.delete();
+      var failInstall = true;
+      final service = _RecoverableService(() async {
+        if (failInstall) throw StateError('startup failed');
+        await endpoint.writeAsString(currentEndpoint);
+      });
+      final state = AppState(service: service, connectDaemon: () => connect());
+      addTearDown(state.dispose);
+
+      await state.connect();
+      await state.connect();
+      expect(service.installs, 1);
+      expect(state.link, LinkState.offline);
+
+      failInstall = false;
+      await state.enableService();
+      expect(service.installs, 2);
+      expect(state.link, LinkState.online);
+    },
   );
 
   test(
