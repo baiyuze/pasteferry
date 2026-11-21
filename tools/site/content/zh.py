@@ -176,7 +176,7 @@ C = {
 
     "specs_h2": "技术规格",
     "specs": [
-        ("版本", '2.13.1，<time datetime="2026-11-20">2026 年 11 月 20 日</time>发布'),
+        ("版本", '2.13.2，<time datetime="2026-11-21">2026 年 11 月 21 日</time>发布'),
         ("Mac 客户端", "macOS 13 Ventura 及以上；Apple 芯片与 Intel 芯片各有一个安装包，约 25 MB，不需要 Rosetta；也有两种芯片通用的版本，约 47 MB"),
         ("Windows 客户端", "Windows 10 与 Windows 11，x64；按用户安装，不需要管理员权限；安装包约 23 MB"),
         ("Linux 客户端", "x64 与 ARM64；.deb（Debian、Ubuntu 等）或 tar.gz（其他发行版），约 22 MB；"

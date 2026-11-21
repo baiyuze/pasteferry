@@ -12,6 +12,15 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.13.2',
+ 'date': '2026-11-21',
+ 'changes': [],
+ 'fixes': [('Reopening the desktop app after quitting from the tray now starts the background '
+            'service automatically instead of repeatedly loading until Restart is clicked.',
+            '从托盘退出后重新打开桌面应用，现在会自动启动后台服务，不再反复加载、必须手动点击“重新启动”。',
+            'トレイから終了したデスクトップアプリを開き直すと、バックグラウンドサービスが自動で起動します。「再起動」をクリックするまで読み込みを繰り返す問題を修正しました。',
+            '從系統匣結束後重新開啟桌面應用程式，現在會自動啟動背景服務，不再反覆載入、必須手動按「重新啟動」。',
+            '從系統匣退出後重新開啟桌面應用程式，現在會自動啟動背景服務，不再反覆載入、必須手動按「重新啟動」。')]},
 {'version': '2.13.1',
  'date': '2026-11-20',
  'changes': [('Interface scale: Make text, icons and spacing larger or smaller together, from 90% '

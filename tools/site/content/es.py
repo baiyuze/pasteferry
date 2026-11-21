@@ -219,7 +219,7 @@ C = {'brand': 'PasteFerry',
             'ambas líneas de huellas digitales coincidan antes de confirmar. Con el Servicio no necesita la '
             'dirección de la otra computadora; ingresa uno solo entre subredes o con Tailscale.',
  'specs_h2': 'Especificaciones',
- 'specs': [('Versión', '2.13.1, lanzado <time datetime="2026-11-20">el 20 de noviembre de 2026</time>'),
+ 'specs': [('Versión', '2.13.2, lanzado <time datetime="2026-11-21">el 21 de noviembre de 2026</time>'),
            ('aplicación para mac',
             'macOS 13 Ventura o posterior; descargas separadas para Apple Silicon e Intel, aproximadamente '
             '25 MB cada una, sin Rosetta; una versión universal para ambos pesa aproximadamente 47 MB'),
@@ -1126,7 +1126,7 @@ FEATURES = {'nav_features': 'Características',
  'theme_system': 'Seguir el sistema',
  'theme_light': 'Claro',
  'theme_dark': 'Oscuro',
- 'badge': '{version}: ajusta el tamaño del texto y los iconos a la vez →',
+ 'badge': '{version}: el servicio se recupera al volver a abrir →',
  'home_phone_h2': 'Tu teléfono se une.',
  'home_phone_intro': 'Intercambia contenido con el ordenador en la misma red, por Android o con un QR en el navegador.',
  'home_phone_points': ['<b>Utilice el navegador</b> para el historial y transferencias de archivos '

@@ -8,6 +8,55 @@ Older releases without these translations continue to fall back to English.
 EXTRA_LANGS = ["ar", "de", "es", "fr", "id", "it", "ko", "pl", "pt-BR", "ru", "tr", "uk", "vi"]
 
 EXTRA_NOTES = {
+    "2.13.2": {'ar': {'changes': [],
+        'fixes': ['عند فتح تطبيق سطح المكتب مجددًا بعد الخروج من علبة النظام، تبدأ خدمة الخلفية '
+                  'تلقائيًا بدلًا من تكرار التحميل حتى النقر على إعادة التشغيل.']},
+ 'de': {'changes': [],
+        'fixes': ['Beim erneuten Öffnen der Desktop-App nach dem Beenden über das '
+                  'Infobereich-Symbol startet der Hintergrunddienst automatisch, statt bis zum '
+                  'Klick auf Neustart wiederholt zu laden.']},
+ 'es': {'changes': [],
+        'fixes': ['Al volver a abrir la aplicación de escritorio después de salir desde la bandeja '
+                  'del sistema, el servicio en segundo plano se inicia automáticamente, sin '
+                  'repetir la carga hasta pulsar Reiniciar.']},
+ 'fr': {'changes': [],
+        'fixes': ['Après avoir quitté l’application de bureau depuis la zone de notification, sa '
+                  'réouverture démarre automatiquement le service en arrière-plan, sans chargement '
+                  'en boucle jusqu’au clic sur Redémarrer.']},
+ 'id': {'changes': [],
+        'fixes': ['Saat aplikasi desktop dibuka kembali setelah keluar dari baki sistem, layanan '
+                  'latar belakang kini dimulai otomatis, tanpa terus memuat hingga Mulai ulang '
+                  'diklik.']},
+ 'it': {'changes': [],
+        'fixes': ['Riaprendo l’app desktop dopo averla chiusa dall’area di notifica, il servizio '
+                  'in background si avvia automaticamente senza ripetere il caricamento fino al '
+                  'clic su Riavvia.']},
+ 'ko': {'changes': [],
+        'fixes': ['트레이에서 종료한 데스크톱 앱을 다시 열면 백그라운드 서비스가 자동으로 시작됩니다. 다시 시작을 누를 때까지 로딩이 반복되던 문제를 '
+                  '수정했습니다.']},
+ 'pl': {'changes': [],
+        'fixes': ['Po ponownym otwarciu aplikacji po zamknięciu jej z zasobnika systemowego usługa '
+                  'w tle uruchamia się automatycznie, zamiast wielokrotnie się ładować do '
+                  'kliknięcia Uruchom ponownie.']},
+ 'pt-BR': {'changes': [],
+           'fixes': ['Ao reabrir o aplicativo após sair pela bandeja do sistema, o serviço em '
+                     'segundo plano inicia automaticamente, sem repetir o carregamento até clicar '
+                     'em Reiniciar.']},
+ 'ru': {'changes': [],
+        'fixes': ['При повторном открытии приложения после выхода через системный трей фоновая '
+                  'служба запускается автоматически, без бесконечной загрузки до нажатия '
+                  '«Перезапустить».']},
+ 'tr': {'changes': [],
+        'fixes': ['Sistem tepsisinden kapatılan masaüstü uygulaması yeniden açıldığında arka plan '
+                  'hizmeti artık otomatik başlar; Yeniden başlat tıklanana kadar yükleme '
+                  'tekrarlanmaz.']},
+ 'uk': {'changes': [],
+        'fixes': ['Після повторного відкриття застосунку після виходу через системний трей фонова '
+                  'служба запускається автоматично, без повторного завантаження до натискання '
+                  '«Перезапустити».']},
+ 'vi': {'changes': [],
+        'fixes': ['Khi mở lại ứng dụng sau khi thoát từ khay hệ thống, dịch vụ nền tự khởi động, '
+                  'không còn tải lặp lại cho đến khi nhấn Khởi động lại.']}},
     "2.13.1": {'ar': {'changes': ['حجم الواجهة: كبّر النصوص والأيقونات والمسافات أو صغّرها معًا من 90% إلى 150% '
                         'من الإعدادات > المظهر، أو باستخدام Ctrl (⌘ على Mac) مع = أو - أو 0. تتغير '
                         'النافذة الرئيسية ونافذة اللصق السريع معًا.'],

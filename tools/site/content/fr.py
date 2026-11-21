@@ -237,7 +237,7 @@ C = {'brand': 'PasteFerry',
             "pas besoin de l'adresse de l'autre ordinateur ; vous en entrez un uniquement sur les "
             'sous-réseaux ou avec Tailscale.',
  'specs_h2': 'Spécifications',
- 'specs': [('Version', '2.13.1, publié <time datetime="2026-11-20">le 20 novembre 2026</time>'),
+ 'specs': [('Version', '2.13.2, publié <time datetime="2026-11-21">le 21 novembre 2026</time>'),
            ('Application Mac',
             'macOS 13 Ventura ou version ultérieure\xa0; téléchargements séparés pour Apple Silicon et '
             'Intel, environ 25 Mo chacun, pas de Rosetta ; une version universelle pour les deux fait '
@@ -1176,7 +1176,7 @@ FEATURES = {'nav_features': 'Caractéristiques',
  'theme_system': 'Suivre le système',
  'theme_light': 'Clair',
  'theme_dark': 'Sombre',
- 'badge': '{version} : réglez la taille du texte et des icônes ensemble →',
+ 'badge': '{version} : le service redémarre à la réouverture →',
  'home_phone_h2': 'Votre téléphone participe.',
  'home_phone_intro': 'Échangez avec votre ordinateur sur le même réseau, via Android ou un QR code dans le navigateur.',
  'home_phone_points': ["<b>Utilisez le navigateur</b> pour l'historique et les transferts de fichiers "

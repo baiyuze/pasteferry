@@ -1,5 +1,20 @@
 # 更新记录 / Changelog
 
+## 2.13.2 — 2026-11-21
+
+Restore background service startup when reopening the desktop app.
+
+### Fixes
+
+- Reopening the desktop app after quitting from the tray now starts the background service automatically instead of repeatedly loading until Restart is clicked.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended on Windows for automatic background service recovery; optional on Mac and Linux. Pairings, history and settings are preserved.
+- **Android**: no update needed.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.13.1 — 2026-11-20
 
 Scale the whole interface on Mac, Windows and Linux.

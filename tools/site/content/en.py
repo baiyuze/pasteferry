@@ -185,7 +185,7 @@ C = {
 
     "specs_h2": "Specifications",
     "specs": [
-        ("Version", '2.13.1, released <time datetime="2026-11-20">November 20, 2026</time>'),
+        ("Version", '2.13.2, released <time datetime="2026-11-21">November 21, 2026</time>'),
         ("Mac app", "macOS 13 Ventura or later; separate downloads for Apple silicon and Intel, about 25 MB each, no Rosetta; "
                     "a universal version for both is about 47 MB"),
         ("Windows app", "Windows 10 and Windows 11, x64; installs per user, no administrator rights; about 23 MB download"),

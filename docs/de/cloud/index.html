@@ -200,7 +200,7 @@
               <li>Führen Sie diese Zeilen aus, mit Ihrer öffentlichen IP auf der letzten:<span class="aside">Ersetzen Sie auf ARM <code>amd64</code> durch <code>arm64</code>.</span>
                 <div class="code">
                   <button class="copy" type="button" data-done="Kopiert">Kopieren</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.1/pasteferry-server-linux-amd64.tar.gz
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.2/pasteferry-server-linux-amd64.tar.gz
 tar xzf pasteferry-server-linux-amd64.tar.gz
 cd pasteferry-server-linux-amd64
 sudo ./install.sh 203.0.113.10</code></pre>
@@ -223,7 +223,7 @@ sudo ./install.sh 203.0.113.10</code></pre>
 <span class="t-step">▶ Starting</span>
   ✓ Running
 
-Installed: pasteferry-server 2.13.1
+Installed: pasteferry-server 2.13.2
 In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://203.0.113.10:8787/signal</span>
@@ -247,7 +247,7 @@ Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768
         <p class="intro">Öffnen Sie <code>http://203.0.113.10:8787/healthz</code> (mit Ihrer öffentlichen IP) in einem Browser auf einem beliebigen Computer. Wenn Sie diese Zeile sehen, funktioniert es.</p>
         <figure class="browser" role="img" aria-label="Ein Browser zeigt http://203.0.113.10:8787/healthz, mit dem Serverstatus „OK“ und seiner Version an">
           <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">http://203.0.113.10:8787/healthz</span></div>
-          <pre class="b-body">{"status":"ok","version":"2.13.1"}</pre>
+          <pre class="b-body">{"status":"ok","version":"2.13.2"}</pre>
         </figure>
         <p class="note">Wenn es nicht geladen wird, lesen Sie unten die <a href="#faq">-Fragen</a> .</p>
       </div>

@@ -52,7 +52,7 @@ COPY = {
 
     # ── 首页 ──
     # {version} 由官网 VERSION 生成；每次发版同步更新功能摘要。
-    "badge": ('{version}：界面缩放，文字、图标一起放大 →', '{version}：介面縮放，文字、圖示一起放大 →', '{version}：介面縮放，文字、圖示一起放大 →', '{version}: interface scale for larger text and icons →', '{version}：表示サイズの設定、文字もアイコンもまとめて拡大 →'),
+    "badge": ('{version}：退出后重新打开，后台服务自动恢复 →', '{version}：結束後重新開啟，背景服務自動恢復 →', '{version}：退出後重新開啟，背景服務自動恢復 →', '{version}: background service recovers when reopening →', '{version}：開き直すとバックグラウンドサービスが自動復旧 →'),
     # 首页手机区块（2.7）
     "home_phone_h2": ("手机也能用了。", "手機也能用了。", "手機也能用了。", "Your phone joins in.", "スマホでも使える。"),
     "home_phone_intro": ('同一网络内，用安卓 App 或扫码网页与电脑互传内容。',
