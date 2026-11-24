@@ -32,16 +32,23 @@
   }
 
   // 首屏演示：点 Mac 桌面上的一样东西（或选中后按 ⌘C / Ctrl+C）就复制，化作一张纸飞到 Windows 笔记本上粘贴。
-  // 上面切换两台电脑在家里和公司（先经服务器交换连接信息，再直连），还是同一个 Wi‑Fi（不用服务器）。
-  // 第一次滚动到可见时自动演示一次，之后等访客自己点
+  // 下面切换两台电脑在家里和公司（先经服务器交换连接信息，再直连），还是同一个 Wi‑Fi（不用服务器）。
+  // 看得见时像宣传视频一样轮流复制四样东西；访客点了哪样、或按了暂停就停下，再按一次继续。
+  // 滚出视野或切到别的标签页时不轮播；系统设置了减少动态效果时不轮播，也不显示暂停按钮
   var stage = document.querySelector("[data-play]");
   if (stage) {
     var demo = stage.closest("[data-demo]");
     var files = Array.prototype.slice.call(stage.querySelectorAll(".mac .file"));
     var landed = stage.querySelector(".win .file");
     var status = demo.querySelector("[data-demo-status]");
+    var pauseButton = demo.querySelector("[data-demo-pause]");
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var current = files[0];
     var announce;
+    var cycle;
+    var started = false;
+    var visible = false;
+    var paused = reduce || !pauseButton;
 
     // 按两台设备实际的位置算出纸飞行的起点、终点与弧线，以及服务器的位置和两条交换连接信息的点线
     var layout = function () {
@@ -65,8 +72,10 @@
       var mx = (ma.left + ma.right) / 2 - box.left;
       var wx = (wa.left + wa.right) / 2 - box.left;
       var top = Math.min(ma.top, wa.top) - box.top;
-      // 弧线的控制点在屏幕顶上 rise 处；纸飞到弧线顶附近；服务器在弧线上方
-      var rise = Math.min(Math.max(30, (tx - sx) * 0.18), 100);
+      // 弧线的控制点在屏幕顶上 rise 处；纸飞到弧线顶附近；服务器在弧线上方。
+      // rise 按两块屏幕的距离算，不随复制的是哪一样变，轮播时服务器不会上下跳。
+      // 上限与 site.css 里 .demo .stage 上方的留白对应
+      var rise = Math.min(Math.max(30, (wx - mx) * 0.16), 84);
       var peak = top - rise;
       var startY = sy - a.height / 2;
       var endY = ty - b.height / 2;
@@ -79,14 +88,15 @@
       path.setAttribute("d", "M" + sx + " " + startY + " Q" + (sx + tx) / 2 + " " + peak + " " + tx + " " + endY);
       label.style.setProperty("--ly", apex - 26 + "px");
       var px = (mx + wx) / 2;
-      var py = peak - 46;
+      var py = peak - 40;
       stage.style.setProperty("--px", px + "px");
       stage.style.setProperty("--py", py + "px");
       sig.setAttribute("d", "M" + mx + " " + top + " Q" + mx + " " + py + " " + (px - 24) + " " + py +
         " M" + (px + 24) + " " + py + " Q" + wx + " " + py + " " + wx + " " + top);
     };
 
-    var play = function (file) {
+    // 只有访客自己点的才读给读屏软件听，自动轮播的不读
+    var play = function (file, speak) {
       current = file;
       files.forEach(function (f) { f.classList.toggle("sel", f === file); });
       // 落在 Windows 上的那一样换成刚复制的；动画开始时它先藏着，落地时才出现
@@ -97,18 +107,57 @@
       void stage.offsetWidth; // 强制重排，让动画从头再来
       stage.classList.add("play");
       clearTimeout(announce);
+      if (!speak) return;
       announce = setTimeout(function () {
         status.textContent = demo.getAttribute("data-pasted").replace("{item}", file.getAttribute("data-name"));
-      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 :
-        stage.getAttribute("data-mode") === "wan" ? 3100 : 2300);
+      }, reduce ? 0 : stage.getAttribute("data-mode") === "wan" ? 3100 : 2300);
+    };
+
+    // 一次演示跨网络约 4.4 秒、同一网络约 3.6 秒，播完停一会儿再复制下一样
+    var schedule = function () {
+      clearTimeout(cycle);
+      if (paused || !visible || document.hidden) return;
+      cycle = setTimeout(function () {
+        play(files[(files.indexOf(current) + 1) % files.length]);
+        schedule();
+      }, stage.getAttribute("data-mode") === "wan" ? 5600 : 4800);
+    };
+
+    var setPaused = function (value) {
+      paused = value;
+      if (pauseButton) {
+        pauseButton.classList.toggle("paused", value);
+        var label = pauseButton.getAttribute(value ? "data-resume" : "data-pause");
+        pauseButton.setAttribute("aria-label", label);
+        pauseButton.title = label;
+      }
+      schedule();
+    };
+
+    if (pauseButton && !reduce) {
+      pauseButton.hidden = false;
+      pauseButton.addEventListener("click", function () {
+        if (paused) {
+          setPaused(false);
+          play(files[(files.indexOf(current) + 1) % files.length]);
+          schedule();
+        } else {
+          setPaused(true);
+        }
+      });
+    }
+
+    var pick = function (file) {
+      if (pauseButton && !reduce) setPaused(true);
+      play(file, true);
     };
 
     files.forEach(function (file) {
-      file.addEventListener("click", function () { play(file); });
+      file.addEventListener("click", function () { pick(file); });
       file.addEventListener("keydown", function (e) {
         if ((e.metaKey || e.ctrlKey) && (e.key === "c" || e.key === "C")) {
           e.preventDefault();
-          play(file);
+          pick(file);
         }
       });
     });
@@ -121,7 +170,8 @@
           b.tabIndex = b === button ? 0 : -1;
         });
         stage.setAttribute("data-mode", button.getAttribute("data-mode"));
-        play(current);
+        play(current, true);
+        schedule();
       });
       button.addEventListener("keydown", function (e) {
         var step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
@@ -135,17 +185,22 @@
 
     layout();
     window.addEventListener("resize", layout);
-    // 滚动到可见时才开始，免得还没看到就播完了
+    document.addEventListener("visibilitychange", schedule);
+    // 滚动到可见时才开始，免得还没看到就播完了；滚出视野后停止轮播，回来时接着播
     if ("IntersectionObserver" in window) {
       var seen = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting) {
+        visible = entries[0].isIntersecting;
+        if (visible && !started) {
+          started = true;
           play(current);
-          seen.disconnect();
         }
-      }, { threshold: 0.35 });
+        schedule();
+      }, { threshold: 0.25 });
       seen.observe(stage);
     } else {
+      visible = started = true;
       play(current);
+      schedule();
     }
   }
 

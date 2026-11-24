@@ -350,11 +350,13 @@ def footer(c: dict, code: str, up: str, sub: str = "") -> str:
   </footer>"""
 
 
-def cta(c: dict, base: str, start: str = "", tour_label: str = "", note: bool = True) -> str:
+def cta(c: dict, base: str, start: str = "", tour_label: str = "", note: bool = True, inline_start: bool = False) -> str:
     """下载按钮，指向下载页：在那里按系统和芯片选安装包。base 是语言根目录的相对路径，
-    start 是快速开始页面的地址，给了就在下面加一行链接。"""
-    link = f'\n        <a class="start-link" href="{start}">{c["start_link"]}</a>' if start else ""
-    platform_note = f'\n        <p class="note">{c["dl_note"]}</p>' if note else ""
+    start 是快速开始页面的地址，给了就在下面加一行链接；inline_start 时接在平台说明的同一行后面（首屏省一行）。"""
+    link = f'\n        <a class="start-link" href="{start}">{c["start_link"]}</a>' if start and not inline_start else ""
+    after = (f'<span class="sep" aria-hidden="true"> · </span><a class="start-link" href="{start}">{c["start_link"]}</a>'
+             if start and inline_start else "")
+    platform_note = f'\n        <p class="note">{c["dl_note"]}{after}</p>' if note else ""
     tour = (f'\n          <a class="button quiet tour-link" href="{base}{TOUR}" data-tour-open aria-haspopup="dialog">'
             f'<span aria-hidden="true">▶</span> {esc(tour_label)} <span class="tour-duration">1:25</span></a>') if tour_label else ""
     return f"""
@@ -620,10 +622,17 @@ MOVED_ANCHORS = """  <script>
 """
 
 
+# 首屏演示的暂停与播放图标
+PAUSE_ICON = ('<svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="5" width="2.6" height="10" rx="1"/>'
+              '<rect x="11.4" y="5" width="2.6" height="10" rx="1"/></svg>')
+PLAY_ICON = '<svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.2 5.2v9.6a.8.8 0 0 0 1.2.7l7.4-4.8a.8.8 0 0 0 0-1.4L8.4 4.5a.8.8 0 0 0-1.2.7z"/></svg>'
+
+
 def stage(c: dict, f: dict) -> str:
     """首屏演示：Mac 桌面上四样东西（文件、截图、一段文字、文件夹），点一样就复制，化作一张纸飞到 Windows
-    笔记本上粘贴出来。上面切换两台电脑在家里和公司（服务器只介绍，内容直连），还是在同一个 Wi‑Fi（不用服务器）。
-    动画由 site.js 驱动；没有脚本时停在复制完成的样子。"""
+    笔记本上粘贴出来。画面紧跟在下载按钮下面，下方切换两台电脑在家里和公司（服务器只介绍，内容直连），
+    还是在同一个 Wi‑Fi（不用服务器），旁边是暂停按钮。
+    动画由 site.js 驱动：像宣传视频一样轮流复制四样东西，访客点了哪样或按暂停就停下；没有脚本时停在复制完成的样子。"""
     items = [("doc", c["stage_file"]), ("pic", f["demo_image"]), ("note", f["demo_text"]), ("folder", f["demo_folder"])]
     files = "\n".join(
         f'                <button type="button" class="file{" sel" if i == 0 else ""}" data-name="{esc(name)}" '
@@ -640,7 +649,6 @@ def stage(c: dict, f: dict) -> str:
 
     pasted = esc(f["demo_pasted"].replace("{device}", c["stage_win"]))
     return f"""<div class="demo" data-demo data-pasted="{pasted}">
-          <div class="demo-modes" role="radiogroup" aria-label="{esc(f["demo_where"])}">{modes}</div>
           <div class="stage" data-play data-mode="wan" role="group" aria-label="{esc(c["stage_label"])}">
             <figure class="device mac">
               <div class="screen"><div class="desk">
@@ -667,9 +675,20 @@ def stage(c: dict, f: dict) -> str:
             <span class="arc-label" aria-hidden="true"><span class="wan">{c["stage_arc"]}</span><span class="lan">{esc(f["demo_no_server"])}</span></span>
             <span class="sheet-fly" aria-hidden="true">{LINES}</span>
           </div>
+          <div class="demo-bar">
+            <div class="demo-modes" role="radiogroup" aria-label="{esc(f["demo_where"])}">{modes}</div>
+            <button type="button" class="demo-pause" data-demo-pause hidden aria-label="{esc(f["demo_pause"])}" title="{esc(f["demo_pause"])}" data-pause="{esc(f["demo_pause"])}" data-resume="{esc(f["demo_resume"])}">{PAUSE_ICON}{PLAY_ICON}</button>
+          </div>
           <p class="demo-hint">{esc(f["demo_hint"])}</p>
           <p class="skip" aria-live="polite" data-demo-status></p>
         </div>"""
+
+
+def hero_title(h1: str, code: str) -> str:
+    """首页大标题：宽屏排成一行，把演示画面让进首屏；窄屏仍按文案里的 <br> 分两行。
+    中文、日文没有空格，换行处直接接上；其他语言在换行后补一个空格（行首的空格不占位置）。"""
+    gap = "" if code.startswith("zh") or code == "ja" else " "
+    return h1.replace("<br>", '<br class="hero-br">' + gap)
 
 
 def home(code: str) -> str:
@@ -710,11 +729,11 @@ def home(code: str) -> str:
 {header(c, code, up)}
 
   <main id="main">
-    <section class="hero">
+    <section class="hero home-hero">
       <div class="wrap">
         <a class="release-note" href="{REPO}/releases/tag/v{VERSION}">{keys(badge)}</a>
-        <h1 class="display">{c["h1"]}</h1>
-        <p class="lede">{esc(h["hero"])}</p>{cta(c, "", START, tour_ui["watch"])}
+        <h1 class="display">{hero_title(c["h1"], code)}</h1>
+        <p class="lede">{esc(h["hero"])}</p>{cta(c, "", START, tour_ui["watch"], inline_start=True)}
         {stage(c, f)}
       </div>
     </section>

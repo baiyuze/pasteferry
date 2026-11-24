@@ -680,6 +680,88 @@ code {
   overflow: hidden;
 }
 
+/* 首页首屏像新品发布页：文字收紧，演示画面紧跟在按钮下面，常见的笔记本屏幕上不用滚动就能看到两台电脑。
+ * 上下留白跟着窗口高度收放，矮屏上先省留白 */
+.home-hero {
+  padding-top: clamp(2rem, 6.5vh, 4.5rem);
+}
+
+.home-hero .release-note {
+  margin-bottom: clamp(1rem, 2.6vh, 1.5rem);
+  padding: 0.35rem 0.95rem;
+  border-color: var(--rule);
+  border-radius: 999px;
+  font-size: clamp(0.8rem, 2.4vw, 0.9rem);
+}
+
+.home-hero .display {
+  font-size: clamp(2.6rem, 6.4vw, 5.25rem);
+  word-spacing: 0.08em;
+}
+
+/* 中文标题里的逗号与句号用半宽，排成一行时逗号后面不会空出一大块 */
+:lang(zh) .home-hero .display {
+  font-feature-settings: "halt";
+}
+
+/* 日文、韩文的标题更长，字号收小，宽屏才放得进一行 */
+:lang(ja) .home-hero .display {
+  font-size: clamp(1.85rem, 7.4vw, 3.4rem);
+}
+
+:lang(ko) .home-hero .display {
+  font-size: clamp(2.2rem, 6.4vw, 4.1rem);
+}
+
+/* 宽屏标题排成一行 */
+@media (min-width: 64rem) {
+  .hero-br {
+    display: none;
+  }
+}
+
+.home-hero .lede {
+  margin-top: clamp(0.9rem, 2.2vh, 1.35rem);
+  max-width: 44rem;
+  font-size: clamp(1rem, 1.7vw, 1.18rem);
+}
+
+/* 中文按标点断行，不把「搜索」这样的词拆到两行 */
+:lang(zh) .home-hero .lede {
+  word-break: keep-all;
+}
+
+.home-hero .cta {
+  margin-top: clamp(1.25rem, 3.2vh, 2rem);
+}
+
+.home-hero .note {
+  margin-top: 0.85rem;
+}
+
+.home-hero .note .start-link {
+  display: inline;
+  margin: 0;
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+.home-hero .note .sep {
+  white-space: pre;
+}
+
+/* 手机上一行放不下，「快速开始」另起一行 */
+@media (max-width: 34rem) {
+  .home-hero .note .sep {
+    display: none;
+  }
+
+  .home-hero .note .start-link {
+    display: block;
+    margin-top: 0.4rem;
+  }
+}
+
 .tour-link > span:first-child { margin-right: 0.15rem; color: var(--blue-hi); font-size: 0.75rem; }
 .tour-duration { color: var(--dim); font: 0.8rem var(--mono); }
 .tour-is-open { overflow: hidden; }
@@ -931,15 +1013,21 @@ kbd {
   color: var(--ink);
 }
 
-/* 可以点的演示：Mac 桌面上四样东西，点哪样就复制哪样；上面切换两台电脑在家里和公司，还是同一个 Wi‑Fi。
- * 跨网络时先经服务器交换连接信息（灰色点线），再直连（蓝色弧线），整段往后推 --t0 */
+/* 可以点的演示：Mac 桌面上四样东西，点哪样就复制哪样；下面切换两台电脑在家里和公司，还是同一个 Wi‑Fi。
+ * 跨网络时先经服务器交换连接信息（灰色点线），再直连（蓝色弧线），整段往后推 --t0。
+ * 画面宽度跟着窗口高度走：窗口矮就把两台电脑缩小一点，保证整台都在首屏里 */
 .demo {
-  margin: clamp(3rem, 7vw, 4.5rem) auto 0;
-  max-width: 62rem;
+  margin: 0 auto;
+  max-width: clamp(36rem, (100vh - 26rem) * 1.9, 66rem);
+  max-width: clamp(36rem, (100svh - 26rem) * 1.9, 66rem);
+  container-type: inline-size;
 }
 
+/* 电脑上方留给服务器与弧线：弧线高出屏幕约 9.4% 的画面宽度（最多 84px，见 site.js），
+ * 服务器图标与说明再占约 3.5rem，上面空出 1.5rem 与按钮隔开 */
 .demo .stage {
-  margin-top: clamp(8rem, 16vw, 12.5rem);
+  margin-top: 10.25rem;
+  margin-top: clamp(7rem, 9.4cqw + 5rem, 10.25rem);
 }
 
 .stage {
@@ -984,10 +1072,65 @@ kbd {
 }
 
 .demo-hint {
-  margin: 1.75rem 0 0;
+  margin: 0.9rem 0 0;
   font-size: 0.85rem;
   color: var(--dim);
   text-align: center;
+}
+
+/* 电脑下面的一行：中间是场景切换，右边是暂停按钮（像视频右下角的那个） */
+.demo-bar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 2.25rem;
+}
+
+.demo-pause {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.demo-pause[hidden] {
+  display: none;
+}
+
+.demo-pause:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.demo-pause:focus-visible {
+  outline: 2px solid var(--blue-hi);
+  outline-offset: 2px;
+}
+
+.demo-pause svg {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+}
+
+.demo-pause .i-play,
+.demo-pause.paused .i-pause {
+  display: none;
+}
+
+.demo-pause.paused .i-play {
+  display: block;
 }
 
 .stage[data-mode="wan"] .lan,

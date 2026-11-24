@@ -49,7 +49,7 @@
   <link rel="icon" href="assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="assets/site.css?v=8c9451a663">
+  <link rel="stylesheet" href="assets/site.css?v=4bf1147bf5">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     // 第一次打开时按浏览器语言跳到对应页面；在页面上选过语言后，以选的为准
@@ -215,19 +215,17 @@
   </header>
 
   <main id="main">
-    <section class="hero">
+    <section class="hero home-hero">
       <div class="wrap">
         <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.2">2.13.2：退出后重新打开，后台服务自动恢复 →</a>
-        <h1 class="display">跨设备，<br>复制粘贴。</h1>
+        <h1 class="display">跨设备，<br class="hero-br">复制粘贴。</h1>
         <p class="lede">在 Mac、Windows、Linux 之间同步剪贴板，不用同一个账号。复制记录能搜索、收藏，文件和文件夹也能拖放互传。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 看完整演示 <span class="tour-duration">1:25</span></a>
         </div>
-        <p class="note">免费开源 · Mac / Windows / Linux / Android</p>
-        <a class="start-link" href="start/">快速开始 →</a>
+        <p class="note">免费开源 · Mac / Windows / Linux / Android<span class="sep" aria-hidden="true"> · </span><a class="start-link" href="start/">快速开始 →</a></p>
         <div class="demo" data-demo data-pasted="{item} 已粘贴到 Windows 笔记本">
-          <div class="demo-modes" role="radiogroup" aria-label="两台电脑在哪"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">家里 ↔ 公司</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">同一个 Wi‑Fi</button></div>
           <div class="stage" data-play data-mode="wan" role="group" aria-label="演示：在 MacBook 上按下 Command C，文件化作一张纸，经直连飞到 Windows 笔记本，在那里按下 Ctrl V 粘贴出来">
             <figure class="device mac">
               <div class="screen"><div class="desk">
@@ -256,6 +254,10 @@
             <span class="server" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg><span>服务器只负责介绍</span></span>
             <span class="arc-label" aria-hidden="true"><span class="wan">直连，端到端加密</span><span class="lan">在局域网里直接找到，不用服务器</span></span>
             <span class="sheet-fly" aria-hidden="true"><span class="lines"><i></i><i></i><i></i></span></span>
+          </div>
+          <div class="demo-bar">
+            <div class="demo-modes" role="radiogroup" aria-label="两台电脑在哪"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">家里 ↔ 公司</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">同一个 Wi‑Fi</button></div>
+            <button type="button" class="demo-pause" data-demo-pause hidden aria-label="暂停演示" title="暂停演示" data-pause="暂停演示" data-resume="播放演示"><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="5" width="2.6" height="10" rx="1"/><rect x="11.4" y="5" width="2.6" height="10" rx="1"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.2 5.2v9.6a.8.8 0 0 0 1.2.7l7.4-4.8a.8.8 0 0 0 0-1.4L8.4 4.5a.8.8 0 0 0-1.2.7z"/></svg></button>
           </div>
           <p class="demo-hint">点 Mac 上的任意一项，复制到另一台电脑</p>
           <p class="skip" aria-live="polite" data-demo-status></p>
@@ -399,7 +401,7 @@
     <form method="dialog"><button class="tour-close" aria-label="关闭宣传片">×</button></form>
     <iframe title="一分钟多，了解隔空贴" data-src="tour/?embed" allow="fullscreen" allowfullscreen></iframe>
   </dialog>
-  <script src="assets/site.js?v=0d77f62813" defer></script>
+  <script src="assets/site.js?v=e36c655e95" defer></script>
   <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>

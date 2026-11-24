@@ -44,6 +44,9 @@ COPY = {
     "demo_folder": ("品牌素材", "品牌素材", "品牌素材", "brand-assets", "ブランド素材"),
     "demo_copy": ("复制 {item}", "複製 {item}", "複製 {item}", "Copy {item}", "{item} をコピー"),
     "demo_pasted": ("{item} 已粘贴到 {device}", "{item} 已貼上到 {device}", "{item} 已貼上到 {device}", "{item} pasted on the {device}", "{item} を {device} に貼り付けました"),
+    # 演示自动轮流复制四样东西，旁边的按钮暂停与继续
+    "demo_pause": ("暂停演示", "暫停示範", "暫停示範", "Pause demo", "デモを一時停止"),
+    "demo_resume": ("播放演示", "播放示範", "播放示範", "Play demo", "デモを再生"),
     # 顶栏的外观菜单：默认跟随系统，也可以固定浅色或深色
     "theme_menu": ("外观", "外觀", "外觀", "Appearance", "外観"),
     "theme_system": ("跟随系统", "跟隨系統", "跟隨系統", "Match system", "システムに合わせる"),

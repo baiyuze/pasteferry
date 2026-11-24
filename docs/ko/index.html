@@ -49,7 +49,7 @@
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../assets/site.css?v=8c9451a663">
+  <link rel="stylesheet" href="../assets/site.css?v=4bf1147bf5">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
   <script>
     (function () {
@@ -191,19 +191,17 @@
   </header>
 
   <main id="main">
-    <section class="hero">
+    <section class="hero home-hero">
       <div class="wrap">
         <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.13.2">2.13.2: 다시 열면 백그라운드 서비스 자동 복구 →</a>
-        <h1 class="display">복사하고,<br>다른 기기에 붙여넣기.</h1>
+        <h1 class="display">복사하고,<br class="hero-br"> 다른 기기에 붙여넣기.</h1>
         <p class="lede">같은 계정 없이 Mac, Windows, Linux의 클립보드를 동기화하세요. 복사 기록을 검색하고 즐겨찾기에 보관하거나 파일과 폴더를 끌어서 전송할 수 있습니다.</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>PasteFerry 다운로드</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 전체 둘러보기 <span class="tour-duration">1:25</span></a>
         </div>
-        <p class="note">무료 오픈 소스 · Mac / Windows / Linux / Android</p>
-        <a class="start-link" href="start/">빠른 시작 →</a>
+        <p class="note">무료 오픈 소스 · Mac / Windows / Linux / Android<span class="sep" aria-hidden="true"> · </span><a class="start-link" href="start/">빠른 시작 →</a></p>
         <div class="demo" data-demo data-pasted="{item} 항목을 Windows 노트북에 붙여넣었습니다.">
-          <div class="demo-modes" role="radiogroup" aria-label="컴퓨터 두 대는 어디에 있나요?"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">집 ⇔ 사무실</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">동일한 Wi-Fi</button></div>
           <div class="stage" data-play data-mode="wan" role="group" aria-label="데모: MacBook의 명령 C는 파일을 Windows 노트북에 직접 연결되는 시트로 변환합니다. 여기서 Ctrl V pastes it는">
             <figure class="device mac">
               <div class="screen"><div class="desk">
@@ -232,6 +230,10 @@
             <span class="server" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg><span>서버에서는 소개만 해준다</span></span>
             <span class="arc-label" aria-hidden="true"><span class="wan">직접, 종단 간 암호화</span><span class="lan">로컬 네트워크에서 발견되었으나 서버가 없습니다.</span></span>
             <span class="sheet-fly" aria-hidden="true"><span class="lines"><i></i><i></i><i></i></span></span>
+          </div>
+          <div class="demo-bar">
+            <div class="demo-modes" role="radiogroup" aria-label="컴퓨터 두 대는 어디에 있나요?"><button type="button" role="radio" aria-checked="true" tabindex="0" data-mode="wan">집 ⇔ 사무실</button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="lan">동일한 Wi-Fi</button></div>
+            <button type="button" class="demo-pause" data-demo-pause hidden aria-label="데모 일시정지" title="데모 일시정지" data-pause="데모 일시정지" data-resume="데모 재생"><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="5" width="2.6" height="10" rx="1"/><rect x="11.4" y="5" width="2.6" height="10" rx="1"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.2 5.2v9.6a.8.8 0 0 0 1.2.7l7.4-4.8a.8.8 0 0 0 0-1.4L8.4 4.5a.8.8 0 0 0-1.2.7z"/></svg></button>
           </div>
           <p class="demo-hint">Mac에서 아무 항목이나 클릭하여 복사하세요.</p>
           <p class="skip" aria-live="polite" data-demo-status></p>
@@ -375,7 +377,7 @@
     <form method="dialog"><button class="tour-close" aria-label="둘러보기 닫기">×</button></form>
     <iframe title="85초 안에 PasteFerry 를 만나보세요" data-src="tour/?embed" allow="fullscreen" allowfullscreen></iframe>
   </dialog>
-  <script src="../assets/site.js?v=0d77f62813" defer></script>
+  <script src="../assets/site.js?v=e36c655e95" defer></script>
   <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>
