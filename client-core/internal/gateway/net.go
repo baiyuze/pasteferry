@@ -57,6 +57,12 @@ func (n *Net) DialTCP(network string, local, remote *net.TCPAddr) (transport.TCP
 	return nil, errors.New("official relay supports UDP TURN only")
 }
 
+// peerGrantWait 是开隧道时等对端授权的上限，peerGrantRetry 是重试间隔；测试时缩短
+var (
+	peerGrantWait  = 22 * time.Second
+	peerGrantRetry = 300 * time.Millisecond
+)
+
 type packetConn struct {
 	client                      *Client
 	session                     string
@@ -94,7 +100,11 @@ func (c *Client) openPacket(ctx context.Context, session string, remote *net.UDP
 	header.Set("Authorization", "Bearer "+a.Token)
 	var ws *websocket.Conn
 	var err error
-	for attempt := 0; attempt < 30; attempt++ {
+	// 409 表示对端还没为这次中转授权（两端都授权后网关才开隧道）。对端是应答方，要等收到
+	// 本端的请求才去授权，网络慢时实测要十几秒；以前只等 9 秒，本端拿不到中转地址，
+	// 这次中转就白白失败、再冷却一分钟。现在一直等到 peerGrantWait，仍短于 30 秒的握手时限
+	deadline := time.Now().Add(peerGrantWait)
+	for {
 		var resp *http.Response
 		ws, resp, err = websocket.Dial(ctx, u, &websocket.DialOptions{HTTPHeader: header, HTTPClient: c.http})
 		if err == nil {
@@ -103,10 +113,13 @@ func (c *Client) openPacket(ctx context.Context, session string, remote *net.UDP
 		if resp == nil || resp.StatusCode != 409 {
 			return nil, errors.New("official relay tunnel unavailable")
 		}
+		if time.Now().After(deadline) {
+			return nil, errors.New("peer did not authorize the official relay in time")
+		}
 		select {
 		case <-ctx.Done():
 			return nil, ctx.Err()
-		case <-time.After(300 * time.Millisecond):
+		case <-time.After(peerGrantRetry):
 		}
 	}
 	if err != nil {
@@ -160,6 +173,16 @@ func (p *packetConn) receive() {
 				return
 			}
 			reason := "service_unavailable"
+			// 记下真实原因：网关关隧道时给的原因（如对端的分配已不在、限流、令牌过期），
+			// 或者连接本身断了。以前一律记成 service_unavailable，诊断报告看不出中转为什么断
+			detail := err.Error()
+			var closeErr websocket.CloseError
+			if errors.As(err, &closeErr) {
+				detail = "gateway closed the tunnel: " + closeErr.Reason
+			}
+			if len(detail) > 120 {
+				detail = detail[:120]
+			}
 			status := websocket.CloseStatus(err)
 			if status == websocket.StatusPolicyViolation {
 				u := p.client.Usage()
@@ -177,7 +200,7 @@ func (p *packetConn) receive() {
 			// ICE may otherwise keep a closed relay selected for many seconds.
 			// Notify the owning connection so new offers are queued for retry.
 			if p.onClosed != nil {
-				go p.onClosed(&Error{Code: reason})
+				go p.onClosed(&Error{Code: reason, Detail: detail})
 			}
 			return
 		}

@@ -19,6 +19,7 @@ import (
 
 	"github.com/baiyuze/pasteferry/client-core/internal/identity"
 	"github.com/baiyuze/pasteferry/server/relay"
+	"github.com/coder/websocket"
 	"github.com/pion/transport/v5/stdnet"
 	"github.com/pion/turn/v5"
 	_ "modernc.org/sqlite"
@@ -333,4 +334,44 @@ func TestRunFetchesOwnerUsageWithoutRelay(t *testing.T) {
 		t.Fatal("re-enabling kept usage from the disabled period")
 	}
 	wait("re-enable")
+}
+
+// 对端还没授权时网关回 409：要一直重试到对端授权为止（有上限），不能几秒就放弃。
+func TestTunnelWaitsForPeerGrant(t *testing.T) {
+	oldWait, oldRetry := peerGrantWait, peerGrantRetry
+	peerGrantWait, peerGrantRetry = 2*time.Second, 20*time.Millisecond
+	defer func() { peerGrantWait, peerGrantRetry = oldWait, oldRetry }()
+
+	var tries atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if tries.Add(1) <= 40 { // 约 0.8 秒后对端才授权，超过以前 30 次的上限
+			w.WriteHeader(http.StatusConflict)
+			return
+		}
+		ws, err := websocket.Accept(w, r, nil)
+		if err != nil {
+			return
+		}
+		_ = ws.Write(r.Context(), websocket.MessageText, []byte(`{"local_address":"10.0.0.2:4000","turn_address":"127.0.0.1:3478"}`))
+		<-r.Context().Done()
+	}))
+	defer server.Close()
+	c, _ := NewClient(identity.FromSeed(make([]byte, 32)), server.URL, nil)
+	defer c.Close()
+	c.access["session"] = Access{Token: "test-token"}
+	p, err := c.openPacket(context.Background(), "session", &net.UDPAddr{IP: net.IPv4(127, 0, 0, 1), Port: 3478})
+	if err != nil {
+		t.Fatalf("对端授权后隧道应能打开：%v（重试 %d 次）", err, tries.Load())
+	}
+	_ = p.Close()
+
+	// 对端一直不授权：到上限就放弃
+	tries.Store(-1 << 30)
+	start := time.Now()
+	if _, err := c.openPacket(context.Background(), "session", &net.UDPAddr{IP: net.IPv4(127, 0, 0, 1), Port: 3478}); err == nil {
+		t.Fatal("对端一直不授权时应报错")
+	}
+	if d := time.Since(start); d < peerGrantWait || d > peerGrantWait+time.Second {
+		t.Fatalf("放弃用时 %v，应在 %v 左右", d, peerGrantWait)
+	}
 }

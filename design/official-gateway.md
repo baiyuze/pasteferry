@@ -40,6 +40,19 @@ selected and reported as relayed for up to 35 seconds; ICE's Failed verdict
 the real state is then reported once. Every release logs a warning with its
 reason, so diagnostics show why a relay ended.
 
+The offerer opens its tunnel as soon as it gathers, but the gateway answers
+409 `peer_pending` until the answerer has authorized the same attempt, and
+the answerer only authorizes after the relay offer reaches it. On a slow link
+that took over ten seconds, while the client gave up after nine: the offerer
+never got a relay candidate and the attempt always failed, followed by a
+one-minute cooldown. The client now keeps retrying for up to 22 seconds,
+inside the 30-second handshake limit. Relay-only connections also check each
+candidate pair for 8 seconds instead of pion's 1.4: round trips through the
+TCP tunnel measured 1.5 to 2.5 seconds. When the gateway closes a tunnel, the
+logged error keeps its close reason (for example `invalid_target` once the
+peer's allocation is gone) while the reported code stays
+`service_unavailable`.
+
 Signed SignalMessage adds optional `connection_attempt_id`, `official_relay`
 and `gateway_capable` and `relay_denial_code` fields. The server forwards the original signed payload;
 it does not interpret these capabilities. PeerDisplay travels only inside the

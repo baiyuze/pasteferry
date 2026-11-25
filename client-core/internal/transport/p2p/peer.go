@@ -201,13 +201,14 @@ func NewPeer(opts PeerOptions) (*Peer, error) {
 		settings.SetICEUDPMux(opts.UDPMux)
 	}
 
+	// 官方中转的隧道是 TCP，实测检查包往返常要 1.5～2.5 秒，1.4 秒的默认检查同样不够
+	settings.SetICEMaxBindingRequests(iceMaxBindingRequests)
 	config := webrtc.Configuration{ICEServers: opts.ICEServers}
 	if opts.ForceRelay {
 		config.ICETransportPolicy = webrtc.ICETransportPolicyRelay
 	} else {
 		// 中转路径握手快，若不加等待，往往在直连打通之前就被选中，之后再也不会换成直连
 		settings.SetRelayAcceptanceMinWait(relayAcceptanceWait)
-		settings.SetICEMaxBindingRequests(iceMaxBindingRequests)
 	}
 
 	return &Peer{

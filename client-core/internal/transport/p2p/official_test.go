@@ -24,6 +24,12 @@ import (
 
 func officialPair(t *testing.T, base string, backend *turnrelay.Server, dropDirect bool) (*Manager, *Manager, <-chan *pb.PeerMessage) {
 	t.Helper()
+	return officialPairDelayed(t, base, backend, dropDirect, nil)
+}
+
+// officialPairDelayed 同 officialPair；delay 不为空时，信令按它返回的时长延后送达。
+func officialPairDelayed(t *testing.T, base string, backend *turnrelay.Server, dropDirect bool, delay func(*pb.SignalMessage) time.Duration) (*Manager, *Manager, <-chan *pb.PeerMessage) {
+	t.Helper()
 	a := identity.FromSeed(make([]byte, 32))
 	seed := sha256.Sum256([]byte("official p2p b"))
 	b := identity.FromSeed(seed[:])
@@ -52,7 +58,12 @@ func officialPair(t *testing.T, base string, backend *turnrelay.Server, dropDire
 					answer.Sdp = stripCandidates(answer.Sdp)
 				}
 			}
-			go func() { _ = (*target).HandleSignal(context.Background(), from, msg) }()
+			go func() {
+				if delay != nil {
+					time.Sleep(delay(msg))
+				}
+				_ = (*target).HandleSignal(context.Background(), from, msg)
+			}()
 			return nil
 		}
 	}
@@ -159,47 +170,7 @@ func TestStaleOfficialClosureDoesNotCancelReplacement(t *testing.T) {
 	}
 }
 func TestOfficialDirectThenGatewayTURN(t *testing.T) {
-	binary := os.Getenv("PF_GATEWAY_TEST_BINARY")
-	if binary == "" {
-		t.Skip("set PF_GATEWAY_TEST_BINARY for independent gateway interoperability")
-	}
-	udp, e := net.ListenPacket("udp4", "127.0.0.1:0")
-	if e != nil {
-		t.Fatal(e)
-	}
-	port := udp.LocalAddr().(*net.UDPAddr).Port
-	udp.Close()
-	backend, e := turnrelay.New(turnrelay.Options{PublicIP: "127.0.0.1", ListenIP: "127.0.0.1", Port: port, Secret: "test-only-separate-turn-secret"})
-	if e != nil {
-		t.Fatal(e)
-	}
-	defer backend.Close()
-	tcp, e := net.Listen("tcp", "127.0.0.1:0")
-	if e != nil {
-		t.Fatal(e)
-	}
-	addr := tcp.Addr().String()
-	tcp.Close()
-	dir := t.TempDir()
-	cmd := exec.Command(binary, "serve", "-listen", addr, "-db", filepath.Join(dir, "gateway.db"), "-secret-file", filepath.Join(dir, "secret"), "-signal", "http://127.0.0.1:1", "-turn", fmt.Sprintf("127.0.0.1:%d", port), "-udp-bind", "127.0.0.1", "-stun", "")
-	cmd.Stderr = os.Stderr
-	if e = cmd.Start(); e != nil {
-		t.Fatal(e)
-	}
-	defer func() { cmd.Process.Kill(); cmd.Wait() }()
-	base := "http://" + addr
-	until := time.Now().Add(5 * time.Second)
-	for {
-		r, e := http.Get(base + "/healthz")
-		if e == nil {
-			r.Body.Close()
-			break
-		}
-		if time.Now().After(until) {
-			t.Fatal("gateway startup failed")
-		}
-		time.Sleep(30 * time.Millisecond)
-	}
+	base, backend := startTestGateway(t)
 	a, b, messages := officialPair(t, base, backend, true)
 	start := time.Now()
 	if a.selfID < b.selfID {
@@ -215,7 +186,7 @@ func TestOfficialDirectThenGatewayTURN(t *testing.T) {
 	if time.Since(start) < officialDirectWait {
 		t.Fatal("relay selected before direct budget")
 	}
-	if e = a.Send(b.selfID, &pb.PeerMessage{Payload: &pb.PeerMessage_Fetch{Fetch: &pb.PeerFetch{ClipId: "through-independent-gateway"}}}); e != nil {
+	if e := a.Send(b.selfID, &pb.PeerMessage{Payload: &pb.PeerMessage_Fetch{Fetch: &pb.PeerFetch{ClipId: "through-independent-gateway"}}}); e != nil {
 		t.Fatal(e)
 	}
 	select {
@@ -226,4 +197,71 @@ func TestOfficialDirectThenGatewayTURN(t *testing.T) {
 	case <-time.After(5 * time.Second):
 		t.Fatal("encrypted peer channel did not deliver")
 	}
+}
+
+// 对端晚了 12 秒才收到中转请求、才去网关授权（实测家里那台作为应答方有时要十几秒）。
+// 发起方开隧道时网关一直回 409，要等到对端授权，中转照样建立；以前等 9 秒就放弃，
+// 这次中转必然失败，再冷却一分钟。
+func TestOfficialRelayWhenPeerAuthorizesLate(t *testing.T) {
+	base, backend := startTestGateway(t)
+	lateOffer := func(msg *pb.SignalMessage) time.Duration {
+		if msg.GetOfficialRelay() && msg.GetOffer() != nil {
+			return 12 * time.Second
+		}
+		return 0
+	}
+	a, b, _ := officialPairDelayed(t, base, backend, true, lateOffer)
+	if a.selfID < b.selfID {
+		_ = a.Connect(context.Background(), b.selfID)
+	} else {
+		_ = b.Connect(context.Background(), a.selfID)
+	}
+	waitPair(t, a, b, StateRelay, 40*time.Second)
+}
+
+// startTestGateway 启动独立构建的官方网关（PF_GATEWAY_TEST_BINARY）与它背后的 TURN。
+func startTestGateway(t *testing.T) (string, *turnrelay.Server) {
+	t.Helper()
+	binary := os.Getenv("PF_GATEWAY_TEST_BINARY")
+	if binary == "" {
+		t.Skip("set PF_GATEWAY_TEST_BINARY for independent gateway interoperability")
+	}
+	udp, e := net.ListenPacket("udp4", "127.0.0.1:0")
+	if e != nil {
+		t.Fatal(e)
+	}
+	port := udp.LocalAddr().(*net.UDPAddr).Port
+	udp.Close()
+	backend, e := turnrelay.New(turnrelay.Options{PublicIP: "127.0.0.1", ListenIP: "127.0.0.1", Port: port, Secret: "test-only-separate-turn-secret"})
+	if e != nil {
+		t.Fatal(e)
+	}
+	t.Cleanup(func() { _ = backend.Close() })
+	tcp, e := net.Listen("tcp", "127.0.0.1:0")
+	if e != nil {
+		t.Fatal(e)
+	}
+	addr := tcp.Addr().String()
+	tcp.Close()
+	dir := t.TempDir()
+	cmd := exec.Command(binary, "serve", "-listen", addr, "-db", filepath.Join(dir, "gateway.db"), "-secret-file", filepath.Join(dir, "secret"), "-signal", "http://127.0.0.1:1", "-turn", fmt.Sprintf("127.0.0.1:%d", port), "-udp-bind", "127.0.0.1", "-stun", "")
+	cmd.Stderr = os.Stderr
+	if e = cmd.Start(); e != nil {
+		t.Fatal(e)
+	}
+	t.Cleanup(func() { cmd.Process.Kill(); cmd.Wait() })
+	base := "http://" + addr
+	until := time.Now().Add(5 * time.Second)
+	for {
+		r, e := http.Get(base + "/healthz")
+		if e == nil {
+			r.Body.Close()
+			break
+		}
+		if time.Now().After(until) {
+			t.Fatal("gateway startup failed")
+		}
+		time.Sleep(30 * time.Millisecond)
+	}
+	return base, backend
 }

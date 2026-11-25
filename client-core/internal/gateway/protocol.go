@@ -82,6 +82,14 @@ type Error struct {
 	Usage      *Usage `json:"usage,omitempty"`
 	UsageToken string `json:"usage_token,omitempty"`
 	ExpiresAt  int64  `json:"expires_at,omitempty"`
+	// Detail 只用于日志：中转隧道断开的真实原因（网关给的关闭原因，或连接错误），
+	// 不影响 Code 的含义与界面上显示的原因
+	Detail string `json:"-"`
 }
 
-func (e *Error) Error() string { return "official service: " + e.Code }
+func (e *Error) Error() string {
+	if e.Detail != "" {
+		return "official service: " + e.Code + " (" + e.Detail + ")"
+	}
+	return "official service: " + e.Code
+}
