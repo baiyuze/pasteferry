@@ -228,7 +228,9 @@ func start(dataDir, deviceName, version string, host Host) (_ *core, err error) 
 		Store:      db,
 		LoadConfig: loadCfg,
 		StatePath:  filepath.Join(paths.Root, "egress.json"),
-		AppVersion: version,
+		// 请路由器为打洞端口做端口映射，对端可以直接连进来
+		PortMapping: true,
+		AppVersion:  version,
 		OnDeviceChanged: func(d *pb.Device) {
 			hub.Publish(rpc.EventDeviceChanged(d))
 			if peerMgr != nil {

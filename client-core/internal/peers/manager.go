@@ -173,6 +173,9 @@ type Options struct {
 	OnPeerReady func(deviceID string)
 	// StatePath 保存网络出口历史的文件，见 p2p/egress_history.go
 	StatePath string
+	// PortMapping 请路由器为打洞端口做端口映射（p2p/portmapping.go），只在连着服务器时做。
+	// 会改动所在网络的路由器设置，只由后台服务开启
+	PortMapping bool
 	// LANPort / LANDiscovery 供测试替换局域网通道的端口和发现方式，默认 8788 与 mDNS
 	LANPort      int
 	LANDiscovery lan.Discovery
@@ -320,7 +323,8 @@ func NewManager(opts Options) (*Manager, error) {
 				stream.Close()
 			}
 		},
-		StatePath: opts.StatePath,
+		StatePath:   opts.StatePath,
+		PortMapping: portMappingWhenOnline(opts),
 		// 公共 STUN 服务器 IP 分散，能探测到更多出口；用户可以在设置里关掉。
 		// 没有服务器时只在局域网里连，探测出口没有用，还会把公网 IP 暴露给公共服务器
 		ProbeServers: func() []string {
@@ -1036,6 +1040,15 @@ func (m *Manager) sendSignal(ctx context.Context, to string, msg *pb.SignalMessa
 		lastErr = ErrNoRoute
 	}
 	return lastErr
+}
+
+// portMappingWhenOnline 在开启端口映射时返回「连着服务器才映射」的判断：只在局域网里用时，
+// 对端都在同一个网络里，路由器上的映射没有用处。
+func portMappingWhenOnline(opts Options) func() bool {
+	if !opts.PortMapping {
+		return nil
+	}
+	return func() bool { return opts.LoadConfig().EffectiveSignalingURL() != "" }
 }
 
 // P2P 暴露数据面给上层（M4 的同步逻辑用）。

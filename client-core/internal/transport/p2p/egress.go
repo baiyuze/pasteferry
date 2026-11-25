@@ -58,6 +58,9 @@ type Egress struct {
 	// Targets 是看到这个地址的探测服务器 IP。出口历史记住它们，以后每轮都探测，
 	// 免得 DNS 换了一组 IP 之后这条线路就探测不到了（见 egressHistory.pinned）
 	Targets []probeTarget
+	// Mapped 表示这是路由器端口映射（PCP、NAT-PMP、UPnP）得到的地址，见 portmapping.go；
+	// Via 里是协议名。它不是探测到的线路，不进出口历史，也不参与对称型 NAT 的判断
+	Mapped bool
 }
 
 // Guessed 表示这个地址是按历史记录推算的，而非本轮实测。
@@ -78,7 +81,7 @@ func (r EgressReport) needsFreshProbe() bool {
 		return true
 	}
 	for _, e := range r.Egresses {
-		if !e.Guessed() && !e.PortPreserved {
+		if !e.Guessed() && !e.Mapped && !e.PortPreserved {
 			return true
 		}
 	}
@@ -101,7 +104,7 @@ type EgressReport struct {
 func (r EgressReport) Symmetric() bool {
 	ports := map[netip.Addr]uint16{}
 	for _, e := range r.Egresses {
-		if e.Guessed() {
+		if e.Guessed() || e.Mapped {
 			continue
 		}
 		if p, ok := ports[e.Addr.Addr()]; ok && p != e.Addr.Port() {

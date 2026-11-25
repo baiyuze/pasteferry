@@ -306,8 +306,10 @@ func run(dataDir string) error {
 		Store:      db,
 		LoadConfig: loadCfg,
 		StatePath:  filepath.Join(paths.Root, "egress.json"),
-		AppVersion: version,
-		SendFiles:  true,
+		// 请路由器为打洞端口做端口映射，对端可以直接连进来
+		PortMapping: true,
+		AppVersion:  version,
+		SendFiles:   true,
 		OnDeviceChanged: func(d *pb.Device) {
 			hub.Publish(rpc.EventDeviceChanged(d))
 		},

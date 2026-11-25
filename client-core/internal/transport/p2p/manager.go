@@ -54,12 +54,16 @@ type Manager struct {
 	history      *egressHistory
 	stop         chan struct{}
 	closeOnce    sync.Once
+	// 路由器端口映射（见 portmapping.go）；没开启时两个通道都为空
+	portmapKick chan struct{}
+	portmapDone chan struct{}
 
 	egressMu   sync.Mutex
 	egress     EgressReport
 	serverSTUN []string      // 信令服务器下发的 STUN 地址，只用于出口探测
 	probing    chan struct{} // 非空表示正在探测，探测结束时关闭
 	probeAgain bool          // 探测期间又有新的触发，结束后再探一轮
+	mapped     *Egress       // 路由器端口映射得到的地址，每轮探测结果都并入它
 }
 
 type ManagerOptions struct {
@@ -88,6 +92,9 @@ type ManagerOptions struct {
 	DisablePortPrediction bool
 	// Net 替换打洞端口与直连所用的网络，仅供测试（pion 的虚拟网络）
 	Net transport.Net
+	// PortMapping 返回是否请路由器为打洞端口做端口映射（PCP、NAT-PMP、UPnP，见 portmapping.go），
+	// 每次尝试前调用。会改动所在网络的路由器设置，只由后台服务开启，测试与实验室为空即不开
+	PortMapping func() bool
 }
 
 func NewManager(opts ManagerOptions) *Manager {
@@ -145,6 +152,11 @@ func NewManager(opts ManagerOptions) *Manager {
 
 	go m.egressLoop()
 	m.triggerProbe()
+	if opts.PortMapping != nil && opts.Net == nil {
+		m.portmapKick = make(chan struct{}, 1)
+		m.portmapDone = make(chan struct{})
+		go m.portMapLoop(opts.PortMapping)
+	}
 	return m
 }
 
@@ -199,6 +211,13 @@ func (m *Manager) Close() {
 	m.CloseAll()
 	m.closeOnce.Do(func() {
 		close(m.stop)
+		if m.portmapDone != nil {
+			// 等它删掉路由器上的映射，最多 3 秒
+			select {
+			case <-m.portmapDone:
+			case <-time.After(3 * time.Second):
+			}
+		}
 		if m.mux != nil {
 			_ = m.mux.Close()
 		}
@@ -237,6 +256,7 @@ func (m *Manager) egressLoop() {
 				lastNet = k
 				m.log.Info("网络已变化，重新探测出口")
 				m.triggerProbe()
+				m.kickPortMap()
 			}
 		}
 	}
@@ -309,7 +329,7 @@ func (m *Manager) runProbe(done chan struct{}) {
 		}
 
 		m.egressMu.Lock()
-		m.egress = report
+		m.egress = withMapped(report, m.mapped)
 		if m.probeAgain {
 			m.probeAgain = false
 			m.egressMu.Unlock()
