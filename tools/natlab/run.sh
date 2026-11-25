@@ -24,8 +24,13 @@
 set -euo pipefail
 
 BIN=$(cd "$(dirname "${1:?用法: run.sh <natlab 可执行文件>}")" && pwd)/$(basename "$1")
+# NATLAB_BIN_B 让 b 用另一个版本的 natlab，验证新旧版本混用（默认与 a 相同）
+BIN_B=${NATLAB_BIN_B:-$BIN}
 WORK=$(mktemp -d)
 PROBE="10.200.1.2:3478,10.200.1.3:3478,10.200.1.4:3478"
+# 公司四线路场景用域名探测：stun.multi.lab 解析出两个 IP，只有第二个落在去往对端的线路上
+# （见 setup 的 office）。解析结果来自各命名空间的 /etc/netns/<名字>/hosts
+PROBE_OFFICE="stun.multi.lab:3478,10.200.1.3:3478"
 
 ns() { ip netns exec "$@"; }
 
@@ -40,6 +45,7 @@ cleanup() {
         INFRA_PID=""
     fi
     for n in inet rA a rB b sw r; do ip netns del "$n" 2>/dev/null || true; done
+    rm -rf /etc/netns/a /etc/netns/b
 }
 trap 'cleanup; rm -rf "$WORK"' EXIT
 
@@ -50,6 +56,7 @@ veth() { # <命名空间1> <网卡1> <命名空间2> <网卡2>
 # setup <A 侧出口模式> <B 侧模式>
 #   A：single 单出口 | dual 两个出口，去对端走出口 2、探测服务器有一台走出口 2
 #      hidden 两个出口，但没有任何探测服务器走出口 2 | quad 四个出口
+#      office 公司网络：四条线路，两条是改写端口的运营商级 NAT，去对端走其中一条（设计文档第 13 节）
 #   B：cone 家用路由器 | symmetric 端口随机分配 | dual 两个出口
 setup() {
     cleanup
@@ -117,7 +124,22 @@ setup() {
         for i in 2 3 4; do ns rA $snat -d "10.200.1.$i" -j SNAT --to-source "10.255.0.1$i"; done
         ns rA $snat -j SNAT --to-source 10.255.0.11
         ;;
+    office)
+        # 实测的公司网络：路由器按目标 IP 选线路。出口 1、2 不改端口；出口 3、4 是运营商级 NAT，
+        # 端口改写成另一个号，但对不同目标都是同一个（端点无关映射，这里用固定端口模拟）。
+        # 去往对端走出口 4，探测服务器里只有 10.200.1.4 落在出口 4 上，而它只是
+        # stun.multi.lab 的第二个 IP。只走这两条线路的是打洞端口，固定端口不会冲突
+        ns rA $snat -p udp -d 10.254.0.0/24 -j SNAT --to-source 10.255.0.14:40000
+        ns rA $snat -p udp -d 10.200.1.4 -j SNAT --to-source 10.255.0.14:40000
+        ns rA $snat -p udp -d 10.200.1.3 -j SNAT --to-source 10.255.0.13:30000
+        ns rA $snat -d 10.200.1.2 -j SNAT --to-source 10.255.0.12
+        ns rA $snat -j SNAT --to-source 10.255.0.11
+        ;;
     esac
+    for n in a b; do
+        mkdir -p "/etc/netns/$n"
+        printf '127.0.0.1 localhost\n10.200.1.2 stun.multi.lab\n10.200.1.4 stun.multi.lab\n' >"/etc/netns/$n/hosts"
+    done
     case $2 in
     cone) ns rB $snat -j SNAT --to-source 10.254.0.21 ;;
     symmetric) ns rB $snat -j SNAT --to-source 10.254.0.21 --random-fully ;;
@@ -141,11 +163,13 @@ setup() {
 PASS=0
 FAIL=0
 
-# check <场景名> <A 侧> <B 侧> <direct|relay> [legacy|history|late|leaky-a|leaky-b]
+# check <场景名> <A 侧> <B 侧> <direct|relay> [legacy|history|pinned|late|leaky-a|leaky-b]
 check() {
     # NATLAB_ONLY 只跑名字里含这段文字的场景，排查问题时用
     [[ -n ${NATLAB_ONLY:-} && $1 != *"$NATLAB_ONLY"* ]] && return
     local name=$1 expect=$4 flag=${5:-} aflags=() bflags=() state="$WORK/a-state.json"
+    local probe=$PROBE
+    [[ $2 == office ]] && probe=$PROBE_OFFICE
     rm -f "$state" # 每个场景从空白开始：上一个场景的出口历史会让这一个「意外」直连
     INFRA_ARGS=()
     # 现实里信令经服务器绕一道，比设备之间的包慢几十毫秒：对端拿到本端地址就开始发包，
@@ -158,6 +182,13 @@ check() {
         # 预置一份历史：这个网络里见过不改端口的出口 2
         printf '{"networks":{"192.168.10.2":[{"ip":"10.255.0.12","port_preserved":true,"last_seen":"%s"}]}}' \
             "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >"$state"
+        ;;
+    pinned)
+        # DNS 换了一组 IP：这一轮的域名只解析出落在出口 2 的那个 IP。历史里记着出口 4（改端口）
+        # 是经 10.200.1.4 探测到的，新版本每轮都会再探测它
+        printf '{"networks":{"192.168.10.2":[{"ip":"10.255.0.14","port_preserved":false,"last_seen":"%s","servers":[{"name":"stun.multi.lab","addr":"10.200.1.4:3478"}]}]}}' \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >"$state"
+        probe="10.200.1.2:3478,10.200.1.3:3478"
         ;;
     late)
         # 开头 8 秒 rB 不放行发往 a 那边的 UDP，第一次握手只能落到中转；
@@ -183,9 +214,9 @@ check() {
         ;;
     esac
     local common=(-infra http://10.200.0.2:9000 -stun 10.200.1.1:3478 -timeout 30s)
-    ns b "$BIN" peer -id b -peer a "${common[@]}" -probe "$PROBE" "${bflags[@]}" >"$WORK/b.json" 2>"$WORK/b.log" &
+    ns b "$BIN_B" peer -id b -peer a "${common[@]}" -probe "$probe" "${bflags[@]}" >"$WORK/b.json" 2>"$WORK/b.log" &
     local bpid=$!
-    ns a "$BIN" peer -id a -peer b "${common[@]}" -probe "$PROBE" -state "$state" "${aflags[@]}" \
+    ns a "$BIN" peer -id a -peer b "${common[@]}" -probe "$probe" -state "$state" "${aflags[@]}" \
         >"$WORK/a.json" 2>"$WORK/a.log" || true
     wait "$bpid" || true
 
@@ -311,6 +342,8 @@ check "两个出口 ↔ 端口随机分配的 NAT" dual symmetric relay
 check "一开始打不通，先中转后换直连" dual cone direct late
 check "公司路由器会为外来的包占住端口" dual cone direct leaky-a
 check "家用路由器会为外来的包占住端口" dual cone direct leaky-b
+check "公司四线路，去对端的线路在域名第二个 IP 上" office cone direct
+check "公司四线路，DNS 换了 IP，靠历史记住的服务器" office cone direct pinned
 
 echo
 echo "局域网（没有服务器）"
