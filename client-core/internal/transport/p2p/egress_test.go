@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/netip"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -166,5 +167,131 @@ func TestHistoryFillsInMissedPreservedEgress(t *testing.T) {
 	h.now = func() time.Time { return now.Add(historyTTL + time.Hour) }
 	if stale := h.augment("office", EgressReport{LocalPort: 7000}); len(stale.Egresses) != 0 {
 		t.Errorf("过期的历史不该再用：%+v", stale.Egresses)
+	}
+}
+
+// 同一个域名的几个 IP 要都探测：按目标 IP 分线路的路由器会把它们分到不同线路上。
+// 先排每个域名的第一个 IP，再排历史里记下的服务器，最后轮流取其余的 IP，总数有上限。
+func TestResolveProbeTargetsUsesEveryAddress(t *testing.T) {
+	dns := map[string][]netip.Addr{
+		"multi.example":  {netip.MustParseAddr("1.0.0.1"), netip.MustParseAddr("1.0.0.2"), netip.MustParseAddr("1.0.0.3")},
+		"single.example": {netip.MustParseAddr("2.0.0.1"), netip.MustParseAddr("1.0.0.2")},    // 与上面重复的 IP 只探一次
+		"bogus.example":  {netip.MustParseAddr("198.18.0.5"), netip.MustParseAddr("2.0.0.2")}, // 先是 fake-ip，跳过它取下一个
+	}
+	opts := probeOptions{
+		Lookup: func(_ context.Context, host string) ([]netip.Addr, error) {
+			if ips, ok := dns[host]; ok {
+				return ips, nil
+			}
+			return nil, errors.New("no such host")
+		},
+		Pinned: []probeTarget{
+			{name: "pinned.example", addr: netip.MustParseAddrPort("4.0.0.1:3478")},
+			{name: "multi.example", addr: netip.MustParseAddrPort("1.0.0.3:3478")}, // 已在名单里：提前，不重复
+		},
+	}
+	got := resolveProbeTargets(context.Background(),
+		[]string{"multi.example:3478", "single.example", "3.0.0.1:19302", "bogus.example", "missing.example"}, opts)
+	var addrs []string
+	for _, tg := range got {
+		addrs = append(addrs, tg.name+"="+tg.addr.String())
+	}
+	want := []string{
+		"multi.example=1.0.0.1:3478", "single.example=2.0.0.1:3478", "3.0.0.1=3.0.0.1:19302", "bogus.example=2.0.0.2:3478",
+		"pinned.example=4.0.0.1:3478", "multi.example=1.0.0.3:3478",
+		"multi.example=1.0.0.2:3478",
+	}
+	if strings.Join(addrs, " ") != strings.Join(want, " ") {
+		t.Fatalf("探测目标 =\n  %v\n期望\n  %v", addrs, want)
+	}
+
+	// 一个域名有很多 IP 时总数截断
+	var many []netip.Addr
+	for i := 1; i <= 40; i++ {
+		many = append(many, netip.AddrFrom4([4]byte{5, 0, 0, byte(i)}))
+	}
+	dns["many.example"] = many
+	if got := resolveProbeTargets(context.Background(), []string{"many.example"}, opts); len(got) != maxProbeTargets {
+		t.Fatalf("探测目标 %d 个，应截断到 %d", len(got), maxProbeTargets)
+	}
+}
+
+// 同一个域名的两个 IP 看到同一个出口：来源域名只记一次，两个 IP 都记下，供出口历史使用。
+func TestProbeEgressRecordsTargets(t *testing.T) {
+	prober := fakeProber{"1.0.0.1:3478": "9.9.9.1:6000", "1.0.0.2:3478": "9.9.9.1:6000", "2.0.0.1:3478": "9.9.9.2:5000"}
+	opts := probeOptions{Lookup: func(context.Context, string) ([]netip.Addr, error) {
+		return []netip.Addr{netip.MustParseAddr("1.0.0.1"), netip.MustParseAddr("1.0.0.2")}, nil
+	}}
+	r := probeEgress(context.Background(), prober, 5000, []string{"stun.example", "2.0.0.1"}, opts)
+	if len(r.Egresses) != 2 {
+		t.Fatalf("出口 = %+v", r.Egresses)
+	}
+	e := r.Egresses[0]
+	if e.Addr.String() != "9.9.9.1:6000" || len(e.Via) != 1 || e.Via[0] != "stun.example" || len(e.Targets) != 2 {
+		t.Fatalf("第一个出口 = %+v，期望 9.9.9.1:6000、来源 stun.example 一个、两个服务器 IP", e)
+	}
+}
+
+// 出口历史记住每条线路上的探测服务器（最新的在前，每条最多 3 台），以后每轮都探测它们；
+// 按线路轮流排，过期的线路不再带。用户只允许用自己的服务器时由 Manager 决定不带。
+func TestHistoryPinsServersPerLine(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "egress.json")
+	now := time.Date(2026, 11, 26, 0, 0, 0, 0, time.UTC)
+	h := loadEgressHistory(path)
+	h.now = func() time.Time { return now }
+	target := func(name, addr string) probeTarget {
+		return probeTarget{name: name, addr: netip.MustParseAddrPort(addr)}
+	}
+	h.record("office", EgressReport{LocalPort: 5000, Egresses: []Egress{
+		{Addr: netip.MustParseAddrPort("9.9.9.1:5000"), PortPreserved: true, Via: []string{"a"},
+			Targets: []probeTarget{target("a", "1.0.0.1:3478"), target("a", "1.0.0.2:3478")}},
+		{Addr: netip.MustParseAddrPort("9.9.9.2:6000"), Via: []string{"b"},
+			Targets: []probeTarget{target("b", "2.0.0.1:3478")}},
+	}})
+	// 下一轮出口 1 又被另外两台服务器看到：新的排前面，最多留 3 台
+	now = now.Add(time.Hour)
+	h.record("office", EgressReport{LocalPort: 5000, Egresses: []Egress{
+		{Addr: netip.MustParseAddrPort("9.9.9.1:5000"), PortPreserved: true, Via: []string{"c"},
+			Targets: []probeTarget{target("c", "3.0.0.1:3478"), target("c", "3.0.0.2:3478")}},
+	}})
+
+	h = loadEgressHistory(path) // 要能持久化
+	h.now = func() time.Time { return now }
+	var got []string
+	for _, tg := range h.pinned("office") {
+		got = append(got, tg.name+"="+tg.addr.String())
+	}
+	want := "c=3.0.0.1:3478 b=2.0.0.1:3478 c=3.0.0.2:3478 a=1.0.0.1:3478"
+	if strings.Join(got, " ") != want {
+		t.Fatalf("记下的服务器 = %v\n期望 %s", got, want)
+	}
+	if other := h.pinned("home"); len(other) != 0 {
+		t.Errorf("别的网络不该带这些服务器：%v", other)
+	}
+	h.now = func() time.Time { return now.Add(historyTTL) }
+	if stale := h.pinned("office"); len(stale) != 0 {
+		t.Errorf("过期的线路不该再带：%v", stale)
+	}
+}
+
+// 握手前要不要重新探测：只有改端口的线路或端口预测会过时。
+func TestNeedsFreshProbe(t *testing.T) {
+	preserved := Egress{Addr: netip.MustParseAddrPort("9.9.9.1:5000"), PortPreserved: true, Via: []string{"a"}}
+	translated := Egress{Addr: netip.MustParseAddrPort("9.9.9.2:6000"), Via: []string{"b"}}
+	guessed := Egress{Addr: netip.MustParseAddrPort("9.9.9.3:5000"), PortPreserved: true}
+	cases := []struct {
+		name string
+		r    EgressReport
+		want bool
+	}{
+		{"没有出口", EgressReport{}, false},
+		{"只有不改端口的", EgressReport{Egresses: []Egress{preserved, guessed}}, false},
+		{"有改端口的", EgressReport{Egresses: []Egress{preserved, translated}}, true},
+		{"有端口预测", EgressReport{Egresses: []Egress{preserved}, Predicted: []netip.AddrPort{netip.MustParseAddrPort("9.9.9.1:5001")}}, true},
+	}
+	for _, c := range cases {
+		if got := c.r.needsFreshProbe(); got != c.want {
+			t.Errorf("%s：needsFreshProbe = %v，期望 %v", c.name, got, c.want)
+		}
 	}
 }

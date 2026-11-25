@@ -38,13 +38,14 @@ func openIPv6Mux(port int) *ice.UDPMuxDefault {
 	return ice.NewUDPMuxDefault(ice.UDPMuxParams{UDPConn: conn})
 }
 
-// dualStackMux 把 IPv4 与 IPv6 两个打洞端口合成 pion 的一个 UDPMux。
+// dualStackMux 把 IPv4 与 IPv6 两个打洞端口合成 pion 的一个 UDPMux。本机没有 IPv6 时
+// v6 为空，只用来滤掉回环地址（见 GetListenAddresses）。
 //
 // 不用 pion 自带的 MultiUDPMuxDefault：它在创建时就把各端口的本机地址抄下来，
 // 之后换了网络、地址变了也不再更新；这里每次收集地址时都现查。
 type dualStackMux struct {
 	v4 ice.UDPMux
-	v6 ice.UDPMux
+	v6 ice.UDPMux // 可以为空
 }
 
 var _ ice.UDPMux = (*dualStackMux)(nil)
@@ -53,7 +54,7 @@ var _ ice.UDPMux = (*dualStackMux)(nil)
 func (d *dualStackMux) Close() error { return nil }
 
 func (d *dualStackMux) GetConn(ufrag string, addr net.Addr) (net.PacketConn, error) {
-	if ua, ok := addr.(*net.UDPAddr); ok && ua.IP.To4() == nil {
+	if ua, ok := addr.(*net.UDPAddr); ok && ua.IP.To4() == nil && d.v6 != nil {
 		return d.v6.GetConn(ufrag, addr)
 	}
 	return d.v4.GetConn(ufrag, addr)
@@ -61,13 +62,33 @@ func (d *dualStackMux) GetConn(ufrag string, addr net.Addr) (net.PacketConn, err
 
 func (d *dualStackMux) RemoveConnByUfrag(ufrag string) {
 	d.v4.RemoveConnByUfrag(ufrag)
-	d.v6.RemoveConnByUfrag(ufrag)
+	if d.v6 != nil {
+		d.v6.RemoveConnByUfrag(ufrag)
+	}
 }
 
 // GetListenAddresses 是 IPv4 端口原有的地址，加上 IPv6 端口上可用的公网 IPv6 地址。
 // IPv6 端口绑在 [::] 上时 pion 会把本机的 IPv4 地址也列进来，必须滤掉。
+//
+// IPv4 的回环地址也滤掉（只剩回环时除外，两端在同一台电脑上还用得着）。共享端口绑在
+// 0.0.0.0 上，pion 会把 127.0.0.1 也当成 host candidate 发给对端：对端多出一组
+// 永远不通的检查，本端也白白往对方的回环地址发包；pion 只对它自己的 UDPMuxDefault
+// 滤回环，管不到 UniversalUDPMux。
 func (d *dualStackMux) GetListenAddresses() []net.Addr {
-	out := d.v4.GetListenAddresses()
+	var out, loopback []net.Addr
+	for _, a := range d.v4.GetListenAddresses() {
+		if ua, ok := a.(*net.UDPAddr); ok && ua.IP.IsLoopback() {
+			loopback = append(loopback, a)
+			continue
+		}
+		out = append(out, a)
+	}
+	if len(out) == 0 {
+		out = loopback
+	}
+	if d.v6 == nil {
+		return out
+	}
 	for _, a := range d.v6.GetListenAddresses() {
 		ua, ok := a.(*net.UDPAddr)
 		if !ok {

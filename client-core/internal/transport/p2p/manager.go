@@ -134,11 +134,13 @@ func NewManager(opts ManagerOptions) *Manager {
 	m.localPort = conn.LocalAddr().(*net.UDPAddr).Port
 	m.iceMux = m.mux
 	if opts.Net == nil {
+		d := &dualStackMux{v4: m.mux}
 		if m.mux6 = openIPv6Mux(m.localPort); m.mux6 != nil {
-			m.iceMux = &dualStackMux{v4: m.mux, v6: m.mux6}
+			d.v6 = m.mux6
 		} else {
 			log.Info("本机没有 IPv6，只用 IPv4 打洞")
 		}
+		m.iceMux = d
 	}
 
 	go m.egressLoop()
@@ -265,20 +267,25 @@ func (m *Manager) runProbe(done chan struct{}) {
 		servers := slices.Clone(m.serverSTUN)
 		prev := m.egress
 		m.egressMu.Unlock()
+		network := localNetworkKey()
+		opts := m.probeOpts
 		if m.probeServers != nil {
-			servers = append(servers, m.probeServers()...)
+			if public := m.probeServers(); len(public) > 0 {
+				servers = append(servers, public...)
+				// 记下的服务器多是公共服务器：用户只允许用自己的服务器探测时不带
+				opts.Pinned = m.history.pinned(network)
+			}
 		}
 
 		report := EgressReport{LocalPort: m.localPort, At: time.Now()}
 		if len(servers) > 0 {
 			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-			report = probeEgress(ctx, m.mux, m.localPort, servers, m.probeOpts)
+			report = probeEgress(ctx, m.mux, m.localPort, servers, opts)
 			cancel()
 		}
 		if !m.noPredict {
 			report.Predicted = predictPorts(report, prev)
 		}
-		network := localNetworkKey()
 		m.history.record(network, report)
 		report = m.history.augment(network, report)
 
@@ -342,10 +349,10 @@ func (m *Manager) advertisedCandidates() []string {
 	}
 	m.egressMu.Lock()
 	wait := m.probing
-	stale := wait == nil && len(m.egress.Predicted) > 0 && time.Since(m.egress.At) > predictFresh
+	stale := wait == nil && m.egress.needsFreshProbe() && time.Since(m.egress.At) > mappingFresh
 	m.egressMu.Unlock()
 	if stale {
-		// 对称型 NAT 的端口计数一直在往后走，几分钟前的探测结果预测不准，先重新探测一轮
+		// 几分钟前的探测结果可能已经过时，先重新探测一轮，见 needsFreshProbe
 		m.triggerProbe()
 		m.egressMu.Lock()
 		wait = m.probing

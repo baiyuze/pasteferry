@@ -42,6 +42,9 @@ const (
 	probeTimeout      = 1500 * time.Millisecond
 	maxSrflxAdvertise = 8 // 发给对端的出口地址上限，太多只会拖慢连通性检查
 	historyTTL        = 7 * 24 * time.Hour
+	// maxProbeTargets 是一轮最多探测的服务器 IP 数。按目标 IP 分线路的网络里，
+	// IP 越多越可能每条线路都落到；并发探测，多几个 IP 不多花时间
+	maxProbeTargets = 24
 )
 
 // Egress 是本机在某个出口上的公网地址。
@@ -50,12 +53,37 @@ type Egress struct {
 	// PortPreserved 表示这个出口不改端口（公网端口等于本地端口）。
 	// 这样的出口即使某一轮没探测到，也能用「出口 IP + 本地端口」推算出来。
 	PortPreserved bool
-	// Via 是经由哪些探测服务器发现的；为空表示来自历史记录的推算。
+	// Via 是经由哪些探测服务器发现的（域名，去重）；为空表示来自历史记录的推算。
 	Via []string
+	// Targets 是看到这个地址的探测服务器 IP。出口历史记住它们，以后每轮都探测，
+	// 免得 DNS 换了一组 IP 之后这条线路就探测不到了（见 egressHistory.pinned）
+	Targets []probeTarget
 }
 
 // Guessed 表示这个地址是按历史记录推算的，而非本轮实测。
 func (e Egress) Guessed() bool { return len(e.Via) == 0 }
+
+// mappingFresh：握手时探测结果超过这么久、又有会过时的地址（见 needsFreshProbe），先重新探测
+const mappingFresh = 10 * time.Second
+
+// needsFreshProbe 报告握手前是否该重新探测：有会改写端口的线路，或做了端口预测。
+//
+// 改写端口的线路（多是运营商级 NAT）映射空闲一两分钟就会回收，下次再发包换一个新端口。
+// 实测公司一条这样的线路，同一个本地端口每隔 5 分钟探测一次，次次端口都不一样：
+// 握手时拿几分钟前的结果去告诉对端，端口多半已经对不上了。重新探测一轮，既拿到当前的
+// 端口，也让映射在接下来的连通性检查期间保持住。对称型 NAT 的端口计数一直在往后走，
+// 预测同样要用最新的结果。不改端口的线路地址不会变，不必为它重探。
+func (r EgressReport) needsFreshProbe() bool {
+	if len(r.Predicted) > 0 {
+		return true
+	}
+	for _, e := range r.Egresses {
+		if !e.Guessed() && !e.PortPreserved {
+			return true
+		}
+	}
+	return false
+}
 
 // EgressReport 是一轮探测的结果。
 type EgressReport struct {
@@ -94,7 +122,10 @@ var _ stunProber = (*ice.UniversalUDPMuxDefault)(nil)
 type probeOptions struct {
 	// AllowPrivate 允许内网与回环地址的探测服务器，仅供测试与实验环境使用
 	AllowPrivate bool
-	Resolver     *net.Resolver
+	// Lookup 解析域名的 IPv4 地址；为空时用系统解析，测试时替换
+	Lookup func(ctx context.Context, host string) ([]netip.Addr, error)
+	// Pinned 是出口历史里记下的、曾经探测到某条线路的服务器，排在各域名的第一个 IP 之后
+	Pinned []probeTarget
 }
 
 // probeEgress 并发探测所有服务器，按公网地址归并结果。
@@ -104,8 +135,8 @@ func probeEgress(ctx context.Context, prober stunProber, localPort int, servers 
 	report := EgressReport{LocalPort: localPort, Probed: len(targets), At: time.Now()}
 
 	type answer struct {
-		name string
-		addr netip.AddrPort
+		target probeTarget
+		addr   netip.AddrPort
 	}
 	answers := make(chan answer, len(targets))
 	var wg sync.WaitGroup
@@ -121,7 +152,7 @@ func probeEgress(ctx context.Context, prober stunProber, localPort int, servers 
 			if !ok {
 				return
 			}
-			answers <- answer{name: t.name, addr: netip.AddrPortFrom(ip.Unmap(), uint16(mapped.Port))}
+			answers <- answer{target: t, addr: netip.AddrPortFrom(ip.Unmap(), uint16(mapped.Port))}
 		}(t)
 	}
 	wg.Wait()
@@ -137,15 +168,20 @@ func probeEgress(ctx context.Context, prober stunProber, localPort int, servers 
 			byAddr[a.addr] = e
 			order = append(order, a.addr)
 		}
-		e.Via = append(e.Via, a.name)
+		if !slices.Contains(e.Via, a.target.name) {
+			e.Via = append(e.Via, a.target.name)
+		}
+		e.Targets = append(e.Targets, a.target)
 	}
 	// 被越多服务器看到的出口越可能是常用出口，排在前面
 	sort.SliceStable(order, func(i, j int) bool {
-		return len(byAddr[order[i]].Via) > len(byAddr[order[j]].Via)
+		return len(byAddr[order[i]].Targets) > len(byAddr[order[j]].Targets)
 	})
 	for _, a := range order {
-		sort.Strings(byAddr[a].Via)
-		report.Egresses = append(report.Egresses, *byAddr[a])
+		e := byAddr[a]
+		sort.Strings(e.Via)
+		slices.SortFunc(e.Targets, func(x, y probeTarget) int { return x.addr.Compare(y.addr) })
+		report.Egresses = append(report.Egresses, *e)
 	}
 	return report
 }
@@ -160,12 +196,22 @@ type probeTarget struct {
 // 按 IP 去重是因为出口只按目标 IP 选择：同一 IP 的不同端口、同一 IP 的多个域名
 // （Google 的 stun1–4 就是同一个 IP）只会落在同一个出口上，多探无益。
 //
+// 反过来，同一个域名的多个 IP 要都探测：多线路的路由器按目标 IP 选线路，一个域名的
+// 几个 IP 常常分落在不同线路上。实测公司网络 4 条线路，B 站一个域名的 7 个 IP 就
+// 覆盖了全部 4 条；以前每个域名只取第一个 IP，DNS 返回的顺序一变，某条线路就整轮
+// 探测不到，恰好经那条线路去往对端时就打不通。
+//
+// 排列顺序：先是每个域名的第一个 IP，再是历史里记下的服务器（opts.Pinned），
+// 最后轮流取各域名的其余 IP，总数不超过 maxProbeTargets。
+//
 // 各域名并发解析：逐个解析时一台 DNS 慢就拖住整轮探测，而刚开机、刚换网络时
 // 正是 DNS 最慢、最需要尽快探完的时候（探完才能把出口地址发给对端）。
 func resolveProbeTargets(ctx context.Context, servers []string, opts probeOptions) []probeTarget {
-	resolver := opts.Resolver
-	if resolver == nil {
-		resolver = net.DefaultResolver
+	lookup := opts.Lookup
+	if lookup == nil {
+		lookup = func(ctx context.Context, host string) ([]netip.Addr, error) {
+			return net.DefaultResolver.LookupNetIP(ctx, "ip4", host)
+		}
 	}
 	type resolved struct {
 		host string
@@ -189,7 +235,7 @@ func resolveProbeTargets(ctx context.Context, servers []string, opts probeOption
 			defer wg.Done()
 			lctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 			defer cancel()
-			if ips, err := resolver.LookupNetIP(lctx, "ip4", host); err == nil {
+			if ips, err := lookup(lctx, host); err == nil {
 				results[i].ips = ips
 			}
 		}()
@@ -199,16 +245,40 @@ func resolveProbeTargets(ctx context.Context, servers []string, opts probeOption
 	// 按服务器原本的顺序去重，结果与解析快慢无关
 	seen := map[netip.Addr]bool{}
 	var out []probeTarget
-	for _, r := range results {
-		host, port := r.host, r.port
-		for _, ip := range r.ips {
-			ip = ip.Unmap()
-			if !ip.Is4() || seen[ip] || !usableProbeIP(ip, opts.AllowPrivate) {
-				continue
+	add := func(t probeTarget) bool {
+		ip := t.addr.Addr().Unmap()
+		if len(out) >= maxProbeTargets || !ip.Is4() || seen[ip] || !usableProbeIP(ip, opts.AllowPrivate) {
+			return false
+		}
+		seen[ip] = true
+		out = append(out, probeTarget{name: t.name, addr: netip.AddrPortFrom(ip, t.addr.Port())})
+		return true
+	}
+	// 每个域名的第一个可用 IP；记下用到了第几个，后面接着轮流取
+	next := make([]int, len(results))
+	for i, r := range results {
+		for next[i] < len(r.ips) {
+			ip := r.ips[next[i]]
+			next[i]++
+			if add(probeTarget{name: r.host, addr: netip.AddrPortFrom(ip, r.port)}) {
+				break
 			}
-			seen[ip] = true
-			out = append(out, probeTarget{name: host, addr: netip.AddrPortFrom(ip, port)})
-			break // 一个域名取一个可用 IP 就够了
+		}
+	}
+	for _, t := range opts.Pinned {
+		add(t)
+	}
+	for more := true; more && len(out) < maxProbeTargets; {
+		more = false
+		for i, r := range results {
+			for next[i] < len(r.ips) {
+				ip := r.ips[next[i]]
+				next[i]++
+				more = true
+				if add(probeTarget{name: r.host, addr: netip.AddrPortFrom(ip, r.port)}) {
+					break
+				}
+			}
 		}
 	}
 	return out
@@ -334,12 +404,11 @@ func srflxCandidates(r EgressReport) []string {
 //
 // 端口随机分配的对称型 NAT 预测不中，只是多发了几十个检查包，照旧落到中转。
 const (
-	maxPredictAdvertise = 32               // 发给对端的预测地址上限
-	predictSpan         = 12               // 每段连续分配之后预测的端口数
-	predictClusterGap   = 512              // 端口相距不超过这么多，算同一段连续分配（中途偶有一两百的跳跃）
-	predictPersistAge   = time.Minute      // 两轮探测至少隔这么久，才能据此认出一直保持着的旧映射
-	predictFresh        = 10 * time.Second // 握手时探测结果超过这么久，先重新探测，预测要用最新的计数
-	natPortFloor        = 1024             // 端口计数到 65535 后假定从这里重新开始
+	maxPredictAdvertise = 32          // 发给对端的预测地址上限
+	predictSpan         = 12          // 每段连续分配之后预测的端口数
+	predictClusterGap   = 512         // 端口相距不超过这么多，算同一段连续分配（中途偶有一两百的跳跃）
+	predictPersistAge   = time.Minute // 两轮探测至少隔这么久，才能据此认出一直保持着的旧映射
+	natPortFloor        = 1024        // 端口计数到 65535 后假定从这里重新开始
 )
 
 // predictPorts 为对称型 NAT 推测接下来会分配的公网端口。

@@ -75,6 +75,17 @@ const (
 	remoteEgressWait = 3 * time.Second
 	// punchHeadStart：收到对端的出口地址后，等本端发往那里的包先出去，再公布自己的
 	punchHeadStart = 200 * time.Millisecond
+	// iceMaxBindingRequests 是每个 candidate pair 最多发多少个连通性检查，之后判为失败。
+	//
+	// pion 每 200 毫秒检查一轮，默认 7 个，也就是一对地址只试 1.4 秒。打洞要两端的包
+	// 在时间上碰头：本端先发的包被对方路由器丢掉，只是为本端路由器开了门，要等对方的
+	// 包进来、本端再发一个才算打通。而对方的出口地址要等「谁先发包」的等待（最多 3 秒，
+	// 见 remoteEgressWait）、握手前的重新探测（最多 1.5 秒）之后才发过来，
+	// 往往晚于 1.4 秒：这时本端的检查早已放弃，pion 作为发起方收到对方的检查也不会
+	// 重新检查已失败的一对，于是只差一点就打不通。改为 40 个，每对试 8 秒，盖住上面
+	// 两段等待再加信令来回；与 Tailscale 持续互发探测包的做法一致，多出的只是每秒
+	// 几个几十字节的小包，打通或放弃后就停。
+	iceMaxBindingRequests = 40
 )
 
 var (
@@ -196,6 +207,7 @@ func NewPeer(opts PeerOptions) (*Peer, error) {
 	} else {
 		// 中转路径握手快，若不加等待，往往在直连打通之前就被选中，之后再也不会换成直连
 		settings.SetRelayAcceptanceMinWait(relayAcceptanceWait)
+		settings.SetICEMaxBindingRequests(iceMaxBindingRequests)
 	}
 
 	return &Peer{
@@ -572,11 +584,44 @@ func (p *Peer) armConnectTimeout() {
 	}
 	p.connectTimer = time.AfterFunc(connectTimeout, func() {
 		if p.State() == StateConnecting {
-			p.log.Warn("连接握手超时，重置以便重试")
+			p.mu.Lock()
+			pc := p.pc
+			p.mu.Unlock()
+			p.log.Warn("连接握手超时，重置以便重试", iceCheckSummary(pc)...)
 			p.Close()
 		}
 	})
 	p.mu.Unlock()
+}
+
+// iceCheckSummary 汇总一次没成功的握手里连通性检查的情况，记进日志，排查直连失败时用。
+// 只记数量与地址类型，不记地址（诊断报告会公开给开发者）。
+//
+// 怎么看：对端地址只有 host 与 srflx 而没有出口地址，是对方没探测到出口；
+// 「收到对端检查」为 0，是对方的包一个也没进来（多半被本端或对方的路由器挡在外面，
+// 或者本端经另一条线路出去、告诉对方的地址不对）；收到了检查却「收到应答」为 0，
+// 是本端的包到不了对方。
+func iceCheckSummary(pc *webrtc.PeerConnection) []any {
+	if pc == nil {
+		return nil
+	}
+	var sent, received, answered uint64
+	types := map[string]int{}
+	for _, s := range pc.GetStats() {
+		switch st := s.(type) {
+		case webrtc.ICECandidatePairStats:
+			sent += st.RequestsSent
+			received += st.RequestsReceived
+			answered += st.ResponsesReceived
+		case webrtc.ICECandidateStats:
+			if st.Type == webrtc.StatsTypeRemoteCandidate {
+				types[st.CandidateType.String()]++
+			}
+		}
+	}
+	remote := fmt.Sprintf("host=%d srflx=%d prflx=%d relay=%d",
+		types["host"], types["srflx"], types["prflx"], types["relay"])
+	return []any{"对端地址", remote, "发出检查", sent, "收到对端检查", received, "收到应答", answered}
 }
 func (p *Peer) HandleSignal(ctx context.Context, msg *pb.SignalMessage) error {
 	switch m := msg.GetPayload().(type) {

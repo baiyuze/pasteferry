@@ -22,7 +22,7 @@ func (f *fakeMux) GetConn(ufrag string, addr net.Addr) (net.PacketConn, error) {
 	f.got = append(f.got, addr.String())
 	return nil, errors.New("fake")
 }
-func (f *fakeMux) RemoveConnByUfrag(string)        {}
+func (f *fakeMux) RemoveConnByUfrag(string)       {}
 func (f *fakeMux) GetListenAddresses() []net.Addr { return f.addrs }
 
 func udp(s string) *net.UDPAddr {
@@ -45,7 +45,8 @@ func TestDualStackMuxAdvertisesOnlyPublicIPv6(t *testing.T) {
 	for _, a := range d.GetListenAddresses() {
 		got = append(got, a.String())
 	}
-	want := "192.168.1.147:54145 127.0.0.1:54145 [2408:8207:1234:5678::9]:54145"
+	// 回环地址不发给对端（只剩回环时除外，见下一个测试）
+	want := "192.168.1.147:54145 [2408:8207:1234:5678::9]:54145"
 	if strings.Join(got, " ") != want {
 		t.Fatalf("addresses = %v\nwant        %s", got, want)
 	}
@@ -54,6 +55,30 @@ func TestDualStackMuxAdvertisesOnlyPublicIPv6(t *testing.T) {
 	_, _ = d.GetConn("u", udp("192.168.1.147:54145"))
 	if len(v6.got) != 1 || len(v4.got) != 1 {
 		t.Fatalf("GetConn routed v4=%v v6=%v", v4.got, v6.got)
+	}
+}
+
+// 本机没有 IPv6 时 v6 为空：只滤回环，不能因为空的 v6 端口出错。
+// 只剩回环地址时保留它，两端在同一台电脑上还要靠它连接。
+func TestDualStackMuxWithoutIPv6DropsLoopback(t *testing.T) {
+	v4 := &fakeMux{addrs: []net.Addr{udp("127.0.0.1:5000"), udp("192.168.3.19:5000"), udp("10.211.55.2:5000")}}
+	d := &dualStackMux{v4: v4}
+	var got []string
+	for _, a := range d.GetListenAddresses() {
+		got = append(got, a.String())
+	}
+	if want := "192.168.3.19:5000 10.211.55.2:5000"; strings.Join(got, " ") != want {
+		t.Fatalf("addresses = %v, want %s", got, want)
+	}
+	_, _ = d.GetConn("u", udp("[2408:8207::9]:5000"))
+	d.RemoveConnByUfrag("u")
+	if len(v4.got) != 1 {
+		t.Fatalf("没有 IPv6 端口时应交给 IPv4 端口：%v", v4.got)
+	}
+
+	only := &dualStackMux{v4: &fakeMux{addrs: []net.Addr{udp("127.0.0.1:5000")}}}
+	if a := only.GetListenAddresses(); len(a) != 1 || a[0].String() != "127.0.0.1:5000" {
+		t.Fatalf("只有回环地址时应保留它：%v", a)
 	}
 }
 
