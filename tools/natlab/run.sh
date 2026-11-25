@@ -35,15 +35,17 @@ PROBE_OFFICE="stun.multi.lab:3478,10.200.1.3:3478"
 ns() { ip netns exec "$@"; }
 
 INFRA_PID=""
+NATPMP_PID="" # 模拟支持 NAT-PMP 的路由器（端口映射场景）
 INFRA_ARGS=() # 各场景额外传给 infra 的参数，由 check 设置
 
 # 按进程号结束 infra：用 pkill -f 按路径匹配会连本脚本自己一起杀掉（命令行里也有这个路径）
 cleanup() {
-    if [[ -n $INFRA_PID ]]; then
-        kill "$INFRA_PID" 2>/dev/null || true
-        wait "$INFRA_PID" 2>/dev/null || true
-        INFRA_PID=""
-    fi
+    for pid in $INFRA_PID $NATPMP_PID; do
+        kill "$pid" 2>/dev/null || true
+        wait "$pid" 2>/dev/null || true
+    done
+    INFRA_PID=""
+    NATPMP_PID=""
     for n in inet rA a rB b sw r; do ip netns del "$n" 2>/dev/null || true; done
     rm -rf /etc/netns/a /etc/netns/b
 }
@@ -163,7 +165,7 @@ setup() {
 PASS=0
 FAIL=0
 
-# check <场景名> <A 侧> <B 侧> <direct|relay> [legacy|history|pinned|late|leaky-a|leaky-b]
+# check <场景名> <A 侧> <B 侧> <direct|relay> [legacy|history|pinned|late|leaky-a|leaky-b|portmap|portmap-off|portmap-cgnat]
 check() {
     # NATLAB_ONLY 只跑名字里含这段文字的场景，排查问题时用
     [[ -n ${NATLAB_ONLY:-} && $1 != *"$NATLAB_ONLY"* ]] && return
@@ -212,6 +214,19 @@ check() {
         aflags=(-settle 40s)
         bflags=(-settle 40s)
         ;;
+    portmap | portmap-off | portmap-cgnat)
+        # rA 扮演支持 NAT-PMP 的家用路由器，见 natlab natpmp。portmap：两端都开端口映射，
+        # a 的路由器为它映射端口；portmap-off：路由器支持，但两端都不请求（对照）；
+        # portmap-cgnat：路由器报告的外网地址是运营商级 NAT 地址，映射到不了公网，不该用
+        local report=()
+        [[ $flag == portmap-cgnat ]] && report=(-report 100.64.0.11)
+        ns rA "$BIN" natpmp -lan 192.168.10.1 -wan-ip 10.255.0.11 "${report[@]}" >"$WORK/natpmp.log" 2>&1 &
+        NATPMP_PID=$!
+        if [[ $flag != portmap-off ]]; then
+            aflags=(-portmap)
+            bflags=(-portmap)
+        fi
+        ;;
     esac
     local common=(-infra http://10.200.0.2:9000 -stun 10.200.1.1:3478 -timeout 30s)
     ns b "$BIN_B" peer -id b -peer a "${common[@]}" -probe "$probe" "${bflags[@]}" >"$WORK/b.json" 2>"$WORK/b.log" &
@@ -229,6 +244,15 @@ check() {
     if [[ $flag == late ]] && ! grep -q '尝试换成直连' "$WORK/a.log"; then
         ok=0
         echo "    a 没有经过「中转 → 尝试换成直连」"
+    fi
+    # 端口映射场景要确认直连确实来自映射，运营商 NAT 场景要确认映射被识别出来、没有用上
+    if [[ $flag == portmap ]] && ! grep -q '路由器已为打洞端口做了映射' "$WORK/a.log"; then
+        ok=0
+        echo "    a 没有建立端口映射"
+    fi
+    if [[ $flag == portmap-cgnat ]] && ! grep -q '外面还有一层运营商 NAT' "$WORK/a.log"; then
+        ok=0
+        echo "    a 没有识别出外面还有一层运营商 NAT"
     fi
     if [[ $ok == 1 ]]; then
         PASS=$((PASS + 1))
@@ -344,6 +368,9 @@ check "公司路由器会为外来的包占住端口" dual cone direct leaky-a
 check "家用路由器会为外来的包占住端口" dual cone direct leaky-b
 check "公司四线路，去对端的线路在域名第二个 IP 上" office cone direct
 check "公司四线路，DNS 换了 IP，靠历史记住的服务器" office cone direct pinned
+check "路由器支持 NAT-PMP ↔ 端口随机分配的 NAT" single symmetric direct portmap
+check "路由器支持 NAT-PMP，但不做映射（对照）" single symmetric relay portmap-off
+check "路由器外面还有一层运营商 NAT，映射不可用" single symmetric relay portmap-cgnat
 
 echo
 echo "局域网（没有服务器）"

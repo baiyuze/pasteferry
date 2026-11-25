@@ -4,10 +4,12 @@
 //	natlab infra -http 10.200.0.2:9000 -stun 10.200.1.1,10.200.1.2 -turn 10.200.0.3
 //	natlab peer -id a -peer b -infra http://10.200.0.2:9000 -stun ... -probe ... -turn ...
 //	natlab lanpeer -seed a -peer-seed b [-mdns] [-addr ip:port]
+//	natlab natpmp -lan 192.168.10.1 -wan-ip 10.255.0.11 [-report 100.64.0.11]
 //
 // infra 扮演「互联网」上的服务：信令转发、若干台 STUN 服务器、一台 TURN 中转。
 // peer 用的就是 PasteFerry 真实的 P2P 连接代码，只把信令换成了这里的 HTTP 转发。
 // lanpeer 不用服务器，信令与发现走真实的局域网通道（transport/lan）。
+// natpmp 在路由器里扮演支持 NAT-PMP 的家用路由器（见 natpmp.go）。
 package main
 
 import (
@@ -38,7 +40,7 @@ const turnSecret = "natlab"
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "用法: natlab <infra|peer|lanpeer> [参数]")
+		fmt.Fprintln(os.Stderr, "用法: natlab <infra|peer|lanpeer|natpmp> [参数]")
 		os.Exit(2)
 	}
 	var err error
@@ -47,6 +49,8 @@ func main() {
 		err = runInfra(os.Args[2:])
 	case "peer":
 		err = runPeer(os.Args[2:])
+	case "natpmp":
+		err = runNATPMP(os.Args[2:])
 	case "lanpeer":
 		err = runLANPeer(os.Args[2:])
 	default:
@@ -187,7 +191,12 @@ func runPeer(args []string) error {
 	timeout := fs.Duration("timeout", 40*time.Second, "等待连接的最长时间")
 	linger := fs.Duration("linger", 4*time.Second, "报完结果后保持连接的时间")
 	settle := fs.Duration("settle", 0, "连上中转后再等多久，看能否换成直连")
+	portMapping := fs.Bool("portmap", false, "请路由器做端口映射（与后台服务相同），见 natlab natpmp")
 	_ = fs.Parse(args)
+	var mapping func() bool
+	if *portMapping {
+		mapping = func() bool { return true }
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), *timeout+*settle+10*time.Second)
 	defer cancel()
@@ -200,6 +209,7 @@ func runPeer(args []string) error {
 		ProbeAllowPrivate:  true, // 实验室用内网地址扮演公网
 		DisableEgressProbe: *legacy,
 		StatePath:          *statePath,
+		PortMapping:        mapping,
 		ProbeServers:       func() []string { return splitList(*probeList) },
 		SendSignal: func(ctx context.Context, to string, msg *pb.SignalMessage) error {
 			raw, err := proto.Marshal(msg)
@@ -236,6 +246,13 @@ func runPeer(args []string) error {
 			time.Sleep(50 * time.Millisecond)
 		}
 	}
+	// 开了端口映射时再等它一会儿（路由器不支持就等不到，最多 3 秒），让这一次握手就带上
+	if *portMapping {
+		deadline := time.Now().Add(3 * time.Second)
+		for time.Now().Before(deadline) && !hasMapped(m.Egress()) {
+			time.Sleep(50 * time.Millisecond)
+		}
+	}
 	if err := m.Connect(ctx, *peerID); err != nil {
 		return err
 	}
@@ -252,6 +269,15 @@ func runPeer(args []string) error {
 	// 读到的就成了「已断开」
 	time.Sleep(*linger)
 	return err
+}
+
+func hasMapped(r p2p.EgressReport) bool {
+	for _, e := range r.Egresses {
+		if e.Mapped {
+			return true
+		}
+	}
+	return false
 }
 
 // waitFinal 等连接建立，再多等一会儿让两端交换 LinkInfo，取稳定后的状态。
