@@ -12,16 +12,19 @@ document.documentElement.classList.add('js');
   var d = document.documentElement, k = 'pasteferry-theme', p;
   var m = window.matchMedia && matchMedia('(prefers-color-scheme: light)');
   try { p = localStorage.getItem(k); } catch (e) {}
+  p = p === 'light' || p === 'system' ? p : 'dark';
   function a() {
-    var t = p === 'light' || p === 'dark' ? p : (m && m.matches ? 'light' : 'dark');
+    var t = p === 'system' ? (m && m.matches ? 'light' : 'dark') : p;
     d.setAttribute('data-theme', t);
-    d.setAttribute('data-theme-pref', p === 'light' || p === 'dark' ? p : 'system');
+    d.setAttribute('data-theme-pref', p);
+    var c = document.querySelector('meta[name="theme-color"]');
+    if (c) c.setAttribute('content', t === 'light' ? '#ffffff' : '#141416');
   }
   a();
-  if (m && m.addEventListener) m.addEventListener('change', function () { if (p !== 'light' && p !== 'dark') a(); });
+  if (m && m.addEventListener) m.addEventListener('change', function () { if (p === 'system') a(); });
   window.pfSetTheme = function (v) {
-    p = v;
-    try { v === 'system' ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {}
+    p = v === 'light' || v === 'system' ? v : 'dark';
+    try { localStorage.setItem(k, p); } catch (e) {}
     a();
   };
 })();

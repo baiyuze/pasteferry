@@ -47,32 +47,6 @@
   --mac-outline: rgba(0, 0, 0, 0.06);
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --mac-window: #ffffff;
-    --mac-bar: #f6f6f6;
-    --mac-line: #e5e5ea;
-    --mac-ink: #1d1d1f;
-    --mac-dim: #65656b;
-    --mac-faint: #68686e;
-    --mac-rule: #e3e3e8;
-    --mac-panel: #fbfbfd;
-    --mac-sep: #e5e5ea;
-    --mac-chip: #ececf0;
-    --mac-chip-ink: #3a3a3c;
-    --mac-blue: #0a66d8;
-    --mac-field: #f0f0f3;
-    --mac-seg-on: #ffffff;
-    --mac-bar-fill: #e3e3e8;
-    --mac-stroke: #b9b9c0;
-    --mac-scr-a: #f4f4f6;
-    --mac-scr-b: #e9e9ed;
-    --mac-shadow: rgba(0, 0, 0, 0.14);
-    --mac-shadow-strong: rgba(0, 0, 0, 0.18);
-    --mac-outline: rgba(0, 0, 0, 0.06);
-  }
-}
-
 /* 功能页（features/）。在 site.css 之后加载，只给这一页用。
  *
  * 照苹果产品页的路数：一屏一件事，大标题，留白多，画面随滚动出现或推进。

@@ -50,13 +50,12 @@
     var visible = false;
     var paused = reduce || !pauseButton;
 
-    // 按两台设备实际的位置算出纸飞行的起点、终点与弧线，以及服务器的位置和两条交换连接信息的点线
+    // 按实际位置算出纸飞行的起点、终点与唯一的传输弧线，以及服务器说明的位置
     var layout = function () {
       var src = current.querySelector(".doc");
       var dst = landed.querySelector(".doc");
       var sheet = stage.querySelector(".sheet-fly");
       var path = stage.querySelector(".arc .direct");
-      var sig = stage.querySelector(".arc .sig");
       var label = stage.querySelector(".arc-label");
       var box = stage.getBoundingClientRect();
       var a = src.getBoundingClientRect();
@@ -91,8 +90,6 @@
       var py = peak - 40;
       stage.style.setProperty("--px", px + "px");
       stage.style.setProperty("--py", py + "px");
-      sig.setAttribute("d", "M" + mx + " " + top + " Q" + mx + " " + py + " " + (px - 24) + " " + py +
-        " M" + (px + 24) + " " + py + " Q" + wx + " " + py + " " + wx + " " + top);
     };
 
     // 只有访客自己点的才读给读屏软件听，自动轮播的不读
@@ -284,11 +281,11 @@
     } catch (e) {}
   }
 
-  // 外观菜单：跟随系统、浅色、深色。选择存在 localStorage，由 <head> 里的脚本（反馈页是 platform.js）
+  // 外观菜单：默认深色。选择存在 localStorage，由 <head> 里的脚本（反馈页是 platform.js）
   // 在下次打开时先于绘制应用
   var themeButtons = document.querySelectorAll("[data-theme-set]");
   function markTheme() {
-    var pref = document.documentElement.getAttribute("data-theme-pref") || "system";
+    var pref = document.documentElement.getAttribute("data-theme-pref") || "dark";
     themeButtons.forEach(function (b) {
       b.setAttribute("aria-pressed", b.getAttribute("data-theme-set") === pref ? "true" : "false");
     });

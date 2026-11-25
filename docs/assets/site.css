@@ -1,6 +1,6 @@
 /* PasteFerry 官网。由 tools/site/build.py 生成的页面共用这一份样式。
  *
- * 浅色与深色跟随系统，系统蓝用于按钮、链接、直连的线和「被复制的那张纸」。
+ * 默认深色，可切换浅色或跟随系统。系统蓝用于按钮、链接、直连的线和「被复制的那张纸」。
  * 区块之间靠留白分开。首屏演示与按需打开的宣传片展示复制过程。
  * 不加载网页字体：Mac 上是 SF Pro、苹方、冬青，Windows 上是 Segoe UI、微软雅黑、Meiryo。
  * 从手机宽度写起，宽屏再放开；标题与引言居中，正文、列表、表格左对齐。
@@ -45,8 +45,8 @@
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
 }
 
-/* 浅色。默认跟随系统；顶栏的外观菜单可以固定成浅色或深色（<html data-theme>，由 <head> 里的脚本设置）。
- * 没有脚本时按系统设置。截图、代码块和示意窗口也使用对应外观。 */
+/* 默认深色。顶栏选择浅色或跟随系统时，由 <head> 脚本设置 <html data-theme>。
+ * 没有脚本时仍用深色。截图、代码块和示意窗口也使用对应外观。 */
 :root[data-theme="light"] {
   color-scheme: light;
   --ground: #ffffff;
@@ -71,32 +71,6 @@
   --key-rule: #d1d1d6;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    color-scheme: light;
-    --ground: #ffffff;
-    --surface: #f5f5f7;
-    --surface-2: #ebebef;
-    --rule: #e4e4e9;
-    --rule-strong: #d1d1d6;
-    --ink: #1d1d1f;
-    --ink-2: #3a3a3c;
-    --dim: #65656b;
-    --faint: #68686e;
-    --blue: #0a66d8;
-    --blue-hi: #0a62cf;
-    --blue-wash: rgba(10, 102, 216, 0.08);
-    --bar: rgba(255, 255, 255, 0.78);
-    --bar-rule: rgba(0, 0, 0, 0.08);
-    --pop-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
-    --button-hover: #0b57b8;
-    --device-shadow: 0 40px 70px -42px rgba(0, 0, 0, 0.45);
-    --key-bg: linear-gradient(#ffffff, #f2f2f4);
-    --key-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.06), 0 1px 0 rgba(0, 0, 0, 0.1), 0 8px 18px rgba(0, 0, 0, 0.08);
-    --key-rule: #d1d1d6;
-  }
-}
-
 /* 一张截图的深色版与浅色版，只显示与当前外观相符的那一张 */
 .theme-light {
   display: none !important;
@@ -108,16 +82,6 @@
 
 :root[data-theme="light"] .theme-dark {
   display: none !important;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .theme-light {
-    display: block !important;
-  }
-
-  :root:not([data-theme]) .theme-dark {
-    display: none !important;
-  }
 }
 
 /* 日文用日文字形：冬青与 Meiryo 排在中文字体前面 */
@@ -440,7 +404,7 @@ caption.skip {
   height: 1.05rem;
 }
 
-:root:not([data-theme-pref]) .appearance-now svg:nth-child(1),
+:root:not([data-theme-pref]) .appearance-now svg:nth-child(3),
 :root[data-theme-pref="system"] .appearance-now svg:nth-child(1),
 :root[data-theme-pref="light"] .appearance-now svg:nth-child(2),
 :root[data-theme-pref="dark"] .appearance-now svg:nth-child(3) {
@@ -985,8 +949,8 @@ kbd {
   fill: none;
   stroke: var(--blue);
   stroke-width: 1.5;
-  stroke-dasharray: 4 6;
-  opacity: 0.45;
+  stroke-linecap: round;
+  opacity: 0.3;
 }
 
 .arc-label {
@@ -1014,7 +978,7 @@ kbd {
 }
 
 /* 可以点的演示：Mac 桌面上四样东西，点哪样就复制哪样；下面切换两台电脑在家里和公司，还是同一个 Wi‑Fi。
- * 跨网络时先经服务器交换连接信息（灰色点线），再直连（蓝色弧线），整段往后推 --t0。
+ * 只用一条蓝色弧线表示内容直传；网络位置用设备下方的文字区分。
  * 画面宽度跟着窗口高度走：窗口矮就把两台电脑缩小一点，保证整台都在首屏里 */
 .demo {
   margin: 0 auto;
@@ -1148,34 +1112,6 @@ kbd {
   color: var(--faint);
 }
 
-/* 网络：同一个 Wi‑Fi 时一个虚线框把两台都圈起来，跨网络时各圈各的 */
-.stage::before,
-.device::before {
-  content: "";
-  position: absolute;
-  border: 1px dashed var(--rule-strong);
-  border-radius: 22px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
-}
-
-.stage::before {
-  inset: -4.5rem -1.6rem -0.9rem;
-  transform: scale(0.97);
-}
-
-.device::before {
-  inset: -1.1rem -11% -0.5rem;
-  transform: scale(0.94);
-}
-
-.stage[data-mode="lan"]::before,
-.stage[data-mode="wan"] .device::before {
-  opacity: 1;
-  transform: none;
-}
-
 /* Mac 桌面上的四样东西 */
 .mac .files {
   position: absolute;
@@ -1291,38 +1227,6 @@ kbd {
   opacity: 1;
 }
 
-.stage.play[data-mode="wan"] .server svg {
-  animation: ping 0.9s var(--ease) both;
-}
-
-.arc .sig {
-  fill: none;
-  stroke: var(--dim);
-  stroke-width: 1.3;
-  stroke-dasharray: 1 5;
-  stroke-linecap: round;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-
-.stage[data-mode="wan"] .arc .sig {
-  opacity: 0.55;
-}
-
-.stage.play[data-mode="wan"] .arc .sig {
-  animation: sig 0.9s linear both;
-}
-
-@keyframes ping {
-  25%, 65% { color: #fff; background: var(--action); border-color: var(--action); }
-}
-
-@keyframes sig {
-  0% { opacity: 0; stroke-dashoffset: 30; }
-  25% { opacity: 0.9; }
-  100% { opacity: 0.55; stroke-dashoffset: 0; }
-}
-
 /* 编排：一次复制、一次粘贴，约 3.6 秒 */
 .stage.play .mac kbd {
   animation: press 0.32s var(--ease) both;
@@ -1381,9 +1285,9 @@ kbd {
 }
 
 @keyframes arc {
-  0%, 12% { opacity: 0; stroke-dashoffset: 40; }
-  30%, 80% { opacity: 0.9; stroke-dashoffset: 0; }
-  100% { opacity: 0.45; stroke-dashoffset: 0; }
+  0%, 12% { opacity: 0; }
+  30%, 80% { opacity: 0.55; }
+  100% { opacity: 0.3; }
 }
 
 @keyframes label {

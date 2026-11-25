@@ -165,20 +165,21 @@ PLATFORM = ('  <script>document.documentElement.classList.add("js");'
             'document.documentElement.classList.add("pc");</script>\n')
 
 
-# 外观：默认跟随系统的浅色或深色，顶栏的外观菜单可以固定其中一种（存在 localStorage）。
+# 外观：默认深色，顶栏可选择浅色、深色或跟随系统（存在 localStorage）。
 # 在第一次绘制前给 <html> 写上 data-theme，避免先闪一下另一种颜色。反馈页的内容安全策略不允许内联脚本，
 # 同样的逻辑在 docs/assets/platform.js 里；宣传片页（tour/）像视频一样一直是深色，不加。
 THEME_KEY = "pasteferry-theme"
 THEME_SCRIPT = ('  <script>(function(){var d=document.documentElement,k="' + THEME_KEY + '",p,'
                 'm=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");'
                 'try{p=localStorage.getItem(k)}catch(e){}'
-                'function a(){var t=p==="light"||p==="dark"?p:(m&&m.matches?"light":"dark");'
-                'd.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p==="light"||p==="dark"?p:"system")}'
-                'a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p!=="light"&&p!=="dark")a()});'
-                'window.pfSetTheme=function(v){p=v;try{v==="system"?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}a()}'
+                'p=p==="light"||p==="system"?p:"dark";'
+                'function a(){var t=p==="system"?(m&&m.matches?"light":"dark"):p;'
+                'd.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p);'
+                'var c=document.querySelector(\'meta[name="theme-color"]\');if(c)c.setAttribute("content",t==="light"?"#ffffff":"#141416")}'
+                'a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p==="system")a()});'
+                'window.pfSetTheme=function(v){p=v==="light"||v==="system"?v:"dark";try{localStorage.setItem(k,p)}catch(e){}a()}'
                 '})();</script>\n')
-THEME_COLOR = ('  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">\n'
-               '  <meta name="theme-color" content="#141416" media="(prefers-color-scheme: dark)">\n')
+THEME_COLOR = '  <meta name="theme-color" content="#141416">\n'
 DARK_IMG = re.compile(r'<img ([^>]*?)src="([^"]*?)-dark\.png"([^>]*)>')
 
 
@@ -320,10 +321,10 @@ THEME_ICONS = {
 
 
 def theme_menu(f: dict) -> str:
-    """顶栏的外观菜单：跟随系统、浅色、深色。要脚本才能切换，没有脚本时不显示（样式里藏起来）。"""
+    """顶栏的外观菜单：深色、浅色、跟随系统。要脚本才能切换，没有脚本时不显示（样式里藏起来）。"""
     items = "".join(
         f'<li><button type="button" data-theme-set="{k}" aria-pressed="false">{THEME_ICONS[k]}{esc(f["theme_" + k])}</button></li>'
-        for k in ("system", "light", "dark"))
+        for k in ("dark", "light", "system"))
     return f"""<details class="lang appearance">
           <summary aria-label="{esc(f["theme_menu"])}" title="{esc(f["theme_menu"])}"><i class="appearance-now" aria-hidden="true">{THEME_ICONS["system"]}{THEME_ICONS["light"]}{THEME_ICONS["dark"]}</i></summary>
           <ul>{items}</ul>
@@ -670,7 +671,7 @@ def stage(c: dict, f: dict) -> str:
               <div class="base"></div>
               <figcaption>{c["stage_win"]}{net("win")}</figcaption>
             </figure>
-            <svg class="arc" aria-hidden="true"><path class="sig" d=""/><path class="direct" d=""/></svg>
+            <svg class="arc" aria-hidden="true"><path class="direct" d=""/></svg>
             <span class="server" aria-hidden="true">{SERVER}<span>{esc(f["demo_server"])}</span></span>
             <span class="arc-label" aria-hidden="true"><span class="wan">{c["stage_arc"]}</span><span class="lan">{esc(f["demo_no_server"])}</span></span>
             <span class="sheet-fly" aria-hidden="true">{LINES}</span>
@@ -2904,11 +2905,10 @@ def write(path: Path, text: str) -> None:
         if path.parent.name != 'feedback':
             text = text.replace('  <meta charset="utf-8">\n',
                                 '  <meta charset="utf-8">\n' + GITHUB_PAGES_REDIRECT, 1)
-        # 外观：宣传片页一直是深色，其余页面跟随系统或访问者的选择
+        # 外观：默认深色，其余选择在绘制前应用；宣传片页一直是深色
         if path.parent.name != TOUR.strip("/"):
-            text = text.replace('  <meta name="theme-color" content="#141416">\n', THEME_COLOR, 1)
-            if path.parent.name != 'feedback':
-                text = text.replace('  <meta charset="utf-8">\n', '  <meta charset="utf-8">\n' + THEME_SCRIPT, 1)
+            theme_setup = THEME_COLOR + (THEME_SCRIPT if path.parent.name != 'feedback' else '')
+            text = text.replace('  <meta name="theme-color" content="#141416">\n', theme_setup, 1)
             text = light_shots(path, text)
         text = versioned(path, text)
     path.parent.mkdir(parents=True, exist_ok=True)
