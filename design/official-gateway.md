@@ -45,7 +45,7 @@ The offerer opens its tunnel as soon as it gathers, but the gateway answers
 the answerer only authorizes after the relay offer reaches it. On a slow link
 that took over ten seconds, while the client gave up after nine: the offerer
 never got a relay candidate and the attempt always failed, followed by a
-one-minute cooldown. The client now keeps retrying for up to 22 seconds,
+one-minute cooldown. Since 2.14.0 the client keeps retrying for up to 22 seconds,
 inside the 30-second handshake limit. Relay-only connections also check each
 candidate pair for 8 seconds instead of pion's 1.4: round trips through the
 TCP tunnel measured 1.5 to 2.5 seconds. When the gateway closes a tunnel, the

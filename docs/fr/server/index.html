@@ -173,11 +173,11 @@
             <div class="os-grid">
               <div class="os-steps">
                 <ol class="steps">
-                <li>Téléchargez <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.2/pasteferry-server-windows-amd64.zip">pasteferry-server-windows-amd64.zip</a> et choisissez Extraire tout.</li>
+                <li>Téléchargez <a href="https://github.com/baiyuze/pasteferry/releases/download/v2.14.0/pasteferry-server-windows-amd64.zip">pasteferry-server-windows-amd64.zip</a> et choisissez Extraire tout.</li>
                 <li>Ouvrez le dossier extrait et double-cliquez sur <code>install.cmd</code>.<span class="aside">Si vous voyez «Windows a protégé votre PC », cliquez sur Plus d'informations, puis sur Exécuter quand même ; lorsque le contrôle de compte d'utilisateur vous le demande, cliquez sur Oui. Le serveur n'est pas encore signé par code, c'est pourquoi Windows le demande une fois.</span></li>
                 <li>L'installation continue dans une nouvelle fenêtre. L'adresse <code>ws://…/signal</code> à la fin est celle que vous saisissez dans les applications.</li>
                 </ol>
-                <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.13.2/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Téléchargez le serveur Windows</a>
+                <a class="button" href="https://github.com/baiyuze/pasteferry/releases/download/v2.14.0/pasteferry-server-windows-amd64.zip"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Téléchargez le serveur Windows</a>
                 <ul class="points">
                 <li><strong>Fonctionne en tant que service Windows :</strong> commence par Windows, aucune connexion requise, aucune fenêtre. Il apparaît sous le nom de serveur PasteFerry dans Services.</li>
                 <li><strong>Pare-feu déjà autorisé :</strong> le script ajoute une règle entrante pour pastaferry-server.exe uniquement, il n'y a donc aucun port à ouvrir.</li>
@@ -205,7 +205,7 @@
 <span class="t-step">&gt; Starting</span>
   √ Running
 
-Installed: pasteferry-server 2.13.2. It runs as a Windows service and starts with Windows.
+Installed: pasteferry-server 2.14.0. It runs as a Windows service and starts with Windows.
 In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
@@ -239,7 +239,7 @@ In PasteFerry on each computer, set Settings → Connection → Custom server to
                   <li>Ouvrez Terminal et exécutez ces lignes :
                 <div class="code">
                   <button class="copy" type="button" data-done="Copié">Copier</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.2/pasteferry-server-macos.tar.gz
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.14.0/pasteferry-server-macos.tar.gz
 tar xzf pasteferry-server-macos.tar.gz
 cd pasteferry-server-macos
 ./install.sh</code></pre>
@@ -263,7 +263,7 @@ cd pasteferry-server-macos
 <span class="t-step">▶ Starting</span>
   ✓ Running
 
-Installed: pasteferry-server 2.13.2. It starts whenever you log in to this Mac.
+Installed: pasteferry-server 2.14.0. It starts whenever you log in to this Mac.
 In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
@@ -295,7 +295,7 @@ In PasteFerry on each computer, set Settings → Connection → Custom server to
                   <li>Sur la machine elle-même, ou via ssh, exécutez ces lignes :<span class="aside">Sur ARM, comme un Raspberry Pi avec un système d'exploitation 64 bits, remplacez <code>amd64</code> par <code>arm64</code>.</span>
                 <div class="code">
                   <button class="copy" type="button" data-done="Copié">Copier</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.13.2/pasteferry-server-linux-amd64.tar.gz
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.14.0/pasteferry-server-linux-amd64.tar.gz
 tar xzf pasteferry-server-linux-amd64.tar.gz
 cd pasteferry-server-linux-amd64
 sudo ./install.sh</code></pre>
@@ -318,7 +318,7 @@ sudo ./install.sh</code></pre>
 <span class="t-step">▶ Starting</span>
   ✓ Running
 
-Installed: pasteferry-server 2.13.2
+Installed: pasteferry-server 2.14.0
 In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://192.168.1.20:8787/signal</span>
@@ -358,7 +358,7 @@ Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768
         <p class="intro">Sur un autre ordinateur, ouvrez <code>http://192.168.1.20:8787/healthz</code> dans un navigateur (avec votre adresse). Si vous voyez cette ligne, le chemin réseau fonctionne.</p>
         <figure class="browser" role="img" aria-label="Un navigateur affichant http://192.168.1.20:8787/healthz, avec le statut du serveur ok et sa version">
           <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">http://192.168.1.20:8787/healthz</span></div>
-          <pre class="b-body">{"status":"ok","version":"2.13.2"}</pre>
+          <pre class="b-body">{"status":"ok","version":"2.14.0"}</pre>
         </figure>
         <p class="note">S'il ne se charge pas, consultez les questions <a href="#faq"></a> ci-dessous.</p>
       </div>

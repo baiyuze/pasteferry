@@ -1,5 +1,26 @@
 # 更新记录 / Changelog
 
+## 2.14.0 — 2026-11-26
+
+Devices on different networks connect directly much more often.
+
+### Changes
+
+- Higher direct connection success: On networks with several internet lines, such as many offices, PasteFerry now finds the line that leads to the other device, so connections that used to go through the relay connect directly. Only the device on that network needs this update.
+- Router port mapping: When the router supports UPnP, NAT-PMP or PCP and has a public address, PasteFerry opens a port on it, so other devices can connect directly even from networks that are otherwise hard to reach.
+
+### Fixes
+
+- Direct connection attempts no longer give up on each address after 1.4 seconds, and ports on carrier-grade NAT lines are refreshed before each attempt, so attempts that narrowly failed now connect.
+- When the other device took more than nine seconds to approve the official relay, the relay always failed and was retried only a minute later; it now waits up to 22 seconds.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: recommended. A device on a network with several internet lines, such as an office, needs this update to connect directly; port mapping works on any device whose router supports it. Pairings, history and settings are preserved.
+- **Android**: recommended; port mapping works on Wi-Fi routers that support it.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.13.2 — 2026-11-21
 
 Restore background service startup when reopening the desktop app.

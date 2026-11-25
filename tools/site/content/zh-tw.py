@@ -176,7 +176,7 @@ C = {
 
     "specs_h2": "技術規格",
     "specs": [
-        ("版本", '2.13.2，<time datetime="2026-11-21">2026 年 11 月 21 日</time>發布'),
+        ("版本", '2.14.0，<time datetime="2026-11-26">2026 年 11 月 26 日</time>發布'),
         ("Mac 用戶端", "macOS 13 Ventura 以上；Apple 晶片與 Intel 晶片各有一個安裝檔，約 25 MB，不需要 Rosetta；也有兩種晶片通用的版本，約 47 MB"),
         ("Windows 用戶端", "Windows 10 與 Windows 11，x64；只為目前使用者安裝，不需要系統管理員權限；安裝檔約 23 MB"),
         ("Linux 用戶端", "x64 與 ARM64；.deb（Debian、Ubuntu 等）或 tar.gz（其他發行版），約 22 MB；"

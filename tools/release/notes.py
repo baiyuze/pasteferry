@@ -12,6 +12,39 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.14.0',
+ 'date': '2026-11-26',
+ 'changes': [('Higher direct connection success: On networks with several internet lines, such as '
+              'many offices, PasteFerry now finds the line that leads to the other device, so '
+              'connections that used to go through the relay connect directly. Only the device on '
+              'that network needs this update.',
+              '远程直连成功率提升：公司等有多条线路的网络里，现在能找到通往对方设备的那条线路，以前只能经中转的连接改为直连。只需升级处在这类网络里的那台设备。',
+              'リモート直接接続の成功率が向上：会社など複数の回線があるネットワークで、相手デバイスにつながる回線を見つけられるようになり、これまで中継経由だった接続が直接つながります。更新が必要なのは、そのネットワークにあるデバイスだけです。',
+              '遠端直連成功率提升：公司等有多條線路的網路裡，現在能找到通往對方裝置的那條線路，以前只能經中繼的連線改為直連。只需更新位於這類網路中的那台裝置。',
+              '遙距直連成功率提升：公司等有多條線路的網絡裏，現在能找到通往對方裝置的那條線路，以往只能經中轉的連線改為直連。只需更新位於這類網絡中的那部裝置。'),
+             ('Router port mapping: When the router supports UPnP, NAT-PMP or PCP and has a public '
+              'address, PasteFerry opens a port on it, so other devices can connect directly even '
+              'from networks that are otherwise hard to reach.',
+              '路由器端口映射：路由器支持 UPnP、NAT-PMP 或 PCP 且有公网地址时，自动在路由器上开一个端口，其他设备即使在难以打通的网络里也能直接连进来。',
+              'ルーターのポートマッピング：ルーターが UPnP・NAT-PMP・PCP '
+              'のいずれかに対応し、グローバルアドレスを持つ場合、ルーターに自動でポートを開きます。つながりにくいネットワークにある他のデバイスからも直接接続できます。',
+              '路由器連接埠對應：路由器支援 UPnP、NAT-PMP 或 PCP 且有公用位址時，會自動在路由器上開一個連接埠，其他裝置即使在難以打通的網路裡也能直接連進來。',
+              '路由器連接埠映射：路由器支援 UPnP、NAT-PMP 或 PCP 並有公用地址時，會自動在路由器上開一個連接埠，其他裝置即使在難以打通的網絡裏亦能直接連進來。')],
+ 'fixes': [('Direct connection attempts no longer give up on each address after 1.4 seconds, and '
+            'ports on carrier-grade NAT lines are refreshed before each attempt, so attempts that '
+            'narrowly failed now connect.',
+            '直连尝试不再每个地址只试 1.4 秒就放弃，运营商级 NAT 线路的端口也会在每次尝试前重新获取，以前差一点没连上的情况现在能直连。',
+            '直接接続の試行で、アドレスごとに 1.4 秒で諦めることがなくなりました。キャリアグレード NAT '
+            '回線のポートも試行のたびに取り直すため、あと少しで失敗していた接続がつながります。',
+            '直連嘗試不再每個位址只試 1.4 秒就放棄，電信級 NAT 線路的連接埠也會在每次嘗試前重新取得，以往差一點沒連上的情況現在能直連。',
+            '直連嘗試不再每個地址只試 1.4 秒便放棄，電訊級 NAT 線路的連接埠亦會在每次嘗試前重新取得，以往差一點連不上的情況現在能直連。'),
+           ('When the other device took more than nine seconds to approve the official relay, the '
+            'relay always failed and was retried only a minute later; it now waits up to 22 '
+            'seconds.',
+            '对方设备同意官方中转超过 9 秒时，中转必然失败、一分钟后才重试；现在最多等 22 秒。',
+            '相手デバイスが公式中継の承認に 9 秒以上かかると中継が必ず失敗し、再試行は 1 分後でした。最大 22 秒まで待つようにしました。',
+            '對方裝置同意官方中繼超過 9 秒時，中繼必定失敗，一分鐘後才重試；現在最多等 22 秒。',
+            '對方裝置同意官方中轉超過 9 秒時，中轉必定失敗，一分鐘後才重試；現在最多等 22 秒。')]},
 {'version': '2.13.2',
  'date': '2026-11-21',
  'changes': [],
