@@ -66,7 +66,7 @@
       "notes": {
         "en": {
           "changes": [
-            "Higher direct connection success: On networks with several internet lines, such as many offices, PasteFerry now finds the line that leads to the other device, so connections that used to go through the relay connect directly. Only the device on that network needs this update.",
+            "Higher direct connection success: On networks with several internet lines, PasteFerry now finds the line that leads to the other device, so connections that used to go through the relay connect directly. Only the device on that network needs this update.",
             "Router port mapping: When the router supports UPnP, NAT-PMP or PCP and has a public address, PasteFerry opens a port on it, so other devices can connect directly even from networks that are otherwise hard to reach."
           ],
           "fixes": [
@@ -76,7 +76,7 @@
         },
         "zh-Hans": {
           "changes": [
-            "远程直连成功率提升：公司等有多条线路的网络里，现在能找到通往对方设备的那条线路，以前只能经中转的连接改为直连。只需升级处在这类网络里的那台设备。",
+            "远程直连成功率提升：在有多条线路的网络里，现在能找到通往对方设备的那条线路，以前只能经中转的连接改为直连。只需升级处在这类网络里的那台设备。",
             "路由器端口映射：路由器支持 UPnP、NAT-PMP 或 PCP 且有公网地址时，自动在路由器上开一个端口，其他设备即使在难以打通的网络里也能直接连进来。"
           ],
           "fixes": [
@@ -86,7 +86,7 @@
         },
         "ja": {
           "changes": [
-            "リモート直接接続の成功率が向上：会社など複数の回線があるネットワークで、相手デバイスにつながる回線を見つけられるようになり、これまで中継経由だった接続が直接つながります。更新が必要なのは、そのネットワークにあるデバイスだけです。",
+            "リモート直接接続の成功率が向上：複数の回線があるネットワークで、相手デバイスにつながる回線を見つけられるようになり、これまで中継経由だった接続が直接つながります。更新が必要なのは、そのネットワークにあるデバイスだけです。",
             "ルーターのポートマッピング：ルーターが UPnP・NAT-PMP・PCP のいずれかに対応し、グローバルアドレスを持つ場合、ルーターに自動でポートを開きます。つながりにくいネットワークにある他のデバイスからも直接接続できます。"
           ],
           "fixes": [
@@ -96,7 +96,7 @@
         },
         "zh-Hant-TW": {
           "changes": [
-            "遠端直連成功率提升：公司等有多條線路的網路裡，現在能找到通往對方裝置的那條線路，以前只能經中繼的連線改為直連。只需更新位於這類網路中的那台裝置。",
+            "遠端直連成功率提升：在有多條線路的網路裡，現在能找到通往對方裝置的那條線路，以前只能經中繼的連線改為直連。只需更新位於這類網路中的那台裝置。",
             "路由器連接埠對應：路由器支援 UPnP、NAT-PMP 或 PCP 且有公用位址時，會自動在路由器上開一個連接埠，其他裝置即使在難以打通的網路裡也能直接連進來。"
           ],
           "fixes": [
@@ -106,7 +106,7 @@
         },
         "zh-Hant-HK": {
           "changes": [
-            "遙距直連成功率提升：公司等有多條線路的網絡裏，現在能找到通往對方裝置的那條線路，以往只能經中轉的連線改為直連。只需更新位於這類網絡中的那部裝置。",
+            "遙距直連成功率提升：在有多條線路的網絡裏，現在能找到通往對方裝置的那條線路，以往只能經中轉的連線改為直連。只需更新位於這類網絡中的那部裝置。",
             "路由器連接埠映射：路由器支援 UPnP、NAT-PMP 或 PCP 並有公用地址時，會自動在路由器上開一個連接埠，其他裝置即使在難以打通的網絡裏亦能直接連進來。"
           ],
           "fixes": [
@@ -116,7 +116,7 @@
         },
         "ar": {
           "changes": [
-            "نجاح أكبر في الاتصال المباشر: في الشبكات التي تضم عدة خطوط إنترنت، كما في كثير من المكاتب، يعثر PasteFerry الآن على الخط الذي يصل إلى الجهاز الآخر، فتتصل مباشرةً اتصالاتٌ كانت تمر عبر الترحيل. يكفي تحديث الجهاز الموجود على تلك الشبكة.",
+            "نجاح أكبر في الاتصال المباشر: في الشبكات التي تضم عدة خطوط إنترنت، يعثر PasteFerry الآن على الخط الذي يصل إلى الجهاز الآخر، فتتصل مباشرةً اتصالاتٌ كانت تمر عبر الترحيل. يكفي تحديث الجهاز الموجود على تلك الشبكة.",
             "تعيين المنافذ على الموجّه: إذا كان الموجّه يدعم UPnP أو NAT-PMP أو PCP ولديه عنوان عام، يفتح PasteFerry منفذًا عليه، فتتمكن الأجهزة الأخرى من الاتصال مباشرةً حتى من الشبكات التي يصعب الوصول إليها."
           ],
           "fixes": [
@@ -126,7 +126,7 @@
         },
         "de": {
           "changes": [
-            "Mehr direkte Verbindungen: In Netzen mit mehreren Internetleitungen, etwa in vielen Büros, findet PasteFerry jetzt die Leitung, die zum anderen Gerät führt, sodass bisher über das Relay laufende Verbindungen direkt zustande kommen. Nur das Gerät in diesem Netz braucht das Update.",
+            "Mehr direkte Verbindungen: In Netzen mit mehreren Internetleitungen findet PasteFerry jetzt die Leitung, die zum anderen Gerät führt, sodass bisher über das Relay laufende Verbindungen direkt zustande kommen. Nur das Gerät in diesem Netz braucht das Update.",
             "Portfreigabe am Router: Unterstützt der Router UPnP, NAT-PMP oder PCP und hat er eine öffentliche Adresse, öffnet PasteFerry dort einen Port, sodass andere Geräte auch aus schwer erreichbaren Netzen direkt verbinden können."
           ],
           "fixes": [
@@ -136,7 +136,7 @@
         },
         "es": {
           "changes": [
-            "Más conexiones directas: en redes con varias líneas de internet, como muchas oficinas, PasteFerry ahora encuentra la línea que lleva al otro dispositivo, y las conexiones que antes pasaban por retransmisión se conectan directamente. Solo hace falta actualizar el dispositivo de esa red.",
+            "Más conexiones directas: en redes con varias líneas de internet, PasteFerry ahora encuentra la línea que lleva al otro dispositivo, y las conexiones que antes pasaban por retransmisión se conectan directamente. Solo hace falta actualizar el dispositivo de esa red.",
             "Asignación de puertos en el router: si el router admite UPnP, NAT-PMP o PCP y tiene una dirección pública, PasteFerry abre un puerto en él para que otros dispositivos se conecten directamente incluso desde redes difíciles de alcanzar."
           ],
           "fixes": [
@@ -146,7 +146,7 @@
         },
         "fr": {
           "changes": [
-            "Plus de connexions directes : sur les réseaux à plusieurs lignes Internet, comme dans beaucoup de bureaux, PasteFerry trouve désormais la ligne qui mène à l’autre appareil, et les connexions qui passaient par le relais se font en direct. Seul l’appareil de ce réseau doit être mis à jour.",
+            "Plus de connexions directes : sur les réseaux à plusieurs lignes Internet, PasteFerry trouve désormais la ligne qui mène à l’autre appareil, et les connexions qui passaient par le relais se font en direct. Seul l’appareil de ce réseau doit être mis à jour.",
             "Redirection de port sur le routeur : si le routeur prend en charge UPnP, NAT-PMP ou PCP et dispose d’une adresse publique, PasteFerry y ouvre un port, pour que les autres appareils se connectent en direct même depuis des réseaux difficiles à joindre."
           ],
           "fixes": [
@@ -156,7 +156,7 @@
         },
         "id": {
           "changes": [
-            "Lebih banyak koneksi langsung: Di jaringan dengan beberapa jalur internet, seperti di banyak kantor, PasteFerry kini menemukan jalur yang menuju perangkat lain, sehingga koneksi yang dulu lewat relai kini tersambung langsung. Hanya perangkat di jaringan itu yang perlu diperbarui.",
+            "Lebih banyak koneksi langsung: Di jaringan dengan beberapa jalur internet, PasteFerry kini menemukan jalur yang menuju perangkat lain, sehingga koneksi yang dulu lewat relai kini tersambung langsung. Hanya perangkat di jaringan itu yang perlu diperbarui.",
             "Pemetaan port di router: Jika router mendukung UPnP, NAT-PMP, atau PCP dan punya alamat publik, PasteFerry membuka port di sana, sehingga perangkat lain bisa terhubung langsung bahkan dari jaringan yang sulit dijangkau."
           ],
           "fixes": [
@@ -166,7 +166,7 @@
         },
         "it": {
           "changes": [
-            "Più connessioni dirette: sulle reti con più linee Internet, come in molti uffici, PasteFerry ora trova la linea che porta all’altro dispositivo, e le connessioni che passavano tramite inoltro si collegano direttamente. Basta aggiornare il dispositivo su quella rete.",
+            "Più connessioni dirette: sulle reti con più linee Internet, PasteFerry ora trova la linea che porta all’altro dispositivo, e le connessioni che passavano tramite inoltro si collegano direttamente. Basta aggiornare il dispositivo su quella rete.",
             "Mappatura delle porte sul router: se il router supporta UPnP, NAT-PMP o PCP e ha un indirizzo pubblico, PasteFerry vi apre una porta, così gli altri dispositivi possono collegarsi direttamente anche da reti difficili da raggiungere."
           ],
           "fixes": [
@@ -176,7 +176,7 @@
         },
         "ko": {
           "changes": [
-            "원격 직접 연결 성공률 향상: 여러 인터넷 회선을 쓰는 회사 같은 네트워크에서 상대 기기로 이어지는 회선을 찾아, 그동안 중계를 거치던 연결이 직접 연결됩니다. 해당 네트워크에 있는 기기만 업데이트하면 됩니다.",
+            "원격 직접 연결 성공률 향상: 여러 인터넷 회선을 쓰는 네트워크에서 상대 기기로 이어지는 회선을 찾아, 그동안 중계를 거치던 연결이 직접 연결됩니다. 해당 네트워크에 있는 기기만 업데이트하면 됩니다.",
             "라우터 포트 매핑: 라우터가 UPnP, NAT-PMP 또는 PCP를 지원하고 공인 주소가 있으면 라우터에 포트를 열어, 연결하기 어려운 네트워크에 있는 기기도 직접 연결할 수 있습니다."
           ],
           "fixes": [
@@ -186,7 +186,7 @@
         },
         "pl": {
           "changes": [
-            "Więcej połączeń bezpośrednich: w sieciach z kilkoma łączami internetowymi, jak w wielu biurach, PasteFerry znajduje teraz łącze prowadzące do drugiego urządzenia, więc połączenia, które szły przez przekaźnik, łączą się bezpośrednio. Wystarczy zaktualizować urządzenie w tej sieci.",
+            "Więcej połączeń bezpośrednich: w sieciach z kilkoma łączami internetowymi PasteFerry znajduje teraz łącze prowadzące do drugiego urządzenia, więc połączenia, które szły przez przekaźnik, łączą się bezpośrednio. Wystarczy zaktualizować urządzenie w tej sieci.",
             "Przekierowanie portów na routerze: jeśli router obsługuje UPnP, NAT-PMP lub PCP i ma adres publiczny, PasteFerry otwiera na nim port, dzięki czemu inne urządzenia mogą łączyć się bezpośrednio nawet z trudno dostępnych sieci."
           ],
           "fixes": [
@@ -196,7 +196,7 @@
         },
         "pt-BR": {
           "changes": [
-            "Mais conexões diretas: em redes com várias linhas de internet, como muitos escritórios, o PasteFerry agora encontra a linha que leva ao outro dispositivo, e conexões que passavam por retransmissão se conectam diretamente. Só o dispositivo nessa rede precisa da atualização.",
+            "Mais conexões diretas: em redes com várias linhas de internet, o PasteFerry agora encontra a linha que leva ao outro dispositivo, e conexões que passavam por retransmissão se conectam diretamente. Só o dispositivo nessa rede precisa da atualização.",
             "Mapeamento de portas no roteador: quando o roteador oferece UPnP, NAT-PMP ou PCP e tem um endereço público, o PasteFerry abre uma porta nele, para que outros dispositivos se conectem diretamente mesmo de redes difíceis de alcançar."
           ],
           "fixes": [
@@ -206,7 +206,7 @@
         },
         "ru": {
           "changes": [
-            "Больше прямых подключений: в сетях с несколькими интернет-линиями, как во многих офисах, PasteFerry теперь находит линию, ведущую к другому устройству, и подключения, которые шли через ретрансляцию, устанавливаются напрямую. Обновить нужно только устройство в такой сети.",
+            "Больше прямых подключений: в сетях с несколькими интернет-линиями PasteFerry теперь находит линию, ведущую к другому устройству, и подключения, которые шли через ретрансляцию, устанавливаются напрямую. Обновить нужно только устройство в такой сети.",
             "Проброс портов на роутере: если роутер поддерживает UPnP, NAT-PMP или PCP и имеет публичный адрес, PasteFerry открывает на нём порт, и другие устройства могут подключаться напрямую даже из труднодоступных сетей."
           ],
           "fixes": [
@@ -216,7 +216,7 @@
         },
         "tr": {
           "changes": [
-            "Daha fazla doğrudan bağlantı: Birçok ofiste olduğu gibi birden fazla internet hattı olan ağlarda PasteFerry artık diğer cihaza giden hattı buluyor; eskiden aktarma üzerinden giden bağlantılar doğrudan kuruluyor. Yalnızca o ağdaki cihazın güncellenmesi yeterli.",
+            "Daha fazla doğrudan bağlantı: Birden fazla internet hattı olan ağlarda PasteFerry artık diğer cihaza giden hattı buluyor; eskiden aktarma üzerinden giden bağlantılar doğrudan kuruluyor. Yalnızca o ağdaki cihazın güncellenmesi yeterli.",
             "Yönlendiricide port eşleme: Yönlendirici UPnP, NAT-PMP veya PCP destekliyor ve genel bir adrese sahipse PasteFerry üzerinde bir port açar; böylece diğer cihazlar ulaşılması zor ağlardan bile doğrudan bağlanabilir."
           ],
           "fixes": [
@@ -226,7 +226,7 @@
         },
         "uk": {
           "changes": [
-            "Більше прямих підключень: у мережах із кількома інтернет-лініями, як у багатьох офісах, PasteFerry тепер знаходить лінію, що веде до іншого пристрою, і підключення, які йшли через ретрансляцію, встановлюються напряму. Оновити потрібно лише пристрій у такій мережі.",
+            "Більше прямих підключень: у мережах із кількома інтернет-лініями PasteFerry тепер знаходить лінію, що веде до іншого пристрою, і підключення, які йшли через ретрансляцію, встановлюються напряму. Оновити потрібно лише пристрій у такій мережі.",
             "Переадресація портів на роутері: якщо роутер підтримує UPnP, NAT-PMP або PCP і має публічну адресу, PasteFerry відкриває на ньому порт, і інші пристрої можуть підключатися напряму навіть із важкодоступних мереж."
           ],
           "fixes": [
@@ -236,7 +236,7 @@
         },
         "vi": {
           "changes": [
-            "Kết nối trực tiếp thành công hơn: Trên mạng có nhiều đường truyền internet, như ở nhiều văn phòng, PasteFerry giờ tìm ra đường dẫn tới thiết bị kia, nên các kết nối trước đây đi qua chuyển tiếp giờ kết nối trực tiếp. Chỉ cần cập nhật thiết bị trong mạng đó.",
+            "Kết nối trực tiếp thành công hơn: Trên mạng có nhiều đường truyền internet, PasteFerry giờ tìm ra đường dẫn tới thiết bị kia, nên các kết nối trước đây đi qua chuyển tiếp giờ kết nối trực tiếp. Chỉ cần cập nhật thiết bị trong mạng đó.",
             "Ánh xạ cổng trên bộ định tuyến: Khi bộ định tuyến hỗ trợ UPnP, NAT-PMP hoặc PCP và có địa chỉ công khai, PasteFerry mở một cổng trên đó để các thiết bị khác kết nối trực tiếp, kể cả từ những mạng khó kết nối."
           ],
           "fixes": [
