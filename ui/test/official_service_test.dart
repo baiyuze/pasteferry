@@ -6,6 +6,7 @@ import 'package:pasteferry_ui/gen/pasteferry/v1/daemon.pb.dart';
 import 'package:pasteferry_ui/main.dart';
 import 'package:pasteferry_ui/pages/official_service_page.dart';
 import 'package:pasteferry_ui/pages/settings_page.dart';
+import 'package:pasteferry_ui/widgets/common.dart';
 
 class OfficialTestState extends AppState {
   bool failSave = false;
@@ -42,43 +43,67 @@ class OfficialTestState extends AppState {
 }
 
 void main() {
-  testWidgets(
-    'official navigation is opt-in and does not replace startup history',
-    (tester) async {
-      final state = OfficialTestState();
-      await tester.pumpWidget(PasteFerryApp(state: state));
-      expect(find.text('服务'), findsNothing);
-      state.debugSeed(
-        status: state.status!,
-        config: state.config!.deepCopy()
-          ..serviceMode = ServiceMode.SERVICE_MODE_OFFICIAL,
-        self: state.self!,
-      );
-      await tester.pumpAndSettle();
-      expect(find.text('还没有记录'), findsOneWidget);
-      await tester.tap(find.text('服务').first);
-      await tester.pumpAndSettle();
-      expect(find.byType(OfficialServicePage), findsOneWidget);
-      expect(
-        find.descendant(
-          of: find.byType(OfficialServicePage),
-          matching: find.text('未连接'),
-        ),
-        findsOneWidget,
-      );
-      expect(find.text('正在获取额度…'), findsOneWidget);
-      expect(find.text('0.00 MB'), findsNothing);
-      state.debugSeed(
-        status: state.status!,
-        config: state.config!.deepCopy()
-          ..serviceMode = ServiceMode.SERVICE_MODE_LAN,
-        self: state.self!,
-      );
-      await tester.pumpAndSettle();
-      expect(find.byType(OfficialServicePage), findsNothing);
-      expect(find.byType(SettingsPage), findsOneWidget);
-    },
-  );
+  testWidgets('service navigation stays visible while the service is off', (
+    tester,
+  ) async {
+    final state = OfficialTestState();
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    expect(find.text('还没有记录'), findsOneWidget);
+    await tester.tap(find.text('服务').first);
+    await tester.pumpAndSettle();
+    final page = find.byType(OfficialServicePage);
+    expect(page, findsOneWidget);
+    expect(find.text('正在获取额度…'), findsNothing);
+    expect(
+      tester
+          .widget<SmallSwitch>(
+            find.descendant(of: page, matching: find.byType(SmallSwitch)),
+          )
+          .value,
+      false,
+    );
+    await tester.tap(
+      find.descendant(
+        of: page,
+        matching: find.widgetWithText(FilledButton, '使用服务'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('启用服务？'), findsOneWidget);
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+    expect(state.saves, 0);
+    await tester.tap(
+      find.descendant(
+        of: page,
+        matching: find.widgetWithText(FilledButton, '使用服务'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.widgetWithText(FilledButton, '使用服务'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(state.officialEnabled, true);
+    expect(
+      find.descendant(of: page, matching: find.text('未连接')),
+      findsOneWidget,
+    );
+    expect(find.text('正在获取额度…'), findsOneWidget);
+    expect(find.text('0.00 MB'), findsNothing);
+    await tester.tap(
+      find.descendant(of: page, matching: find.byType(SmallSwitch)),
+    );
+    await tester.pumpAndSettle();
+    expect(state.officialEnabled, false);
+    expect(page, findsOneWidget);
+    expect(find.byType(SettingsPage), findsNothing);
+    expect(find.text('正在获取额度…'), findsNothing);
+    expect(find.text('服务'), findsNWidgets(2));
+  });
   testWidgets(
     'custom address is saved explicitly and a failure preserves the draft',
     (tester) async {
@@ -105,6 +130,37 @@ void main() {
       expect(state.config!.serviceMode, ServiceMode.SERVICE_MODE_CUSTOM);
     },
   );
+  testWidgets('service page keeps the custom server address', (tester) async {
+    final state = OfficialTestState();
+    state.debugSeed(
+      status: state.status!,
+      config: state.config!.deepCopy()
+        ..serviceMode = ServiceMode.SERVICE_MODE_CUSTOM
+        ..signalingUrl = 'wss://my.example/signal'
+        ..customSignalingUrl = 'wss://my.example/signal',
+      self: state.self!,
+    );
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    await tester.tap(find.text('服务').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '使用服务'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('已保存的地址仍会保留'), findsOneWidget);
+    await tester.tap(find.descendant(
+      of: find.byType(AlertDialog),
+      matching: find.widgetWithText(FilledButton, '使用服务'),
+    ));
+    await tester.pumpAndSettle();
+    expect(state.config!.serviceMode, ServiceMode.SERVICE_MODE_OFFICIAL);
+    expect(state.config!.customSignalingUrl, 'wss://my.example/signal');
+    await tester.tap(find.descendant(
+      of: find.byType(OfficialServicePage),
+      matching: find.byType(SmallSwitch),
+    ));
+    await tester.pumpAndSettle();
+    expect(state.config!.serviceMode, ServiceMode.SERVICE_MODE_LAN);
+    expect(state.config!.customSignalingUrl, 'wss://my.example/signal');
+  });
   testWidgets(
     'quota notice waits for foreground and acknowledgement survives restart',
     (tester) async {
@@ -144,84 +200,81 @@ void main() {
       expect(find.byType(AlertDialog), findsNothing);
     },
   );
-  testWidgets(
-    'allowance shows before any relay and devices show their route',
-    (tester) async {
-      final state = OfficialTestState(official: true);
-      state.debugSeed(
-        status: state.status!.deepCopy()..signalingConnected = true,
-        config: state.config!,
-        self: state.self!,
-        peers: [
-          Device(
-            id: 'mac',
-            name: '书房 Mac',
-            platform: 'darwin',
-            online: true,
-            connection: ConnectionKind.CONNECTION_KIND_DIRECT,
-          ),
-          Device(
-            id: 'win',
-            name: '办公室 Windows',
-            platform: 'windows',
-            online: true,
-            connection: ConnectionKind.CONNECTION_KIND_RELAY,
-          ),
-          Device(id: 'linux', name: 'Ubuntu', platform: 'linux'),
-        ],
-      );
-      await tester.pumpWidget(PasteFerryApp(state: state));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('服务').first);
-      await tester.pumpAndSettle();
-      final page = find.byType(OfficialServicePage);
-      Finder inPage(String text) =>
-          find.descendant(of: page, matching: find.text(text));
-      expect(inPage('已连接'), findsOneWidget);
-      expect(inPage('正在获取额度…'), findsOneWidget);
-      // A failed first query is not shown as zero or as a warning about usage.
-      state.usage(
-        OfficialUsage(available: false, reason: 'service_unavailable'),
-      );
-      await tester.pumpAndSettle();
-      expect(inPage('暂时获取不到额度，会自动重试。'), findsOneWidget);
-      // An unbound device gets the untouched default allowance from the gateway.
-      final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      state.usage(
-        OfficialUsage(
-          available: true,
-          day: '2026-10-19',
-          limitBytes: Int64(100000000),
-          remainingBytes: Int64(100000000),
-          resetAtUnix: Int64(now + 3600),
-          updatedAtUnix: Int64(now),
+  testWidgets('allowance shows before any relay and devices show their route', (
+    tester,
+  ) async {
+    final state = OfficialTestState(official: true);
+    state.debugSeed(
+      status: state.status!.deepCopy()..signalingConnected = true,
+      config: state.config!,
+      self: state.self!,
+      peers: [
+        Device(
+          id: 'mac',
+          name: '书房 Mac',
+          platform: 'darwin',
+          online: true,
+          connection: ConnectionKind.CONNECTION_KIND_DIRECT,
         ),
-      );
-      await tester.pumpAndSettle();
-      expect(inPage('100.00 MB'), findsNWidgets(2));
-      expect(inPage('0.00 MB'), findsNWidgets(3));
-      expect(inPage('用量暂不可用，已有数据可能过期'), findsNothing);
-      final bar = tester.widget<LinearProgressIndicator>(
-        find.descendant(of: page, matching: find.byType(LinearProgressIndicator)),
-      );
-      expect(bar.value, 1.0);
-      expect(inPage('书房 Mac'), findsOneWidget);
-      expect(inPage('直连'), findsOneWidget);
-      expect(inPage('中转'), findsOneWidget);
-      expect(inPage('离线'), findsOneWidget);
-      // Figures older than two and a half idle refreshes are marked stale.
-      state.usage(
-        OfficialUsage(
-          available: true,
-          limitBytes: Int64(100000000),
-          remainingBytes: Int64(100000000),
-          updatedAtUnix: Int64(now - 600),
+        Device(
+          id: 'win',
+          name: '办公室 Windows',
+          platform: 'windows',
+          online: true,
+          connection: ConnectionKind.CONNECTION_KIND_RELAY,
         ),
-      );
-      await tester.pumpAndSettle();
-      expect(inPage('用量暂不可用，已有数据可能过期'), findsOneWidget);
-    },
-  );
+        Device(id: 'linux', name: 'Ubuntu', platform: 'linux'),
+      ],
+    );
+    await tester.pumpWidget(PasteFerryApp(state: state));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('服务').first);
+    await tester.pumpAndSettle();
+    final page = find.byType(OfficialServicePage);
+    Finder inPage(String text) =>
+        find.descendant(of: page, matching: find.text(text));
+    expect(inPage('已连接'), findsOneWidget);
+    expect(inPage('正在获取额度…'), findsOneWidget);
+    // A failed first query is not shown as zero or as a warning about usage.
+    state.usage(OfficialUsage(available: false, reason: 'service_unavailable'));
+    await tester.pumpAndSettle();
+    expect(inPage('暂时获取不到额度，会自动重试。'), findsOneWidget);
+    // An unbound device gets the untouched default allowance from the gateway.
+    final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    state.usage(
+      OfficialUsage(
+        available: true,
+        day: '2026-10-19',
+        limitBytes: Int64(100000000),
+        remainingBytes: Int64(100000000),
+        resetAtUnix: Int64(now + 3600),
+        updatedAtUnix: Int64(now),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(inPage('100.00 MB'), findsNWidgets(2));
+    expect(inPage('0.00 MB'), findsNWidgets(3));
+    expect(inPage('用量暂不可用，已有数据可能过期'), findsNothing);
+    final bar = tester.widget<LinearProgressIndicator>(
+      find.descendant(of: page, matching: find.byType(LinearProgressIndicator)),
+    );
+    expect(bar.value, 1.0);
+    expect(inPage('书房 Mac'), findsOneWidget);
+    expect(inPage('直连'), findsOneWidget);
+    expect(inPage('中转'), findsOneWidget);
+    expect(inPage('离线'), findsOneWidget);
+    // Figures older than two and a half idle refreshes are marked stale.
+    state.usage(
+      OfficialUsage(
+        available: true,
+        limitBytes: Int64(100000000),
+        remainingBytes: Int64(100000000),
+        updatedAtUnix: Int64(now - 600),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(inPage('用量暂不可用，已有数据可能过期'), findsOneWidget);
+  });
   for (final language in ['en', 'zh-Hans', 'zh-Hant-TW', 'zh-Hant-HK', 'ja']) {
     testWidgets('official usage fits minimum window in $language', (
       tester,

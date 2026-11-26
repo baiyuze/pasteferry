@@ -260,10 +260,6 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
         });
       }
     }
-    if (!state.officialEnabled && _section == Section.official) {
-      _section = Section.settings;
-    }
-
     // 对端发起配对时主动弹出确认——指纹核对不能等用户自己去翻页面
     final pending = state.pendingPairing;
     if (pending != null && !_pairingDialogOpen && !_officialDialogOpen) {
@@ -528,13 +524,12 @@ class _Sidebar extends StatelessWidget {
             selected: current == Section.devices,
             onTap: () => onSelect(Section.devices),
           ),
-          if (state.officialEnabled)
-            _NavItem(
-              icon: AppIcons.cloud,
-              label: l.officialService,
-              selected: current == Section.official,
-              onTap: () => onSelect(Section.official),
-            ),
+          _NavItem(
+            icon: AppIcons.cloud,
+            label: l.officialService,
+            selected: current == Section.official,
+            onTap: () => onSelect(Section.official),
+          ),
           _NavItem(
             icon: AppIcons.gear,
             label: l.navSettings,

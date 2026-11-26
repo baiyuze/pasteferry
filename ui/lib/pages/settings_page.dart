@@ -20,6 +20,7 @@ import '../platform.dart';
 import 'appearance_settings.dart';
 import 'quick_paste_settings.dart';
 import 'send_settings.dart';
+import 'official_service_toggle.dart';
 import '../pixel_art.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -187,7 +188,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: _Dropdown<String>(
                   value: cfg.language,
                   // 语言名用各自的写法，选错了语言的人也认得出自己的
-                  items: [MapEntry('', l.languageSystem), ...languageNames.entries],
+                  items: [
+                    MapEntry('', l.languageSystem),
+                    ...languageNames.entries,
+                  ],
                   onChanged: (v) => _update(state, cfg..language = v),
                 ),
               ),
@@ -234,7 +238,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   value: state.officialEnabled,
                   onChanged: _serverSaving
                       ? null
-                      : (v) => _setOfficial(state, cfg, v),
+                      : (v) => _setOfficial(state, v),
                 ),
               ),
               SettingRow(
@@ -654,39 +658,10 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  Future<void> _setOfficial(AppState state, Config cfg, bool value) async {
-    if (value) {
-      final ok = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(context.l10n.officialEnableTitle),
-          content: Text(
-            '${context.l10n.officialPrivacy}${cfg.serviceMode == ServiceMode.SERVICE_MODE_CUSTOM ? '\n\n${context.l10n.officialSwitchConfirm}' : ''}',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: Text(context.l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: Text(context.l10n.useOfficialService),
-            ),
-          ],
-        ),
-      );
-      if (ok != true || !mounted) return;
-    }
+  Future<void> _setOfficial(AppState state, bool value) async {
     setState(() => _serverSaving = true);
     try {
-      final next = cfg.deepCopy()
-        ..serviceMode = (value
-            ? ServiceMode.SERVICE_MODE_OFFICIAL
-            : ServiceMode.SERVICE_MODE_LAN)
-        ..signalingUrl = '';
-      await state.updateConfig(next);
-    } catch (e) {
-      if (mounted) showToast(context, AppState.describeError(e), error: true);
+      await setOfficialService(context, state, value);
     } finally {
       if (mounted) setState(() => _serverSaving = false);
     }
@@ -1004,7 +979,11 @@ class _CategoryRow extends StatelessWidget {
                   trailing!,
                 ],
                 const SizedBox(width: Insets.sm),
-                DirectionalIcon(AppIcons.chevronRight, size: 13, color: p.textFaint),
+                DirectionalIcon(
+                  AppIcons.chevronRight,
+                  size: 13,
+                  color: p.textFaint,
+                ),
               ],
             ),
           ),
