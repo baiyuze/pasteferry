@@ -457,7 +457,7 @@ PLANS = [
      + '<path class="p-sig" d="M56 64V22h42M184 64V22h-42"/>'
      + '<path class="p-data" d="M80 80h80"/>'
      + _laptop(32, 64) + _laptop(160, 64)),
-    # Tailscale：家与公司是两个网络，外面一圈点线把它们连成一个虚拟局域网，不需要服务器
+    # Tailscale：家与外面是两个网络，外面一圈点线把它们连成一个虚拟局域网，不需要服务器
     ("ts", TAILSCALE, '<rect class="p-ts" x="2" y="2" width="236" height="108" rx="16"/>'
      '<rect class="p-net" x="12" y="12" width="98" height="88" rx="10"/>'
      '<rect class="p-net" x="130" y="12" width="98" height="88" rx="10"/>'
@@ -631,7 +631,7 @@ PLAY_ICON = '<svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d=
 
 def stage(c: dict, f: dict) -> str:
     """首屏演示：Mac 桌面上四样东西（文件、截图、一段文字、文件夹），点一样就复制，化作一张纸飞到 Windows
-    笔记本上粘贴出来。画面紧跟在下载按钮下面，下方切换两台电脑在家里和公司（服务器只介绍，内容直连），
+    笔记本上粘贴出来。画面紧跟在下载按钮下面，下方切换两台电脑在家里和外面（服务器只介绍，内容直连），
     还是在同一个 Wi‑Fi（不用服务器），旁边是暂停按钮。
     动画由 site.js 驱动：像宣传视频一样轮流复制四样东西，访客点了哪样或按暂停就停下；没有脚本时停在复制完成的样子。"""
     items = [("doc", c["stage_file"]), ("pic", f["demo_image"]), ("note", f["demo_text"]), ("folder", f["demo_folder"])]
