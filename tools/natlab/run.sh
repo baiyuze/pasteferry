@@ -28,7 +28,7 @@ BIN=$(cd "$(dirname "${1:?用法: run.sh <natlab 可执行文件>}")" && pwd)/$(
 BIN_B=${NATLAB_BIN_B:-$BIN}
 WORK=$(mktemp -d)
 PROBE="10.200.1.2:3478,10.200.1.3:3478,10.200.1.4:3478"
-# 公司四线路场景用域名探测：stun.multi.lab 解析出两个 IP，只有第二个落在去往对端的线路上
+# 四线路场景用域名探测：stun.multi.lab 解析出两个 IP，只有第二个落在去往对端的线路上
 # （见 setup 的 office）。解析结果来自各命名空间的 /etc/netns/<名字>/hosts
 PROBE_OFFICE="stun.multi.lab:3478,10.200.1.3:3478"
 
@@ -58,7 +58,7 @@ veth() { # <命名空间1> <网卡1> <命名空间2> <网卡2>
 # setup <A 侧出口模式> <B 侧模式>
 #   A：single 单出口 | dual 两个出口，去对端走出口 2、探测服务器有一台走出口 2
 #      hidden 两个出口，但没有任何探测服务器走出口 2 | quad 四个出口
-#      office 公司网络：四条线路，两条是改写端口的运营商级 NAT，去对端走其中一条（设计文档第 13 节）
+#      office 多线路网络：四条线路，两条是改写端口的运营商级 NAT，去对端走其中一条（设计文档第 13 节）
 #   B：cone 家用路由器 | symmetric 端口随机分配 | dual 两个出口
 setup() {
     cleanup
@@ -127,7 +127,7 @@ setup() {
         ns rA $snat -j SNAT --to-source 10.255.0.11
         ;;
     office)
-        # 实测的公司网络：路由器按目标 IP 选线路。出口 1、2 不改端口；出口 3、4 是运营商级 NAT，
+        # 实测的多线路网络：路由器按目标 IP 选线路。出口 1、2 不改端口；出口 3、4 是运营商级 NAT，
         # 端口改写成另一个号，但对不同目标都是同一个（端点无关映射，这里用固定端口模拟）。
         # 去往对端走出口 4，探测服务器里只有 10.200.1.4 落在出口 4 上，而它只是
         # stun.multi.lab 的第二个 IP。只走这两条线路的是打洞端口，固定端口不会冲突
@@ -366,8 +366,8 @@ check "两个出口 ↔ 端口随机分配的 NAT" dual symmetric relay
 check "一开始打不通，先中转后换直连" dual cone direct late
 check "公司路由器会为外来的包占住端口" dual cone direct leaky-a
 check "家用路由器会为外来的包占住端口" dual cone direct leaky-b
-check "公司四线路，去对端的线路在域名第二个 IP 上" office cone direct
-check "公司四线路，DNS 换了 IP，靠历史记住的服务器" office cone direct pinned
+check "四条线路，去对端的线路在域名第二个 IP 上" office cone direct
+check "四条线路，DNS 换了 IP，靠历史记住的服务器" office cone direct pinned
 check "路由器支持 NAT-PMP ↔ 端口随机分配的 NAT" single symmetric direct portmap
 check "路由器支持 NAT-PMP，但不做映射（对照）" single symmetric relay portmap-off
 check "路由器外面还有一层运营商 NAT，映射不可用" single symmetric relay portmap-cgnat
