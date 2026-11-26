@@ -14,14 +14,13 @@ MAX_RELEASES = 10
 RELEASES = [
 {'version': '2.14.0',
  'date': '2026-11-26',
- 'changes': [('Higher direct connection success: On networks with several internet lines, such as '
-              'many offices, PasteFerry now finds the line that leads to the other device, so '
+ 'changes': [('Higher direct connection success: On networks with several internet lines, PasteFerry now finds the line that leads to the other device, so '
               'connections that used to go through the relay connect directly. Only the device on '
               'that network needs this update.',
-              '远程直连成功率提升：公司等有多条线路的网络里，现在能找到通往对方设备的那条线路，以前只能经中转的连接改为直连。只需升级处在这类网络里的那台设备。',
-              'リモート直接接続の成功率が向上：会社など複数の回線があるネットワークで、相手デバイスにつながる回線を見つけられるようになり、これまで中継経由だった接続が直接つながります。更新が必要なのは、そのネットワークにあるデバイスだけです。',
-              '遠端直連成功率提升：公司等有多條線路的網路裡，現在能找到通往對方裝置的那條線路，以前只能經中繼的連線改為直連。只需更新位於這類網路中的那台裝置。',
-              '遙距直連成功率提升：公司等有多條線路的網絡裏，現在能找到通往對方裝置的那條線路，以往只能經中轉的連線改為直連。只需更新位於這類網絡中的那部裝置。'),
+              '远程直连成功率提升：在有多条线路的网络里，现在能找到通往对方设备的那条线路，以前只能经中转的连接改为直连。只需升级处在这类网络里的那台设备。',
+              'リモート直接接続の成功率が向上：複数の回線があるネットワークで、相手デバイスにつながる回線を見つけられるようになり、これまで中継経由だった接続が直接つながります。更新が必要なのは、そのネットワークにあるデバイスだけです。',
+              '遠端直連成功率提升：在有多條線路的網路裡，現在能找到通往對方裝置的那條線路，以前只能經中繼的連線改為直連。只需更新位於這類網路中的那台裝置。',
+              '遙距直連成功率提升：在有多條線路的網絡裏，現在能找到通往對方裝置的那條線路，以往只能經中轉的連線改為直連。只需更新位於這類網絡中的那部裝置。'),
              ('Router port mapping: When the router supports UPnP, NAT-PMP or PCP and has a public '
               'address, PasteFerry opens a port on it, so other devices can connect directly even '
               'from networks that are otherwise hard to reach.',

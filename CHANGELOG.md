@@ -6,7 +6,7 @@ Devices on different networks connect directly much more often.
 
 ### Changes
 
-- Higher direct connection success: On networks with several internet lines, such as many offices, PasteFerry now finds the line that leads to the other device, so connections that used to go through the relay connect directly. Only the device on that network needs this update.
+- Higher direct connection success: On networks with several internet lines, PasteFerry now finds the line that leads to the other device, so connections that used to go through the relay connect directly. Only the device on that network needs this update.
 - Router port mapping: When the router supports UPnP, NAT-PMP or PCP and has a public address, PasteFerry opens a port on it, so other devices can connect directly even from networks that are otherwise hard to reach.
 
 ### Fixes
@@ -16,7 +16,7 @@ Devices on different networks connect directly much more often.
 
 ### Upgrade notes
 
-- **Mac, Windows and Linux apps**: recommended. A device on a network with several internet lines, such as an office, needs this update to connect directly; port mapping works on any device whose router supports it. Pairings, history and settings are preserved.
+- **Mac, Windows and Linux apps**: recommended. A device on a network with several internet lines needs this update to connect directly; port mapping works on any device whose router supports it. Pairings, history and settings are preserved.
 - **Android**: recommended; port mapping works on Wi-Fi routers that support it.
 - **Server**: no update needed.
 - The device-to-device protocol is unchanged and compatible with existing releases.

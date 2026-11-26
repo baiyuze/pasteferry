@@ -8,8 +8,7 @@ Older releases without these translations continue to fall back to English.
 EXTRA_LANGS = ["ar", "de", "es", "fr", "id", "it", "ko", "pl", "pt-BR", "ru", "tr", "uk", "vi"]
 
 EXTRA_NOTES = {
-    "2.14.0": {'ar': {'changes': ['نجاح أكبر في الاتصال المباشر: في الشبكات التي تضم عدة خطوط إنترنت، كما في '
-                    'كثير من المكاتب، يعثر PasteFerry الآن على الخط الذي يصل إلى الجهاز الآخر، '
+    "2.14.0": {'ar': {'changes': ['نجاح أكبر في الاتصال المباشر: في الشبكات التي تضم عدة خطوط إنترنت، يعثر PasteFerry الآن على الخط الذي يصل إلى الجهاز الآخر، '
                     'فتتصل مباشرةً اتصالاتٌ كانت تمر عبر الترحيل. يكفي تحديث الجهاز الموجود على '
                     'تلك الشبكة.',
                     'تعيين المنافذ على الموجّه: إذا كان الموجّه يدعم UPnP أو NAT-PMP أو PCP ولديه '
@@ -21,8 +20,7 @@ EXTRA_NOTES = {
                   'عندما كان الجهاز الآخر يستغرق أكثر من تسع ثوانٍ للموافقة على الترحيل الرسمي، '
                   'كان الترحيل يفشل دائمًا ولا يُعاد إلا بعد دقيقة؛ أصبح الانتظار الآن حتى 22 '
                   'ثانية.']},
- 'de': {'changes': ['Mehr direkte Verbindungen: In Netzen mit mehreren Internetleitungen, etwa in '
-                    'vielen Büros, findet PasteFerry jetzt die Leitung, die zum anderen Gerät '
+ 'de': {'changes': ['Mehr direkte Verbindungen: In Netzen mit mehreren Internetleitungen findet PasteFerry jetzt die Leitung, die zum anderen Gerät '
                     'führt, sodass bisher über das Relay laufende Verbindungen direkt zustande '
                     'kommen. Nur das Gerät in diesem Netz braucht das Update.',
                     'Portfreigabe am Router: Unterstützt der Router UPnP, NAT-PMP oder PCP und hat '
@@ -34,8 +32,7 @@ EXTRA_NOTES = {
                   'Brauchte das andere Gerät länger als neun Sekunden, um das offizielle Relay '
                   'freizugeben, scheiterte das Relay immer und wurde erst nach einer Minute erneut '
                   'versucht; jetzt wird bis zu 22 Sekunden gewartet.']},
- 'es': {'changes': ['Más conexiones directas: en redes con varias líneas de internet, como muchas '
-                    'oficinas, PasteFerry ahora encuentra la línea que lleva al otro dispositivo, '
+ 'es': {'changes': ['Más conexiones directas: en redes con varias líneas de internet, PasteFerry ahora encuentra la línea que lleva al otro dispositivo, '
                     'y las conexiones que antes pasaban por retransmisión se conectan '
                     'directamente. Solo hace falta actualizar el dispositivo de esa red.',
                     'Asignación de puertos en el router: si el router admite UPnP, NAT-PMP o PCP y '
@@ -48,8 +45,7 @@ EXTRA_NOTES = {
                   'Cuando el otro dispositivo tardaba más de nueve segundos en aprobar la '
                   'retransmisión oficial, esta siempre fallaba y no se reintentaba hasta un minuto '
                   'después; ahora espera hasta 22 segundos.']},
- 'fr': {'changes': ['Plus de connexions directes : sur les réseaux à plusieurs lignes Internet, '
-                    'comme dans beaucoup de bureaux, PasteFerry trouve désormais la ligne qui mène '
+ 'fr': {'changes': ['Plus de connexions directes : sur les réseaux à plusieurs lignes Internet, PasteFerry trouve désormais la ligne qui mène '
                     'à l’autre appareil, et les connexions qui passaient par le relais se font en '
                     'direct. Seul l’appareil de ce réseau doit être mis à jour.',
                     'Redirection de port sur le routeur : si le routeur prend en charge UPnP, '
@@ -63,8 +59,7 @@ EXTRA_NOTES = {
                   'Lorsque l’autre appareil mettait plus de neuf secondes à autoriser le relais '
                   'officiel, celui-ci échouait toujours et n’était retenté qu’une minute plus tard '
                   '; l’attente va maintenant jusqu’à 22 secondes.']},
- 'id': {'changes': ['Lebih banyak koneksi langsung: Di jaringan dengan beberapa jalur internet, '
-                    'seperti di banyak kantor, PasteFerry kini menemukan jalur yang menuju '
+ 'id': {'changes': ['Lebih banyak koneksi langsung: Di jaringan dengan beberapa jalur internet, PasteFerry kini menemukan jalur yang menuju '
                     'perangkat lain, sehingga koneksi yang dulu lewat relai kini tersambung '
                     'langsung. Hanya perangkat di jaringan itu yang perlu diperbarui.',
                     'Pemetaan port di router: Jika router mendukung UPnP, NAT-PMP, atau PCP dan '
@@ -76,8 +71,7 @@ EXTRA_NOTES = {
                   'Saat perangkat lain butuh lebih dari sembilan detik untuk menyetujui relai '
                   'resmi, relai selalu gagal dan baru dicoba lagi semenit kemudian; kini menunggu '
                   'hingga 22 detik.']},
- 'it': {'changes': ['Più connessioni dirette: sulle reti con più linee Internet, come in molti '
-                    'uffici, PasteFerry ora trova la linea che porta all’altro dispositivo, e le '
+ 'it': {'changes': ['Più connessioni dirette: sulle reti con più linee Internet, PasteFerry ora trova la linea che porta all’altro dispositivo, e le '
                     'connessioni che passavano tramite inoltro si collegano direttamente. Basta '
                     'aggiornare il dispositivo su quella rete.',
                     'Mappatura delle porte sul router: se il router supporta UPnP, NAT-PMP o PCP e '
@@ -90,7 +84,7 @@ EXTRA_NOTES = {
                   'Quando l’altro dispositivo impiegava più di nove secondi ad approvare l’inoltro '
                   'ufficiale, l’inoltro falliva sempre e veniva ritentato solo dopo un minuto; ora '
                   'attende fino a 22 secondi.']},
- 'ko': {'changes': ['원격 직접 연결 성공률 향상: 여러 인터넷 회선을 쓰는 회사 같은 네트워크에서 상대 기기로 이어지는 회선을 찾아, 그동안 중계를 거치던 '
+ 'ko': {'changes': ['원격 직접 연결 성공률 향상: 여러 인터넷 회선을 쓰는 네트워크에서 상대 기기로 이어지는 회선을 찾아, 그동안 중계를 거치던 '
                     '연결이 직접 연결됩니다. 해당 네트워크에 있는 기기만 업데이트하면 됩니다.',
                     '라우터 포트 매핑: 라우터가 UPnP, NAT-PMP 또는 PCP를 지원하고 공인 주소가 있으면 라우터에 포트를 열어, 연결하기 어려운 '
                     '네트워크에 있는 기기도 직접 연결할 수 있습니다.'],
@@ -98,8 +92,7 @@ EXTRA_NOTES = {
                   '연결이 이제 연결됩니다.',
                   '상대 기기가 공식 중계를 승인하는 데 9초 넘게 걸리면 중계가 항상 실패하고 1분 뒤에야 다시 시도했습니다. 이제 최대 22초까지 '
                   '기다립니다.']},
- 'pl': {'changes': ['Więcej połączeń bezpośrednich: w sieciach z kilkoma łączami internetowymi, '
-                    'jak w wielu biurach, PasteFerry znajduje teraz łącze prowadzące do drugiego '
+ 'pl': {'changes': ['Więcej połączeń bezpośrednich: w sieciach z kilkoma łączami internetowymi PasteFerry znajduje teraz łącze prowadzące do drugiego '
                     'urządzenia, więc połączenia, które szły przez przekaźnik, łączą się '
                     'bezpośrednio. Wystarczy zaktualizować urządzenie w tej sieci.',
                     'Przekierowanie portów na routerze: jeśli router obsługuje UPnP, NAT-PMP lub '
@@ -111,8 +104,7 @@ EXTRA_NOTES = {
                   'Gdy drugie urządzenie potrzebowało ponad dziewięciu sekund na zatwierdzenie '
                   'oficjalnego przekaźnika, przekaźnik zawsze zawodził i był ponawiany dopiero po '
                   'minucie; teraz czeka do 22 sekund.']},
- 'pt-BR': {'changes': ['Mais conexões diretas: em redes com várias linhas de internet, como muitos '
-                       'escritórios, o PasteFerry agora encontra a linha que leva ao outro '
+ 'pt-BR': {'changes': ['Mais conexões diretas: em redes com várias linhas de internet, o PasteFerry agora encontra a linha que leva ao outro '
                        'dispositivo, e conexões que passavam por retransmissão se conectam '
                        'diretamente. Só o dispositivo nessa rede precisa da atualização.',
                        'Mapeamento de portas no roteador: quando o roteador oferece UPnP, NAT-PMP '
@@ -125,8 +117,7 @@ EXTRA_NOTES = {
                      'Quando o outro dispositivo levava mais de nove segundos para aprovar a '
                      'retransmissão oficial, ela sempre falhava e só era tentada de novo um minuto '
                      'depois; agora espera até 22 segundos.']},
- 'ru': {'changes': ['Больше прямых подключений: в сетях с несколькими интернет-линиями, как во '
-                    'многих офисах, PasteFerry теперь находит линию, ведущую к другому устройству, '
+ 'ru': {'changes': ['Больше прямых подключений: в сетях с несколькими интернет-линиями PasteFerry теперь находит линию, ведущую к другому устройству, '
                     'и подключения, которые шли через ретрансляцию, устанавливаются напрямую. '
                     'Обновить нужно только устройство в такой сети.',
                     'Проброс портов на роутере: если роутер поддерживает UPnP, NAT-PMP или PCP и '
@@ -138,8 +129,7 @@ EXTRA_NOTES = {
                   'Если другому устройству требовалось больше девяти секунд, чтобы одобрить '
                   'официальную ретрансляцию, она всегда завершалась неудачей и повторялась лишь '
                   'через минуту; теперь ожидание длится до 22 секунд.']},
- 'tr': {'changes': ['Daha fazla doğrudan bağlantı: Birçok ofiste olduğu gibi birden fazla internet '
-                    'hattı olan ağlarda PasteFerry artık diğer cihaza giden hattı buluyor; eskiden '
+ 'tr': {'changes': ['Daha fazla doğrudan bağlantı: Birden fazla internet hattı olan ağlarda PasteFerry artık diğer cihaza giden hattı buluyor; eskiden '
                     'aktarma üzerinden giden bağlantılar doğrudan kuruluyor. Yalnızca o ağdaki '
                     'cihazın güncellenmesi yeterli.',
                     'Yönlendiricide port eşleme: Yönlendirici UPnP, NAT-PMP veya PCP destekliyor '
@@ -151,8 +141,7 @@ EXTRA_NOTES = {
                   'Diğer cihazın resmî aktarmayı onaylaması dokuz saniyeden uzun sürdüğünde '
                   'aktarma her zaman başarısız oluyor ve ancak bir dakika sonra yeniden '
                   'deneniyordu; artık 22 saniyeye kadar bekleniyor.']},
- 'uk': {'changes': ['Більше прямих підключень: у мережах із кількома інтернет-лініями, як у '
-                    'багатьох офісах, PasteFerry тепер знаходить лінію, що веде до іншого '
+ 'uk': {'changes': ['Більше прямих підключень: у мережах із кількома інтернет-лініями PasteFerry тепер знаходить лінію, що веде до іншого '
                     'пристрою, і підключення, які йшли через ретрансляцію, встановлюються напряму. '
                     'Оновити потрібно лише пристрій у такій мережі.',
                     'Переадресація портів на роутері: якщо роутер підтримує UPnP, NAT-PMP або PCP '
@@ -164,8 +153,7 @@ EXTRA_NOTES = {
                   'Якщо іншому пристрою потрібно було понад дев’ять секунд, щоб схвалити офіційну '
                   'ретрансляцію, вона завжди завершувалася невдачею й повторювалася лише за '
                   'хвилину; тепер очікування триває до 22 секунд.']},
- 'vi': {'changes': ['Kết nối trực tiếp thành công hơn: Trên mạng có nhiều đường truyền internet, '
-                    'như ở nhiều văn phòng, PasteFerry giờ tìm ra đường dẫn tới thiết bị kia, nên '
+ 'vi': {'changes': ['Kết nối trực tiếp thành công hơn: Trên mạng có nhiều đường truyền internet, PasteFerry giờ tìm ra đường dẫn tới thiết bị kia, nên '
                     'các kết nối trước đây đi qua chuyển tiếp giờ kết nối trực tiếp. Chỉ cần cập '
                     'nhật thiết bị trong mạng đó.',
                     'Ánh xạ cổng trên bộ định tuyến: Khi bộ định tuyến hỗ trợ UPnP, NAT-PMP hoặc '
