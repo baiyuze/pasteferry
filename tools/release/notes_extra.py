@@ -8,6 +8,21 @@ Older releases without these translations continue to fall back to English.
 EXTRA_LANGS = ["ar", "de", "es", "fr", "id", "it", "ko", "pl", "pt-BR", "ru", "tr", "uk", "vi"]
 
 EXTRA_NOTES = {
+    "2.14.1": {
+        "ar": {"changes": ["عناصر تحكم الخدمة: تظهر صفحة الخدمة دائمًا في الشريط الجانبي لسطح المكتب حتى عندما تكون الخدمة الرسمية متوقفة. يمكن تفعيلها من مفتاح أعلى الصفحة أو الزر في وسطها، ويظل مفتاح الإعدادات متاحًا."], "fixes": []},
+        "de": {"changes": ["Dienststeuerung: Die Dienstseite bleibt in der Seitenleiste sichtbar, auch wenn der offizielle Dienst ausgeschaltet ist. Er lässt sich oben auf der Seite oder über die Schaltfläche in der Mitte aktivieren; der Schalter in den Einstellungen bleibt verfügbar."], "fixes": []},
+        "es": {"changes": ["Controles del servicio: la página Servicio permanece en la barra lateral aunque el servicio oficial esté desactivado. Actívalo con el interruptor superior o el botón central; el control de Ajustes sigue disponible."], "fixes": []},
+        "fr": {"changes": ["Commandes du service : la page Service reste dans la barre latérale même lorsque le service officiel est désactivé. Activez-le avec l’interrupteur en haut de la page ou le bouton central ; le réglage existant reste disponible."], "fixes": []},
+        "id": {"changes": ["Kontrol layanan: Halaman Layanan tetap ada di bilah samping desktop saat layanan resmi nonaktif. Aktifkan lewat sakelar di bagian atas halaman atau tombol di tengah; kontrol di Pengaturan tetap tersedia."], "fixes": []},
+        "it": {"changes": ["Controlli del servizio: la pagina Servizio resta nella barra laterale anche quando il servizio ufficiale è disattivato. Attivalo con l’interruttore in alto o il pulsante al centro; il controllo nelle Impostazioni resta disponibile."], "fixes": []},
+        "ko": {"changes": ["서비스 제어: 공식 서비스가 꺼져 있어도 데스크톱 사이드바에 서비스 페이지가 표시됩니다. 페이지 상단 스위치나 가운데 버튼으로 켤 수 있으며 설정의 기존 스위치도 계속 사용할 수 있습니다."], "fixes": []},
+        "pl": {"changes": ["Sterowanie usługą: strona Usługa pozostaje w pasku bocznym, gdy oficjalna usługa jest wyłączona. Można ją włączyć przełącznikiem u góry strony lub przyciskiem pośrodku; przełącznik w Ustawieniach nadal działa."], "fixes": []},
+        "pt-BR": {"changes": ["Controles do serviço: a página Serviço permanece na barra lateral mesmo quando o serviço oficial está desativado. Ative-o pela chave no topo da página ou pelo botão central; o controle em Configurações continua disponível."], "fixes": []},
+        "ru": {"changes": ["Управление службой: страница службы остаётся на боковой панели, даже когда официальная служба выключена. Включить её можно переключателем вверху страницы или кнопкой в центре; настройка в параметрах также доступна."], "fixes": []},
+        "tr": {"changes": ["Hizmet kontrolleri: Resmî hizmet kapalıyken de Hizmet sayfası masaüstü kenar çubuğunda görünür. Sayfanın üstündeki anahtar veya ortadaki düğmeyle açılabilir; Ayarlar'daki mevcut anahtar da kullanılabilir."], "fixes": []},
+        "uk": {"changes": ["Керування службою: сторінка служби залишається на бічній панелі, навіть коли офіційну службу вимкнено. Її можна ввімкнути перемикачем угорі сторінки або кнопкою посередині; налаштування в параметрах також доступне."], "fixes": []},
+        "vi": {"changes": ["Điều khiển dịch vụ: Trang Dịch vụ luôn có trong thanh bên trên máy tính ngay cả khi dịch vụ chính thức đang tắt. Bật từ công tắc ở đầu trang hoặc nút ở giữa; công tắc trong Cài đặt vẫn dùng được."], "fixes": []},
+    },
     "2.14.0": {'ar': {'changes': ['نجاح أكبر في الاتصال المباشر: في الشبكات التي تضم عدة خطوط إنترنت، يعثر PasteFerry الآن على الخط الذي يصل إلى الجهاز الآخر، '
                     'فتتصل مباشرةً اتصالاتٌ كانت تمر عبر الترحيل. يكفي تحديث الجهاز الموجود على '
                     'تلك الشبكة.',

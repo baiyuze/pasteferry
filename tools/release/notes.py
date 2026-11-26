@@ -12,6 +12,14 @@
 MAX_RELEASES = 10
 
 RELEASES = [
+{'version': '2.14.1',
+ 'date': '2026-11-26',
+ 'changes': [('Service controls: The Service page stays in the desktop sidebar while the official service is off. Enable it from the page header or the centered button; the existing control in Settings remains available.',
+              '服务开关：即使官方服务未开启，桌面版左侧也会显示“服务”页面。可在页面右上角或中央按钮开启，设置里的原有开关仍可使用。',
+              'サービスの切り替え：公式サービスがオフでも、デスクトップ版のサイドバーにサービスページを表示します。ページ右上のスイッチか中央のボタンから有効にでき、設定内の従来のスイッチも使えます。',
+              '服務開關：即使官方服務尚未啟用，桌面版側邊欄仍會顯示「服務」頁面。可從頁面右上方或中央按鈕啟用，設定中的原有開關也能使用。',
+              '服務開關：即使官方服務尚未啟用，桌面版側邊欄仍會顯示「服務」頁面。可在頁面右上角或中央按鈕啟用，設定內原有的開關亦可使用。')],
+ 'fixes': []},
 {'version': '2.14.0',
  'date': '2026-11-26',
  'changes': [('Higher direct connection success: On networks with several internet lines, PasteFerry now finds the line that leads to the other device, so '

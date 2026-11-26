@@ -199,7 +199,7 @@
               <li>마지막 공용 IP를 사용하여 다음 줄을 실행합니다.<span class="aside">ARM에서는 <code>amd64</code> 를 <code>arm64</code>로 바꿉니다.</span>
                 <div class="code">
                   <button class="copy" type="button" data-done="복사됨">복사</button>
-<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.14.0/pasteferry-server-linux-amd64.tar.gz
+<pre><code>curl -LO https://github.com/baiyuze/pasteferry/releases/download/v2.14.1/pasteferry-server-linux-amd64.tar.gz
 tar xzf pasteferry-server-linux-amd64.tar.gz
 cd pasteferry-server-linux-amd64
 sudo ./install.sh 203.0.113.10</code></pre>
@@ -222,7 +222,7 @@ sudo ./install.sh 203.0.113.10</code></pre>
 <span class="t-step">▶ Starting</span>
   ✓ Running
 
-Installed: pasteferry-server 2.14.0
+Installed: pasteferry-server 2.14.1
 In PasteFerry on each computer, set Settings → Connection → Custom server to:
 
     <span class="t-url">ws://203.0.113.10:8787/signal</span>
@@ -246,7 +246,7 @@ Open in your firewall: TCP 8787 (signaling), UDP 3478 (STUN and TURN), UDP 32768
         <p class="intro">모든 컴퓨터의 브라우저에서 <code>http://203.0.113.10:8787/healthz</code> (공용 IP 사용)를 엽니다. 이 줄이 보이면 제대로 작동하는 것입니다.</p>
         <figure class="browser" role="img" aria-label="서버 상태가 정상인 http://203.0.113.10:8787/healthz, 와 해당 버전을 표시하는 브라우저">
           <div class="b-bar"><span class="t-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="b-url">http://203.0.113.10:8787/healthz</span></div>
-          <pre class="b-body">{"status":"ok","version":"2.14.0"}</pre>
+          <pre class="b-body">{"status":"ok","version":"2.14.1"}</pre>
         </figure>
         <p class="note">로드되지 않으면 아래 <a href="#faq">질문</a> 를 참조하세요.</p>
       </div>

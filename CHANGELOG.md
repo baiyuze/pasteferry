@@ -1,5 +1,20 @@
 # 更新记录 / Changelog
 
+## 2.14.1 — 2026-11-26
+
+Keep the Service page available when the official service is off.
+
+### Changes
+
+- Service controls: The Service page stays in the desktop sidebar while the official service is off. Enable it from the page header or the centered button; the existing control in Settings remains available.
+
+### Upgrade notes
+
+- **Mac, Windows and Linux apps**: optional; update to use the new Service page controls. Pairings, history and settings are preserved.
+- **Android**: no update needed.
+- **Server**: no update needed.
+- The device-to-device protocol is unchanged and compatible with existing releases.
+
 ## 2.14.0 — 2026-11-26
 
 Devices on different networks connect directly much more often.

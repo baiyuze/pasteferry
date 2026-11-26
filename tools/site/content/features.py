@@ -55,7 +55,7 @@ COPY = {
 
     # ── 首页 ──
     # {version} 由官网 VERSION 生成；每次发版同步更新功能摘要。
-    "badge": ('{version}：远程直连成功率提升 →', '{version}：遠端直連成功率提升 →', '{version}：遙距直連成功率提升 →', '{version}: more devices connect directly →', '{version}：リモート直接接続の成功率が向上 →'),
+    "badge": ('{version}：服务入口常驻左侧 →', '{version}：服務入口常駐側邊欄 →', '{version}：服務入口常駐側邊欄 →', '{version}: Service page stays in the sidebar →', '{version}：サービス画面を常に表示 →'),
     # 首页手机区块（2.7）
     "home_phone_h2": ("手机也能用了。", "手機也能用了。", "手機也能用了。", "Your phone joins in.", "スマホでも使える。"),
     "home_phone_intro": ('同一网络内，用安卓 App 或扫码网页与电脑互传内容。',
