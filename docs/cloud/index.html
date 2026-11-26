@@ -13,7 +13,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>把隔空贴服务器部署到公网：云服务器图文教程</title>
-  <meta name="description" content="一台有公网 IP 的 Linux 云主机，运行一个脚本就能装好隔空贴的信令与 TURN 服务器。每台电脑直接连它，在家、在公司、在外面都能同步剪贴板。含安全组放行、检查、客户端设置与国内域名备案的说明。">
+  <meta name="description" content="一台有公网 IP 的 Linux 云主机，运行一个脚本就能装好隔空贴的信令与 TURN 服务器。每台电脑直接连它，在家、在外面都能同步剪贴板。含安全组放行、检查、客户端设置与国内域名备案的说明。">
   <link rel="canonical" href="https://pasteferry.cc/cloud/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/cloud/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/cloud/">
@@ -29,7 +29,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="隔空贴">
   <meta property="og:title" content="把隔空贴服务器部署到公网：云服务器图文教程">
-  <meta property="og:description" content="一台有公网 IP 的 Linux 云主机，运行一个脚本就能装好隔空贴的信令与 TURN 服务器。每台电脑直接连它，在家、在公司、在外面都能同步剪贴板。含安全组放行、检查、客户端设置与国内域名备案的说明。">
+  <meta property="og:description" content="一台有公网 IP 的 Linux 云主机，运行一个脚本就能装好隔空贴的信令与 TURN 服务器。每台电脑直接连它，在家、在外面都能同步剪贴板。含安全组放行、检查、客户端设置与国内域名备案的说明。">
   <meta property="og:url" content="https://pasteferry.cc/cloud/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
   <meta property="og:locale" content="zh_CN">
@@ -37,7 +37,7 @@
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../assets/site.css?v=a98e653f3f">
+  <link rel="stylesheet" href="../assets/site.css?v=0c23d15b19">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
 </head>
 <body>
@@ -114,13 +114,13 @@
         <figure class="diagram">
           <svg viewBox="0 0 960 460" role="img" aria-labelledby="cloud-title cloud-desc">
             <title id="cloud-title">通过公网服务器使用隔空贴</title>
-            <desc id="cloud-desc">公网服务器的地址是 203.0.113.10。Mac 在公司网络里，Windows 在家里的网络里，两台电脑都通过信令连接到服务器；复制的内容在两台电脑之间直连传输，打不通直连时经服务器中转。</desc>
+            <desc id="cloud-desc">公网服务器的地址是 203.0.113.10。Mac 在外面的网络里，Windows 在家里的网络里，两台电脑都通过信令连接到服务器；复制的内容在两台电脑之间直连传输，打不通直连时经服务器中转。</desc>
             <rect class="d-box" x="340" y="24" width="280" height="118" rx="14"/>
             <text class="d-title" x="480" y="62" text-anchor="middle">公网服务器</text>
             <text class="d-sub" x="480" y="90" text-anchor="middle">云主机，有公网 IP</text>
             <text class="d-ip" x="480" y="124" text-anchor="middle">203.0.113.10</text>
             <rect class="d-lan" x="8" y="196" width="412" height="212" rx="22"/>
-            <text class="d-lan-label" x="32" y="228">公司网络</text>
+            <text class="d-lan-label" x="32" y="228">外面的网络</text>
             <rect class="d-lan" x="540" y="196" width="412" height="212" rx="22"/>
             <text class="d-lan-label" x="564" y="228">家里的网络</text>
             <path class="d-sig" d="M150 250V68H340"/>
@@ -348,7 +348,7 @@ sudo ./install.sh 203.0.113.10</code></pre>
     </div>
   </footer>
 
-  <script src="../assets/site.js?v=cf97337170" defer></script>
+  <script src="../assets/site.js?v=67eb728ae8" defer></script>
   <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>

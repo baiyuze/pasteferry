@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>用 Tailscale 跨網絡使用隔空貼：不用伺服器，在家和公司之間同步</title>
-  <meta name="description" content="每部電腦安裝 Tailscale、登入同一個帳戶，配對時輸入對方的 Tailscale 地址：不需要公網 IP，不需要伺服器，也不需要長期開着的電腦，在公司、在外面都能同步剪貼簿。">
+  <title>用 Tailscale 跨網絡使用隔空貼：不用伺服器，在不同網絡之間同步</title>
+  <meta name="description" content="每部電腦安裝 Tailscale、登入同一個帳戶，配對時輸入對方的 Tailscale 地址：不需要公網 IP，不需要伺服器，也不需要長期開着的電腦，出門在外也能同步剪貼簿。">
   <link rel="canonical" href="https://pasteferry.cc/zh-hk/tailscale/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/tailscale/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/tailscale/">
@@ -28,8 +28,8 @@
   <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}p=p==="light"||p==="system"?p:"dark";function a(){var t=p==="system"?(m&&m.matches?"light":"dark"):p;d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#ffffff":"#141416")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p==="system")a()});window.pfSetTheme=function(v){p=v==="light"||v==="system"?v:"dark";try{localStorage.setItem(k,p)}catch(e){}a()}})();</script>
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="隔空貼">
-  <meta property="og:title" content="用 Tailscale 跨網絡使用隔空貼：不用伺服器，在家和公司之間同步">
-  <meta property="og:description" content="每部電腦安裝 Tailscale、登入同一個帳戶，配對時輸入對方的 Tailscale 地址：不需要公網 IP，不需要伺服器，也不需要長期開着的電腦，在公司、在外面都能同步剪貼簿。">
+  <meta property="og:title" content="用 Tailscale 跨網絡使用隔空貼：不用伺服器，在不同網絡之間同步">
+  <meta property="og:description" content="每部電腦安裝 Tailscale、登入同一個帳戶，配對時輸入對方的 Tailscale 地址：不需要公網 IP，不需要伺服器，也不需要長期開着的電腦，出門在外也能同步剪貼簿。">
   <meta property="og:url" content="https://pasteferry.cc/zh-hk/tailscale/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-zh-hant.png">
   <meta property="og:locale" content="zh_HK">
@@ -37,7 +37,7 @@
   <link rel="icon" href="../../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
   <link rel="icon" href="../../assets/favicon-32.png?v=8e9afa506d" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=bcbf406cb8">
-  <link rel="stylesheet" href="../../assets/site.css?v=a98e653f3f">
+  <link rel="stylesheet" href="../../assets/site.css?v=0c23d15b19">
   <script>document.documentElement.classList.add("js");if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.documentElement.classList.add("pc");</script>
 </head>
 <body>
@@ -95,7 +95,7 @@
       <div class="wrap">
         <p class="crumb"><a href="../../zh-hk/">隔空貼</a> / <a href="../../zh-hk/start/#server">連接方式</a></p>
         <h1 class="display">用 Tailscale 跨網絡使用</h1>
-        <p class="lede">沒有公網 IP，也不想部署伺服器？每部電腦安裝 Tailscale，配對時輸入對方的 Tailscale 地址，在家、在公司都能同步。</p>
+        <p class="lede">沒有公網 IP，也不想部署伺服器？每部電腦安裝 Tailscale，配對時輸入對方的 Tailscale 地址，在家、在外面都能同步。</p>
         <ol class="guide-toc">
           <li><a href="#join">安裝 Tailscale</a></li>
           <li><a href="#address">查地址</a></li>
@@ -112,12 +112,12 @@
         <figure class="diagram">
           <svg viewBox="0 0 960 330" role="img" aria-labelledby="ts-title ts-desc">
             <title id="ts-title">透過 Tailscale 使用隔空貼</title>
-            <desc id="ts-desc">Mac 在公司，Windows 在家裏，兩部電腦都安裝了 Tailscale，在同一個虛擬區域網絡裏各有一個以 100 開頭的地址。複製的內容在兩部電腦之間直接傳輸，沒有伺服器。</desc>
+            <desc id="ts-desc">Mac 在外面，Windows 在家裏，兩部電腦都安裝了 Tailscale，在同一個虛擬區域網絡裏各有一個以 100 開頭的地址。複製的內容在兩部電腦之間直接傳輸，沒有伺服器。</desc>
             <rect class="d-ts" x="8" y="8" width="944" height="314" rx="22"/>
             <text class="d-ts-label" x="32" y="42">Tailscale 虛擬區域網絡：每部裝置一個以 100 開頭的地址</text>
             <rect class="d-box" x="40" y="100" width="240" height="160" rx="14"/>
             <text class="d-title" x="160" y="146" text-anchor="middle">Mac</text>
-            <text class="d-sub" x="160" y="174" text-anchor="middle">在公司</text>
+            <text class="d-sub" x="160" y="174" text-anchor="middle">在外面</text>
             <text class="d-ip" x="160" y="226" text-anchor="middle">100.88.20.5</text>
             <rect class="d-box" x="680" y="100" width="240" height="160" rx="14"/>
             <text class="d-title" x="800" y="146" text-anchor="middle">Windows</text>
@@ -206,7 +206,7 @@
           <div>
             <ol class="steps">
               <li>在家裏那部 Windows 電腦上開啟「裝置」，按「新增裝置」，記下 6 位配對碼。</li>
-              <li>在公司的 Mac 上按「新增裝置」，切換到「輸入配對碼」，輸入它；再按「不在同一網段？」，填上 <code>100.92.41.17</code>，按「繼續」。</li>
+              <li>在外面的 Mac 上按「新增裝置」，切換到「輸入配對碼」，輸入它；再按「不在同一網段？」，填上 <code>100.92.41.17</code>，按「繼續」。</li>
               <li>兩邊螢幕會顯示同樣的兩行安全指紋，逐字核對一致後確認。之後兩部電腦在哪裏都能同步。</li>
             </ol>
           </div>
@@ -224,7 +224,7 @@
         <div class="faq">
           <details>
             <summary>裝置之間顯示「直連」，速度卻很慢？</summary>
-            <div class="answer"><p>隔空貼顯示的「直連」，是指兩部電腦在 Tailscale 的虛擬網絡裏直接相連。Tailscale 本身打不通兩部電腦時，會經它在境外的中轉伺服器（DERP）轉發，在內地使用就會比較慢。</p><p>在終端機執行 <code>tailscale ping 對方的地址</code>：顯示 via DERP，代表 Tailscale 正在中轉；顯示 via 一個 IP 和端口，就是點對點。公司網絡、校園網絡比較容易遇到中轉，可以自建 DERP 中轉伺服器，或者換用另一種網絡工具。</p></div>
+            <div class="answer"><p>隔空貼顯示的「直連」，是指兩部電腦在 Tailscale 的虛擬網絡裏直接相連。Tailscale 本身打不通兩部電腦時，會經它在境外的中轉伺服器（DERP）轉發，在內地使用就會比較慢。</p><p>在終端機執行 <code>tailscale ping 對方的地址</code>：顯示 via DERP，代表 Tailscale 正在中轉；顯示 via 一個 IP 和端口，就是點對點。多出口網絡、校園網絡比較容易遇到中轉，可以自建 DERP 中轉伺服器，或者換用另一種網絡工具。</p></div>
           </details>
           <details>
             <summary>配對時找不到對方？</summary>
@@ -292,7 +292,7 @@
     </div>
   </footer>
 
-  <script src="../../assets/site.js?v=cf97337170" defer></script>
+  <script src="../../assets/site.js?v=67eb728ae8" defer></script>
   <script src="/assets/analytics.js?v=f3eea0a3f5" defer></script>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7ee226baf4a949a397c4bfd69a9e7461"}'></script>
 </body>

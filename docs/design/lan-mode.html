@@ -18,7 +18,7 @@
   <meta name="theme-color" content="#141416">
   <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}p=p==="light"||p==="system"?p:"dark";function a(){var t=p==="system"?(m&&m.matches?"light":"dark"):p;d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#ffffff":"#141416")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p==="system")a()});window.pfSetTheme=function(v){p=v==="light"||v==="system"?v:"dark";try{localStorage.setItem(k,p)}catch(e){}a()}})();</script>
   <link rel="icon" href="../assets/favicon.svg?v=df696024d8" type="image/svg+xml">
-  <link rel="stylesheet" href="../assets/site.css?v=a98e653f3f">
+  <link rel="stylesheet" href="../assets/site.css?v=0c23d15b19">
 </head>
 <body>
   <a class="skip" href="#main">跳到正文</a>
@@ -67,7 +67,7 @@
 <h3 id="3-局域网信令">3. 局域网信令</h3>
 <ul><li>固定 UDP 端口 8788，被占用时（同一台 Mac 上两个用户都登录着）退回随机端口，端口随 mDNS 和地址一起告诉对方。</li><li>每个包是 4 字节魔数 <code>PFL1</code>（2.0.0 之前是 <code>CSL1</code>） 加 <code>LanPacket</code>，上限 16 KB，按来源限速。</li><li>已配对设备之间收发的就是服务器转发的那种 <code>Signed</code>。上线通知是 <code>SignalMessage</code> 里新增的 <code>LanHello</code>：自报的地址、要不要回一条、自己多久发一次。</li><li>对每台还没连通的设备，每 10 秒往它可能在的地址发 hello（已连通时 30 秒保活）。候选地址按顺序取：最近一次收到它消息的来源、mDNS 发现的、它自报的、地址簿里的，最多 12 个。</li><li>收到有效消息就记下来源地址，并标记可达；超过对方声明间隔的三倍没收到，视为不可达。</li><li>信令发往对方最近的来源地址，150 毫秒后再补发一次，抵消 UDP 偶尔丢包；重复的那份被 nonce 去重。</li></ul>
 <h3 id="4-地址簿与跨网段">4. 地址簿与跨网段</h3>
-<ul><li>新表 <code>device_addrs(device_id, addr, last_seen)</code>，每台设备最多 8 个，随设备一起删除。</li><li>跨网段时 mDNS 过不去，配对时由用户输入对方配对码下面显示的地址。配对双方都记下对方的地址，之后任意一方换了地址，只要另一方没换，就能重新找到。</li><li>两边都换了地址时，在设备菜单里「输入它的地址」。不做网段扫描：在公司网络里会被当成端口扫描。</li><li>Tailscale 不转发 mDNS，但 100.x 地址就是普通的可达地址：配对时输入它，之后同样靠地址簿。</li></ul>
+<ul><li>新表 <code>device_addrs(device_id, addr, last_seen)</code>，每台设备最多 8 个，随设备一起删除。</li><li>跨网段时 mDNS 过不去，配对时由用户输入对方配对码下面显示的地址。配对双方都记下对方的地址，之后任意一方换了地址，只要另一方没换，就能重新找到。</li><li>两边都换了地址时，在设备菜单里「输入它的地址」。不做网段扫描：在不少网络里会被当成端口扫描。</li><li>Tailscale 不转发 mDNS，但 100.x 地址就是普通的可达地址：配对时输入它，之后同样靠地址簿。</li></ul>
 <h3 id="5-配对">5. 配对</h3>
 <ul><li>显示码的一方：码在服务器和局域网两边同时开放（连着服务器时用服务器签发的码，否则本机生成，格式见 <code>proto/pairingcode</code>），一边用掉另一边就失效。错码 10 次作废。</li><li>输入码的一方：先在局域网里找，发往所有 <code>p=1</code> 的实例和用户输入的地址，每 500 毫秒重发，3 秒为限（输了地址时 5 秒）；找不到且连着服务器再去服务器兑换。</li><li>请求和回复都是 <code>LanPairInfo</code>，用自带的公钥签名，并校验 ID 由公钥派生；回复回显请求的 nonce，绑定到这次请求。配对码在局域网里明文传输，与服务器模式下服务器能看到配对码等价：防中间人靠的是用户核对指纹。</li><li>配对请求与回复本身证明了对方在哪个地址，收到即标记可达，确认后第一次连接不必再等 hello。</li><li><strong>敲门</strong>：输入码的一方在 mDNS 里带上 <code>s=1</code>；显示码的一方看到后，先往它的每个地址发一个只有魔数的空包。显示码的一方若是没放行防火墙的 Windows，对方主动发来的配对请求本会被挡住；先发过包，有状态防火墙就会放行。只在同一网段有效（靠 mDNS），跨网段时仍需在被连的一方放行。</li></ul>
 <h3 id="6-搜索附近设备">6. 搜索附近设备</h3>
