@@ -5,12 +5,11 @@
 <h1 align="center">PasteFerry</h1>
 
 <p align="center">
-  <strong>Direct P2P clipboard and file transfer, on your LAN and across networks.</strong><br>
-  Copy on one device, paste on another — no chat apps, cloud drives or shared account.
-  On the same network, devices connect with no server, at full LAN speed; across networks, PasteFerry
-  punches through NAT on home, work and mobile networks to connect them directly.
-  End-to-end encrypted, with a relay only as a fallback. Clipboard sync, searchable history and file
-  transfer for Mac, Windows and Linux; Android and a phone web page send and receive files on your local network.
+  <strong>P2P clipboard sync and file transfer.</strong><br>
+  P2P direct on your LAN and across networks; nothing goes through a cloud. End-to-end encrypted,
+  with an encrypted relay only if hole punching fails. Clipboard sync, searchable history and file
+  transfer for Mac, Windows and Linux, no shared account; Android and a phone web page send and
+  receive files on your local network.
 </p>
 
 <p align="center">
@@ -46,11 +45,11 @@
 
 Universal Clipboard needs the same Apple ID and both Macs close by. AirDrop makes you accept every time, and also only works nearby. Messaging yourself means manual downloads and your files on someone else's server. With one Mac and one Windows PC, or one computer at home and one at the office, none of the built-in options work.
 
-With PasteFerry you pair two computers once. After that, copy on one and paste on the other. Side by side on one network or far apart on different ones, the two connect to each other directly, peer to peer, so what you copy goes straight across instead of through someone's server. Everything you copied stays in your history: press <kbd>⌥V</kbd> (<kbd>Alt</kbd>+<kbd>V</kbd> on Windows and Linux) to find it and paste it into the app you're using.
+With PasteFerry you pair two computers once. After that, copy on one and paste on the other. On the LAN and across networks, they connect P2P; content never goes through anyone's server. Everything you copied stays in your history: press <kbd>⌥V</kbd> (<kbd>Alt</kbd>+<kbd>V</kbd> on Windows and Linux) to find it and paste it into the app you're using.
 
 | | PasteFerry | Universal Clipboard | AirDrop | Chat apps |
 |---|:-:|:-:|:-:|:-:|
-| Direct device to device, on the LAN and across networks (home ↔ office) | ✓ | Nearby only | Nearby only | Via their servers |
+| P2P direct, on the LAN and across networks | ✓ | Nearby only | Nearby only | Via their servers |
 | Different Apple IDs | ✓ | — | Needs accepting | ✓ |
 | Paste right away, nothing to accept | ✓ | ✓ | — | — |
 | Between Mac and Windows | ✓ | — | — | ✓ |
@@ -60,7 +59,7 @@ With PasteFerry you pair two computers once. After that, copy on one and paste o
 
 ## At its core: direct connections, on the LAN and across networks
 
-PasteFerry connects your devices to each other directly. On the same network they need no server at all and move data at LAN speed; across networks they punch through NAT, whether one sits behind a home router and the other on a multi-uplink network or a phone hotspot. What you copy and the files you send go straight from one to the other, not through anyone's server.
+Devices connect P2P: directly on the LAN with no server, by hole punching across networks. Content goes straight from one device to the other, not through anyone's server.
 
 ```mermaid
 flowchart LR
@@ -71,7 +70,7 @@ flowchart LR
 ```
 
 - **Same network: no server, full LAN speed.** Devices find each other over mDNS and pair with a code. Send Files between computers uses an encrypted TCP fast link: a 1 GB file went from a Mac to a Linux VM at 144 MB/s. The Android app and the phone web page also transfer directly on the LAN.
-- **Across networks, the server only introduces them.** The official service or your own server helps the two computers exchange connection details; then they punch through NAT and connect directly (WebRTC, built on [pion](https://github.com/pion/webrtc)).
+- **Hole punching across networks.** The official service or your own server handles signaling only (WebRTC, built on [pion](https://github.com/pion/webrtc)).
 - **Networks with several uplinks.** Networks with two ISPs pick an uplink per destination. PasteFerry asks several STUN servers from one shared UDP port, learns its address on every uplink and sends them all to the peer, and decides which side sends first to get past routers that lock a port. A Mac on a network with four uplinks connects directly to one on a home connection.
 - **Mobile data and portable Wi‑Fi (2.13).** Many carrier NATs give every destination a new port, but hand the ports out in sequence. PasteFerry spots the pattern and predicts the next ports, so a laptop on a phone hotspot or a portable Wi‑Fi router connects directly. Only NATs that pick ports at random still need the relay.
 - **IPv6 (2.13).** When both computers have public IPv6 addresses, they connect directly over IPv6, with no NAT to cross.
