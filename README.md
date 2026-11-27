@@ -21,6 +21,8 @@
   ·
   <a href="README.zh-CN.md">简体中文</a>
   ·
+  <a href="README.tr.md">Türkçe</a>
+  ·
   <a href="https://gitee.com/baiyuze/pasteferry/releases">Gitee mirror</a>
 </p>
 
