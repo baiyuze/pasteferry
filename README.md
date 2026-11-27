@@ -5,11 +5,12 @@
 <h1 align="center">PasteFerry</h1>
 
 <p align="center">
-  <strong>Copy on one computer, paste on another — even when they're on different networks.</strong><br>
-  Clipboard sync, searchable history and file transfer that go directly between your devices, peer to peer.
-  Home, office or phone hotspot: PasteFerry punches through NAT to connect them, and falls back to an
-  end-to-end encrypted relay only when it can't. Mac, Windows and Linux, no shared account; Android and
-  a phone web page send and receive files on your local network.
+  <strong>Direct P2P clipboard and file transfer, on your LAN and across networks.</strong><br>
+  Copy on one device, paste on another — no chat apps, cloud drives or shared account.
+  On the same network, devices connect with no server, at full LAN speed; across networks, PasteFerry
+  punches through NAT on home, work and mobile networks to connect them directly.
+  End-to-end encrypted, with a relay only as a fallback. Clipboard sync, searchable history and file
+  transfer for Mac, Windows and Linux; Android and a phone web page send and receive files on your local network.
 </p>
 
 <p align="center">
@@ -45,22 +46,21 @@
 
 Universal Clipboard needs the same Apple ID and both Macs close by. AirDrop makes you accept every time, and also only works nearby. Messaging yourself means manual downloads and your files on someone else's server. With one Mac and one Windows PC, or one computer at home and one at the office, none of the built-in options work.
 
-With PasteFerry you pair two computers once. After that, copy on one and paste on the other, whether they sit side by side or one is at the office and the other at home. The two connect to each other directly, so what you copy goes straight across instead of through someone's server. Everything you copied stays in your history: press <kbd>⌥V</kbd> (<kbd>Alt</kbd>+<kbd>V</kbd> on Windows and Linux) to find it and paste it into the app you're using.
+With PasteFerry you pair two computers once. After that, copy on one and paste on the other. Side by side on one network or far apart on different ones, the two connect to each other directly, peer to peer, so what you copy goes straight across instead of through someone's server. Everything you copied stays in your history: press <kbd>⌥V</kbd> (<kbd>Alt</kbd>+<kbd>V</kbd> on Windows and Linux) to find it and paste it into the app you're using.
 
 | | PasteFerry | Universal Clipboard | AirDrop | Chat apps |
 |---|:-:|:-:|:-:|:-:|
+| Direct device to device, on the LAN and across networks (home ↔ office) | ✓ | Nearby only | Nearby only | Via their servers |
 | Different Apple IDs | ✓ | — | Needs accepting | ✓ |
-| Different networks (home ↔ office) | ✓ | — | — | ✓ |
-| Direct device to device, even across networks | ✓ | Nearby only | Nearby only | Via their servers |
 | Paste right away, nothing to accept | ✓ | ✓ | — | — |
 | Between Mac and Windows | ✓ | — | — | ✓ |
 | Files and whole folders | ✓ | Unreliable | ✓ | Zipped |
 | History of what you copied | ✓ | — | — | Scroll back |
 | Only your devices can decrypt content | ✓ | ✓ | ✓ | — |
 
-## At its core: direct connections, across networks
+## At its core: direct connections, on the LAN and across networks
 
-Everything in PasteFerry rests on your computers talking to each other directly. What you copy and the files you send go from one to the other, not through anyone's server — whether the two share a Wi‑Fi network or sit behind different routers in different cities.
+PasteFerry connects your devices to each other directly. On the same network they need no server at all and move data at LAN speed; across networks they punch through NAT, whether one sits behind a home router and the other on a multi-uplink network or a phone hotspot. What you copy and the files you send go straight from one to the other, not through anyone's server.
 
 ```mermaid
 flowchart LR
@@ -70,15 +70,16 @@ flowchart LR
     A -. "only if that fails: encrypted relay" .-> S
 ```
 
-- **Same network: no server at all.** Computers find each other over mDNS and pair with a code.
-- **Different networks: the server only introduces them.** The official service or your own server helps the two computers exchange connection details; then they punch through NAT and connect directly (WebRTC, built on [pion](https://github.com/pion/webrtc)).
-- **Office networks with several uplinks.** Offices with two ISPs pick an uplink per destination. PasteFerry asks several STUN servers from one shared UDP port, learns its address on every uplink and sends them all to the peer, and decides which side sends first to get past routers that lock a port. A Mac on an office network with four uplinks connects directly to one on a home connection.
-- **Mobile data and portable Wi‑Fi (2.13).** Many carrier NATs give every destination a new port, but hand the ports out in sequence. PasteFerry spots the pattern and predicts the next ports, so a laptop on a phone hotspot or a portable Wi‑Fi router can still connect directly. Only NATs that pick ports at random still need the relay.
+- **Same network: no server, full LAN speed.** Devices find each other over mDNS and pair with a code. Send Files between computers uses an encrypted TCP fast link: a 1 GB file went from a Mac to a Linux VM at 144 MB/s. The Android app and the phone web page also transfer directly on the LAN.
+- **Across networks, the server only introduces them.** The official service or your own server helps the two computers exchange connection details; then they punch through NAT and connect directly (WebRTC, built on [pion](https://github.com/pion/webrtc)).
+- **Networks with several uplinks.** Networks with two ISPs pick an uplink per destination. PasteFerry asks several STUN servers from one shared UDP port, learns its address on every uplink and sends them all to the peer, and decides which side sends first to get past routers that lock a port. A Mac on a network with four uplinks connects directly to one on a home connection.
+- **Mobile data and portable Wi‑Fi (2.13).** Many carrier NATs give every destination a new port, but hand the ports out in sequence. PasteFerry spots the pattern and predicts the next ports, so a laptop on a phone hotspot or a portable Wi‑Fi router connects directly. Only NATs that pick ports at random still need the relay.
 - **IPv6 (2.13).** When both computers have public IPv6 addresses, they connect directly over IPv6, with no NAT to cross.
+- **Router port mapping (2.14).** When the router supports UPnP, NAT-PMP or PCP and has a public address, PasteFerry opens a port on it, so the other device reaches it directly.
 - **Fast across distances (2.12).** When a direct transfer between networks stays slow, PasteFerry opens parallel connections and keeps them only if they help.
 - **Relay only as a fallback.** The relay forwards end-to-end encrypted packets it can't read and rides out network stalls of up to 35 seconds; the connection switches back to direct once punching succeeds while idle. **Devices** shows whether each computer is Direct or Relay.
 - **Fingerprints checked at pairing.** Both screens show the same two lines, and every later message is signed, so the server can't impersonate your device.
-- **Tested in a lab on every commit.** The [NAT traversal lab](tools/natlab) uses Linux network namespaces and iptables to model home routers, multi-uplink networks, port-randomizing NATs and more — 16 scenarios run against PasteFerry's real connection code. Port prediction is tested on pion's virtual network: a sequential symmetric NAT connects directly with it and fails without it.
+- **Tested in a lab on every commit.** The [NAT traversal lab](tools/natlab) uses Linux network namespaces and iptables to model home routers, multi-uplink networks, port-randomizing NATs and more — 21 scenarios run against PasteFerry's real connection code. Port prediction is tested on pion's virtual network: a sequential symmetric NAT connects directly with it and fails without it.
 
 Direct connections across networks are between the Mac, Windows and Linux apps. The Android app and the phone web page work on the local network for now.
 
@@ -171,7 +172,7 @@ The Mac app isn't notarized by Apple and the Windows app isn't code-signed yet: 
 
 **2. Pair.** On one computer, **Devices → Add device → Show a code**; on the other, **Enter a code**. Confirm only if both screens show the same two fingerprint lines. From then on, copy on either one and paste on the other.
 
-**3. Across networks (optional)**, pick how the computers find each other. Whichever you pick, content goes directly between them whenever a direct path exists:
+**3. Connect across networks.** Pick how the computers find each other; on a single network you can skip this. Content then goes directly between them whenever a direct path exists:
 
 | Way | Best for | You need |
 |---|---|---|
