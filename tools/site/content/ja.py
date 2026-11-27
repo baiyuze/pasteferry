@@ -6,10 +6,10 @@ SITE = "https://pasteferry.cc/"
 C = {
     "brand": "PasteFerry",
     "brand_alt": ["隔空贴", "CopySync"],
-    "title": "PasteFerry：デバイス間のクリップボード・履歴・ファイル転送",
-    "description": "パソコン間でコピーと貼り付け、履歴の検索、パソコンとAndroid間で写真やファイルの転送。Mac・Windows・Linux・Androidに対応。スマホはQRコードでWeb版も利用可能。AndroidとWeb版は同一ネットワーク内で使用。無料・オープンソース。",
-    "og_title": "PasteFerry：デバイス間のクリップボード・履歴・ファイル転送",
-    "og_description": "パソコン間でコピーと貼り付け、履歴の検索、パソコンとAndroid間で写真やファイルの転送。Mac・Windows・Linux・Androidに対応。スマホはQRコードでWeb版も利用可能。AndroidとWeb版は同一ネットワーク内で使用。無料・オープンソース。",
+    "title": "PasteFerry：P2P 直結のクリップボード同期・ファイル転送",
+    "description": "LAN でも別ネットワークでも P2P 直結、クラウドを経由しません。パソコン間でコピーと貼り付け、履歴の検索、パソコンとAndroid間で写真やファイルの転送。Mac・Windows・Linux・Androidに対応。スマホはQRコードでWeb版も利用可能。AndroidとWeb版は同一ネットワーク内で使用。無料・オープンソース。",
+    "og_title": "PasteFerry：P2P 直結のクリップボード同期・ファイル転送",
+    "og_description": "LAN でも別ネットワークでも P2P 直結、クラウドを経由しません。パソコン間でコピーと貼り付け、履歴の検索、パソコンとAndroid間で写真やファイルの転送。Mac・Windows・Linux・Androidに対応。スマホはQRコードでWeb版も利用可能。AndroidとWeb版は同一ネットワーク内で使用。無料・オープンソース。",
     "og_image": "og-en.png",
     "skip": "本文へ移動",
     "home_label": "PasteFerry ホーム",
@@ -862,7 +862,7 @@ C = {
         ],
     },
 
-    "ld_description": "パソコン間でコピーと貼り付け、履歴の検索、パソコンとAndroid間で写真やファイルの転送。Mac・Windows・Linux・Androidに対応。スマホはQRコードでWeb版も利用可能。AndroidとWeb版は同一ネットワーク内で使用。無料・オープンソース。",
+    "ld_description": "LAN でも別ネットワークでも P2P 直結、クラウドを経由しません。パソコン間でコピーと貼り付け、履歴の検索、パソコンとAndroid間で写真やファイルの転送。Mac・Windows・Linux・Androidに対応。スマホはQRコードでWeb版も利用可能。AndroidとWeb版は同一ネットワーク内で使用。無料・オープンソース。",
     "ld_os": "macOS 13 以降（Intel と Apple シリコン）、Windows 10、Windows 11（x64）、Linux（x64、ARM64）",
     "ld_currency": "JPY",
     "ld_features": [

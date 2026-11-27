@@ -604,6 +604,9 @@ ICONS = {
     "globe": '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/>',
     "lock": '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
     "send": '<path d="M20.5 3.5 3.8 10.4l6.6 3.2 3.2 6.6z"/><path d="m10.4 13.6 4.6-4.6"/>',
+    "lan": '<rect x="3" y="4" width="7" height="5.5" rx="1.2"/><rect x="14" y="4" width="7" height="5.5" rx="1.2"/>'
+           '<path d="M6.5 9.5v3.5h11V9.5M12 13v4.5M9 20h6"/>',
+    "lab": '<path d="M9.5 3.5h5M10.5 3.5v5.3L5.4 17.6a2 2 0 0 0 1.7 2.9h9.8a2 2 0 0 0 1.7-2.9l-5.1-8.8V3.5"/><path d="M7.4 14.5h9.2"/>',
 }
 
 
@@ -711,6 +714,14 @@ def home(code: str) -> str:
           </li>'''
         for (symbol, target), (title, text) in zip(destinations, h["extras"])
     )
+    direct = "\n".join(
+        f'''          <li class="tile">
+            {icon(symbol)}
+            <h3>{esc(title)}</h3>
+            <p>{esc(text)}</p>
+          </li>'''
+        for symbol, (title, text) in zip(("lan", "globe", "lab"), h["direct_tiles"])
+    )
     moved = MOVED_ANCHORS.replace("MOVED", json.dumps({
         "how": HOW, "multi-uplink": HOW + "#multi-uplink", "install": DOWNLOAD,
         "faq": FAQ, "security": SECURITY, "specs": HOW + "#specs",
@@ -736,6 +747,17 @@ def home(code: str) -> str:
         <h1 class="display">{hero_title(c["h1"], code)}</h1>
         <p class="lede">{esc(h["hero"])}</p>{cta(c, "", START, tour_ui["watch"], inline_start=True)}
         {stage(c, f)}
+      </div>
+    </section>
+
+    <section class="section" id="direct" aria-labelledby="direct-title">
+      <div class="wrap">
+        <h2 id="direct-title">{esc(h["direct_h2"])}</h2>
+        <p class="intro">{esc(h["direct_intro"])}</p>
+        <ul class="tiles">
+{direct}
+        </ul>
+        <p class="more"><a href="{HOW}">{esc(h["direct_link"])}</a></p>
       </div>
     </section>
 

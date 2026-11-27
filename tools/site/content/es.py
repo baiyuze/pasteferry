@@ -2,12 +2,12 @@
 
 C = {'brand': 'PasteFerry',
  'brand_alt': ['隔空贴', 'CopySync'],
- 'title': 'PasteFerry: portapapeles, historial y transferencia de archivos entre dispositivos',
- 'description': 'Copie y pegue entre computadoras, busque el historial del portapapeles y envíe fotos y '
+ 'title': 'PasteFerry: portapapeles y transferencia de archivos P2P',
+ 'description': 'Conexión P2P directa en la red local y entre redes, sin nube. Copie y pegue entre computadoras, busque el historial del portapapeles y envíe fotos y '
                 'archivos entre computadoras y Android. Mac, Windows, Linux, Android y una página web de '
                 'teléfono. Android y web funcionan en la misma red. Gratis y de código abierto.',
- 'og_title': 'PasteFerry: portapapeles, historial y transferencia de archivos entre dispositivos',
- 'og_description': 'Copie y pegue entre computadoras, busque el historial del portapapeles y envíe fotos y '
+ 'og_title': 'PasteFerry: portapapeles y transferencia de archivos P2P',
+ 'og_description': 'Conexión P2P directa en la red local y entre redes, sin nube. Copie y pegue entre computadoras, busque el historial del portapapeles y envíe fotos y '
                    'archivos entre computadoras y Android. Mac, Windows, Linux, Android y una página web de '
                    'teléfono. Android y web funcionan en la misma red. Gratis y de código abierto.',
  'og_image': 'og-es.png',
@@ -1084,7 +1084,7 @@ C = {'brand': 'PasteFerry',
                         'Consulte las notas de la versión <a href="{notes}"></a> para conocer los cambios en '
                         'esta versión; Las versiones anteriores están en <a href="{releases}">GitHub '
                         'Versiones</a>.')]},
- 'ld_description': 'Copie y pegue entre computadoras, busque el historial del portapapeles y envíe fotos y '
+ 'ld_description': 'Conexión P2P directa en la red local y entre redes, sin nube. Copie y pegue entre computadoras, busque el historial del portapapeles y envíe fotos y '
                    'archivos entre computadoras y Android. Mac, Windows, Linux, Android y una página web de '
                    'teléfono. Android y web funcionan en la misma red. Gratis y de código abierto.',
  'ld_os': 'macOS 13 o posterior (Intel y Apple Silicon); Windows 10, Windows 11 (x64); Linux (x64, ARM64)',

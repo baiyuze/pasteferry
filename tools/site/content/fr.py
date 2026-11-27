@@ -2,13 +2,13 @@
 
 C = {'brand': 'PasteFerry',
  'brand_alt': ['隔空贴', 'CopySync'],
- 'title': 'PasteFerry: presse-papiers multi-appareils, historique et transfert de fichiers',
- 'description': "Copiez et collez entre ordinateurs, recherchez l'historique de votre presse-papiers et "
+ 'title': 'PasteFerry: presse-papiers et transfert de fichiers en P2P',
+ 'description': "Connexion P2P directe en local comme entre réseaux, sans cloud. Copiez et collez entre ordinateurs, recherchez l'historique de votre presse-papiers et "
                 'envoyez des photos et des fichiers entre ordinateurs et Android. Mac, Windows, Linux, '
                 'Android et une page Web de téléphone. Android et Web fonctionnent sur le même réseau. '
                 'Gratuit et open source.',
- 'og_title': 'PasteFerry: presse-papiers multi-appareils, historique et transfert de fichiers',
- 'og_description': "Copiez et collez entre ordinateurs, recherchez l'historique de votre presse-papiers et "
+ 'og_title': 'PasteFerry: presse-papiers et transfert de fichiers en P2P',
+ 'og_description': "Connexion P2P directe en local comme entre réseaux, sans cloud. Copiez et collez entre ordinateurs, recherchez l'historique de votre presse-papiers et "
                    'envoyez des photos et des fichiers entre ordinateurs et Android. Mac, Windows, Linux, '
                    'Android et une page Web de téléphone. Android et Web fonctionnent sur le même réseau. '
                    'Gratuit et open source.',
@@ -1132,7 +1132,7 @@ C = {'brand': 'PasteFerry',
                         'Consultez les notes de version <a href="{notes}"></a> pour connaître les '
                         'modifications apportées à cette version\xa0; les anciennes versions se trouvent sur '
                         '<a href="{releases}">GitHub publie</a>.')]},
- 'ld_description': "Copiez et collez entre ordinateurs, recherchez l'historique de votre presse-papiers et "
+ 'ld_description': "Connexion P2P directe en local comme entre réseaux, sans cloud. Copiez et collez entre ordinateurs, recherchez l'historique de votre presse-papiers et "
                    'envoyez des photos et des fichiers entre ordinateurs et Android. Mac, Windows, Linux, '
                    'Android et une page Web de téléphone. Android et Web fonctionnent sur le même réseau. '
                    'Gratuit et open source.',

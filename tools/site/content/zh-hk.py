@@ -6,10 +6,10 @@ SITE = "https://pasteferry.cc/"
 C = {
     "brand": "隔空貼",
     "brand_alt": ["PasteFerry", "CopySync"],
-    "title": "隔空貼 PasteFerry：跨裝置剪貼簿、複製記錄與檔案傳送",
-    "description": "電腦間複製貼上、找回記錄，電腦與安卓互傳相片和檔案。支援 Mac、Windows、Linux、安卓；手機也能掃碼使用網頁，毋須安裝。安卓與網頁在同一網絡使用。免費開源。",
-    "og_title": "隔空貼 PasteFerry：跨裝置剪貼簿、複製記錄與檔案傳送",
-    "og_description": "電腦間複製貼上、找回記錄，電腦與安卓互傳相片和檔案。支援 Mac、Windows、Linux、安卓；手機也能掃碼使用網頁，毋須安裝。安卓與網頁在同一網絡使用。免費開源。",
+    "title": "隔空貼 PasteFerry：P2P 直連的剪貼簿同步及檔案傳輸",
+    "description": "區域網絡、跨網絡均 P2P 直連，內容不經雲端。電腦間複製貼上、找回記錄，電腦與安卓互傳相片和檔案。支援 Mac、Windows、Linux、安卓；手機也能掃碼使用網頁，毋須安裝。安卓與網頁在同一網絡使用。免費開源。",
+    "og_title": "隔空貼 PasteFerry：P2P 直連的剪貼簿同步及檔案傳輸",
+    "og_description": "區域網絡、跨網絡均 P2P 直連，內容不經雲端。電腦間複製貼上、找回記錄，電腦與安卓互傳相片和檔案。支援 Mac、Windows、Linux、安卓；手機也能掃碼使用網頁，毋須安裝。安卓與網頁在同一網絡使用。免費開源。",
     "og_image": "og-zh-hant.png",
     "skip": "跳至主要內容",
     "home_label": "隔空貼首頁",
@@ -21,7 +21,7 @@ C = {
     "nav_download": "下載",
     "lang_label": "語言",
 
-    "h1": '跨裝置，<br>複製貼上。',
+    "h1": '跨網直連，<br>複製即達。',
     "lede": '同步剪貼簿、儲存複製記錄，互傳相片和檔案。',
     "dl_button": "下載隔空貼",
     "dl_mac": "下載 Mac 版",
@@ -826,7 +826,7 @@ C = {
     },
 
     "gitee_hint": "內地伺服器從 GitHub 下載很慢的話，可以改從 Gitee 鏡像下載：",
-    "ld_description": "電腦間複製貼上、找回記錄，電腦與安卓互傳相片和檔案。支援 Mac、Windows、Linux、安卓；手機也能掃碼使用網頁，毋須安裝。安卓與網頁在同一網絡使用。免費開源。",
+    "ld_description": "區域網絡、跨網絡均 P2P 直連，內容不經雲端。電腦間複製貼上、找回記錄，電腦與安卓互傳相片和檔案。支援 Mac、Windows、Linux、安卓；手機也能掃碼使用網頁，毋須安裝。安卓與網頁在同一網絡使用。免費開源。",
     "ld_os": "macOS 13 或以上（Intel 與 Apple 晶片）；Windows 10、Windows 11（x64）；Linux（x64、ARM64）",
     "ld_currency": "HKD",
     "ld_features": [

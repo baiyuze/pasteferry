@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PasteFerry: cross-device clipboard, history and file transfer</title>
-  <meta name="description" content="Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.">
+  <title>PasteFerry: P2P clipboard sync and file transfer</title>
+  <meta name="description" content="P2P direct on your LAN and across networks; nothing goes through a cloud. Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.">
   <link rel="canonical" href="https://pasteferry.cc/en/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/">
@@ -29,8 +29,8 @@
   <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}p=p==="light"||p==="system"?p:"dark";function a(){var t=p==="system"?(m&&m.matches?"light":"dark"):p;d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#ffffff":"#141416")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p==="system")a()});window.pfSetTheme=function(v){p=v==="light"||v==="system"?v:"dark";try{localStorage.setItem(k,p)}catch(e){}a()}})();</script>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PasteFerry">
-  <meta property="og:title" content="PasteFerry: cross-device clipboard, history and file transfer">
-  <meta property="og:description" content="Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.">
+  <meta property="og:title" content="PasteFerry: P2P clipboard sync and file transfer">
+  <meta property="og:description" content="P2P direct on your LAN and across networks; nothing goes through a cloud. Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.">
   <meta property="og:url" content="https://pasteferry.cc/en/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og-en.png">
   <meta property="og:image:width" content="1200">
@@ -99,7 +99,7 @@
           "隔空贴",
           "CopySync"
         ],
-        "description": "Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
+        "description": "P2P direct on your LAN and across networks; nothing goes through a cloud. Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "macOS 13 or later (Intel and Apple silicon); Windows 10, Windows 11 (x64); Linux (x64, ARM64)",
         "softwareVersion": "2.14.1",
@@ -194,7 +194,7 @@
       <div class="wrap">
         <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.14.1">2.14.1: Service page stays in the sidebar →</a>
         <h1 class="display">Copy here.<br class="hero-br"> Paste there.</h1>
-        <p class="lede">Sync your clipboard across Mac, Windows and Linux without a shared account. Search and save your clipboard history, or drag files and folders to another device.</p>
+        <p class="lede">P2P direct on your LAN and across networks; nothing goes through a cloud. Sync your clipboard, search your history and send files between Mac, Windows and Linux, no shared account needed.</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>Download PasteFerry</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> Watch the full tour <span class="tour-duration">1:25</span></a>
@@ -237,6 +237,31 @@
           <p class="demo-hint">Click anything on the Mac to copy it over</p>
           <p class="skip" aria-live="polite" data-demo-status></p>
         </div>
+      </div>
+    </section>
+
+    <section class="section" id="direct" aria-labelledby="direct-title">
+      <div class="wrap">
+        <h2 id="direct-title">Direct on the LAN, hole-punched across networks</h2>
+        <p class="intro">Content travels only between your devices, end-to-end encrypted. Servers can’t decrypt it.</p>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="7" height="5.5" rx="1.2"/><rect x="14" y="4" width="7" height="5.5" rx="1.2"/><path d="M6.5 9.5v3.5h11V9.5M12 13v4.5M9 20h6"/></svg>
+            <h3>LAN direct</h3>
+            <p>mDNS discovery, no server. Files between computers use an encrypted TCP link: 1 GB at 144 MB/s in our test.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
+            <h3>Hole punching across networks</h3>
+            <p>The server only handles signaling. Works with multi-line networks, phone hotspots, IPv6 and router port mapping; an encrypted relay only if punching fails.</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 3.5h5M10.5 3.5v5.3L5.4 17.6a2 2 0 0 0 1.7 2.9h9.8a2 2 0 0 0 1.7-2.9l-5.1-8.8V3.5"/><path d="M7.4 14.5h9.2"/></svg>
+            <h3>Tested in a NAT lab</h3>
+            <p>21 network scenarios, run automatically on every commit.</p>
+          </li>
+        </ul>
+        <p class="more"><a href="how/">How it works →</a></p>
       </div>
     </section>
 

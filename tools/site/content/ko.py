@@ -2,11 +2,11 @@
 
 C = {'brand': 'PasteFerry',
  'brand_alt': ['隔空贴', 'CopySync'],
- 'title': 'PasteFerry: 장치 간 클립보드, 기록 및 파일 전송',
- 'description': '컴퓨터 간에 복사하여 붙여넣고, 클립보드 기록을 찾고, 컴퓨터와 Android간에 사진과 파일을 보낼 수 있습니다. Mac, Windows, Linux, '
+ 'title': 'PasteFerry: P2P 직접 연결 클립보드 동기화와 파일 전송',
+ 'description': 'LAN과 다른 네트워크 모두 P2P 직접 연결, 클라우드를 거치지 않습니다. 컴퓨터 간에 복사하여 붙여넣고, 클립보드 기록을 찾고, 컴퓨터와 Android간에 사진과 파일을 보낼 수 있습니다. Mac, Windows, Linux, '
                 'Android 및 전화 웹페이지. Android 와 웹은 동일한 네트워크에서 작동합니다. 무료이며 오픈 소스입니다.',
- 'og_title': 'PasteFerry: 장치 간 클립보드, 기록 및 파일 전송',
- 'og_description': '컴퓨터 간에 복사하여 붙여넣고, 클립보드 기록을 찾고, 컴퓨터와 Android간에 사진과 파일을 보낼 수 있습니다. Mac, Windows, Linux, '
+ 'og_title': 'PasteFerry: P2P 직접 연결 클립보드 동기화와 파일 전송',
+ 'og_description': 'LAN과 다른 네트워크 모두 P2P 직접 연결, 클라우드를 거치지 않습니다. 컴퓨터 간에 복사하여 붙여넣고, 클립보드 기록을 찾고, 컴퓨터와 Android간에 사진과 파일을 보낼 수 있습니다. Mac, Windows, Linux, '
                    'Android 및 전화 웹페이지. Android 와 웹은 동일한 네트워크에서 작동합니다. 무료이며 오픈 소스입니다.',
  'og_image': 'og-en.png',
  'skip': '콘텐츠로 건너뛰기',
@@ -753,7 +753,7 @@ C = {'brand': 'PasteFerry',
                        ('새로운 버전과 이전 버전은 무엇인가요?',
                         '이 버전에서 변경된 내용은 <a href="{notes}">릴리스 노트</a> 를 참조하세요. 이전 버전은 <a '
                         'href="{releases}">GitHub 릴리스</a>에 있습니다.')]},
- 'ld_description': '컴퓨터 간에 복사하여 붙여넣고, 클립보드 기록을 찾고, 컴퓨터와 Android간에 사진과 파일을 보낼 수 있습니다. Mac, Windows, Linux, '
+ 'ld_description': 'LAN과 다른 네트워크 모두 P2P 직접 연결, 클라우드를 거치지 않습니다. 컴퓨터 간에 복사하여 붙여넣고, 클립보드 기록을 찾고, 컴퓨터와 Android간에 사진과 파일을 보낼 수 있습니다. Mac, Windows, Linux, '
                    'Android 및 전화 웹페이지. Android 와 웹은 동일한 네트워크에서 작동합니다. 무료이며 오픈 소스입니다.',
  'ld_os': 'macOS 13 이상(Intel 및 Apple 실리콘); Windows 10, Windows 11(x64); Linux (x64, ARM64)',
  'ld_currency': 'USD',

@@ -12,8 +12,8 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>隔空贴 PasteFerry：跨设备剪贴板、复制历史与文件传送</title>
-  <meta name="description" content="电脑间复制粘贴、找回历史，电脑与安卓互传照片和文件。支持 Mac、Windows、Linux、安卓；手机也能扫码用网页，不必安装。安卓和网页在同一网络使用。免费开源。">
+  <title>隔空贴 PasteFerry：P2P 直连的剪贴板同步与文件传输</title>
+  <meta name="description" content="局域网、跨网络均 P2P 直连，内容不经云端。电脑间复制粘贴、找回历史，电脑与安卓互传照片和文件。支持 Mac、Windows、Linux、安卓；手机也能扫码用网页，不必安装。安卓和网页在同一网络使用。免费开源。">
   <link rel="canonical" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-CN" href="https://pasteferry.cc/">
   <link rel="alternate" hreflang="zh-TW" href="https://pasteferry.cc/zh-tw/">
@@ -29,8 +29,8 @@
   <script>(function(){var d=document.documentElement,k="pasteferry-theme",p,m=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");try{p=localStorage.getItem(k)}catch(e){}p=p==="light"||p==="system"?p:"dark";function a(){var t=p==="system"?(m&&m.matches?"light":"dark"):p;d.setAttribute("data-theme",t);d.setAttribute("data-theme-pref",p);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#ffffff":"#141416")}a();if(m&&m.addEventListener)m.addEventListener("change",function(){if(p==="system")a()});window.pfSetTheme=function(v){p=v==="light"||v==="system"?v:"dark";try{localStorage.setItem(k,p)}catch(e){}a()}})();</script>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="隔空贴">
-  <meta property="og:title" content="隔空贴 PasteFerry：跨设备剪贴板、复制历史与文件传送">
-  <meta property="og:description" content="电脑间复制粘贴、找回历史，电脑与安卓互传照片和文件。支持 Mac、Windows、Linux、安卓；手机也能扫码用网页，不必安装。安卓和网页在同一网络使用。免费开源。">
+  <meta property="og:title" content="隔空贴 PasteFerry：P2P 直连的剪贴板同步与文件传输">
+  <meta property="og:description" content="局域网、跨网络均 P2P 直连，内容不经云端。电脑间复制粘贴、找回历史，电脑与安卓互传照片和文件。支持 Mac、Windows、Linux、安卓；手机也能扫码用网页，不必安装。安卓和网页在同一网络使用。免费开源。">
   <meta property="og:url" content="https://pasteferry.cc/">
   <meta property="og:image" content="https://pasteferry.cc/assets/og.png">
   <meta property="og:image:width" content="1200">
@@ -123,7 +123,7 @@
           "PasteFerry",
           "CopySync"
         ],
-        "description": "电脑间复制粘贴、找回历史，电脑与安卓互传照片和文件。支持 Mac、Windows、Linux、安卓；手机也能扫码用网页，不必安装。安卓和网页在同一网络使用。免费开源。",
+        "description": "局域网、跨网络均 P2P 直连，内容不经云端。电脑间复制粘贴、找回历史，电脑与安卓互传照片和文件。支持 Mac、Windows、Linux、安卓；手机也能扫码用网页，不必安装。安卓和网页在同一网络使用。免费开源。",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "macOS 13 及以上（Intel 与 Apple 芯片）；Windows 10、Windows 11（x64）；Linux（x64、ARM64）",
         "softwareVersion": "2.14.1",
@@ -217,8 +217,8 @@
     <section class="hero home-hero">
       <div class="wrap">
         <a class="release-note" href="https://github.com/baiyuze/pasteferry/releases/tag/v2.14.1">2.14.1：服务入口常驻左侧 →</a>
-        <h1 class="display">跨设备，<br class="hero-br">复制粘贴。</h1>
-        <p class="lede">在 Mac、Windows、Linux 之间同步剪贴板，不用同一个账号。复制记录能搜索、收藏，文件和文件夹也能拖放互传。</p>
+        <h1 class="display">跨网直连，<br class="hero-br">复制即达。</h1>
+        <p class="lede">局域网、跨网络均 P2P 直连，内容不经云端。Mac、Windows、Linux 之间同步剪贴板、搜索复制记录、互传文件，无需同一账号。</p>
         <div class="cta">
           <a class="button" href="download/"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>下载隔空贴</a>
           <a class="button quiet tour-link" href="tour/" data-tour-open aria-haspopup="dialog"><span aria-hidden="true">▶</span> 看完整演示 <span class="tour-duration">1:25</span></a>
@@ -261,6 +261,31 @@
           <p class="demo-hint">点 Mac 上的任意一项，复制到另一台电脑</p>
           <p class="skip" aria-live="polite" data-demo-status></p>
         </div>
+      </div>
+    </section>
+
+    <section class="section" id="direct" aria-labelledby="direct-title">
+      <div class="wrap">
+        <h2 id="direct-title">局域网直连，跨网络打洞直连</h2>
+        <p class="intro">内容只在你的设备之间传输，端到端加密，服务器无法解密。</p>
+        <ul class="tiles">
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="7" height="5.5" rx="1.2"/><rect x="14" y="4" width="7" height="5.5" rx="1.2"/><path d="M6.5 9.5v3.5h11V9.5M12 13v4.5M9 20h6"/></svg>
+            <h3>局域网直连</h3>
+            <p>mDNS 自动发现，无需服务器。电脑间传文件走加密 TCP 通道，实测 1 GB 文件 144 MB/s。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.4 2.3-3.6 5.1-3.6 8.5s1.2 6.2 3.6 8.5M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5"/></svg>
+            <h3>跨网络打洞直连</h3>
+            <p>服务器仅负责信令。支持多线路网络、手机热点、IPv6 与路由器端口映射；打洞失败才走加密中转。</p>
+          </li>
+          <li class="tile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 3.5h5M10.5 3.5v5.3L5.4 17.6a2 2 0 0 0 1.7 2.9h9.8a2 2 0 0 0 1.7-2.9l-5.1-8.8V3.5"/><path d="M7.4 14.5h9.2"/></svg>
+            <h3>NAT 实验室验证</h3>
+            <p>21 种网络场景，每次提交自动测试。</p>
+          </li>
+        </ul>
+        <p class="more"><a href="how/">直连原理 →</a></p>
       </div>
     </section>
 

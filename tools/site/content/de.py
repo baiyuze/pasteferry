@@ -2,13 +2,13 @@
 
 C = {'brand': 'PasteFerry',
  'brand_alt': ['隔空贴', 'CopySync'],
- 'title': 'PasteFerry: geräteübergreifende Zwischenablage, Verlauf und Dateiübertragung',
- 'description': 'Kopieren und Einfügen zwischen Computern, Durchsuchen des Verlaufs Ihrer Zwischenablage und '
+ 'title': 'PasteFerry: P2P-Zwischenablage und Dateiübertragung',
+ 'description': 'P2P-Direktverbindung im LAN und über Netzwerke hinweg, ohne Cloud. Kopieren und Einfügen zwischen Computern, Durchsuchen des Verlaufs Ihrer Zwischenablage und '
                 'Senden von Fotos und Dateien zwischen Computern und Android. Mac, Windows, Linux, Android '
                 'und eine Telefon-Webseite. Android und Web funktionieren im selben Netzwerk. Kostenlos und '
                 'Open Source.',
- 'og_title': 'PasteFerry: geräteübergreifende Zwischenablage, Verlauf und Dateiübertragung',
- 'og_description': 'Kopieren und Einfügen zwischen Computern, Durchsuchen des Verlaufs Ihrer Zwischenablage '
+ 'og_title': 'PasteFerry: P2P-Zwischenablage und Dateiübertragung',
+ 'og_description': 'P2P-Direktverbindung im LAN und über Netzwerke hinweg, ohne Cloud. Kopieren und Einfügen zwischen Computern, Durchsuchen des Verlaufs Ihrer Zwischenablage '
                    'und Senden von Fotos und Dateien zwischen Computern und Android. Mac, Windows, Linux, '
                    'Android und eine Telefon-Webseite. Android und Web funktionieren im selben Netzwerk. '
                    'Kostenlos und Open Source.',
@@ -1158,7 +1158,7 @@ C = {'brand': 'PasteFerry',
                         'Informationen zu den Änderungen in dieser Version finden Sie in den '
                         'Versionshinweisen <a href="{notes}"></a> . Ältere Versionen sind auf <a '
                         'href="{releases}">GitHub Releases</a>.')]},
- 'ld_description': 'Kopieren und Einfügen zwischen Computern, Durchsuchen des Verlaufs Ihrer Zwischenablage '
+ 'ld_description': 'P2P-Direktverbindung im LAN und über Netzwerke hinweg, ohne Cloud. Kopieren und Einfügen zwischen Computern, Durchsuchen des Verlaufs Ihrer Zwischenablage '
                    'und Senden von Fotos und Dateien zwischen Computern und Android. Mac, Windows, Linux, '
                    'Android und eine Telefon-Webseite. Android und Web funktionieren im selben Netzwerk. '
                    'Kostenlos und Open Source.',

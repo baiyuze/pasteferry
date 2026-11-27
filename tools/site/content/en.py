@@ -6,10 +6,10 @@ SITE = "https://pasteferry.cc/"
 C = {
     "brand": "PasteFerry",
     "brand_alt": ["隔空贴", "CopySync"],
-    "title": "PasteFerry: cross-device clipboard, history and file transfer",
-    "description": "Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
-    "og_title": "PasteFerry: cross-device clipboard, history and file transfer",
-    "og_description": "Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
+    "title": "PasteFerry: P2P clipboard sync and file transfer",
+    "description": "P2P direct on your LAN and across networks; nothing goes through a cloud. Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
+    "og_title": "PasteFerry: P2P clipboard sync and file transfer",
+    "og_description": "P2P direct on your LAN and across networks; nothing goes through a cloud. Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
     "og_image": "og-en.png",
     "skip": "Skip to content",
     "home_label": "PasteFerry home",
@@ -926,7 +926,7 @@ C = {
         ],
     },
 
-    "ld_description": "Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
+    "ld_description": "P2P direct on your LAN and across networks; nothing goes through a cloud. Copy and paste between computers, find your clipboard history, and send photos and files between computers and Android. Mac, Windows, Linux, Android and a phone web page. Android and web work on the same network. Free and open source.",
     "ld_os": "macOS 13 or later (Intel and Apple silicon); Windows 10, Windows 11 (x64); Linux (x64, ARM64)",
     "ld_currency": "USD",
     "ld_features": [
