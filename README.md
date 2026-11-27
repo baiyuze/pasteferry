@@ -5,9 +5,11 @@
 <h1 align="center">PasteFerry</h1>
 
 <p align="center">
-  Clipboard sync, searchable history and file transfer — across your computers and phone.<br>
-  Mac, Windows, Linux and Android, without a shared account. Use the Android app
-  to send and receive files on your local network, or scan a code to use the phone web page.
+  <strong>Copy on one computer, paste on another — even when they're on different networks.</strong><br>
+  Clipboard sync, searchable history and file transfer that go directly between your devices, peer to peer.
+  Home, office or phone hotspot: PasteFerry punches through NAT to connect them, and falls back to an
+  end-to-end encrypted relay only when it can't. Mac, Windows and Linux, no shared account; Android and
+  a phone web page send and receive files on your local network.
 </p>
 
 <p align="center">
@@ -24,6 +26,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/v/release/baiyuze/pasteferry?color=0A66D8" alt="Release">
+  <img src="https://img.shields.io/badge/connection-P2P%20direct%2C%20across%20networks-0A66D8" alt="Connection: P2P direct, across networks">
   <img src="https://img.shields.io/badge/macOS-13%2B-1D1D1F" alt="macOS 13+">
   <img src="https://img.shields.io/badge/Windows-10%20%2F%2011-1D1D1F" alt="Windows 10 / 11">
   <img src="https://img.shields.io/badge/Linux-x64%20%2F%20ARM64-1D1D1F" alt="Linux x64 / ARM64">
@@ -40,19 +43,46 @@
 
 ## Why
 
-Universal Clipboard needs the same Apple ID and both Macs close by. AirDrop makes you accept every time. Messaging yourself means manual downloads and your files on someone else's server. With one Mac and one Windows PC, none of the built-in options work.
+Universal Clipboard needs the same Apple ID and both Macs close by. AirDrop makes you accept every time, and also only works nearby. Messaging yourself means manual downloads and your files on someone else's server. With one Mac and one Windows PC, or one computer at home and one at the office, none of the built-in options work.
 
-With PasteFerry you pair two computers once. After that, copy on one and paste on the other. Everything you copied stays in your history: press <kbd>⌥V</kbd> (<kbd>Alt</kbd>+<kbd>V</kbd> on Windows and Linux) to find it and paste it into the app you're using.
+With PasteFerry you pair two computers once. After that, copy on one and paste on the other, whether they sit side by side or one is at the office and the other at home. The two connect to each other directly, so what you copy goes straight across instead of through someone's server. Everything you copied stays in your history: press <kbd>⌥V</kbd> (<kbd>Alt</kbd>+<kbd>V</kbd> on Windows and Linux) to find it and paste it into the app you're using.
 
 | | PasteFerry | Universal Clipboard | AirDrop | Chat apps |
 |---|:-:|:-:|:-:|:-:|
 | Different Apple IDs | ✓ | — | Needs accepting | ✓ |
 | Different networks (home ↔ office) | ✓ | — | — | ✓ |
+| Direct device to device, even across networks | ✓ | Nearby only | Nearby only | Via their servers |
 | Paste right away, nothing to accept | ✓ | ✓ | — | — |
 | Between Mac and Windows | ✓ | — | — | ✓ |
 | Files and whole folders | ✓ | Unreliable | ✓ | Zipped |
 | History of what you copied | ✓ | — | — | Scroll back |
 | Only your devices can decrypt content | ✓ | ✓ | ✓ | — |
+
+## At its core: direct connections, across networks
+
+Everything in PasteFerry rests on your computers talking to each other directly. What you copy and the files you send go from one to the other, not through anyone's server — whether the two share a Wi‑Fi network or sit behind different routers in different cities.
+
+```mermaid
+flowchart LR
+    A["Computer A<br>copy here"] -- "signaling: exchange connection info" --> S[("Official service<br>or your own server")]
+    B["Computer B<br>paste here"] -- signaling --> S
+    A <== "direct, NAT hole punching · DTLS end-to-end" ==> B
+    A -. "only if that fails: encrypted relay" .-> S
+```
+
+- **Same network: no server at all.** Computers find each other over mDNS and pair with a code.
+- **Different networks: the server only introduces them.** The official service or your own server helps the two computers exchange connection details; then they punch through NAT and connect directly (WebRTC, built on [pion](https://github.com/pion/webrtc)).
+- **Office networks with several uplinks.** Offices with two ISPs pick an uplink per destination. PasteFerry asks several STUN servers from one shared UDP port, learns its address on every uplink and sends them all to the peer, and decides which side sends first to get past routers that lock a port. A Mac on an office network with four uplinks connects directly to one on a home connection.
+- **Mobile data and portable Wi‑Fi (2.13).** Many carrier NATs give every destination a new port, but hand the ports out in sequence. PasteFerry spots the pattern and predicts the next ports, so a laptop on a phone hotspot or a portable Wi‑Fi router can still connect directly. Only NATs that pick ports at random still need the relay.
+- **IPv6 (2.13).** When both computers have public IPv6 addresses, they connect directly over IPv6, with no NAT to cross.
+- **Fast across distances (2.12).** When a direct transfer between networks stays slow, PasteFerry opens parallel connections and keeps them only if they help.
+- **Relay only as a fallback.** The relay forwards end-to-end encrypted packets it can't read and rides out network stalls of up to 35 seconds; the connection switches back to direct once punching succeeds while idle. **Devices** shows whether each computer is Direct or Relay.
+- **Fingerprints checked at pairing.** Both screens show the same two lines, and every later message is signed, so the server can't impersonate your device.
+- **Tested in a lab on every commit.** The [NAT traversal lab](tools/natlab) uses Linux network namespaces and iptables to model home routers, multi-uplink networks, port-randomizing NATs and more — 16 scenarios run against PasteFerry's real connection code. Port prediction is tested on pion's virtual network: a sequential symmetric NAT connects directly with it and fails without it.
+
+Direct connections across networks are between the Mac, Windows and Linux apps. The Android app and the phone web page work on the local network for now.
+
+Details: [how it works](https://pasteferry.cc/en/how/), and the design notes (Chinese) on [NAT traversal](design/nat-traversal.md) (multi-uplink networks, port prediction, IPv6) and [local network mode](design/lan-mode.md).
 
 ## Features
 
@@ -124,27 +154,6 @@ Select files, choose **PasteFerry**, review the batch and pick one paired receiv
 - Runs in the background, starts at login, recovers from crashes; checks for updates and installs them after you confirm.
 - 18 interface languages: English, Simplified Chinese, Traditional Chinese (Taiwan and Hong Kong), Japanese, Korean, Arabic (right to left), German, French, Spanish, Portuguese (Brazil), Italian, Russian, Ukrainian, Polish, Turkish, Vietnamese and Indonesian.
 
-## At its core: direct connections
-
-Everything in PasteFerry rests on two computers talking to each other directly: what you copy goes from one to the other, not through anyone's server.
-
-```mermaid
-flowchart LR
-    A["Computer A<br>copy here"] -- "signaling: exchange connection info" --> S[("Official service<br>or your own server")]
-    B["Computer B<br>paste here"] -- signaling --> S
-    A <== "direct, NAT hole punching · DTLS end-to-end" ==> B
-    A -. "only if that fails: encrypted relay" .-> S
-```
-
-- **No server on the same network.** Computers find each other over mDNS and pair with a code.
-- **Across networks the server only introduces them.** The official service or your own server helps the two computers exchange connection details; then they punch through NAT and connect directly (WebRTC, built on [pion](https://github.com/pion/webrtc)).
-- **Direct even on multi-uplink networks.** Offices with two ISPs pick an uplink per destination. PasteFerry asks several STUN servers from one shared UDP port, learns its address on every uplink and sends them all to the peer, and decides which side sends first to get past routers that lock a port. A Mac on an office network with four uplinks connects directly to one on a home connection.
-- **Relay only as a fallback.** The relay forwards end-to-end encrypted packets it can't read, and the connection switches back to direct once punching succeeds while idle.
-- **Fingerprints checked at pairing.** Both screens show the same two lines, and every later message is signed, so the server can't impersonate your device.
-- **Tested in a lab on every commit.** The [NAT traversal lab](tools/natlab) uses Linux network namespaces and iptables to model home routers, multi-uplink networks, port-randomizing NATs and more — 16 scenarios run against PasteFerry's real connection code.
-
-Details: [how it works](https://pasteferry.cc/en/how/), and the design notes (Chinese) on [NAT traversal on multi-uplink networks](design/nat-traversal.md) and [local network mode](design/lan-mode.md).
-
 ## Get started
 
 New here? The **[quick start](https://pasteferry.cc/en/start/)** walks through it with screenshots.
@@ -153,7 +162,7 @@ New here? The **[quick start](https://pasteferry.cc/en/start/)** walks through i
 
 - **Mac** (macOS 13+): [Apple silicon](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-mac-apple-silicon.dmg) or [Intel](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-mac-intel.dmg); a [universal](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry.dmg) build runs on both.
 - **Windows** 10/11: [installer](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-Setup.exe) or [portable zip](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-windows-x64.zip).
-- **Android** 10 or later, arm64: **[APK](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-android-arm64.apk)** (beta; Android asks before installing it). Turn on **Devices → Phone web transfer** on the computer, then scan the code with your phone, or install the APK and pair it like another computer.
+- **Android** 9 or later, arm64: **[APK](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-android-arm64.apk)** (beta; Android asks before installing it). Turn on **Devices → Phone web transfer** on the computer, then scan the code with your phone, or install the APK and pair it like another computer.
 - **Any phone or tablet, nothing to install**: turn on **Devices → Phone web transfer** on the computer and scan the code shown there. The page in the phone's browser lists the records from the computer, copies a text to the phone, and sends text, photos and files back. It works on the same local network and the contents are encrypted.
 - **iPhone and iPad**: there is no app yet, because distributing one needs an Apple developer certificate. Use the web page above instead; it does the same things in Safari.
 - **Linux** (X11, or Wayland with XWayland): `.deb` for Ubuntu and Debian ([x64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-amd64.deb), [ARM64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-arm64.deb)), or `tar.gz` for other distributions ([x64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-amd64.tar.gz), [ARM64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-arm64.tar.gz)) — extract it and run `./PasteFerry/install.sh` to add it to the app menu.
@@ -162,7 +171,7 @@ The Mac app isn't notarized by Apple and the Windows app isn't code-signed yet: 
 
 **2. Pair.** On one computer, **Devices → Add device → Show a code**; on the other, **Enter a code**. Confirm only if both screens show the same two fingerprint lines. From then on, copy on either one and paste on the other.
 
-**3. Across networks (optional)**, pick a way to connect:
+**3. Across networks (optional)**, pick how the computers find each other. Whichever you pick, content goes directly between them whenever a direct path exists:
 
 | Way | Best for | You need |
 |---|---|---|
@@ -179,7 +188,7 @@ Self-hosting takes one install command; see the [server deployment guide](server
 | **Windows app** | Windows 10 and 11, x64 |
 | **Linux app** | x64 or ARM64; an X11 desktop, or Wayland with XWayland (GNOME and KDE have it by default); GTK 3 |
 | **Server** | Optional: Linux (x86_64, ARM64; systemd or Docker), macOS, or Windows 10/11 x64 |
-| **Android app** | 10 or later, arm64; beta, so Android asks before installing it |
+| **Android app** | 9 or later, arm64; beta, so Android asks before installing it |
 | **Phone web page** | Any phone or tablet on the same network; nothing to install |
 | **iPhone / iPad** | No app: distributing one needs an Apple developer certificate, and iOS doesn't let apps watch the clipboard in the background. Use the web page instead |
 

@@ -5,8 +5,8 @@
 <h1 align="center">隔空贴 PasteFerry</h1>
 
 <p align="center">
-  跨设备剪贴板、复制历史与隔空传送，电脑和手机一起用。<br>
-  Mac、Windows、Linux、安卓互通，不限账号。电脑间复制粘贴；电脑与安卓在同一网络互传照片和文件，手机也能扫码用网页。
+  <strong>在这台电脑复制，到那台电脑粘贴，不在同一个网络也行。</strong><br>
+  剪贴板同步、复制历史与隔空传送，内容在设备之间点对点直连传输。家里、公司、手机热点之间，隔空贴打洞穿过 NAT 直接连上，打不通才走端到端加密的中转。Mac、Windows、Linux 互通，不限账号；安卓和手机网页在同一网络里互传照片和文件。
 </p>
 
 <p align="center">
@@ -23,9 +23,12 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/v/release/baiyuze/pasteferry?label=%E7%89%88%E6%9C%AC&color=0A66D8" alt="版本">
+  <img src="https://img.shields.io/badge/%E8%BF%9E%E6%8E%A5-P2P%20%E7%9B%B4%E8%BF%9E%EF%BC%8C%E8%B7%A8%E7%BD%91%E7%BB%9C-0A66D8" alt="连接：P2P 直连，跨网络">
   <img src="https://img.shields.io/badge/macOS-13%2B-1D1D1F" alt="macOS 13+">
   <img src="https://img.shields.io/badge/Windows-10%20%2F%2011-1D1D1F" alt="Windows 10 / 11">
   <img src="https://img.shields.io/badge/Linux-x64%20%2F%20ARM64-1D1D1F" alt="Linux x64 / ARM64">
+  <img src="https://img.shields.io/badge/Android-9%2B%20arm64-1D1D1F" alt="Android 9+ arm64">
+  <img src="https://img.shields.io/badge/%E7%BD%91%E9%A1%B5-%E4%BB%BB%E6%84%8F%E6%B5%8F%E8%A7%88%E5%99%A8-1D1D1F" alt="网页，任意浏览器">
   <img src="https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF-AGPL--3.0-6E6E73" alt="AGPL-3.0 许可">
 </p>
 
@@ -37,19 +40,46 @@
 
 ## 它解决什么问题
 
-通用剪贴板要同一个 Apple ID、两台离得近；隔空投送每次都要点接收；发给自己要手动下载，文件还留在别人的服务器上。一台 Mac 一台 Windows 时，系统自带的办法一个都用不了。
+通用剪贴板要同一个 Apple ID、两台离得近；隔空投送每次都要点接收，也只能在近处用；发给自己要手动下载，文件还留在别人的服务器上。一台 Mac 一台 Windows，或者一台在家一台在公司时，系统自带的办法一个都用不了。
 
-隔空贴的做法：两台电脑配对一次，之后在一台上复制，另一台直接粘贴。复制过的内容都在复制记录里，按 <kbd>⌥V</kbd>（Windows、Linux 上是 <kbd>Alt</kbd>+<kbd>V</kbd>）就能找出来贴进正在用的 App。
+隔空贴的做法：两台电脑配对一次，之后在一台上复制，另一台直接粘贴。两台放在一张桌上也好，一台在公司一台在家也好，它们都直接连在一起，复制的内容直接传过去，不在谁的服务器上中转。复制过的内容都在复制记录里，按 <kbd>⌥V</kbd>（Windows、Linux 上是 <kbd>Alt</kbd>+<kbd>V</kbd>）就能找出来贴进正在用的 App。
 
 | | 隔空贴 | 通用剪贴板 | 隔空投送 | 聊天软件 |
 |---|:-:|:-:|:-:|:-:|
 | 不同 Apple ID 之间 | ✓ | — | 需对方接收 | ✓ |
 | 不在同一个网络（家里 ↔ 公司） | ✓ | — | — | ✓ |
+| 设备之间直连，跨网络也行 | ✓ | 只限近处 | 只限近处 | 经它们的服务器 |
 | 复制后直接粘贴，不用点接收 | ✓ | ✓ | — | — |
 | Mac 与 Windows 之间 | ✓ | — | — | ✓ |
 | 文件与整个文件夹 | ✓ | 不稳定 | ✓ | 打包后可以 |
 | 复制历史，随时找回 | ✓ | — | — | 翻聊天记录 |
 | 仅自己的设备可解密内容 | ✓ | ✓ | ✓ | — |
+
+## 核心：跨网络打洞直连
+
+隔空贴的一切都建立在「两台电脑直接连起来」上：复制的内容和发送的文件在两台电脑之间直接传，不经过谁的服务器。连着同一个 Wi‑Fi 时是这样，隔着不同的路由器、在不同的城市时也是这样。
+
+```mermaid
+flowchart LR
+    A["电脑 A<br>在这里复制"] -- 信令：交换连接信息 --> S[("服务<br>或自建服务器")]
+    B["电脑 B<br>在这里粘贴"] -- 信令 --> S
+    A <== "打洞直连 · DTLS 端到端加密" ==> B
+    A -. "打不通时：加密中转" .-> S
+```
+
+- **同一网络里不需要服务器**：靠 mDNS 互相发现，输入配对码就能直连。
+- **跨网络时服务器只牵线**：「服务」或自建服务器帮两台电脑交换连接信息，然后它们打洞直连（WebRTC，基于 [pion](https://github.com/pion/webrtc)）。
+- **多出口网络也能直连**：公司双线这类网络按目标地址选出口。隔空贴在同一个 UDP 端口上同时询问多台 STUN 服务器，拿到每个出口的地址一并告诉对端；还会安排好哪一边先发包，避开会占住端口的路由器。实测公司 4 个出口与家里宽带之间可以直连。
+- **手机流量、随身 Wi‑Fi 也能直连（2.13）**：不少运营商的 NAT 给每个目标地址换一个新端口，但端口是按顺序发的。隔空贴认出这个规律，预测接下来的端口，连着手机热点或随身 Wi‑Fi 的电脑也能直连。只有端口完全随机分配的 NAT 仍需中转。
+- **IPv6 直连（2.13）**：两台都有公网 IPv6 地址时直接走 IPv6，不用穿过任何 NAT。
+- **远距离也传得快（2.12）**：跨网络直连传文件一直偏慢时，自动多开几条并行连接，确实变快才保留。
+- **打不通才中转**：中转转发的是端到端加密的数据包，服务器解不开；网络卡住 35 秒以内都能缓过来；空闲时会再试打洞，成功后切回直连。「设备」页会标出每台电脑是「直连」还是「中转」。
+- **配对时核对安全指纹**：两块屏幕显示同样的两行指纹，之后的每条消息都带签名，服务器无法冒充你的设备。
+- **每次提交都在实验室里验证**：[NAT 打洞实验室](tools/natlab) 用 Linux 网络命名空间和 iptables 模拟家用路由器、多出口网络、端口随机分配的 NAT 等 16 种场景，用隔空贴真实的连接代码各跑一遍。端口预测另在 pion 的虚拟网络上测试：按顺序分配端口的对称型 NAT 有预测能直连，没有就打不通。
+
+跨网络直连目前是 Mac、Windows、Linux 电脑之间；安卓 App 和手机网页暂时在同一网络里用。
+
+细节见[工作原理](https://pasteferry.cc/how/)与技术方案：[NAT 打洞](design/nat-traversal.md)（多出口网络、端口预测、IPv6）、[局域网直连](design/lan-mode.md)。
 
 ## 功能
 
@@ -59,11 +89,11 @@
 - **按大小分流**：50 MB 以内（可调）复制时就传好；更大的只同步一条记录，需要时点一下再取。
 - **对方离线也不丢**：这期间复制的，连上后补进对方的复制记录。
 
-### 隔空传送（2.5 新增）
+### 隔空传送（2.8 起支持安卓）
 
 - 打开「隔空传送」，配对过的电脑都在雷达上。把文件或整个文件夹拖到其中一台，就直接发过去。
 - **不限大小**：能看到进度、速度和剩余时间；断了会从断点接着传，每个文件用 SHA-256 校验。
-- 收到的文件默认存到「下载」（可以改），不进复制记录。两台都要是 2.5 或更新的版本。
+- 收到的文件默认存到「下载」（可以改），不进复制记录。电脑版要 2.5 或更新的版本，安卓要 2.8 或更新；安卓只在同一网络里传。
 
 ### 给好友发文件（2.6 新增）
 
@@ -121,27 +151,6 @@
 - 后台常驻，开机自启，崩溃自动恢复；App 里检查更新，确认后自动安装。
 - 18 种界面语言：简体中文、繁体中文（台湾、香港）、英文、日文、韩文、阿拉伯文（从右到左）、德文、法文、西班牙文、葡萄牙文（巴西）、意大利文、俄文、乌克兰文、波兰文、土耳其文、越南文、印尼文。
 
-## 核心：打洞直连
-
-隔空贴的一切都建立在「两台电脑直接连起来」上：内容在两台电脑之间直接传，不经过谁的服务器。
-
-```mermaid
-flowchart LR
-    A["电脑 A<br>在这里复制"] -- 信令：交换连接信息 --> S[("服务<br>或自建服务器")]
-    B["电脑 B<br>在这里粘贴"] -- 信令 --> S
-    A <== "打洞直连 · DTLS 端到端加密" ==> B
-    A -. "打不通时：加密中转" .-> S
-```
-
-- **同一网络里不需要服务器**：靠 mDNS 互相发现，输入配对码就能直连。
-- **跨网络时服务器只牵线**：「服务」或自建服务器帮两台电脑交换连接信息，然后它们打洞直连（WebRTC，基于 [pion](https://github.com/pion/webrtc)）。
-- **多出口网络也能直连**：公司双线这类网络按目标地址选出口。隔空贴在同一个 UDP 端口上同时询问多台 STUN 服务器，拿到每个出口的地址一并告诉对端；还会安排好哪一边先发包，避开会占住端口的路由器。实测公司 4 个出口与家里宽带之间可以直连。
-- **打不通才中转**：中转转发的是端到端加密的数据包，服务器解不开；空闲时会再试打洞，成功后切回直连。
-- **配对时核对安全指纹**：两块屏幕显示同样的两行指纹，之后的每条消息都带签名，服务器无法冒充你的设备。
-- **每次提交都在实验室里验证**：[NAT 打洞实验室](tools/natlab) 用 Linux 网络命名空间和 iptables 模拟家用路由器、多出口网络、端口随机分配的 NAT 等 16 种场景，用隔空贴真实的连接代码各跑一遍。
-
-细节见[工作原理](https://pasteferry.cc/how/)与技术方案：[多出口网络的 NAT 打洞](design/nat-traversal.md)、[局域网直连](design/lan-mode.md)。
-
 ## 开始使用
 
 第一次用？跟着 **[快速开始](https://pasteferry.cc/start/)** 一步步来，有截图。
@@ -150,13 +159,16 @@ flowchart LR
 
 - **Mac**（macOS 13 以上）：[Apple 芯片版](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-mac-apple-silicon.dmg)或 [Intel 版](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-mac-intel.dmg)；也有两种芯片都能用的[通用版](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry.dmg)。
 - **Windows** 10/11：[安装程序](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-Setup.exe)或[便携版](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-windows-x64.zip)。
+- **安卓** 9 及以上，arm64：**[APK](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-android-arm64.apk)**（测试版，安装时安卓会先询问）。可以在电脑上打开 **设备 → 手机网页传输** 用手机扫码，也可以装上 APK，像另一台电脑一样配对。
+- **任何手机、平板，不用装 App**：在电脑上打开 **设备 → 手机网页传输**，用手机扫屏幕上的码。手机浏览器里的网页能看到电脑上的复制记录，把文字复制到手机，也能把文字、照片和文件发回电脑。需要在同一网络里，内容加密传输。
+- **iPhone 与 iPad**：还没有 App，因为分发需要 Apple 开发者证书。请用上面的网页，在 Safari 里功能一样。
 - **Linux**（X11，或带 XWayland 的 Wayland 桌面）：Ubuntu、Debian 用 `.deb`（[x64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-amd64.deb)、[ARM64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-arm64.deb)），其他发行版用 `tar.gz`（[x64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-amd64.tar.gz)、[ARM64](https://github.com/baiyuze/pasteferry/releases/latest/download/PasteFerry-linux-arm64.tar.gz)），解压后运行 `./PasteFerry/install.sh` 加进应用菜单。
 
 Mac 版还没有经过 Apple 公证，Windows 版还没有代码签名：Mac 上第一次打开时到 **系统设置 → 隐私与安全性** 点 **仍要打开**；Windows 上点 **更多信息 → 仍要运行**。然后点 **启用后台同步**。Windows 防火墙询问、macOS 询问能否查找本地网络上的设备时，都选择允许。想让快捷粘贴直接粘贴，Mac 上按 <kbd>⌥V</kbd> 后点底栏的 **去授权**，在「辅助功能」里打开隔空贴。
 
 **2. 配对。**一台点 **设备 → 添加设备 → 生成配对码**，另一台点 **输入配对码**。两边显示的两行安全指纹完全一致后再确认。之后在任意一台上复制，另一台就能直接粘贴。
 
-**3. 跨网络时（可选）**，选一种连接方式：
+**3. 跨网络时（可选）**，选一种方式让两台电脑找到彼此。无论选哪种，只要能打通，内容都在两台电脑之间直接传：
 
 | 方式 | 适合 | 要准备 |
 |---|---|---|
@@ -173,7 +185,9 @@ Mac 版还没有经过 Apple 公证，Windows 版还没有代码签名：Mac 上
 | **Windows 客户端** | Windows 10 与 11，x64 |
 | **Linux 客户端** | x64 或 ARM64；X11 桌面，或带 XWayland 的 Wayland 桌面（GNOME、KDE 默认都带）；GTK 3 |
 | **服务器** | 可选：Linux（x86_64、ARM64；systemd 或 Docker）、macOS，或 Windows 10/11 x64 |
-| **iPhone / iPad** | 暂不支持：iOS 不允许 App 在后台监听剪贴板 |
+| **安卓 App** | 9 及以上，arm64；测试版，安装时安卓会先询问 |
+| **手机网页** | 同一网络里的任何手机或平板，不用安装 |
+| **iPhone / iPad** | 没有 App：分发需要 Apple 开发者证书，iOS 也不允许 App 在后台监听剪贴板。请改用手机网页 |
 
 ### 通过 Homebrew 安装 Mac 版
 
